@@ -8,24 +8,24 @@ export const clientesCollection: EntityCollection = {
     name: "Clientes",
     singularName: "Cliente",
     slug: "clientes",
-    path: "clientes",
+    dbPath: "clientes",
     icon: "Person",
     description: "Información de los clientes del servicio de alquiler",
     textSearchEnabled: true,
     properties: {
         nombre: {
             name: "Nombre",
-            dataType: "string",
+            type: "string",
             validation: { required: true }
         },
         apellido: {
             name: "Apellido",
-            dataType: "string",
+            type: "string",
             validation: { required: true }
         },
         email: {
             name: "Email",
-            dataType: "string",
+            type: "string",
             email: true,
             validation: {
                 required: true,
@@ -33,23 +33,23 @@ export const clientesCollection: EntityCollection = {
         },
         telefono: {
             name: "Teléfono",
-            dataType: "string"
+            type: "string"
         },
         direccion: {
             name: "Dirección",
-            dataType: "string"
+            type: "string"
         },
         ciudad: {
             name: "Ciudad",
-            dataType: "string"
+            type: "string"
         },
         pais: {
             name: "País",
-            dataType: "string"
+            type: "string"
         },
         fecha_registro: {
             name: "Fecha de Registro",
-            dataType: "date",
+            type: "date",
             autoValue: "on_create"
         }
     }
@@ -63,18 +63,18 @@ export const implementosCollection: EntityCollection = {
     name: "Implementos",
     singularName: "Implemento",
     slug: "implementos",
-    path: "implementos",
+    dbPath: "implementos",
     icon: "Extension",
     description: "Inventario de todos los implementos y accesorios para la maquinaria.",
     properties: {
         nombre: {
             name: "Nombre del Implemento",
-            dataType: "string",
+            type: "string",
             validation: { required: true }
         },
         stock_total: {
             name: "Stock Total",
-            dataType: "number",
+            type: "number",
             validation: {
                 integer: true,
                 min: 0
@@ -82,7 +82,7 @@ export const implementosCollection: EntityCollection = {
         },
         stock_alquilado: {
             name: "Stock Alquilado",
-            dataType: "number",
+            type: "number",
             validation: {
                 integer: true,
                 min: 0
@@ -90,7 +90,7 @@ export const implementosCollection: EntityCollection = {
         },
         stock_libre: {
             name: "Stock Libre",
-            dataType: "number",
+            type: "number",
             validation: {
                 integer: true,
                 min: 0
@@ -142,80 +142,80 @@ const tiposAlquiler = {
 // Subcollección de Alquileres
 // -----------------------------------------------------------------------------
 
-const alquileresSubcollection: EntityCollection = {
+export const alquileresSubcollection: EntityCollection = {
     name: "Alquileres",
     singularName: "Alquiler",
     slug: "alquileres",
-    path: "alquileres",
+    dbPath: "alquileres",
     icon: "CalendarToday",
     description: "Historial completo de alquileres de esta máquina",
     properties: {
         cliente_referencia: {
             name: "Cliente",
-            dataType: "reference",
+            type: "reference",
             path: "clientes",
             validation: { required: true },
             previewProperties: ["nombre", "apellido"]
         },
         tipo_alquiler: {
             name: "Tipo de Alquiler",
-            dataType: "string",
+            type: "string",
             enum: tiposAlquiler,
             validation: { required: true }
         },
         precio_por_dia: {
             name: "Precio por Día",
-            dataType: "number",
+            type: "number",
             validation: { required: true }
         },
         fecha_salida: {
             name: "Fecha de Salida",
-            dataType: "date",
+            type: "date",
             validation: { required: true }
         },
         fecha_devolucion_prevista: {
             name: "Fecha Devolución Prevista",
-            dataType: "date"
+            type: "date"
         },
         fecha_devolucion_real: {
             name: "Fecha Devolución Real",
-            dataType: "date"
+            type: "date"
         },
         situacion_obra: {
             name: "Situación / Obra",
-            dataType: "string",
+            type: "string",
             validation: { required: true }
         },
         horas_salida: {
             name: "Horas al Salir",
-            dataType: "number"
+            type: "number"
         },
         horas_devolucion: {
             name: "Horas al Devolver",
-            dataType: "number"
+            type: "number"
         },
         implementos_incluidos: {
             name: "Implementos Incluidos",
-            dataType: "string",
+            type: "string",
             description: "Lista de implementos (ej: PINZAS + ARIDO)"
         },
         activo: {
             name: "Alquiler Activo",
-            dataType: "boolean",
+            type: "boolean",
             defaultValue: true
         },
         notas: {
             name: "Notas del Alquiler",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         total_facturado: {
             name: "Total Facturado",
-            dataType: "number"
+            type: "number"
         },
         estado_pago: {
             name: "Estado de Pago",
-            dataType: "string",
+            type: "string",
             enum: {
                 pendiente: "Pendiente",
                 pagado: "Pagado",
@@ -229,22 +229,22 @@ const alquileresSubcollection: EntityCollection = {
 // Subcollección de Mantenimiento
 // -----------------------------------------------------------------------------
 
-const mantenimientoSubcollection: EntityCollection = {
+export const mantenimientoSubcollection: EntityCollection = {
     name: "Mantenimiento",
     singularName: "Registro Mantenimiento",
     slug: "mantenimiento",
-    path: "mantenimiento",
+    dbPath: "mantenimiento",
     icon: "Build",
     description: "Historial completo de mantenimiento de esta máquina",
     properties: {
         fecha: {
             name: "Fecha del Mantenimiento",
-            dataType: "date",
+            type: "date",
             validation: { required: true }
         },
         tipo_mantenimiento: {
             name: "Tipo de Mantenimiento",
-            dataType: "string",
+            type: "string",
             enum: {
                 preventivo: "Preventivo",
                 correctivo: "Correctivo",
@@ -257,54 +257,54 @@ const mantenimientoSubcollection: EntityCollection = {
         },
         horas_maquina: {
             name: "Horas de la Máquina",
-            dataType: "number",
+            type: "number",
             description: "Horas que tenía la máquina al momento del mantenimiento"
         },
         descripcion: {
             name: "Descripción del Trabajo",
-            dataType: "string",
+            type: "string",
             multiline: true,
             validation: { required: true }
         },
         tecnico: {
             name: "Técnico Responsable",
-            dataType: "string"
+            type: "string"
         },
         taller_externo: {
             name: "Taller Externo",
-            dataType: "string",
+            type: "string",
             description: "Si se realizó en taller externo"
         },
         costo: {
             name: "Costo del Mantenimiento",
-            dataType: "number"
+            type: "number"
         },
         proxima_revision: {
             name: "Próxima Revisión",
-            dataType: "date"
+            type: "date"
         },
         proxima_revision_horas: {
             name: "Próxima Revisión (Horas)",
-            dataType: "number"
+            type: "number"
         },
         repuestos_utilizados: {
             name: "Repuestos Utilizados",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         tiempo_parada: {
             name: "Tiempo de Parada (días)",
-            dataType: "number",
+            type: "number",
             description: "Días que estuvo parada la máquina"
         },
         urgente: {
             name: "Mantenimiento Urgente",
-            dataType: "boolean",
+            type: "boolean",
             defaultValue: false
         },
         completado: {
             name: "Trabajo Completado",
-            dataType: "boolean",
+            type: "boolean",
             defaultValue: true
         }
     }
@@ -314,32 +314,32 @@ const mantenimientoSubcollection: EntityCollection = {
 // Subcollección de Horas
 // -----------------------------------------------------------------------------
 
-const horasSubcollection: EntityCollection = {
+export const horasSubcollection: EntityCollection = {
     name: "Lecturas Horas",
     singularName: "Lectura Horas",
     slug: "horas",
-    path: "horas",
+    dbPath: "horas",
     icon: "Schedule",
     description: "Registro histórico de lecturas de horas de la máquina",
     properties: {
         fecha: {
             name: "Fecha de Lectura",
-            dataType: "date",
+            type: "date",
             validation: { required: true }
         },
         horas_totales: {
             name: "Horas Totales",
-            dataType: "number",
+            type: "number",
             validation: { required: true }
         },
         horas_periodo: {
             name: "Horas del Período",
-            dataType: "number",
+            type: "number",
             description: "Horas trabajadas desde la última lectura"
         },
         motivo_lectura: {
             name: "Motivo de la Lectura",
-            dataType: "string",
+            type: "string",
             enum: {
                 salida_alquiler: "Salida de Alquiler",
                 devolucion_alquiler: "Devolución de Alquiler",
@@ -350,15 +350,15 @@ const horasSubcollection: EntityCollection = {
         },
         operador: {
             name: "Operador/Responsable",
-            dataType: "string"
+            type: "string"
         },
         notas: {
             name: "Notas",
-            dataType: "string"
+            type: "string"
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            dataType: "string",
+            type: "string",
             description: "Si está relacionado con un alquiler específico"
         }
     }
@@ -368,22 +368,22 @@ const horasSubcollection: EntityCollection = {
 // Subcollección de Incidencias
 // -----------------------------------------------------------------------------
 
-const incidenciasSubcollection: EntityCollection = {
+export const incidenciasSubcollection: EntityCollection = {
     name: "Incidencias",
     singularName: "Incidencia",
     slug: "incidencias",
-    path: "incidencias",
+    dbPath: "incidencias",
     icon: "Warning",
     description: "Registro de problemas, averías y observaciones importantes",
     properties: {
         fecha: {
             name: "Fecha de la Incidencia",
-            dataType: "date",
+            type: "date",
             validation: { required: true }
         },
         tipo_incidencia: {
             name: "Tipo de Incidencia",
-            dataType: "string",
+            type: "string",
             enum: {
                 averia: "Avería",
                 accidente: "Accidente",
@@ -397,7 +397,7 @@ const incidenciasSubcollection: EntityCollection = {
         },
         gravedad: {
             name: "Gravedad",
-            dataType: "string",
+            type: "string",
             enum: {
                 baja: "Baja",
                 media: "Media",
@@ -408,44 +408,44 @@ const incidenciasSubcollection: EntityCollection = {
         },
         descripcion: {
             name: "Descripción de la Incidencia",
-            dataType: "string",
+            type: "string",
             multiline: true,
             validation: { required: true }
         },
         reportado_por: {
             name: "Reportado por",
-            dataType: "string"
+            type: "string"
         },
         cliente_relacionado: {
             name: "Cliente Relacionado",
-            dataType: "reference",
+            type: "reference",
             path: "clientes"
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            dataType: "string"
+            type: "string"
         },
         solucion: {
             name: "Solución Aplicada",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         fecha_solucion: {
             name: "Fecha de Solución",
-            dataType: "date"
+            type: "date"
         },
         costo_reparacion: {
             name: "Costo de Reparación",
-            dataType: "number"
+            type: "number"
         },
         responsable_cliente: {
             name: "Responsabilidad del Cliente",
-            dataType: "boolean",
+            type: "boolean",
             description: "Si la incidencia es responsabilidad del cliente"
         },
         resuelto: {
             name: "Incidencia Resuelta",
-            dataType: "boolean",
+            type: "boolean",
             defaultValue: false
         }
     }
@@ -459,9 +459,8 @@ export const maquinariaCollection: EntityCollection = {
     name: "Maquinaria",
     singularName: "Máquina",
     slug: "maquinaria",
-    path: "maquinaria",
+    dbPath: "maquinaria",
     icon: "Construction",
-    description: "Catálogo de maquinaria - La información detallada está en las subcollecciones",
     subcollections: [
         alquileresSubcollection,
         mantenimientoSubcollection,
@@ -472,12 +471,12 @@ export const maquinariaCollection: EntityCollection = {
         nombre: {
             name: "Nombre / Identificador",
             description: "Ej: Nº 1 - MANITOU MLT 737",
-            dataType: "string",
+            type: "string",
             validation: { required: true }
         },
         imagen: {
             name: "Imagen de la Máquina",
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -485,59 +484,59 @@ export const maquinariaCollection: EntityCollection = {
         },
         categoria: {
             name: "Categoría",
-            dataType: "string",
+            type: "string",
             enum: categoriasMaquinaria,
             validation: { required: true }
         },
         modelo: {
             name: "Modelo Completo",
-            dataType: "string",
+            type: "string",
             description: "Modelo completo de la máquina"
         },
         estado_actual: {
             name: "Estado Actual",
-            dataType: "string",
+            type: "string",
             enum: estadosMaquina,
             validation: { required: true }
         },
         notas: {
             name: "Notas Generales",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         horas_totales: {
             name: "Horas Totales Actuales",
-            dataType: "number",
+            type: "number",
             description: "Última lectura de horas registrada"
         },
         numero_serie: {
             name: "Número de Serie",
-            dataType: "string"
+            type: "string"
         },
         ano_fabricacion: {
             name: "Año de Fabricación",
-            dataType: "number"
+            type: "number"
         },
         fecha_ultima_lectura: {
             name: "Fecha Última Lectura",
-            dataType: "date"
+            type: "date"
         },
         alquiler_activo_id: {
             name: "ID Alquiler Activo",
-            dataType: "string",
+            type: "string",
             description: "ID del alquiler activo en la subcollección"
         },
         proximo_mantenimiento: {
             name: "Próximo Mantenimiento",
-            dataType: "date"
+            type: "date"
         },
         fecha_adquisicion: {
             name: "Fecha de Adquisición",
-            dataType: "date"
+            type: "date"
         },
         precio_compra: {
             name: "Precio de Compra",
-            dataType: "number"
+            type: "number"
         }
     }
 };
@@ -550,137 +549,137 @@ export const controlDiarioCollection: EntityCollection = {
     name: "Control Diario",
     singularName: "Registro Diario",
     slug: "control_diario",
-    path: "control_diario",
+    dbPath: "control_diario",
     icon: "Today",
     description: "Snapshots diarios del estado de toda la maquinaria - equivalente a las hojas Excel",
     properties: {
         fecha: {
             name: "Fecha",
-            dataType: "date",
+            type: "date",
             validation: { required: true }
         },
         facturacion_total: {
             name: "Facturación Total Diaria",
-            dataType: "number"
+            type: "number"
         },
         facturacion_por_categoria: {
             name: "Facturación por Categoría",
-            dataType: "map",
+            type: "map",
             properties: {
                 manipuladoras_telescopicas: {
                     name: "Manipuladoras Telescópicas",
-                    dataType: "number"
+                    type: "number"
                 },
                 plataformas: {
                     name: "Plataformas",
-                    dataType: "number"
+                    type: "number"
                 },
                 excavadoras: {
                     name: "Excavadoras",
-                    dataType: "number"
+                    type: "number"
                 },
                 otros: {
                     name: "Otros",
-                    dataType: "number"
+                    type: "number"
                 }
             }
         },
         total_maquinas: {
             name: "Total de Máquinas",
-            dataType: "number"
+            type: "number"
         },
         maquinas_alquiladas: {
             name: "Máquinas Alquiladas",
-            dataType: "number"
+            type: "number"
         },
         maquinas_disponibles: {
             name: "Máquinas Disponibles",
-            dataType: "number"
+            type: "number"
         },
         maquinas_mantenimiento: {
             name: "Máquinas en Mantenimiento",
-            dataType: "number"
+            type: "number"
         },
         subcontratas: {
             name: "Subcontratas",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "map",
+                type: "map",
                 properties: {
                     proveedor: {
                         name: "Proveedor",
-                        dataType: "string"
+                        type: "string"
                     },
                     precio: {
                         name: "Precio",
-                        dataType: "number"
+                        type: "number"
                     },
                     descripcion: {
                         name: "Descripción",
-                        dataType: "string"
+                        type: "string"
                     }
                 }
             }
         },
         previsiones: {
             name: "Previsiones",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "map",
+                type: "map",
                 properties: {
                     maquina_id: {
                         name: "ID Máquina",
-                        dataType: "string"
+                        type: "string"
                     },
                     maquina_nombre: {
                         name: "Nombre Máquina",
-                        dataType: "string"
+                        type: "string"
                     },
                     tipo_alquiler: {
                         name: "Tipo",
-                        dataType: "string"
+                        type: "string"
                     },
                     fecha_prevista: {
                         name: "Fecha Prevista",
-                        dataType: "date"
+                        type: "date"
                     },
                     cliente: {
                         name: "Cliente",
-                        dataType: "string"
+                        type: "string"
                     },
                     ubicacion: {
                         name: "Ubicación",
-                        dataType: "string"
+                        type: "string"
                     }
                 }
             }
         },
         notas_generales: {
             name: "Notas Generales del Día",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         estado_implementos: {
             name: "Estado de Implementos",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "map",
+                type: "map",
                 properties: {
                     nombre: {
                         name: "Implemento",
-                        dataType: "string"
+                        type: "string"
                     },
                     stock_total: {
                         name: "Stock Total",
-                        dataType: "number"
+                        type: "number"
                     },
                     alquilados: {
                         name: "Alquilados",
-                        dataType: "number"
+                        type: "number"
                     },
                     libres: {
                         name: "Libres",
-                        dataType: "number"
+                        type: "number"
                     }
                 }
             }
@@ -693,5 +692,9 @@ export const collections = [
     clientesCollection,
     implementosCollection,
     maquinariaCollection,
-    controlDiarioCollection
+    controlDiarioCollection,
+    alquileresSubcollection,
+    mantenimientoSubcollection,
+    horasSubcollection,
+    incidenciasSubcollection
 ];
