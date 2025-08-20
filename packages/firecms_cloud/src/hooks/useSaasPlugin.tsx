@@ -68,6 +68,14 @@ export function useSaasPlugin({
         return collection;
     }, []);
 
+    const injectCollections = useCallback(
+        (collections: EntityCollection[]) => mergeCollections(
+            collections,
+            (collectionConfigController.collections ?? []).map(modifyCollection),
+            appConfig?.modifyCollection
+        ),
+        [collectionConfigController.collections]);
+
     return {
         key: "saas",
         homePage: {
@@ -75,13 +83,7 @@ export function useSaasPlugin({
             additionalChildrenEnd,
         },
         collection: {
-            injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
-                (collections: EntityCollection[]) => mergeCollections(
-                    collections,
-                    (collectionConfigController.collections ?? []).map(modifyCollection),
-                    appConfig?.modifyCollection
-                ),
-                [collectionConfigController.collections]),
+            injectCollections: projectConfig.isTrialOver ? undefined : injectCollections,
             modifyCollection
         },
         collectionView: {

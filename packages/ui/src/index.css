@@ -21,7 +21,7 @@
 }
 
 .typography-h4 {
-    @apply text-3xl font-headers font-normal;
+    @apply text-3xl font-headers font-normal tracking-tight;
 }
 
 .typography-h5 {
