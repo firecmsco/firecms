@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavbarItem from "@theme-original/NavbarItem";
 import { useLocation } from "@docusaurus/router";
+import { getCurrentGclid } from "../../utils/gclid";
 
 export default function NavbarItemWrapper(props) {
     const {
@@ -13,13 +14,17 @@ export default function NavbarItemWrapper(props) {
     const [finalLink, setFinalLink] = useState(linkUrl);
 
     useEffect(() => {
-        if (linkUrl && location.search) {
+        if (linkUrl) {
             try {
                 const url = new URL(linkUrl); // This will throw for relative paths
                 const params = new URLSearchParams(location.search);
                 params.forEach((value, key) => {
                     url.searchParams.append(key, value);
                 });
+                const storedGclid = getCurrentGclid();
+                if (storedGclid && !url.searchParams.has("gclid")) {
+                    url.searchParams.append("gclid", storedGclid);
+                }
                 setFinalLink(url.toString());
             } catch (e) {
                 // Not a valid absolute URL, do nothing.

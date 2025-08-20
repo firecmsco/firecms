@@ -16,6 +16,7 @@ import "../../css/custom.css";
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { defaultBorderMixin } from "../../partials/styles";
+import { getGclidFromUrl, setStoredGclid } from "../../utils/gclid";
 
 export default function LayoutWrapper(props) {
 
@@ -56,6 +57,14 @@ export default function LayoutWrapper(props) {
             observer.disconnect();
         };
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
+
+    useEffect(() => {
+        if (ExecutionEnvironment.canUseDOM) {
+            const gclid = getGclidFromUrl();
+            console.log("GCLID from URL:", gclid);
+            if (gclid) setStoredGclid(gclid);
+        }
+    }, []);
 
     function isDocs() {
         return pathname.startsWith("/docs/");
