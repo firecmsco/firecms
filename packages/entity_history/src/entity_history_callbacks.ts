@@ -1,25 +1,57 @@
-import { EntityCallbacks } from "@firecms/core";
+import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import equal from "react-fast-compare"
+
+export interface NewHistoryEntryParams {
+    context: FireCMSContext<User>;
+    previousValues?: Partial<any>;
+    values: Partial<any>;
+    path: string;
+    entityId: string;
+}
+
+export function createHistoryEntry({
+                                       context,
+                                       previousValues,
+                                       values,
+                                       path,
+                                       entityId
+                                   }: NewHistoryEntryParams) {
+
+    const uid = context.authController.user?.uid;
+    const dataSource = context.dataSource;
+    const changedFields = previousValues ? findChangedFields(previousValues, values) : null;
+
+    dataSource.saveEntity({
+        path: path + "/" + entityId + "/__history",
+        values: {
+            ...values,
+            __metadata: {
+                previous_values: previousValues,
+                changed_fields: changedFields,
+                updated_on: new Date(),
+                updated_by: uid ?? null,
+            }
+        },
+        status: "new"
+    }).then(() => {
+        console.debug("History saved for", path, entityId);
+    });
+}
 
 export const entityHistoryCallbacks: EntityCallbacks = {
     onSaveSuccess: async (props) => {
 
-        const changedFields = props.previousValues ? findChangedFields(props.previousValues, props.values) : null;
-        const uid = props.context.authController.user?.uid;
-        props.context.dataSource.saveEntity({
-            path: props.path + "/" + props.entityId + "/__history",
-            values: {
-                ...props.values,
-                __metadata: {
-                    previous_values: props.previousValues,
-                    changed_fields: changedFields,
-                    updated_on: new Date(),
-                    updated_by: uid,
-                }
-            },
-            status: "new"
-        }).then(() => {
-            console.debug("History saved for", props.path, props.entityId);
+        const values = props.values;
+        const previousValues = props.previousValues;
+        const path = props.path;
+        const entityId = props.entityId;
+        const context = props.context;
+        createHistoryEntry({
+            context: context,
+            previousValues: previousValues,
+            values: values,
+            path: path,
+            entityId: entityId
         });
     }
 }
