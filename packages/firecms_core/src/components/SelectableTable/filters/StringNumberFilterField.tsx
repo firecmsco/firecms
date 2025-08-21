@@ -12,7 +12,7 @@ import {
     SelectItem,
     TextField
 } from "@firecms/ui";
-import { EnumValueConfig } from "../../../types";
+import { EnumValueConfig } from "@firecms/types";
 
 interface StringNumberFilterFieldProps {
     name: string,

@@ -1,4 +1,4 @@
-import { UserConfigurationPersistence } from "../types";
+import { UserConfigurationPersistence } from "@firecms/types";
 import { useContext } from "react";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 

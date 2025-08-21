@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
-import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
+import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "@firecms/types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useFireCMSContext } from "../hooks";

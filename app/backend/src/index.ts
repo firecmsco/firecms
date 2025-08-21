@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { collectionRegistry, createPostgresDatabaseConnection, createPostgresWebSocket } from "@firecms/backend";
 
@@ -8,6 +9,10 @@ import * as tables from "./schema.generated";
 import { collections } from "shared";
 
 import * as dotenv from "dotenv";
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment from app root level
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });

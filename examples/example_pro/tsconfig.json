@@ -21,6 +21,7 @@
       "@firecms/core": ["../../packages/firecms_core/src"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
       "@firecms/ui": ["../../packages/ui/src"],
+      "@firecms/types": ["../../packages/types/src"],
       "@firecms/editor": ["../../packages/editor/src"],
       "@firecms/datatalk": ["../../packages/datatalk/src"],
       "@firecms/mongodb": ["../../packages/mongodb/src"],

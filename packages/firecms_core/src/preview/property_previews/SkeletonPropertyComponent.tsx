@@ -4,7 +4,7 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     ResolvedStringProperty
-} from "../../types";
+} from "@firecms/types";
 import React from "react";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";

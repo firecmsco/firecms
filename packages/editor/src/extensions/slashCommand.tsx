@@ -21,7 +21,7 @@ import {
 } from "@firecms/ui"
 import tippy from "tippy.js"
 import { onFileRead, UploadFn } from "./Image";
-import { EditorAIController } from "../types";
+import { EditorAIController } from "@firecms/types";
 
 // See `addAttributes` below
 export interface CommandNodeAttrs {

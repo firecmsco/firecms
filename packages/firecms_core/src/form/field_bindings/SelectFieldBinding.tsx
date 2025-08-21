@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { EnumType, FieldProps } from "../../types";
+import { EnumType, FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, resolveEnumValues } from "../../util";

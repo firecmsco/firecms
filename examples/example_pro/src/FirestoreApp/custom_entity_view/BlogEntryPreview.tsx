@@ -9,7 +9,7 @@ import {
     useStorageSource
 } from "@firecms/core";
 import { Card, CircularProgress, Container, Markdown, Typography, } from "@firecms/ui";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { productsCollection } from "../collections/products_collection";
 import { BlogEntry } from "../collections/blog_collection";
 

@@ -28,7 +28,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import { NavigationCardBinding } from "./NavigationCardBinding";
-import { NavigationEntry } from "../../types";
+import { NavigationEntry } from "@firecms/types";
 import { cls } from "@firecms/ui";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>

@@ -1,6 +1,6 @@
 import { AutoFixHighIcon, Avatar, Menu, MenuItem, PersonIcon } from "@firecms/ui";
 import React, { useEffect, useRef, useState } from "react";
-import { ChatMessage, FeedbackSlug } from "../types";
+import { ChatMessage, FeedbackSlug } from "@firecms/types";
 import { SystemMessage } from "./SystemMessage";
 import { EntityCollection } from "@firecms/core";
 

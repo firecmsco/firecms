@@ -13,7 +13,7 @@
     "deploy:staging": "vite build && firecms deploy --project=firecms-demo-27150 --env-dev"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-canary.258",
+    "@firecms/cloud": "3.0.0-canary.258",
     "@fontsource/jetbrains-mono": "^5.2.5",
     "firebase": "^10.14.1",
     "react": "18.3.1",

@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import "@firecms/ui/index.css" layer(base);
-@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@source "../../../packages/**/src/**/*.{js,ts,jsx,tsx}";
 
 @layer utilities {
     body {
@@ -11,4 +13,3 @@
         @apply text-primary dark:text-primary
     }
 }
-

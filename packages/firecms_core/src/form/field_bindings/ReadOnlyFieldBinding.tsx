@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FieldProps } from "../../types";
+import { FieldProps } from "@firecms/types";
 
 import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityReference, EntityValues, useDataSource } from "@firecms/core";
-import { Product } from "../../types";
+import { Product } from "@firecms/types";
 import { Card, CircularProgress, Typography } from "@firecms/ui";
 import { StorageImage } from "./StorageImage";
 

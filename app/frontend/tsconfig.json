@@ -1,17 +1,17 @@
 {
   "extends": "../../packages/firecms_core/tsconfig.json",
   "compilerOptions": {
-    "target": "ESNEXT",
+    "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNEXT",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -20,6 +20,8 @@
     "paths": {
       "@firecms/core": ["../../packages/firecms_core/src"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
+      "@firecms/postgresql": ["../../packages/postgresql/src"],
+      "@firecms/types": ["../../packages/types/src"],
       "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/editor": ["../../packages/editor/src"],
       "@firecms/datatalk": ["../../packages/datatalk/src"],
@@ -34,5 +36,5 @@
       "shared": ["../shared"]
     }
   },
-  "include": ["./src", "../shared"]
+  "include": ["./src", "./vite.config.ts"]
 }

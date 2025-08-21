@@ -19,7 +19,7 @@ import {
     PermissionsBuilder,
     User,
     UserConfigurationPersistence
-} from "../types";
+} from "@firecms/types";
 import {
     applyPermissionsFunctionIfEmpty,
     getCollectionBySlugWithin,

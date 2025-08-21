@@ -16,7 +16,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
-import { User } from "../types";
+import { User } from "@firecms/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 

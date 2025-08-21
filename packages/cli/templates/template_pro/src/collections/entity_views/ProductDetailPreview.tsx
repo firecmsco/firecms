@@ -12,7 +12,7 @@ import {
     SelectItem
 } from "@firecms/ui";
 import { Entity, EntityValues, useSnackbarController } from "@firecms/core";
-import { Product } from "../../types";
+import { Product } from "@firecms/types";
 import { StorageImage } from "../../components/StorageImage";
 
 export function ProductDetailPreview({

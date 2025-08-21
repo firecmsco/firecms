@@ -1,5 +1,5 @@
 import { Button, FilterListOffIcon } from "@firecms/ui";
-import { EntityTableController } from "../types";
+import { EntityTableController } from "@firecms/types";
 
 export function ClearFilterSortButton({
                                           tableController,

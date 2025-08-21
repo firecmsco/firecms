@@ -1,4 +1,4 @@
-import { CMSView } from "../types";
+import { CMSView } from "@firecms/types";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { useEffect } from "react";
 

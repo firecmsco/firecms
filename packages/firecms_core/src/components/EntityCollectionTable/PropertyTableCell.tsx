@@ -10,7 +10,7 @@ import {
     ResolvedProperty,
     ResolvedStringProperty,
     StringProperty
-} from "../../types";
+} from "@firecms/types";
 
 import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
 import { VirtualTableSelect } from "../VirtualTable/fields/VirtualTableSelect";

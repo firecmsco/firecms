@@ -1,4 +1,4 @@
-import { Entity, EntityCallbacks, EntityCollection } from "../types";
+import { Entity, EntityCallbacks, EntityCollection } from "@firecms/types";
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
 import {

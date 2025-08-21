@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { useLargeLayout, useNavigationController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types";
+import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
 import { IconForView } from "../util";
 import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";

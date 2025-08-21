@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DataSource, EntityCollection } from "../../types";
+import { DataSource, EntityCollection } from "@firecms/types";
 import { DataSourceContext } from "../../contexts/DataSourceContext";
 
 /**

@@ -1,7 +1,7 @@
 import { DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
 import { Button, CenteredView, CircularProgress, Typography, } from "@firecms/ui";
 import { useEffect, useRef, useState } from "react";
-import { ImportConfig } from "../types";
+import { ImportConfig } from "@firecms/types";
 
 export function ImportSaveInProgress<C extends EntityCollection>
 ({

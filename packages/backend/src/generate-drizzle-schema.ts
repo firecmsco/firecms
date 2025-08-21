@@ -144,7 +144,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             columnDefinition = `integer("${colName}").references(() => ${targetTableVarName}.id, ${refOptions})`;
             break;
         }
-        case "relationship": {
+        case "relation": {
             const relProp = prop as RelationshipProperty;
             if (!relProp.hasMany) {
                 const fkColumnName = relProp.sourceForeignKey ? toSnakeCase(String(relProp.sourceForeignKey)) : `${toSnakeCase(propName)}_id`;
@@ -242,7 +242,7 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
 
         // Add foreign key constraints and indexes
         Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
-            if (prop.type === "reference" || (prop.type === "relationship" && !(prop as RelationshipProperty).hasMany)) {
+            if (prop.type === "reference" || (prop.type === "relation" && !(prop as RelationshipProperty).hasMany)) {
                 const colName = toSnakeCase(propName);
                 if (prop.type === "reference") {
                     const refProp = prop as ReferenceProperty;
@@ -277,7 +277,7 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                     const targetTableVarName = getTableVarName(refProp.path);
                     tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${propName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
                 }
-            } else if (prop.type === "relationship") {
+            } else if (prop.type === "relation") {
                 const relProp = prop as RelationshipProperty;
                 if (relProp.hasMany) {
                     const targetTableVarName = getTableVarName(relProp.target);
@@ -286,7 +286,7 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                     if (targetCollection) {
                         const inverseFkProp = Object.entries(targetCollection.properties ?? {}).find(([_, targetProp]) => {
                             return (targetProp.type === "reference" && (targetProp as ReferenceProperty).path === tableName) ||
-                                   (targetProp.type === "relationship" && (targetProp as RelationshipProperty).target === tableName && !(targetProp as RelationshipProperty).hasMany);
+                                   (targetProp.type === "relation" && (targetProp as RelationshipProperty).target === tableName && !(targetProp as RelationshipProperty).hasMany);
                         });
 
                         if (inverseFkProp) {

@@ -49,7 +49,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/types": "^3.0.0-canary.258",
+    "@firecms/types": "3.0.0-canary.258",
     "drizzle-orm": "^0.44.4",
     "pg": "^8.11.3",
     "ws": "^8.16.0",

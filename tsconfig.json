@@ -8,7 +8,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
     "declaration": true,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ArrayProperty, FieldProps, Property, PropertyConfig, ResolvedProperty } from "../types";
+import { ArrayProperty, FieldProps, Property, PropertyConfig, ResolvedProperty } from "@firecms/types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,

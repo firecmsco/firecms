@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "../../types";
+import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "@firecms/types";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";

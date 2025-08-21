@@ -12,7 +12,7 @@ import {
     PropertyConfig,
     PropertyFieldBindingProps,
     ResolvedEntityCollection
-} from "../types";
+} from "@firecms/types";
 import equal from "react-fast-compare";
 
 import { ErrorBoundary, getFormFieldKeys } from "../components";

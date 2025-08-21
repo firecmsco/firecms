@@ -1,6 +1,6 @@
 import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
-import { FilterValues, ResolvedProperties, ResolvedProperty } from "../../types";
+import { FilterValues, ResolvedProperties, ResolvedProperty } from "@firecms/types";
 import { VirtualTableColumn } from "../VirtualTable";
 import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
 import { getColumnKeysForProperty } from "../common/useColumnsIds";

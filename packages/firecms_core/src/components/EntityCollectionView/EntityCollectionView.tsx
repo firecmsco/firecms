@@ -15,7 +15,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperty,
     SaveEntityProps
-} from "../../types";
+} from "@firecms/types";
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,

@@ -7,7 +7,7 @@ import {
     FormContext,
     PluginFormActionProps, ResolvedEntityCollection,
     User
-} from "../types";
+} from "@firecms/types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {

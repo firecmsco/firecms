@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "../../types";
+import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "@firecms/types";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 

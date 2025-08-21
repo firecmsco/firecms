@@ -1,4 +1,4 @@
-import { SideEntityController } from "../types";
+import { SideEntityController } from "@firecms/types";
 import { useContext } from "react";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 

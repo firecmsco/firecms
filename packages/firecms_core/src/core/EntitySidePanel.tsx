@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import { EntitySidePanelProps } from "../types";
+import { EntitySidePanelProps } from "@firecms/types";
 import { useNavigationController, useSideEntityController } from "../hooks";
 
 import { ErrorBoundary } from "../components";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EnumValueConfig } from "../../types";
+import { EnumValueConfig } from "@firecms/types";
 import { EnumValuesChip } from "./EnumValuesChip";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";

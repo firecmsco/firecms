@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
+import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "@firecms/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";

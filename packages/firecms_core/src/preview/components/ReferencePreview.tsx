@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Entity, EntityCollection, EntityReference } from "../../types";
+import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Skeleton } from "@firecms/ui";

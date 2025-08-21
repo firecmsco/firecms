@@ -1,5 +1,5 @@
 import hash from "object-hash";
-import { GeoPoint } from "../types";
+import { GeoPoint } from "@firecms/types";
 
 export const pick: <T>(obj: T, ...args: any[]) => T = (obj: any, ...args: any[]) => ({
     ...args.reduce((res, key) => ({

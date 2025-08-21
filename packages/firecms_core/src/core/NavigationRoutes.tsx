@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView } from "../types";
+import { CMSView } from "@firecms/types";
 import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
 import { FireCMSRoute } from "../routes/FireCMSRoute";

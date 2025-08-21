@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { UserManagement } from "../types";
+import { UserManagement } from "@firecms/types";
 import {
     AuthController,
     Authenticator,

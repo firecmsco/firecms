@@ -1,5 +1,5 @@
 import { collection, getFirestore, onSnapshot, query } from "@firebase/firestore";
-import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
+import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "@firecms/types";
 import Fuse from "fuse.js"
 
 import { FirebaseApp } from "@firebase/app";

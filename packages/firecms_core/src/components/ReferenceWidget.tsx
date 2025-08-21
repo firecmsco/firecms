@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FilterValues } from "../types";
+import { Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 import { getReferenceFrom } from "../util";
 import { PreviewSize, ReferencePreview } from "../preview";
 import { useNavigationController, useReferenceDialog } from "../hooks";

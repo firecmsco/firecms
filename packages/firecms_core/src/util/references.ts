@@ -1,4 +1,4 @@
-import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "../types";
+import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "@firecms/types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
 import { getFieldConfig } from "../core";

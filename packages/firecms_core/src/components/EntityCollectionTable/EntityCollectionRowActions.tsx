@@ -1,6 +1,6 @@
 import React, { MouseEvent, useCallback } from "react";
 
-import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
+import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "@firecms/types";
 import {
     Checkbox,
     Chip,

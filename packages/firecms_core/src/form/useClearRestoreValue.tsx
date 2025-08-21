@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { CMSType, Property, ResolvedProperty } from "../types";
+import { CMSType, Property, ResolvedProperty } from "@firecms/types";
 
 /**
  * Hook we use to restore a value after it has been cleared

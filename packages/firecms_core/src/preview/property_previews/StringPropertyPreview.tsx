@@ -2,7 +2,7 @@ import React from "react";
 
 import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { PreviewType } from "../../types";
+import { PreviewType } from "@firecms/types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";

@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
-import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
+import { CollectionSize, Entity, EntityCollection, FilterValues } from "@firecms/types";
 
 import {
     EntityCollectionRowActions,

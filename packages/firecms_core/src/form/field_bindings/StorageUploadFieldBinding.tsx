@@ -6,7 +6,7 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
-} from "../../types";
+} from "@firecms/types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

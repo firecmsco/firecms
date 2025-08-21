@@ -1,4 +1,4 @@
 import React from "react";
-import { SideEntityController } from "../types";
+import { SideEntityController } from "@firecms/types";
 
 export const SideEntityControllerContext = React.createContext<SideEntityController>({} as SideEntityController);

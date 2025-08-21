@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox, cls } from "@firecms/ui";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { Property } from "../../types";
+import { Property } from "@firecms/types";
 
 /**
  * @group Preview components

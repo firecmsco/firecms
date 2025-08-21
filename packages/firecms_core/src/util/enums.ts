@@ -1,4 +1,4 @@
-import { EnumValueConfig, EnumValues } from "../types";
+import { EnumValueConfig, EnumValues } from "@firecms/types";
 import { CHIP_COLORS, ChipColorScheme, getColorSchemeForSeed } from "@firecms/ui";
 
 export function enumToObjectEntries(enumValues: EnumValues): EnumValueConfig[] {

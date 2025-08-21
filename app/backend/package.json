@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "shared": "workspace:*",
     "@firecms/backend": "3.0.0-canary.258",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",

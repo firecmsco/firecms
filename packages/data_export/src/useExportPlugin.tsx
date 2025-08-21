@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { EntityCollection, FireCMSPlugin } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin } from "@firecms/types";
 import { ExportCollectionAction } from "./export";
 
 /**

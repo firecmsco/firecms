@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, EntityCollection, ResolvedProperty } from "../types";
+import { Entity, EntityCollection, ResolvedProperty } from "@firecms/types";
 
 import {
     getEntityImagePreviewPropertyKey,

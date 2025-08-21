@@ -19,7 +19,7 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityRelationship ? "relationship" :
+                            T extends EntityRelationship ? "relation" :
                                 T extends EntityReference ? "reference" :
                                     T extends Array<any> ? "array" :
                                         T extends Record<string, any> ? "map" : never;

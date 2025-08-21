@@ -1,5 +1,6 @@
 packages:
   - 'packages/*'
+  - 'app'
   - 'app/*'
 #  - 'examples/*'
 #  - 'saas'

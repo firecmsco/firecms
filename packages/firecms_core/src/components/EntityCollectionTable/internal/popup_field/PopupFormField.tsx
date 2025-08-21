@@ -12,7 +12,7 @@ import {
     ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
-} from "../../../../types";
+} from "@firecms/types";
 import { Formex, useCreateFormex } from "@firecms/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";

@@ -36,7 +36,7 @@ import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { useImportConfig } from "../hooks";
 import { convertDataToEntity, getInferenceType } from "../utils";
 import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
-import { ImportConfig } from "../types";
+import { ImportConfig } from "@firecms/types";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 

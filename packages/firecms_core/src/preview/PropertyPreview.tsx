@@ -8,7 +8,7 @@ import {
     ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedStringProperty
-} from "../types";
+} from "@firecms/types";
 
 import { resolveProperty } from "../util";
 

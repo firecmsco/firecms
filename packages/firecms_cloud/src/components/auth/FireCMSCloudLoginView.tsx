@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { BooleanSwitchWithLabel, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
-import { FireCMSBackend } from "../../types";
+import { FireCMSBackend } from "@firecms/types";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;

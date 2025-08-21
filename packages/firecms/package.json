@@ -29,7 +29,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.258"
+    "@firecms/cli": "3.0.0-canary.258"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

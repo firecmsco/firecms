@@ -18,7 +18,7 @@ import {
     ThumbDownOffAltIcon,
     Tooltip
 } from "@firecms/ui";
-import { FeedbackSlug } from "../types";
+import { FeedbackSlug } from "@firecms/types";
 
 export function SystemMessage({
                                   text,

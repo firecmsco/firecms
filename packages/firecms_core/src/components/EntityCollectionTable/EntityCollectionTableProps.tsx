@@ -9,7 +9,7 @@ import {
     ResolvedProperty,
     SelectionController,
     User
-} from "../../types";
+} from "@firecms/types";
 import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
 
 /**

@@ -1,4 +1,4 @@
-import { AuthController, Entity, EntityCollection, Permissions, User } from "../types";
+import { AuthController, Entity, EntityCollection, Permissions, User } from "@firecms/types";
 import { fullPathToCollectionSegments } from "./paths";
 
 const DEFAULT_PERMISSIONS = {

@@ -6,7 +6,7 @@ import {
     FormContext,
     ResolvedEntityCollection,
     SideEntityController
-} from "../types";
+} from "@firecms/types";
 import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButton, Typography } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";

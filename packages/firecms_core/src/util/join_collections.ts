@@ -5,7 +5,7 @@ import {
     PropertiesOrBuilders,
     Property,
     PropertyOrBuilder
-} from "../types";
+} from "@firecms/types";
 import { mergeDeep } from "./objects";
 import { sortProperties } from "./collections";
 import { isPropertyBuilder } from "./entities";

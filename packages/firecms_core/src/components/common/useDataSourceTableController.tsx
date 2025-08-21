@@ -12,7 +12,7 @@ import {
     SelectedCellProps,
     User,
     WhereFilterOp
-} from "../../types";
+} from "@firecms/types";
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
 

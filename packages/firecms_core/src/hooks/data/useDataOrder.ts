@@ -1,4 +1,4 @@
-import { Entity } from "../../types";
+import { Entity } from "@firecms/types";
 
 export interface DataOrderProps<M extends Record<string, any>> {
     data: Entity<M>[];

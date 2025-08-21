@@ -23,7 +23,7 @@ import {
     ResolvedStringProperty,
     StringProperty,
     UserConfigurationPersistence
-} from "../types";
+} from "@firecms/types";
 import { getValueInPath, mergeDeep } from "./objects";
 import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";

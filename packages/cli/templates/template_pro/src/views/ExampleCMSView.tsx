@@ -13,7 +13,7 @@ import {
     useSnackbarController
 } from "@firecms/core";
 import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { productsCollection } from "../collections/products";
 
 /**

@@ -1,6 +1,6 @@
 import React from "react";
 import { useCustomizationController, useFireCMSContext } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
+import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "@firecms/types";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";

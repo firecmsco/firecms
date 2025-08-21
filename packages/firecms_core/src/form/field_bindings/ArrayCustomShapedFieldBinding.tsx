@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps } from "../../types";
+import { FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";

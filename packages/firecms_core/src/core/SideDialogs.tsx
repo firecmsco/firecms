@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useSideDialogsController } from "../hooks";
-import { SideDialogPanelProps } from "../types";
+import { SideDialogPanelProps } from "@firecms/types";
 import { Sheet } from "@firecms/ui";
 import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
 import { ErrorBoundary } from "../components";

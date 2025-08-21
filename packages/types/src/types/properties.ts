@@ -1,11 +1,11 @@
 import React from "react";
 import { FieldProps } from "./fields";
-import { PropertyPreviewProps } from "../preview";
 import { EntityReference, EntityRelationship, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
 import { AuthController } from "./auth";
+import { PropertyPreviewProps } from "../components";
 
 /**
  * @group Entity properties
@@ -17,7 +17,7 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityRelationship ? "relationship" :
+                            T extends EntityRelationship ? "relation" :
                                 T extends EntityReference ? "reference" :
                                     T extends Array<any> ? "array" :
                                         T extends Record<string, any> ? "map" : never;
@@ -636,7 +636,7 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
  */
 export interface RelationshipProperty<T extends EntityRelationship = any> extends BaseProperty<T> {
 
-    type: "relationship";
+    type: "relation";
 
     /**
      * The path (slug) or table name of the target collection.

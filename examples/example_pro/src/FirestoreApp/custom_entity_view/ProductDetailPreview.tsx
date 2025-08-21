@@ -10,7 +10,7 @@ import {
     Select,
     SelectItem
 } from "@firecms/ui";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { Entity, EntityValues, useSnackbarController } from "@firecms/core";
 import { StorageImage } from "./components/StorageImage";
 import React from "react";

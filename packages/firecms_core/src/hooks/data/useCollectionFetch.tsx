@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../types";
+import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "@firecms/types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationController } from "../useNavigationController";
 import { useFireCMSContext } from "../useFireCMSContext";

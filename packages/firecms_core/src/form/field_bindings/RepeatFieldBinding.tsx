@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "../../types";
+import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
 import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mergeDeep } from "../../util";

@@ -14,7 +14,7 @@ import {
 } from "@firecms/ui";
 import { useSnackbarController } from "@firecms/core";
 import { getCurrencySymbol } from "@/app/common/utils";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 
 export function ProductDetailView({
                                       product

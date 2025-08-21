@@ -5,7 +5,7 @@ import {
     PermissionsBuilder,
     PropertiesOrBuilders,
     PropertyOrBuilder
-} from "../types";
+} from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
 export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {

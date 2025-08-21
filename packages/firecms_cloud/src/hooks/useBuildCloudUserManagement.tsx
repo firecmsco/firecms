@@ -12,7 +12,7 @@ import {
     setDoc
 } from "@firebase/firestore";
 import { FirebaseApp } from "@firebase/app";
-import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types";
+import { FireCMSBackend, FireCMSCloudUserWithRoles } from "@firecms/types";
 import { CMSType, PermissionsBuilder, Role, User } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
 import { resolveUserRolePermissions, UserManagement } from "@firecms/user_management";

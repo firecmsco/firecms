@@ -13,7 +13,7 @@ import {
 } from "@firebase/firestore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFireCMSBackend } from "./useFireCMSBackend";
-import { ProLicense, Subscription } from "../types";
+import { ProLicense, Subscription } from "@firecms/types";
 import { convertDocToSubscription } from "../api/firestore";
 
 const CUSTOMERS_COLLECTION = "customers";

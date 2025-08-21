@@ -1,4 +1,4 @@
-import { EntityReference, GeoPoint, Vector } from "../types";
+import { EntityReference, GeoPoint, Vector } from "@firecms/types";
 
 // Define a unique prefix for entity keys in localStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Entity, SelectionController } from "../../types";
+import { Entity, SelectionController } from "@firecms/types";
 
 export function useSelectionController<M extends Record<string, any> = any>(
     onSelectionChange?: (entity: Entity<M>, selected: boolean) => void

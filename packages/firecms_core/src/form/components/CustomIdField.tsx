@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 // import { ErrorMessage } from "@firecms/formex";
-import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "../../types";
+import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "@firecms/types";
 
 import { useClipboard, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries } from "../../util";

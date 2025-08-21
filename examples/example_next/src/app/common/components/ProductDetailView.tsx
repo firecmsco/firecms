@@ -13,7 +13,7 @@ import {
     SelectItem
 } from "@firecms/ui";
 import { useSnackbarController } from "@firecms/core";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { getCurrencySymbol } from "@/app/common/utils";
 
 export function ProductDetailView({

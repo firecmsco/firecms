@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
+import { Entity, EntityCollection, EntityReference, FieldProps } from "@firecms/types";
 import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

@@ -1,6 +1,6 @@
 import { buildCollection } from "@firecms/core";
 import { localeCollection } from "./locales";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { ProductDetailPreview } from "./entity_views/ProductDetailPreview";
 
 export const productsCollection = buildCollection<Product>({

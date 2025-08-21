@@ -4,7 +4,7 @@ import { CollectionsConfigController, mergeCollections } from "@firecms/collecti
 import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
-import { FireCMSAppConfig, FireCMSBackend } from "../types";
+import { FireCMSAppConfig, FireCMSBackend } from "@firecms/types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
 import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";

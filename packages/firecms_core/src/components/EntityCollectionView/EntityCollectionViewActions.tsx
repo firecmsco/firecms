@@ -2,7 +2,7 @@ import React from "react";
 
 import { canCreateEntity, canDeleteEntity } from "../../util";
 import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
+import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "@firecms/types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";

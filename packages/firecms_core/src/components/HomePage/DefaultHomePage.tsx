@@ -8,7 +8,7 @@ import {
     NavigationGroupMapping,
     PluginGenericProps,
     PluginHomePageAdditionalCardsProps
-} from "../../types";
+} from "@firecms/types";
 import { toArray } from "../../util/arrays";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";

@@ -2,7 +2,7 @@
 import React from "react";
 
 import { CircularProgress, cls, Container, Markdown, Typography, } from "@firecms/ui";
-import { BlogEntryWithId, ProductWithId } from "../types";
+import { BlogEntryWithId, ProductWithId } from "@firecms/types";
 import ProductPreviewCard from "@/app/common/components/ProductPreviewCard";
 
 /**

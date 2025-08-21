@@ -1,4 +1,4 @@
-import { AuthController, FireCMSContext, User } from "../types";
+import { AuthController, FireCMSContext, User } from "@firecms/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
 import { useNavigationController } from "./useNavigationController";

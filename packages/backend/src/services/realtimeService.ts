@@ -3,7 +3,7 @@ import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
 import { PgTable } from "drizzle-orm/pg-core";
-import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
+import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@firecms/types";
 import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/core";
 
 type RealTimeListenCollectionProps = ListenCollectionProps & {

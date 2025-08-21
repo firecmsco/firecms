@@ -8,7 +8,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
+} from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";

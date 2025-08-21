@@ -18,7 +18,7 @@ import {
     ReferenceProperty,
     StringProperty,
     User
-} from "../types";
+} from "@firecms/types";
 
 /**
  * Identity function we use to defeat the type system of Typescript and build

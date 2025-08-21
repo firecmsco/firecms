@@ -1,4 +1,4 @@
-import { Properties, PropertiesOrBuilders } from "../types";
+import { Properties, PropertiesOrBuilders } from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
 export function makePropertiesEditable(properties: Properties) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
-import { ProductPrice, ProductWithPrices } from "../../types";
+import { ProductPrice, ProductWithPrices } from "@firecms/types";
 import { SubscribeCloudParams } from "../../hooks";
 import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
 

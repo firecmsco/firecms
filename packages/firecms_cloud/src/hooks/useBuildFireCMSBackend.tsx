@@ -1,6 +1,6 @@
 import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "@firebase/firestore";
 
-import { FireCMSBackend, FireCMSProject } from "../types";
+import { FireCMSBackend, FireCMSProject } from "@firecms/types";
 import { FirebaseApp } from "@firebase/app";
 import {
     getAuth,

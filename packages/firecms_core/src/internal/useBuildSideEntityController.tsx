@@ -9,7 +9,7 @@ import {
     SideDialogPanelProps,
     SideDialogsController,
     SideEntityController
-} from "../types";
+} from "@firecms/types";
 import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import {

@@ -1,4 +1,4 @@
-import { EntityCollection, EntityCustomView } from "../types";
+import { EntityCollection, EntityCustomView } from "@firecms/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 import { resolveEntityView } from "./resolutions";
 

@@ -1,4 +1,4 @@
-import { ResolvedReferenceProperty } from "../../types";
+import { ResolvedReferenceProperty } from "@firecms/types";
 import { resolveArrayProperty } from "../../util";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";

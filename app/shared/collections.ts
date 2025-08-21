@@ -314,7 +314,7 @@ export const mantenimientoSubcollection: EntityCollection = {
 // Subcollección de Horas
 // -----------------------------------------------------------------------------
 
-export const horasSubcollection: EntityCollection = {
+export const horasSubcollection: EntityCollection<any> = {
     name: "Lecturas Horas",
     singularName: "Lectura Horas",
     slug: "horas",
@@ -358,7 +358,7 @@ export const horasSubcollection: EntityCollection = {
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            type: "string",
+            type: "relation",
             description: "Si está relacionado con un alquiler específico"
         }
     }

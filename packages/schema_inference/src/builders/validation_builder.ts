@@ -1,4 +1,4 @@
-import { InferencePropertyBuilderProps } from "../types";
+import { InferencePropertyBuilderProps } from "@firecms/types";
 import { PropertyValidationSchema } from "../cms_types";
 
 export function buildValidation({

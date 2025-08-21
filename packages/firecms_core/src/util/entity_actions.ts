@@ -1,4 +1,4 @@
-import { EntityAction } from "../types";
+import { EntityAction } from "@firecms/types";
 
 const reservedKeys = ["edit", "copy", "delete"];
 

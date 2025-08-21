@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Entity, EntityCollection, EntityReference } from "../../../types";
+import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { ReferencePreview } from "../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationController, useReferenceDialog } from "../../../hooks";

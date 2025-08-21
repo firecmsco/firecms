@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavigationController } from "../types";
+import { NavigationController } from "@firecms/types";
 import { NavigationContext } from "../contexts/NavigationContext";
 
 /**

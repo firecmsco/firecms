@@ -25,6 +25,7 @@
     "packages/schema_inference",
     "packages/user_management",
     "packages/formex",
+    "packages/types",
     "app/frontend",
     "app/backend",
     "examples/example_cloud",

@@ -1,4 +1,4 @@
-import { EntityCollection, EntityReference } from "../types";
+import { EntityCollection, EntityReference } from "@firecms/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 
 export function getParentReferencesFromPath(props: {

@@ -7,7 +7,7 @@ import {
     FormContext,
     ResolvedEntityCollection,
     SideEntityController
-} from "../types";
+} from "@firecms/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
 import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";

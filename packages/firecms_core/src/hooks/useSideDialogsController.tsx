@@ -1,4 +1,4 @@
-import { SideDialogsController } from "../types";
+import { SideDialogsController } from "@firecms/types";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useContext } from "react";
 

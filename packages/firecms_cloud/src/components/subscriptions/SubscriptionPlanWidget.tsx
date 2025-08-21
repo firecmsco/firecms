@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Alert, Button, CircularProgress } from "@firecms/ui";
 import { PaywallDialog } from "./Paywall";
 import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
-import { Subscription } from "../../types";
+import { Subscription } from "@firecms/types";
 
 export type SubscriptionPlanWidgetProps = {}
 

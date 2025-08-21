@@ -2,7 +2,7 @@ import { AdditionalFieldDelegate, AsyncPreviewComponent, buildCollection, Entity
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
-import { Locale, Product } from "../types";
+import { Locale, Product } from "@firecms/types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";

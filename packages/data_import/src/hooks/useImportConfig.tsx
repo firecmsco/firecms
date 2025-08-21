@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Entity, Property } from "@firecms/core";
-import { ImportConfig } from "../types";
+import { ImportConfig } from "@firecms/types";
 
 export const useImportConfig = (): ImportConfig => {
 

@@ -1,4 +1,4 @@
-import { AuthController, User } from "../types";
+import { AuthController, User } from "@firecms/types";
 import { useContext } from "react";
 import { AuthControllerContext } from "../contexts/AuthControllerContext";
 

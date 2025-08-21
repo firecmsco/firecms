@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "../../types";
+import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "@firecms/types";
 import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
 import { ReferencePreview } from "../../../preview";
-import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types";
+import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { getReferenceFrom, IconForView } from "../../../util";

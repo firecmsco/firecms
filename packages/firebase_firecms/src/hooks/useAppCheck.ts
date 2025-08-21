@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 
 import { AppCheck, getToken, initializeAppCheck } from "@firebase/app-check";
 import { FirebaseApp } from "@firebase/app";
-import { AppCheckOptions } from "../types";
+import { AppCheckOptions } from "@firecms/types";
 
 /**
  * @group Firebase

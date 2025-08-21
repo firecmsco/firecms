@@ -6,7 +6,7 @@ import {
     ResolvedMapProperty,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
+} from "@firecms/types";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
 import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util";

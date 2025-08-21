@@ -12,7 +12,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
+} from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
 export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {

@@ -7,7 +7,7 @@ import {
     FireCMSContext,
     ResolvedEntityCollection,
     User
-} from "../../types";
+} from "@firecms/types";
 
 /**
  * @group Hooks and utilities

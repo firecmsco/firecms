@@ -1,5 +1,5 @@
 import React from "react";
-import { WhereFilterOp } from "../../types";
+import { WhereFilterOp } from "@firecms/types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = {

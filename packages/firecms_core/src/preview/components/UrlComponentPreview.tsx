@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
-import { PreviewType } from "../../types";
+import { PreviewType } from "@firecms/types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
 import { EmptyValue } from "./EmptyValue";

@@ -13,7 +13,7 @@ import {
     PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty
-} from "../types";
+} from "@firecms/types";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";

@@ -1,4 +1,4 @@
-import { CollectionSize, ResolvedProperty, SelectedCellProps } from "../../types";
+import { CollectionSize, ResolvedProperty, SelectedCellProps } from "@firecms/types";
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 

@@ -1,4 +1,4 @@
-import { InferencePropertyBuilderProps } from "../types";
+import { InferencePropertyBuilderProps } from "@firecms/types";
 import { findCommonInitialStringInPath } from "../strings";
 import { Property } from "../cms_types";
 

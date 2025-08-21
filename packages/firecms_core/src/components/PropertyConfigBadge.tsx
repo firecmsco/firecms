@@ -1,5 +1,5 @@
 import { getIconForWidget } from "../util";
-import { PropertyConfig } from "../types";
+import { PropertyConfig } from "@firecms/types";
 import { getDefaultFieldConfig } from "../core";
 
 export function PropertyConfigBadge({

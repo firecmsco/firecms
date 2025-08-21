@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { CloseIcon, Collapse, IconButton, TextField } from "@firecms/ui";
-import { FieldProps, PreviewType } from "../../types";
+import { FieldProps, PreviewType } from "@firecms/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
 import { PropertyPreview } from "../../preview";

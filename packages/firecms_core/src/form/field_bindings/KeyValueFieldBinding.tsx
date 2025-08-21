@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataType, FieldProps, GeoPoint } from "../../types";
+import { DataType, FieldProps, GeoPoint } from "@firecms/types";
 
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

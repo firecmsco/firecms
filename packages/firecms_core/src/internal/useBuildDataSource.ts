@@ -17,7 +17,7 @@ import {
     PropertyConfig,
     ResolvedProperties,
     SaveEntityProps
-} from "../types";
+} from "@firecms/types";
 import { resolveCollection, updateDateAutoValues } from "../util";
 
 /**

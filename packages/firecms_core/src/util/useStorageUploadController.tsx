@@ -12,7 +12,7 @@ import {
     StorageConfig,
     StorageSource,
     StringProperty
-} from "../types";
+} from "@firecms/types";
 import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../preview";
 import { randomString } from "./strings";

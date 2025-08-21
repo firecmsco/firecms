@@ -1,4 +1,4 @@
-import { EntityCollection, StorageSource } from "../types";
+import { EntityCollection, StorageSource } from "@firecms/types";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { useContext } from "react";
 

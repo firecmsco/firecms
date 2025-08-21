@@ -25,6 +25,7 @@ export default defineConfig({
         alias: {
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
+            "@firecms/types": path.resolve(__dirname, "../../packages/types/src"),
             "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),
             "@firecms/editor": path.resolve(__dirname, "../../packages/editor/src"),
             "@firecms/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),

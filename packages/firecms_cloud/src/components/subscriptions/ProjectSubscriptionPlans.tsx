@@ -4,7 +4,7 @@ import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from 
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
-import { Subscription } from "../../types";
+import { Subscription } from "@firecms/types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 

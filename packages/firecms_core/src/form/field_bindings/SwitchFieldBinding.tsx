@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FieldProps } from "../../types";
+import { FieldProps } from "@firecms/types";
 import { getIconForProperty } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { BooleanSwitchWithLabel } from "@firecms/ui";

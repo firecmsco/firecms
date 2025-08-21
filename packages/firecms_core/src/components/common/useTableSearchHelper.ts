@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { EntityCollection } from "../../types";
+import { EntityCollection } from "@firecms/types";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks";
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {

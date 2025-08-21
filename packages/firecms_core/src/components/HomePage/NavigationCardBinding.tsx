@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { useCustomizationController, useFireCMSContext } from "../../hooks";
-import { NavigationEntry, PluginHomePageActionsProps } from "../../types";
+import { NavigationEntry, PluginHomePageActionsProps } from "@firecms/types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { IconButton, StarIcon } from "@firecms/ui";

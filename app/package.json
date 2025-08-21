@@ -25,6 +25,7 @@
     "generate:schema": "cd backend && npm run generate:schema"
   },
   "devDependencies": {
+    "@firecms/types": "*",
     "concurrently": "^8.2.2",
     "typescript": "^5.0.0"
   },

@@ -11,7 +11,7 @@ import {
     SelectItem,
     Tooltip
 } from "@firecms/ui";
-import { CollectionSize } from "../../../types";
+import { CollectionSize } from "@firecms/types";
 import { useLargeLayout } from "../../../hooks";
 
 interface CollectionTableToolbarProps {

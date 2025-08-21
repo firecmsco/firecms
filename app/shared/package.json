@@ -1,0 +1,31 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Shared collections and types for FireCMS app",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@firecms/types": "3.0.0-canary.258"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./collections": {
+      "types": "./dist/collections.d.ts",
+      "import": "./dist/collections.js"
+    }
+  }
+}
+

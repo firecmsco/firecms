@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
-import { EntityAction } from "../../types";
+import { EntityAction } from "@firecms/types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
 import { navigateToEntity, resolveDefaultSelectedView } from "../../util";

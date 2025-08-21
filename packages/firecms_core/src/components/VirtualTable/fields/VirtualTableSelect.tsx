@@ -1,4 +1,4 @@
-import { EnumValueConfig } from "../../../types";
+import { EnumValueConfig } from "@firecms/types";
 import { EnumValuesChip } from "../../../preview";
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";

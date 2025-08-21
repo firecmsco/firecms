@@ -1,4 +1,4 @@
-import { EntityCallbacks } from "../types";
+import { EntityCallbacks } from "@firecms/types";
 
 export const mergeCallbacks = (
     baseCallbacks: EntityCallbacks = {},

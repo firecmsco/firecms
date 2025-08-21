@@ -27,7 +27,7 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { Product } from "../types";
+import { Product } from "@firecms/types";
 import { usersCollection } from "../collections/users_collection";
 
 /**

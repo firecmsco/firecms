@@ -4,7 +4,7 @@ import {
     ResolvedStringProperty,
     StorageConfig,
     UploadedFileContext
-} from "../types";
+} from "@firecms/types";
 import { randomString } from "./strings";
 
 interface ResolveFilenameStringParams<M extends object> {

@@ -13,7 +13,7 @@ import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
 import { EntityCollectionView, NotFoundPage } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
-import { EntityCollection } from "../types";
+import { EntityCollection } from "@firecms/types";
 
 export function FireCMSRoute() {
 

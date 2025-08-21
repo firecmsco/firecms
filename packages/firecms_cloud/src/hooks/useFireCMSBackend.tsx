@@ -1,5 +1,5 @@
 import React from "react";
-import { FireCMSBackend } from "../types";
+import { FireCMSBackend } from "@firecms/types";
 
 export const FireCMSBackendContext = React.createContext({} as FireCMSBackend);
 //

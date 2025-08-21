@@ -1,4 +1,4 @@
-import { CollectionSize } from "../types";
+import { CollectionSize } from "@firecms/types";
 import { PreviewSize } from "./PropertyPreviewProps";
 
 export const SMALL_THUMBNAIL = 40;

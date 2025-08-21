@@ -1,4 +1,4 @@
-import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "../../../types";
+import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "@firecms/types";
 
 export function getTableCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
     if (property.type === "boolean") {
