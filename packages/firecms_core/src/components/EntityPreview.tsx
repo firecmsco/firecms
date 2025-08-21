@@ -23,7 +23,7 @@ import {
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 export type EntityPreviewProps = {
-    size: PreviewSize,
+    size?: PreviewSize,
     actions?: React.ReactNode,
     collection?: EntityCollection,
     hover?: boolean;
@@ -48,7 +48,7 @@ export function EntityPreview({
                                   collection: collectionProp,
                                   previewKeys,
                                   onClick,
-                                  size,
+                                  size = "medium",
                                   includeId = true,
                                   includeTitle = true,
                                   includeEntityLink = true,
@@ -194,7 +194,7 @@ export type EntityPreviewContainerProps = {
     children: React.ReactNode;
     hover?: boolean;
     fullwidth?: boolean;
-    size: PreviewSize;
+    size?: PreviewSize;
     className?: string;
     style?: React.CSSProperties;
     onClick?: (e: React.SyntheticEvent) => void;
@@ -204,7 +204,7 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
                                                                                                          children,
                                                                                                          hover,
                                                                                                          onClick,
-                                                                                                         size,
+                                                                                                         size = "medium",
                                                                                                          style,
                                                                                                          className,
                                                                                                          fullwidth = true,

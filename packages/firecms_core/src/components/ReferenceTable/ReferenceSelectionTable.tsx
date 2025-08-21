@@ -289,6 +289,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         textSearchLoading={textSearchLoading}
                         onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
                         textSearchEnabled={textSearchEnabled}
+                        additionalFields={collection.additionalFields}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
                         tableController={tableController}
@@ -300,8 +301,9 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                                 size={"small"}
                                 collectionOrView={collection}
                                 className={"text-surface-300 dark:text-surface-600"}/>
-                            {collection.singularName ? `Select ${collection.singularName}` : `Select
-                                                                                              from ${collection.name}`}
+                            {collection.singularName
+                                ? `Select ${collection.singularName}`
+                                : `Select from ${collection.name}`}
                         </Typography>}
                         defaultSize={collection.defaultSize}
                         properties={resolvedCollection.properties}

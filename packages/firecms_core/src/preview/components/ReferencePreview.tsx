@@ -10,7 +10,7 @@ import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPr
 export type ReferencePreviewProps = {
     disabled?: boolean;
     reference: EntityReference,
-    size: PreviewSize;
+    size?: PreviewSize;
     previewProperties?: string[];
     onClick?: (e: React.SyntheticEvent) => void;
     hover?: boolean;
@@ -27,7 +27,7 @@ export const ReferencePreview = function ReferencePreview(props: ReferencePrevie
         console.warn("Reference preview received value of type", typeof reference);
         return <EntityPreviewContainer
             onClick={props.onClick}
-            size={props.size}>
+            size={props.size ?? "medium"}>
             <ErrorView error={"Unexpected value. Click to edit"}
                        tooltip={JSON.stringify(reference)}/>
         </EntityPreviewContainer>;
@@ -140,6 +140,7 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
             </EntityPreviewContainer>
         );
     }
+
     return <EntityPreview size={size}
                           previewKeys={previewProperties}
                           disabled={disabled}
