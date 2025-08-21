@@ -23,7 +23,7 @@ export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boo
             return true;
     }
     if (property.dataType === "reference") {
-        return !property.path;
+        return !property.path && !property.Field;
     }
     return false;
 }
