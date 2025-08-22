@@ -1,4 +1,4 @@
-import { convertDataToEntity, ImportConfig } from "@firecms/data_import_export";
+import { convertDataToEntity, ImportConfig } from "@firecms/data_import";
 import {
     CircularProgressCenter,
     EntityCollectionTable,
