@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 @import "@firecms/ui/index.css" layer(base);
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 @source "../../../packages/**/src/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer utilities {
     body {

@@ -25,8 +25,11 @@ export function useBuildModeController(): ModeController {
     }, [prefersDarkMode]);
 
     const setDocumentMode = (mode: "light" | "dark") => {
-        document.body.style.setProperty("color-scheme", mode);
-        document.documentElement.dataset.theme = mode;
+        if (mode === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
     };
 
     const setModeInternal = useCallback((mode: "light" | "dark" | "system") => {
