@@ -5,7 +5,6 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
-    | EntityRelationship
     | Record<string, any>
     | CMSType[];
 
@@ -19,7 +18,6 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityRelationship ? "relation" :
                                 T extends EntityReference ? "reference" :
                                     T extends Array<any> ? "array" :
                                         T extends Record<string, any> ? "map" : never;
@@ -36,27 +34,6 @@ export type EntityStatus = "new" | "existing" | "copy";
  * @group Models
  */
 export type EntityValues<M extends object> = M;
-
-export class EntityRelationship {
-    /**
-     * The collection of related entity references.
-     * For "to-one" relationships, this array will contain 0 or 1 element.
-     * For "to-many" relationships, it can contain multiple elements.
-     */
-    readonly references: EntityReference[];
-
-    constructor(references: EntityReference | EntityReference[]) {
-        this.references = Array.isArray(references) ? references : [references];
-    }
-
-    /**
-     * A type guard to identify instances of EntityRelationship.
-     * @returns {boolean}
-     */
-    isEntityRelationship(): this is EntityRelationship {
-        return true;
-    }
-}
 
 /**
  * Class used to create a reference to an entity in a different path

@@ -38,32 +38,6 @@ export type EntityValues<M extends object> = M;
 
 
 /**
- * Represents the resolved value of a relationship property.
- * It holds an array of references to the related entities, providing a
- * consistent data structure for both "to-one" and "to-many" relationships.
- */
-export class EntityRelationship {
-    /**
-     * The collection of related entity references.
-     * For "to-one" relationships, this array will contain 0 or 1 element.
-     * For "to-many" relationships, it can contain multiple elements.
-     */
-    readonly references: EntityReference[];
-
-    constructor(references: EntityReference | EntityReference[]) {
-        this.references = Array.isArray(references) ? references : [references];
-    }
-
-    /**
-     * A type guard to identify instances of EntityRelationship.
-     * @returns {boolean}
-     */
-    isEntityRelationship(): this is EntityRelationship {
-        return true;
-    }
-}
-
-/**
  * Class used to create a reference to an entity in a different path
  */
 export class EntityReference {

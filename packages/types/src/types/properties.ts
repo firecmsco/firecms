@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldProps } from "./fields";
-import { EntityReference, EntityRelationship, EntityValues, GeoPoint, Vector } from "./entities";
+import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { AuthController } from "./auth";
@@ -17,10 +17,9 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityRelationship ? "relation" :
-                                T extends EntityReference ? "reference" :
-                                    T extends Array<any> ? "array" :
-                                        T extends Record<string, any> ? "map" : never;
+                            T extends EntityReference ? "reference" :
+                                T extends Array<any> ? "array" :
+                                    T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -32,7 +31,6 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
-    | EntityRelationship
     | Record<string, any>
     | CMSType[];
 
@@ -46,7 +44,6 @@ export type AnyProperty =
     DateProperty |
     GeopointProperty |
     ReferenceProperty |
-    RelationshipProperty |
     ArrayProperty |
     MapProperty;
 
@@ -61,8 +58,7 @@ export type Property<T extends CMSType = any> =
                     T extends GeoPoint ? GeopointProperty :
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends EntityRelationship ? RelationshipProperty :
-                                    T extends Record<string, any> ? MapProperty<T> : AnyProperty;
+                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
 
 /**
  * Interface including all common properties of a CMS property
@@ -625,82 +621,6 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
      */
     validation?: PropertyValidationSchema,
 
-}
-
-/**
- * Defines a relationship between tables in a SQL database.
- * This property assumes relationships join on the primary keys defined
- * at the collection level.
- *
- * @group Entity properties
- */
-export interface RelationshipProperty<T extends EntityRelationship = any> extends BaseProperty<T> {
-
-    type: "relation";
-
-    /**
-     * The path (slug) or table name of the target collection.
-     * @example "posts"
-     */
-    target: string;
-
-    /**
-     * If `true`, the relationship is "to-many" (one-to-many or many-to-many)
-     * and renders as a sub-collection.
-     * If `false` or undefined, it's a "to-one" relationship and renders as a
-     * reference selection field.
-     * @default false
-     */
-    hasMany?: boolean;
-
-    /**
-     * Controls how the relationship is rendered in the UI.
-     * - 'select': Renders a dropdown for to-one, or a multi-select for to-many. Ideal for linking existing entities.
-     * - 'subcollection': Renders an inline table view. Ideal for creating/editing related entities directly.
-     * @default 'select' for hasMany:false, 'subcollection' for hasMany:true
-     */
-    widget?: "select" | "subcollection";
-
-    /**
-     * The foreign key column(s) on the **source table** (this entity's table).
-     * Use a string for a single column or an array for a composite key.
-     * This is used for **one-to-one** relationships (`hasMany: false`).
-     */
-    sourceForeignKey?: string | string[];
-
-    /**
-     * The foreign key column(s) on the **target table**.
-     * Use a string for a single column or an array for a composite key.
-     * This is used for **one-to-many** relationships (`hasMany: true` and no `through` property).
-     */
-    targetForeignKey?: string | string[];
-
-    /**
-     * Configuration for a **many-to-many** relationship via a junction table.
-     * Required for many-to-many relationships (`hasMany: true` with a junction table).
-     */
-    through?: {
-        /**
-         * The name of the junction table.
-         * @example "posts_to_tags"
-         */
-        junctionTable: string;
-
-        /**
-         * The foreign key column(s) in the junction table referencing the **source table**.
-         */
-        sourceForeignKey: string | string[];
-
-        /**
-         * The foreign key column(s) in the junction table referencing the **target table**.
-         */
-        targetForeignKey: string | string[];
-    };
-
-    /**
-     * Properties of the target collection to display in previews or sub-collection columns.
-     */
-    previewProperties?: string[];
 }
 
 /**

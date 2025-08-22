@@ -7,7 +7,9 @@ import {
     Property,
     ReferenceProperty,
     RelationshipProperty,
-    StringProperty
+    StringProperty,
+    CollectionRelations,
+    ExtendedRelation
 } from "@firecms/types";
 
 // --- Helper Functions ---
@@ -183,6 +185,7 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
 
     const relationsToGenerate: { tableVarName: string; relations: string[] }[] = [];
     const allTables = new Map<string, string>(); // tableName -> tableVarName
+    const junctionTables: string[] = []; // Track junction tables for many-to-many
 
     // 1. Generate Enums
     collections.forEach(collection => {
@@ -196,7 +199,6 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                     ? property.enum.map(v => String(v.id))
                     : Object.keys(property.enum);
                 if (values.length > 0) {
-                    // Use enum values exactly as they are defined - DO NOT convert them
                     schemaContent += `export const ${enumVarName} = pgEnum("${enumDbName}", [${values.map(v => `'${v}'`).join(", ")}]);\n`;
                 }
             }
@@ -204,7 +206,42 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
     });
     schemaContent += "\n\n";
 
-    // 2. Generate Main Collection Tables
+    // 2. Generate Junction Tables for Many-to-Many Relations
+    collections.forEach(collection => {
+        if (collection.relations) {
+            Object.entries(collection.relations).forEach(([relationKey, relation]) => {
+                if (relation.type === "manyToMany") {
+                    try {
+                        const junctionTable = relation.through.table();
+                        const junctionTableName = junctionTable.dbPath ?? junctionTable.name ?? "";
+                        const junctionTableVarName = getTableVarName(junctionTableName);
+
+                        if (!junctionTables.includes(junctionTableName)) {
+                            junctionTables.push(junctionTableName);
+
+                            // Get source and target collection info
+                            const sourceCollection = collection;
+                            const targetCollection = relation.with();
+                            const sourceTableName = sourceCollection.dbPath ?? sourceCollection.name ?? "";
+                            const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                            const sourceTableVarName = getTableVarName(sourceTableName);
+                            const targetTableVarName = getTableVarName(targetTableName);
+
+                            schemaContent += `export const ${junctionTableVarName} = pgTable("${junctionTableName}", {\n`;
+                            schemaContent += `\tid: integer().primaryKey().notNull(),\n`;
+                            schemaContent += `\t${relation.through.sourceKey}: integer("${toSnakeCase(relation.through.sourceKey)}").references(() => ${sourceTableVarName}.id, { onDelete: "cascade" }).notNull(),\n`;
+                            schemaContent += `\t${relation.through.targetKey}: integer("${toSnakeCase(relation.through.targetKey)}").references(() => ${targetTableVarName}.id, { onDelete: "cascade" }).notNull()\n`;
+                            schemaContent += "});\n\n";
+                        }
+                    } catch (e) {
+                        console.warn(`Could not generate junction table for relation ${relationKey}:`, e);
+                    }
+                }
+            });
+        }
+    });
+
+    // 3. Generate Main Collection Tables
     for (const collection of collections) {
         const tableName = collection.dbPath ?? collection.name;
         if (!tableName) continue;
@@ -221,101 +258,219 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
             if (columnString) columns.push(`\t${columnString}`);
         });
 
-        // Add standard timestamp fields if they exist in the properties
-        const hasCreatedAt = collection.properties?.createdAt;
-        const hasUpdatedAt = collection.properties?.updatedAt;
-
-        if (hasCreatedAt && !columns.find(c => c.includes("createdAt"))) {
-            columns.push("\tcreatedAt: timestamp(\"created_at\", { withTimezone: true, mode: 'string' })");
-        }
-        if (hasUpdatedAt && !columns.find(c => c.includes("updatedAt"))) {
-            columns.push("\tupdatedAt: timestamp(\"updated_at\", { withTimezone: true, mode: 'string' })");
+        // Process reference fields from relations
+        if (collection.relations) {
+            Object.entries(collection.relations).forEach(([relationKey, relation]) => {
+                if (relation.type === "one" && relation.fields && relation.references) {
+                    // For one() relations, add the foreign key columns if they're not already in properties
+                    relation.fields.forEach((fieldName, index) => {
+                        if (!collection.properties?.[fieldName]) {
+                            try {
+                                const targetCollection = relation.with();
+                                const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                                const targetTableVarName = getTableVarName(targetTableName);
+                                const isRequired = relation.ui?.validation?.required ?? false;
+                                const refOptions = isRequired ? "{ onDelete: \"cascade\" }" : "{ onDelete: \"set null\" }";
+                                const columnDef = `integer("${toSnakeCase(fieldName)}").references(() => ${targetTableVarName}.id, ${refOptions})`;
+                                const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                                columns.push(`\t${fieldName}: ${finalDef}`);
+                            } catch (e) {
+                                console.warn(`Could not resolve target collection for relation ${relationKey}`);
+                            }
+                        }
+                    });
+                } else if (relation.type === "self") {
+                    // Add self-referencing foreign key
+                    if (!collection.properties?.[relation.parentKey]) {
+                        const isRequired = relation.ui?.validation?.required ?? false;
+                        const refOptions = isRequired ? "{ onDelete: \"cascade\" }" : "{ onDelete: \"set null\" }";
+                        const columnDef = `integer("${toSnakeCase(relation.parentKey)}").references(() => ${tableVarName}.id, ${refOptions})`;
+                        const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                        columns.push(`\t${relation.parentKey}: ${finalDef}`);
+                    }
+                } else if (relation.type === "polymorphic") {
+                    // Add polymorphic foreign key and type discriminator
+                    if (!collection.properties?.[relation.foreignKey]) {
+                        const isRequired = relation.ui?.validation?.required ?? false;
+                        const columnDef = `integer("${toSnakeCase(relation.foreignKey)}")`;
+                        const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                        columns.push(`\t${relation.foreignKey}: ${finalDef}`);
+                    }
+                    if (!collection.properties?.[relation.typeKey]) {
+                        const isRequired = relation.ui?.validation?.required ?? false;
+                        const columnDef = `varchar("${toSnakeCase(relation.typeKey)}")`;
+                        const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                        columns.push(`\t${relation.typeKey}: ${finalDef}`);
+                    }
+                } else if (relation.type === "composite") {
+                    // Add composite key fields
+                    relation.keys.forEach(({ local }) => {
+                        if (!collection.properties?.[local]) {
+                            const isRequired = relation.ui?.validation?.required ?? false;
+                            const columnDef = `integer("${toSnakeCase(local)}")`;
+                            const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                            columns.push(`\t${local}: ${finalDef}`);
+                        }
+                    });
+                }
+            });
         }
 
         if (columns.length > 0) {
             schemaContent += `,\n${columns.join(",\n")}`;
         }
-        schemaContent += "\n";
-
-        // Add table constraints if needed (indexes, foreign keys)
-        const constraints: string[] = [];
-
-        // Add foreign key constraints and indexes
-        Object.entries(collection.properties as Properties?? {}).forEach(([propName, prop]) => {
-            if (prop.type === "reference" || (prop.type === "relation" && !(prop as RelationshipProperty).hasMany)) {
-                const colName = toSnakeCase(propName);
-                if (prop.type === "reference") {
-                    const refProp = prop as ReferenceProperty;
-                    if (refProp.path) {
-                        const targetTableVarName = getTableVarName(refProp.path);
-                        const onDelete = prop.validation?.required ? "cascade" : "set null";
-                        constraints.push(`\tindex("${tableVarName}_${colName}_idx").using("btree", table.${propName}.asc().nullsLast().op("int4_ops"))`);
-                        constraints.push(`\tforeignKey({\n\t\tcolumns: [table.${propName}],\n\t\tforeignColumns: [${targetTableVarName}.id],\n\t\tname: "${tableVarName}_${colName}_${targetTableVarName}_fk"\n\t}).onDelete("${onDelete}")`);
-                    }
-                }
-            }
-        });
-
-        if (constraints.length > 0) {
-            schemaContent += `\n}, (table) => [\n${constraints.join(",\n")}\n]);\n\n`;
-        } else {
-            schemaContent += "\n});\n\n";
-        }
+        schemaContent += "\n\n});\n\n";
     }
 
-    // 3. Generate Relations
+    // 4. Generate Relations from the new relation system
     for (const collection of collections) {
         const tableName = collection.dbPath ?? collection.name;
         if (!tableName) continue;
         const tableVarName = getTableVarName(tableName);
         const tableRelations: string[] = [];
 
-        Object.entries(collection.properties as Properties?? {}).forEach(([propName, prop]) => {
+        // Process relations defined in the collection.relations object
+        if (collection.relations) {
+            Object.entries(collection.relations).forEach(([relationKey, relation]) => {
+                try {
+                    if (relation.type === "one") {
+                        // Generate one() relation
+                        if (relation.fields && relation.references) {
+                            const targetCollection = relation.with();
+                            const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                            const targetTableVarName = getTableVarName(targetTableName);
+                            const fieldsStr = relation.fields.map(f => `${tableVarName}.${f}`).join(", ");
+                            const referencesStr = relation.references.map(r => `${targetTableVarName}.${r}`).join(", ");
+
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
+                            }
+                        }
+                    } else if (relation.type === "many") {
+                        // Generate many() relation
+                        const targetCollection = relation.with();
+                        const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                        const targetTableVarName = getTableVarName(targetTableName);
+
+                        if (relation.relationName) {
+                            tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: "${relation.relationName}" })`);
+                        } else {
+                            tableRelations.push(`\t${relationKey}: many(${targetTableVarName})`);
+                        }
+                    } else if (relation.type === "manyToMany") {
+                        // Generate many-to-many relation
+                        const targetCollection = relation.with();
+                        const junctionTable = relation.through.table();
+                        const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                        const junctionTableName = junctionTable.dbPath ?? junctionTable.name ?? "";
+                        const targetTableVarName = getTableVarName(targetTableName);
+                        const junctionTableVarName = getTableVarName(junctionTableName);
+
+                        if (relation.relationName) {
+                            tableRelations.push(`\t${relationKey}: many(${junctionTableVarName}, { relationName: "${relation.relationName}" })`);
+                        } else {
+                            tableRelations.push(`\t${relationKey}: many(${junctionTableVarName})`);
+                        }
+                    } else if (relation.type === "self") {
+                        // Generate self-referencing relation
+                        if (relation.direction === "parentToChildren") {
+                            // Parent has many children
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: many(${tableVarName}, { relationName: "${relation.relationName}" })`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: many(${tableVarName})`);
+                            }
+                        } else {
+                            // Child has one parent
+                            const fieldsStr = `${tableVarName}.${relation.parentKey}`;
+                            const referencesStr = `${tableVarName}.id`;
+
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: one(${tableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: one(${tableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
+                            }
+                        }
+                    } else if (relation.type === "conditional") {
+                        // Generate conditional relation (treated as regular one/many with where clause in queries)
+                        const targetCollection = relation.with();
+                        const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                        const targetTableVarName = getTableVarName(targetTableName);
+
+                        if (relation.cardinality === "one") {
+                            const fieldsStr = relation.fields.map(f => `${tableVarName}.${f}`).join(", ");
+                            const referencesStr = relation.references.map(r => `${targetTableVarName}.${r}`).join(", ");
+
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
+                            }
+                        } else {
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: "${relation.relationName}" })`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: many(${targetTableVarName})`);
+                            }
+                        }
+                    } else if (relation.type === "composite") {
+                        // Generate composite key relation
+                        const targetCollection = relation.with();
+                        const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                        const targetTableVarName = getTableVarName(targetTableName);
+
+                        const fieldsStr = relation.keys.map(k => `${tableVarName}.${k.local}`).join(", ");
+                        const referencesStr = relation.keys.map(k => `${targetTableVarName}.${k.foreign}`).join(", ");
+
+                        if (relation.cardinality === "one") {
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
+                            }
+                        } else {
+                            if (relation.relationName) {
+                                tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: "${relation.relationName}" })`);
+                            } else {
+                                tableRelations.push(`\t${relationKey}: many(${targetTableVarName})`);
+                            }
+                        }
+                    } else if (relation.type === "polymorphic") {
+                        // For polymorphic relations, we need to generate relations for each target type
+                        // This is complex in Drizzle and might need custom query handling
+                        relation.targets.forEach((target, index) => {
+                            const targetCollection = target.with();
+                            const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                            const targetTableVarName = getTableVarName(targetTableName);
+                            const relationName = `${relationKey}_${target.typeValue}`;
+
+                            // Generate a relation for each polymorphic target
+                            tableRelations.push(`\t${relationName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${relation.foreignKey}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
+                        });
+                    }
+                } catch (e) {
+                    console.warn(`Could not generate relation ${relationKey}:`, e);
+                }
+            });
+        }
+
+        // Also process legacy reference properties for backward compatibility
+        Object.entries(collection.properties as Properties ?? {}).forEach(([propName, prop]) => {
             if (prop.type === "reference") {
                 const refProp = prop as ReferenceProperty;
                 if (refProp.path) {
                     const targetTableVarName = getTableVarName(refProp.path);
-                    tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${propName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
-                }
-            } else if (prop.type === "relation") {
-                const relProp = prop as RelationshipProperty;
-                if (relProp.hasMany) {
-                    const targetTableVarName = getTableVarName(relProp.target);
-                    // Find the inverse foreign key in the target collection
-                    const targetCollection = collections.find(c => (c.dbPath ?? c.name) === relProp.target);
-                    if (targetCollection) {
-                        const inverseFkProp = Object.entries(targetCollection.properties as Properties?? {}).find(([_, targetProp]) => {
-                            return (targetProp.type === "reference" && (targetProp as ReferenceProperty).path === tableName) ||
-                                (targetProp.type === "relation" && (targetProp as RelationshipProperty).target === tableName && !(targetProp as RelationshipProperty).hasMany);
-                        });
-
-                        if (inverseFkProp) {
-                            tableRelations.push(`\t${propName}: many(${targetTableVarName})`);
-                        }
+                    // Only add if not already handled by the new relations system
+                    const existingRelation = collection.relations && Object.values(collection.relations).find(rel =>
+                        rel.type === "one" && rel.fields?.includes(propName)
+                    );
+                    if (!existingRelation) {
+                        tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${propName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
                     }
-                } else {
-                    const targetTableVarName = getTableVarName(relProp.target);
-                    const fkColumnName = relProp.sourceForeignKey ? String(relProp.sourceForeignKey) : `${propName}Id`;
-                    tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${fkColumnName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
                 }
             }
-        });
-
-        // Generate inverse relations (many side of one-to-many)
-        collections.forEach(otherCollection => {
-            const otherTableName = otherCollection.dbPath ?? otherCollection.name;
-            if (!otherTableName || otherTableName === tableName) return;
-
-            Object.entries(otherCollection.properties as Properties?? {}).forEach(([otherPropName, otherProp]) => {
-                if (otherProp.type === "reference" && (otherProp as ReferenceProperty).path === tableName) {
-                    const otherTableVarName = getTableVarName(otherTableName);
-                    // Use the exact table name from the introspected relations
-                    const relationName = otherTableName === "maintenance_history" ? "maintenanceHistories" :
-                        otherTableName === "payment_history" ? "paymentHistories" :
-                            otherTableName;
-                    tableRelations.push(`\t${relationName}: many(${otherTableVarName})`);
-                }
-            });
         });
 
         if (tableRelations.length > 0) {
@@ -326,14 +481,50 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
         }
     }
 
+    // 5. Generate Junction Table Relations for Many-to-Many
+    junctionTables.forEach(junctionTableName => {
+        const junctionTableVarName = getTableVarName(junctionTableName);
+        const junctionRelations: string[] = [];
+
+        // Find collections that use this junction table
+        collections.forEach(collection => {
+            if (collection.relations) {
+                Object.entries(collection.relations).forEach(([relationKey, relation]) => {
+                    if (relation.type === "manyToMany") {
+                        try {
+                            const junctionTable = relation.through.table();
+                            const currentJunctionTableName = junctionTable.dbPath ?? junctionTable.name ?? "";
+
+                            if (currentJunctionTableName === junctionTableName) {
+                                const sourceTableName = collection.dbPath ?? collection.name ?? "";
+                                const targetCollection = relation.with();
+                                const targetTableName = targetCollection.dbPath ?? targetCollection.name ?? "";
+                                const sourceTableVarName = getTableVarName(sourceTableName);
+                                const targetTableVarName = getTableVarName(targetTableName);
+
+                                junctionRelations.push(`\t${relation.through.sourceKey}: one(${sourceTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${relation.through.sourceKey}],\n\t\treferences: [${sourceTableVarName}.id]\n\t})`);
+                                junctionRelations.push(`\t${relation.through.targetKey}: one(${targetTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${relation.through.targetKey}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
+                            }
+                        } catch (e) {
+                            console.warn(`Could not generate junction table relations for ${relationKey}:`, e);
+                        }
+                    }
+                });
+            }
+        });
+
+        if (junctionRelations.length > 0) {
+            relationsToGenerate.push({
+                tableVarName: junctionTableVarName,
+                relations: junctionRelations
+            });
+        }
+    });
+
     // Generate all Relations
-    relationsToGenerate.forEach(({
-                                     tableVarName,
-                                     relations
-                                 }) => {
-        // Convert table variable name to camelCase for relation exports
-        const relationVarName = tableVarName.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
-        schemaContent += `export const ${relationVarName}Relations = relations(${tableVarName}, ({ one, many }) => ({\n`;
+    relationsToGenerate.forEach(({ tableVarName, relations }) => {
+        const relationVarName = `${tableVarName}Relations`;
+        schemaContent += `export const ${relationVarName} = relations(${tableVarName}, ({ one, many }) => ({\n`;
         schemaContent += `${relations.join(",\n")}\n`;
         schemaContent += "}));\n\n";
     });
@@ -341,7 +532,6 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
     const finalOutputPath = outputPath || path.resolve(process.cwd(), "src/schema.generated.ts");
     await fs.writeFile(finalOutputPath, schemaContent);
     console.log("✅ Drizzle schema generated successfully at", finalOutputPath);
-    // suggest running `pnpm db:generate` with bold and colored background for the command only
     console.log(`You can now run ${formatTerminalText("pnpm db:generate", {
         bold: true,
         backgroundColor: "blue",

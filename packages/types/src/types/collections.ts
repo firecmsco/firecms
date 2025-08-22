@@ -9,6 +9,7 @@ import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
 import { EntityOverrides } from "./entity_overrides";
+import { CollectionRelations } from "./relations";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -166,9 +167,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     subcollections?: EntityCollection<any, any>[];
 
-
-    referencedCollections?: EntityCollection<any, any>[];
-
     /**
      * This interface defines all the callbacks that can be used when an entity
      * is being created, updated or deleted.
@@ -249,6 +247,52 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * e.g. `initialSort: ["order", "asc"]`
      */
     initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
+
+    /**
+     * Relations defined for this entity collection using object syntax.
+     * Define relationships using direct object definitions.
+     *
+     * @example
+     * ```typescript
+     * relations: {
+     *   // one-to-many: customer has many orders
+     *   orders: {
+     *     type: "many",
+     *     with: () => ordersCollection,
+     *     ui: {
+     *       name: "Customer Orders",
+     *       icon: "ShoppingCart",
+     *       widget: "table",
+     *       previewProperties: ["total", "status", "date"]
+     *     }
+     *   },
+     *
+     *   // many-to-one: order belongs to customer
+     *   customer: {
+     *     type: "one",
+     *     with: () => customersCollection,
+     *     fields: ["customerId"],
+     *     references: ["id"],
+     *     ui: {
+     *       name: "Customer",
+     *       widget: "select"
+     *     }
+     *   },
+     *
+     *   // many-to-many: product has many categories
+     *   categories: {
+     *     type: "manyToMany",
+     *     with: () => categoriesCollection,
+     *     through: {
+     *       table: () => productCategoriesJunction,
+     *       sourceKey: "productId",
+     *       targetKey: "categoryId"
+     *     }
+     *   }
+     * }
+     * ```
+     */
+    relations?: CollectionRelations;
 
     /**
      * Array of builders for rendering additional panels in an entity view.
@@ -648,7 +692,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     onAddColumn?: (column: string) => void;
 }
 
-export type SelectedCellProps<M extends Record<string, any>> = {
+export type SelectedCellProps<M extends Record<string, any> = any> = {
     propertyKey: Extract<keyof M, string>;
     cellRect: DOMRect;
     width: number;

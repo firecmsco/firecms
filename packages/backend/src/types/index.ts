@@ -1,6 +1,5 @@
 import { Entity, EntityCollection, EntityStatus, FilterValues } from "@firecms/types";
 
-// These should match exactly with FireCMS core types
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
   path: string;
   collection?: EntityCollection<M>;

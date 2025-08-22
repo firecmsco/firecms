@@ -17,6 +17,7 @@ const __dirname = path.dirname(__filename);
 // Load environment from app root level
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
+// Register collections and relations
 collections.forEach(collection => collectionRegistry.register(collection));
 
 const app = express();
