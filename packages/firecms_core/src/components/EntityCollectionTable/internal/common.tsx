@@ -4,7 +4,7 @@ export function getTableCellAlignment(property: Property | ResolvedProperty): "r
     if (property.type === "boolean") {
         return "center";
     } else if (property.type === "number") {
-        if (property.enumValues)
+        if (property.enum)
             return "left";
         return "right";
     } else if (property.type === "date") {
@@ -25,7 +25,7 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
             return 280;
         } else if (property.storage) {
             return 160;
-        } else if (property.enumValues) {
+        } else if (property.enum) {
             return 200;
         } else if (property.multiline) {
             return 300;

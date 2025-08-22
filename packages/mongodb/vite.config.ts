@@ -30,6 +30,7 @@ export default defineConfig(() => ({
             "@firecms/firebase": path.resolve(__dirname, "../firebase_firecms/src"),
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
             "@firecms/core": path.resolve(__dirname, "../firecms_core/src"),
+            "@firecms/types": path.resolve(__dirname, "../types/src"),
             "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
             "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),

@@ -358,7 +358,7 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "url";
         } else if (property.email) {
             return "email";
-        } else if (property.enumValues) {
+        } else if (property.enum) {
             return "select";
         } else if (property.reference) {
             return "reference_as_string";
@@ -366,7 +366,7 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "text_field";
         }
     } else if (property.type === "number") {
-        if (property.enumValues) {
+        if (property.enum) {
             return "number_select";
         }
         return "number_input";

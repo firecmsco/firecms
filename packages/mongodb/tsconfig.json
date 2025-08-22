@@ -38,6 +38,9 @@
       "@firecms/core": [
         "../firecms_core/src"
       ],
+      "@firecms/types": [
+        "../types/src"
+      ],
       "@firecms/data_import": ["../../packages/data_import/src"],
       "@firecms/data_export": ["../../packages/data_export/src"],
       "@firecms/data_import_export": [

@@ -32,8 +32,8 @@ function getSimpleProperty(property: Property): InputProperty {
         description: property.description,
         type: property.type,
         fieldConfigId: fieldId,
-        enumValues: "enumValues" in property && property.enumValues
-            ? getSimpleEnumValues(property.enumValues)
+        enumValues: "enumValues" in property && property.enum
+            ? getSimpleEnumValues(property.enum)
             : undefined,
         disabled: Boolean(property.disabled || property.readOnly)
     };

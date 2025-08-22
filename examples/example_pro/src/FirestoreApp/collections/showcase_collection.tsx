@@ -116,7 +116,7 @@ export const showcaseCollection = buildCollection({
         // category: buildProperty({
         //     type: "string",
         //     name: "Category",
-        //     enumValues: {
+        //     enum: {
         //         art_design_books: "Art and design books",
         //         backpacks: "Backpacks and bags",
         //         bath: "Bath",
@@ -129,7 +129,7 @@ export const showcaseCollection = buildCollection({
         //     type: "array",
         //     of: {
         //         type: "string",
-        //         enumValues: {
+        //         enum: {
         //             es: "Spanish",
         //             en: "English",
         //             fr: {

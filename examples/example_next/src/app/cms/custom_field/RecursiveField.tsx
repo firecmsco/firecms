@@ -28,7 +28,7 @@ export const conditionProperty = (name: string): MapProperty => ({
         operator: {
             type: "string",
             name: "Operator",
-            enumValues: {
+            enum: {
                 "==": "==",
                 "!=": "!=",
                 "in": "in",

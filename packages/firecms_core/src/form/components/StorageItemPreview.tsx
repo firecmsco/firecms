@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ResolvedStringProperty } from "@firecms/types";
-import { PreviewSize, PropertyPreview } from "../../preview";
+import { PreviewSize, ResolvedStringProperty } from "@firecms/types";
+import { PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";

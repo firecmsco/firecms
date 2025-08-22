@@ -3,7 +3,7 @@ import React from "react";
 import { resolveArrayProperty } from "../../util";
 import { ResolvedProperty } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PreviewSize, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";

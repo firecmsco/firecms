@@ -45,6 +45,7 @@ export default defineConfig(() => ({
         alias: {
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
             "@firecms/core": path.resolve(__dirname, "../core/src"),
+            "@firecms/types": path.resolve(__dirname, "../types/src"),
             "@firecms/firebase": path.resolve(__dirname, "../firebase_firecms/src"),
             "@firecms/formex": path.resolve(__dirname, "../formex/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),

@@ -22,6 +22,7 @@ export default defineConfig({
                 "react-dom",
                 "@firecms/cloud",
                 "@firecms/core",
+                "@firecms/types",
                 "@firecms/firebase",
                 "@firecms/ui",
                 "@firebase/firestore",

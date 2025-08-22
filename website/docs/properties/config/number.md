@@ -33,7 +33,7 @@ import { buildProperty } from "./builders";
 const property = buildProperty({
     name: "Status",
     dataType: "number",
-    enumValues: [
+    enum: [
       buildEnumValueConfig({
         id: "-1",
         label: "Lightly tense",

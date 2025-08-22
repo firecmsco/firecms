@@ -55,7 +55,7 @@ export const carsCollection = buildCollection<Car>({
       validation: {
         required: true
       },
-      enumValues: [
+      enum: [
         {
           id: "alfa-romero",
           label: "Alfa Romero"
@@ -90,7 +90,7 @@ export const carsCollection = buildCollection<Car>({
         required: true
       },
       dataType: "string",
-      enumValues: [
+      enum: [
         {
           label: "Diesel",
           id: "diesel"

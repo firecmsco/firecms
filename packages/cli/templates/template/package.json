@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@firecms/core": "^3.0.0-beta",
+    "@firecms/types": "^3.0.0-beta",
     "@firecms/firebase": "^3.0.0-beta",
     "@firecms/ui": "^3.0.0-beta",
     "firebase": "^10.14.0",

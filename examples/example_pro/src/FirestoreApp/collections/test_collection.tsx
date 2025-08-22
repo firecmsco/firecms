@@ -245,7 +245,7 @@ export const testCollection = buildCollection<any>({
             locale: {
                 name: "Locales",
                 type: "string",
-                enumValues: locales,
+                enum: locales,
                 clearable: true
             },
             available_locales: {
@@ -253,7 +253,7 @@ export const testCollection = buildCollection<any>({
                 type: "array",
                 of: {
                     type: "string",
-                    enumValues: locales
+                    enum: locales
                 }
             },
             image: {
@@ -310,7 +310,7 @@ export const testCollection = buildCollection<any>({
             //     type: "string",
             //     disabled: true,
             //     name: "Type",
-            //     enumValues: [
+            //     enum: [
             //         {
             //             id: "seat",
             //             label: "Seat"
@@ -331,7 +331,7 @@ export const testCollection = buildCollection<any>({
             //                     category: {
             //                         type: "string",
             //                         name: "Category",
-            //                         enumValues: [
+            //                         enum: [
             //                             {
             //                                 id: "deck",
             //                                 label: "Deck"
@@ -436,7 +436,7 @@ export const testCollection = buildCollection<any>({
             // background: {
             //     type: "number",
             //     name: "Colour",
-            //     enumValues:
+            //     enum:
             //         [
             //             {
             //                 id: 0,
@@ -491,7 +491,7 @@ export const testCollection = buildCollection<any>({
             //             type: {
             //                 name: "Type",
             //                 type: "string",
-            //                 enumValues: {
+            //                 enum: {
             //                     oneNum: "Saturation without range",
             //                     fromTo: "Saturation available range"
             //                 }
@@ -582,7 +582,7 @@ export const testCollection = buildCollection<any>({
             //     of: {
             //         name: "My enum",
             //         type: "string",
-            //         enumValues: {
+            //         enum: {
             //             value1: "My Value 1",
             //             value2: "Your Value 2",
             //             value3: "Another Value 3",
@@ -606,7 +606,7 @@ export const testCollection = buildCollection<any>({
             // enum: {
             //     name: "My enum",
             //     type: "string",
-            //     enumValues: {
+            //     enum: {
             //         value1: "My Value 1",
             //         value2: "Your Value 2",
             //         value3: "Another Value 3",
@@ -698,7 +698,7 @@ export const testCollection = buildCollection<any>({
             // test_enum: buildProperty({
             //     type: "string",
             //     name: "Currency",
-            //     enumValues: [
+            //     enum: [
             //         {
             //             id: "EUR",
             //             label: "Euros",

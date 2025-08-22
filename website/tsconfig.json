@@ -29,6 +29,9 @@
       "@firecms/core": [
         "../packages/firecms_core"
       ],
+      "@firecms/types": [
+        "../packages/types"
+      ],
       "@firecms/firebase": [
         "../packages/firebase_firecms"
       ],

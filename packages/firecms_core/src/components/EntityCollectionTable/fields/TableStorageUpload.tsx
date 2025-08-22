@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "@firecms/types";
+import { Entity, PreviewSize, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "@firecms/types";
 import { useDropzone } from "react-dropzone";
-import { PreviewSize, PropertyPreview } from "../../../preview";
+import { PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { useSnackbarController, useStorageSource } from "../../../hooks";
 import { getThumbnailMeasure } from "../../../preview/util";

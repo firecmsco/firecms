@@ -21,7 +21,7 @@ export const productsCollection = buildCollection<any>({
             type: "string",
             name: "Category",
             clearable: true,
-            enumValues: {
+            enum: {
                 bath: "Bath",
                 bicycle: "Bicycle",
                 books: "Books",

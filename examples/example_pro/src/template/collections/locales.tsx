@@ -1,6 +1,6 @@
-import { buildCollection, buildEnumValues } from "@firecms/core";
+import { buildCollection, buildEnum } from "@firecms/core";
 
-const locales = buildEnumValues({
+const locales = buildEnum({
     "en-US": "English (United States)",
     "es-ES": "Spanish (Spain)",
     "de-DE": "German"

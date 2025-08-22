@@ -102,7 +102,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             validation: { required: true },
             type: "string",
             columnWidth: 140,
-            enumValues: {
+            enum: {
                 published: {
                     id: "published",
                     label: "Published",

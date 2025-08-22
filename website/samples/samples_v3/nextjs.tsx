@@ -96,7 +96,7 @@ const booksCollection = buildCollection({
         category: {
             name: "Category",
             dataType: "string",
-            enumValues: categories
+            enum: categories
         },
         tags: {
             name: "Tags",

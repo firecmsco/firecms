@@ -78,7 +78,7 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
                         // we can use the enumValues property to define the enum values
                         // the stored value will be the id of the category
                         // and the UI label will be the name of the category
-                        enumValues: categoriesData.map((category: any) => ({
+                        enum: categoriesData.map((category: any) => ({
                             id: category.id,
                             label: category.values.name
                         }))

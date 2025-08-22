@@ -103,6 +103,7 @@ module.exports = {
                             alias: {
                                 "@firecms/cloud": path.resolve(__dirname, "../packages/firecms_cloud/src"),
                                 "@firecms/core": path.resolve(__dirname, "../packages/firecms_core/src"),
+                                "@firecms/types": path.resolve(__dirname, "../packages/types/src"),
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                                 "@firecms/collection_editor": path.resolve(__dirname, "../packages/collection_editor/src"),
                                 "@firecms/firebase": path.resolve(__dirname, "../packages/firebase_firecms/src"),

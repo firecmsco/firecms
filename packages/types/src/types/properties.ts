@@ -3,9 +3,9 @@ import { FieldProps } from "./fields";
 import { EntityReference, EntityRelationship, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
-import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
 import { AuthController } from "./auth";
 import { PropertyPreviewProps } from "../components";
+import { ChipColorKey, ChipColorScheme } from "./chips";
 
 /**
  * @group Entity properties
@@ -326,7 +326,7 @@ export interface NumberProperty extends BaseProperty<number> {
      * exclusive values the property can take, mapped to the label that it is
      * displayed in the dropdown.
      */
-    enumValues?: EnumValues;
+    enum?: EnumValues;
 
     /**
      * Rules for validating this property
@@ -384,7 +384,7 @@ export interface StringProperty extends BaseProperty<string> {
      * a `Map` instead of a plain object.
      *
      */
-    enumValues?: EnumValues;
+    enum?: EnumValues;
 
     /**
      * You can specify a `Storage` configuration. It is used to

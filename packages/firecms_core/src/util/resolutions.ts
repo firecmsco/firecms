@@ -404,11 +404,11 @@ export function resolveProperties<M extends Record<string, any>>({
  * @param fromBuilder
  */
 export function resolvePropertyEnum(property: StringProperty | NumberProperty, fromBuilder?: boolean): ResolvedStringProperty | ResolvedNumberProperty {
-    if (typeof property.enumValues === "object") {
+    if (typeof property.enum === "object") {
         return {
             ...property,
             resolved: true,
-            enumValues: enumToObjectEntries(property.enumValues)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
+            enumValues: enumToObjectEntries(property.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
     }

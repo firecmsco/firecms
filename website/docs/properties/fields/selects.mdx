@@ -22,7 +22,7 @@ import { buildProperty } from "@firecms/core";
 buildProperty({
     dataType: "string",
     name: "Category",
-    enumValues: {
+    enum: {
         art_design_books: "Art and design books",
         backpacks: "Backpacks and bags",
         bath: "Bath",
@@ -40,7 +40,7 @@ import { buildProperty } from "@firecms/core";
 buildProperty({
     dataType: "string",
     name: "Currency",
-    enumValues: [
+    enum: [
         { id: "EUR", label: "Euros", color: "blueDark" },
         { id: "DOL", label: "Dollars", color: "greenLight" }
     ]
@@ -74,7 +74,7 @@ buildProperty({
     dataType: "array",
     of: {
         dataType: "string",
-        enumValues: {
+        enum: {
             "es": "Spanish",
             "en": "English",
             "fr": {
@@ -113,7 +113,7 @@ import { buildProperty } from "@firecms/core";
 buildProperty({
     dataType: "string",
     name: "Currency",
-    enumValues: [
+    enum: [
         { id: "EUR", label: "Euros", color: "blueDark" },
         {
             id: "DOL",

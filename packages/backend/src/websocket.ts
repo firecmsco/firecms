@@ -1,7 +1,7 @@
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "./types";
+import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "@firecms/types";
 import { WebSocketServer } from "ws";
 import { PgTableWithColumns } from "drizzle-orm/pg-core";
 import { Server } from "http";
@@ -11,7 +11,7 @@ export function createPostgresWebSocket(server: Server, db: NodePgDatabase, tabl
     const dataSourceDelegate = new PostgresDataSourceDelegate(db, realtimeService, tables);
     const wss = new WebSocketServer({ server });
 
-    wss.on("connection", (ws, req) => {
+    wss.on("connection", (ws) => {
         const clientId = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         console.log(`WebSocket client connected: ${clientId}`);
 

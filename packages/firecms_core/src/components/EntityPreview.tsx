@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, EntityCollection, ResolvedProperty } from "@firecms/types";
+import { Entity, EntityCollection, PreviewSize, ResolvedProperty } from "@firecms/types";
 
 import {
     getEntityImagePreviewPropertyKey,
@@ -13,7 +13,7 @@ import {
     resolveCollection
 } from "../util";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
-import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
+import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
     useAuthController,
     useCustomizationController,

@@ -319,14 +319,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 }
             } else if (selected && property.type === "string") {
                 const stringProperty = property as ResolvedStringProperty;
-                if (stringProperty.enumValues) {
+                if (stringProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
                                                          multiple={false}
                                                          focused={selected}
                                                          disabled={disabled}
                                                          valueType={"string"}
                                                          small={getPreviewSizeFrom(size) !== "medium"}
-                                                         enumValues={stringProperty.enumValues}
+                                                         enumValues={stringProperty.enum}
                                                          error={validationError ?? error}
                                                          internalValue={internalValue as string | number}
                                                          updateValue={updateValue}

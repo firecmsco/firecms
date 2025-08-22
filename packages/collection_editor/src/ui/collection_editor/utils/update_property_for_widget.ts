@@ -27,7 +27,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: undefined
+                enum: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multiline") {
@@ -42,7 +42,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: undefined
+                enum: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "markdown") {
@@ -71,7 +71,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: true,
-                enumValues: undefined
+                enum: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "email") {
@@ -86,7 +86,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: true,
                 url: undefined,
-                enumValues: undefined
+                enum: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "select") {
@@ -101,7 +101,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: propertyData.enumValues ?? []
+                enum: propertyData.enumValues ?? []
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multi_select") {
@@ -124,7 +124,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_input",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
-                enumValues: undefined
+                enum: undefined
             } satisfies NumberProperty
         );
     } else if (selectedWidgetId === "number_select") {
@@ -134,7 +134,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
-                enumValues: propertyData.enumValues ?? []
+                enum: propertyData.enumValues ?? []
             } satisfies NumberProperty
         );
     } else if (selectedWidgetId === "multi_number_select") {

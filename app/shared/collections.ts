@@ -150,10 +150,17 @@ export const alquileresSubcollection: EntityCollection = {
     icon: "CalendarToday",
     description: "Historial completo de alquileres de esta máquina",
     properties: {
+        maquina_referencia: {
+            name: "Máquina",
+            type: "relation",
+            target: "maquinaria",
+            validation: { required: true },
+            previewProperties: ["nombre", "estado_actual"]
+        },
         cliente_referencia: {
             name: "Cliente",
-            type: "reference",
-            path: "clientes",
+            type: "relation",
+            target: "clientes",
             validation: { required: true },
             previewProperties: ["nombre", "apellido"]
         },
@@ -359,6 +366,7 @@ export const horasSubcollection: EntityCollection<any> = {
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
             type: "relation",
+            target: "alquileres",
             description: "Si está relacionado con un alquiler específico"
         }
     }
@@ -418,12 +426,13 @@ export const incidenciasSubcollection: EntityCollection = {
         },
         cliente_relacionado: {
             name: "Cliente Relacionado",
-            type: "reference",
-            path: "clientes"
+            type: "relation",
+            target: "clientes"
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            type: "string"
+            type: "relation",
+            target: "alquileres",
         },
         solucion: {
             name: "Solución Aplicada",

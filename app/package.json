@@ -19,9 +19,10 @@
     "build:backend": "cd backend && npm run build",
     "start": "cd backend && npm start",
     "deploy": "npm run build && npm run start",
+    "db:pull": "cd backend && npm run db:pull",
+    "db:generate": "cd backend && npm run db:generate",
     "db:migrate": "cd backend && npm run db:migrate",
     "db:studio": "cd backend && npm run db:studio",
-    "db:generate": "cd backend && npm run db:generate",
     "generate:schema": "cd backend && npm run generate:schema"
   },
   "devDependencies": {

@@ -7,12 +7,12 @@ import {
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
-    ResolvedStringProperty
+    ResolvedStringProperty,
+    PropertyPreviewProps
 } from "@firecms/types";
 
 import { resolveProperty } from "../util";
 
-import { PropertyPreviewProps } from "./PropertyPreviewProps";
 import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";

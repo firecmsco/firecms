@@ -48,6 +48,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
+    "@firecms/types": "3.0.0-canary.258",
     "@firecms/core": "3.0.0-canary.258"
   },
   "peerDependencies": {

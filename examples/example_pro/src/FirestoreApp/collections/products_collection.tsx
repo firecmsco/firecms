@@ -224,7 +224,7 @@ export const productsCollection = buildCollection<Product>({
             type: "string",
             name: "Category",
             clearable: true,
-            enumValues: categories
+            enum: categories
         },
         available: {
             type: "boolean",
@@ -252,7 +252,7 @@ export const productsCollection = buildCollection<Product>({
         currency: {
             type: "string",
             name: "Currency",
-            enumValues: currencies,
+            enum: currencies,
             widthPercentage: 50,
             validation: {
                 required: true
@@ -339,7 +339,7 @@ export const productsCollection = buildCollection<Product>({
             readOnly: true,
             of: {
                 type: "string",
-                enumValues: locales
+                enum: locales
             },
             defaultValue: ["es"]
         },
@@ -390,7 +390,7 @@ export const productsSimpleCollection = buildCollection<any>({
             type: "string",
             name: "Category",
             clearable: true,
-            enumValues: categories
+            enum: categories
         },
         price: {
             type: "number",

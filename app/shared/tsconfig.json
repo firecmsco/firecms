@@ -10,13 +10,13 @@
     "noEmit": false,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
+    "baseUrl": "../../",
     "paths": {
-      "@firecms/types": ["../../packages/types/src"],
+      "@firecms/types": ["packages/types/src/index.ts"],
+      "@firecms/types/*": ["packages/types/src/*"]
     }
   },
   "include": [
@@ -27,4 +27,3 @@
     "dist"
   ]
 }
-

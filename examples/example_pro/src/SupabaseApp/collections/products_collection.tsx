@@ -40,7 +40,7 @@ export const productsCollection = buildCollection<any>({
             type: "string",
             name: "Category",
             clearable: true,
-            enumValues: {
+            enum: {
                 bath: "Bath",
                 bicycle: "Bicycle",
                 books: "Books",
@@ -55,7 +55,7 @@ export const productsCollection = buildCollection<any>({
             type: "array",
             of: {
                 type: "string",
-                enumValues: locales
+                enum: locales
             }
         },
         related_products: {

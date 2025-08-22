@@ -28,6 +28,7 @@ export default defineConfig(() => ({
     resolve: {
         alias: {
             "@firecms/core": path.resolve(__dirname, "../firecms_core/src"),
+            "@firecms/types": path.resolve(__dirname, "../types/src"),
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
             "@firecms/editor": path.resolve(__dirname, "../editor/src"),
         }

@@ -124,10 +124,10 @@ function getYupStringSchema({
                             }: PropertyContext<string>): StringSchema {
     let collection: StringSchema<any> = yup.string();
     const validation = property.validation;
-    if (property.enumValues) {
+    if (property.enum) {
         if (validation?.required)
             collection = collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
-        const entries = enumToObjectEntries(property.enumValues);
+        const entries = enumToObjectEntries(property.enum);
         collection = collection.oneOf(
             (validation?.required ? entries : [...entries, null])
                 .map((enumValueConfig) => enumValueConfig?.id ?? null)

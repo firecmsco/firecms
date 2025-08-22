@@ -41,6 +41,9 @@
       "@firecms/core": [
         "../firecms_core/src"
       ],
+      "@firecms/types": [
+        "../types/src"
+      ],
       "@firecms/schema_inference": [
         "../schema_inference/src"
       ],

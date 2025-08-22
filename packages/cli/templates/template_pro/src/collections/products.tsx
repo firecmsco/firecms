@@ -41,7 +41,7 @@ export const productsCollection = buildCollection<Product>({
             type: "string",
             name: "Category",
             clearable: true,
-            enumValues: {
+            enum: {
                 electronics: "Electronics",
                 books: "Books",
                 furniture: "Furniture",
@@ -88,7 +88,7 @@ export const productsCollection = buildCollection<Product>({
         currency: {
             type: "string",
             name: "Currency",
-            enumValues: [
+            enum: [
                 {
                     id: "EUR",
                     label: "Euros",

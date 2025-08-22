@@ -990,7 +990,7 @@ const BooksCollection: EntityCollection = {
         category: {
             name: 'Category',
             dataType: 'string',
-            enumValues: [
+            enum: [
                 {
                     id: 'drama',
                     label: 'Drama',
@@ -1407,7 +1407,7 @@ const booksCollection = buildCollection({
         category: {
             name: "Category",
             dataType: "string",
-            enumValues: categories
+            enum: categories
         },
         tags: {
             name: "Tags",
@@ -5929,7 +5929,7 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
                         // we can use the enumValues property to define the enum values
                         // the stored value will be the id of the category
                         // and the UI label will be the name of the category
-                        enumValues: categoriesData.map((category: any) => ({
+                        enum: categoriesData.map((category: any) => ({
                             id: category.id,
                             label: category.values.name
                         }))
@@ -6513,7 +6513,7 @@ or simply as an object with key/value pairs:
 buildProperty({
     dataType: "string",
     name: "Category",
-    enumValues: {
+    enum: {
         art_design_books: "Art and design books",
         backpacks: "Backpacks and bags",
         bath: "Bath",
@@ -6530,7 +6530,7 @@ or
 buildProperty({
     dataType: "string",
     name: "Currency",
-    enumValues: [
+    enum: [
         { id: "EUR", label: "Euros", color: "blueDark" },
         { id: "DOL", label: "Dollars", color: "greenLight" }
     ]
@@ -6562,7 +6562,7 @@ buildProperty({
     dataType: "array",
     of: {
         dataType: "string",
-        enumValues: {
+        enum: {
             "es": "Spanish",
             "en": "English",
             "fr": {
@@ -6656,7 +6656,7 @@ And you can also define custom colors using the HTML syntax `#AAAAAA`:
 buildProperty({
     dataType: "string",
     name: "Currency",
-    enumValues: [
+    enum: [
         { id: "EUR", label: "Euros", color: "blueDark" },
         {
             id: "DOL",
@@ -7254,7 +7254,7 @@ plain object.
 const amazonLinkProperty = buildProperty({
     dataType: "string",
     name: "Amazon link",
-    enumValues: {
+    enum: {
         "es": "Spanish",
         "de": "German",
         "en": "English",
@@ -7386,7 +7386,7 @@ You can use the enum values providing a map of possible
 const property = buildProperty({
     name: "Status",
     dataType: "number",
-    enumValues: [
+    enum: [
       buildEnumValueConfig({
         id: "-1",
         label: "Lightly tense",
@@ -7723,7 +7723,7 @@ const ctaProperty = buildProperty({
             description: "Action type that determines the user flow",
             validation: { required: true, uniqueInArray: true },
             dataType: "string",
-            enumValues: {
+            enum: {
                 complete: "Complete",
                 continue: "Continue"
             }
@@ -7861,7 +7861,7 @@ export const userSchema: EntityCollection = buildCollection<User>({
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",
-                    enumValues: {
+                    enum: {
                         "facebook": "FacebookId",
                         "apple": "Apple"
                     }
@@ -9000,7 +9000,7 @@ buildProperty(({ values }) => ({
     validation: { required: true },
     dataType: "string",
     columnWidth: 140,
-    enumValues: {
+    enum: {
         published: {
             id: "published",
             label: "Published",
@@ -9259,7 +9259,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
-            enumValues: {
+            enum: {
                 published: {
                     id: "published",
                     label: "Published",
@@ -10056,7 +10056,7 @@ export const carsCollection = buildCollection<Car>({
       validation: {
         required: true
       },
-      enumValues: [
+      enum: [
         {
           id: "alfa-romero",
           label: "Alfa Romero"
@@ -10091,7 +10091,7 @@ export const carsCollection = buildCollection<Car>({
         required: true
       },
       dataType: "string",
-      enumValues: [
+      enum: [
         {
           label: "Diesel",
           id: "diesel"

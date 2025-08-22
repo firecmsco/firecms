@@ -23,7 +23,7 @@ export function StringPropertyPreview({
         const resolvedProperty = resolvePropertyEnum(property);
         return <EnumValuesChip
             enumKey={enumKey}
-            enumValues={resolvedProperty.enumValues}
+            enumValues={resolvedProperty.enum}
             size={size}/>;
     } else if (property.previewAsTag) {
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");

@@ -24,7 +24,7 @@ const ctaProperty = buildProperty({
             description: "Action type that determines the user flow",
             validation: { required: true, uniqueInArray: true },
             dataType: "string",
-            enumValues: {
+            enum: {
                 complete: "Complete",
                 continue: "Continue"
             }

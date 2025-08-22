@@ -35,6 +35,9 @@
       "@firecms/core": [
         "../firecms_core/src"
       ],
+      "@firecms/types": [
+        "../types/src"
+      ],
       "@firecms/collection_editor": [
         "../collection_editor/src"
       ],

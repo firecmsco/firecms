@@ -8,8 +8,9 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections/collections.ts",
-    "generate:schema:watch": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections/collections.ts --watch",
+    "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections.ts",
+    "generate:schema:watch": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections.ts --watch",
+    "db:pull": "drizzle-kit pull",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"

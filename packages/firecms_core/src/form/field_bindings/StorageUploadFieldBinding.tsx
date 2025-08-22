@@ -1,14 +1,13 @@
 import React, { useCallback, useState } from "react";
 
 import {
-    FieldProps,
+    FieldProps, PreviewSize,
     PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
 } from "@firecms/types";
 import { useDropzone } from "react-dropzone";
-import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";

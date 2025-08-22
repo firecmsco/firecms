@@ -1,18 +1,18 @@
 import { useMemo } from "react";
 import {
-    DataSource,
+    DataSourceDelegate,
+    DeleteEntityProps,
     Entity,
     EntityCollection,
     FetchCollectionProps,
     FetchEntityProps,
-    SaveEntityProps,
-    DeleteEntityProps,
     ListenCollectionProps,
-    ListenEntityProps
-} from "@firecms/core";
+    ListenEntityProps,
+    SaveEntityProps
+} from "@firecms/types";
 import { PostgresDataSourceClient, PostgresDataSourceConfig } from "./postgres_client";
 
-export interface PostgresDataSourceDelegate extends DataSource {
+export interface PostgresDataSourceDelegate extends DataSourceDelegate {
     client: PostgresDataSourceClient;
 }
 
@@ -20,22 +20,57 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
     const client = useMemo(() => new PostgresDataSourceClient(config), [config.baseUrl, config.websocketUrl]);
 
     const dataSource: PostgresDataSourceDelegate = useMemo(() => ({
+
+        key: "postgres",
+
+        name: "PostgreSQL",
+
         client,
 
+        delegateToCMSModel: (data: any) => data,
+
+        cmsToDelegateModel: (data: any) => data,
+
+        setDateToMidnight: (date: Date) => {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        },
+
         async fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
-            return client.fetchCollection(props);
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
+            return client.fetchCollection(cleanProps);
         },
 
         async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
-            return client.fetchEntity(props);
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
+            return client.fetchEntity(cleanProps);
         },
 
         async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
-            return client.saveEntity(props);
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
+            return client.saveEntity(cleanProps);
         },
 
         async deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void> {
-            return client.deleteEntity(props);
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
+            return client.deleteEntity(cleanProps);
         },
 
         async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
@@ -49,20 +84,35 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
         },
 
         async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
-            return client.countEntities(props);
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
+            return client.countEntities(cleanProps);
         },
 
         listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
             return client.listenCollection(
-                props,
+                cleanProps,
                 (entities: Entity<M>[]) => props.onUpdate(entities),
                 props.onError
             );
         },
 
         listenEntity<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
+            // Strip out navigationController and any other unnecessary props before sending to client
+            const {
+                navigationController,
+                ...cleanProps
+            } = props as any;
             return client.listenEntity(
-                props,
+                cleanProps,
                 (entity: Entity<M> | null) => {
                     if (entity !== null) {
                         props.onUpdate(entity);
@@ -81,67 +131,4 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
     }), [client]);
 
     return dataSource;
-}
-
-export function createPostgresDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
-    const client = new PostgresDataSourceClient(config);
-
-    return {
-        client,
-
-        async fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
-            return client.fetchCollection(props);
-        },
-
-        async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
-            return client.fetchEntity(props);
-        },
-
-        async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
-            return client.saveEntity(props);
-        },
-
-        async deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void> {
-            return client.deleteEntity(props);
-        },
-
-        async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
-            return client.checkUniqueField(path, name, value, entityId, collection);
-        },
-
-        generateEntityId(path: string, collection?: EntityCollection): string {
-            return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        },
-
-        async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
-            return client.countEntities(props);
-        },
-
-        listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
-            return client.listenCollection(
-                props,
-                (entities: Entity<M>[]) => props.onUpdate(entities),
-                props.onError
-            );
-        },
-
-        listenEntity<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
-            return client.listenEntity(
-                props,
-                (entity: Entity<M> | null) => {
-                    if (entity !== null) {
-                        props.onUpdate(entity);
-                    } else {
-                        // Handle null case - some FireCMS listeners expect only non-null entities
-                        // We'll skip the update for null entities to match FireCMS expectations
-                    }
-                },
-                props.onError
-            );
-        },
-
-        isFilterCombinationValid(): boolean {
-            return true;
-        }
-    };
 }

@@ -12,7 +12,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "@firecms/core";
+} from "@firecms/types";
 
 export interface DataSourceDelegate {
     key: string;

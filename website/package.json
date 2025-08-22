@@ -59,6 +59,7 @@
     "@firecms/cloud": "workspace:*",
     "@firecms/collection_editor": "workspace:*",
     "@firecms/core": "workspace:*",
+    "@firecms/types": "workspace:*",
     "@firecms/data_enhancement": "workspace:*",
     "@firecms/data_export": "workspace:*",
     "@firecms/data_import": "workspace:*",

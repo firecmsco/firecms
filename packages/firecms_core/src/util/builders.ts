@@ -86,7 +86,7 @@ export function buildPropertiesOrBuilder<M extends Record<string, any>>(
  * @param enumValues
  * @group Builder
  */
-export function buildEnumValues(
+export function buildEnum(
     enumValues: EnumValues
 ): EnumValues {
     return enumValues;

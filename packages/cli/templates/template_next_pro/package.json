@@ -13,6 +13,7 @@
     "@firecms/collection_editor": "^3.0.0-beta",
     "@firecms/collection_editor_firebase": "^3.0.0-beta",
     "@firecms/core": "^3.0.0-beta",
+    "@firecms/types": "^3.0.0-beta",
     "@firecms/data_enhancement": "^3.0.0-beta",
     "@firecms/data_export": "^3.0.0-beta",
     "@firecms/data_import": "^3.0.0-beta",

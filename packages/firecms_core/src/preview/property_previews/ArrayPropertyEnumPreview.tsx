@@ -16,13 +16,13 @@ export function ArrayPropertyEnumPreview({
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     const ofProperty = property.of as ResolvedStringProperty | ResolvedNumberProperty;
-    if (!ofProperty.enumValues)
+    if (!ofProperty.enum)
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     if (!value) return null;
 
     return <ArrayEnumPreview name={propertyKey}
                              value={value}
-                             enumValues={ofProperty.enumValues}
+                             enumValues={ofProperty.enum}
                              size={size}/>;
 }

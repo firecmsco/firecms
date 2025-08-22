@@ -297,7 +297,7 @@ function createFilterField({
                                      setHidden={setHidden}/>;
     } else if (baseProperty.type === "number" || baseProperty.type === "string") {
         const name = baseProperty.name;
-        const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;
+        const enumValues = baseProperty.enum ? enumToObjectEntries(baseProperty.enum) : undefined;
         return <StringNumberFilterField value={filterValue}
                                         setValue={setFilterValue}
                                         name={id as string}

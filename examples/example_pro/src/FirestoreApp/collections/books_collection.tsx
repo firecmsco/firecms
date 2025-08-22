@@ -60,7 +60,7 @@ export const booksCollection = buildCollection({
         category: {
             name: "Category",
             type: "string",
-            enumValues: categories
+            enum: categories
         },
         tags: {
             name: "Tags",

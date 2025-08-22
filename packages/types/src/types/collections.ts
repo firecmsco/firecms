@@ -166,6 +166,9 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     subcollections?: EntityCollection<any, any>[];
 
+
+    referencedCollections?: EntityCollection<any, any>[];
+
     /**
      * This interface defines all the callbacks that can be used when an entity
      * is being created, updated or deleted.

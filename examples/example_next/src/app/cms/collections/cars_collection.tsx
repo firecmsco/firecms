@@ -15,7 +15,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                     required: true
                 },
                 type: "string",
-                enumValues: [
+                enum: [
                     {
                         label: "Alfa Romero",
                         id: "alfa-romero"
@@ -104,7 +104,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 name: "Brand Name"
             },
             aspiration: {
-                enumValues: [
+                enum: [
                     {
                         id: "Aspired",
                         label: "Aspired"
@@ -148,7 +148,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
             cylinder_count: {
                 name: "Cylinder Count",
                 type: "string",
-                enumValues: [
+                enum: [
                     {
                         id: "eight",
                         label: "Eight"
@@ -182,7 +182,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                enumValues: [
+                enum: [
                     {
                         label: "Convertible",
                         id: "convertible"
@@ -212,7 +212,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                enumValues: [
+                enum: [
                     {
                         id: "four",
                         label: "Four"
@@ -228,7 +228,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                enumValues: [
+                enum: [
                     {
                         label: "Front",
                         id: "front"
@@ -251,7 +251,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
             engine_type: {
                 name: "Engine Type",
                 type: "string",
-                enumValues: [
+                enum: [
                     {
                         label: "Dohc",
                         id: "dohc"
@@ -286,7 +286,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 }
             },
             fuel_system: {
-                enumValues: [
+                enum: [
                     {
                         id: "1bbl",
                         label: "1bbl"

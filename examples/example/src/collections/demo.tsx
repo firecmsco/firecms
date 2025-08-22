@@ -84,7 +84,7 @@ export const demoCollection = buildCollection({
         category: {
             type: "string",
             name: "Category",
-            enumValues: {
+            enum: {
                 art_design_books: "Art and design books",
                 backpacks: "Backpacks and bags",
                 bath: "Bath",
@@ -99,7 +99,7 @@ export const demoCollection = buildCollection({
             type: "array",
             of: {
                 type: "string",
-                enumValues: {
+                enum: {
                     es: "Spanish",
                     en: "English",
                     fr: {

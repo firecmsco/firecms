@@ -1,10 +1,9 @@
 import React from "react";
 
 import { resolveArrayProperty } from "../../util";
-import { ResolvedProperty } from "@firecms/types";
+import { PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
 
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { ErrorBoundary } from "../../components";
 

@@ -27,6 +27,7 @@ export default defineConfig(({ command }) => {
                         ? [
                             "@firecms/cloud",
                             "@firecms/core",
+                            "@firecms/types",
                             "@firecms/firebase",
                             "@firecms/ui",
                             "@firebase/firestore",
@@ -53,6 +54,7 @@ export default defineConfig(({ command }) => {
                 "@firecms/cloud": path.resolve(__dirname, "../../packages/firecms_cloud/src"),
                 "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),
                 "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
+                "@firecms/types": path.resolve(__dirname, "../../packages/types/src"),
                 "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
                 "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
                 "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),

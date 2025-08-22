@@ -51,11 +51,11 @@ export type ResolvedProperties<M extends Record<string, any> = any> = {
  * @group Entity properties
  */
 export type ResolvedStringProperty =
-    Omit<StringProperty, "enumValues" | "type"> &
+    Omit<StringProperty, "enum" | "type"> &
     {
         type: "string";
         resolved: true;
-        enumValues?: EnumValueConfig[];
+        enum?: EnumValueConfig[];
         fromBuilder: boolean;
     }
 
@@ -63,7 +63,7 @@ export type ResolvedStringProperty =
  * @group Entity properties
  */
 export type ResolvedNumberProperty =
-    Omit<NumberProperty, "enumValues" | "type"> &
+    Omit<NumberProperty, "enum" | "type"> &
     {
         type: "number";
         resolved: true;

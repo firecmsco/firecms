@@ -12,15 +12,3 @@ export * from "./postgres_client";
 // React hooks and data source implementation
 export * from "./usePostgresDataSource";
 
-// Re-export commonly used FireCMS core types
-export type {
-    Entity,
-    EntityCollection,
-    DataSource,
-    FetchCollectionProps,
-    FetchEntityProps,
-    SaveEntityProps,
-    DeleteEntityProps,
-    ListenCollectionProps,
-    ListenEntityProps
-} from "@firecms/core";

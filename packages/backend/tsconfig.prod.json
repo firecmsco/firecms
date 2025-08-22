@@ -9,6 +9,9 @@
     "paths": {
       "@firecms/core": [
         "../firecms_core/src"
+      ],
+      "@firecms/types": [
+        "../firecms_core/src"
       ]
     }
   },

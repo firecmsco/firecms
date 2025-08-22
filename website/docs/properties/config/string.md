@@ -125,7 +125,7 @@ import { buildProperty } from "./builders";
 const amazonLinkProperty = buildProperty({
     dataType: "string",
     name: "Amazon link",
-    enumValues: {
+    enum: {
         "es": "Spanish",
         "de": "German",
         "en": "English",

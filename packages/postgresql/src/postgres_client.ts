@@ -5,7 +5,7 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     SaveEntityProps
-} from "@firecms/core";
+} from "@firecms/types";
 
 export interface PostgresDataSourceConfig {
     baseUrl: string;
@@ -53,7 +53,7 @@ export class PostgresDataSourceClient {
     private headers: Record<string, string>;
     private ws: WebSocket | null = null;
     private subscriptions = new Map<string, (data: any) => void>();
-    private pendingRequests = new Map<string, { resolve: Function; reject: Function }>();
+    private pendingRequests = new Map<string, { resolve: (p:any) => void; reject: (p:any) => void }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private isConnected = false;

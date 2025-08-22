@@ -19,6 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@firecms/core": ["../../packages/firecms_core/src"],
+      "@firecms/types": ["../../packages/types/src"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
       "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/editor": ["../../packages/editor/src"],

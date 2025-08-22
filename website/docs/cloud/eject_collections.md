@@ -72,7 +72,7 @@ const BooksCollection: EntityCollection = {
         category: {
             name: 'Category',
             dataType: 'string',
-            enumValues: [
+            enum: [
                 {
                     id: 'drama',
                     label: 'Drama',

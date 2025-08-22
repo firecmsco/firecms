@@ -3,8 +3,7 @@ import React, { useEffect } from "react";
 import { renderSkeletonImageThumbnail } from "../property_previews/SkeletonPropertyComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
 import { useStorageSource } from "../../hooks";
-import { DownloadConfig, FileType } from "@firecms/types";
-import { PreviewSize } from "../PropertyPreviewProps";
+import { DownloadConfig, FileType, PreviewSize } from "@firecms/types";
 import { ErrorView } from "../../components";
 
 type StorageThumbnailProps = {

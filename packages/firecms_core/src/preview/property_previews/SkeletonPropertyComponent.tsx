@@ -3,11 +3,11 @@ import {
     ResolvedMapProperty,
     ResolvedProperties,
     ResolvedProperty,
-    ResolvedStringProperty
+    ResolvedStringProperty,
+    PreviewSize
 } from "@firecms/types";
 import React from "react";
 import { getThumbnailMeasure } from "../util";
-import { PreviewSize } from "../PropertyPreviewProps";
 import { Skeleton } from "@firecms/ui";
 
 export interface SkeletonPropertyComponentProps {
@@ -225,7 +225,6 @@ function renderUrlAudioComponent() {
 }
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const imageSize = size === "small" ? 40 : size === "medium" ? 100 : 200;
     return (
         <Skeleton width={imageSize}
