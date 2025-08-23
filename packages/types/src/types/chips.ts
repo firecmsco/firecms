@@ -1,9 +1,9 @@
-export type ChipColorScheme = {
+export type ColorScheme = {
     color: string;
     text: string;
 }
 
-export type ChipColorKey =
+export type ColorKey =
     | "blueLighter"
     | "cyanLighter"
     | "tealLighter"

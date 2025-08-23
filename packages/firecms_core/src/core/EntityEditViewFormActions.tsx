@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import {
     Entity,
     EntityAction,
-    EntityActionClickProps,
+    EntityActionClickProps, EntityFormActionsProps,
     FireCMSContext,
     FormContext,
     ResolvedEntityCollection,
@@ -29,7 +29,6 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
-import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 
 export function EntityEditViewFormActions({

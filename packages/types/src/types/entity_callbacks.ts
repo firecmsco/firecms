@@ -1,8 +1,8 @@
 import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
-import { FireCMSContext } from "./firecms_context";
 import { ResolvedEntityCollection } from "./resolved_entities";
-import { User } from "./user";
+import { User } from "../users";
+import { FireCMSContext } from "../firecms_context";
 
 /**
  * This interface defines all the callbacks that can be used when an entity

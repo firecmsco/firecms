@@ -136,7 +136,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                            aiController: editorAIController,
                                                        }
                                                    }}/>;
-    } else if (property.type === "string" && !property.enumValues) {
+    } else if (property.type === "string" && !property.enum) {
         fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
                                                 highlight={suggestedValue as string}/>;
     } else {
@@ -157,7 +157,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         }).finally(() => setDataLoading(false));
     };
 
-    const allowInstructions = property.type === "string" && !property.enumValues;
+    const allowInstructions = property.type === "string" && !property.enum;
 
     return <>
 

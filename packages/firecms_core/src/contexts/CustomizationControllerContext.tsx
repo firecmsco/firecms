@@ -1,4 +1,4 @@
 import React from "react";
-import { CustomizationController } from "../types/customization_controller";
+import { CustomizationController } from "@firecms/types";
 
 export const CustomizationControllerContext = React.createContext<CustomizationController>({} as CustomizationController);

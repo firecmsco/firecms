@@ -1,7 +1,6 @@
-import { User } from "./user";
-import { Role } from "./roles";
 import { DataSourceDelegate } from "./datasource";
 import { StorageSource } from "./storage";
+import { Role, User } from "../users";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations.

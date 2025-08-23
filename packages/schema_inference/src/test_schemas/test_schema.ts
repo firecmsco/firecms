@@ -9,7 +9,7 @@ import usage from "./pop_products.json" assert {
         integrity: "sha384-ABC123"
         };
 import * as util from "util";
-import { DataType } from "../cms_types";
+import { DataType } from "@firecms/types";
 
 buildEntityPropertiesFromData(usage, getType)
     .then((res) => console.log(util.inspect(res, { showHidden: false, depth: null, colors: true })));

@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Entity,
-    EntityAction,
+    EntityAction, EntityFormActionsProps,
     FireCMSContext,
     FormContext,
     ResolvedEntityCollection,
@@ -11,21 +11,6 @@ import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButt
 import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
 
-export interface EntityFormActionsProps {
-    path: string;
-    collection: ResolvedEntityCollection;
-    entity?: Entity;
-    layout: "bottom" | "side";
-    savingError?: Error;
-    formex: FormexController<any>;
-    disabled: boolean;
-    status: "new" | "existing" | "copy";
-    pluginActions: React.ReactNode[];
-    openEntityMode: "side_panel" | "full_screen";
-    showDefaultActions?: boolean;
-    navigateBack: () => void;
-    formContext: FormContext
-}
 
 export function EntityFormActions({
                                       path,

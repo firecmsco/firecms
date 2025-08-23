@@ -48,7 +48,7 @@ export function SkeletonPropertyComponent({
                 if (arrayProperty.of.type === "map" && arrayProperty.of.properties) {
                     content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewKeys);
                 } else if (arrayProperty.of.type === "string") {
-                    if (arrayProperty.of.enumValues) {
+                    if (arrayProperty.of.enum) {
                         content = renderArrayEnumTableCell();
                     } else if (arrayProperty.of.storage) {
                         content = renderGenericArrayCell(arrayProperty.of);

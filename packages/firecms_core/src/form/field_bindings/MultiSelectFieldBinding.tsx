@@ -40,7 +40,7 @@ export function MultiSelectFieldBinding({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = enumToObjectEntries(of.enumValues);
+    const enumValues = enumToObjectEntries(of.enum);
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");

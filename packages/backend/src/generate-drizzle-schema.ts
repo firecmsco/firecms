@@ -172,10 +172,23 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             break;
         case "reference": {
             const refProp = prop as ReferenceProperty;
-            if (!refProp.path) return "";
-            const targetTableVarName = getTableVarName(refProp.path);
-            const refOptions = (prop as any).validation?.required ? "{ onDelete: \"cascade\" }" : "{ onDelete: \"set null\" }";
-            columnDefinition = `integer("${colName}").references(() => ${targetTableVarName}.id, ${refOptions})`;
+            // ensure we have a path or a target function
+            if (!refProp.path && typeof (refProp as any).target !== "function") return "";
+            // resolve target collection to inspect its idField type
+            const targetCollection: EntityCollection =
+                typeof (refProp as any).target === "function"
+                    ? (refProp as any).target()
+                    : {} as EntityCollection;
+            const idField = targetCollection.idField ?? "id";
+            const idProp = targetCollection.properties?.[idField] as Property | undefined;
+            const isNumberId = idProp?.type === "number";
+            const baseColumn = isNumberId ? `integer("${colName}")` : `varchar("${colName}")`;
+            const targetTableName = resolveTargetTableName(refProp.path ?? (refProp as any).target);
+            const targetTableVar = getTableVarName(targetTableName);
+            const refOptions = (prop as any).validation?.required
+                ? "{ onDelete: \"cascade\" }"
+                : "{ onDelete: \"set null\" }";
+            columnDefinition = `${baseColumn}.references(() => ${targetTableVar}.${idField}, ${refOptions})`;
             break;
         }
         case "array":
@@ -243,9 +256,6 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                             const sourceCollection = collection;
                             const targetTableName = resolveTargetTableName(relation.target as any);
                             const sourceTableName = sourceCollection.dbPath ?? sourceCollection.name ?? "";
-                            const sourceTableVarName = getTableVarName(sourceTableName);
-                            const targetTableVarName = getTableVarName(targetTableName);
-
                             const sourceRefOptions: string[] = [];
                             if (relation.through.onSourceDelete) sourceRefOptions.push(`onDelete: "${relation.through.onSourceDelete}"`);
                             const targetRefOptions: string[] = [];
@@ -409,17 +419,14 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                         if (currentJunctionTableName === junctionTableName) {
                             const sourceTableName = collection.dbPath ?? collection.name ?? "";
                             const targetTableName = resolveTargetTableName(relation.target as any);
-                            const sourceTableVarName = getTableVarName(sourceTableName);
-                            const targetTableVarName = getTableVarName(targetTableName);
-
                             const sourceKeys = Array.isArray(relation.through.sourceJunctionKey) ? relation.through.sourceJunctionKey : [relation.through.sourceJunctionKey];
                             sourceKeys.forEach(key => {
-                                junctionRelations.push(`	${key}: one(${sourceTableVarName}, {\n		fields: [${junctionTableVarName}.${key}],\n		references: [${sourceTableVarName}.id]\n	})`);
+                                junctionRelations.push(`	${key}: one(${sourceTableName}, {\n		fields: [${junctionTableVarName}.${key}],\n		references: [${sourceTableName}.id]\n	})`);
                             });
 
                             const targetKeys = Array.isArray(relation.through.targetJunctionKey) ? relation.through.targetJunctionKey : [relation.through.targetJunctionKey];
                             targetKeys.forEach(key => {
-                                junctionRelations.push(`	${key}: one(${targetTableVarName}, {\n		fields: [${junctionTableVarName}.${key}],\n		references: [${targetTableVarName}.id]\n	})`);
+                                junctionRelations.push(`	${key}: one(${targetTableName}, {\n		fields: [${junctionTableVarName}.${key}],\n		references: [${targetTableName}.id]\n	})`);
                             });
                         }
                     }

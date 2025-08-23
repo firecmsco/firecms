@@ -1,5 +1,4 @@
 import React from "react";
-import { EntityFormProps } from "../form";
 
 /**
  * Controller to open the side dialog

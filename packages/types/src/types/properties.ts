@@ -3,9 +3,9 @@ import { FieldProps } from "./fields";
 import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
-import { AuthController } from "./auth";
 import { PropertyPreviewProps } from "../components";
-import { ChipColorKey, ChipColorScheme } from "./chips";
+import { ColorKey, ColorScheme } from "./chips";
+import { AuthController } from "../controllers";
 
 /**
  * @group Entity properties
@@ -229,9 +229,9 @@ export type EnumValueConfig = {
     disabled?: boolean;
     /**
      * You can pick from a list of predefined color combinations or define
-     * your own {@link ChipColorScheme}
+     * your own {@link ColorScheme}
      */
-    color?: ChipColorKey | ChipColorScheme;
+    color?: ColorKey | ColorScheme;
 }
 
 /**

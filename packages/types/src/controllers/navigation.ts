@@ -1,7 +1,5 @@
 import React from "react";
-import { EntityCollection } from "./collections";
-import { EntityReference } from "./entities";
-import { FireCMSPlugin } from "./plugins";
+import { EntityCollection, EntityReference, FireCMSPlugin } from "../types";
 
 /**
  * Controller that includes the resolved navigation and utility methods and

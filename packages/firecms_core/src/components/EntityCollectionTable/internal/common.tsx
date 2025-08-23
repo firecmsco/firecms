@@ -48,7 +48,7 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
             return 300;
         }
     } else if (property.type === "number") {
-        if (property.enumValues) {
+        if (property.enum) {
             return 200;
         }
         return 140;

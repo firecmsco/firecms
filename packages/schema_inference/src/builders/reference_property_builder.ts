@@ -1,6 +1,6 @@
-import { InferencePropertyBuilderProps } from "@firecms/types";
 import { findCommonInitialStringInPath } from "../strings";
-import { Property } from "../cms_types";
+import { InferencePropertyBuilderProps } from "../types";
+import { Property } from "@firecms/types";
 
 export function buildReferenceProperty({
                                         totalDocsCount,

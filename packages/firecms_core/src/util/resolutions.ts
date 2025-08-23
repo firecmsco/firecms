@@ -173,7 +173,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
                 ignoreMissingFields,
                 ...props
             }) as ResolvedProperty<any>;
-        } else if ((property.type === "string" || property.type === "number") && property.enumValues) {
+        } else if ((property.type === "string" || property.type === "number") && property.enum) {
             resolvedProperty = resolvePropertyEnum(property, fromBuilder) as ResolvedProperty<any>;
         }
     }
@@ -408,7 +408,7 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
         return {
             ...property,
             resolved: true,
-            enumValues: enumToObjectEntries(property.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
+            enum: enumToObjectEntries(property.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
     }

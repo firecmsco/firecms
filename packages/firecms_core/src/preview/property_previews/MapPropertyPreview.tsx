@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ResolvedMapProperty } from "@firecms/types";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";

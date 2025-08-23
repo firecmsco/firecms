@@ -1,7 +1,7 @@
-import { InferencePropertyBuilderProps, ValuesCountEntry } from "@firecms/types";
 import { findCommonInitialStringInPath } from "../strings";
 import { extractEnumFromValues } from "../util";
-import { FileType, Property, StringProperty } from "../cms_types";
+import { FileType, Property, StringProperty } from "@firecms/types";
+import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types";
 
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];
 const AUDIO_EXTENSIONS = [".mp3", ".ogg", ".opus", ".aac"];
@@ -55,7 +55,7 @@ export function buildStringProperty({
             const enumValues = extractEnumFromValues(Array.from(valuesResult.valuesCount.keys()));
 
             if (Object.keys(enumValues).length > 1)
-                config.enumValues = enumValues;
+                config.enum = enumValues;
         }
 
         // regular string
@@ -63,7 +63,7 @@ export function buildStringProperty({
             !probablyAURL &&
             !probablyUserIds &&
             !probablyAURL &&
-            !config.enumValues) {
+            !config.enum) {
             const fileType = probableFileType(valuesResult, totalDocsCount);
             if (fileType) {
                 config.storage = {

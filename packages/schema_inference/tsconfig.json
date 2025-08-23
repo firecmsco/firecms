@@ -32,6 +32,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@firecms/types": [
+        "../types/src"
+      ]
     }
   },
   "include": [

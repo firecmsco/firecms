@@ -1,8 +1,5 @@
-import { EntityCollection } from "./collections";
-import { ResolvedEntityCollection } from "./resolved_entities";
-import { Entity } from "./entities";
-import { EntityOverrides } from "./entity_overrides";
-import { EntityFormProps } from "../form";
+import { Entity, EntityCollection, ResolvedEntityCollection } from "../types";
+import { EntityFormProps } from "../components";
 
 /**
  * Props used to open a side dialog

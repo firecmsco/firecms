@@ -1,18 +1,16 @@
 import React from "react";
-import { User } from "./user";
-import { AuthController } from "./auth";
-import { DataSourceDelegate } from "./datasource";
 import { EntityCollection, EntityCustomView } from "./collections";
-import { CMSView, NavigationController } from "./navigation";
-import { FireCMSContext } from "./firecms_context";
 import { PropertyConfig } from "./property_config";
 import { Locale } from "./locales";
-import { StorageSource } from "./storage";
 import { EntityLinkBuilder } from "./entity_link_builder";
-import { UserConfigurationPersistence } from "./local_config_persistence";
 import { FireCMSPlugin } from "./plugins";
-import { CMSAnalyticsEvent } from "./analytics";
 import { EntityAction } from "./entity_actions";
+import { User } from "../users";
+import {
+    AuthController, CMSAnalyticsEvent, CMSView, DataSourceDelegate, NavigationController, StorageSource,
+    UserConfigurationPersistence
+} from "../controllers";
+import { FireCMSContext } from "../firecms_context";
 
 /**
  * Use this callback to build entity collections dynamically.

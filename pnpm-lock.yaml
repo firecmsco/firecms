@@ -856,6 +856,9 @@ importers:
 
   packages/editor:
     dependencies:
+      '@firecms/types':
+        specifier: 3.0.0-canary.258
+        version: link:../types
       '@firecms/ui':
         specifier: 3.0.0-canary.258
         version: link:../ui
@@ -1251,6 +1254,9 @@ importers:
       '@firecms/formex':
         specifier: 3.0.0-canary.258
         version: link:../formex
+      '@firecms/types':
+        specifier: 3.0.0-canary.258
+        version: link:../types
       '@firecms/ui':
         specifier: 3.0.0-canary.258
         version: link:../ui
@@ -1486,6 +1492,9 @@ importers:
 
   packages/schema_inference:
     devDependencies:
+      '@firecms/types':
+        specifier: 3.0.0-canary.258
+        version: link:../types
       '@types/node':
         specifier: ^20.17.14
         version: 20.17.14

@@ -293,14 +293,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 removePadding = true;
             } else if (selected && property.type === "number") {
                 const numberProperty = property as ResolvedNumberProperty;
-                if (numberProperty.enumValues) {
+                if (numberProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
                                                          multiple={false}
                                                          disabled={disabled}
                                                          focused={selected}
                                                          valueType={"number"}
                                                          small={getPreviewSizeFrom(size) !== "medium"}
-                                                         enumValues={numberProperty.enumValues}
+                                                         enumValues={numberProperty.enum}
                                                          error={validationError ?? error}
                                                          internalValue={internalValue as string | number}
                                                          updateValue={updateValue}
@@ -388,7 +388,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 }
                 if (arrayProperty.of && !Array.isArray(arrayProperty.of)) {
                     if (arrayProperty.of.type === "string" || arrayProperty.of.type === "number") {
-                        if (selected && arrayProperty.of.enumValues) {
+                        if (selected && arrayProperty.of.enum) {
                             innerComponent =
                                 <VirtualTableSelect name={propertyKey as string}
                                                     multiple={true}
@@ -396,7 +396,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                     focused={selected}
                                                     small={getPreviewSizeFrom(size) !== "medium"}
                                                     valueType={arrayProperty.of.type}
-                                                    enumValues={arrayProperty.of.enumValues}
+                                                    enumValues={arrayProperty.of.enum}
                                                     error={validationError ?? error}
                                                     internalValue={internalValue as string | number}
                                                     updateValue={updateValue}

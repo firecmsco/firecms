@@ -57,13 +57,13 @@ export const clientesCollection: EntityCollection = {
         alquileres: {
             type: "many",
             target: () => alquileresSubcollection,
-            ui: {
+            widget: "table",
+            collection: {
                 name: "Historial de Alquileres",
                 singularName: "Alquiler",
                 icon: "History",
-                widget: "table",
                 previewProperties: ["maquina_referencia", "fecha_salida", "fecha_devolucion_real", "total_facturado", "estado_pago"],
-                defaultSort: ["fecha_salida", "desc"],
+                initialSort: ["fecha_salida", "desc"],
                 description: "Todos los alquileres realizados por este cliente",
                 permissions: {
                     read: true,
@@ -76,11 +76,11 @@ export const clientesCollection: EntityCollection = {
         incidencias: {
             type: "many",
             target: () => incidenciasSubcollection,
+            widget: "table",
             collection: {
                 name: "Incidencias",
                 singularName: "Incidencia",
                 icon: "Warning",
-                widget: "table",
                 previewProperties: ["tipo_incidencia", "gravedad", "fecha", "resuelto"]
             }
         }
@@ -268,9 +268,9 @@ export const alquileresSubcollection: EntityCollection = {
             target: () => clientesCollection,
             sourceFields: ["cliente_referencia"],
             targetFields: ["id"],
-            ui: {
+            widget: "select",
+            collection: {
                 name: "Cliente",
-                widget: "select"
             }
         },
         maquina: {
@@ -278,30 +278,30 @@ export const alquileresSubcollection: EntityCollection = {
             target: () => maquinariaCollection,
             sourceFields: ["maquina_referencia"],
             targetFields: ["id"],
-            ui: {
+            widget: "select",
+            collection: {
                 name: "Máquina",
-                widget: "select"
             }
         },
         horas: {
             type: "many",
             target: () => horasSubcollection,
-            ui: {
+            widget: "table",
+            collection: {
                 name: "Lecturas Horas",
                 singularName: "Lectura Horas",
                 icon: "Schedule",
-                widget: "table",
                 previewProperties: ["fecha", "horas_totales", "horas_periodo"]
             }
         },
         incidencias: {
             type: "many",
             target: () => incidenciasSubcollection,
-            ui: {
+            widget: "table",
+            collection: {
                 name: "Incidencias del Alquiler",
                 singularName: "Incidencia",
                 icon: "Warning",
-                widget: "table",
                 previewProperties: ["tipo_incidencia", "gravedad", "fecha", "resuelto"]
             }
         }
@@ -452,9 +452,9 @@ export const horasSubcollection: EntityCollection<any> = {
             target: () => alquileresSubcollection,
             sourceFields: ["alquiler_relacionado"],
             targetFields: ["id"],
-            ui: {
+            widget: "select",
+            collection: {
                 name: "Alquiler Relacionado",
-                widget: "select"
             }
         }
     }
@@ -550,21 +550,21 @@ export const incidenciasSubcollection: EntityCollection = {
         cliente: {
             type: "one",
             target: () => clientesCollection,
-            fields: ["cliente_relacionado"],
-            references: ["id"],
-            ui: {
+            sourceFields: ["cliente_relacionado"],
+            targetFields: ["id"],
+            widget: "select",
+            collection: {
                 name: "Cliente Relacionado",
-                widget: "select"
             }
         },
         alquiler: {
             type: "one",
             target: () => alquileresSubcollection,
-            fields: ["alquiler_relacionado"],
-            references: ["id"],
-            ui: {
+            sourceFields: ["alquiler_relacionado"],
+            targetFields: ["id"],
+            widget: "select",
+            collection: {
                 name: "Alquiler Relacionado",
-                widget: "select"
             }
         }
     }
@@ -656,13 +656,13 @@ export const maquinariaCollection: EntityCollection = {
         alquileres: {
             type: "many",
             target: () => alquileresSubcollection,
-            ui: {
+            widget: "table",
+            collection: {
                 name: "Alquileres de la Máquina",
                 singularName: "Alquiler",
                 icon: "CalendarToday",
-                widget: "table",
                 previewProperties: ["cliente_referencia", "fecha_salida", "fecha_devolucion_real", "estado_pago"],
-                defaultSort: ["fecha_salida", "desc"]
+                initialSort: ["fecha_salida", "desc"]
             }
         }
     }

@@ -81,7 +81,7 @@ export const blogCollectionTemplate:EntityCollection = {
             name: "Status",
             validation: { required: true },
             type: "string",
-            enumValues: {
+            enum: {
                 published: {
                     id: "published",
                     label: "Published",

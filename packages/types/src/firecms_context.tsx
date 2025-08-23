@@ -1,15 +1,13 @@
-import { DataSource } from "./datasource";
-import { StorageSource } from "./storage";
-import { NavigationController } from "./navigation";
-import { SideEntityController } from "./side_entity_controller";
-import { AuthController } from "./auth";
-import { User } from "./user";
-import { SnackbarController } from "../hooks";
-import { UserConfigurationPersistence } from "./local_config_persistence";
-import { SideDialogsController } from "./side_dialogs_controller";
-import { DialogsController } from "./dialogs_controller";
-import { CustomizationController } from "./customization_controller";
-import { AnalyticsController } from "./analytics_controller";
+import {
+    AnalyticsController,
+    AuthController, CustomizationController,
+    DataSource, DialogsController,
+    NavigationController,
+    SideDialogsController,
+    SideEntityController, SnackbarController,
+    StorageSource, UserConfigurationPersistence
+} from "./controllers";
+import { User } from "./users";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.

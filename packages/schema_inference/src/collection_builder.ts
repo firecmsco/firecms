@@ -9,7 +9,7 @@ import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
 import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
-import { DataType, EnumValues, Properties, Property, StringProperty } from "./cms_types";
+import { DataType, EnumValues, Properties, Property, StringProperty } from "@firecms/types";
 
 export type InferenceTypeBuilder = (value: any) => DataType;
 
@@ -51,7 +51,7 @@ export function buildPropertyFromData(
         const newEnumValues = extractEnumFromValues(Array.from(valuesCount["inferred_prop"].valuesCount.keys()));
         return {
             ...property,
-            enumValues: [...newEnumValues, ...enumValues]
+            enum: [...newEnumValues, ...enumValues]
         } as StringProperty;
     }
     const generatedProperty = buildPropertyFromCount(

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
-import { DialogControllerEntryProps, DialogsController } from "../types/dialogs_controller";
+import { DialogControllerEntryProps, DialogsController } from "@firecms/types";
 
 export const DialogsControllerContext = React.createContext<DialogsController>({} as DialogsController);
 

@@ -32,7 +32,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            size = "large"
                                                        }: SelectProps<T>) {
 
-    const enumValues = resolveEnumValues(property.enumValues ?? []);
+    const enumValues = resolveEnumValues(property.enum ?? []);
 
     useClearRestoreValue({
         property,

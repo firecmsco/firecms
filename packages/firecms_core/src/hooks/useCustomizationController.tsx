@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CustomizationController } from "../types/customization_controller";
+import { CustomizationController } from "@firecms/types";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 
 /**

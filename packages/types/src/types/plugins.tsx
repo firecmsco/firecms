@@ -1,13 +1,13 @@
 import React, { PropsWithChildren } from "react";
 
-import { FireCMSContext } from "./firecms_context";
 import { CollectionActionsProps, EntityCollection, EntityTableController } from "./collections";
-import { User } from "./user";
 import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-import { NavigationGroupMapping } from "./navigation";
+import { FireCMSContext } from "../firecms_context";
+import { NavigationGroupMapping } from "../controllers";
+import { User } from "../users";
 
 /**
  * Interface used to define plugins for FireCMS.

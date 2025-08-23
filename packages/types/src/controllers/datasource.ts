@@ -1,8 +1,6 @@
-import { Entity, EntityStatus, EntityValues } from "./entities";
-import { EntityCollection, FilterValues } from "./collections";
-import { ResolvedEntityCollection } from "./resolved_entities";
-import { FireCMSContext } from "./firecms_context";
 import { NavigationController } from "./navigation";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, ResolvedEntityCollection } from "../types";
+import { FireCMSContext } from "../firecms_context";
 
 /**
  * @group Datasource

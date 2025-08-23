@@ -11,10 +11,10 @@ import {
     ResolvedStringProperty,
     StorageConfig,
     StorageSource,
-    StringProperty
+    StringProperty,
+    PreviewSize
 } from "@firecms/types";
 import { useCallback, useEffect, useState } from "react";
-import { PreviewSize } from "../preview";
 import { randomString } from "./strings";
 import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
 import { resolveProperty } from "./resolutions";

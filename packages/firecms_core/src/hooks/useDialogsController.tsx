@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { DialogsController } from "../types/dialogs_controller";
 import { DialogsControllerContext } from "../contexts/DialogsProvider";
+import { DialogsController } from "@firecms/types";
 
 /**
  * Use this hook to open a dialog imperatively.

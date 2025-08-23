@@ -67,7 +67,7 @@ export type ResolvedNumberProperty =
     {
         type: "number";
         resolved: true;
-        enumValues?: EnumValueConfig[];
+        enum?: EnumValueConfig[];
         fromBuilder: boolean;
     }
 

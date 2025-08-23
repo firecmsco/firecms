@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary } from "../../components";
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { resolveArrayProperty } from "../../util";
 

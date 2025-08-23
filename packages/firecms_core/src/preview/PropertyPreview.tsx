@@ -136,7 +136,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                                         value={value}
                                                         property={property as ResolvedArrayProperty}/>;
                 } else if (arrayProperty.of.type === "string") {
-                    if (arrayProperty.of.enumValues) {
+                    if (arrayProperty.of.enum) {
                         content = <ArrayPropertyEnumPreview
                             {...props}
                             value={value as string[]}
@@ -152,7 +152,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                             value={value as string[]}
                             property={property as ResolvedArrayProperty}/>;
                     }
-                } else if (arrayProperty.of.type === "number" && arrayProperty.of.enumValues) {
+                } else if (arrayProperty.of.type === "number" && arrayProperty.of.enum) {
                     content = <ArrayPropertyEnumPreview
                         {...props}
                         value={value as string[]}

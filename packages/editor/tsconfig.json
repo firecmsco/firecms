@@ -32,6 +32,9 @@
     "paths": {
       "@firecms/ui": [
         "../ui/src"
+      ],
+      "@firecms/types": [
+        "../types/src"
       ]
     }
   }

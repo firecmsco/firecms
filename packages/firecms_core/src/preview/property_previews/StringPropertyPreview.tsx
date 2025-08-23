@@ -4,7 +4,7 @@ import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
 import { PreviewType } from "@firecms/types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreviewProps } from "@firecms/types";
 import { ErrorBoundary } from "../../components";
 import { Chip, cls, getColorSchemeForSeed } from "@firecms/ui";
 
@@ -18,7 +18,7 @@ export function StringPropertyPreview({
                                           size
                                       }: PropertyPreviewProps<string>): React.ReactElement {
 
-    if (property.enumValues) {
+    if (property.enum) {
         const enumKey = value;
         const resolvedProperty = resolvePropertyEnum(property);
         return <EnumValuesChip

@@ -124,7 +124,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         color: "#4223c9",
         property: {
             type: "string",
-            enumValues: [],
+            enum: [],
             Field: SelectFieldBinding
         }
     },
@@ -138,7 +138,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             type: "array",
             of: {
                 type: "string",
-                enumValues: [],
+                enum: [],
             },
             Field: MultiSelectFieldBinding
         }
@@ -162,7 +162,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         color: "#bec920",
         property: {
             type: "number",
-            enumValues: [],
+            enum: [],
             Field: SelectFieldBinding
         }
     },
@@ -176,7 +176,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             type: "array",
             of: {
                 type: "number",
-                enumValues: [],
+                enum: [],
             },
             Field: MultiSelectFieldBinding
         }
@@ -383,9 +383,9 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "custom_array";
         } else if (isPropertyBuilder(of)) {
             return "repeat";
-        } else if (of?.type === "string" && of.enumValues) {
+        } else if (of?.type === "string" && of.enum) {
             return "multi_select";
-        } else if (of?.type === "number" && of.enumValues) {
+        } else if (of?.type === "number" && of.enum) {
             return "multi_number_select";
         } else if (of?.type === "string" && of.storage) {
             return "multi_file_upload";

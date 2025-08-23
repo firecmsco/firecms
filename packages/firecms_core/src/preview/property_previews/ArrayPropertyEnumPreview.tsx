@@ -1,6 +1,6 @@
 import { ResolvedNumberProperty, ResolvedStringProperty } from "@firecms/types";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreviewProps } from "@firecms/types";
 
 /**
  * @group Preview components

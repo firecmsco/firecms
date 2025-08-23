@@ -32,7 +32,7 @@ export function EnumPropertyField({
 
     const snackbarContext = useSnackbarController();
 
-    const enumValuesPath = multiselect ? "of.enumValues" : "enumValues";
+    const enumValuesPath = multiselect ? "of.enum" : "enum";
 
     const defaultValue = getIn(values, "defaultValue");
 

@@ -1,4 +1,4 @@
-import { CMSType, Property, ResolvedProperty } from "@firecms/types";
+import { CMSType, Property, ResolvedProperty } from "../types";
 
 /**
  * @group Preview components

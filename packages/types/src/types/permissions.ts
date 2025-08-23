@@ -1,7 +1,7 @@
-import { User } from "./user";
-import { AuthController } from "./auth";
 import { EntityCollection, InferCollectionType } from "./collections";
 import { Entity } from "./entities";
+import { AuthController } from "../controllers";
+import { User } from "../users";
 
 /**
  * Define the operations that can be performed in a collection.

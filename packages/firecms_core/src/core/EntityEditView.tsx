@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
     Entity,
-    EntityCollection,
+    EntityCollection, EntityFormProps,
     EntityStatus,
     FireCMSPlugin,
     FormContext,
@@ -27,7 +27,7 @@ import {
 } from "../hooks";
 import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import { getEntityFromCache } from "../util/entity_cache";
-import { EntityForm, EntityFormProps } from "../form";
+import { EntityForm } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub } from "../util/createFormexStub";

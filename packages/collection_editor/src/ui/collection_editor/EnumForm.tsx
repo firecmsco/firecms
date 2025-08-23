@@ -42,27 +42,27 @@ export function EnumForm({
                          }: EnumFormProps) {
 
     const formex = useCreateFormex<{
-        enumValues: EnumValueConfig[]
+        enum: EnumValueConfig[]
     }>({
-        initialValues: { enumValues },
+        initialValues: { enum: enumValues },
         validateOnChange: true,
         validation: (values) => {
             const errors: any = {};
-            if (values.enumValues) {
-                values.enumValues.forEach((enumValue, index) => {
+            if (values.enum) {
+                values.enum.forEach((enumValue, index) => {
                     if (!enumValue?.label) {
-                        errors.enumValues = errors.enumValues ?? [];
-                        errors.enumValues[index] = errors.enumValues[index] ?? {};
-                        errors.enumValues[index].label = "You must specify a label for this enum value entry";
+                        errors.enum = errors.enum ?? [];
+                        errors.enum[index] = errors.enum[index] ?? {};
+                        errors.enum[index].label = "You must specify a label for this enum value entry";
                     }
                     if (!enumValue?.id) {
-                        errors.enumValues = errors.enumValues ?? [];
-                        errors.enumValues[index] = errors.enumValues[index] ?? {};
-                        errors.enumValues[index].id = "You must specify an ID for this enum value entry";
+                        errors.enum = errors.enum ?? [];
+                        errors.enum[index] = errors.enum[index] ?? {};
+                        errors.enum[index].id = "You must specify an ID for this enum value entry";
                     }
                 });
             }
-            const hasError = Boolean(errors?.enumValues && Object.keys(errors?.enumValues).length > 0);
+            const hasError = Boolean(errors?.enum && Object.keys(errors?.enum).length > 0);
             onError?.(hasError);
             return errors;
         }
@@ -72,9 +72,9 @@ export function EnumForm({
 
     useEffect(() => {
         if (onValuesChanged) {
-            onValuesChanged(values.enumValues);
+            onValuesChanged(values.enum);
         }
-    }, [values.enumValues]);
+    }, [values.enum]);
 
     return <Formex value={formex}>
         <EnumFormFields enumValuesPath={"enumValues"}
@@ -90,7 +90,7 @@ export function EnumForm({
 
 type EnumFormFieldsProps = {
     values: {
-        enumValues: EnumValueConfig[]
+        enum: EnumValueConfig[]
     };
     errors: any;
     enumValuesPath: string;
@@ -127,7 +127,7 @@ function EnumFormFields({
                             internalId
                         }:ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
-        const entryError = errors?.enumValues && errors?.enumValues[index];
+        const entryError = errors?.enum && errors?.enum[index];
         return <EnumEntry index={index}
                           disabled={disabled}
                           enumValuesPath={enumValuesPath}
@@ -135,7 +135,7 @@ function EnumFormFields({
                           entryError={entryError}
                           shouldUpdateId={shouldUpdateId || justAdded}
                           onDialogOpen={() => setEditDialogIndex(index)}
-                          inferredEntry={inferredValues.has(values.enumValues[index]?.id as string)}
+                          inferredEntry={inferredValues.has(values.enum[index]?.id as string)}
                           key={`${internalId}`}/>;
     };
 
@@ -151,7 +151,7 @@ function EnumFormFields({
 
             const fieldData = Array.from(new Set(flatData));
 
-            const currentEnumValues = values.enumValues;
+            const currentEnumValues = values.enum;
             const foundEnumValues = extractEnumFromValues(fieldData);
 
             // add only new enum values
@@ -192,7 +192,7 @@ function EnumFormFields({
 
                 <ArrayContainer droppableId={enumValuesPath}
                                 addLabel={"Add enum value"}
-                                value={values.enumValues}
+                                value={values.enum}
                                 disabled={disabled}
                                 size={"small"}
                                 buildEntry={buildEntry}

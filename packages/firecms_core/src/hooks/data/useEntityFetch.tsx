@@ -73,8 +73,8 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
                     console.error(e);
                 }
             }
-            CACHE[`${path}/${entityId}`] = updatedEntity;
-            setEntity(updatedEntity);
+            CACHE[`${path}/${entityId}`] = updatedEntity ?? undefined;
+            setEntity(updatedEntity ?? undefined);
             setDataLoading(false);
             setDataLoadingError(undefined);
         };

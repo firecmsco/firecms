@@ -113,7 +113,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "string",
-                    enumValues: propertyData.of?.enumValues ?? []
+                    enum: propertyData.of?.enum ?? []
                 }
             } satisfies ArrayProperty
         );
@@ -146,7 +146,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "number",
-                    enumValues: propertyData.of?.enumValues ?? []
+                    enum: propertyData.of?.enum ?? []
                 }
             } satisfies ArrayProperty
         );

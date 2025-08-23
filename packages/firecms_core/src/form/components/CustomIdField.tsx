@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 // import { ErrorMessage } from "@firecms/formex";
-import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "@firecms/types";
+import { CustomizationController, Entity, EntityStatus, EnumValueConfig, EnumValues } from "@firecms/types";
 
 import { useClipboard, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries } from "../../util";
@@ -18,7 +18,6 @@ import {
 } from "@firecms/ui";
 import { EnumValuesChip } from "../../preview";
 import { useCustomizationController } from "../../hooks/useCustomizationController";
-import { CustomizationController } from "../../types/customization_controller";
 import { useFormex } from "@firecms/formex";
 
 export function CustomIdField<M extends Record<string, any>>({

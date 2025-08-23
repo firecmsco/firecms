@@ -1,7 +1,8 @@
 import React from "react";
 
-import { EnumValuesChip, PropertyPreviewProps } from "../../preview";
+import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries } from "../../util";
+import { PropertyPreviewProps } from "@firecms/types";
 
 /**
  * @group Preview components
@@ -12,9 +13,9 @@ export function NumberPropertyPreview({
                                           size
                                       }: PropertyPreviewProps<number>): React.ReactElement {
 
-    if (property.enumValues) {
+    if (property.enum) {
         const enumKey = value;
-        const enumValues = enumToObjectEntries(property.enumValues);
+        const enumValues = enumToObjectEntries(property.enum);
         if (!enumValues)
             return <>{value}</>;
         return <EnumValuesChip

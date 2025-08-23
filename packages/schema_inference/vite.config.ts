@@ -27,6 +27,8 @@ export default defineConfig(() => ({
         }
     },
     resolve: {
-        alias: {}
-    }
+        alias: {
+            "@firecms/types": path.resolve(__dirname, "../types/src")
+        }
+    },
 }));
