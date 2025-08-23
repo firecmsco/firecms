@@ -28,7 +28,7 @@ export const clientesCollection: EntityCollection = {
             type: "string",
             email: true,
             validation: {
-                required: true,
+                required: true
             }
         },
         telefono: {
@@ -56,7 +56,7 @@ export const clientesCollection: EntityCollection = {
     relations: {
         alquileres: {
             type: "many",
-            target: "alquileres",
+            target: () => alquileresSubcollection,
             ui: {
                 name: "Historial de Alquileres",
                 singularName: "Alquiler",
@@ -75,8 +75,8 @@ export const clientesCollection: EntityCollection = {
         },
         incidencias: {
             type: "many",
-            target: "incidencias",
-            ui: {
+            target: () => incidenciasSubcollection,
+            collection: {
                 name: "Incidencias",
                 singularName: "Incidencia",
                 icon: "Warning",
@@ -153,7 +153,7 @@ const categoriasMaquinaria = {
     plataformas_unipersonales_electricas: "PLATAFORMAS UNIPERSONALES ELECTRICAS",
     plataformas_articulada_cadena: "PLATAFORMAS ARTICULADA CADENA",
     rodillos: "RODILLOS",
-    carretillas_elevadoras: "CARRETILLAS ELEVADORAS",
+    carretillas_elevadoras: "CARRETILLAS ELEVADORAS"
 };
 
 const estadosMaquina = {
@@ -265,9 +265,9 @@ export const alquileresSubcollection: EntityCollection = {
     relations: {
         cliente: {
             type: "one",
-            target: "clientes",
-            fields: ["cliente_referencia"],
-            references: ["id"],
+            target: () => clientesCollection,
+            sourceFields: ["cliente_referencia"],
+            targetFields: ["id"],
             ui: {
                 name: "Cliente",
                 widget: "select"
@@ -275,9 +275,9 @@ export const alquileresSubcollection: EntityCollection = {
         },
         maquina: {
             type: "one",
-            target: "maquinaria",
-            fields: ["maquina_referencia"],
-            references: ["id"],
+            target: () => maquinariaCollection,
+            sourceFields: ["maquina_referencia"],
+            targetFields: ["id"],
             ui: {
                 name: "Máquina",
                 widget: "select"
@@ -285,7 +285,7 @@ export const alquileresSubcollection: EntityCollection = {
         },
         horas: {
             type: "many",
-            target: "horas",
+            target: () => horasSubcollection,
             ui: {
                 name: "Lecturas Horas",
                 singularName: "Lectura Horas",
@@ -296,7 +296,7 @@ export const alquileresSubcollection: EntityCollection = {
         },
         incidencias: {
             type: "many",
-            target: "incidencias",
+            target: () => incidenciasSubcollection,
             ui: {
                 name: "Incidencias del Alquiler",
                 singularName: "Incidencia",
@@ -449,9 +449,9 @@ export const horasSubcollection: EntityCollection<any> = {
     relations: {
         alquiler: {
             type: "one",
-            target: "alquileres",
-            fields: ["alquiler_relacionado"],
-            references: ["id"],
+            target: () => alquileresSubcollection,
+            sourceFields: ["alquiler_relacionado"],
+            targetFields: ["id"],
             ui: {
                 name: "Alquiler Relacionado",
                 widget: "select"
@@ -520,7 +520,7 @@ export const incidenciasSubcollection: EntityCollection = {
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
             type: "reference",
-            path: "alquileres",
+            path: "alquileres"
         },
         solucion: {
             name: "Solución Aplicada",
@@ -549,7 +549,7 @@ export const incidenciasSubcollection: EntityCollection = {
     relations: {
         cliente: {
             type: "one",
-            target: "clientes",
+            target: () => clientesCollection,
             fields: ["cliente_relacionado"],
             references: ["id"],
             ui: {
@@ -559,7 +559,7 @@ export const incidenciasSubcollection: EntityCollection = {
         },
         alquiler: {
             type: "one",
-            target: "alquileres",
+            target: () => alquileresSubcollection,
             fields: ["alquiler_relacionado"],
             references: ["id"],
             ui: {
@@ -592,7 +592,7 @@ export const maquinariaCollection: EntityCollection = {
             type: "string",
             storage: {
                 storagePath: "images",
-                acceptedFiles: ["image/*"],
+                acceptedFiles: ["image/*"]
             }
         },
         categoria: {
@@ -655,7 +655,7 @@ export const maquinariaCollection: EntityCollection = {
     relations: {
         alquileres: {
             type: "many",
-            target: "alquileres",
+            target: () => alquileresSubcollection,
             ui: {
                 name: "Alquileres de la Máquina",
                 singularName: "Alquiler",

@@ -5,6 +5,7 @@ export * from "./entity_actions";
 export * from "./resolved_entities";
 export * from "./properties";
 export * from "./collections";
+export * from "./relations";
 export * from "./permissions";
 export * from "./navigation";
 export * from "./locales";

@@ -258,7 +258,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *   // one-to-many: customer has many orders
      *   orders: {
      *     type: "many",
-     *     with: () => ordersCollection,
+     *     target: () => ordersCollection,
      *     ui: {
      *       name: "Customer Orders",
      *       icon: "ShoppingCart",
@@ -270,7 +270,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *   // many-to-one: order belongs to customer
      *   customer: {
      *     type: "one",
-     *     with: () => customersCollection,
+     *     target: () => customersCollection,
      *     fields: ["customerId"],
      *     references: ["id"],
      *     ui: {
@@ -282,7 +282,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *   // many-to-many: product has many categories
      *   categories: {
      *     type: "manyToMany",
-     *     with: () => categoriesCollection,
+     *     target: () => categoriesCollection,
      *     through: {
      *       table: () => productCategoriesJunction,
      *       sourceKey: "productId",
