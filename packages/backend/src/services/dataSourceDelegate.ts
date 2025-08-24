@@ -54,10 +54,9 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
     constructor(
         private db: Database,
-        realtimeService: RealtimeService,
-        tables: Record<string, PgTable>
+        realtimeService: RealtimeService
     ) {
-        this.entityService = new EntityService(db, tables);
+        this.entityService = new EntityService(db);
         this.realtimeService = realtimeService;
     }
 

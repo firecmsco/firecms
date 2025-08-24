@@ -7,6 +7,7 @@
  */
 
 // Core database functionality
+export * from "./init";
 export * from "./db/connection";
 export * from "./db/entityService";
 

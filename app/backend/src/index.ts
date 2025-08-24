@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
-import { collectionRegistry, createPostgresDatabaseConnection, createPostgresWebSocket } from "@firecms/backend";
+import { createPostgresDatabaseConnection, initializeFireCMSBackend } from "@firecms/backend";
 
 import * as tables from "./schema.generated";
 import { collections } from "shared";
@@ -17,9 +17,6 @@ const __dirname = path.dirname(__filename);
 // Load environment from app root level
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-// Register collections and relations
-collections.forEach(collection => collectionRegistry.register(collection));
-
 const app = express();
 const server = createServer(app);
 
@@ -28,6 +25,13 @@ if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is not set");
 }
 const db = createPostgresDatabaseConnection(databaseUrl);
+
+initializeFireCMSBackend({
+    collections,
+    tables,
+    db,
+    server
+});
 
 // Middleware
 app.use(cors());
@@ -52,12 +56,9 @@ app.get("/health", (req, res) => {
     res.json({
         status: "ok",
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV,
-        collections: collectionRegistry.getAll().length
+        environment: process.env.NODE_ENV
     });
 });
-
-createPostgresWebSocket(server, db, tables);
 
 // Error handling middleware
 app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -76,7 +77,6 @@ server.listen(PORT, () => {
     console.log("📡 WebSocket server ready for all operations");
     console.log("🗄️ PostgreSQL backend with Drizzle ORM initialized");
     console.log("🔄 Real-time sync enabled via WebSockets");
-    console.log(`📚 ${collectionRegistry.getAll().length} collections registered`);
 });
 
 export { app, server };

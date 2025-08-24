@@ -185,22 +185,26 @@ function transformPropertyFromId(value: any, property: any): any {
 }
 
 export class EntityService {
-    constructor(private db: NodePgDatabase<any>, private tables: Record<string, PgTable<any>>) {
+    constructor(private db: NodePgDatabase<any>) {
     }
 
     // Map collection paths to actual database tables
-    private getTableForPath(path: string) {
-        const table = this.tables[path];
+    private getTableForPath(path: string): PgTable<any> {
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
+        if (!collection) {
+            throw new Error(`Unknown collection path or slug: ${path}`);
+        }
+        const table = collectionRegistry.getTable(collection.dbPath);
         if (!table) {
-            throw new Error(`Unknown collection path: ${path}`);
+            throw new Error(`Table not found for dbPath: ${collection.dbPath}`);
         }
         return table;
     }
 
     private getIdFieldInfo(path: string) {
-        const collection = collectionRegistry.get(path);
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
         if (!collection) {
-            throw new Error(`Collection not found for path: ${path}`);
+            throw new Error(`Collection not found for path or slug: ${path}`);
         }
 
         const idFieldName = collection.idField ?? "id";
@@ -257,7 +261,7 @@ export class EntityService {
         if (result.length === 0) return undefined;
 
         const raw = result[0];
-        const collection = collectionRegistry.get(path);
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
 
         // Transform IDs back to reference objects and apply type conversion
         let values = raw;
@@ -356,7 +360,7 @@ export class EntityService {
         }
 
         const results = await query;
-        const collection = collectionRegistry.get(path);
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
 
         console.log("Fetched collection:", results);
 
@@ -385,7 +389,7 @@ export class EntityService {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];
-        const collection = collectionRegistry.get(path);
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
 
         // Transform references to IDs, map field names, then sanitize
         let processedData = values;
@@ -494,7 +498,7 @@ export class EntityService {
         databaseId?: string
     ): Promise<Entity<M>[]> {
         const table = this.getTableForPath(path);
-        const collection = collectionRegistry.get(path);
+        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];
 
