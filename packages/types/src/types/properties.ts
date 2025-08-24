@@ -520,7 +520,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
     /**
      * Record of properties included in this map.
      */
-    properties?: PropertiesOrBuilders<T>;
+    properties?: Properties<T>;
 
     /**
      * Order in which the properties are displayed.

@@ -8,9 +8,7 @@ import {
 } from "@firecms/types";
 
 export interface PostgresDataSourceConfig {
-    baseUrl: string;
-    websocketUrl?: string;
-    headers?: Record<string, string>;
+    websocketUrl: string;
 }
 
 export interface WebSocketMessage {
@@ -48,9 +46,7 @@ export class ApiError extends Error {
 }
 
 export class PostgresDataSourceClient {
-    private baseUrl: string;
     private websocketUrl: string;
-    private headers: Record<string, string>;
     private ws: WebSocket | null = null;
     private subscriptions = new Map<string, (data: any) => void>();
     private pendingRequests = new Map<string, { resolve: (p:any) => void; reject: (p:any) => void }>();
@@ -60,9 +56,7 @@ export class PostgresDataSourceClient {
     private messageQueue: any[] = [];
 
     constructor(config: PostgresDataSourceConfig) {
-        this.baseUrl = config.baseUrl.replace(/\/$/, "");
-        this.websocketUrl = config.websocketUrl || config.baseUrl.replace("http", "ws");
-        this.headers = config.headers || {};
+        this.websocketUrl = config.websocketUrl;
         this.initWebSocket();
     }
 

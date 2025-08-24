@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
-import { EnumValues, PropertiesOrBuilders } from "./properties";
+import { EnumValues, Properties, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
@@ -55,7 +55,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Path or table name of the collection in the database.
      * If not specified, the `name` property is used, converted to snake_case.
      */
-    dbPath?: string;
+    dbPath: string;
 
     /**
      * Optional database id of this collection. If not specified, the default
@@ -91,7 +91,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Set of properties that compose an entity
      */
-    properties: PropertiesOrBuilders<M>;
+    properties: Properties<M>;
 
     /**
      * Default preview properties displayed when this collection is referenced to.

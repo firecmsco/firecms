@@ -1,8 +1,6 @@
 import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
 import { Database } from "../db/connection";
-
-import { PgTable } from "drizzle-orm/pg-core";
 import {
     DeleteEntityProps,
     Entity,
@@ -39,9 +37,9 @@ export interface DataSourceDelegate {
     isFilterCombinationValid?(props: any): boolean;
 
     currentTime?: () => any;
-    delegateToCMSModel: (data: any) => any;
-    cmsToDelegateModel: (data: any) => any;
+
     setDateToMidnight: (input?: any) => any;
+
     initTextSearch?: (props: any) => Promise<boolean>;
 }
 

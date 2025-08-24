@@ -16,10 +16,47 @@ export interface PostgresDataSourceDelegate extends DataSourceDelegate {
     client: PostgresDataSourceClient;
 }
 
-export function usePostgresDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
-    const client = useMemo(() => new PostgresDataSourceClient(config), [config.baseUrl, config.websocketUrl]);
+function recursivelyMap(
+    data: any,
+    mapFn: (value: any) => any
+): any {
+    if (Array.isArray(data)) {
+        return data.map((item: any) => recursivelyMap(item, mapFn));
+    } else if (data && typeof data === "object") {
+        const result: Record<string, any> = {};
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                result[key] = recursivelyMap(data[key], mapFn);
+            }
+        }
+        return mapFn(result);
+    }
+    return mapFn(data);
+}
 
-    const dataSource: PostgresDataSourceDelegate = useMemo(() => ({
+function delegateToCMSModel(data: any): any {
+    return recursivelyMap(data, (value) => {
+        if (value && value.__type === "date" && value.value) {
+            const date = new Date(value.value);
+            return isNaN(date.getTime()) ? null : date;
+        }
+        return value;
+    });
+}
+
+function cmsToDelegateModel(data: any): any {
+    return recursivelyMap(data, (value) => {
+        if (value instanceof Date) {
+            return value.toISOString();
+        }
+        return value;
+    });
+}
+
+export function usePostgresDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
+    const client = useMemo(() => new PostgresDataSourceClient(config), [config.websocketUrl]);
+
+    return useMemo(() => ({
 
         key: "postgres",
 
@@ -27,9 +64,15 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
 
         client,
 
-        delegateToCMSModel: (data: any) => data,
+        delegateToCMSModel: (data: any) => {
+            console.log("Mapping data from delegate to CMS model:", data);
+            return delegateToCMSModel(data);
+        },
 
-        cmsToDelegateModel: (data: any) => data,
+        cmsToDelegateModel: (data: any) => {
+            console.log("Mapping data from CMS to delegate model:", data);
+            return cmsToDelegateModel(data);
+        },
 
         setDateToMidnight: (date: Date) => {
             const d = new Date(date);
@@ -44,7 +87,11 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
                 collection,
                 ...cleanProps
             } = props as any;
-            return client.fetchCollection(cleanProps);
+            const entities = await client.fetchCollection(cleanProps);
+            return entities.map(e => ({
+                ...e,
+                values: delegateToCMSModel(e.values)
+            }));
         },
 
         async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
@@ -54,7 +101,12 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
                 collection,
                 ...cleanProps
             } = props as any;
-            return client.fetchEntity(cleanProps);
+            const entity = await client.fetchEntity(cleanProps);
+            if (!entity) return undefined;
+            return {
+                ...entity,
+                values: delegateToCMSModel(entity.values)
+            };
         },
 
         async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
@@ -64,7 +116,11 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
                 collection,
                 ...cleanProps
             } = props as any;
-            return client.saveEntity(cleanProps);
+            const entity = await client.saveEntity(cleanProps);
+            return {
+                ...entity,
+                values: delegateToCMSModel(entity.values)
+            };
         },
 
         async deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void> {
@@ -106,7 +162,10 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             } = props as any;
             return client.listenCollection(
                 cleanProps,
-                (entities: Entity<M>[]) => props.onUpdate(entities),
+                (entities: Entity<M>[]) => props.onUpdate(entities.map(e => ({
+                    ...e,
+                    values: delegateToCMSModel(e.values)
+                }))),
                 props.onError
             );
         },
@@ -122,7 +181,10 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
                 cleanProps,
                 (entity: Entity<M> | null) => {
                     if (entity !== null) {
-                        props.onUpdate(entity);
+                        props.onUpdate({
+                            ...entity,
+                            values: delegateToCMSModel(entity.values)
+                        });
                     } else {
                         // Handle null case - some FireCMS listeners expect only non-null entities
                         // We'll skip the update for null entities to match FireCMS expectations
@@ -137,5 +199,4 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
         }
     }), [client]);
 
-    return dataSource;
 }

@@ -63,7 +63,6 @@ export function App() {
 
     // Replace Firestore delegate with PostgreSQL delegate
     const postgresDelegate = usePostgresDataSource({
-        baseUrl: "http://localhost:3001",
         websocketUrl: "ws://localhost:3001"
     });
 

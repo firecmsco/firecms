@@ -2,7 +2,7 @@ import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, FilterValues, Property, WhereFilterOp } from "@firecms/core";
+import { Entity, FilterValues, Properties, Property, WhereFilterOp } from "@firecms/core";
 
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) {
@@ -48,57 +48,56 @@ function sanitizeAndConvertDates(obj: any): any {
 }
 
 // Transform references for database storage (reference objects to IDs)
-function transformReferencesToIds(entity: any, properties: Record<string, any>): any {
+function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties<M>): any {
     if (!entity || !properties) return entity;
 
-    console.log("🔄 [transformReferencesToIds] Starting transformation");
-    console.log("🔄 [transformReferencesToIds] Entity keys:", Object.keys(entity));
-    console.log("🔄 [transformReferencesToIds] Properties keys:", Object.keys(properties));
+    console.log("🔄 [serializeDataToServer] Starting transformation");
+    console.log("🔄 [serializeDataToServer] Entity keys:", Object.keys(entity));
+    console.log("🔄 [serializeDataToServer] Properties keys:", Object.keys(properties));
 
     const result: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(entity)) {
-        const property = properties[key];
+        const property = properties[key as keyof M] as Property;
         if (!property) {
-            console.log(`🔄 [transformReferencesToIds] No property config found for key: ${key}`);
+            console.log(`🔄 [serializeDataToServer] No property config found for key: ${key}`);
             result[key] = value;
             continue;
         }
 
-        console.log(`🔄 [transformReferencesToIds] Processing ${key}:`, {
+        console.log(`🔄 [serializeDataToServer] Processing ${key}:`, {
             value,
-            propertyType: property.dataType || property.type,
-            hasPath: !!property.path
+            propertyType: property.type,
         });
 
-        result[key] = transformPropertyToId(value, property);
+        result[key] = serializePropertyToServer(value, property);
     }
 
-    console.log("🔄 [transformReferencesToIds] Final result:", result);
+    console.log("🔄 [serializeDataToServer] Final result:", result);
     return result;
 }
 
-function transformPropertyToId(value: any, property: any): any {
+function serializePropertyToServer(value: any, property: Property): any {
     if (value === null || value === undefined) {
         return value;
     }
 
-    const propertyType = property.dataType || property.type;
-    console.log(`🔄 [transformPropertyToId] Property type: ${propertyType}, value:`, value);
+    const propertyType = property.type;
+    console.log(`🔄 [serializePropertyToServer] Property type: ${propertyType}, value:`, value);
 
     switch (propertyType) {
         case "reference":
             // Transform reference object to ID
             if (typeof value === "object" && value.id !== undefined) {
-                console.log(`🔄 [transformPropertyToId] Transforming reference ${value.id} from path ${value.path}`);
+                console.log(`🔄 [serializePropertyToServer] Transforming reference ${value.id} from path ${value.path}`);
                 return value.id;
             }
-            console.log(`🔄 [transformPropertyToId] Reference value is not an object or has no id:`, value);
+            console.log(`🔄 [serializePropertyToServer] Reference value is not an object or has no id:`, value);
             return value;
 
         case "array":
             if (Array.isArray(value) && property.of) {
-                return value.map(item => transformPropertyToId(item, property.of));
+                return value.map(item => serializePropertyToServer(item, property.of as Property));
             }
             return value;
 
@@ -106,9 +105,9 @@ function transformPropertyToId(value: any, property: any): any {
             if (typeof value === "object" && property.properties) {
                 const result: Record<string, any> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
-                    const subProperty = property.properties[subKey];
+                    const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
-                        result[subKey] = transformPropertyToId(subValue, subProperty);
+                        result[subKey] = serializePropertyToServer(subValue, subProperty);
                     } else {
                         result[subKey] = subValue;
                     }
@@ -123,30 +122,30 @@ function transformPropertyToId(value: any, property: any): any {
 }
 
 // Transform IDs back to reference objects for frontend
-function transformIdsToReferences(entity: any, properties: Record<string, any>): any {
-    if (!entity || !properties) return entity;
+function parseDataFromServer<M extends Record<string, any>>(data: M, properties: Properties<M>): M {
+    if (!data || !properties) return data;
 
     const result: Record<string, any> = {};
 
-    for (const [key, value] of Object.entries(entity)) {
-        const property = properties[key];
+    for (const [key, value] of Object.entries(data)) {
+        const property = properties[key as keyof M] as Property;
         if (!property) {
             result[key] = value;
             continue;
         }
 
-        result[key] = transformPropertyFromId(value, property);
+        result[key] = parsePropertyFromServer(value, property);
     }
 
-    return result;
+    return result as M;
 }
 
-function transformPropertyFromId(value: any, property: any): any {
+function parsePropertyFromServer(value: any, property: Property): any {
     if (value === null || value === undefined) {
         return value;
     }
 
-    switch (property.dataType || property.type) {
+    switch ( property.type) {
         case "reference":
             // Transform ID back to reference object with type information
             if (typeof value === "string" || typeof value === "number") {
@@ -160,7 +159,7 @@ function transformPropertyFromId(value: any, property: any): any {
 
         case "array":
             if (Array.isArray(value) && property.of) {
-                return value.map(item => transformPropertyFromId(item, property.of));
+                return value.map(item => parsePropertyFromServer(item, property.of as Property));
             }
             return value;
 
@@ -168,9 +167,9 @@ function transformPropertyFromId(value: any, property: any): any {
             if (typeof value === "object" && property.properties) {
                 const result: Record<string, any> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
-                    const subProperty = property.properties[subKey];
+                    const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
-                        result[subKey] = transformPropertyFromId(subValue, subProperty);
+                        result[subKey] = parsePropertyFromServer(subValue, subProperty);
                     } else {
                         result[subKey] = subValue;
                     }
@@ -178,6 +177,32 @@ function transformPropertyFromId(value: any, property: any): any {
                 return result;
             }
             return value;
+
+        case "number":
+            if (typeof value === "string") {
+                const parsed = parseFloat(value);
+                return isNaN(parsed) ? null : parsed;
+            }
+            return value;
+
+        case "date": {
+            let date: Date | undefined;
+            if (value instanceof Date) {
+                date = value;
+            } else if (typeof value === "string" || typeof value === "number") {
+                const parsedDate = new Date(value);
+                if (!isNaN(parsedDate.getTime())) {
+                    date = parsedDate;
+                }
+            }
+            if (date) {
+                return {
+                    __type: "date",
+                    value: date.toISOString()
+                };
+            }
+            return null;
+        }
 
         default:
             return value;
@@ -266,7 +291,7 @@ export class EntityService {
         // Transform IDs back to reference objects and apply type conversion
         let values = raw;
         if (collection) {
-            values = transformIdsToReferences(raw, collection.properties);
+            values = parseDataFromServer(raw as M, collection.properties as Properties<M>);
         }
 
         return {
@@ -362,13 +387,13 @@ export class EntityService {
         const results = await query;
         const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
 
-        console.log("Fetched collection:", results);
+        console.log("Fetched collection:", results.length, "items");
 
         return results.map((entity: any) => {
             // Transform IDs back to reference objects
             let values = entity;
             if (collection) {
-                values = transformIdsToReferences(entity, collection.properties);
+                values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
             }
 
             return {
@@ -394,7 +419,7 @@ export class EntityService {
         // Transform references to IDs, map field names, then sanitize
         let processedData = values;
         if (collection) {
-            processedData = transformReferencesToIds(values, collection.properties);
+            processedData = serializeDataToServer(values as M, collection.properties as Properties<M>);
         }
         const entityData = sanitizeAndConvertDates(processedData);
 
@@ -541,7 +566,7 @@ export class EntityService {
             // Transform IDs back to reference objects
             let values = entity;
             if (collection) {
-                values = transformIdsToReferences(entity, collection.properties);
+                values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
             }
 
             return {

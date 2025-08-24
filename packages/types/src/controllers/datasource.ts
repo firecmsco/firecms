@@ -410,10 +410,6 @@ export interface DataSourceDelegate {
      */
     currentTime?: () => any;
 
-    delegateToCMSModel: (data: any) => any;
-
-    cmsToDelegateModel: (data: any) => any;
-
     setDateToMidnight: (input?: any) => any;
 
     initTextSearch?: (props: {

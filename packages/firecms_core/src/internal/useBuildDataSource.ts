@@ -223,20 +223,17 @@ export function useBuildDataSource({
 
             const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
 
-            const delegateValues = usedDelegate.cmsToDelegateModel(
-                values,
-            );
 
-            const updatedValues: EntityValues<M> = properties
+            const updatedValues: Partial<EntityValues<M>> = properties
                 ? updateDateAutoValues(
                     {
-                        inputValues: delegateValues,
+                        inputValues: values,
                         properties,
                         status,
                         timestampNowValue: usedDelegate.currentTime?.() ?? new Date(),
                         setDateToMidnight: usedDelegate.setDateToMidnight
                     })
-                : delegateValues;
+                : values;
 
             return usedDelegate.saveEntity({
                 path,
@@ -245,12 +242,6 @@ export function useBuildDataSource({
                 values: updatedValues,
                 status,
                 navigationController,
-            }).then((res) => {
-                return {
-                    id: res.id,
-                    path: res.path,
-                    values: usedDelegate.delegateToCMSModel(updatedValues),
-                } as Entity<M>;
             });
         }, [delegate.saveEntity, navigationController.getCollection]),
 
