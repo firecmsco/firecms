@@ -52,10 +52,10 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     description?: string;
 
     /**
-     * Relative path of this view to its parent.
-     * If this view is in the root the path is equal to the absolute one.
+     * Path or table name of the collection in the database.
+     * If not specified, the `name` property is used, converted to snake_case.
      */
-    dbPath: string;
+    dbPath?: string;
 
     /**
      * Optional database id of this collection. If not specified, the default

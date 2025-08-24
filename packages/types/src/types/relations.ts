@@ -80,6 +80,11 @@ export interface ManyToManyRelation {
          */
         table: () => EntityCollection;
         /**
+         * Optional override for the junction table name.
+         * If not provided, the name is inferred from the `table` collection.
+         */
+        dbPath?: string;
+        /**
          * Foreign key in junction table that references this collection
          */
         sourceJunctionKey: string | string[];

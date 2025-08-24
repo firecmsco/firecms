@@ -41,6 +41,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.fetchCollection(cleanProps);
@@ -50,6 +51,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.fetchEntity(cleanProps);
@@ -59,6 +61,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.saveEntity(cleanProps);
@@ -68,6 +71,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.deleteEntity(cleanProps);
@@ -87,6 +91,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.countEntities(cleanProps);
@@ -96,6 +101,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.listenCollection(
@@ -109,6 +115,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,
+                collection,
                 ...cleanProps
             } = props as any;
             return client.listenEntity(

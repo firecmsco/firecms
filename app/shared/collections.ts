@@ -13,13 +13,12 @@ export const clientesCollection: EntityCollection = {
     description: "Información de los clientes del servicio de alquiler",
     textSearchEnabled: true,
     properties: {
-        nombre: {
-            name: "Nombre",
-            type: "string",
+        id: {
+            type: "number",
             validation: { required: true }
         },
-        apellido: {
-            name: "Apellido",
+        nombre: {
+            name: "Nombre",
             type: "string",
             validation: { required: true }
         },
@@ -99,6 +98,10 @@ export const implementosCollection: EntityCollection = {
     icon: "Extension",
     description: "Inventario de todos los implementos y accesorios para la maquinaria.",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         nombre: {
             name: "Nombre del Implemento",
             type: "string",
@@ -182,6 +185,10 @@ export const alquileresSubcollection: EntityCollection = {
     icon: "CalendarToday",
     description: "Historial completo de alquileres de esta máquina",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         maquina_referencia: {
             name: "Máquina",
             type: "reference",
@@ -320,6 +327,10 @@ export const mantenimientoSubcollection: EntityCollection = {
     icon: "Build",
     description: "Historial completo de mantenimiento de esta máquina",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         fecha: {
             name: "Fecha del Mantenimiento",
             type: "date",
@@ -405,6 +416,10 @@ export const horasSubcollection: EntityCollection<any> = {
     icon: "Schedule",
     description: "Registro histórico de lecturas de horas de la máquina",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         fecha: {
             name: "Fecha de Lectura",
             type: "date",
@@ -472,6 +487,10 @@ export const incidenciasSubcollection: EntityCollection = {
     icon: "Warning",
     description: "Registro de problemas, averías y observaciones importantes",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         fecha: {
             name: "Fecha de la Incidencia",
             type: "date",
@@ -581,6 +600,10 @@ export const maquinariaCollection: EntityCollection = {
     dbPath: "maquinaria",
     icon: "Construction",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         nombre: {
             name: "Nombre / Identificador",
             description: "Ej: Nº 1 - MANITOU MLT 737",
@@ -680,6 +703,10 @@ export const controlDiarioCollection: EntityCollection = {
     icon: "Today",
     description: "Snapshots diarios del estado de toda la maquinaria - equivalente a las hojas Excel",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         fecha: {
             name: "Fecha",
             type: "date",

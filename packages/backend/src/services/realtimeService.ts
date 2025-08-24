@@ -3,8 +3,9 @@ import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
 import { PgTable } from "drizzle-orm/pg-core";
-import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@firecms/types";
+import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
 import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/core";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 type RealTimeListenCollectionProps = ListenCollectionProps & {
     subscriptionId: string
@@ -36,7 +37,7 @@ export class RealtimeService extends EventEmitter {
     // Add callback storage for DataSourceDelegate subscriptions
     private subscriptionCallbacks = new Map<string, (data: any) => void>();
 
-    constructor(private db: Database, tables: Record<string, PgTable>) {
+    constructor(private db: NodePgDatabase, tables: Record<string, PgTable>) {
         super();
         this.entityService = new EntityService(db, tables);
     }
@@ -332,6 +333,7 @@ export class RealtimeService extends EventEmitter {
     }
 
     private sendError(clientId: string, error: string, subscriptionId?: string) {
+        console.error("Error handling collection subscription:", error);
         const message = {
             type: "error" as const,
             subscriptionId,

@@ -203,12 +203,9 @@ export class EntityService {
             throw new Error(`Collection not found for path: ${path}`);
         }
 
-        const idFieldName = collection.idField;
-        if (!idFieldName) {
-            throw new Error(`ID field not configured for collection '${path}'`);
-        }
-
+        const idFieldName = collection.idField ?? "id";
         const idFieldConfig = collection.properties[idFieldName] as Property;
+
         if (!idFieldConfig) {
             throw new Error(`ID field '${idFieldName}' not found in properties for collection '${path}'`);
         }
