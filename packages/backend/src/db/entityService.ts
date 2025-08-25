@@ -2,6 +2,7 @@ import { and, asc, desc, eq, ilike, or, sql, SQLWrapper } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+
 import {
     Entity,
     FilterValues,
@@ -10,7 +11,7 @@ import {
     Properties,
     Property,
     WhereFilterOp
-} from "@firecms/core";
+} from "@firecms/types";
 import {
     toSnakeCase,
     getTableNameFromCollection,
@@ -72,7 +73,7 @@ function serializePropertyToServer(value: any, property: Property): any {
 
     switch (propertyType) {
         case "reference":
-            if (typeof value === "object" && value.id !== undefined) {
+            if (typeof value === "object" && value !== null && value.id !== undefined) {
                 return value.id;
             }
             return value;
@@ -118,8 +119,8 @@ function parsePropertyFromServer(value: any, property: Property): any {
             if (typeof value === "string" || typeof value === "number") {
                 return {
                     id: value.toString(),
-                    path: property.path,
-                    type: "reference"
+                    path: property.path!,
+                    __type: "reference"
                 };
             }
             return value;

@@ -4,6 +4,7 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCollection,
+    EntityReference,
     FetchCollectionProps,
     FetchEntityProps,
     ListenCollectionProps,
@@ -40,6 +41,9 @@ function delegateToCMSModel(data: any): any {
             const date = new Date(value.value);
             return isNaN(date.getTime()) ? null : date;
         }
+        if (value && value.__type === "reference" && value.id !== undefined && value.path !== undefined) {
+            return new EntityReference(value.id, value.path);
+        }
         return value;
     });
 }
@@ -48,6 +52,13 @@ function cmsToDelegateModel(data: any): any {
     return recursivelyMap(data, (value) => {
         if (value instanceof Date) {
             return value.toISOString();
+        }
+        if (value instanceof EntityReference) {
+            return {
+                id: value.id,
+                path: value.path,
+                __type: "reference"
+            };
         }
         return value;
     });
