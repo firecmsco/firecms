@@ -11,6 +11,11 @@ import {
     Property,
     WhereFilterOp
 } from "@firecms/core";
+import {
+    toSnakeCase,
+    getTableNameFromCollection,
+    resolveJunctionTableName
+} from "../utils/collection-utils";
 
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) return null;
@@ -42,28 +47,6 @@ function sanitizeAndConvertDates(obj: any): any {
     }
 
     return obj;
-}
-
-// Helper utils to mirror schema generation defaults
-function toSnakeCase(str: string): string {
-    if (!str) return "";
-    return str.replace(/[A-Z]/g, (letter, index) => index === 0 ? letter.toLowerCase() : `_${letter.toLowerCase()}`);
-}
-
-function getTableNameFromCollection(collection: any): string {
-    // Matches getTableName in generate-drizzle-schema.ts
-    return (collection.dbPath ?? toSnakeCase(collection.slug ?? "")) || toSnakeCase(collection.name ?? "");
-}
-
-function resolveJunctionTableName(
-    through: { dbPath?: string } | undefined,
-    sourceCollection: any,
-    targetCollection: any
-): string {
-    if (through?.dbPath) return through.dbPath;
-    const sourceName = getTableNameFromCollection(sourceCollection);
-    const targetName = getTableNameFromCollection(targetCollection);
-    return [sourceName, targetName].sort().join("_");
 }
 
 // Transform references for database storage (reference objects to IDs)

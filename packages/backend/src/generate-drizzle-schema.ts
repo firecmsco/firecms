@@ -10,6 +10,14 @@ import {
     ReferenceProperty,
     StringProperty
 } from "@firecms/types";
+import {
+    toSnakeCase,
+    getTableName,
+    getTableVarName,
+    resolveTargetTableName,
+    resolveJunctionTableName,
+    getEnumVarName
+} from "./utils/collection-utils";
 
 let loadedCollections: EntityCollection[] | undefined = [];
 
@@ -59,72 +67,6 @@ const formatTerminalText = (text: string, options: {
     }
 
     return `${codes}${text}\x1b[0m`;
-};
-
-/**
- * Converts a camelCase or PascalCase string to snake_case.
- * @param str The string to convert.
- * @returns The snake_cased string.
- */
-const toSnakeCase = (str: string): string => {
-    if (!str) return "";
-    return str.replace(/[A-Z]/g, (letter, index) =>
-        index === 0 ? letter.toLowerCase() : `_${letter.toLowerCase()}`
-    );
-};
-
-/**
- * Generates a Drizzle-friendly variable name from a table name.
- * @param tableName The name of the table.
- * @returns A variable-safe name in camelCase.
- */
-const getTableVarName = (tableName: string): string => {
-    // Convert snake_case to camelCase for table variable names
-    return tableName.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
-};
-
-/**
- * Converts table name and property name to camelCase enum variable name
- * @param tableName The name of the table.
- * @param propName The property name.
- * @returns A camelCase enum variable name.
- */
-const getEnumVarName = (tableName: string, propName: string): string => {
-    const tableVar = getTableVarName(tableName);
-    const propVar = propName.charAt(0).toUpperCase() + propName.slice(1);
-    return `${tableVar}${propVar}`;
-};
-
-const getTableName = (collection: EntityCollection): string => {
-    return collection.dbPath ?? toSnakeCase(collection.slug) ?? toSnakeCase(collection.name);
-};
-
-/**
- * Resolve a target value that can be a string or a function returning an EntityCollection
- */
-const resolveTargetTableName = (target: string | (() => EntityCollection)): string => {
-    if (typeof target === "function") {
-        const col = target();
-        return getTableName(col);
-    }
-    return target;
-};
-
-/**
- * Resolve a junction table which can be a string or a function returning an EntityCollection
- */
-const resolveJunctionTableName = (
-    through: {
-        dbPath?: string
-    } | undefined,
-    sourceCollection: EntityCollection,
-    targetCollection: EntityCollection
-): string => {
-    if (through?.dbPath) return through.dbPath;
-    const sourceName = getTableName(sourceCollection);
-    const targetName = getTableName(targetCollection);
-    // sort names to ensure consistent table name regardless of relation direction
-    return [sourceName, targetName].sort().join("_");
 };
 
 /**
