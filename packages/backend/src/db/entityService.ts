@@ -365,18 +365,23 @@ export class EntityService {
         }
 
         // Apply ordering
+        const orderExpressions = [];
         if (options.orderBy) {
             const orderField = (table as any)[options.orderBy];
             if (orderField) {
                 if (options.order === "desc") {
-                    query = query.orderBy(desc(orderField));
+                    orderExpressions.push(desc(orderField));
                 } else {
-                    query = query.orderBy(asc(orderField));
+                    orderExpressions.push(asc(orderField));
                 }
             }
-        } else {
-            // Default ordering by ID
-            query = query.orderBy(desc(idField));
+        }
+
+        // Default ordering by ID, always applied as a secondary sort
+        orderExpressions.push(desc(idField));
+
+        if (orderExpressions.length > 0) {
+            query = query.orderBy(...orderExpressions);
         }
 
         // Apply limit
