@@ -2,7 +2,6 @@ import { WebSocket } from "ws";
 import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
-import { PgTable } from "drizzle-orm/pg-core";
 import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
 import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/core";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -37,9 +36,9 @@ export class RealtimeService extends EventEmitter {
     // Add callback storage for DataSourceDelegate subscriptions
     private subscriptionCallbacks = new Map<string, (data: any) => void>();
 
-    constructor(private db: NodePgDatabase, tables: Record<string, PgTable>) {
+    constructor(private db: NodePgDatabase) {
         super();
-        this.entityService = new EntityService(db, tables);
+        this.entityService = new EntityService(db);
     }
 
     // Make subscriptions accessible for DataSourceDelegate

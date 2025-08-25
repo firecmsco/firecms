@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { createPostgresDatabaseConnection, initializeFireCMSBackend } from "@firecms/backend";
 
-import * as tables from "./schema.generated";
+import { tables } from "./schema.generated";
 import { collections } from "shared";
 
 import * as dotenv from "dotenv";

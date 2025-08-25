@@ -1,6 +1,6 @@
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
-import { Database } from "../db/connection";
 import {
     DeleteEntityProps,
     Entity,
@@ -51,7 +51,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     private realtimeService: RealtimeService;
 
     constructor(
-        private db: Database,
+        private db: NodePgDatabase,
         realtimeService: RealtimeService
     ) {
         this.entityService = new EntityService(db);

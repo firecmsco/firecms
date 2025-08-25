@@ -97,10 +97,6 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      * If this is a subcollection, specify the parent collection ids.
      */
     parentCollectionIds?: string[];
-    /**
-     * Whether this is a subcollection or not.
-     */
-    isSubCollection?: boolean;
 
     className?: string;
 
@@ -139,7 +135,6 @@ export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
                                                                      path: fullPathProp,
                                                                      parentCollectionIds,
-                                                                     isSubCollection,
                                                                      className,
                                                                      updateUrl,
                                                                      ...collectionProp
@@ -730,7 +725,6 @@ export const EntityCollectionView = React.memo(
     }, (a, b) => {
         return equal(a.slug, b.slug) &&
             equal(a.parentCollectionIds, b.parentCollectionIds) &&
-            equal(a.isSubCollection, b.isSubCollection) &&
             equal(a.className, b.className) &&
             equal(a.properties, b.properties) &&
             equal(a.propertiesOrder, b.propertiesOrder) &&

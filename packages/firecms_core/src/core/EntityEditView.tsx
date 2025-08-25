@@ -57,7 +57,7 @@ export interface EntityEditViewProps<M extends Record<string, any> = any> {
      * The CMS path of the entity, e.g. "users" or "products".
      */
     path: string;
-    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
     entityId?: string | number;
     databaseId?: string;
     copy?: boolean;
@@ -321,7 +321,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         ? <EntityCollectionView
                             path={newFullPath}
                             parentCollectionIds={[...parentCollectionIds, collection.slug]}
-                            isSubCollection={true}
                             updateUrl={false}
                             {...subcollection}
                             openEntityMode={layout}/>

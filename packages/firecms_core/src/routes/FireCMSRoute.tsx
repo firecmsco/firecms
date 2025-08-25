@@ -77,7 +77,6 @@ export function FireCMSRoute() {
             return null;
         return <EntityCollectionView
             key={`collection_view_${collection.slug}`}
-            isSubCollection={false}
             parentCollectionIds={[]}
             path={collection.slug}
             updateUrl={true}
@@ -97,7 +96,6 @@ export function FireCMSRoute() {
                 return null;
             return <EntityCollectionView
                 key={`collection_view_${collection.slug}`}
-                isSubCollection={false}
                 parentCollectionIds={[]}
                 path={collection.slug}
                 updateUrl={true}
