@@ -125,8 +125,8 @@ function collectionToCode(collection: EntityCollection): object {
         icon: collection.icon,
         group: collection.group,
         customId: collection.customId,
-        initialFilter: collection.initialFilter,
-        initialSort: collection.initialSort,
+        filter: collection.filter,
+        sort: collection.sort,
         properties: Object.entries({
             ...(collection.properties ?? {})
         })
@@ -134,7 +134,7 @@ function collectionToCode(collection: EntityCollection): object {
                 [key]: propertyCleanup(value)
             }))
             .reduce((a, b) => ({ ...a, ...b }), {}),
-        subcollections: (collection.subcollections ?? []).map(collectionToCode)
+        // subcollections: (collection.subcollections ?? []).map(collectionToCode)
     }
 
 }

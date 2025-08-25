@@ -127,7 +127,7 @@ export const productsCollection = buildCollection<Product>({
     }),
     includeJsonView: true,
     Actions: [SampleCollectionActions],
-    subcollections: [localeCollection],
+    subcollections: () => [localeCollection],
     // defaultSelectedView: "sample_custom_view",
     entityViews: [
         {
@@ -437,7 +437,7 @@ export const productsCollection2 = buildCollection({
     name: "Products 2",
     slug: "products_2",
     // openEntityMode: "full_screen",
-    subcollections: [
+    subcollections: () => [
         buildCollection({
             slug: "product_locales_2",
             dbPath: "locales",

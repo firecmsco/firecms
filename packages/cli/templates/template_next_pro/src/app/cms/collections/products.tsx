@@ -56,7 +56,7 @@ export const productsCollection = buildCollection<Product>({
     //     create: true,
     //     delete: true
     // }),
-    subcollections: [localeCollection],
+    subcollections: () => [localeCollection],
     entityViews: [
         {
             key: "preview",

@@ -83,7 +83,7 @@ export const testCollection = buildCollection<any>({
             // delete: false,
             // read: true
         },
-        subcollections: [
+        subcollections: () => [
             {
                 slug: "sub_collection/with/slash",
                 name: "Sub collection with slash",
@@ -94,7 +94,7 @@ export const testCollection = buildCollection<any>({
                         name: "Sub prop",
                     }
                 },
-                subcollections: [
+                subcollections: () => [
 
                     {
                         slug: "sub_sub_collection/with/slash",

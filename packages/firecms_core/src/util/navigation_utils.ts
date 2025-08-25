@@ -90,7 +90,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
             }
 
             resolvedPathParts.push(entityId); // Append entity ID
-            currentCollections = foundCollection.subcollections; // Move to subcollections
+            currentCollections = foundCollection.subcollections?.(); // Move to subcollections
             foundMatch = true;
 
             if (!currentCollections && remainingPath.length > 0) {
@@ -143,7 +143,7 @@ export function getCollectionBySlugWithin(pathOrId: string, collections: EntityC
             } else if (navigationEntry.subcollections) {
                 const newPath = pathOrId.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionBySlugWithin(newPath, navigationEntry.subcollections);
+                    result = getCollectionBySlugWithin(newPath, navigationEntry.subcollections?.());
             }
         }
         if (result) break;

@@ -77,8 +77,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     : EntityTableController<M> {
 
     const {
-        initialFilter,
-        initialSort,
+        filter,
+        sort,
         forceFilter: forceFilterFromCollection
     } = collection;
 
@@ -119,21 +119,21 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         }
     }
 
-    const initialSortInternal = useMemo(() => {
-        if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
+    const sortInternal = useMemo(() => {
+        if (sort && forceFilter && !checkFilterCombination(forceFilter, sort)) {
             console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
             return undefined;
         }
-        return initialSort;
-    }, [initialSort, forceFilter]);
+        return sort;
+    }, [sort, forceFilter]);
 
     const {
-        filterValues: initialFilterUrl,
-        sortBy: initialSortUrl,
+        filterValues: filterUrl,
+        sortBy: sortUrl,
     } = parseFilterAndSort(window.location.search);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
-    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? filterUrl : undefined) ?? filter ?? undefined);
+    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? sortUrl : undefined) ?? sortInternal);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 

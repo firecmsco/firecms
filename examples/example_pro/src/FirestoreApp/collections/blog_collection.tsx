@@ -132,7 +132,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             defaultValue: ["default tag"]
         }
     },
-    initialFilter: {
+    filter: {
         status: ["==", "published"]
     }
 });

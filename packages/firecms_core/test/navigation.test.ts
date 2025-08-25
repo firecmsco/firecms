@@ -165,7 +165,7 @@ describe("Resolving paths test", () => {
                     type: "number"
                 })
             },
-            subcollections: [jointLocaleCollection]
+            subcollections: () => [jointLocaleCollection]
         });
 
         // Simplified joints collection
@@ -179,7 +179,7 @@ describe("Resolving paths test", () => {
                     type: "string"
                 })
             },
-            subcollections: [jointMovementsCollection, jointLocaleCollection]
+            subcollections: () => [jointMovementsCollection, jointLocaleCollection]
         });
 
         const collections = [jointsCollection];
@@ -215,7 +215,7 @@ describe("Resolving paths test", () => {
             dbPath: "locales", // Actual path segment
             name: "Locales",
             properties: {},
-            subcollections: [subSubCollection]
+            subcollections: () => [subSubCollection]
         });
 
         const productsCollection = buildCollection({
@@ -223,7 +223,7 @@ describe("Resolving paths test", () => {
             dbPath: "products",
             name: "Products",
             properties: {},
-            subcollections: [localesCollection]
+            subcollections:() =>  [localesCollection]
         });
 
         const testCollections = [productsCollection];

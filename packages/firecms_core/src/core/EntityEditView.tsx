@@ -208,7 +208,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     }, [selectedTabProp]);
 
-    const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
+    const subcollections = (collection.subcollections?.() ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.entityViews ?? [];
     const customViewsCount = customViews?.length ?? 0;

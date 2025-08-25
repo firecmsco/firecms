@@ -126,7 +126,7 @@ export type Relation = BaseRelation & {
     /**
      * How to render this relation in the UI
      */
-    widget?: "select" | "subcollection" | "table";
+    widget?: "select" | "subcollection" | "reference";
 
     /**
      * For hierarchical/self relations: how deep to load the tree
@@ -138,9 +138,3 @@ export type Relation = BaseRelation & {
     }
 
 };
-
-/**
- * Collection relations object - comprehensive relation definitions
- * @group Models
- */
-export type CollectionRelations = Record<string, Relation>;

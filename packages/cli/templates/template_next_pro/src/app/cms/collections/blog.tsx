@@ -121,7 +121,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             }
         }
     },
-    initialFilter: {
+    filter: {
         status: ["==", "published"]
     }
 });

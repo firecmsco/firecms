@@ -22,7 +22,7 @@ export const showcaseCollection = buildCollection({
     //         }
     //     }
     // ],
-    subcollections: [{
+    subcollections: () => [{
         slug: "id_subcollection",
         dbPath: "subcollection",
         name: "Subcollection",

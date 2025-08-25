@@ -422,7 +422,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === pathSegment);
             if (!collection)
                 return undefined;
-            currentCollections = collection.subcollections;
+            currentCollections = collection.subcollections?.();
             if (i === pathSegments.length - 1)
                 return collection as EC;
         }
@@ -443,7 +443,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
             if (!collection)
                 return undefined;
-            currentCollections = collection.subcollections;
+            currentCollections = collection.subcollections?.();
             if (i === ids.length - 1)
                 return collection as EC;
         }
@@ -501,7 +501,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
             paths.push(collection.dbPath);
-            currentCollections = collection.subcollections;
+            currentCollections = collection.subcollections?.();
         }
         return paths;
     }, [getCollectionFromIds]);
@@ -551,7 +551,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
             if (!c.subcollections) return c;
             return {
                 ...c,
-                subcollections: filterOutNotAllowedCollections(c.subcollections, authController)
+                subcollections: () => filterOutNotAllowedCollections(c.subcollections?.() ?? [], authController)
             }
         });
 }
@@ -562,7 +562,7 @@ function applyPluginModifyCollection(resolvedCollections: EntityCollection[], mo
         if (modifiedCollection.subcollections) {
             return {
                 ...modifiedCollection,
-                subcollections: applyPluginModifyCollection(modifiedCollection.subcollections, modifyCollection)
+                subcollections: () => applyPluginModifyCollection(modifiedCollection.subcollections?.() ?? [], modifyCollection)
             } satisfies EntityCollection;
         }
         return modifiedCollection;
@@ -644,7 +644,7 @@ function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
         subcollections: subcollectionsB,
         ...restB
     } = b;
-    if (!areCollectionListsEqual(subcollectionsA ?? [], subcollectionsB ?? [])) {
+    if (!areCollectionListsEqual(subcollectionsA?.() ?? [], subcollectionsB?.() ?? [])) {
         return false;
     }
     return equal(removeFunctions(restA), removeFunctions(restB));

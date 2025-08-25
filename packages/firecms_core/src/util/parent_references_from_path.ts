@@ -42,7 +42,7 @@ export function getParentReferencesFromPath(props: {
                     if (collection.subcollections) {
                         result.push(...getParentReferencesFromPath({
                             path: newPath,
-                            collections: collection.subcollections,
+                            collections: collection.subcollections?.(),
                             currentFullPath: path
                         }));
                     }

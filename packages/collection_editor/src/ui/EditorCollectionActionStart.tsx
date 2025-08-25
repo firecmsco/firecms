@@ -27,8 +27,8 @@ export function EditorCollectionActionStart({
         : true;
 
     let saveDefaultFilterButton = null;
-    if (!equal(getObjectOrNull(tableController.filterValues), getObjectOrNull(collection.initialFilter)) ||
-        !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.initialSort))) {
+    if (!equal(getObjectOrNull(tableController.filterValues), getObjectOrNull(collection.filter)) ||
+        !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.sort))) {
         saveDefaultFilterButton = <>
             <Tooltip
                 asChild={true}
@@ -43,8 +43,8 @@ export function EditorCollectionActionStart({
                             parentCollectionIds,
                             collectionData: mergeDeep(collection as PersistedCollection,
                                 {
-                                    initialFilter: tableController.filterValues ?? null,
-                                    initialSort: tableController.sortBy ?? null
+                                    filter: tableController.filterValues ?? null,
+                                    sort: tableController.sortBy ?? null
                                 })
                         }).then(() => {
                             snackbarController.open({
@@ -56,7 +56,7 @@ export function EditorCollectionActionStart({
                 </Button>
             </Tooltip>
 
-            {(collection.initialFilter || collection.initialSort) && <Tooltip
+            {(collection.filter || collection.sort) && <Tooltip
                 title={"Reset to default filter and sort"}>
                 <Button
                     color={"primary"}
@@ -64,10 +64,10 @@ export function EditorCollectionActionStart({
                     variant={"text"}
                     onClick={() => {
                         tableController.clearFilter?.();
-                        if (collection?.initialFilter)
-                            tableController.setFilterValues?.(collection?.initialFilter);
-                        if (collection?.initialSort)
-                            tableController.setSortBy?.(collection?.initialSort);
+                        if (collection?.filter)
+                            tableController.setFilterValues?.(collection?.filter);
+                        if (collection?.sort)
+                            tableController.setSortBy?.(collection?.sort);
                     }}>
                     <UndoIcon/>
                 </Button>

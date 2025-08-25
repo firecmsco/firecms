@@ -48,7 +48,8 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
         }
 
         if (collection.subcollections) {
-            const subCollection = collection.subcollections.find(subCol => getSubcollectionColumnId(subCol) === key);
+            const subCollection = collection.subcollections?.()
+                .find(subCol => getSubcollectionColumnId(subCol) === key);
             if (subCollection) {
                 return [{
                     key,
@@ -72,7 +73,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
     const propertyKeys = Object.keys(collection.properties);
 
     const additionalFields = collection.additionalFields ?? [];
-    const subCollections: EntityCollection[] = collection.subcollections ?? [];
+    const subCollections: EntityCollection[] = collection.subcollections?.() ?? [];
 
     const columnIds: string[] = [
         ...propertyKeys,

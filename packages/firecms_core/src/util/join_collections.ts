@@ -1,7 +1,7 @@
 import {
     EntityCollection,
     MapProperty,
-    ModifyCollectionProps,
+    ModifyCollectionProps, Properties,
     PropertiesOrBuilders,
     Property,
     PropertyOrBuilder
@@ -79,13 +79,13 @@ export function mergeCollection(target: EntityCollection,
 ): EntityCollection {
 
     const subcollectionsMerged = joinCollectionLists(
-        target?.subcollections ?? [],
-        source?.subcollections ?? [],
+        target?.subcollections?.() ?? [],
+        source?.subcollections?.() ?? [],
         [...parentPaths, target.slug],
         modifyCollection
     );
 
-    const propertiesMerged: PropertiesOrBuilders = { ...target.properties } as PropertiesOrBuilders;
+    const propertiesMerged: Properties = { ...target.properties } as Properties;
     Object.keys(source.properties).forEach((key) => {
         const property = target.properties[key] as Property;
         if (property)
@@ -103,7 +103,7 @@ export function mergeCollection(target: EntityCollection,
 
     let resultCollection: EntityCollection = {
         ...mergedCollection,
-        subcollections: subcollectionsMerged,
+        subcollections: () => subcollectionsMerged,
         properties: sortProperties(propertiesMerged, mergedPropertiesOrder),
         propertiesOrder: mergedPropertiesOrder,
         entityViews: mergedEntityViews,

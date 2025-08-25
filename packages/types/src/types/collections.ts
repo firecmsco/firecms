@@ -7,9 +7,17 @@ import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
 import { EntityOverrides } from "./entity_overrides";
-import { CollectionRelations } from "./relations";
 import { User } from "../users";
 import { FireCMSContext } from "../firecms_context";
+import { Relation } from "./relations";
+
+type SubCollection = EntityCollection<any, any> & {
+    /**
+     * Used for SQL datasource only.
+     * If you are using a custom datasource or a noSQL, you can ignore this property.
+     */
+    relation?: Relation
+};
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -165,7 +173,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * collections. The collections added here will be displayed when opening
      * the side dialog of an entity.
      */
-    subcollections?: EntityCollection<any, any>[];
+    subcollections?: () => SubCollection[];
 
     /**
      * This interface defines all the callbacks that can be used when an entity
@@ -235,64 +243,18 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Initial filters applied to the collection this collection is related to.
      * Defaults to none. Filters applied with this prop can be changed.
-     * e.g. `initialFilter: { age: [">=", 18] }`
-     * e.g. `initialFilter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
+     * e.g. `filter: { age: [">=", 18] }`
+     * e.g. `filter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
      */
-    initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
+    filter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 
     /**
      * Default sort applied to this collection.
      * When setting this prop, entities will have a default order
      * applied in the collection.
-     * e.g. `initialSort: ["order", "asc"]`
+     * e.g. `sort: ["order", "asc"]`
      */
-    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
-
-    /**
-     * Relations defined for this entity collection using object syntax.
-     * Define relationships using direct object definitions.
-     *
-     * @example
-     * ```typescript
-     * relations: {
-     *   // one-to-many: customer has many orders
-     *   orders: {
-     *     type: "many",
-     *     target: () => ordersCollection,
-     *     ui: {
-     *       name: "Customer Orders",
-     *       icon: "ShoppingCart",
-     *       widget: "table",
-     *       previewProperties: ["total", "status", "date"]
-     *     }
-     *   },
-     *
-     *   // many-to-one: order belongs to customer
-     *   customer: {
-     *     type: "one",
-     *     target: () => customersCollection,
-     *     fields: ["customerId"],
-     *     references: ["id"],
-     *     ui: {
-     *       name: "Customer",
-     *       widget: "select"
-     *     }
-     *   },
-     *
-     *   // many-to-many: product has many categories
-     *   categories: {
-     *     type: "manyToMany",
-     *     target: () => categoriesCollection,
-     *     through: {
-     *       table: () => productCategoriesJunction,
-     *       sourceKey: "productId",
-     *       targetKey: "categoryId"
-     *     }
-     *   }
-     * }
-     * ```
-     */
-    relations?: CollectionRelations;
+    sort?: [Extract<keyof M, string>, "asc" | "desc"];
 
     /**
      * Array of builders for rendering additional panels in an entity view.

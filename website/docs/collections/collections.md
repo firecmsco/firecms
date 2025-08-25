@@ -209,7 +209,7 @@ Subcollections are easily accessible from the side view while editing an entity.
 ## Filters
 
 :::tip
-If you need to have some filters and sorting applied by default, you can use the `initialFilter`and `initialSort`
+If you need to have some filters and sorting applied by default, you can use the `filter`and `sort`
 prop. You can also force a filter combination to be always applied by using the `forceFilter`prop.
 :::
 
@@ -310,16 +310,16 @@ const archiveEntityAction: EntityAction = {
 }
 ```
 
-- **`initialFilter`**: Initial filters applied to this collection. Defaults to none. Filters applied with this prop can
+- **`filter`**: Initial filters applied to this collection. Defaults to none. Filters applied with this prop can
   be changed by the user.
 
 ```tsx
-initialFilter: {
+filter: {
     age: [">=", 18]
 }
 ```
 ```tsx
-initialFilter: {
+filter: {
     related_user: ["==", new EntityReference("sdc43dsw2", "users")]
 }
 ```
@@ -338,11 +338,11 @@ forceFilter: {
 }
 ```
 
-- **`initialSort`**: Default sort applied to this collection. It takes tuples in the shape `["property_name", "asc"]`
+- **`sort`**: Default sort applied to this collection. It takes tuples in the shape `["property_name", "asc"]`
   or `["property_name", "desc"]`.
 
 ```tsx
-initialSort: ["price", "asc"]
+sort: ["price", "asc"]
 ```
 
 - **`Actions`**: Builder for rendering additional components such as buttons in the collection toolbar. The builder

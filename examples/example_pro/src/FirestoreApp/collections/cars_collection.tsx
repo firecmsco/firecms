@@ -396,6 +396,6 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 type: "string"
             }
         },
-        subcollections: []
+        subcollections: () => []
     }
 )

@@ -62,7 +62,7 @@ export const clientesCollection: EntityCollection = {
                 singularName: "Alquiler",
                 icon: "History",
                 previewProperties: ["maquina_referencia", "fecha_salida", "fecha_devolucion_real", "total_facturado", "estado_pago"],
-                initialSort: ["fecha_salida", "desc"],
+                sort: ["fecha_salida", "desc"],
                 description: "Todos los alquileres realizados por este cliente",
                 permissions: {
                     read: true,
@@ -702,7 +702,7 @@ export const maquinariaCollection: EntityCollection = {
                 singularName: "Alquiler",
                 icon: "CalendarToday",
                 previewProperties: ["cliente_referencia", "fecha_salida", "fecha_devolucion_real", "estado_pago"],
-                initialSort: ["fecha_salida", "desc"]
+                sort: ["fecha_salida", "desc"]
             }
         },
         implementos: {

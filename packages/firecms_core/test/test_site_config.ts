@@ -296,7 +296,7 @@ export const siteConfig = {
             dbPath: "products",
             callbacks: productCallbacks,
             singularName: "Products",
-            subcollections: [localeCollection]
+            subcollections: () => [localeCollection]
         }),
         buildCollection({
             ...productsCollection,
@@ -304,21 +304,21 @@ export const siteConfig = {
             dbPath: "sites/es/products",
             callbacks: productCallbacks,
             singularName: "Products",
-            subcollections: [localeCollection, pricesCollection]
+            subcollections: () => [localeCollection, pricesCollection]
         }),
         buildCollection({
             ...productsCollection,
             dbPath: "products/id/subcollection_inline",
             callbacks: productCallbacks,
             singularName: "Products",
-            subcollections: [localeCollection]
+            subcollections: () => [localeCollection]
         }),
         buildCollection({
             ...usersCollection,
             dbPath: "users",
             slug: "u",
             singularName: "Users",
-            subcollections: [buildCollection({
+            subcollections: () => [buildCollection({
                 ...productsCollection,
                 slug: "p"
             })]

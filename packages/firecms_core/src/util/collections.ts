@@ -2,13 +2,13 @@ import {
     DefaultSelectedViewBuilder,
     DefaultSelectedViewParams,
     EntityCollection,
-    PermissionsBuilder,
+    PermissionsBuilder, Properties,
     PropertiesOrBuilders,
     PropertyOrBuilder
 } from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
-export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
+export function sortProperties<M extends Record<string, any>>(properties: Properties<M>, propertiesOrder?: (keyof M)[]): Properties<M> {
     try {
         const propertiesKeys = Object.keys(properties);
         const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
@@ -31,7 +31,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
                 }
             })
             .filter((a) => a !== undefined)
-            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<M>;
+            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as Properties<M>;
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;

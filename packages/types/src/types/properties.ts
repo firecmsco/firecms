@@ -6,6 +6,7 @@ import { FilterValues } from "./collections";
 import { PropertyPreviewProps } from "../components";
 import { ColorKey, ColorScheme } from "./chips";
 import { AuthController } from "../controllers";
+import { Relation } from "./relations";
 
 /**
  * @group Entity properties
@@ -640,6 +641,8 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * property.
      */
     path?: string;
+
+    relation?: Relation;
 
     /**
      * Allow selection of entities that pass the given filter only.

@@ -109,7 +109,7 @@ export const blogCollectionTemplate:EntityCollection = {
             }
         }
     }),
-    initialFilter: {
+    filter: {
         status: ["==", "published"]
     }
 };
