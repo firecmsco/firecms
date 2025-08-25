@@ -97,7 +97,7 @@ export function getNavigationEntriesFromPath(props: {
                     } else if (collection.subcollections) {
                         result.push(...getNavigationEntriesFromPath({
                             path: newPath,
-                            collections: collection.subcollections,
+                            collections: collection.subcollections?.(),
                             currentFullPath: path,
                             contextEntityViews: props.contextEntityViews
                         }));

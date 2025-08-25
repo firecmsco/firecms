@@ -402,7 +402,7 @@ export const EntityCollectionView = React.memo(
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
         const additionalFields = useMemo(() => {
-            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.map((subcollection) => {
+            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.().map((subcollection) => {
                 return {
                     key: getSubcollectionColumnId(subcollection),
                     name: subcollection.name,

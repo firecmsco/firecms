@@ -368,16 +368,16 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     }, [refreshNavigation]);
 
     const getCollection = useCallback((
-        idOrPath: string,
+        slugOrPath: string,
         includeUserOverride = false
     ): EC | undefined => {
         const collections = collectionsRef.current;
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionBySlugWithin(removeInitialAndTrailingSlashes(idOrPath), collections);
+        const baseCollection = getCollectionBySlugWithin(removeInitialAndTrailingSlashes(slugOrPath), collections);
 
-        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
+        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(slugOrPath) : undefined;
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride ?? {}) : undefined;
 
         let result: Partial<EntityCollection> | undefined = overriddenCollection;

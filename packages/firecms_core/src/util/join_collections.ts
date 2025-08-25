@@ -1,7 +1,8 @@
 import {
     EntityCollection,
     MapProperty,
-    ModifyCollectionProps, Properties,
+    ModifyCollectionProps,
+    Properties,
     PropertiesOrBuilders,
     Property,
     PropertyOrBuilder
@@ -20,9 +21,11 @@ function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) =
         });
         const resCollection = modified ?? collection;
         if (resCollection.subcollections) {
-            resCollection.subcollections = resCollection.subcollections.map((subcollection) => {
-                return applyModifyFunction(modifyCollection, subcollection, [...parentPaths, collection.slug]);
-            });
+            resCollection.subcollections = resCollection.subcollections
+                ? (() => (resCollection.subcollections?.() ?? []).map((subcollection) => {
+                    return applyModifyFunction(modifyCollection, subcollection, [...parentPaths, collection.slug]) as EntityCollection;
+                }))
+                : undefined;
         }
         return resCollection;
     } else {

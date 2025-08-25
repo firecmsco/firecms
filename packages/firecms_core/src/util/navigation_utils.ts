@@ -118,14 +118,14 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
 /**
  * Find the corresponding view at any depth for a given path.
  * Note that path or segments of the paths can be collection aliases.
- * @param pathOrId
+ * @param slugOrPath
  * @param collections
  */
-export function getCollectionBySlugWithin(pathOrId: string, collections: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionBySlugWithin(slugOrPath: string, collections: EntityCollection[]): EntityCollection | undefined {
 
-    const subpaths = removeInitialAndTrailingSlashes(pathOrId).split("/");
+    const subpaths = removeInitialAndTrailingSlashes(slugOrPath).split("/");
     if (subpaths.length % 2 === 0) {
-        throw Error(`getCollectionBySlug: Collection paths must have an odd number of segments: ${pathOrId}`);
+        throw Error(`getCollectionBySlug: Collection paths must have an odd number of segments: ${slugOrPath}`);
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -138,10 +138,10 @@ export function getCollectionBySlugWithin(pathOrId: string, collections: EntityC
 
         if (navigationEntry) {
 
-            if (subpathCombination === pathOrId) {
+            if (subpathCombination === slugOrPath) {
                 result = navigationEntry;
             } else if (navigationEntry.subcollections) {
-                const newPath = pathOrId.replace(subpathCombination, "").split("/").slice(2).join("/");
+                const newPath = slugOrPath.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
                     result = getCollectionBySlugWithin(newPath, navigationEntry.subcollections?.());
             }

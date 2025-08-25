@@ -111,7 +111,7 @@ export const productCallbacks: EntityCallbacks<Product> = {
 
 export const productsCollection = buildCollection<Product>({
     dbPath: "products",
-    slug: "ppp",
+    slug: "products",
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",

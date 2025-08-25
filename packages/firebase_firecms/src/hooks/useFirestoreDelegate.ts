@@ -476,8 +476,20 @@ export function useFirestoreDelegate({
 
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
+            console.debug("1", {
+                path,
+                entityId,
+                values: valuesProp,
+                collection
+            })
             const values = cmsToFirestoreModel(valuesProp, getFirestore(firebaseApp));
 
+            console.debug("2", {
+                path,
+                entityId,
+                values: valuesProp,
+                collection
+            })
             const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
             const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
@@ -733,7 +745,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = f
     } else if (Array.isArray(data)) {
         return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore, true));
     } else if (data.isEntityReference && data.isEntityReference()) {
-        return doc(firestore, data.slug, data.id);
+        return doc(firestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
     } else if (data instanceof Date) {

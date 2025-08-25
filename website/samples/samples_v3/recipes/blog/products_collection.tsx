@@ -2,7 +2,7 @@ import { buildCollection } from "@firecms/core";
 import { Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
-    slug: "ppp",
+    slug: "products",
     dbPath: "products",
     name: "Products",
     singularName: "Product",
@@ -101,7 +101,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                path: "ppp"
+                path: "products"
             }
         },
         publisher: {
