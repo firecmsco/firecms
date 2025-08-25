@@ -131,6 +131,23 @@ export const implementosCollection: EntityCollection = {
                 min: 0
             }
         }
+    },
+    relations: {
+        maquinaria: {
+            type: "manyToMany",
+            target: () => maquinariaCollection,
+            through: {
+                dbPath: "maquinaria_implementos",
+                sourceJunctionKey: "implemento_id",
+                targetJunctionKey: "maquinaria_id"
+            },
+            widget: "table",
+            collection: {
+                name: "Maquinaria Compatible",
+                singularName: "Máquina",
+                icon: "Construction"
+            }
+        }
     }
 };
 
@@ -686,6 +703,21 @@ export const maquinariaCollection: EntityCollection = {
                 icon: "CalendarToday",
                 previewProperties: ["cliente_referencia", "fecha_salida", "fecha_devolucion_real", "estado_pago"],
                 initialSort: ["fecha_salida", "desc"]
+            }
+        },
+        implementos: {
+            type: "manyToMany",
+            target: () => implementosCollection,
+            through: {
+                dbPath: "maquinaria_implementos",
+                sourceJunctionKey: "maquinaria_id",
+                targetJunctionKey: "implemento_id"
+            },
+            widget: "table",
+            collection: {
+                name: "Implementos Compatibles",
+                singularName: "Implemento",
+                icon: "Extension"
             }
         }
     }

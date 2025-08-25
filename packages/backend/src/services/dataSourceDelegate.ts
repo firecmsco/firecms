@@ -69,21 +69,14 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                              order
                                                          }: FetchCollectionProps<M>): Promise<Entity<M>[]> {
 
-        if (searchString) {
-            return this.entityService.searchEntities<M>(
-                path,
-                searchString,
-                collection?.databaseId
-            );
-        }
-
         return this.entityService.fetchCollection<M>(path, {
             filter,
             orderBy,
             order,
             limit,
             startAfter,
-            databaseId: collection?.databaseId
+            databaseId: collection?.databaseId,
+            searchString
         });
     }
 

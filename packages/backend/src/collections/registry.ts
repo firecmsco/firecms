@@ -6,6 +6,8 @@ class CollectionRegistry {
     private collectionsByDbPath = new Map<string, EntityCollection>();
     private collectionsBySlug = new Map<string, EntityCollection>();
     private tables = new Map<string, PgTable>();
+    private enums = new Map<string, unknown>();
+    private relations = new Map<string, unknown>();
     private collectionsArray: EntityCollection[] = [];
 
     register(collection: EntityCollection) {
@@ -20,6 +22,14 @@ class CollectionRegistry {
         this.tables.set(dbPath, table);
     }
 
+    registerEnums(enums: Record<string, unknown>) {
+        Object.entries(enums).forEach(([name, value]) => this.enums.set(name, value));
+    }
+
+    registerRelations(relations: Record<string, unknown>) {
+        Object.entries(relations).forEach(([name, value]) => this.relations.set(name, value));
+    }
+
     get(path: string): EntityCollection | undefined {
         return this.collectionsByDbPath.get(path);
     }
@@ -30,6 +40,23 @@ class CollectionRegistry {
 
     getTable(dbPath: string): PgTable | undefined {
         return this.tables.get(dbPath);
+    }
+
+    // New: accessors for enums and relations
+    getEnum(name: string): unknown | undefined {
+        return this.enums.get(name);
+    }
+
+    getRelation(name: string): unknown | undefined {
+        return this.relations.get(name);
+    }
+
+    getAllEnums(): Record<string, unknown> {
+        return Object.fromEntries(this.enums.entries());
+    }
+
+    getAllRelations(): Record<string, unknown> {
+        return Object.fromEntries(this.relations.entries());
     }
 
     getAll(): EntityCollection[] {

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
-import { EnumValues, Properties, PropertiesOrBuilders } from "./properties";
+import { EnumValues, Properties } from "./properties";
 import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";

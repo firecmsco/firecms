@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { createPostgresDatabaseConnection, initializeFireCMSBackend } from "@firecms/backend";
 
-import { tables } from "./schema.generated";
+import { tables, enums, relations } from "./schema.generated";
 import { collections } from "shared";
 
 import * as dotenv from "dotenv";
@@ -29,6 +29,8 @@ const db = createPostgresDatabaseConnection(databaseUrl);
 initializeFireCMSBackend({
     collections,
     tables,
+    enums,
+    relations,
     db,
     server
 });
