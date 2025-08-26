@@ -642,6 +642,10 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      */
     path?: string;
 
+    /**
+     * For SQL databases, you can specify the table name of the collection this
+     * reference points to.
+     */
     relation?: Relation;
 
     /**

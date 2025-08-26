@@ -1,23 +1,16 @@
 import { promises as fs } from "fs";
 import path from "path";
 import chokidar from "chokidar";
+import { EntityCollection, NumberProperty, Property, ReferenceProperty, StringProperty, } from "@firecms/types";
 import {
-    ArrayProperty,
-    EntityCollection,
-    NumberProperty,
-    Properties,
-    Property,
-    ReferenceProperty,
-    StringProperty
-} from "@firecms/types";
-import {
-    toSnakeCase,
+    getEnumVarName,
     getTableName,
     getTableVarName,
-    resolveTargetTableName,
     resolveJunctionTableName,
-    getEnumVarName
+    resolveTargetTableName,
+    toSnakeCase
 } from "./utils/collection-utils";
+import { resolveCollectionRelations } from "./utils/relations";
 
 let loadedCollections: EntityCollection[] | undefined = [];
 
@@ -156,6 +149,10 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             break;
         case "reference": {
             const refProp = prop as ReferenceProperty;
+            if (refProp.relation?.type === "manyToMany") {
+                return ""; // This is a virtual property for a many-to-many relation, handled by a junction table.
+            }
+
             // ensure we have a path or a target function
             if (!refProp.path) return "";
 
@@ -188,6 +185,13 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             break;
         }
         case "array": {
+            const arrayProp = prop as any;
+            if (arrayProp.of?.type === "reference") {
+                const refProp = arrayProp.of as ReferenceProperty;
+                if (refProp.relation?.type === "manyToMany") {
+                    return ""; // This is a virtual property for the relation, no column needed.
+                }
+            }
             columnDefinition = `jsonb("${colName}")`;
             break;
         }
@@ -245,57 +249,56 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
 
     // 2. Generate Junction Tables for Many-to-Many Relations
     collections.forEach(collection => {
-        if (collection.relations) {
-            Object.entries(collection.relations).forEach(([, relation]) => {
-                if (relation.type === "manyToMany") {
-                    try {
-                        const sourceCollection = collection;
-                        const targetCollection = relation.target();
-                        const junctionTableName = resolveJunctionTableName(relation.through, sourceCollection, targetCollection);
-                        const junctionTableVarName = getTableVarName(junctionTableName);
+        const resolvedRelations = resolveCollectionRelations(collection, collections);
+        Object.entries(resolvedRelations).forEach(([, relation]) => {
+            if (relation.type === "manyToMany") {
+                try {
+                    const sourceCollection = collection;
+                    const targetCollection = relation.target();
+                    const junctionTableName = resolveJunctionTableName(relation.through, sourceCollection, targetCollection);
+                    const junctionTableVarName = getTableVarName(junctionTableName);
 
-                        if (!junctionTables.includes(junctionTableName)) {
-                            junctionTables.push(junctionTableName);
+                    if (!junctionTables.includes(junctionTableName)) {
+                        junctionTables.push(junctionTableName);
 
-                            const sourceName = getTableName(sourceCollection);
-                            const targetName = getTableName(targetCollection);
+                        const sourceName = getTableName(sourceCollection);
+                        const targetName = getTableName(targetCollection);
 
-                            const sourceJunctionKey = relation.through?.sourceJunctionKey ?? `${toSnakeCase(sourceName)}_id`;
-                            const targetJunctionKey = relation.through?.targetJunctionKey ?? `${toSnakeCase(targetName)}_id`;
+                        const sourceJunctionKey = relation.through?.sourceJunctionKey ?? `${toSnakeCase(sourceName)}_id`;
+                        const targetJunctionKey = relation.through?.targetJunctionKey ?? `${toSnakeCase(targetName)}_id`;
 
-                            // Get source and target collection info
-                            const sourceRefOptions: string[] = [];
-                            const onSourceDelete = relation.through?.onSourceDelete ?? "cascade";
-                            sourceRefOptions.push(`onDelete: "${onSourceDelete}"`);
+                        // Get source and target collection info
+                        const sourceRefOptions: string[] = [];
+                        const onSourceDelete = relation.through?.onSourceDelete ?? "cascade";
+                        sourceRefOptions.push(`onDelete: "${onSourceDelete}"`);
 
-                            const targetRefOptions: string[] = [];
-                            const onTargetDelete = relation.through?.onTargetDelete ?? "cascade";
-                            targetRefOptions.push(`onDelete: "${onTargetDelete}"`);
+                        const targetRefOptions: string[] = [];
+                        const onTargetDelete = relation.through?.onTargetDelete ?? "cascade";
+                        targetRefOptions.push(`onDelete: "${onTargetDelete}"`);
 
-                            const sourceRefOptionsString = `{ ${sourceRefOptions.join(", ")} }`;
-                            const targetRefOptionsString = `{ ${targetRefOptions.join(", ")} }`;
+                        const sourceRefOptionsString = `{ ${sourceRefOptions.join(", ")} }`;
+                        const targetRefOptionsString = `{ ${targetRefOptions.join(", ")} }`;
 
-                            const sourceJunctionColumns = getJunctionKeyColumns(sourceJunctionKey, sourceCollection, sourceRefOptionsString);
-                            const targetJunctionColumns = getJunctionKeyColumns(targetJunctionKey, targetCollection, targetRefOptionsString);
+                        const sourceJunctionColumns = getJunctionKeyColumns(sourceJunctionKey, sourceCollection, sourceRefOptionsString);
+                        const targetJunctionColumns = getJunctionKeyColumns(targetJunctionKey, targetCollection, targetRefOptionsString);
 
-                            const sourceKeyArray = Array.isArray(sourceJunctionKey) ? sourceJunctionKey : [sourceJunctionKey];
-                            const targetKeyArray = Array.isArray(targetJunctionKey) ? targetJunctionKey : [targetJunctionKey];
+                        const sourceKeyArray = Array.isArray(sourceJunctionKey) ? sourceJunctionKey : [sourceJunctionKey];
+                        const targetKeyArray = Array.isArray(targetJunctionKey) ? targetJunctionKey : [targetJunctionKey];
 
-                            // Generate junction table with proper structure
-                            schemaContent += `export const ${junctionTableVarName} = pgTable("${junctionTableName}", {\n`;
-                            schemaContent += `${sourceJunctionColumns.join(",\n")},\n`;
-                            schemaContent += `${targetJunctionColumns.join(",\n")}\n`;
-                            schemaContent += `}, (table) => ({\n`;
-                            schemaContent += `\tpk: primaryKey({ columns: [${[...sourceKeyArray, ...targetKeyArray].map(key => `table.${key}`).join(", ")}] })\n`;
-                            schemaContent += `}));\n\n`;
-                            if (!exportedTableVars.includes(junctionTableVarName)) exportedTableVars.push(junctionTableVarName);
-                        }
-                    } catch (e) {
-                        console.warn("Could not generate junction table for relation manyToMany:", e);
+                        // Generate junction table with proper structure
+                        schemaContent += `export const ${junctionTableVarName} = pgTable("${junctionTableName}", {\n`;
+                        schemaContent += `${sourceJunctionColumns.join(",\n")},\n`;
+                        schemaContent += `${targetJunctionColumns.join(",\n")}\n`;
+                        schemaContent += `}, (table) => ({\n`;
+                        schemaContent += `\tpk: primaryKey({ columns: [${[...sourceKeyArray, ...targetKeyArray].map(key => `table.${key}`).join(", ")}] })\n`;
+                        schemaContent += `}));\n\n`;
+                        if (!exportedTableVars.includes(junctionTableVarName)) exportedTableVars.push(junctionTableVarName);
                     }
+                } catch (e) {
+                    console.warn("Could not generate junction table for relation manyToMany:", e);
                 }
-            });
-        }
+            }
+        });
     });
 
     // 3. Generate Main Collection Tables
@@ -315,28 +318,27 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
             if (columnString) columns.push(`\t${columnString}`);
         });
 
-        // Process reference fields from relations
-        if (collection.relations) {
-            Object.entries(collection.relations).forEach(([, relation]) => {
-                if (relation.type === "one" && relation.sourceFields && relation.targetFields) {
-                    const refOptionsParts: string[] = [];
-                    if (relation.onUpdate) refOptionsParts.push(`onUpdate: "${relation.onUpdate}"`);
-                    if (relation.onDelete) refOptionsParts.push(`onDelete: "${relation.onDelete}"`);
-                    const refOptions = refOptionsParts.length > 0 ? `{ ${refOptionsParts.join(", ")} }` : "{}";
-                    // For one() relations, add the foreign key columns if they're not already in properties
-                    relation.sourceFields.forEach((fieldName) => {
-                        if (!collection.properties?.[fieldName]) {
-                            const targetTableName = resolveTargetTableName(relation.target );
-                            const targetTableVarName = getTableVarName(targetTableName);
-                            const isRequired = relation.validation?.required ?? false;
-                            const columnDef = `integer("${toSnakeCase(fieldName)}").references(() => ${targetTableVarName}.id, ${refOptions})`;
-                            const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
-                            columns.push(`\t${fieldName}: ${finalDef}`);
-                        }
-                    });
-                }
-            });
-        }
+        // Process reference fields from resolved relations
+        const resolvedRelations = resolveCollectionRelations(collection, collections);
+        Object.entries(resolvedRelations).forEach(([, relation]) => {
+            if (relation.type === "one" && relation.sourceFields && relation.targetFields) {
+                const refOptionsParts: string[] = [];
+                if (relation.onUpdate) refOptionsParts.push(`onUpdate: "${relation.onUpdate}"`);
+                if (relation.onDelete) refOptionsParts.push(`onDelete: "${relation.onDelete}"`);
+                const refOptions = refOptionsParts.length > 0 ? `{ ${refOptionsParts.join(", ")} }` : "{}";
+                // For one() relations, add the foreign key columns if they're not already in properties
+                relation.sourceFields.forEach((fieldName) => {
+                    if (!collection.properties?.[fieldName]) {
+                        const targetTableName = resolveTargetTableName(relation.target);
+                        const targetTableVarName = getTableVarName(targetTableName);
+                        const isRequired = relation.validation?.required ?? false;
+                        const columnDef = `integer("${toSnakeCase(fieldName)}").references(() => ${targetTableVarName}.id, ${refOptions})`;
+                        const finalDef = isRequired ? `${columnDef}.notNull()` : columnDef;
+                        columns.push(`\t${fieldName}: ${finalDef}`);
+                    }
+                });
+            }
+        });
 
         if (columns.length > 0) {
             schemaContent += `,\n${columns.join(",\n")}`;
@@ -352,68 +354,49 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
         const tableVarName = getTableVarName(tableName);
         const tableRelations: string[] = [];
 
-        // Process relations defined in the collection.relations object
-        if (collection.relations) {
-            Object.entries(collection.relations).forEach(([relationKey, relation]) => {
-                try {
-                    if (relation.type === "one") {
-                        // Generate one() relation
-                        if (relation.sourceFields && relation.targetFields) {
-                            const targetTableName = resolveTargetTableName(relation.target );
-                            const targetTableVarName = getTableVarName(targetTableName);
-                            const fieldsStr = relation.sourceFields.map(f => `${tableVarName}.${f}`).join(", ");
-                            const referencesStr = relation.targetFields.map(r => `${targetTableVarName}.${r}`).join(", ");
-
-                            if (relation.relationName) {
-                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
-                            } else {
-                                tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
-                            }
-                        }
-                    } else if (relation.type === "many") {
-                        // Generate many() relation
-                        const targetTableName = resolveTargetTableName(relation.target );
+        // Process resolved relations
+        const resolvedRelations = resolveCollectionRelations(collection, collections);
+        Object.entries(resolvedRelations).forEach(([relationKey, relation]) => {
+            try {
+                if (relation.type === "one") {
+                    // Generate one() relation
+                    if (relation.sourceFields && relation.targetFields) {
+                        const targetTableName = resolveTargetTableName(relation.target);
                         const targetTableVarName = getTableVarName(targetTableName);
+                        const fieldsStr = relation.sourceFields.map(f => `${tableVarName}.${f}`).join(", ");
+                        const referencesStr = relation.targetFields.map(r => `${targetTableVarName}.${r}`).join(", ");
 
                         if (relation.relationName) {
-                            tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: "${relation.relationName}" })`);
+                            tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: "${relation.relationName}"\n\t})`);
                         } else {
-                            tableRelations.push(`\t${relationKey}: many(${targetTableVarName})`);
-                        }
-                    } else if (relation.type === "manyToMany") {
-                        // Generate many-to-many relation
-                        const sourceCollection = collection;
-                        const targetCollection = relation.target();
-                        const junctionTableName = resolveJunctionTableName(relation.through , sourceCollection, targetCollection);
-                        const junctionTableVarName = getTableVarName(junctionTableName);
-
-                        if (relation.relationName) {
-                            tableRelations.push(`\t${relationKey}: many(${junctionTableVarName}, { relationName: "${relation.relationName}" })`);
-                        } else {
-                            tableRelations.push(`\t${relationKey}: many(${junctionTableVarName})`);
+                            tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, {\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}]\n\t})`);
                         }
                     }
-                } catch (e) {
-                    console.warn(`Could not generate relation ${relationKey}:`, e);
-                }
-            });
-        }
-
-        // Also process legacy reference properties for backward compatibility
-        Object.entries(collection.properties as Properties ?? {}).forEach(([propName, prop]) => {
-            if ((prop ).type === "reference") {
-                const refProp = prop as ReferenceProperty;
-                if (refProp.path) {
-                    const targetTableName = resolveTargetTableName(refProp.path);
+                } else if (relation.type === "many") {
+                    // Generate many() relation
+                    const targetTableName = resolveTargetTableName(relation.target);
                     const targetTableVarName = getTableVarName(targetTableName);
-                    // Only add if not already handled by the new relations system
-                    const existingRelation = collection.relations && Object.values(collection.relations).find(rel =>
-                        rel.type === "one" && rel.sourceFields?.includes(propName)
-                    );
-                    if (!existingRelation) {
-                        tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${propName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
+
+                    if (relation.relationName) {
+                        tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: "${relation.relationName}" })`);
+                    } else {
+                        tableRelations.push(`\t${relationKey}: many(${targetTableVarName})`);
+                    }
+                } else if (relation.type === "manyToMany") {
+                    // Generate many-to-many relation
+                    const sourceCollection = collection;
+                    const targetCollection = relation.target();
+                    const junctionTableName = resolveJunctionTableName(relation.through, sourceCollection, targetCollection);
+                    const junctionTableVarName = getTableVarName(junctionTableName);
+
+                    if (relation.relationName) {
+                        tableRelations.push(`\t${relationKey}: many(${junctionTableVarName}, { relationName: "${relation.relationName}" })`);
+                    } else {
+                        tableRelations.push(`\t${relationKey}: many(${junctionTableVarName})`);
                     }
                 }
+            } catch (e) {
+                console.warn(`Could not generate relation ${relationKey}:`, e);
             }
         });
 
@@ -438,44 +421,43 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
 
         // Find collections that use this junction table
         collections.forEach(collection => {
-            if (collection.relations) {
-                Object.entries(collection.relations).forEach(([, relation]) => {
-                    if (relation.type === "manyToMany") {
-                        const sourceCollection = collection;
-                        const targetCollection = relation.target();
-                        const currentJunctionTableName = resolveJunctionTableName(relation.through, sourceCollection, targetCollection);
+            const resolvedRelations = resolveCollectionRelations(collection, collections);
+            Object.entries(resolvedRelations).forEach(([, relation]) => {
+                if (relation.type === "manyToMany") {
+                    const sourceCollection = collection;
+                    const targetCollection = relation.target();
+                    const currentJunctionTableName = resolveJunctionTableName(relation.through, sourceCollection, targetCollection);
 
-                        if (currentJunctionTableName === junctionTableName) {
-                            const sourceTableName = getTableName(sourceCollection);
-                            const targetTableName = getTableName(targetCollection);
-                            const sourceTableVarName = getTableVarName(sourceTableName);
-                            const targetTableVarName = getTableVarName(targetTableName);
+                    if (currentJunctionTableName === junctionTableName) {
+                        const sourceTableName = getTableName(sourceCollection);
+                        const targetTableName = getTableName(targetCollection);
+                        const sourceTableVarName = getTableVarName(sourceTableName);
+                        const targetTableVarName = getTableVarName(targetTableName);
 
-                            const sourceIdField = sourceCollection.idField ?? "id";
-                            const targetIdField = targetCollection.idField ?? "id";
+                        const sourceIdField = sourceCollection.idField ?? "id";
+                        const targetIdField = targetCollection.idField ?? "id";
 
-                            const sourceJunctionKey = relation.through?.sourceJunctionKey ?? `${toSnakeCase(sourceTableName)}_id`;
-                            const targetJunctionKey = relation.through?.targetJunctionKey ?? `${toSnakeCase(targetTableName)}_id`;
+                        const sourceJunctionKey = relation.through?.sourceJunctionKey ?? `${toSnakeCase(sourceTableName)}_id`;
+                        const targetJunctionKey = relation.through?.targetJunctionKey ?? `${toSnakeCase(targetTableName)}_id`;
 
-                            const sourceKeys = Array.isArray(sourceJunctionKey) ? sourceJunctionKey : [sourceJunctionKey];
-                            sourceKeys.forEach(key => {
-                                if (!addedRelationKeys.has(key)) {
-                                    junctionRelations.push(`\t${key}: one(${sourceTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${key}],\n\t\treferences: [${sourceTableVarName}.${sourceIdField}]\n\t})`);
-                                    addedRelationKeys.add(key);
-                                }
-                            });
+                        const sourceKeys = Array.isArray(sourceJunctionKey) ? sourceJunctionKey : [sourceJunctionKey];
+                        sourceKeys.forEach(key => {
+                            if (!addedRelationKeys.has(key)) {
+                                junctionRelations.push(`\t${key}: one(${sourceTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${key}],\n\t\treferences: [${sourceTableVarName}.${sourceIdField}]\n\t})`);
+                                addedRelationKeys.add(key);
+                            }
+                        });
 
-                            const targetKeys = Array.isArray(targetJunctionKey) ? targetJunctionKey : [targetJunctionKey];
-                            targetKeys.forEach(key => {
-                                if (!addedRelationKeys.has(key)) {
-                                    junctionRelations.push(`\t${key}: one(${targetTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${key}],\n\t\treferences: [${targetTableVarName}.${targetIdField}]\n\t})`);
-                                    addedRelationKeys.add(key);
-                                }
-                            });
-                        }
+                        const targetKeys = Array.isArray(targetJunctionKey) ? targetJunctionKey : [targetJunctionKey];
+                        targetKeys.forEach(key => {
+                            if (!addedRelationKeys.has(key)) {
+                                junctionRelations.push(`\t${key}: one(${targetTableVarName}, {\n\t\tfields: [${junctionTableVarName}.${key}],\n\t\treferences: [${targetTableVarName}.${targetIdField}]\n\t})`);
+                                addedRelationKeys.add(key);
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
         });
 
         if (junctionRelations.length > 0) {

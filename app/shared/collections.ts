@@ -52,38 +52,10 @@ export const clientesCollection: EntityCollection = {
             autoValue: "on_create"
         }
     },
-    relations: {
-        alquileres: {
-            type: "many",
-            target: () => alquileresSubcollection,
-            widget: "table",
-            collection: {
-                name: "Historial de Alquileres",
-                singularName: "Alquiler",
-                icon: "History",
-                previewProperties: ["maquina_referencia", "fecha_salida", "fecha_devolucion_real", "total_facturado", "estado_pago"],
-                sort: ["fecha_salida", "desc"],
-                description: "Todos los alquileres realizados por este cliente",
-                permissions: {
-                    read: true,
-                    create: false,
-                    edit: false,
-                    delete: false
-                }
-            }
-        },
-        incidencias: {
-            type: "many",
-            target: () => incidenciasSubcollection,
-            widget: "table",
-            collection: {
-                name: "Incidencias",
-                singularName: "Incidencia",
-                icon: "Warning",
-                previewProperties: ["tipo_incidencia", "gravedad", "fecha", "resuelto"]
-            }
-        }
-    }
+    subcollections: () => [
+        alquileresSubcollection,
+        incidenciasSubcollection
+    ]
 };
 
 // -----------------------------------------------------------------------------
@@ -130,22 +102,19 @@ export const implementosCollection: EntityCollection = {
                 integer: true,
                 min: 0
             }
-        }
-    },
-    relations: {
+        },
         maquinaria: {
-            type: "manyToMany",
-            target: () => maquinariaCollection,
-            through: {
-                dbPath: "maquinaria_implementos",
-                sourceJunctionKey: "implemento_id",
-                targetJunctionKey: "maquinaria_id"
-            },
-            widget: "table",
-            collection: {
-                name: "Maquinaria Compatible",
-                singularName: "Máquina",
-                icon: "Construction"
+            type: "reference",
+            name: "Maquinaria",
+            path: "maquinaria",
+            relation: {
+                type: "manyToMany",
+                target: () => maquinariaCollection,
+                through: {
+                    dbPath: "maquinaria_implementos",
+                    sourceJunctionKey: "implemento_id",
+                    targetJunctionKey: "maquinaria_id"
+                }
             }
         }
     }
@@ -286,50 +255,10 @@ export const alquileresSubcollection: EntityCollection = {
             }
         }
     },
-    relations: {
-        cliente: {
-            type: "one",
-            target: () => clientesCollection,
-            sourceFields: ["cliente_referencia"],
-            targetFields: ["id"],
-            widget: "select",
-            collection: {
-                name: "Cliente",
-            }
-        },
-        maquina: {
-            type: "one",
-            target: () => maquinariaCollection,
-            sourceFields: ["maquina_referencia"],
-            targetFields: ["id"],
-            widget: "select",
-            collection: {
-                name: "Máquina",
-            }
-        },
-        horas: {
-            type: "many",
-            target: () => horasSubcollection,
-            widget: "table",
-            collection: {
-                name: "Lecturas Horas",
-                singularName: "Lectura Horas",
-                icon: "Schedule",
-                previewProperties: ["fecha", "horas_totales", "horas_periodo"]
-            }
-        },
-        incidencias: {
-            type: "many",
-            target: () => incidenciasSubcollection,
-            widget: "table",
-            collection: {
-                name: "Incidencias del Alquiler",
-                singularName: "Incidencia",
-                icon: "Warning",
-                previewProperties: ["tipo_incidencia", "gravedad", "fecha", "resuelto"]
-            }
-        }
-    }
+    subcollections: () => [
+        horasSubcollection,
+        incidenciasSubcollection
+    ]
 };
 
 // -----------------------------------------------------------------------------
@@ -477,18 +406,6 @@ export const horasSubcollection: EntityCollection<any> = {
             path: "alquileres",
             description: "Si está relacionado con un alquiler específico"
         }
-    },
-    relations: {
-        alquiler: {
-            type: "one",
-            target: () => alquileresSubcollection,
-            sourceFields: ["alquiler_relacionado"],
-            targetFields: ["id"],
-            widget: "select",
-            collection: {
-                name: "Alquiler Relacionado",
-            }
-        }
     }
 };
 
@@ -581,28 +498,6 @@ export const incidenciasSubcollection: EntityCollection = {
             type: "boolean",
             defaultValue: false
         }
-    },
-    relations: {
-        cliente: {
-            type: "one",
-            target: () => clientesCollection,
-            sourceFields: ["cliente_relacionado"],
-            targetFields: ["id"],
-            widget: "select",
-            collection: {
-                name: "Cliente Relacionado",
-            }
-        },
-        alquiler: {
-            type: "one",
-            target: () => alquileresSubcollection,
-            sourceFields: ["alquiler_relacionado"],
-            targetFields: ["id"],
-            widget: "select",
-            collection: {
-                name: "Alquiler Relacionado",
-            }
-        }
     }
 };
 
@@ -690,37 +585,28 @@ export const maquinariaCollection: EntityCollection = {
         precio_compra: {
             name: "Precio de Compra",
             type: "number"
-        }
-    },
-    relations: {
-        alquileres: {
-            type: "many",
-            target: () => alquileresSubcollection,
-            widget: "table",
-            collection: {
-                name: "Alquileres de la Máquina",
-                singularName: "Alquiler",
-                icon: "CalendarToday",
-                previewProperties: ["cliente_referencia", "fecha_salida", "fecha_devolucion_real", "estado_pago"],
-                sort: ["fecha_salida", "desc"]
-            }
         },
         implementos: {
-            type: "manyToMany",
-            target: () => implementosCollection,
-            through: {
-                dbPath: "maquinaria_implementos",
-                sourceJunctionKey: "maquinaria_id",
-                targetJunctionKey: "implemento_id"
-            },
-            widget: "table",
-            collection: {
-                name: "Implementos Compatibles",
-                singularName: "Implemento",
-                icon: "Extension"
+            type: "reference",
+            name: "Implementos",
+            path: "implementos",
+            relation: {
+                type: "manyToMany",
+                target: () => implementosCollection,
+                through: {
+                    dbPath: "maquinaria_implementos",
+                    sourceJunctionKey: "maquinaria_id",
+                    targetJunctionKey: "implemento_id"
+                }
             }
         }
-    }
+    },
+    subcollections: () => [
+        alquileresSubcollection,
+        mantenimientoSubcollection,
+        horasSubcollection,
+        incidenciasSubcollection
+    ]
 };
 
 // -----------------------------------------------------------------------------

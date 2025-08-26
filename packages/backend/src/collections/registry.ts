@@ -62,6 +62,21 @@ class CollectionRegistry {
     getAll(): EntityCollection[] {
         return this.collectionsArray;
     }
+
+    getAllCollectionsRecursively(): EntityCollection[] {
+        const result: EntityCollection[] = [];
+
+        function addCollection(collection: EntityCollection) {
+            result.push(collection);
+            const subcollections = collection.subcollections?.();
+            if (subcollections) {
+                subcollections.forEach(addCollection);
+            }
+        }
+
+        this.collectionsArray.forEach(addCollection);
+        return result;
+    }
 }
 
 export const collectionRegistry = new CollectionRegistry();

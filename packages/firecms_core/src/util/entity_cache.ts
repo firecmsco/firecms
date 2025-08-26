@@ -49,7 +49,7 @@ function customReviver(key: string, value: any): any {
             case "Date":
                 return new Date(value.value);
             case "EntityReference":
-                return new EntityReference(value.id, value.slug);
+                return new EntityReference(value.id, value.path);
             case "GeoPoint":
                 return new GeoPoint(value.latitude, value.longitude);
             case "Vector":
