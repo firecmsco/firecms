@@ -4,19 +4,17 @@ import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {
     Entity,
+    EntityCollection,
     FilterValues,
     ManyRelation,
     ManyToManyRelation,
     Properties,
     Property,
+    Subcollection,
     WhereFilterOp
 } from "@firecms/core";
 import { resolveCollectionRelations } from "../utils/relations";
-import {
-    toSnakeCase,
-    getTableNameFromCollection,
-    resolveJunctionTableName
-} from "../utils/collection-utils";
+import { getTableNameFromCollection, resolveJunctionTableName, toSnakeCase } from "../utils/collection-utils";
 
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) {
@@ -61,7 +59,6 @@ function sanitizeAndConvertDates(obj: any): any {
     return obj;
 }
 
-
 // Transform references for database storage (reference objects to IDs)
 function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties<M>): any {
     if (!entity || !properties) return entity;
@@ -90,9 +87,12 @@ function serializePropertyToServer(value: any, property: Property): any {
 
     switch (propertyType) {
         case "reference":
-            // Transform reference object to ID
-            if (typeof value === "object" && value.id !== undefined) {
-                return value.id;
+            if (typeof value === "string" || typeof value === "number") {
+                return {
+                    id: value.toString(),
+                    path: property.path!,
+                    __type: "reference"
+                };
             }
             return value;
 
@@ -153,7 +153,7 @@ function parsePropertyFromServer(value: any, property: Property): any {
                 return {
                     id: value.toString(),
                     path: property.path,
-                    type: "reference"
+                    __type: "reference"
                 };
             }
             return value;
@@ -214,12 +214,49 @@ export class EntityService {
     constructor(private db: NodePgDatabase<any>) {
     }
 
-    // Map collection paths to actual database tables
-    private getTableForPath(path: string): PgTable<any> {
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
-        if (!collection) {
+    private resolveCollectionAndIdsForPath(path: string): {
+        collection: EntityCollection,
+        parentIds: string[]
+    } {
+        const pathSegments = path.split("/").filter(p => p);
+
+        if (pathSegments.length % 2 !== 1) {
+            throw new Error(`Invalid collection path: ${path}. It must have an odd number of segments.`);
+        }
+
+        let currentCollection: EntityCollection | undefined = collectionRegistry.getBySlug(pathSegments[0]) ?? collectionRegistry.get(pathSegments[0]);
+
+        if (!currentCollection) {
             throw new Error(`Unknown collection path or slug: ${path}`);
         }
+
+        const parentIds: string[] = [];
+        for (let i = 1; i < pathSegments.length; i += 2) {
+            const entityId = pathSegments[i];
+            parentIds.push(entityId);
+
+            const subcollectionSlug = pathSegments[i + 1];
+            const subcollections: Subcollection[] | undefined = currentCollection?.subcollections?.();
+            if (!subcollections) {
+                throw new Error(`Unknown collection path or slug: ${path}`);
+            }
+
+            const subcollection: Subcollection | undefined = subcollections?.find(c => c.slug === subcollectionSlug);
+            if (!subcollection) {
+                throw new Error(`Unknown collection path or slug: ${path}`);
+            }
+            currentCollection = subcollection;
+        }
+
+        return {
+            collection: currentCollection,
+            parentIds
+        };
+    }
+
+    // Map collection paths to actual database tables
+    private getTableForPath(path: string): PgTable<any> {
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
         const table = collectionRegistry.getTable(collection.dbPath);
         if (!table) {
             throw new Error(`Table not found for dbPath: ${collection.dbPath}`);
@@ -228,10 +265,7 @@ export class EntityService {
     }
 
     private getIdFieldInfo(path: string) {
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
-        if (!collection) {
-            throw new Error(`Collection not found for path or slug: ${path}`);
-        }
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         const idFieldName = collection.idField ?? "id";
         const idFieldConfig = collection.properties[idFieldName] as Property;
@@ -315,10 +349,13 @@ export class EntityService {
         } = {}
     ): Promise<Entity<M>[]> {
 
-        const pathParts = path.split("/").filter(p => p);
-        if (pathParts.length === 3) {
-            const [parentCollectionSlug, parentEntityId, subcollectionSlug] = pathParts;
-            const parentCollection = collectionRegistry.getBySlug(parentCollectionSlug);
+        const pathSegments = path.split("/").filter(p => p);
+        if (pathSegments.length > 1 && pathSegments.length % 2 === 1) {
+            const parentPath = pathSegments.slice(0, -2).join("/");
+            const parentEntityId = pathSegments[pathSegments.length - 2];
+            const subcollectionSlug = pathSegments[pathSegments.length - 1];
+
+            const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
             if (parentCollection) {
                 // Get all collections for relation resolution
                 const allCollections = collectionRegistry.getAllCollectionsRecursively();
@@ -327,9 +364,9 @@ export class EntityService {
 
                 if (relation) {
                     if (relation.type === "manyToMany") {
-                        return this.fetchManyToManyCollection(parentCollectionSlug, parentEntityId, subcollectionSlug, options);
+                        return this.fetchManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
                     } else if (relation.type === "many") {
-                        return this.fetchManyCollection(parentCollectionSlug, parentEntityId, subcollectionSlug, options);
+                        return this.fetchManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
                     }
                 } else {
                     throw new Error(`Relation not found for subcollection: ${subcollectionSlug}`);
@@ -630,7 +667,7 @@ export class EntityService {
     }
 
     async fetchManyToManyCollection<M extends Record<string, any>>(
-        parentCollectionSlug: string,
+        parentPath: string,
         parentEntityId: string | number,
         subcollectionSlug: string,
         options: {
@@ -642,9 +679,9 @@ export class EntityService {
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-        const parentCollection = collectionRegistry.getBySlug(parentCollectionSlug);
+        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentCollectionSlug}`);
+            throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
         // Get all collections for relation resolution
@@ -653,7 +690,7 @@ export class EntityService {
         const relation = resolvedRelations[subcollectionSlug];
 
         if (!relation || relation.type !== "manyToMany") {
-            throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentCollectionSlug}'`);
+            throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
         const typedRelation = relation as ManyToManyRelation;
 
@@ -668,7 +705,7 @@ export class EntityService {
             throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
         }
 
-        const parentIdInfo = this.getIdFieldInfo(parentCollection.slug ?? parentCollection.dbPath);
+        const parentIdInfo = this.getIdFieldInfo(parentPath);
         const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
 
         const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
@@ -792,7 +829,7 @@ export class EntityService {
     }
 
     async fetchManyCollection<M extends Record<string, any>>(
-        parentCollectionSlug: string,
+        parentPath: string,
         parentEntityId: string | number,
         subcollectionSlug: string,
         options: {
@@ -804,9 +841,9 @@ export class EntityService {
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-        const parentCollection = collectionRegistry.getBySlug(parentCollectionSlug);
+        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentCollectionSlug}`);
+            throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
         // Get all collections for relation resolution
@@ -815,7 +852,7 @@ export class EntityService {
         const relation = resolvedRelations[subcollectionSlug];
 
         if (!relation || relation.type !== "many") {
-            throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentCollectionSlug}'`);
+            throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
         const typedRelation = relation as ManyRelation;
 
@@ -833,11 +870,11 @@ export class EntityService {
         }
 
         if (!foreignKeyField) {
-            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentCollectionSlug}`);
+            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
         }
 
         const existingFilter = options.filter ?? {};
-        const parentIdInfo = this.getIdFieldInfo(parentCollectionSlug);
+        const parentIdInfo = this.getIdFieldInfo(parentPath);
         const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
 
         // Add a filter condition to match the parent ID
