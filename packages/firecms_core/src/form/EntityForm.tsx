@@ -281,7 +281,7 @@ export function EntityForm<M extends Record<string, any>>({
             title: "Error saving entity",
             message: e?.message
         });
-        console.error("Error saving entity", path, entityId);
+        console.error("Error saving entity", path, entityId, e);
         console.error(e);
     }, [entityId, path, snackbarController]);
 
@@ -516,6 +516,7 @@ export function EntityForm<M extends Record<string, any>>({
                 {formFieldKeys.map((key) => {
                     const property = resolvedCollection.properties[key];
                     if (property) {
+
                         const underlyingValueHasChanged: boolean =
                             !!underlyingChanges &&
                             Object.keys(underlyingChanges).includes(key) &&

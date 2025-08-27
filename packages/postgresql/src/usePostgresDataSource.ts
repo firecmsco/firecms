@@ -148,12 +148,6 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             return client.checkUniqueField(path, name, value, entityId, collection);
         },
 
-        generateEntityId(path: string, collection?: EntityCollection): string {
-            // For async ID generation, we'll need to handle this differently
-            // For now, generate a simple timestamp-based ID
-            return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        },
-
         async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
             // Strip out navigationController and any other unnecessary props before sending to client
             const {

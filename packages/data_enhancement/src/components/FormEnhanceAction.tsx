@@ -82,7 +82,7 @@ export function FormEnhanceAction({
     }, [status]);
 
     const enhance = (prompt?: string) => {
-        if (!entityId || !formContext?.values) return;
+        if (!formContext?.values) return;
         setLoading(true);
         if (prompt) {
             addRecentPrompt(storageKey, prompt);
@@ -109,7 +109,7 @@ export function FormEnhanceAction({
     const disabledSuggestionActions = !hasSuggestions;
     const promptSuggestionsEnabled = (samplePrompts ?? []).length > 0 && instructions.length === 0;
 
-    const noIdSet = !formContext?.entityId;
+    // const noIdSet = !formContext?.entityId;
 
     function submit() {
         enhance(instructions);
@@ -179,11 +179,11 @@ export function FormEnhanceAction({
                     className={cls("p-4 rounded-lg resize-none bg-surface-100 dark:bg-surface-800 mx-2 w-full grow outline-hidden", focusedDisabled)}
                     value={instructions}
                     autoFocus={status === "new"}
-                    disabled={loading || noIdSet}
+                    disabled={loading}
                     onFocus={(event) => {
                         event.stopPropagation();
                     }}
-                    placeholder={noIdSet ? "Please set an ID first" : "...or provide instructions"}
+                    placeholder={"...or provide instructions"}
                     onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Enter" && !e.shiftKey) {
@@ -193,7 +193,6 @@ export function FormEnhanceAction({
 
                     }}
                     onChange={(e) => {
-                        if (noIdSet) return;
                         setInstructions(e.target.value);
                     }}
                 />

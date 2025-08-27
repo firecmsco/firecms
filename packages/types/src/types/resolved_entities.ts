@@ -23,7 +23,7 @@ export type ResolvedEntityCollection<M extends Record<string, any> = any> =
     &
     {
         properties: ResolvedProperties<M>,
-        originalCollection: EntityCollection<M>,
+        originalCollection?: EntityCollection<M>,
         editable?: boolean;
     }
 

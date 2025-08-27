@@ -132,14 +132,18 @@ export class PostgresDataSourceClient {
             if (type.endsWith("_SUCCESS")) {
                 resolve(message.payload || message);
             } else if (type === "ERROR") {
-                reject(new ApiError(message.error || "Unknown error", message.error, message.payload?.code));
+                reject(new ApiError(message.payload?.message || message.payload?.error || "Unknown error", message.payload?.error, message.payload?.code));
             }
             return;
         }
 
         // Handle subscription updates
         if (subscriptionId && this.subscriptions.has(subscriptionId)) {
-            const callback = this.subscriptions.get(subscriptionId)!;
+            const callback = this.subscriptions.get(subscriptionId);
+            if (!callback) {
+                throw new Error(`Subscription callback not found for subscriptionId: ${subscriptionId}`);
+            }
+            console.log("Received subscription update:", message);
             callback(message);
         }
     }

@@ -173,7 +173,7 @@ export function createPostgresWebSocket(server: Server, realtimeService: Realtim
                     payload: {
                         error: "Internal server error",
                         code: "INTERNAL_SERVER_ERROR",
-                        message: error.message || "Unknown error"
+                        message: error.message || "Internal unknown error"
                     }
                 };
                 console.error("💥 [WebSocket Server] Sending error response:", errorResponse);

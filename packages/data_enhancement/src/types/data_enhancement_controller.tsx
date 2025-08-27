@@ -1,8 +1,8 @@
-import { EntityValues } from "@firecms/core";
+import { EntityValues } from "@firecms/types";
 import { EditorAIController } from "@firecms/editor";
 
 export type EnhanceParams<M extends object> = {
-    entityId: string | number;
+    entityId?: string | number;
     propertyKey?: string;
     propertyInstructions?: string;
     values: EntityValues<M>;
