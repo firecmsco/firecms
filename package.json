@@ -16,6 +16,7 @@
     "packages/backend",
     "packages/postgresql",
     "packages/cli",
+    "packages/util",
     "packages/ui",
     "packages/datatalk",
     "packages/create_firecms_app",

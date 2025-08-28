@@ -1,22 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
     Entity,
-    EntityCollection, EntityFormProps,
+    EntityCollection,
+    EntityFormProps,
     EntityStatus,
     FireCMSPlugin,
     FormContext,
-    PluginFormActionProps, ResolvedEntityCollection,
+    PluginFormActionProps,
     User
 } from "@firecms/types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
-import {
-    canEditEntity,
-    removeInitialAndTrailingSlashes,
-    resolveCollection,
-    resolveDefaultSelectedView,
-    resolvedSelectedEntityView
-} from "../util";
+import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, } from "@firecms/util";
 
 import {
     useAuthController,
@@ -26,11 +21,10 @@ import {
     useLargeLayout
 } from "../hooks";
 import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
-import { getEntityFromCache } from "../util/entity_cache";
 import { EntityForm } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
-import { createFormexStub } from "../util/createFormexStub";
+import { createFormexStub, getEntityFromCache, resolveCollection, resolvedSelectedEntityView } from "../util";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";

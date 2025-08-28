@@ -4,7 +4,6 @@ import React, { useMemo } from "react";
 import { CustomizationController, Entity, EntityStatus, EnumValueConfig, EnumValues } from "@firecms/types";
 
 import { useClipboard, useSnackbarController } from "../../hooks";
-import { enumToObjectEntries } from "../../util";
 import {
     CircularProgress,
     ContentCopyIcon,
@@ -19,6 +18,7 @@ import {
 import { EnumValuesChip } from "../../preview";
 import { useCustomizationController } from "../../hooks/useCustomizationController";
 import { useFormex } from "@firecms/formex";
+import { enumToObjectEntries } from "@firecms/util";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,

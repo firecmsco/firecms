@@ -19,9 +19,10 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { getDefaultValueFortype, getIconForProperty } from "../../util";
+import { getIconForProperty } from "../../util";
 import { useCustomizationController } from "../../hooks";
 import { getIn } from "@firecms/formex";
+import { getDefaultValueFortype } from "@firecms/util";
 
 type MapEditViewRowState = [number, {
     key: string,

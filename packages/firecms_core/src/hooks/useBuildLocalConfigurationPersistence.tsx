@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PartialEntityCollection, UserConfigurationPersistence } from "@firecms/types";
-import { mergeDeep, stripCollectionPath } from "../util";
+import { mergeDeep, stripCollectionPath } from "@firecms/util";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 

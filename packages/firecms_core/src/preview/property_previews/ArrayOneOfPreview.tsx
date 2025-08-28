@@ -5,8 +5,8 @@ import { useAuthController, useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { ErrorBoundary } from "../../components";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "@firecms/util";
 
 /**
  * @group Preview components

@@ -1,11 +1,10 @@
 import React from "react";
 
-import { canCreateEntity, canDeleteEntity } from "../../util";
 import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "@firecms/types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
-import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { canCreateEntity, canDeleteEntity, toArray } from "@firecms/util";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

@@ -18,7 +18,8 @@ import {
     ResolvedProperties,
     SaveEntityProps
 } from "@firecms/types";
-import { resolveCollection, updateDateAutoValues } from "../util";
+import { updateDateAutoValues } from "@firecms/util";
+import { resolveCollection } from "../util";
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore

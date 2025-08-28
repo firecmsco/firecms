@@ -5,11 +5,11 @@ import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { getReferenceFrom, IconForView } from "../../../util";
 import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
+import { getReferenceFrom } from "@firecms/util";
 
 type TableReferenceFieldProps = {
     name: string;

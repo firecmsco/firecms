@@ -5,7 +5,6 @@ import {
     getIconForProperty,
     LabelWithIconAndTooltip,
     PropertyOrBuilder,
-    randomString,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     useAuthController,
@@ -13,7 +12,8 @@ import {
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
-import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
+import { resolveProperty } from "../../util";
+import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/util";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };

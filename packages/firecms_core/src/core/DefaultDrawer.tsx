@@ -4,12 +4,12 @@ import { useLargeLayout, useNavigationController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { IconForView } from "../util";
 import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
 import { FireCMSLogo } from "../components";
 import { useApp } from "../app/useApp";
+import { IconForView } from "../util";
 
 /**
  * Default drawer used in the CMS

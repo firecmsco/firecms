@@ -9,7 +9,6 @@ import {
     PluginGenericProps,
     PluginHomePageAdditionalCardsProps
 } from "@firecms/types";
-import { toArray } from "../../util/arrays";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 import { NavigationGroup } from "./NavigationGroup";
@@ -25,6 +24,7 @@ import { NavigationCardBinding } from "./NavigationCardBinding";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { RenameGroupDialog } from "./RenameGroupDialog";
+import { toArray } from "@firecms/util";
 
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";

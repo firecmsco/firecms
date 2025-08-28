@@ -36,7 +36,7 @@ export function isPropertyBuilder<T extends CMSType, M extends Record<string, an
     return typeof propertyOrBuilder === "function";
 }
 
-export function getDefaultValuesFor<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | Properties<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -90,13 +90,13 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                         timestampNowValue,
                                                                         setDateToMidnight
                                                                     }:
-                                                                        {
-                                                                            inputValues: Partial<EntityValues<M>>,
-                                                                            properties: ResolvedProperties<M>,
-                                                                            status: EntityStatus,
-                                                                            timestampNowValue: any,
-                                                                            setDateToMidnight: (input?: any) => any | undefined
-                                                                        }): EntityValues<M> {
+                                                                    {
+                                                                        inputValues: Partial<EntityValues<M>>,
+                                                                        properties: ResolvedProperties<M>,
+                                                                        status: EntityStatus,
+                                                                        timestampNowValue: any,
+                                                                        setDateToMidnight: (input?: any) => any | undefined
+                                                                    }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,

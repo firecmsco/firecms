@@ -8,6 +8,7 @@
     "packages/backend",
     "packages/postgresql",
     "packages/ui",
+    "packages/util",
     "packages/datatalk",
     "packages/collection_editor",
     "packages/data_enhancement",

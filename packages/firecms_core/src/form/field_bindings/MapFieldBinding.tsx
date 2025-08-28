@@ -2,7 +2,8 @@ import React from "react";
 import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "@firecms/types";
 
 import { ErrorBoundary } from "../../components";
-import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
+import { getIconForProperty } from "../../util";
+import { isHidden, isReadOnly, pick } from "@firecms/util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
@@ -83,7 +84,7 @@ export function MapFieldBinding({
                                             {...fieldBindingProps}/>
                                     </ErrorBoundary>
                                 </div>
-                            )                                ;
+                            );
                         }
                     )
                 }

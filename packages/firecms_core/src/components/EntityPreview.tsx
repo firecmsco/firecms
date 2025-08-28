@@ -5,13 +5,8 @@ import { Entity, EntityCollection, PreviewSize, ResolvedProperty } from "@firecm
 
 import {
     getEntityImagePreviewPropertyKey,
-    getEntityPreviewKeys,
-    getEntityTitlePropertyKey,
-    getPropertyInPath,
     getValueInPath,
-    IconForView,
-    resolveCollection
-} from "../util";
+} from "@firecms/util";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
@@ -21,6 +16,8 @@ import {
     useSideEntityController
 } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
+import { getPropertyInPath, IconForView, resolveCollection } from "../util";
+import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/references";
 
 export type EntityPreviewProps = {
     size: PreviewSize,

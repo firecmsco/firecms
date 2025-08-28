@@ -10,7 +10,7 @@ import {
 } from "@firecms/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "@firecms/util";
 import {
     Button,
     CircularProgress,
@@ -30,6 +30,7 @@ import {
     useSnackbarController
 } from "../hooks";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
+import { resolveEntityAction } from "../util";
 
 export function EntityEditViewFormActions({
                                               collection,

@@ -23,7 +23,6 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 
 import { PropertyPreview } from "../../preview";
 import { getPreviewSizeFrom } from "../../preview/util";
-import { isReadOnly } from "../../util";
 
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 
@@ -33,6 +32,7 @@ import { EntityTableCellActions } from "./internal/EntityTableCellActions";
 import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
 import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
+import { isReadOnly } from "@firecms/util";
 
 export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;

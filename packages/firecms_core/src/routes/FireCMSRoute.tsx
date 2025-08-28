@@ -3,17 +3,17 @@ import { EntityEditView } from "../core/EntityEditView";
 import { useNavigationController } from "../hooks";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    getNavigationEntriesFromPath,
-    NavigationViewCollectionInternal,
-    NavigationViewEntityCustomInternal,
-    NavigationViewInternal
-} from "../util/navigation_from_path";
+
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
-import { toArray } from "../util/arrays";
 import { EntityCollectionView, NotFoundPage } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 import { EntityCollection } from "@firecms/types";
+import {
+    getNavigationEntriesFromPath,
+    NavigationViewCollectionInternal, NavigationViewEntityCustomInternal,
+    NavigationViewInternal,
+    toArray
+} from "@firecms/util";
 
 export function FireCMSRoute() {
 

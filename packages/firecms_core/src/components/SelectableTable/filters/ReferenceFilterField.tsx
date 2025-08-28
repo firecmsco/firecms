@@ -2,9 +2,9 @@ import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { ReferencePreview } from "../../../preview";
-import { getReferenceFrom } from "../../../util";
 import { useNavigationController, useReferenceDialog } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
+import { getReferenceFrom } from "@firecms/util";
 
 interface ReferenceFilterFieldProps {
     name: string,

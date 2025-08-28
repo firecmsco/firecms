@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 
 import {
-    FieldProps, PreviewSize,
+    FieldProps,
+    PreviewSize,
     PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
@@ -10,7 +11,8 @@ import {
 import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
-import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";
+import { isReadOnly } from "@firecms/util";
+import { getIconForProperty, resolveProperty } from "../../util";
 import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
 import {
     closestCenter,

@@ -4,7 +4,7 @@ import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
-import { getValueInPath } from "../../util";
+import { getValueInPath } from "@firecms/util";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";

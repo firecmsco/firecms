@@ -17,11 +17,12 @@ import { Formex, useCreateFormex } from "@firecms/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
+import { getPropertyInPath, resolveCollection } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
 import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
+import { isReadOnly } from "@firecms/util";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;

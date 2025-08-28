@@ -7,3 +7,4 @@ export * from "./components";
 export * from "./util";
 export * from "./contexts";
 export * from "@firecms/types";
+export * from "@firecms/util";

@@ -5,18 +5,17 @@ import {
     ArrayProperty,
     EntityValues,
     ImageCompression,
+    PreviewSize,
     Property,
     PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
     StorageSource,
-    StringProperty,
-    PreviewSize
+    StringProperty
 } from "@firecms/types";
 import { useCallback, useEffect, useState } from "react";
-import { randomString } from "./strings";
-import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
+import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/util";
 import { resolveProperty } from "./resolutions";
 import { useAuthController } from "../hooks";
 

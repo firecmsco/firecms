@@ -2,17 +2,17 @@ import React from "react";
 
 import {
     AuthController,
-    EntityCollection,
-    PropertiesOrBuilders,
+    EntityCollection, Properties,
+    PropertiesOrBuilders, Property,
     PropertyConfig,
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
 } from "@firecms/types";
-import { isPropertyBuilder } from "./entities";
-import { resolveProperty } from "./resolutions";
+import { isPropertyBuilder } from "@firecms/util";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
 import { getFieldConfig } from "../core";
+import { resolveProperty } from "./resolutions";
 
 export function isReferenceProperty(
     authController: AuthController,
@@ -35,10 +35,6 @@ export function isReferenceProperty(
     return false;
 }
 
-export function getIdIcon(size: "small" | "medium" | "large"): React.ReactNode {
-    return <CircleIcon size={size}/>;
-}
-
 export function getIconForWidget(widget: PropertyConfig | undefined,
                                  size: "small" | "medium" | "large") {
     const Icon = widget?.Icon ?? CircleIcon;
@@ -59,14 +55,6 @@ export function getIconForProperty(
     }
 }
 
-export function getColorForProperty(property: PropertyOrBuilder, fields: Record<string, PropertyConfig>): string {
-    if (isPropertyBuilder(property)) {
-        return "#888";
-    } else {
-        const widget = getFieldConfig(property, fields);
-        return widget?.color ?? "#666";
-    }
-}
 
 /**
  * Get a property in a property tree from a path like
@@ -74,7 +62,7 @@ export function getColorForProperty(property: PropertyOrBuilder, fields: Record<
  * @param properties
  * @param path
  */
-export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties, path: string): PropertyOrBuilder<any, M> | undefined {
+export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties, path: string): Property<M> | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             return properties[path];
@@ -117,9 +105,9 @@ export function getBracketNotation(path: string): string {
  * @param properties
  * @param propertiesOrder
  */
-export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: Extract<keyof M, string>[]): PropertiesOrBuilders<M> {
+export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: Properties<M>, propertiesOrder?: Extract<keyof M, string>[]): Properties<M> {
     if (!propertiesOrder) return properties;
-    const result: PropertiesOrBuilders<any> = {};
+    const result: Properties<any> = {};
     propertiesOrder.filter(Boolean).forEach(path => {
         const property = getPropertyInPath(properties, path);
         if (typeof property === "object" && property.type === "map" && property.properties) {

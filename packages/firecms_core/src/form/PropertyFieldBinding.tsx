@@ -16,11 +16,12 @@ import {
 } from "@firecms/types";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
-import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
+import { isHidden, isPropertyBuilder, isReadOnly } from "@firecms/util";
 import { useAuthController, useCustomizationController } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
+import { resolveProperty } from "../util";
 
 /**
  * This component renders a form field creating the corresponding configuration

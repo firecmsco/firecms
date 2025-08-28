@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 
 import { ImagePreview } from "./ImagePreview";
-import { getThumbnailMeasure } from "../util";
 import { PreviewSize, PreviewType } from "@firecms/types";
 import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
 import { EmptyValue } from "./EmptyValue";
+import { getThumbnailMeasure } from "../util";
 
 /**
  * @group Preview components

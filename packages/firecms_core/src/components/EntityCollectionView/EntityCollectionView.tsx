@@ -22,18 +22,15 @@ import {
     useDataSourceTableController
 } from "../EntityCollectionTable";
 
+import { getPropertyInPath, resolveCollection, resolveEntityAction, resolveProperty } from "../../util";
 import {
     canCreateEntity,
     canDeleteEntity,
     canEditEntity,
-    getPropertyInPath,
     mergeDeep,
     mergeEntityActions,
     navigateToEntity,
-    resolveCollection,
-    resolveEntityAction,
-    resolveProperty
-} from "../../util";
+} from "@firecms/util";
 import { ReferencePreview } from "../../preview";
 import {
     saveEntityWithCallbacks,

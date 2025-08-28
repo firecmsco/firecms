@@ -7,10 +7,10 @@ import {
     ResolvedEntityCollection,
     ResolvedProperties
 } from "@firecms/types";
-import { resolveCollection } from "../util";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon } from "@firecms/ui";
 import { useCustomizationController } from "../hooks/useCustomizationController";
 import { useAuthController } from "../hooks";
+import { resolveCollection } from "../util";
 
 /**
  * @group Components

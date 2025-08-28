@@ -1,7 +1,8 @@
 import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "@firecms/types";
+import { isPropertyBuilder } from "@firecms/util";
 import { isReferenceProperty } from "./property_utils";
-import { isPropertyBuilder } from "./entities";
 import { getFieldConfig } from "../core";
+
 
 export function getEntityPreviewKeys(
     authController: AuthController,

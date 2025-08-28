@@ -1,0 +1,6 @@
+build/
+dist/
+node_modules/
+src/test
+.snapshots/
+*.min.js

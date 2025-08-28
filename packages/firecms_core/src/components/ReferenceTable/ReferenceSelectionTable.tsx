@@ -16,11 +16,12 @@ import {
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { canCreateEntity, IconForView, resolveCollection } from "../../util";
+import {  IconForView, resolveCollection } from "../../util";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
+import { canCreateEntity } from "@firecms/util";
 
 /**
  * @group Components

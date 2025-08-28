@@ -24,11 +24,15 @@ import {
     StringProperty,
     UserConfigurationPersistence
 } from "@firecms/types";
-import { getValueInPath, mergeDeep } from "./objects";
-import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
-import { DEFAULT_ONE_OF_TYPE } from "./common";
-import { getIn } from "@firecms/formex";
-import { enumToObjectEntries } from "./enums";
+import {
+    DEFAULT_ONE_OF_TYPE,
+    enumToObjectEntries,
+    getDefaultValuesFor,
+    getIn,
+    getValueInPath,
+    isPropertyBuilder,
+    mergeDeep
+} from "@firecms/util";
 import { isDefaultFieldConfigId } from "../core";
 
 export const resolveCollection = <M extends Record<string, any>, >
@@ -370,7 +374,7 @@ export function resolveProperties<M extends Record<string, any>>({
                                                                      ...props
                                                                  }: {
     propertyKey?: string,
-    properties: PropertiesOrBuilders<M>,
+    properties: PropertiesOrBuilders<M> | Properties<M> | ResolvedProperties<M>,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,

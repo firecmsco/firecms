@@ -3,7 +3,8 @@ import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
-import { getIconForProperty, getReferenceFrom } from "../../util";
+import { getIconForProperty } from "../../util";
+import {  getReferenceFrom } from "@firecms/util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";

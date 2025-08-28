@@ -1,6 +1,11 @@
 import {
-    DataSource, Entity, EntityCollection, EntityValues, FireCMSContext,
-    ResolvedEntityCollection, SaveEntityProps, User
+    DataSource,
+    Entity,
+    EntityValues,
+    FireCMSContext,
+    ResolvedEntityCollection,
+    SaveEntityProps,
+    User
 } from "@firecms/types";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../util";

@@ -18,14 +18,11 @@ import equal from "react-fast-compare";
 import { ErrorBoundary, getFormFieldKeys } from "../components";
 import {
     getDefaultValuesFor,
-    getEntityTitlePropertyKey,
     getValueInPath,
     isHidden,
     isReadOnly,
     mergeDeep,
-    resolveCollection,
-    useDebouncedCallback
-} from "../util";
+} from "@firecms/util";
 
 import {
     saveEntityWithCallbacks,
@@ -47,6 +44,9 @@ import { CustomIdField } from "../form/components/CustomIdField";
 import { ErrorFocus } from "../form/components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { EntityFormActions } from "./EntityFormActions";
+import { useDebouncedCallback } from "../util/useDebouncedCallback";
+import { resolveCollection } from "../util";
+import { getEntityTitlePropertyKey } from "../util/references";
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
@@ -292,7 +292,7 @@ export function EntityForm<M extends Record<string, any>>({
                             collection,
                             path
                         }: {
-        collection: EntityCollection<M>,
+        collection: EntityCollection<M> | ResolvedEntityCollection<M>,
         path: string,
         entityId: string | number | undefined,
         values: M,

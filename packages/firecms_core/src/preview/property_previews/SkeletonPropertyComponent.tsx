@@ -7,8 +7,8 @@ import {
     PreviewSize
 } from "@firecms/types";
 import React from "react";
-import { getThumbnailMeasure } from "../util";
 import { Skeleton } from "@firecms/ui";
+import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,

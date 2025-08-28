@@ -10,18 +10,18 @@ import {
     SideDialogsController,
     SideEntityController
 } from "@firecms/types";
-import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import {
+    getNavigationEntriesFromPath,
+    NavigationViewInternal,
     removeInitialAndTrailingSlashes,
-    resolveCollection,
     resolveDefaultSelectedView,
-    resolvedSelectedEntityView
-} from "../util";
+} from "@firecms/util";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { useCustomizationController, useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";
 import { JSON_TAB_VALUE } from "../core/EntityEditView";
+import { resolveCollection, resolvedSelectedEntityView } from "../util";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";

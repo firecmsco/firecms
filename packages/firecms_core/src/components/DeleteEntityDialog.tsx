@@ -9,8 +9,8 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "../hooks";
-import { resolveCollection } from "../util";
 import { EntityView } from "./EntityView";
+import { resolveCollection } from "../util";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],

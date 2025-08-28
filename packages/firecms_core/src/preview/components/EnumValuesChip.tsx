@@ -1,7 +1,7 @@
 import React from "react";
 import { Chip } from "@firecms/ui";
 import { EnumValues } from "@firecms/types";
-import { buildEnumLabel, enumToObjectEntries, getColorScheme, getLabelOrConfigFrom } from "../../util/enums";
+import { buildEnumLabel, enumToObjectEntries, getColorScheme, getLabelOrConfigFrom } from "@firecms/util";
 
 export interface EnumValuesChipProps {
     enumValues?: EnumValues;

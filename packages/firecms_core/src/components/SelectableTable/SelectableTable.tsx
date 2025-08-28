@@ -8,7 +8,7 @@ import {
     SelectedCellProps
 } from "@firecms/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
-import { enumToObjectEntries } from "../../util";
+import { enumToObjectEntries } from "@firecms/util";
 import { OnCellValueChange, OnColumnResizeParams } from "../common";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";

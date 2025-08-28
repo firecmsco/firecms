@@ -12,7 +12,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { getHashValue } from "../util";
+import { getHashValue } from "@firecms/util";
 import {
     AddIcon,
     Button,
