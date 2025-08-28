@@ -11,6 +11,14 @@ const ReactCompilerConfig = {
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
+    optimizeDeps: {
+        exclude: ["@firecms/ui", "@firecms/util", "@firecms/types", "@firecms/editor", "@firecms/formex"]
+    },
+    server: {
+        fs: {
+            allow: ["../.."]
+        }
+    },
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },

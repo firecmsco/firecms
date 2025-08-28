@@ -17,7 +17,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Core",
+            name: "FireCMS Types",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
@@ -29,9 +29,6 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/editor": path.resolve(__dirname, "../editor/src"),
-            "@firecms/formex": path.resolve(__dirname, "../formex/src")
         }
     },
     plugins: [

@@ -42,6 +42,7 @@
   },
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
@@ -50,6 +51,7 @@
   },
   "dependencies": {
     "@firecms/types": "3.0.0-canary.258",
+    "@firecms/util": "3.0.0-canary.258",
     "drizzle-orm": "^0.44.4",
     "pg": "^8.11.3",
     "ws": "^8.16.0",

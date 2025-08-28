@@ -63,6 +63,7 @@
   ],
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"

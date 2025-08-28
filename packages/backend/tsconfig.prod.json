@@ -4,16 +4,7 @@
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@firecms/core": [
-        "../firecms_core/src"
-      ],
-      "@firecms/types": [
-        "../firecms_core/src"
-      ]
-    }
+    "declarationDir": "dist"
   },
   "include": [
     "src/**/*"

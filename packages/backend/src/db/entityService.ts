@@ -10,7 +10,6 @@ import {
     ManyToManyRelation,
     Properties,
     Property,
-    Subcollection,
     WhereFilterOp
 } from "@firecms/types";
 import { resolveCollectionRelations } from "../utils/relations";
@@ -86,8 +85,6 @@ function serializePropertyToServer(value: any, property: Property): any {
     }
 
     const propertyType = property.type;
-
-    console.log("serializePropertyToServer", value, property);
 
     switch (propertyType) {
         case "reference":
@@ -218,39 +215,14 @@ export class EntityService {
         collection: EntityCollection,
         parentIds: string[]
     } {
-        const pathSegments = path.split("/").filter(p => p);
-
-        if (pathSegments.length % 2 !== 1) {
-            throw new Error(`Invalid collection path: ${path}. It must have an odd number of segments.`);
-        }
-
-        let currentCollection: EntityCollection | undefined = collectionRegistry.getBySlug(pathSegments[0]) ?? collectionRegistry.get(pathSegments[0]);
-
-        if (!currentCollection) {
-            throw new Error(`Unknown collection path or slug: ${path}`);
-        }
-
-        const parentIds: string[] = [];
-        for (let i = 1; i < pathSegments.length; i += 2) {
-            const entityId = pathSegments[i];
-            parentIds.push(entityId);
-
-            const subcollectionSlug = pathSegments[i + 1];
-            const subcollections: Subcollection[] | undefined = currentCollection?.subcollections?.();
-            if (!subcollections) {
-                throw new Error(`Unknown collection path or slug: ${path}`);
-            }
-
-            const subcollection: Subcollection | undefined = subcollections?.find(c => c.slug === subcollectionSlug);
-            if (!subcollection) {
-                throw new Error(`Unknown collection path or slug: ${path}`);
-            }
-            currentCollection = subcollection;
-        }
+        const {
+            finalCollection,
+            entityIds
+        } = collectionRegistry.resolvePathToCollections(path);
 
         return {
-            collection: currentCollection,
-            parentIds
+            collection: finalCollection,
+            parentIds: entityIds.map(id => String(id))
         };
     }
 
@@ -320,7 +292,7 @@ export class EntityService {
         if (result.length === 0) return undefined;
 
         const raw = result[0] as M;
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         // Transform IDs back to reference objects and apply type conversion
         let values = raw;
@@ -467,7 +439,7 @@ export class EntityService {
         }
 
         const results = await query;
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         return results.map((entity: any) => {
             // Transform IDs back to reference objects
@@ -497,9 +469,8 @@ export class EntityService {
         if (!idField) {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
         }
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
-        console.log("!!! col", path, collection)
         // Transform references to IDs, map field names, then sanitize
         let processedData = values;
         if (collection) {
@@ -608,6 +579,25 @@ export class EntityService {
         return Date.now().toString() + Math.random().toString(36).substring(2, 7);
     }
 
+    /**
+     * Get all collections resolved from a multi-segment path like "products/123/locales"
+     * Returns all collections along the path, useful for navigation and UI purposes
+     */
+    getAllResolvedCollections(path: string): EntityCollection[] {
+        return collectionRegistry.getAllResolvedCollections(path);
+    }
+
+    /**
+     * Resolve a path to get detailed information about collections and entity IDs
+     */
+    resolvePathDetails(path: string): {
+        collections: EntityCollection[],
+        entityIds: (string | number)[],
+        finalCollection: EntityCollection
+    } {
+        return collectionRegistry.resolvePathToCollections(path);
+    }
+
     // Search functionality for text search
     async searchEntities<M extends Record<string, any>>(
         path: string,
@@ -615,7 +605,7 @@ export class EntityService {
         databaseId?: string
     ): Promise<Entity<M>[]> {
         const table = this.getTableForPath(path);
-        const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
         if (!idField) {

@@ -27,11 +27,11 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": [
-        "../firecms_core/src"
-      ],
       "@firecms/types": [
         "../types/src"
+      ],
+      "@firecms/util": [
+        "../util/src"
       ]
     }
   },

@@ -43,6 +43,7 @@
   },
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
@@ -50,26 +51,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/modifiers": "^9.0.0",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@firecms/types": "3.0.0-canary.258",
-    "@radix-ui/react-portal": "^1.1.5",
-    "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
-    "fuse.js": "^7.1.0",
-    "history": "^5.3.0",
-    "markdown-it": "^14.1.0",
-    "notistack": "^3.0.2",
-    "object-hash": "^3.0.0",
-    "prism-react-renderer": "^2.4.1",
-    "react-dropzone": "^14.3.8",
-    "react-fast-compare": "^3.2.2",
-    "react-image-file-resizer": "^0.4.8",
-    "react-transition-group": "^4.4.5",
-    "react-use-measure": "^2.1.7",
-    "react-window": "^1.8.11",
-    "yup": "^0.32.11"
+    "@firecms/types": "3.0.0-canary.258"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
