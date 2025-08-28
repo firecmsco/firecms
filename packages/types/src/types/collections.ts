@@ -230,7 +230,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * You can also pass a set of values (as an EnumValues object) to allow them
      * to pick from only those.
      */
-    customId?: boolean | EnumValues | "optional";
+    customId?: EnumValues | "optional";
 
     /**
      * Force a filter in this view. If applied, the rest of the filters will

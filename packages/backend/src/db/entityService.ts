@@ -12,7 +12,7 @@ import {
     Property,
     Subcollection,
     WhereFilterOp
-} from "@firecms/core";
+} from "@firecms/types";
 import { resolveCollectionRelations } from "../utils/relations";
 import { getTableNameFromCollection, resolveJunctionTableName, toSnakeCase } from "../utils/collection-utils";
 
@@ -21,12 +21,10 @@ function sanitizeAndConvertDates(obj: any): any {
         return null;
     }
 
-    // Sanitize NaN values
     if (typeof obj === "number" && isNaN(obj)) {
         return null;
     }
 
-    // Sanitize "NaN" string
     if (typeof obj === "string" && obj.toLowerCase() === "nan") {
         return null;
     }
@@ -35,7 +33,11 @@ function sanitizeAndConvertDates(obj: any): any {
         return obj.map(v => sanitizeAndConvertDates(v));
     }
 
-    if (typeof obj === "object" && !(obj instanceof Date)) {
+    if (obj instanceof Date) {
+        return obj.toISOString();
+    }
+
+    if (typeof obj === "object") {
         const newObj: Record<string, any> = {};
         for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -45,13 +47,13 @@ function sanitizeAndConvertDates(obj: any): any {
         return newObj;
     }
 
-    // Convert date strings to Date objects
     if (typeof obj === "string") {
         const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
-        if (isoDateRegex.test(obj)) {
+        const jsDateRegex = /^\w{3} \w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} GMT[+-]\d{4} \(.+\)$/;
+        if (isoDateRegex.test(obj) || jsDateRegex.test(obj)) {
             const date = new Date(obj);
             if (!isNaN(date.getTime())) {
-                return date;
+                return date.toISOString();
             }
         }
     }
@@ -85,14 +87,12 @@ function serializePropertyToServer(value: any, property: Property): any {
 
     const propertyType = property.type;
 
+    console.log("serializePropertyToServer", value, property);
+
     switch (propertyType) {
         case "reference":
-            if (typeof value === "string" || typeof value === "number") {
-                return {
-                    id: value.toString(),
-                    path: property.path!,
-                    __type: "reference"
-                };
+            if (typeof value === "object" && value !== null && value.id !== undefined) {
+                return value.id;
             }
             return value;
 
@@ -103,7 +103,7 @@ function serializePropertyToServer(value: any, property: Property): any {
             return value;
 
         case "map":
-            if (typeof value === "object" && property.properties) {
+            if (typeof value === "object" && value !== null && property.properties) {
                 const result: Record<string, any> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
@@ -499,6 +499,7 @@ export class EntityService {
         }
         const collection = collectionRegistry.getBySlug(path) ?? collectionRegistry.get(path);
 
+        console.log("!!! col", path, collection)
         // Transform references to IDs, map field names, then sanitize
         let processedData = values;
         if (collection) {
@@ -521,9 +522,15 @@ export class EntityService {
             if (!updatedEntity) throw new Error("Could not fetch entity after update.");
             return updatedEntity;
         } else {
+            const dataForInsert = { ...entityData };
+            // Don't include the ID in the insert statement, so the database can generate it
+            if (idInfo.fieldName in dataForInsert) {
+                delete dataForInsert[idInfo.fieldName];
+            }
+
             const insertQuery = this.db
                 .insert(table)
-                .values(entityData)
+                .values(dataForInsert)
                 .returning({ id: idField });
 
             const result = await insertQuery;

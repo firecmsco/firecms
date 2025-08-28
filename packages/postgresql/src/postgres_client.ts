@@ -143,7 +143,6 @@ export class PostgresDataSourceClient {
             if (!callback) {
                 throw new Error(`Subscription callback not found for subscriptionId: ${subscriptionId}`);
             }
-            console.log("Received subscription update:", message);
             callback(message);
         }
     }

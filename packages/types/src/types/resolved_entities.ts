@@ -44,7 +44,7 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
  * @group Entity properties
  */
 export type ResolvedProperties<M extends Record<string, any> = any> = {
-    [k in keyof M]: ResolvedProperty<M[keyof M]>;
+    [k in keyof M]: ResolvedProperty<M[k]>;
 };
 
 /**
@@ -118,9 +118,9 @@ export type ResolvedReferenceProperty =
 /**
  * @group Entity properties
  */
-export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
+export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any>
     =
-    Omit<ArrayProperty, "of" | "oneOf" | "type"> &
+    Omit<ArrayProperty<T, ArrayT>, "of" | "oneOf" | "type"> &
     {
         type: "array";
         resolved: true;

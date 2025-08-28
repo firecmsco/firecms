@@ -23,6 +23,10 @@ function recursivelyMap(
 ): any {
     if (Array.isArray(data)) {
         return data.map((item: any) => recursivelyMap(item, mapFn));
+    } else if (data && data instanceof EntityReference) {
+        return mapFn(data);
+    } else if (data && data instanceof Date) {
+        return mapFn(data);
     } else if (data && typeof data === "object") {
         const result: Record<string, any> = {};
         for (const key in data) {
@@ -75,16 +79,6 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
 
         client,
 
-        delegateToCMSModel: (data: any) => {
-            console.log("Mapping data from delegate to CMS model:", data);
-            return delegateToCMSModel(data);
-        },
-
-        cmsToDelegateModel: (data: any) => {
-            console.log("Mapping data from CMS to delegate model:", data);
-            return cmsToDelegateModel(data);
-        },
-
         setDateToMidnight: (date: Date) => {
             const d = new Date(date);
             d.setHours(0, 0, 0, 0);
@@ -121,13 +115,15 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
         },
 
         async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
-            const entity = await client.saveEntity(cleanProps);
+            const updatedValues = cmsToDelegateModel(props.values);
+            console.log("Saving entity", props.path, props.values, updatedValues);
+            const entity = await client.saveEntity({
+                path: props.path,
+                values: updatedValues,
+                entityId: props.entityId,
+                previousValues: props.previousValues,
+                status: props.status
+            });
             return {
                 ...entity,
                 values: delegateToCMSModel(entity.values)

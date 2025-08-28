@@ -27,8 +27,8 @@ export function ReadOnlyFieldBinding({
                                          context
                                      }: FieldProps<any>) {
 
-    if (!context.entityId)
-        throw new Error("ReadOnlyFieldBinding: Entity id is null");
+    // if (!context.entityId)
+    //     throw new Error("ReadOnlyFieldBinding: Entity id is null");
 
     return (
 

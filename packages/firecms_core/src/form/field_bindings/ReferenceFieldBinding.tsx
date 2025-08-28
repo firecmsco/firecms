@@ -20,7 +20,7 @@ import { cls } from "@firecms/ui";
  */
 export function ReferenceFieldBinding(props: FieldProps) {
 
-    if (typeof props.property.slug !== "string") {
+    if (typeof props.property.path !== "string") {
         return <ReadOnlyFieldBinding {...props}/>
     }
 

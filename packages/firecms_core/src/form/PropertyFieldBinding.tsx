@@ -112,11 +112,12 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     authController
                 });
 
-                const disabled = disabledProp || isReadOnly(resolvedProperty) || Boolean(resolvedProperty?.disabled) || context.disabled;
+                const readOnly = isReadOnly(resolvedProperty);
+                const disabled = disabledProp || readOnly || Boolean(resolvedProperty?.disabled) || context.disabled;
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
                     return <></>;
-                } else if (isReadOnly(resolvedProperty)) {
+                } else if (readOnly) {
                     Component = ReadOnlyFieldBinding;
                 } else if (resolvedProperty.Field) {
                     if (typeof resolvedProperty.Field === "function") {

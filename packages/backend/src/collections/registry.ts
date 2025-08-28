@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/types";
 import { PgTable } from "drizzle-orm/pg-core";
 
 class CollectionRegistry {
