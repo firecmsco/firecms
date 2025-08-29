@@ -227,12 +227,17 @@ export interface DataSource {
      * Useful for initializing a text search index.
      * @param props
      */
-    initTextSearch?: (props: {
+    initTextSearch: (props: {
         context: FireCMSContext,
         path: string,
         collection: EntityCollection,
         parentCollectionIds?: string[]
     }) => Promise<boolean>;
+
+    /**
+     * Flag to indicate if the datasource delegate has requested the initialization of the text search index
+     */
+    needsInitTextSearch: boolean;
 
 }
 

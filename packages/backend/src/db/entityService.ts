@@ -869,6 +869,7 @@ export class EntityService {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
         }
 
+        console.log(`Searching for '${searchString}' in ${path}`, collection);
         if (!collection) {
             return [];
         }
@@ -876,16 +877,6 @@ export class EntityService {
         const searchConditions: SQLWrapper[] = [];
         for (const [key, prop] of Object.entries(collection.properties)) {
             if ((prop as Property).type === "string") {
-                const fieldColumn = table[key as keyof typeof table] as AnyPgColumn;
-                if (fieldColumn) {
-                    searchConditions.push(ilike(fieldColumn, `%${searchString}%`));
-                }
-            }
-        }
-
-        if (searchConditions.length === 0) {
-            // Fallback to generic text search on 'name', 'title', 'description'
-            for (const key of ["name", "title", "description"]) {
                 const fieldColumn = table[key as keyof typeof table] as AnyPgColumn;
                 if (fieldColumn) {
                     searchConditions.push(ilike(fieldColumn, `%${searchString}%`));

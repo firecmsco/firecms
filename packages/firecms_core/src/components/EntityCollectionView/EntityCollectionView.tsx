@@ -620,6 +620,13 @@ export const EntityCollectionView = React.memo(
             parentCollectionIds
         });
 
+        console.log("ts", {
+            textSearchLoading,
+            textSearchInitialised,
+            onTextSearchClick,
+            textSearchEnabled
+        });
+
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md", className)}
                  ref={containerRef}>

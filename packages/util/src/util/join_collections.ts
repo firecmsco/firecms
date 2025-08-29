@@ -88,7 +88,7 @@ export function mergeCollection(target: EntityCollection,
         modifyCollection
     );
 
-    const propertiesMerged: Properties = { ...target.properties } as Properties;
+    const propertiesMerged: PropertiesOrBuilders = { ...target.properties } as PropertiesOrBuilders;
     Object.keys(source.properties).forEach((key) => {
         const property = target.properties[key] as Property;
         if (property)

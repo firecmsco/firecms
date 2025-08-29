@@ -45,7 +45,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
             ? () => {
                 setTextSearchLoading(true);
                 const promises: Promise<boolean>[] = [];
-                if (dataSource?.initTextSearch && !searchBlocked) {
+                if (dataSource.needsInitTextSearch && !searchBlocked) {
                     promises.push(dataSource.initTextSearch(props));
                 }
                 if (searchBlocked) {
