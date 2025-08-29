@@ -476,6 +476,14 @@ export class EntityService {
         if (collection) {
             processedData = serializeDataToServer(values as M, collection.properties as Properties<M>);
         }
+
+        // Auto-link to parent entities for subcollections
+        const { collections, entityIds } = collectionRegistry.resolvePathToCollections(path);
+        if (entityIds.length > 0) {
+            // We have parent entities to link to
+            processedData = this.linkToParentEntities(processedData, collections, entityIds, collection);
+        }
+
         const entityData = sanitizeAndConvertDates(processedData);
 
         if (entityId) {
@@ -596,6 +604,76 @@ export class EntityService {
         finalCollection: EntityCollection
     } {
         return collectionRegistry.resolvePathToCollections(path);
+    }
+
+    /**
+     * Automatically link an entity to its parent entities by setting foreign key fields
+     */
+    private linkToParentEntities(
+        entityData: any,
+        collections: EntityCollection[],
+        parentEntityIds: (string | number)[],
+        targetCollection: EntityCollection
+    ): any {
+        const linkedData = { ...entityData };
+
+        // Iterate through parent collections and their corresponding entity IDs
+        for (let i = 0; i < collections.length - 1; i++) { // -1 because the last collection is the target collection
+            const parentCollection = collections[i];
+            const parentEntityId = parentEntityIds[i];
+
+            // Find foreign key field in target collection that references this parent collection
+            const foreignKeyField = this.findForeignKeyForParent(targetCollection, parentCollection);
+
+            if (foreignKeyField) {
+                // Parse the parent entity ID according to the parent collection's ID type
+                const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+                const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+
+                // Set the foreign key field to link to the parent entity
+                linkedData[foreignKeyField] = parsedParentId;
+
+                console.log(`Auto-linking ${targetCollection.slug || targetCollection.dbPath}.${foreignKeyField} = ${parsedParentId} (${parentCollection.slug || parentCollection.dbPath})`);
+            }
+        }
+
+        return linkedData;
+    }
+
+    /**
+     * Find the foreign key field in the target collection that references a parent collection
+     */
+    private findForeignKeyForParent(
+        targetCollection: EntityCollection,
+        parentCollection: EntityCollection
+    ): string | null {
+        for (const [fieldName, property] of Object.entries(targetCollection.properties)) {
+            const prop = property as Property;
+            if (prop.type === "reference") {
+                // Check if this reference points to the parent collection
+                if (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath) {
+                    return fieldName;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get ID field information for a specific collection
+     */
+    private getIdFieldInfoForCollection(collection: EntityCollection) {
+        const idFieldName = collection.idField ?? "id";
+        const idFieldConfig = collection.properties[idFieldName] as Property;
+
+        if (!idFieldConfig) {
+            throw new Error(`ID field '${idFieldName}' not found in properties for collection '${collection.slug || collection.dbPath}'`);
+        }
+
+        return {
+            fieldName: idFieldName,
+            type: idFieldConfig.type
+        };
     }
 
     // Search functionality for text search
