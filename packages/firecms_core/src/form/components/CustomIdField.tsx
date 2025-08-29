@@ -62,7 +62,7 @@ export function CustomIdField<M extends Record<string, any>>({
         label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled: disabled || loading,
         name: "id",
-        value: String(entity && status === "existing" ? entity.id : entityId) ?? "",
+        value: String(entity && status === "existing" ? entity.id : entityId),
         endAdornment: loading ? <CircularProgress size={"small"}/> : (entity
                 ? (
                     <>
@@ -93,6 +93,9 @@ export function CustomIdField<M extends Record<string, any>>({
                 : undefined
         )
     };
+
+    if (idSetAutomatically && !entity)
+        return null;
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection, Subcollection } from "@firecms/types";
 import { PgTable } from "drizzle-orm/pg-core";
 
 class CollectionRegistry {
@@ -101,7 +101,7 @@ class CollectionRegistry {
         const entityIds: (string | number)[] = [];
 
         // Start with the first collection
-        let currentCollection: EntityCollection | undefined = this.getBySlug(pathSegments[0]) ?? this.get(pathSegments[0]);
+        let currentCollection = this.getBySlug(pathSegments[0]) ?? this.get(pathSegments[0]);
 
         if (!currentCollection) {
             throw new Error(`Unknown collection path or slug: ${pathSegments[0]}`);
@@ -116,12 +116,12 @@ class CollectionRegistry {
 
             if (i + 1 < pathSegments.length) {
                 const subcollectionSlug = pathSegments[i + 1];
-                const subcollections = currentCollection?.subcollections?.();
+                const subcollections: Subcollection[] | undefined = currentCollection.subcollections?.();
                 if (!subcollections) {
                     throw new Error(`No subcollections found for ${currentCollection.slug || currentCollection.dbPath} in path: ${path}`);
                 }
 
-                const subcollection = subcollections.find(c => c.slug === subcollectionSlug);
+                const subcollection: Subcollection | undefined = subcollections.find(c => c.slug === subcollectionSlug);
                 if (!subcollection) {
                     throw new Error(`Subcollection '${subcollectionSlug}' not found in ${currentCollection.slug || currentCollection.dbPath}`);
                 }

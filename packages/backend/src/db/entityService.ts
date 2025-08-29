@@ -572,11 +572,190 @@ export class EntityService {
     }
 
     async countEntities(path: string, _databaseId?: string): Promise<number> {
-        const table = this.getTableForPath(path);
+        const pathSegments = path.split("/").filter(p => p);
 
+        // Handle multi-segment paths (subcollections)
+        if (pathSegments.length > 1 && pathSegments.length % 2 === 1) {
+            const parentPath = pathSegments.slice(0, -2).join("/");
+            const parentEntityId = pathSegments[pathSegments.length - 2];
+            const subcollectionSlug = pathSegments[pathSegments.length - 1];
+
+            const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
+            if (parentCollection) {
+                // Get all collections for relation resolution
+                const allCollections = collectionRegistry.getAllCollectionsRecursively();
+                const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+                const relation = resolvedRelations[subcollectionSlug];
+
+                if (relation) {
+                    if (relation.type === "manyToMany") {
+                        return this.countManyToManyCollection(parentPath, parentEntityId, subcollectionSlug);
+                    } else if (relation.type === "many") {
+                        return this.countManyCollection(parentPath, parentEntityId, subcollectionSlug);
+                    }
+                } else {
+                    // Direct subcollection - count with parent filter
+                    return this.countDirectSubcollection(path, parentPath, parentEntityId);
+                }
+            }
+        }
+
+        // Simple collection - count all entities
+        const table = this.getTableForPath(path);
         const result = await this.db
             .select({ count: sql`count(*)` })
             .from(table);
+
+        return Number(result[0]?.count || 0);
+    }
+
+    /**
+     * Count entities in a direct subcollection filtered by parent entity
+     */
+    private async countDirectSubcollection(
+        path: string,
+        parentPath: string,
+        parentEntityId: string | number
+    ): Promise<number> {
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
+        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
+        const table = this.getTableForPath(path);
+
+        // Find the foreign key field that references the parent
+        let foreignKeyField: string | undefined;
+        for (const [key, prop] of Object.entries(collection.properties)) {
+            const property = prop as Property;
+            if (property.type === "reference" &&
+                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
+                foreignKeyField = key;
+                break;
+            }
+        }
+
+        if (!foreignKeyField) {
+            console.warn(`Could not find foreign key field on ${path} pointing to ${parentPath}`);
+            // Fallback to counting all entities
+            const result = await this.db
+                .select({ count: sql`count(*)` })
+                .from(table);
+            return Number(result[0]?.count || 0);
+        }
+
+        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+        const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
+
+        const result = await this.db
+            .select({ count: sql`count(*)` })
+            .from(table)
+            .where(eq(foreignKeyColumn, parsedParentId));
+
+        return Number(result[0]?.count || 0);
+    }
+
+    /**
+     * Count entities in a many-to-many collection filtered by parent entity
+     */
+    private async countManyToManyCollection(
+        parentPath: string,
+        parentEntityId: string | number,
+        subcollectionSlug: string
+    ): Promise<number> {
+        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
+        if (!parentCollection) {
+            throw new Error(`Parent collection not found: ${parentPath}`);
+        }
+
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const relation = resolvedRelations[subcollectionSlug];
+
+        if (!relation || relation.type !== "manyToMany") {
+            throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
+        }
+        const typedRelation = relation as ManyToManyRelation;
+
+        const targetCollection = typedRelation.target();
+        const junctionDbPath = resolveJunctionTableName(typedRelation.through, parentCollection, targetCollection);
+        const junctionTable = collectionRegistry.getTable(junctionDbPath);
+        if (!junctionTable) {
+            throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
+        }
+
+        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+
+        const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
+        const sourceJunctionKeyName = Array.isArray(typedRelation.through?.sourceJunctionKey)
+            ? (typedRelation.through?.sourceJunctionKey as string[])[0]
+            : (typedRelation.through?.sourceJunctionKey ?? defaultSourceKey);
+
+        const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+        if (!sourceJunctionKey) {
+            throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
+        }
+
+        const result = await this.db
+            .select({ count: sql`count(*)` })
+            .from(junctionTable)
+            .where(eq(sourceJunctionKey, parsedParentId));
+
+        return Number(result[0]?.count || 0);
+    }
+
+    /**
+     * Count entities in a one-to-many collection filtered by parent entity
+     */
+    private async countManyCollection(
+        parentPath: string,
+        parentEntityId: string | number,
+        subcollectionSlug: string
+    ): Promise<number> {
+        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
+        if (!parentCollection) {
+            throw new Error(`Parent collection not found: ${parentPath}`);
+        }
+
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const relation = resolvedRelations[subcollectionSlug];
+
+        if (!relation || relation.type !== "many") {
+            throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
+        }
+        const typedRelation = relation as ManyRelation;
+
+        const targetCollection = typedRelation.target();
+        const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
+
+        // Find the field in the target collection that references the parent
+        let foreignKeyField: string | undefined;
+        for (const [key, prop] of Object.entries(targetCollection.properties)) {
+            const property = prop as Property;
+            if (property.type === "reference" &&
+                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
+                foreignKeyField = key;
+                break;
+            }
+        }
+
+        if (!foreignKeyField) {
+            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
+        }
+
+        const table = collectionRegistry.getTable(targetCollection.dbPath);
+        if (!table) {
+            throw new Error(`Table not found for dbPath: ${targetCollection.dbPath}`);
+        }
+
+        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+        const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
+
+        const result = await this.db
+            .select({ count: sql`count(*)` })
+            .from(table)
+            .where(eq(foreignKeyColumn, parsedParentId));
 
         return Number(result[0]?.count || 0);
     }
