@@ -105,40 +105,67 @@ export const resolveCollection = <M extends Record<string, any>, >
  * @param propertyOrBuilder
  * @param propertyValue
  */
-export function resolveProperty<T extends CMSType = CMSType, M extends Record<string, any> = any>({
-                                                                                                      propertyOrBuilder,
-                                                                                                      fromBuilder = false,
-                                                                                                      ignoreMissingFields = false,
-                                                                                                      ...props
-                                                                                                  }: {
-    propertyKey?: string,
-    propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
-    values?: Partial<M>,
-    previousValues?: Partial<M>,
-    path?: string,
-    entityId?: string | number,
-    index?: number,
-    fromBuilder?: boolean;
-    propertyConfigs?: Record<string, PropertyConfig<any>>;
-    ignoreMissingFields?: boolean;
-    authController: AuthController;
-}): ResolvedProperty<T> | null {
+export function resolveProperty<T extends CMSType = CMSType, M extends Record<string, any> = any>(
+    {
+        propertyOrBuilder,
+        fromBuilder = false,
+        ignoreMissingFields = false,
+        ...props
+    }: {
+        propertyKey?: string,
+        propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
+        values?: Partial<M>,
+        previousValues?: Partial<M>,
+        path?: string,
+        entityId?: string | number,
+        index?: number,
+        fromBuilder?: boolean;
+        propertyConfigs?: Record<string, PropertyConfig<any>>;
+        ignoreMissingFields?: boolean;
+        authController: AuthController;
+    }): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
         return propertyOrBuilder as ResolvedProperty<T>;
     }
 
-    let resolvedProperty: ResolvedProperty<T> | null = null;
-
     if (!propertyOrBuilder) {
         return null;
-    } else if (isPropertyBuilder(propertyOrBuilder)) {
+    }
+
+    let property: Property<T> | null;
+    let isFromBuilder = fromBuilder;
+
+    if (isPropertyBuilder(propertyOrBuilder)) {
         const path = props.path;
         if (!path)
             throw Error("Trying to resolve a property builder without specifying the entity path");
 
         const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
-        const result: Property<T> | null = propertyOrBuilder({
+        property = propertyOrBuilder({
+            ...props,
+            path,
+            propertyValue: usedPropertyValue,
+            values: props.values ?? {},
+            previousValues: props.previousValues ?? props.values ?? {}
+        });
+        isFromBuilder = true;
+    } else {
+        property = propertyOrBuilder as Property<T>;
+    }
+
+    if (!property) {
+        return null;
+    }
+
+    // Apply dynamic properties if they exist
+    if (property.dynamicProps) {
+        const path = props.path;
+        if (!path)
+            throw Error("Trying to resolve dynamicProps without specifying the entity path");
+
+        const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
+        const dynamicPropsResult = property.dynamicProps({
             ...props,
             path,
             propertyValue: usedPropertyValue,
@@ -146,51 +173,43 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             previousValues: props.previousValues ?? props.values ?? {}
         });
 
-        if (!result) {
-            return null;
-        }
-
-        resolvedProperty = resolveProperty({
-            ...props,
-            propertyOrBuilder: result,
-            fromBuilder: true,
-            ignoreMissingFields
-        });
-    } else {
-        const property = propertyOrBuilder as Property<T>;
-        if (property.type === "map" && property.properties) {
-            const properties = resolveProperties({
-                ignoreMissingFields,
-                ...props,
-                properties: property.properties,
-            });
-            resolvedProperty = {
-                ...property,
-                resolved: true,
-                fromBuilder,
-                properties
-            } as ResolvedProperty<T>;
-        } else if (property.type === "array") {
-            resolvedProperty = resolveArrayProperty({
-                property,
-                fromBuilder,
-                ignoreMissingFields,
-                ...props
-            }) as ResolvedProperty<any>;
-        } else if ((property.type === "string" || property.type === "number") && property.enum) {
-            resolvedProperty = resolvePropertyEnum(property, fromBuilder) as ResolvedProperty<any>;
+        if (dynamicPropsResult) {
+            property = mergeDeep(property, dynamicPropsResult);
         }
     }
 
-    if (!resolvedProperty) {
+    let resolvedProperty: ResolvedProperty<T> | null;
+
+    if (property?.type === "map" && property.properties) {
+        const properties = resolveProperties({
+            ignoreMissingFields,
+            ...props,
+            properties: property.properties,
+        });
         resolvedProperty = {
-            ...propertyOrBuilder,
+            ...property,
             resolved: true,
-            fromBuilder
+            fromBuilder: isFromBuilder,
+            properties
+        } as ResolvedProperty<T>;
+    } else if (property?.type === "array") {
+        resolvedProperty = resolveArrayProperty({
+            property,
+            fromBuilder: isFromBuilder,
+            ignoreMissingFields,
+            ...props
+        }) as ResolvedProperty<any>;
+    } else if ((property?.type === "string" || property?.type === "number") && property.enum) {
+        resolvedProperty = resolvePropertyEnum(property, isFromBuilder) as ResolvedProperty<any>;
+    } else {
+        resolvedProperty = {
+            ...property,
+            resolved: true,
+            fromBuilder: isFromBuilder
         } as ResolvedProperty<T>;
     }
 
-    if (resolvedProperty.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
+    if (resolvedProperty?.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
         const cmsFields = props.propertyConfigs;
         if (!cmsFields && !ignoreMissingFields) {
             throw Error(`Trying to resolve a property with key '${resolvedProperty.propertyConfig}' that inherits from a custom property config but no custom property configs were provided. Use the property 'propertyConfigs' in your app config to provide them`);

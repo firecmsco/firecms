@@ -248,6 +248,17 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             Field: ArrayOfReferencesFieldBinding
         }
     },
+    many_to_many: {
+        key: "many_to_many",
+        name: "Many to Many",
+        description: "Multiple values that refer to a different collection",
+        Icon: AddLinkIcon,
+        color: "#ff0042",
+        property: {
+            type: "reference",
+            Field: ArrayOfReferencesFieldBinding
+        }
+    },
     date_time: {
         key: "date_time",
         name: "Date/time",
@@ -399,6 +410,9 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
     } else if (property.type === "date") {
         return "date_time";
     } else if (property.type === "reference") {
+        if(property.relation?.type === "manyToMany"){
+            return "many_to_many";
+        }
         return "reference";
     }
 

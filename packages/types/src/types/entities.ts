@@ -64,6 +64,33 @@ export class EntityReference {
         return true;
     }
 }
+/**
+ * Class used to create a reference to an entity in a different path
+ */
+export class EntityRelation {
+    /**
+     * ID of the entity
+     */
+    readonly id: string | number;
+    /**
+     * A string representing the path of the referenced document (relative
+     * to the root of the database).
+     */
+    readonly path: string;
+
+    constructor(id: string | number, path: string) {
+        this.id = id;
+        this.path = path;
+    }
+
+    get pathWithId() {
+        return `${this.path}/${this.id}`;
+    }
+
+    isEntityReference() {
+        return true;
+    }
+}
 
 export class GeoPoint {
 

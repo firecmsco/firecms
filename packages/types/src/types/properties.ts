@@ -38,34 +38,35 @@ export type CMSType =
 /**
  * @ignore
  */
-export type AnyProperty =
-    StringProperty |
-    NumberProperty |
-    BooleanProperty |
-    DateProperty |
-    GeopointProperty |
-    ReferenceProperty |
-    ArrayProperty |
-    MapProperty;
+export type AnyProperty<M extends Record<string, any> = any> =
+    StringProperty<M> |
+    NumberProperty<M> |
+    BooleanProperty<M> |
+    DateProperty<M> |
+    GeopointProperty<M> |
+    ReferenceProperty<M> |
+    RelationProperty<M> |
+    ArrayProperty<any, any, M> |
+    MapProperty<any, M>;
 
 /**
  * @group Entity properties
  */
-export type Property<T extends CMSType = any> =
-    T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? DateProperty :
-                    T extends GeoPoint ? GeopointProperty :
-                        T extends EntityReference ? ReferenceProperty :
-                            T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
+export type Property<T extends CMSType = any, M extends Record<string, any> = any> =
+    T extends string ? StringProperty<M> :
+        T extends number ? NumberProperty<M> :
+            T extends boolean ? BooleanProperty<M> :
+                T extends Date ? DateProperty<M> :
+                    T extends GeoPoint ? GeopointProperty<M> :
+                        T extends EntityReference ? (ReferenceProperty<M> | RelationProperty<M>) :
+                            T extends Array<CMSType> ? ArrayProperty<T, any, M> :
+                                T extends Record<string, any> ? MapProperty<T, M> : AnyProperty<M>;
 
 /**
  * Interface including all common properties of a CMS property
  * @group Entity properties
  */
-export interface BaseProperty<T extends CMSType, CustomProps = any> {
+export interface BaseProperty<T extends CMSType, M extends Record<string, any> = any, CustomProps = any> {
 
     /**
      * type of the property
@@ -164,6 +165,14 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * It defaults to 100, but you can set it to 50 to have two fields in the same row.
      */
     widthPercentage?: number;
+
+    /**
+     * Use this to define dynamic properties that change based on the
+     * entity's values. For example, you can make a field read-only if
+     * another field has a certain value.
+     * This function receives the same props as a `PropertyBuilder` and should return a partial `Property` object.
+     */
+    dynamicProps?: (props: PropertyBuilderProps<M>) => Partial<Property<T, M>>;
 }
 
 /**
@@ -240,7 +249,7 @@ export type EnumValueConfig = {
  * @group Entity properties
  */
 export type Properties<M extends Record<string, any> = any> = {
-    [k in keyof M]: Property<M[keyof M]>;
+    [k in keyof M]: Property<M[keyof M], M>;
 };
 
 /**
@@ -284,6 +293,7 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
  * on the current values of the entity, the previous values and the
  * current value of the property, as well as the path and entity ID.
  * @group Entity properties
+ * @deprecated Use `dynamicProps` within a static `Property` definition instead. This will be removed in a future version.
  */
 export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
     ({
@@ -298,23 +308,22 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
 
 /**
  * @group Entity properties
+ * @deprecated Use `Properties` with `dynamicProps` instead. This will be removed in a future version.
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
-    Property<T>
-    | PropertyBuilder<T, M>;
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> = Property<T, M> | PropertyBuilder<T, M>;
+
+/**
+ * @group Entity properties
+ * @deprecated Use `Properties` with `dynamicProps` instead. This will be removed in a future version.
+ */
+export type PropertiesOrBuilders<M extends Record<string, any> = any> = {
+    [k in keyof M]: PropertyOrBuilder<M[k], M>;
+};
 
 /**
  * @group Entity properties
  */
-export type PropertiesOrBuilders<M extends Record<string, any> = any> =
-    {
-        [k in keyof M]: PropertyOrBuilder<M[k], M>;
-    };
-
-/**
- * @group Entity properties
- */
-export interface NumberProperty extends BaseProperty<number> {
+export interface NumberProperty<M extends Record<string, any> = any> extends BaseProperty<number, M> {
 
     type: "number";
 
@@ -339,7 +348,7 @@ export interface NumberProperty extends BaseProperty<number> {
 /**
  * @group Entity properties
  */
-export interface BooleanProperty extends BaseProperty<boolean> {
+export interface BooleanProperty<M extends Record<string, any> = any> extends BaseProperty<boolean, M> {
 
     type: "boolean";
 
@@ -353,7 +362,7 @@ export interface BooleanProperty extends BaseProperty<boolean> {
 /**
  * @group Entity properties
  */
-export interface StringProperty extends BaseProperty<string> {
+export interface StringProperty<M extends Record<string, any> = any> extends BaseProperty<string, M> {
 
     type: "string";
 
@@ -421,13 +430,14 @@ export interface StringProperty extends BaseProperty<string> {
      * collection, and the `path` prop is used to
      * define the collection this reference points to.
      */
-    reference?: ReferenceProperty;
+    reference?: ReferenceProperty<M>;
 }
 
 /**
  * @group Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any, M extends Record<string, any> = any>
+    extends BaseProperty<T, M> {
 
     type: "array";
 
@@ -437,7 +447,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * or using the `oneOf` prop, otherwise an error will be thrown.
      */
-    of?: PropertyOrBuilder<ArrayT> | Property<ArrayT>[];
+    of?: PropertyOrBuilder<ArrayT, M> | Property<ArrayT, M>[];
 
     /**
      * Use this field if you would like to have an array of typed objects.
@@ -514,7 +524,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @group Entity properties
  */
-export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>> extends BaseProperty<T> {
+export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>, M extends Record<string, any> = any> extends BaseProperty<T, M> {
 
     type: "map";
 
@@ -579,7 +589,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
 /**
  * @group Entity properties
  */
-export interface DateProperty extends BaseProperty<Date> {
+export interface DateProperty<M extends Record<string, any> = any> extends BaseProperty<Date, M> {
 
     type: "date";
 
@@ -613,7 +623,7 @@ export interface DateProperty extends BaseProperty<Date> {
  * @group Entity properties
  */
 // TODO: currently this is the only unsupported field
-export interface GeopointProperty extends BaseProperty<GeoPoint> {
+export interface GeopointProperty<M extends Record<string, any> = any> extends BaseProperty<GeoPoint, M> {
 
     type: "geopoint";
 
@@ -627,7 +637,7 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
 /**
  * @group Entity properties
  */
-export interface ReferenceProperty extends BaseProperty<EntityReference> {
+export interface ReferenceProperty<M extends Record<string, any> = any> extends BaseProperty<EntityReference, M> {
 
     type: "reference";
 
@@ -641,12 +651,6 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * property.
      */
     path?: string;
-
-    /**
-     * For SQL databases, you can specify the table name of the collection this
-     * reference points to.
-     */
-    relation?: Relation;
 
     /**
      * Allow selection of entities that pass the given filter only.
@@ -670,6 +674,19 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * Should the reference include a link to the entity (open the entity details). Defaults to `true`
      */
     includeEntityLink?: boolean;
+
+}
+
+/**
+ * @group Entity properties
+ */
+export interface RelationProperty<M extends Record<string, any> = any> extends ReferenceProperty<M> {
+
+    /**
+     * For SQL databases, you can specify the table name of the collection this
+     * reference points to.
+     */
+    relation: Relation;
 
 }
 

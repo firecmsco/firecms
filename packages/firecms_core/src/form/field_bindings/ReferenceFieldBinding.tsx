@@ -4,12 +4,11 @@ import { Entity, EntityCollection, EntityReference, FieldProps } from "@firecms/
 import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ErrorView } from "../../components";
+import { EntityPreviewContainer, ErrorView } from "../../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, IconForView } from "../../util";
 import { getReferenceFrom } from "@firecms/util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import { EntityPreviewContainer } from "../../components/EntityPreview";
 import { cls } from "@firecms/ui";
 
 /**

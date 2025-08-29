@@ -64,6 +64,7 @@ export type PropertyConfigId =
     "reference" |
     "reference_as_string" |
     "multi_references" |
+    "many_to_many" |
     "switch" |
     "date_time" |
     "repeat" |
