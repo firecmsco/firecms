@@ -4,7 +4,7 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCollection,
-    EntityReference,
+    EntityReference, EntityRelation,
     FetchCollectionProps,
     FetchEntityProps,
     ListenCollectionProps,
@@ -48,6 +48,9 @@ function delegateToCMSModel(data: any): any {
         if (value && value.__type === "reference" && value.id !== undefined && value.path !== undefined) {
             return new EntityReference(value.id, value.path);
         }
+        if (value && value.__type === "relation" && value.id !== undefined && value.path !== undefined) {
+            return new EntityRelation(value.id, value.path);
+        }
         return value;
     });
 }
@@ -56,6 +59,13 @@ function cmsToDelegateModel(data: any): any {
     return recursivelyMap(data, (value) => {
         if (value instanceof Date) {
             return value.toISOString();
+        }
+        if (value instanceof EntityRelation) {
+            return {
+                id: value.id,
+                path: value.path,
+                __type: "relation"
+            };
         }
         if (value instanceof EntityReference) {
             return {

@@ -87,7 +87,7 @@ function serializePropertyToServer(value: any, property: Property): any {
     const propertyType = property.type;
 
     switch (propertyType) {
-        case "reference":
+        case "relation":
             if (typeof value === "object" && value !== null && value.id !== undefined) {
                 return value.id;
             }
@@ -144,13 +144,13 @@ function parsePropertyFromServer(value: any, property: Property): any {
     }
 
     switch (property.type) {
-        case "reference":
+        case "relation":
             // Transform ID back to reference object with type information
             if (typeof value === "string" || typeof value === "number") {
                 return {
                     id: value.toString(),
                     path: property.path,
-                    __type: "reference"
+                    __type: "relation"
                 };
             }
             return value;
@@ -625,7 +625,7 @@ export class EntityService {
         let foreignKeyField: string | undefined;
         for (const [key, prop] of Object.entries(collection.properties)) {
             const property = prop as Property;
-            if (property.type === "reference" &&
+            if (property.type === "relation" &&
                 (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
                 foreignKeyField = key;
                 break;
@@ -732,7 +732,7 @@ export class EntityService {
         let foreignKeyField: string | undefined;
         for (const [key, prop] of Object.entries(targetCollection.properties)) {
             const property = prop as Property;
-            if (property.type === "reference" &&
+            if (property.type === "relation" &&
                 (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
                 foreignKeyField = key;
                 break;
@@ -828,7 +828,7 @@ export class EntityService {
     ): string | null {
         for (const [fieldName, property] of Object.entries(targetCollection.properties)) {
             const prop = property as Property;
-            if (prop.type === "reference") {
+            if (prop.type === "relation") {
                 // Check if this reference points to the parent collection
                 if (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath) {
                     return fieldName;
@@ -1108,7 +1108,7 @@ export class EntityService {
         // Find the field in the target collection that references the parent
         for (const [key, prop] of Object.entries(targetCollection.properties)) {
             const property = prop as Property;
-            if (property.type === "reference" && (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
+            if (property.type === "relation" && (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
                 foreignKeyField = key;
                 break;
             }

@@ -19,7 +19,7 @@ export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useLargeLayout";
 
-export * from "./useReferenceDialog";
+export * from "./useEntitySelectionTable";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useCustomizationController";
 export * from "./useBuildNavigationController";

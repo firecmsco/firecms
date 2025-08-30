@@ -40,6 +40,7 @@ import {
     UploadFileIcon,
     ViewStreamIcon
 } from "@firecms/ui";
+import { RelationFieldBinding } from "../form/field_bindings/RelationFieldBinding";
 
 export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
@@ -248,15 +249,15 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             Field: ArrayOfReferencesFieldBinding
         }
     },
-    many_to_many: {
-        key: "many_to_many",
-        name: "Many to Many",
+    relation: {
+        key: "relation",
+        name: "Relation",
         description: "Multiple values that refer to a different collection",
         Icon: AddLinkIcon,
         color: "#ff0042",
         property: {
-            type: "reference",
-            Field: ArrayOfReferencesFieldBinding
+            type: "relation",
+            Field: RelationFieldBinding
         }
     },
     date_time: {
@@ -402,6 +403,8 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "multi_file_upload";
         } else if (of?.type === "reference") {
             return "multi_references";
+        } else if (of?.type === "relation") {
+            throw new Error("The 'relation' type is not supported inside arrays. Use 'reference' instead.");
         } else {
             return "repeat";
         }
@@ -409,10 +412,9 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
         return "switch";
     } else if (property.type === "date") {
         return "date_time";
+    } else if (property.type === "relation") {
+        return "relation";
     } else if (property.type === "reference") {
-        if(property.relation?.type === "manyToMany"){
-            return "many_to_many";
-        }
         return "reference";
     }
 

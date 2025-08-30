@@ -16,7 +16,7 @@ import {
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import {  IconForView, resolveCollection } from "../../util";
+import { IconForView, resolveCollection } from "../../util";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
@@ -26,7 +26,7 @@ import { canCreateEntity } from "@firecms/util";
 /**
  * @group Components
  */
-export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
+export interface EntitySelectionProps<M extends Record<string, any>> {
 
     /**
      * Allow multiple selection of values
@@ -86,10 +86,10 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
 
 /**
  * This component allows to select entities from a given collection.
- * You probably want to open this dialog as a side view using {@link useReferenceDialog}
+ * You probably want to open this dialog as a side view using {@link useEntitySelectionTable}
  * @group Components
  */
-export function ReferenceSelectionTable<M extends Record<string, any>>(
+export function EntitySelectionTable<M extends Record<string, any>>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -100,7 +100,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         description,
         forceFilter,
         maxSelection,
-    }: ReferenceSelectionInnerProps<M>) {
+    }: EntitySelectionProps<M>) {
 
     const authController = useAuthController();
     const sideDialogContext = useSideDialogContext();
@@ -309,7 +309,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         forceFilter={forceFilter}
                         inlineEditing={false}
                         selectionController={selectionController}
-                        actions={<ReferenceDialogActions
+                        actions={<EntitySelectionDialogActions
                             collection={collection}
                             path={path}
                             onNewClick={onNewClick}
@@ -336,12 +336,12 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
 }
 
-function ReferenceDialogActions({
-                                    collection,
-                                    path,
-                                    onClear,
-                                    onNewClick
-                                }: {
+function EntitySelectionDialogActions({
+                                          collection,
+                                          path,
+                                          onClear,
+                                          onNewClick
+                                      }: {
     collection: EntityCollection<any>,
     path: string,
     onClear: () => void,

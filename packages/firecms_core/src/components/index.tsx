@@ -4,8 +4,8 @@ export { ErrorView } from "./ErrorView";
 export type { EntityViewProps } from "./EntityView";
 export { EntityView } from "./EntityView";
 
-export type { ReferenceSelectionInnerProps } from "./ReferenceTable/ReferenceSelectionTable";
-export { ReferenceSelectionTable } from "./ReferenceTable/ReferenceSelectionTable";
+export type { EntitySelectionProps } from "./ReferenceTable/EntitySelectionTable";
+export { EntitySelectionTable } from "./ReferenceTable/EntitySelectionTable";
 
 export { CircularProgressCenter } from "./CircularProgressCenter";
 

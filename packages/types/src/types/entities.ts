@@ -36,11 +36,12 @@ export interface Entity<M extends object = any> {
  */
 export type EntityValues<M extends object> = M;
 
-
 /**
  * Class used to create a reference to an entity in a different path
  */
 export class EntityReference {
+
+    readonly __type = "reference";
     /**
      * ID of the entity
      */
@@ -64,10 +65,13 @@ export class EntityReference {
         return true;
     }
 }
+
 /**
  * Class used to create a reference to an entity in a different path
  */
 export class EntityRelation {
+
+    readonly __type = "relation";
     /**
      * ID of the entity
      */
@@ -87,7 +91,7 @@ export class EntityRelation {
         return `${this.path}/${this.id}`;
     }
 
-    isEntityReference() {
+    isEntityRelation() {
         return true;
     }
 }

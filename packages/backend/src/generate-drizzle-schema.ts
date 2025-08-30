@@ -139,7 +139,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         case "map":
             columnDefinition = `jsonb("${colName}")`;
             break;
-        case "reference": {
+        case "relation": {
             const refProp = prop as ReferenceProperty;
             if (refProp.relation?.type === "manyToMany") {
                 return ""; // This is a virtual property for a many-to-many relation, handled by a junction table.
@@ -178,7 +178,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         }
         case "array": {
             const arrayProp = prop as any;
-            if (arrayProp.of?.type === "reference") {
+            if (arrayProp.of?.type === "relation") {
                 const refProp = arrayProp.of as ReferenceProperty;
                 if (refProp.relation?.type === "manyToMany") {
                     return ""; // This is a virtual property for the relation, no column needed.

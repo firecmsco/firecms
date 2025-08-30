@@ -14,7 +14,7 @@ export function resolveSubcollectionRelation(subcollection: any): Relation {
 
 /**
  * Resolve a reference property into a one-to-one (or many-to-one) relation.
- * In this model a property of type "reference" on the source points to the
+ * In this model a property of type "relation" on the source points to the
  * target collection's id field.
  */
 export function resolveReferencePropertyRelation({
@@ -26,7 +26,7 @@ export function resolveReferencePropertyRelation({
     property: Property;
     allCollections: EntityCollection[];
 }): Relation | undefined {
-    if (property.type !== "reference") return undefined;
+    if (property.type !== "relation") return undefined;
 
     // Explicit relation on the reference property (supports manyToMany, one, many overrides)
     if ((property).relation) {
@@ -68,31 +68,14 @@ export function resolveCollectionRelations(
 
     // 2) Properties (reference and array-of-reference)
     scanPropertiesRecursively(collection.properties, (keyPath, prop) => {
-        if (prop.type === "reference") {
+        if (prop.type === "relation") {
             const rel = resolveReferencePropertyRelation({
                 propertyKey: keyPath,
                 property: prop,
                 allCollections
             });
             if (rel) result[keyPath] = rel;
-        } else if (prop.type === "array") {
-            const ofProp = (prop).of;
-            if (ofProp && !Array.isArray(ofProp) && typeof ofProp === "object" && (ofProp).type === "reference") {
-                // Prefer explicit relation on the nested reference (covers manyToMany)
-                const nestedRef = ofProp;
-                const explicit = (nestedRef).relation as Relation | undefined;
-                if (explicit) {
-                    result[keyPath] = explicit;
-                } else {
-                    const rel = resolveReferencePropertyRelation({
-                        propertyKey: `${keyPath}[]`,
-                        property: nestedRef,
-                        allCollections
-                    });
-                    if (rel) result[keyPath] = rel;
-                }
-            }
-        }
+        } 
     });
 
     return result;

@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldProps } from "./fields";
-import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
+import { EntityReference, EntityRelation, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { PropertyPreviewProps } from "../components";
@@ -18,9 +18,10 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityReference ? "reference" :
-                                T extends Array<any> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+                            T extends EntityRelation | Array<EntityRelation> ? "relation" :
+                                T extends EntityReference ? "reference" :
+                                    T extends Array<any> ? "array" :
+                                        T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -31,6 +32,7 @@ export type CMSType =
     | boolean
     | Date
     | GeoPoint
+    | EntityRelation
     | EntityReference
     | Record<string, any>
     | CMSType[];
@@ -58,9 +60,10 @@ export type Property<T extends CMSType = any, M extends Record<string, any> = an
             T extends boolean ? BooleanProperty<M> :
                 T extends Date ? DateProperty<M> :
                     T extends GeoPoint ? GeopointProperty<M> :
-                        T extends EntityReference ? (ReferenceProperty<M> | RelationProperty<M>) :
-                            T extends Array<CMSType> ? ArrayProperty<T, any, M> :
-                                T extends Record<string, any> ? MapProperty<T, M> : AnyProperty<M>;
+                        T extends EntityRelation ? RelationProperty<M> :
+                            T extends EntityReference ? ReferenceProperty<M> :
+                                T extends Array<CMSType> ? ArrayProperty<T, any, M> :
+                                    T extends Record<string, any> ? MapProperty<T, M> : AnyProperty<M>;
 
 /**
  * Interface including all common properties of a CMS property
@@ -310,7 +313,9 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
  * @group Entity properties
  * @deprecated Use `Properties` with `dynamicProps` instead. This will be removed in a future version.
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> = Property<T, M> | PropertyBuilder<T, M>;
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
+    Property<T, M>
+    | PropertyBuilder<T, M>;
 
 /**
  * @group Entity properties
@@ -680,7 +685,9 @@ export interface ReferenceProperty<M extends Record<string, any> = any> extends 
 /**
  * @group Entity properties
  */
-export interface RelationProperty<M extends Record<string, any> = any> extends ReferenceProperty<M> {
+export interface RelationProperty<M extends Record<string, any> = any> extends BaseProperty<EntityReference, M> {
+
+    type: "relation";
 
     /**
      * For SQL databases, you can specify the table name of the collection this

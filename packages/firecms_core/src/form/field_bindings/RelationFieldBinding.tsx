@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "@firecms/types";
+import { Entity, EntityCollection, EntityRelation, FieldProps, ResolvedProperty } from "@firecms/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
-import {  getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/util";
 
-import { useNavigationController, useReferenceDialog } from "../../hooks";
+import { useEntitySelectionTable, useNavigationController } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-type ManyToManyFieldBindingProps = FieldProps<EntityReference[]>;
+type RelationFieldBindingProps = FieldProps<EntityRelation | EntityRelation[]>;
 
 /**
  * This field allows selecting multiple references.
@@ -19,40 +19,29 @@ type ManyToManyFieldBindingProps = FieldProps<EntityReference[]>;
  * and tables to the specified properties.
  * @group Form fields
  */
-export function ManyToManyFieldBinding({
-                                                  propertyKey,
-                                                  value,
-                                                  error,
-                                                  showError,
-                                                  disabled,
-                                                  isSubmitting,
-                                                  minimalistView: minimalistViewProp,
-                                                  property,
-                                                  includeDescription,
-                                                  setValue,
-                                                  setFieldValue
-                                              }: ManyToManyFieldBindingProps) {
+export function RelationFieldBinding({
+                                         propertyKey,
+                                         value,
+                                         error,
+                                         showError,
+                                         disabled,
+                                         isSubmitting,
+                                         property,
+                                         includeDescription,
+                                         setValue,
+                                         setFieldValue
+                                     }: RelationFieldBindingProps) {
 
-    const minimalistView = minimalistViewProp || property.minimalistView;
-
-    const ofProperty = property.of as ResolvedProperty;
-    if (ofProperty.type !== "reference") {
-        throw Error("ArrayOfReferencesField expected a property containing references");
+    if (property.type !== "relation") {
+        throw Error("RelationFieldBinding expected a property containing a relation");
     }
 
-    const expanded = property.expanded === undefined ? true : property.expanded;
     const selectedEntityIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
-
-    useClearRestoreValue({
-        property,
-        value,
-        setValue
-    });
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
-    }, [ofProperty.path]);
+        return property.path ? navigationController.getCollection(property.path) : undefined;
+    }, [property.path]);
 
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
@@ -62,7 +51,7 @@ export function ManyToManyFieldBinding({
         setValue(entities.map(e => getReferenceFrom(e)));
     }, [setValue]);
 
-    const referenceDialogController = useReferenceDialog({
+    const referenceDialogController = useEntitySelectionTable({
             multiselect: true,
             path: ofProperty.path,
             collection,
