@@ -38,6 +38,9 @@
       "@firecms/types": [
         "../types/src"
       ],
+      "@firecms/common": [
+        "../common/src"
+      ],
       "@firecms/collection_editor": [
         "../collection_editor/src"
       ],

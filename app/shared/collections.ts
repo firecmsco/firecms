@@ -104,7 +104,7 @@ export const implementosCollection: EntityCollection = {
             }
         },
         maquinaria: {
-            type: "reference",
+            type: "relation",
             name: "Maquinaria",
             path: "maquinaria",
             relation: {
@@ -177,14 +177,14 @@ export const alquileresSubcollection: EntityCollection = {
         },
         maquina_referencia: {
             name: "Máquina",
-            type: "reference",
+            type: "relation",
             path: "maquinaria",
             validation: { required: true },
             previewProperties: ["nombre", "estado_actual"]
         },
         cliente_referencia: {
             name: "Cliente",
-            type: "reference",
+            type: "relation",
             path: "clientes",
             validation: { required: true },
             previewProperties: ["nombre", "apellido"]
@@ -402,7 +402,7 @@ export const horasSubcollection: EntityCollection<any> = {
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            type: "reference",
+            type: "relation",
             path: "alquileres",
             description: "Si está relacionado con un alquiler específico"
         }
@@ -467,12 +467,12 @@ export const incidenciasSubcollection: EntityCollection = {
         },
         cliente_relacionado: {
             name: "Cliente Relacionado",
-            type: "reference",
+            type: "relation",
             path: "clientes"
         },
         alquiler_relacionado: {
             name: "ID Alquiler Relacionado",
-            type: "reference",
+            type: "relation",
             path: "alquileres"
         },
         solucion: {
@@ -521,6 +521,20 @@ export const maquinariaCollection: EntityCollection = {
             description: "Ej: Nº 1 - MANITOU MLT 737",
             type: "string",
             validation: { required: true }
+        },
+        implementos: {
+            type: "relation",
+            name: "Implementos",
+            path: "implementos",
+            relation: {
+                type: "manyToMany",
+                target: () => implementosCollection,
+                through: {
+                    dbPath: "maquinaria_implementos",
+                    sourceJunctionKey: "maquinaria_id",
+                    targetJunctionKey: "implemento_id"
+                }
+            }
         },
         imagen: {
             name: "Imagen de la Máquina",
@@ -586,20 +600,6 @@ export const maquinariaCollection: EntityCollection = {
             name: "Precio de Compra",
             type: "number"
         },
-        implementos: {
-            type: "reference",
-            name: "Implementos",
-            path: "implementos",
-            relation: {
-                type: "manyToMany",
-                target: () => implementosCollection,
-                through: {
-                    dbPath: "maquinaria_implementos",
-                    sourceJunctionKey: "maquinaria_id",
-                    targetJunctionKey: "implemento_id"
-                }
-            }
-        }
     },
     subcollections: () => [
         alquileresSubcollection,

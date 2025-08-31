@@ -48,8 +48,11 @@ export class ApiError extends Error {
 export class PostgresDataSourceClient {
     private websocketUrl: string;
     private ws: WebSocket | null = null;
-    private subscriptions = new Map<string, (data: any) => void>();
-    private pendingRequests = new Map<string, { resolve: (p:any) => void; reject: (p:any) => void }>();
+    private subscriptions = new Map<string, {
+        onUpdate: (data: any) => void,
+        onError?: (error: Error) => void
+    }>();
+    private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private isConnected = false;
@@ -122,17 +125,24 @@ export class PostgresDataSourceClient {
     }
 
     private handleWebSocketMessage(message: WebSocketMessage) {
-        const { type, requestId, subscriptionId } = message;
+        const {
+            type,
+            requestId,
+            subscriptionId
+        } = message;
 
         // Handle responses to pending requests
         if (requestId && this.pendingRequests.has(requestId)) {
-            const { resolve, reject } = this.pendingRequests.get(requestId)!;
+            const {
+                resolve,
+                reject
+            } = this.pendingRequests.get(requestId)!;
             this.pendingRequests.delete(requestId);
 
-            if (type.endsWith("_SUCCESS")) {
+            if (type === "ERROR" || message.error) {
+                reject(new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
+            } else {
                 resolve(message.payload || message);
-            } else if (type === "ERROR") {
-                reject(new ApiError(message.payload?.message || message.payload?.error || "Unknown error", message.payload?.error, message.payload?.code));
             }
             return;
         }
@@ -143,7 +153,13 @@ export class PostgresDataSourceClient {
             if (!callback) {
                 throw new Error(`Subscription callback not found for subscriptionId: ${subscriptionId}`);
             }
-            callback(message);
+            if (message.type === "ERROR" || message.error) {
+                if (callback.onError) {
+                    callback.onError(new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
+                }
+            } else {
+                callback.onUpdate(message);
+            }
         }
     }
 
@@ -161,7 +177,10 @@ export class PostgresDataSourceClient {
             const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             message.requestId = requestId;
 
-            this.pendingRequests.set(requestId, { resolve, reject });
+            this.pendingRequests.set(requestId, {
+                resolve,
+                reject
+            });
 
             try {
                 this.ws!.send(JSON.stringify(message));
@@ -207,7 +226,13 @@ export class PostgresDataSourceClient {
     async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
         const response = await this.sendMessage({
             type: "CHECK_UNIQUE_FIELD",
-            payload: { path, name, value, entityId, collection }
+            payload: {
+                path,
+                name,
+                value,
+                entityId,
+                collection
+            }
         });
         return response.isUnique;
     }
@@ -215,7 +240,10 @@ export class PostgresDataSourceClient {
     generateEntityId(path: string, collection?: EntityCollection): Promise<string> {
         return this.sendMessage({
             type: "GENERATE_ENTITY_ID",
-            payload: { path, collection }
+            payload: {
+                path,
+                collection
+            }
         }).then(response => response.id);
     }
 
@@ -235,15 +263,21 @@ export class PostgresDataSourceClient {
     ): () => void {
         const subscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        this.subscriptions.set(subscriptionId, (message: CollectionUpdateMessage) => {
-            if (message.type === "collection_update") {
-                onUpdate(message.entities);
-            }
+        this.subscriptions.set(subscriptionId, {
+            onUpdate: (message: CollectionUpdateMessage) => {
+                if (message.type === "collection_update") {
+                    onUpdate(message.entities);
+                }
+            },
+            onError
         });
 
         this.sendMessage({
             type: "subscribe_collection",
-            payload: { ...props, subscriptionId }
+            payload: {
+                ...props,
+                subscriptionId
+            }
         }).catch(error => {
             if (onError) onError(error);
         });
@@ -266,15 +300,21 @@ export class PostgresDataSourceClient {
     ): () => void {
         const subscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        this.subscriptions.set(subscriptionId, (message: EntityUpdateMessage) => {
-            if (message.type === "entity_update") {
-                onUpdate(message.entity);
-            }
+        this.subscriptions.set(subscriptionId, {
+            onUpdate: (message: EntityUpdateMessage) => {
+                if (message.type === "entity_update") {
+                    onUpdate(message.entity);
+                }
+            },
+            onError
         });
 
         this.sendMessage({
             type: "subscribe_entity",
-            payload: { ...props, subscriptionId }
+            payload: {
+                ...props,
+                subscriptionId
+            }
         }).catch(error => {
             if (onError) onError(error);
         });

@@ -1,6 +1,7 @@
 import {
     CMSType,
     EntityReference,
+    EntityRelation,
     GeoPoint,
     ResolvedArrayProperty,
     ResolvedMapProperty,
@@ -84,6 +85,8 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
         return getYupGeoPointSchema(propertyContext as PropertyContext<GeoPoint>);
     } else if (property.type === "reference") {
         return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
+    } else if (property.type === "relation") {
+        return getYupRelationSchema(propertyContext as PropertyContext<EntityReference>);
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
@@ -278,6 +281,35 @@ function getYupReferenceSchema({
                                    name,
                                    entityId
                                }: PropertyContext<EntityReference>): AnySchema {
+    let collection: ObjectSchema<any> = yup.object();
+    const validation = property.validation;
+    if (validation) {
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
+        if (validation.unique && customFieldValidator && name)
+            collection = collection.test("unique",
+                "This value already exists and should be unique",
+                (value) => customFieldValidator({
+                    name,
+                    property,
+                    parentProperty,
+                    value,
+                    entityId
+                }));
+    } else {
+        collection = collection.notRequired().nullable(true);
+    }
+    return collection;
+}
+
+function getYupRelationSchema({
+                                  property,
+                                  parentProperty,
+                                  customFieldValidator,
+                                  name,
+                                  entityId
+                              }: PropertyContext<EntityRelation | EntityRelation[]>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {

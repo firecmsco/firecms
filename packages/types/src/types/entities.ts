@@ -64,6 +64,10 @@ export class EntityReference {
     isEntityReference() {
         return true;
     }
+
+    isEntityRelation() {
+        return false;
+    }
 }
 
 /**
@@ -89,6 +93,10 @@ export class EntityRelation {
 
     get pathWithId() {
         return `${this.path}/${this.id}`;
+    }
+
+    isEntityReference() {
+        return false;
     }
 
     isEntityRelation() {

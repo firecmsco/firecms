@@ -46,7 +46,7 @@ export function AdminDrawerMenu({
         {ADMIN_VIEWS_CONFIG.map((view, index) => <MenuItem
             onClick={(event) => {
                 event.preventDefault();
-                navigate(view.slug);
+                navigate(view.path);
             }}
             key={`navigation_${index}`}>
             {<IconForView collectionOrView={view}/>}

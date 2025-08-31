@@ -4,7 +4,6 @@ import {
     FieldProps,
     getIconForProperty,
     LabelWithIconAndTooltip,
-    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     useAuthController,
@@ -65,7 +64,7 @@ export function MarkdownEditorFieldBinding({
     }, [value]);
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property as PropertyOrBuilder,
+        propertyOrBuilder: property,
         values: entityValues,
         authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;

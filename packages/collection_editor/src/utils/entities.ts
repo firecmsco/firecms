@@ -1,9 +1,7 @@
-import { isPropertyBuilder, Properties, PropertiesOrBuilders, Property, PropertyOrBuilder } from "@firecms/core";
+import { isPropertyBuilder, Properties, Property } from "@firecms/core";
 
-export function editableProperty(property: PropertyOrBuilder | PropertyOrBuilder): boolean {
+export function editableProperty(property: Property): boolean {
     if (isPropertyBuilder(property))
-        return false;
-    if (isPropertyBuilder(property as PropertyOrBuilder))
         return false;
     else {
         const eProperty = property as Property;
@@ -15,18 +13,18 @@ export function editableProperty(property: PropertyOrBuilder | PropertyOrBuilder
     }
 }
 
-export function removeNonEditableProperties(properties: PropertiesOrBuilders<any>): Properties {
+export function removeNonEditableProperties(properties: Properties<any>): Properties {
     return Object.entries(properties)
         .filter(([_, property]) => editableProperty(property))
         .map(([key, propertyOrBuilder]) => {
-            const property = propertyOrBuilder as Property;
+            const property = propertyOrBuilder;
             if (!editableProperty(property)) {
                 return undefined;
             } else if (property.type === "map" && property.properties) {
                 return {
                     [key]: {
                         ...property,
-                        properties: removeNonEditableProperties(property.properties as PropertiesOrBuilders)
+                        properties: removeNonEditableProperties(property.properties)
                     }
                 };
             } else {

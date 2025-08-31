@@ -202,7 +202,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
             dbPath: initialValuesProp?.slug ?? "",
             name: initialValuesProp?.name ?? "",
             group: initialValuesProp?.group ?? "",
-            properties: {} as PropertiesOrBuilders,
+            properties: {} as Properties,
             propertiesOrder: [],
             icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
             ownerId: authController.user?.uid ?? ""
@@ -353,7 +353,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             };
 
             if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
-                values.properties = inferredCollection.properties as PropertiesOrBuilders<M>;
+                values.properties = inferredCollection.properties as Properties<M>;
                 values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
             }
 
@@ -803,10 +803,10 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
         properties,
         ...rest
     } = collection;
-    const propertiesResult: PropertiesOrBuilders<any> = {};
+    const propertiesResult: Properties<any> = {};
     if (properties) {
         Object.keys(properties).forEach((key) => {
-            propertiesResult[key] = applyPropertiesConfig(properties[key] as PropertyOrBuilder, propertyConfigs);
+            propertiesResult[key] = applyPropertiesConfig(properties[key], propertyConfigs);
         });
     }
 
@@ -816,7 +816,7 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
     };
 }
 
-function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Record<string, PropertyConfig<any>>) {
+function applyPropertiesConfig(property: Property, propertyConfigs: Record<string, PropertyConfig<any>>) {
     let internalProperty = property;
     if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
@@ -829,7 +829,7 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
             }
 
             if (!isPropertyBuilder(internalProperty) && internalProperty.type === "map" && internalProperty.properties) {
-                const properties: Record<string, PropertyOrBuilder> = {};
+                const properties: Record<string, Property> = {};
                 Object.keys(internalProperty.properties).forEach((key) => {
                     properties[key] = applyPropertiesConfig(((internalProperty as MapProperty).properties as Properties)[key] as Property, propertyConfigs);
                 });

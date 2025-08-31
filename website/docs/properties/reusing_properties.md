@@ -36,7 +36,7 @@ export type PropertyConfig<T extends CMSType = any> = {
      * You can use a builder function to generate the property based on the values or the path.
      * You can also define a custom Field as a React component to be used for this property.
      */
-    property: PropertyOrBuilder<T>;
+    property: Property<T>;
 
     /**
      * Optional icon to be used in the field selector.

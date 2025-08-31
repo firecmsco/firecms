@@ -1,18 +1,16 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
 import {
     CMSType,
-    COLLECTION_PATH_SEPARATOR,
     makePropertiesEditable,
     Properties,
-    PropertiesOrBuilders,
     Property,
     PropertyConfig,
     removeFunctions,
     removePropsIfExisting,
     sortProperties,
-    stripCollectionPath
 } from "@firecms/core";
 import { PersistedCollection } from "@firecms/collection_editor";
+import { COLLECTION_PATH_SEPARATOR, stripCollectionPath } from "@firecms/common";
 
 export function buildCollectionId(idOrPath: string, parentCollectionIds?: string[]): string {
     if (!parentCollectionIds)
@@ -115,7 +113,7 @@ export function prepareCollectionForPersistence<M extends {
     return newCollection;
 }
 
-function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyConfigs: Record<string, PropertyConfig>) {
+function cleanPropertyConfigs(properties: Properties<any>, propertyConfigs: Record<string, PropertyConfig>) {
     const res: Record<string, Property> = {};
     Object.entries(properties).forEach(([key, property]) => {
         if (typeof property === "object") {

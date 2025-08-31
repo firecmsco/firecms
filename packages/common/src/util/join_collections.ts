@@ -1,12 +1,4 @@
-import {
-    EntityCollection,
-    MapProperty,
-    ModifyCollectionProps,
-    Properties,
-    PropertiesOrBuilders,
-    Property,
-    PropertyOrBuilder
-} from "@firecms/types";
+import { EntityCollection, MapProperty, ModifyCollectionProps, Properties, Property, } from "@firecms/types";
 import { mergeDeep } from "./objects";
 import { sortProperties } from "./collections";
 import { isPropertyBuilder } from "./entities";
@@ -88,13 +80,13 @@ export function mergeCollection(target: EntityCollection,
         modifyCollection
     );
 
-    const propertiesMerged: PropertiesOrBuilders = { ...target.properties } as PropertiesOrBuilders;
+    const propertiesMerged: Properties = { ...target.properties } as Properties;
     Object.keys(source.properties).forEach((key) => {
         const property = target.properties[key] as Property;
         if (property)
-            propertiesMerged[key] = mergePropertyOrBuilder(property, source.properties[key] as PropertyOrBuilder);
+            propertiesMerged[key] = mergeProperty(property, source.properties[key]);
         else
-            propertiesMerged[key] = source.properties[key] as PropertyOrBuilder;
+            propertiesMerged[key] = source.properties[key];
     });
 
     const mergedCollection = mergeDeep(target, source, true);
@@ -127,7 +119,7 @@ export function mergeCollection(target: EntityCollection,
     return resultCollection
 }
 
-function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBuilder): PropertyOrBuilder {
+function mergeProperty(target: Property, source: Property): Property {
     if (isPropertyBuilder(source)) {
         return source;
     } else if (isPropertyBuilder(target)) {
@@ -137,16 +129,16 @@ function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBui
         const targetEditable = Boolean(target.editable);
         const sourceEditable = Boolean(source.editable);
         if (source.type === "map" && source.properties) {
-            const targetProperties = ("properties" in target ? target.properties : {}) as PropertiesOrBuilders;
-            const sourceProperties = ("properties" in source ? source.properties : {}) as PropertiesOrBuilders;
+            const targetProperties = ("properties" in target ? target.properties : {}) as Properties;
+            const sourceProperties = ("properties" in source ? source.properties : {}) as Properties;
             const targetPropertiesOrder = "propertiesOrder" in target && target.propertiesOrder ? target.propertiesOrder : Object.keys(targetProperties);
             const sourcePropertiesOrder = "propertiesOrder" in source && source.propertiesOrder ? source.propertiesOrder : ("properties" in source ? Object.keys(source.properties) : []);
             const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
-            const mergedProperties: PropertiesOrBuilders = { ...targetProperties } as PropertiesOrBuilders;
+            const mergedProperties: Properties = { ...targetProperties } as Properties;
             Object.keys(source.properties).forEach((key) => {
                 const property = targetProperties[key] as Property;
                 if (property)
-                    mergedProperties[key] = mergePropertyOrBuilder(property, sourceProperties[key] as PropertyOrBuilder);
+                    mergedProperties[key] = mergeProperty(property, sourceProperties[key]);
             });
             return {
                 ...mergedProperty,

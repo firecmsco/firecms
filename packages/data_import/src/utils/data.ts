@@ -76,7 +76,7 @@ export function flattenEntry(obj: any, parent = ""): any {
     }, {});
 }
 
-export function processValueMapping(authController: AuthController, value: any, property?: PropertyOrBuilder): any {
+export function processValueMapping(authController: AuthController, value: any, property?: Property): any {
     if (value === null) return null;
 
     if (property === undefined) return value;
@@ -88,11 +88,11 @@ export function processValueMapping(authController: AuthController, value: any, 
     const from = inferTypeFromValue(value);
     const to = usedProperty.type;
 
-    if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
+    if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of)) {
         return value.map(v => processValueMapping(authController, v, usedProperty.of as Property));
     } else if (from === "string" && to === "number" && typeof value === "string") {
         return Number(value);
-    } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
+    } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of)) {
         return value.split(",").map((v: string) => processValueMapping(authController, v, usedProperty.of));
     } else if (from === "string" && to === "boolean") {
         return value === "true";

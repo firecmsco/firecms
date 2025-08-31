@@ -10,7 +10,6 @@ import {
     PluginFieldBuilderParams,
     Property,
     PropertyFieldBindingProps,
-    PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty
 } from "@firecms/types";
@@ -281,7 +280,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 
 }
 
-const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, plugins?: FireCMSPlugin[]): boolean => {
+const shouldPropertyReRender = (property: Property | ResolvedProperty, plugins?: FireCMSPlugin[]): boolean => {
     if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
         return true;
     }

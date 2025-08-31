@@ -10,11 +10,9 @@ import {
     EnumValues,
     GeopointProperty,
     MapProperty,
-    NumberProperty,
-    PropertiesOrBuilders,
-    PropertyBuilder,
+    NumberProperty, Properties,
+    Property,
     PropertyConfig,
-    PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
     User
@@ -41,7 +39,7 @@ export function buildCollection<
  * @param property
  * @group Builder
  */
-export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = any>(
+export function buildProperty<T extends CMSType = CMSType, P extends Property<T> = Property<T>>(
     property: P
 ):
     P extends StringProperty ? StringProperty :
@@ -51,8 +49,7 @@ export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrB
                     P extends GeopointProperty ? GeopointProperty :
                         P extends ReferenceProperty ? ReferenceProperty :
                             P extends ArrayProperty ? ArrayProperty :
-                                P extends MapProperty ? MapProperty :
-                                    P extends PropertyBuilder<T, M> ? PropertyBuilder<T, M> : never {
+                                P extends MapProperty ? MapProperty : never {
     return property as any;
 }
 
@@ -63,8 +60,8 @@ export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrB
  * @group Builder
  */
 export function buildProperties<M extends Record<string, any>>(
-    properties: PropertiesOrBuilders<M>
-): PropertiesOrBuilders<M> {
+    properties: Properties<M>
+): Properties<M> {
     return properties;
 }
 
@@ -75,8 +72,8 @@ export function buildProperties<M extends Record<string, any>>(
  * @group Builder
  */
 export function buildPropertiesOrBuilder<M extends Record<string, any>>(
-    propertiesOrBuilder: PropertiesOrBuilders<M>
-): PropertiesOrBuilders<M> {
+    propertiesOrBuilder: Properties<M>
+): Properties<M> {
     return propertiesOrBuilder;
 }
 

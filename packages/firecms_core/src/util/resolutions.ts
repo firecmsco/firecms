@@ -11,7 +11,6 @@ import {
     EnumValues,
     NumberProperty,
     Properties,
-    PropertiesOrBuilders,
     Property,
     PropertyConfig,
     PropertyOrBuilder,
@@ -69,7 +68,7 @@ export const resolveCollection = <M extends Record<string, any>, >
         .map(([key, propertyOrBuilder]) => {
             const childResolvedProperty = resolveProperty({
                 propertyKey: key,
-                propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
+                propertyOrBuilder: propertyOrBuilder,
                 values: usedValues,
                 previousValues: usedPreviousValues,
                 path,
@@ -113,7 +112,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         ...props
     }: {
         propertyKey?: string,
-        propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
+        propertyOrBuilder: Property<T> | ResolvedProperty<T>,
         values?: Partial<M>,
         previousValues?: Partial<M>,
         path?: string,
@@ -142,13 +141,16 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             throw Error("Trying to resolve a property builder without specifying the entity path");
 
         const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
-        property = propertyOrBuilder({
-            ...props,
-            path,
-            propertyValue: usedPropertyValue,
-            values: props.values ?? {},
-            previousValues: props.previousValues ?? props.values ?? {}
-        });
+        property = {
+            ...propertyOrBuilder,
+            ...propertyOrBuilder.dynamicProps?.({
+                ...props,
+                path,
+                propertyValue: usedPropertyValue,
+                values: props.values ?? {},
+                previousValues: props.previousValues ?? props.values ?? {}
+            })
+        };
         isFromBuilder = true;
     } else {
         property = propertyOrBuilder as Property<T>;
@@ -393,7 +395,7 @@ export function resolveProperties<M extends Record<string, any>>({
                                                                      ...props
                                                                  }: {
     propertyKey?: string,
-    properties: PropertiesOrBuilders<M> | Properties<M> | ResolvedProperties<M>,
+    properties: Properties<M> | ResolvedProperties<M>,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -404,7 +406,7 @@ export function resolveProperties<M extends Record<string, any>>({
     ignoreMissingFields?: boolean;
     authController: AuthController;
 }): ResolvedProperties<M> {
-    return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
+    return Object.entries<Property>(properties as Record<string, Property>)
         .map(([key, property]) => {
             const childResolvedProperty = resolveProperty({
                 propertyKey: propertyKey ? `${propertyKey}.${key}` : undefined,

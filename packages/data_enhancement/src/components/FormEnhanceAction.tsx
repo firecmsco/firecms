@@ -18,9 +18,8 @@ import {
     EntityStatus,
     isPropertyBuilder,
     PluginFormActionProps,
-    PropertiesOrBuilders,
+    Properties,
     Property,
-    PropertyOrBuilder,
     stripCollectionPath,
     useLargeLayout,
 } from "@firecms/core";
@@ -234,9 +233,9 @@ export interface EnhanceDialogProps {
     samplePrompts?: string[];
 }
 
-function getPromptsForExistingEntities(properties: PropertiesOrBuilders): SamplePrompt[] {
+function getPromptsForExistingEntities(properties: Properties): SamplePrompt[] {
 
-    const multilineProperties = Object.values(properties).filter((p: PropertyOrBuilder) => {
+    const multilineProperties = Object.values(properties).filter((p: Property) => {
         if (isPropertyBuilder(p)) {
             return false;
         }

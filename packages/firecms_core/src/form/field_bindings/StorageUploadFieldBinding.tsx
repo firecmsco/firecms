@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 import {
     FieldProps,
     PreviewSize,
-    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
@@ -98,7 +97,7 @@ export function StorageUploadFieldBinding({
     });
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property as PropertyOrBuilder,
+        propertyOrBuilder: property,
         authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 

@@ -2,9 +2,8 @@ import {
     DefaultSelectedViewBuilder,
     DefaultSelectedViewParams,
     EntityCollection,
-    PermissionsBuilder, Properties,
-    PropertiesOrBuilders,
-    PropertyOrBuilder
+    PermissionsBuilder,
+    Properties,
 } from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
@@ -15,7 +14,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
         return allPropertiesOrder
             .map((key) => {
                 if (properties[key as keyof M]) {
-                    const property = properties[key] as PropertyOrBuilder;
+                    const property = properties[key];
                     if (!isPropertyBuilder(property) && property?.type === "map" && property.properties) {
                         return ({
                             [key]: {

@@ -1,4 +1,4 @@
-import { Properties, PropertiesOrBuilders } from "@firecms/types";
+import { Properties } from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
 export function makePropertiesEditable(properties: Properties) {
@@ -14,12 +14,12 @@ export function makePropertiesEditable(properties: Properties) {
     return properties;
 }
 
-export function makePropertiesNonEditable(properties: PropertiesOrBuilders): PropertiesOrBuilders {
+export function makePropertiesNonEditable(properties: Properties): Properties {
     return Object.entries(properties).reduce((acc, [key, property]) => {
         if (!isPropertyBuilder(property) && property.type === "map" && property.properties) {
             const updated = {
                 ...property,
-                properties: makePropertiesNonEditable(property.properties as PropertiesOrBuilders)
+                properties: makePropertiesNonEditable(property.properties as Properties)
             };
             acc[key] = updated;
         }
@@ -32,6 +32,6 @@ export function makePropertiesNonEditable(properties: PropertiesOrBuilders): Pro
             };
         }
         return acc;
-    }, {} as PropertiesOrBuilders);
+    }, {} as Properties);
 
 }

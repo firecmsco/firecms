@@ -7,7 +7,6 @@ import {
     ImageCompression,
     PreviewSize,
     Property,
-    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
@@ -91,7 +90,7 @@ export function useStorageUploadController<M extends object>({
     }, [internalInitialValue, value, initialValue]);
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property as PropertyOrBuilder,
+        propertyOrBuilder: property,
         values: entityValues,
         authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;

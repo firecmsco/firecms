@@ -60,7 +60,7 @@ function sanitizeAndConvertDates(obj: any): any {
     return obj;
 }
 
-// Transform references for database storage (reference objects to IDs)
+// Transform relations for database storage (relation objects to IDs)
 function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties<M>): any {
     if (!entity || !properties) return entity;
 
@@ -88,7 +88,9 @@ function serializePropertyToServer(value: any, property: Property): any {
 
     switch (propertyType) {
         case "relation":
-            if (typeof value === "object" && value !== null && value.id !== undefined) {
+            if (Array.isArray(value)) {
+                return value.map(v => serializePropertyToServer(v, property));
+            } else if (typeof value === "object" && value !== null && value.id !== undefined) {
                 return value.id;
             }
             return value;
@@ -119,7 +121,7 @@ function serializePropertyToServer(value: any, property: Property): any {
     }
 }
 
-// Transform IDs back to reference objects for frontend
+// Transform IDs back to relation objects for frontend
 function parseDataFromServer<M extends Record<string, any>>(data: M, properties: Properties<M>): M {
     if (!data || !properties) return data;
 
@@ -145,7 +147,7 @@ function parsePropertyFromServer(value: any, property: Property): any {
 
     switch (property.type) {
         case "relation":
-            // Transform ID back to reference object with type information
+            // Transform ID back to relation object with type information
             if (typeof value === "string" || typeof value === "number") {
                 return {
                     id: value.toString(),
@@ -294,10 +296,61 @@ export class EntityService {
         const raw = result[0] as M;
         const { collection } = this.resolveCollectionAndIdsForPath(path);
 
-        // Transform IDs back to reference objects and apply type conversion
+        // Transform IDs back to relation objects and apply type conversion
         let values = raw;
         if (collection) {
             values = parseDataFromServer(raw, collection.properties as Properties<M>);
+        }
+
+        if (collection) {
+            const allCollections = collectionRegistry.getAllCollectionsRecursively();
+            const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+
+            const m2mPromises = Object.entries(resolvedRelations).map(async ([key, relation]) => {
+                if (relation && relation.type === "manyToMany") {
+                    const manyToManyRelation = relation as ManyToManyRelation;
+                    const targetCollection = manyToManyRelation.target();
+                    const junctionDbPath = resolveJunctionTableName(manyToManyRelation.through, collection, targetCollection);
+                    const junctionTable = collectionRegistry.getTable(junctionDbPath);
+
+                    if (!junctionTable) {
+                        console.error(`Junction table not found for dbPath: ${junctionDbPath}`);
+                        return;
+                    }
+
+                    const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(collection))}_id`;
+                    const sourceJunctionKeyName = Array.isArray(manyToManyRelation.through?.sourceJunctionKey)
+                        ? (manyToManyRelation.through.sourceJunctionKey as string[])[0]
+                        : (manyToManyRelation.through?.sourceJunctionKey ?? defaultSourceKey);
+                    const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+
+                    const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
+                    const targetJunctionKeyName = Array.isArray(manyToManyRelation.through?.targetJunctionKey)
+                        ? (manyToManyRelation.through.targetJunctionKey as string[])[0]
+                        : (manyToManyRelation.through?.targetJunctionKey ?? defaultTargetKey);
+                    const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+
+
+                    if (!sourceJunctionKey || !targetJunctionKey) {
+                        console.error(`Junction keys not found in table ${junctionDbPath}`);
+                        return;
+                    }
+
+                    const relatedLinks = await this.db
+                        .select()
+                        .from(junctionTable)
+                        .where(eq(sourceJunctionKey, parsedId));
+
+                    const relationObjects = relatedLinks.map(link => ({
+                        id: link[targetJunctionKeyName].toString(),
+                        path: targetCollection.slug ?? targetCollection.dbPath,
+                        __type: "relation"
+                    }));
+
+                    values[key as keyof M] = relationObjects as any;
+                }
+            });
+            await Promise.all(m2mPromises);
         }
 
         return {
@@ -442,7 +495,7 @@ export class EntityService {
         const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         return results.map((entity: any) => {
-            // Transform IDs back to reference objects
+            // Transform IDs back to relation objects
             let values = entity;
             if (collection) {
                 values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
@@ -471,10 +524,28 @@ export class EntityService {
         }
         const { collection } = this.resolveCollectionAndIdsForPath(path);
 
-        // Transform references to IDs, map field names, then sanitize
-        let processedData = values;
+        // Separate many-to-many relations
+        const manyToManyValues: Record<string, any> = {};
+        const otherValues: Partial<M> = { ...values };
+
         if (collection) {
-            processedData = serializeDataToServer(values as M, collection.properties as Properties<M>);
+            const allCollections = collectionRegistry.getAllCollectionsRecursively();
+            const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+            for (const key in resolvedRelations) {
+                const relation = resolvedRelations[key];
+                if (relation && relation.type === "manyToMany") {
+                    if (otherValues.hasOwnProperty(key)) {
+                        manyToManyValues[key] = otherValues[key as keyof M];
+                        delete otherValues[key as keyof M];
+                    }
+                }
+            }
+        }
+
+        // Transform relations to IDs, map field names, then sanitize
+        let processedData = otherValues;
+        if (collection) {
+            processedData = serializeDataToServer(otherValues as M, collection.properties as Properties<M>);
         }
 
         // Auto-link to parent entities for subcollections
@@ -486,39 +557,112 @@ export class EntityService {
 
         const entityData = sanitizeAndConvertDates(processedData);
 
-        if (entityId) {
-            // Update existing entity
-            const parsedId = this.parseIdValue(entityId, idInfo.type);
-            const updateQuery = this.db
-                .update(table)
-                .set(entityData)
-                .where(eq(idField, parsedId));
+        const savedId = await this.db.transaction(async (tx) => {
 
-            await updateQuery;
+            let currentId: string | number;
 
-            // Fetch the updated entity to return with proper reference objects
-            const updatedEntity = await this.fetchEntity<M>(path, entityId, databaseId);
-            if (!updatedEntity) throw new Error("Could not fetch entity after update.");
-            return updatedEntity;
-        } else {
-            const dataForInsert = { ...entityData };
-            // Don't include the ID in the insert statement, so the database can generate it
-            if (idInfo.fieldName in dataForInsert) {
-                delete dataForInsert[idInfo.fieldName];
+            if (entityId) {
+                // Update existing entity
+                currentId = this.parseIdValue(entityId, idInfo.type);
+                const updateQuery = tx
+                    .update(table)
+                    .set(entityData)
+                    .where(eq(idField, currentId));
+
+                await updateQuery;
+            } else {
+                const dataForInsert = { ...entityData };
+                // Don't include the ID in the insert statement, so the database can generate it
+                if (idInfo.fieldName in dataForInsert) {
+                    delete dataForInsert[idInfo.fieldName];
+                }
+
+                const insertQuery = tx
+                    .insert(table)
+                    .values(dataForInsert)
+                    .returning({ id: idField });
+
+                const result = await insertQuery;
+                currentId = result[0].id;
             }
 
-            const insertQuery = this.db
-                .insert(table)
-                .values(dataForInsert)
-                .returning({ id: idField });
+            // Update many-to-many relations
+            if (collection && Object.keys(manyToManyValues).length > 0) {
+                await this.updateManyToManyRelations(tx, collection, currentId, manyToManyValues);
+            }
 
-            const result = await insertQuery;
-            const newId = result[0].id;
+            return currentId;
+        });
 
-            // Fetch the newly created entity to return with proper reference objects
-            const newEntity = await this.fetchEntity<M>(path, newId as string | number, databaseId);
-            if (!newEntity) throw new Error("Could not fetch entity after insert.");
-            return newEntity;
+        // Fetch the updated/created entity to return with proper relation objects
+        const finalEntity = await this.fetchEntity<M>(path, savedId, databaseId);
+        if (!finalEntity) throw new Error("Could not fetch entity after save.");
+        return finalEntity;
+    }
+
+    private async updateManyToManyRelations<M extends Record<string, any>>(
+        tx: NodePgDatabase<any>,
+        collection: EntityCollection,
+        entityId: string | number,
+        manyToManyValues: Partial<M>
+    ) {
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+
+        for (const [key, value] of Object.entries(manyToManyValues)) {
+            const relation = resolvedRelations[key];
+            if (!relation || relation.type !== "manyToMany") continue;
+
+            const manyToManyRelation = relation as ManyToManyRelation;
+
+            const targetEntityIds = (value && Array.isArray(value)) ? value.map((rel: any) => rel.id) : [];
+
+            const targetCollection = manyToManyRelation.target();
+            const junctionDbPath = resolveJunctionTableName(manyToManyRelation.through, collection, targetCollection);
+            const junctionTable = collectionRegistry.getTable(junctionDbPath);
+
+            if (!junctionTable) {
+                throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
+            }
+
+            const parentIdInfo = this.getIdFieldInfoForCollection(collection);
+            const parsedParentId = this.parseIdValue(entityId, parentIdInfo.type);
+
+            const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(collection))}_id`;
+            const sourceJunctionKeyName = Array.isArray(manyToManyRelation.through?.sourceJunctionKey)
+                ? (manyToManyRelation.through.sourceJunctionKey as string[])[0]
+                : (manyToManyRelation.through?.sourceJunctionKey ?? defaultSourceKey);
+            const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+
+            if (!sourceJunctionKey) {
+                throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
+            }
+
+            // Delete existing relations for this entity
+            await tx.delete(junctionTable).where(eq(sourceJunctionKey, parsedParentId));
+
+            if (targetEntityIds.length > 0) {
+                const targetIdInfo = this.getIdFieldInfoForCollection(targetCollection);
+                const parsedTargetIds = targetEntityIds.map(id => this.parseIdValue(id, targetIdInfo.type));
+
+                const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
+                const targetJunctionKeyName = Array.isArray(manyToManyRelation.through?.targetJunctionKey)
+                    ? (manyToManyRelation.through.targetJunctionKey as string[])[0]
+                    : (manyToManyRelation.through?.targetJunctionKey ?? defaultTargetKey);
+
+                const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+                if (!targetJunctionKey) {
+                    throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
+                }
+
+                const newLinks = parsedTargetIds.map(targetId => ({
+                    [sourceJunctionKeyName]: parsedParentId,
+                    [targetJunctionKeyName]: targetId
+                }));
+
+                if (newLinks.length > 0)
+                    await tx.insert(junctionTable).values(newLinks);
+            }
         }
     }
 
@@ -621,7 +765,7 @@ export class EntityService {
         const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         const table = this.getTableForPath(path);
 
-        // Find the foreign key field that references the parent
+        // Find the foreign key field that relations the parent
         let foreignKeyField: string | undefined;
         for (const [key, prop] of Object.entries(collection.properties)) {
             const property = prop as Property;
@@ -728,7 +872,7 @@ export class EntityService {
         const targetCollection = typedRelation.target();
         const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
-        // Find the field in the target collection that references the parent
+        // Find the field in the target collection that relations the parent
         let foreignKeyField: string | undefined;
         for (const [key, prop] of Object.entries(targetCollection.properties)) {
             const property = prop as Property;
@@ -801,7 +945,7 @@ export class EntityService {
             const parentCollection = collections[i];
             const parentEntityId = parentEntityIds[i];
 
-            // Find foreign key field in target collection that references this parent collection
+            // Find foreign key field in target collection that relations this parent collection
             const foreignKeyField = this.findForeignKeyForParent(targetCollection, parentCollection);
 
             if (foreignKeyField) {
@@ -820,7 +964,7 @@ export class EntityService {
     }
 
     /**
-     * Find the foreign key field in the target collection that references a parent collection
+     * Find the foreign key field in the target collection that relations a parent collection
      */
     private findForeignKeyForParent(
         targetCollection: EntityCollection,
@@ -829,7 +973,7 @@ export class EntityService {
         for (const [fieldName, property] of Object.entries(targetCollection.properties)) {
             const prop = property as Property;
             if (prop.type === "relation") {
-                // Check if this reference points to the parent collection
+                // Check if this relation points to the parent collection
                 if (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath) {
                     return fieldName;
                 }
@@ -896,7 +1040,7 @@ export class EntityService {
             .limit(50);
 
         return results.map((entity: any) => {
-            // Transform IDs back to reference objects
+            // Transform IDs back to relation objects
             let values = entity;
             if (collection) {
                 values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
@@ -1105,7 +1249,7 @@ export class EntityService {
         const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
         let foreignKeyField: string | undefined;
-        // Find the field in the target collection that references the parent
+        // Find the field in the target collection that relations the parent
         for (const [key, prop] of Object.entries(targetCollection.properties)) {
             const property = prop as Property;
             if (property.type === "relation" && (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {

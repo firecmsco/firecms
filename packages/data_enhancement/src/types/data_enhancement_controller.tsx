@@ -64,7 +64,7 @@ export type InputProperty = {
     description?: string;
     type: string;
     fieldConfigId: string;
-    enumValues?: string[];
+    enum?: string[];
     disabled?: boolean;
     of?: InputProperty;
     oneOf?: {

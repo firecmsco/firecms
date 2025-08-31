@@ -196,7 +196,7 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     /**
      * The CMS property you are binding this field to
      */
-    property: PropertyOrBuilder<T> | ResolvedProperty<T>;
+    property: Property<T> | ResolvedProperty<T>;
 
     /**
      * The context where this field is being rendered. You get a context as a

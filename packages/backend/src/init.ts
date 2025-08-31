@@ -27,9 +27,7 @@ export function initializeFireCMSBackend(config: FireCMSBackendConfig) {
         if (isTable(table)) {
             const tableName = getTableName(table);
             const matchingCollection = config.collections.find(c => c.dbPath === tableName);
-            if (matchingCollection) {
-                collectionRegistry.registerTable(table, matchingCollection.dbPath);
-            }
+            collectionRegistry.registerTable(table, matchingCollection?.dbPath ?? tableName);
         }
     });
 

@@ -1,16 +1,135 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityRelation, FieldProps, ResolvedProperty } from "@firecms/types";
-import { ReferencePreview } from "../../preview";
+import { Entity, EntityCollection, EntityRelation, FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
-import { getIconForProperty } from "../../util";
-import { getReferenceFrom } from "@firecms/common";
+import { ArrayContainer, ArrayEntryParams, EntityPreviewContainer, ErrorView } from "../../components";
+import { getIconForProperty, IconForView } from "../../util";
+import { getRelationFrom } from "@firecms/common";
 
 import { useEntitySelectionTable, useNavigationController } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { RelationPreview } from "../../preview";
 
-type RelationFieldBindingProps = FieldProps<EntityRelation | EntityRelation[]>;
+export function RelationFieldBinding({
+                                         propertyKey,
+                                         value,
+                                         size,
+                                         error,
+                                         showError,
+                                         disabled,
+                                         isSubmitting,
+                                         property,
+                                         includeDescription,
+                                         setValue,
+                                         setFieldValue,
+                                         context,
+                                         customProps
+                                     }: FieldProps<EntityRelation | EntityRelation[]>) {
+
+    if (property.type !== "relation") {
+        throw Error("RelationFieldBinding expected a property containing a relation");
+    }
+
+    const manyRelation = property.relation?.type === "many" || property.relation?.type === "manyToMany";
+    if (manyRelation) {
+        return <MultipleRelationFieldBinding
+            propertyKey={propertyKey}
+            value={Array.isArray(value) ? value : []}
+            error={error}
+            showError={showError}
+            disabled={disabled}
+            isSubmitting={isSubmitting}
+            property={property}
+            includeDescription={includeDescription}
+            setValue={setValue}
+            setFieldValue={setFieldValue}
+            context={context}
+            customProps={customProps}
+        />
+    } else {
+        if (!property.path) {
+            throw new Error("Property path is required for ReferenceFieldBinding");
+        }
+
+        const validValue = value && !Array.isArray(value) && value.isEntityRelation && value.isEntityRelation();
+
+        const navigationController = useNavigationController();
+        const collection: EntityCollection | undefined = useMemo(() => {
+            return property.path ? navigationController.getCollection(property.path) : undefined;
+        }, [property.path]);
+
+        if (!collection) {
+            throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
+        }
+
+        const onSingleEntitySelected = useCallback((e: Entity<any> | null) => {
+            setValue(e ? getRelationFrom(e) : null);
+        }, [setValue]);
+
+        const referenceDialogController = useEntitySelectionTable({
+                multiselect: false,
+                path: property.path,
+                collection,
+                onSingleEntitySelected,
+                selectedEntityIds: validValue ? [value.id] : undefined,
+                forceFilter: property.forceFilter
+            }
+        );
+
+        const onEntryClick = (e: React.SyntheticEvent) => {
+            e.preventDefault();
+            referenceDialogController.open();
+        };
+
+        const relation = Array.isArray(value) ? undefined : value;
+        return (
+            <>
+                <LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name ?? propertyKey}
+                    className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+
+                {!collection && <ErrorView
+                    error={"The specified collection does not exist. Check console"}/>}
+
+                {collection && <>
+
+                    {relation && <RelationPreview
+                        disabled={!property.path}
+                        previewProperties={property.previewProperties}
+                        hover={!disabled}
+                        size={size}
+                        onClick={disabled || isSubmitting ? undefined : onEntryClick}
+                        relation={relation}
+                        includeEntityLink={property.includeEntityLink}
+                        includeId={property.includeId}
+                    />}
+
+                    {!value && <div className="justify-center text-left">
+                        <EntityPreviewContainer className={cls("px-6 h-16 text-sm font-medium flex items-center gap-6",
+                            disabled || isSubmitting
+                                ? "text-surface-accent-500"
+                                : "cursor-pointer text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800")}
+                                                onClick={onEntryClick}
+                                                size={"medium"}>
+                            <IconForView collectionOrView={collection}
+                                         className={"text-surface-300 dark:text-surface-600"}/>
+                            {`Edit ${property.name}`.toUpperCase()}
+                        </EntityPreviewContainer>
+                    </div>}
+                </>}
+
+                <FieldHelperText includeDescription={includeDescription}
+                                 showError={showError}
+                                 error={error}
+                                 disabled={disabled}
+                                 property={property}/>
+
+            </>
+        );
+    }
+}
 
 /**
  * This field allows selecting multiple references.
@@ -19,18 +138,20 @@ type RelationFieldBindingProps = FieldProps<EntityRelation | EntityRelation[]>;
  * and tables to the specified properties.
  * @group Form fields
  */
-export function RelationFieldBinding({
-                                         propertyKey,
-                                         value,
-                                         error,
-                                         showError,
-                                         disabled,
-                                         isSubmitting,
-                                         property,
-                                         includeDescription,
-                                         setValue,
-                                         setFieldValue
-                                     }: RelationFieldBindingProps) {
+export function MultipleRelationFieldBinding({
+                                                 propertyKey,
+                                                 value,
+                                                 error,
+                                                 showError,
+                                                 disabled,
+                                                 isSubmitting,
+                                                 property,
+                                                 includeDescription,
+                                                 setValue,
+                                                 setFieldValue
+                                             }: FieldProps<EntityRelation[]>) {
+
+    console.log("MultipleRelationFieldBinding render", {propertyKey, value});
 
     if (property.type !== "relation") {
         throw Error("RelationFieldBinding expected a property containing a relation");
@@ -43,21 +164,17 @@ export function RelationFieldBinding({
         return property.path ? navigationController.getCollection(property.path) : undefined;
     }, [property.path]);
 
-    if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
-    }
-
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
-        setValue(entities.map(e => getReferenceFrom(e)));
+        setValue(entities.map(e => getRelationFrom(e)));
     }, [setValue]);
 
     const referenceDialogController = useEntitySelectionTable({
             multiselect: true,
-            path: ofProperty.path,
+            path: property.path,
             collection,
             onMultipleEntitiesSelected,
             selectedEntityIds,
-            forceFilter: ofProperty.forceFilter
+            forceFilter: property.forceFilter
         }
     );
 
@@ -76,19 +193,19 @@ export function RelationFieldBinding({
         if (!entryValue)
             return <div>Internal ERROR</div>;
         return (
-            <ReferencePreview
+            <RelationPreview
                 key={internalId}
-                disabled={!ofProperty.path}
-                previewProperties={ofProperty.previewProperties}
+                disabled={!property.path}
+                previewProperties={property.previewProperties}
                 size={"medium"}
                 onClick={onEntryClick}
                 hover={!disabled}
-                reference={entryValue}
-                includeId={ofProperty.includeId}
-                includeEntityLink={ofProperty.includeEntityLink}
+                relation={entryValue}
+                includeId={property.includeId}
+                includeEntityLink={property.includeEntityLink}
             />
         );
-    }, [ofProperty.path, ofProperty.previewProperties, value]);
+    }, [property.path, property.previewProperties, value]);
 
     const title = (<>
         <LabelWithIconAndTooltip
@@ -112,7 +229,7 @@ export function RelationFieldBinding({
                             buildEntry={buildEntry}
                             canAddElements={false}
                             addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
-                            newDefaultEntry={property.of.defaultValue}
+                            newDefaultEntry={null}
                             onValueChange={(value) => setFieldValue(propertyKey, value)}
             />
 
@@ -131,16 +248,13 @@ export function RelationFieldBinding({
     return (
         <>
 
-            {!minimalistView &&
-                <ExpandablePanel
-                    titleClassName={fieldBackgroundMixin}
-                    innerClassName={cls("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
-                    initiallyExpanded={expanded}
-                    title={title}>
-                    {body}
-                </ExpandablePanel>}
+            <ExpandablePanel
+                titleClassName={fieldBackgroundMixin}
+                innerClassName={cls("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
+                title={title}>
+                {body}
+            </ExpandablePanel>
 
-            {minimalistView && body}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

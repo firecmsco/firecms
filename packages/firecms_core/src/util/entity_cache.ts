@@ -1,4 +1,4 @@
-import { EntityReference, GeoPoint, Vector } from "@firecms/types";
+import { EntityReference, EntityRelation, GeoPoint, Vector } from "@firecms/types";
 
 // Define a unique prefix for entity keys in localStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";
@@ -18,25 +18,47 @@ function customReplacer(key: string): any {
     // Handle Date objects
     // @ts-ignore
     if (value instanceof Date) {
-        return { __type: "Date", value: value.toISOString() };
+        return {
+            __type: "Date",
+            value: value.toISOString()
+        };
     }
 
     // Handle EntityReference
     // @ts-ignore
     if (value instanceof EntityReference) {
-        return { __type: "EntityReference", id: value.id, path: value.path };
+        return {
+            __type: "EntityReference",
+            id: value.id,
+            path: value.path
+        };
+    }
+
+    if (value instanceof EntityRelation) {
+        return {
+            __type: "EntityRelation",
+            id: value.id,
+            path: value.path
+        };
     }
 
     // Handle GeoPoint
     // @ts-ignore
     if (value instanceof GeoPoint) {
-        return { __type: "GeoPoint", latitude: value.latitude, longitude: value.longitude };
+        return {
+            __type: "GeoPoint",
+            latitude: value.latitude,
+            longitude: value.longitude
+        };
     }
 
     // Handle Vector
     // @ts-ignore
     if (value instanceof Vector) {
-        return { __type: "Vector", value: value.value };
+        return {
+            __type: "Vector",
+            value: value.value
+        };
     }
 
     return value;
@@ -50,6 +72,8 @@ function customReviver(key: string, value: any): any {
                 return new Date(value.value);
             case "EntityReference":
                 return new EntityReference(value.id, value.path);
+            case "EntityRelation":
+                return new EntityRelation(value.id, value.path);
             case "GeoPoint":
                 return new GeoPoint(value.latitude, value.longitude);
             case "Vector":
@@ -156,7 +180,6 @@ export function hasEntityInCache(path: string): boolean {
  * @param path - The unique path/key for the entity to remove.
  */
 export function removeEntityFromCache(path: string): void {
-
 
     console.debug("Removing entity from cache", path);
 

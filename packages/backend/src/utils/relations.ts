@@ -13,22 +13,22 @@ export function resolveSubcollectionRelation(subcollection: any): Relation {
 }
 
 /**
- * Resolve a reference property into a one-to-one (or many-to-one) relation.
+ * Resolve a relation property into a one-to-one (or many-to-one) relation.
  * In this model a property of type "relation" on the source points to the
  * target collection's id field.
  */
-export function resolveReferencePropertyRelation({
-                                                     propertyKey,
-                                                     property,
-                                                     allCollections
-                                                 }: {
+export function resolvePropertyRelation({
+                                            propertyKey,
+                                            property,
+                                            allCollections
+                                        }: {
     propertyKey: string;
     property: Property;
     allCollections: EntityCollection[];
 }): Relation | undefined {
     if (property.type !== "relation") return undefined;
 
-    // Explicit relation on the reference property (supports manyToMany, one, many overrides)
+    // Explicit relation on the relation property (supports manyToMany, one, many overrides)
     if ((property).relation) {
         return (property).relation as Relation;
     }
@@ -50,9 +50,8 @@ export function resolveReferencePropertyRelation({
 /**
  * Recursively resolve relations for a collection by scanning:
  * - its subcollections (as one-to-many)
- * - its properties (reference properties as one-to-one)
+ * - its properties (relation properties as one-to-one)
  * - nested map properties
- * Note: array-of-reference is not treated as one-to-one here.
  */
 export function resolveCollectionRelations(
     collection: EntityCollection,
@@ -66,16 +65,16 @@ export function resolveCollectionRelations(
         result[sc.slug] = resolveSubcollectionRelation(sc);
     }
 
-    // 2) Properties (reference and array-of-reference)
+    // 2) Properties (relation)
     scanPropertiesRecursively(collection.properties, (keyPath, prop) => {
         if (prop.type === "relation") {
-            const rel = resolveReferencePropertyRelation({
+            const rel = resolvePropertyRelation({
                 propertyKey: keyPath,
                 property: prop,
                 allCollections
             });
             if (rel) result[keyPath] = rel;
-        } 
+        }
     });
 
     return result;

@@ -18,7 +18,7 @@ import { cls } from "@firecms/ui";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function ReferenceFieldBinding(props: FieldProps) {
+export function ReferenceFieldBinding(props: FieldProps<EntityReference>) {
 
     if (typeof props.property.path !== "string") {
         return <ReadOnlyFieldBinding {...props}/>

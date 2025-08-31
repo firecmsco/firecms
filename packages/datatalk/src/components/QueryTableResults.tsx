@@ -12,7 +12,7 @@ import {
     EntityCollectionTable,
     mergeEntityActions,
     OnCellValueChange,
-    PropertiesOrBuilders,
+    Properties,
     resolveCollection,
     resolveEntityAction,
     useAuthController,
@@ -82,7 +82,7 @@ export function QueryTableResults({
     }, []);
 
     const [queryResults, setQueryResults] = useState<Entity<any>[] | null>(null);
-    const [properties, setProperties] = useState<PropertiesOrBuilders | null>(null);
+    const [properties, setProperties] = useState<Properties | null>(null);
     const [propertiesOrder, setPropertiesOrder] = useState<string[] | null>(null);
     const [path, setPath] = useState<string | null>(null);
     const [collection, setCollection] = useState<EntityCollection | undefined>();

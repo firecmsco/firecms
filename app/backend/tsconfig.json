@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "lib": ["ES2022"],
     "outDir": "./dist",
-    "rootDir": "../..",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,6 +21,9 @@
       ],
       "@firecms/backend": [
         "../../packages/backend/src"
+      ],
+      "@firecms/common": [
+        "../../packages/common/src"
       ],
       "shared": [
         "../shared"

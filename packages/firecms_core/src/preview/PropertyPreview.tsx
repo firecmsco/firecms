@@ -4,11 +4,12 @@ import equal from "react-fast-compare"
 import {
     CMSType,
     EntityReference,
+    EntityRelation,
+    PropertyPreviewProps,
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
-    ResolvedStringProperty,
-    PropertyPreviewProps
+    ResolvedStringProperty
 } from "@firecms/types";
 
 import { resolveProperty } from "../util";
@@ -31,6 +32,7 @@ import { DatePreview } from "./components/DatePreview";
 import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 import { ErrorView } from "../components";
+import { RelationPreview } from "./components/RelationPreview";
 
 /**
  * @group Preview components
@@ -200,6 +202,23 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
             }
         } else {
             content = <EmptyValue/>;
+        }
+
+    } else if (property.type === "relation") {
+        if (!value) {
+            content = <EmptyValue/>;
+        }
+        if (typeof value === "object" && "isEntityRelation" in value && value.isEntityRelation()) {
+            content = <RelationPreview
+                disabled={!property.path}
+                previewProperties={property.previewProperties}
+                includeId={property.includeId}
+                includeEntityLink={property.includeEntityLink}
+                size={props.size}
+                relation={value as EntityRelation}
+            />;
+        } else {
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
 
     } else if (property.type === "boolean") {

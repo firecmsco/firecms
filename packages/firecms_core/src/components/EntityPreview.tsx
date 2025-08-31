@@ -3,10 +3,7 @@ import { useMemo } from "react";
 
 import { Entity, EntityCollection, PreviewSize, ResolvedProperty } from "@firecms/types";
 
-import {
-    getEntityImagePreviewPropertyKey,
-    getValueInPath,
-} from "@firecms/common";
+import { getEntityImagePreviewPropertyKey, getValueInPath, } from "@firecms/common";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
@@ -20,7 +17,7 @@ import { getPropertyInPath, IconForView, resolveCollection } from "../util";
 import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/references";
 
 export type EntityPreviewProps = {
-    size: PreviewSize,
+    size?: PreviewSize,
     actions?: React.ReactNode,
     collection?: EntityCollection,
     hover?: boolean;
@@ -45,7 +42,7 @@ export function EntityPreview({
                                   collection: collectionProp,
                                   previewKeys,
                                   onClick,
-                                  size,
+                                  size = "medium",
                                   includeId = true,
                                   includeTitle = true,
                                   includeEntityLink = true,
@@ -191,7 +188,7 @@ export type EntityPreviewContainerProps = {
     children: React.ReactNode;
     hover?: boolean;
     fullwidth?: boolean;
-    size: PreviewSize;
+    size?: PreviewSize;
     className?: string;
     style?: React.CSSProperties;
     onClick?: (e: React.SyntheticEvent) => void;
@@ -201,7 +198,7 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
                                                                                                          children,
                                                                                                          hover,
                                                                                                          onClick,
-                                                                                                         size,
+                                                                                                         size = "medium",
                                                                                                          style,
                                                                                                          className,
                                                                                                          fullwidth = true,

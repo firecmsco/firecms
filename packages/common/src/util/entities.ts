@@ -2,14 +2,11 @@ import {
     CMSType,
     DataType,
     Entity,
-    EntityReference,
+    EntityReference, EntityRelation,
     EntityStatus,
     EntityValues,
     Properties,
-    PropertiesOrBuilders,
     Property,
-    PropertyBuilder,
-    PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
 } from "@firecms/types";
@@ -32,22 +29,22 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder<T extends CMSType, M extends Record<string, any>>(propertyOrBuilder?: PropertyOrBuilder<T, M> | Property<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T, M> {
-    return typeof propertyOrBuilder === "function";
+export function isPropertyBuilder<T extends CMSType, M extends Record<string, any>>(propertyOrBuilder?: Property<T> | ResolvedProperty<T>) {
+    return typeof propertyOrBuilder?.dynamicProps === "function";
 }
 
-export function getDefaultValuesFor<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | Properties<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
             if (!property) return {};
-            const value = getDefaultValueFor(property as PropertyOrBuilder);
+            const value = getDefaultValueFor(property);
             return value === undefined ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
-export function getDefaultValueFor(property?: PropertyOrBuilder) {
+export function getDefaultValueFor(property?: Property) {
     if (!property) return undefined;
     if (isPropertyBuilder(property)) return undefined;
     if (property.defaultValue || property.defaultValue === null) {
@@ -145,6 +142,10 @@ export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M
     return new EntityReference(entity.id, entity.path);
 }
 
+export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>): EntityRelation {
+    return new EntityRelation(entity.id, entity.path);
+}
+
 export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
     properties: ResolvedProperties<M>,
@@ -172,8 +173,15 @@ export function traverseValueProperty(inputValue: any,
     if (property.type === "map" && property.properties) {
         value = traverseValuesProperties(inputValue, property.properties as ResolvedProperties, operation);
     } else if (property.type === "array") {
-        if (property.of && Array.isArray(inputValue)) {
-            value = inputValue.map((e) => traverseValueProperty(e, property.of as Property, operation));
+        const of = property.of;
+        if (of && Array.isArray(inputValue) && !Array.isArray(of)) {
+            value = inputValue.map((e) => traverseValueProperty(e, of, operation));
+        } else if (of && Array.isArray(inputValue) && Array.isArray(of)) {
+            value = inputValue.map((e, i) => {
+                if (i < of.length)
+                    return traverseValuesProperties(e, of[i], operation);
+                return null
+            }).filter(Boolean);
         } else if (property.oneOf && Array.isArray(inputValue)) {
             const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
             const valueField = property.oneOf?.valueField ?? DEFAULT_ONE_OF_VALUE;

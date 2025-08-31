@@ -1,4 +1,4 @@
-import { getPropertyInPath, PropertiesOrBuilders, Property } from "@firecms/core";
+import { getPropertyInPath, Properties, Property } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     ChevronRightIcon,
@@ -154,7 +154,7 @@ export function DataNewPropertiesMapping({
     );
 }
 
-function getAllPropertyKeys(properties: PropertiesOrBuilders, currentKey?: string): string[] {
+function getAllPropertyKeys(properties: Properties, currentKey?: string): string[] {
     return Object.entries(properties).reduce((acc, [key, property]) => {
         const accumulatedKey = currentKey ? `${currentKey}.${key}` : key;
         if (typeof property !== "function" && property.type === "map" && property.properties) {

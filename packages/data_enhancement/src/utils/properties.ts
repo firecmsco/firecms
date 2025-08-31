@@ -3,13 +3,12 @@ import {
     getFieldId,
     getValueInPath,
     isPropertyBuilder,
-    PropertiesOrBuilders,
-    Property,
-    PropertyOrBuilder
+    Properties,
+    Property
 } from "@firecms/core";
 import { InputProperty } from "../types/data_enhancement_controller";
 
-export function getSimplifiedProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, values: M, path = ""): Record<string, InputProperty> {
+export function getSimplifiedProperties<M extends Record<string, any>>(properties: Properties<M>, values: M, path = ""): Record<string, InputProperty> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -32,18 +31,18 @@ function getSimpleProperty(property: Property): InputProperty {
         description: property.description,
         type: property.type,
         fieldConfigId: fieldId,
-        enumValues: "enumValues" in property && property.enum
+        enum: "enum" in property && property.enum
             ? getSimpleEnumValues(property.enum)
             : undefined,
         disabled: Boolean(property.disabled || property.readOnly)
     };
 }
 
-function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?: any): Record<string, InputProperty> {
+function getSimplifiedProperty(property: Property, path: string, value?: any): Record<string, InputProperty> {
     if (isPropertyBuilder(property)) return {};
     if (property.type === "array") {
 
-        if (property.of && !isPropertyBuilder(property.of as PropertyOrBuilder)) {
+        if (property.of && !isPropertyBuilder(property.of)) {
             const arrayParentProperty: InputProperty = {
                 name: property.name,
                 description: property.description,
@@ -58,7 +57,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
             //     result = {
             //         ...result,
             //         ...value
-            //             .map((v, i) => getSimplifiedProperty(property.of as PropertyOrBuilder, `${path}.${i}`, v))
+            //             .map((v, i) => getSimplifiedProperty(property.of, `${path}.${i}`, v))
             //             .reduce((a, b) => ({ ...a, ...b }), {})
             //     };
             // }
@@ -69,7 +68,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
             // result = {
             //     ...result,
             //     // ...Array.from(Array(newValuesCount))
-            //     //     .map((v, i) => getSimplifiedProperty(property.of as PropertyOrBuilder, `${path}.${i + existingValuesCount}`, v))
+            //     //     .map((v, i) => getSimplifiedProperty(property.of, `${path}.${i + existingValuesCount}`, v))
             //     //     .reduce((a, b) => ({ ...a, ...b }), {})
             // }
 

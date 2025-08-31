@@ -11,7 +11,7 @@ import {
     EntityReference,
     EntityTableController,
     FilterValues,
-    PartialEntityCollection,
+    PartialEntityCollection, Property,
     PropertyOrBuilder,
     ResolvedProperty,
     SaveEntityProps
@@ -377,7 +377,7 @@ export const EntityCollectionView = React.memo(
                                                 propertyKey,
                                                 entity
                                             }: GetPropertyForProps<M>) => {
-            let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+            let propertyOrBuilder: Property | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
             if (!propertyOrBuilder) {
@@ -618,13 +618,6 @@ export const EntityCollectionView = React.memo(
             collection,
             path: resolvedFullPath,
             parentCollectionIds
-        });
-
-        console.log("ts", {
-            textSearchLoading,
-            textSearchInitialised,
-            onTextSearchClick,
-            textSearchEnabled
         });
 
         return (

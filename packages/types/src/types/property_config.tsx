@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSType, PropertyOrBuilder } from "./properties";
+import { CMSType, Property, PropertyOrBuilder } from "./properties";
 
 /**
  * This is the configuration object for a property.
@@ -24,7 +24,7 @@ export type PropertyConfig<T extends CMSType = any> = {
      * This property or builder will be used as the base values for the resulting property.
      * You can also use a builder function to generate the base property.
      */
-    property: PropertyOrBuilder<T>;
+    property: Property<T>;
 
     /**
      * Optional icon to be used in the field selector.

@@ -3,6 +3,7 @@ import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
 import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "@firecms/types";
 import { WebSocketServer } from "ws";
 import { Server } from "http";
+import { inspect } from "util";
 
 export function createPostgresWebSocket(server: Server, realtimeService: RealtimeService, dataSourceDelegate: PostgresDataSourceDelegate) {
     const wss = new WebSocketServer({ server });
@@ -66,9 +67,9 @@ export function createPostgresWebSocket(server: Server, realtimeService: Realtim
                     case "SAVE_ENTITY": {
                         console.debug("💾 [WebSocket Server] Processing SAVE_ENTITY request");
                         const request: SaveEntityProps = payload;
-                        console.debug("💾 [WebSocket Server] Saving entity with request:", request);
+                        console.debug("💾 [WebSocket Server] Saving entity with request:", inspect(request, { depth: null, colors: true }));
                         const entity = await dataSourceDelegate.saveEntity(request);
-                        console.debug("💾 [WebSocket Server] SAVE_ENTITY result:", entity);
+                        console.debug("💾 [WebSocket Server] SAVE_ENTITY result:", inspect(entity, { depth: null, colors: true  }));
                         const response = {
                             type: "SAVE_ENTITY_SUCCESS",
                             payload: { entity },

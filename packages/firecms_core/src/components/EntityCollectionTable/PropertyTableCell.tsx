@@ -3,7 +3,7 @@ import equal from "react-fast-compare"
 import {
     CMSType,
     Entity,
-    EntityReference,
+    EntityReference, EntityRelation,
     ReferenceProperty,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
@@ -33,6 +33,7 @@ import { useSelectableTableController } from "../SelectableTable/SelectableTable
 import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
 import { isReadOnly } from "@firecms/common";
+import { TableRelationField } from "./fields/TableRelationField";
 
 export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;
@@ -367,6 +368,24 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     innerComponent =
                         <TableReferenceField name={propertyKey as string}
                                              internalValue={internalValue as EntityReference}
+                                             updateValue={updateValue}
+                                             disabled={disabled}
+                                             size={size}
+                                             path={property.path}
+                                             multiselect={false}
+                                             previewProperties={property.previewProperties}
+                                             includeId={property.includeId}
+                                             includeEntityLink={property.includeEntityLink}
+                                             title={property.name ?? propertyKey}
+                                             forceFilter={property.forceFilter}
+                        />;
+                }
+                allowScroll = false;
+            } else if (property.type === "relation") {
+                if (typeof property.path === "string") {
+                    innerComponent =
+                        <TableRelationField name={propertyKey as string}
+                                             internalValue={internalValue as EntityRelation}
                                              updateValue={updateValue}
                                              disabled={disabled}
                                              size={size}

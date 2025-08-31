@@ -4,7 +4,6 @@ import {
     isPropertyBuilder,
     Property,
     PropertyConfigBadge,
-    PropertyOrBuilder,
     useCustomizationController,
 } from "@firecms/core";
 import {
@@ -117,7 +116,7 @@ export function NonEditablePropertyPreview({
     name: string,
     selected: boolean,
     onClick?: () => void,
-    property?: PropertyOrBuilder
+    property?: Property
 }) {
 
     const { propertyConfigs } = useCustomizationController();

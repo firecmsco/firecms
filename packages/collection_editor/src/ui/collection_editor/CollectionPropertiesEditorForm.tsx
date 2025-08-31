@@ -9,7 +9,6 @@ import {
     Properties,
     Property,
     PropertyConfig,
-    PropertyOrBuilder,
     useLargeLayout,
     User,
     useSnackbarController
@@ -139,7 +138,7 @@ export function CollectionPropertiesEditorForm({
                             acc[propertyKey] = (newCollection.properties ?? {})[propertyKey];
                             return acc;
                         }, {} as {
-                            [key: string]: PropertyOrBuilder
+                            [key: string]: Property
                         }),
                         ...values.properties
                     };

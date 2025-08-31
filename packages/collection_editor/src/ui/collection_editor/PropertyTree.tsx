@@ -5,8 +5,8 @@ import {
     AdditionalFieldDelegate,
     CMSType,
     isPropertyBuilder,
-    PropertiesOrBuilders,
-    PropertyOrBuilder
+    Properties,
+    Property
 } from "@firecms/core";
 import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
@@ -51,7 +51,7 @@ export const PropertyTree = React.memo(
         namespace?: string;
         selectedPropertyKey?: string;
         onPropertyClick?: (propertyKey: string, namespace?: string) => void;
-        properties: PropertiesOrBuilders<M>;
+        properties: Properties<M>;
         propertiesOrder?: string[];
         additionalFields?: AdditionalFieldDelegate<M>[];
         errors: Record<string, any>;
@@ -125,7 +125,7 @@ export const PropertyTree = React.memo(
 
                         {propertiesOrder && propertiesOrder
                             .map((propertyKey: string, index: number) => {
-                                const property = properties[propertyKey] as PropertyOrBuilder;
+                                const property = properties[propertyKey];
                                 const additionalField = additionalFields?.find(field => field.key === propertyKey);
 
                                 if (!property && !additionalField) {
@@ -178,7 +178,7 @@ export function PropertyTreeEntry({
     id: string;
     propertyKey: string;
     namespace?: string;
-    propertyOrBuilder: PropertyOrBuilder;
+    propertyOrBuilder: Property;
     additionalField?: AdditionalFieldDelegate<any>;
     selectedPropertyKey?: string;
     errors: Record<string, any>;

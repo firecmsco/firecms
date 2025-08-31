@@ -2,8 +2,9 @@ import React from "react";
 
 import {
     AuthController,
-    EntityCollection, Properties,
-    PropertiesOrBuilders, Property,
+    EntityCollection,
+    Properties,
+    Property,
     PropertyConfig,
     PropertyOrBuilder,
     ResolvedProperties,
@@ -16,7 +17,7 @@ import { resolveProperty } from "./resolutions";
 
 export function isReferenceProperty(
     authController: AuthController,
-    propertyOrBuilder: PropertyOrBuilder,
+    propertyOrBuilder: Property,
     fields: Record<string, PropertyConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
@@ -55,14 +56,13 @@ export function getIconForProperty(
     }
 }
 
-
 /**
  * Get a property in a property tree from a path like
  * `address.street`
  * @param properties
  * @param path
  */
-export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties, path: string): Property<M> | undefined {
+export function getPropertyInPath<M extends Record<string, any>>(properties: Properties<M> | ResolvedProperties, path: string): Property<M> | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             return properties[path];

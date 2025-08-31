@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import chokidar from "chokidar";
-import { EntityCollection, NumberProperty, Property, ReferenceProperty, StringProperty, } from "@firecms/types";
+import { EntityCollection, NumberProperty, Property, RelationProperty, StringProperty, } from "@firecms/types";
 import {
     getEnumVarName,
     getTableName,
@@ -140,7 +140,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             columnDefinition = `jsonb("${colName}")`;
             break;
         case "relation": {
-            const refProp = prop as ReferenceProperty;
+            const refProp = prop as RelationProperty;
             if (refProp.relation?.type === "manyToMany") {
                 return ""; // This is a virtual property for a many-to-many relation, handled by a junction table.
             }
@@ -179,7 +179,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         case "array": {
             const arrayProp = prop as any;
             if (arrayProp.of?.type === "relation") {
-                const refProp = arrayProp.of as ReferenceProperty;
+                const refProp = arrayProp.of as RelationProperty;
                 if (refProp.relation?.type === "manyToMany") {
                     return ""; // This is a virtual property for the relation, no column needed.
                 }

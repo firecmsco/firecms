@@ -8,9 +8,10 @@ import {
     MapProperty,
     NumberProperty,
     ReferenceProperty,
+    RelationProperty,
     StringProperty
 } from "./properties";
-import { EntityReference, GeoPoint } from "./entities";
+import { EntityReference, EntityRelation, GeoPoint } from "./entities";
 import { EntityCollection } from "./collections";
 
 /**
@@ -37,8 +38,9 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
                 T extends Date ? ResolvedTimestampProperty :
                     T extends GeoPoint ? ResolvedGeopointProperty :
                         T extends EntityReference ? ResolvedReferenceProperty :
-                            T extends CMSType[] ? ResolvedArrayProperty<T> :
-                                T extends Record<string, any> ? ResolvedMapProperty<T> : any;
+                            T extends EntityRelation | EntityRelation[] ? ResolvedRelationProperty :
+                                T extends CMSType[] ? ResolvedArrayProperty<T> :
+                                    T extends Record<string, any> ? ResolvedMapProperty<T> : any;
 
 /**
  * @group Entity properties
@@ -111,6 +113,16 @@ export type ResolvedReferenceProperty =
     Omit<ReferenceProperty, "type"> &
     {
         type: "reference";
+        resolved: true;
+        fromBuilder: boolean;
+    }
+/**
+ * @group Entity properties
+ */
+export type ResolvedRelationProperty =
+    Omit<RelationProperty, "type"> &
+    {
+        type: "relation";
         resolved: true;
         fromBuilder: boolean;
     }

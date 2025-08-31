@@ -5,7 +5,7 @@ import {
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
-    PropertiesOrBuilders,
+    Properties,
     Property,
     PropertyConfigBadge,
     resolveCollection,
@@ -418,7 +418,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
 }
 
-function buildHeadersMappingFromData(objArr: object[], properties?: PropertiesOrBuilders<any>) {
+function buildHeadersMappingFromData(objArr: object[], properties?: Properties<any>) {
     const headersMapping: Record<string, string> = {};
     objArr.filter(Boolean).forEach((obj) => {
         Object.keys(obj).forEach((key) => {

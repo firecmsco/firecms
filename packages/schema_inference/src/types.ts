@@ -9,7 +9,7 @@ export type TypesCount = {
     date?: number,
     geopoint?: number,
     reference?: number,
-    relationship?: number,
+    relation?: number,
 };
 
 export type TypesCountRecord<K extends keyof DataType = any> = {
