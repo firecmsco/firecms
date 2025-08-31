@@ -22,7 +22,7 @@ import {
 import { getIconForProperty } from "../../util";
 import { useCustomizationController } from "../../hooks";
 import { getIn } from "@firecms/formex";
-import { getDefaultValueFortype } from "@firecms/util";
+import { getDefaultValueFortype } from "@firecms/common";
 
 type MapEditViewRowState = [number, {
     key: string,

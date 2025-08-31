@@ -32,7 +32,7 @@ import {
     getValueInPath,
     isPropertyBuilder,
     mergeDeep
-} from "@firecms/util";
+} from "@firecms/common";
 import { isDefaultFieldConfigId } from "../core";
 
 export const resolveCollection = <M extends Record<string, any>, >

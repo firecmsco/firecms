@@ -11,7 +11,7 @@ import {
 import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
-import { isReadOnly } from "@firecms/util";
+import { isReadOnly } from "@firecms/common";
 import { getIconForProperty, resolveProperty } from "../../util";
 import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
 import {

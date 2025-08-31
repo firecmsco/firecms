@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
-import { getDefaultValueFor, mergeDeep } from "@firecms/util";
+import { getDefaultValueFor, mergeDeep } from "@firecms/common";
 import { getArrayResolvedProperties, getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";

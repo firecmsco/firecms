@@ -3,7 +3,7 @@ import { FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
-import { isReadOnly } from "@firecms/util";
+import { isReadOnly } from "@firecms/common";
 import { getArrayResolvedProperties, getIconForProperty, } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useAuthController } from "../../hooks";

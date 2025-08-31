@@ -11,7 +11,7 @@ import {
 } from "@firecms/types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
-import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, } from "@firecms/util";
+import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, } from "@firecms/common";
 
 import {
     useAuthController,

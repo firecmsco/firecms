@@ -32,7 +32,7 @@ import { EntityTableCellActions } from "./internal/EntityTableCellActions";
 import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
 import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
-import { isReadOnly } from "@firecms/util";
+import { isReadOnly } from "@firecms/common";
 
 export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;

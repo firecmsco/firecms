@@ -7,7 +7,7 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer, ErrorView } from "../../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, IconForView } from "../../util";
-import { getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/common";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { cls } from "@firecms/ui";
 

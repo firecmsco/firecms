@@ -9,7 +9,7 @@ import {
     ResolvedProperties,
     ResolvedProperty
 } from "@firecms/types";
-import { isPropertyBuilder } from "@firecms/util";
+import { isPropertyBuilder } from "@firecms/common";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
 import { getFieldConfig } from "../core";
 import { resolveProperty } from "./resolutions";

@@ -4,7 +4,7 @@ import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { ReferencePreview } from "../../../preview";
 import { useNavigationController, useEntitySelectionTable } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
-import { getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/common";
 
 interface ReferenceFilterFieldProps {
     name: string,

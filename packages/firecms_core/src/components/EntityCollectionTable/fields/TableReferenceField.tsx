@@ -9,7 +9,7 @@ import { useCustomizationController, useNavigationController, useEntitySelection
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
-import { getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/common";
 
 type TableReferenceFieldProps = {
     name: string;

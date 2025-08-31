@@ -30,7 +30,7 @@ export default defineConfig(() => ({
     resolve: {
         alias: {
             "@firecms/types": path.resolve(__dirname, "../types/src"),
-            "@firecms/util": path.resolve(__dirname, "../util/src")
+            "@firecms/common": path.resolve(__dirname, "../common/src")
         }
     },
     plugins: [

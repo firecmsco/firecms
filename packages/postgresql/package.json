@@ -34,7 +34,6 @@
     "watch": "vite build --watch",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "prepublishOnly": "run-s build",
-    "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
     "test:lint": "eslint \"src/**\" --quiet",
     "test": "jest",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"

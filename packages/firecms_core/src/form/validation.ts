@@ -9,7 +9,7 @@ import {
 } from "@firecms/types";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
-import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "@firecms/util";
+import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "@firecms/common";
 
 // Add custom unique function for array values
 declare module "yup" {

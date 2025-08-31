@@ -12,7 +12,7 @@ const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
     optimizeDeps: {
-        exclude: ["@firecms/ui", "@firecms/util", "@firecms/types", "@firecms/editor", "@firecms/formex"]
+        exclude: ["@firecms/ui", "@firecms/common", "@firecms/types", "@firecms/editor", "@firecms/formex"]
     },
     server: {
         fs: {
@@ -38,7 +38,7 @@ export default defineConfig(() => ({
     resolve: {
         alias: {
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/util": path.resolve(__dirname, "../util/src"),
+            "@firecms/common": path.resolve(__dirname, "../common/src"),
             "@firecms/types": path.resolve(__dirname, "../types/src"),
             "@firecms/editor": path.resolve(__dirname, "../editor/src"),
             "@firecms/formex": path.resolve(__dirname, "../formex/src")

@@ -13,7 +13,7 @@ import {
     NavigationViewCollectionInternal, NavigationViewEntityCustomInternal,
     NavigationViewInternal,
     toArray
-} from "@firecms/util";
+} from "@firecms/common";
 
 export function FireCMSRoute() {
 

@@ -22,7 +22,7 @@ import {
     isHidden,
     isReadOnly,
     mergeDeep,
-} from "@firecms/util";
+} from "@firecms/common";
 
 import {
     saveEntityWithCallbacks,

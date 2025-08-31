@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, FilterValues, PreviewSize } from "@firecms/types";
-import { getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/common";
 import { ReferencePreview } from "../preview";
 import { useNavigationController, useEntitySelectionTable } from "../hooks";
 import { Button, cls } from "@firecms/ui";

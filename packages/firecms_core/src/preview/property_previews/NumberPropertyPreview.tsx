@@ -2,7 +2,7 @@ import React from "react";
 
 import { EnumValuesChip } from "../../preview";
 import { PropertyPreviewProps } from "@firecms/types";
-import { enumToObjectEntries } from "@firecms/util";
+import { enumToObjectEntries } from "@firecms/common";
 
 /**
  * @group Preview components

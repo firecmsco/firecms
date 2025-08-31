@@ -18,7 +18,7 @@ import {
     SwitchFieldBinding,
     TextFieldBinding
 } from "../form";
-import { isPropertyBuilder, mergeDeep } from "@firecms/util";
+import { isPropertyBuilder, mergeDeep } from "@firecms/common";
 
 import {
     AddLinkIcon,

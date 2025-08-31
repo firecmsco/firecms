@@ -16,7 +16,7 @@ import {
     NavigationViewInternal,
     removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
-} from "@firecms/util";
+} from "@firecms/common";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { useCustomizationController, useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";

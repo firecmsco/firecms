@@ -13,7 +13,7 @@ import {
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
 import { resolveProperty } from "../../util";
-import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/util";
+import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/common";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };

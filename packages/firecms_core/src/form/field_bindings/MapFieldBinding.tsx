@@ -3,7 +3,7 @@ import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, Resolve
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
-import { isHidden, isReadOnly, pick } from "@firecms/util";
+import { isHidden, isReadOnly, pick } from "@firecms/common";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";

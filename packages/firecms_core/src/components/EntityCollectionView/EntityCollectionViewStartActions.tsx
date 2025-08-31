@@ -3,7 +3,7 @@ import { useCustomizationController, useFireCMSContext } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "@firecms/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
-import { toArray } from "@firecms/util";
+import { toArray } from "@firecms/common";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

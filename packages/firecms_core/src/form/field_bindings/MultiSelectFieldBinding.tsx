@@ -4,7 +4,7 @@ import { EnumType, FieldProps, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
-import { enumToObjectEntries, getLabelOrConfigFrom } from "@firecms/util";
+import { enumToObjectEntries, getLabelOrConfigFrom } from "@firecms/common";
 import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 

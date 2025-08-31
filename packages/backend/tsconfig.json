@@ -30,8 +30,8 @@
       "@firecms/types": [
         "../types/src"
       ],
-      "@firecms/util": [
-        "../util/src"
+      "@firecms/common": [
+        "../common/src"
       ]
     }
   },

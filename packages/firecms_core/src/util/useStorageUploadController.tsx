@@ -15,7 +15,7 @@ import {
     StringProperty
 } from "@firecms/types";
 import { useCallback, useEffect, useState } from "react";
-import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/util";
+import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/common";
 import { resolveProperty } from "./resolutions";
 import { useAuthController } from "../hooks";
 

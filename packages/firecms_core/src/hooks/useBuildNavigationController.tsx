@@ -28,7 +28,7 @@ import {
     removeInitialAndTrailingSlashes,
     resolveCollectionPathIds,
     resolvePermissions
-} from "@firecms/util";
+} from "@firecms/common";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";

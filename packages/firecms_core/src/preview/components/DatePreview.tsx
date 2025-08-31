@@ -3,7 +3,7 @@ import React from "react";
 import { format } from "date-fns";
 import * as locales from "date-fns/locale";
 import { useCustomizationController } from "../../hooks";
-import { defaultDateFormat } from "@firecms/util";
+import { defaultDateFormat } from "@firecms/common";
 
 /**
  * @group Preview components

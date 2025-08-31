@@ -2,7 +2,7 @@ import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
 import { EntityAction } from "@firecms/types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
-import { navigateToEntity, resolveDefaultSelectedView } from "@firecms/util";
+import { navigateToEntity, resolveDefaultSelectedView } from "@firecms/common";
 
 export const editEntityAction: EntityAction = {
     icon: <EditIcon size={"small"}/>,

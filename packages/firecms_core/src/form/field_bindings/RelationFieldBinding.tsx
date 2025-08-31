@@ -4,7 +4,7 @@ import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
-import { getReferenceFrom } from "@firecms/util";
+import { getReferenceFrom } from "@firecms/common";
 
 import { useEntitySelectionTable, useNavigationController } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";

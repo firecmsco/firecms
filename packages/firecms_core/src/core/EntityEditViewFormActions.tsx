@@ -10,7 +10,7 @@ import {
 } from "@firecms/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "@firecms/util";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "@firecms/common";
 import {
     Button,
     CircularProgress,

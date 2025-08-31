@@ -92,7 +92,6 @@ export type FirestoreDelegate = DataSourceDelegate & {
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  * @param textSearchControllerBuilder
- * @param collectionRegistry
  * @group Firebase
  */
 export function useFirestoreDelegate({

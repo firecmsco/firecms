@@ -4,7 +4,7 @@ import { useAuthController, useCustomizationController, useFireCMSContext, useLa
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "@firecms/types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { canCreateEntity, canDeleteEntity, toArray } from "@firecms/util";
+import { canCreateEntity, canDeleteEntity, toArray } from "@firecms/common";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

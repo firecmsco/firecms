@@ -6,7 +6,7 @@ import { Entity, EntityCollection, PreviewSize, ResolvedProperty } from "@firecm
 import {
     getEntityImagePreviewPropertyKey,
     getValueInPath,
-} from "@firecms/util";
+} from "@firecms/common";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {

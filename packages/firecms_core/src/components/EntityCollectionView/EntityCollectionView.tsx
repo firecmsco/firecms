@@ -30,7 +30,7 @@ import {
     mergeDeep,
     mergeEntityActions,
     navigateToEntity,
-} from "@firecms/util";
+} from "@firecms/common";
 import { ReferencePreview } from "../../preview";
 import {
     saveEntityWithCallbacks,

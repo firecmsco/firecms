@@ -1,7 +1,7 @@
 import React from "react";
 import { coolIconKeys, Icon, IconColor, iconKeys } from "@firecms/ui";
 import equal from "react-fast-compare"
-import { hashString, slugify } from "@firecms/util";
+import { hashString, slugify } from "@firecms/common";
 
 export function getIcon(iconKey?: string | React.ReactNode,
                         className?: string,

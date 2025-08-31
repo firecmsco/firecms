@@ -18,7 +18,7 @@ import {
 import { EnumValuesChip } from "../../preview";
 import { useCustomizationController } from "../../hooks/useCustomizationController";
 import { useFormex } from "@firecms/formex";
-import { enumToObjectEntries } from "@firecms/util";
+import { enumToObjectEntries } from "@firecms/common";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,

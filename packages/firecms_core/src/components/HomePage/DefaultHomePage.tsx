@@ -24,7 +24,7 @@ import { NavigationCardBinding } from "./NavigationCardBinding";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { RenameGroupDialog } from "./RenameGroupDialog";
-import { toArray } from "@firecms/util";
+import { toArray } from "@firecms/common";
 
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";

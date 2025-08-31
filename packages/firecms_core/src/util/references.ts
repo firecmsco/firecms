@@ -1,5 +1,5 @@
 import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "@firecms/types";
-import { isPropertyBuilder } from "@firecms/util";
+import { isPropertyBuilder } from "@firecms/common";
 import { isReferenceProperty } from "./property_utils";
 import { getFieldConfig } from "../core";
 

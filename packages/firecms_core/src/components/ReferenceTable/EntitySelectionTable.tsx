@@ -21,7 +21,7 @@ import { useSelectionController } from "../EntityCollectionView/useSelectionCont
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { canCreateEntity } from "@firecms/util";
+import { canCreateEntity } from "@firecms/common";
 
 /**
  * @group Components

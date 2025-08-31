@@ -22,7 +22,7 @@ import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firec
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
 import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
-import { isReadOnly } from "@firecms/util";
+import { isReadOnly } from "@firecms/common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;

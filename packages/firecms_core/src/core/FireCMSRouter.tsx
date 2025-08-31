@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { removeInitialAndTrailingSlashes } from "@firecms/util";
+import { removeInitialAndTrailingSlashes } from "@firecms/common";
 
 export function FireCMSRouter({
                            children,
