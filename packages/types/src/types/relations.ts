@@ -1,5 +1,4 @@
 import type { EntityCollection } from "./collections";
-import type { Property, Properties } from "./properties";
 
 /**
  * @group Models

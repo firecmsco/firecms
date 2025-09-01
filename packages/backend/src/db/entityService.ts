@@ -534,7 +534,7 @@ export class EntityService {
             for (const key in resolvedRelations) {
                 const relation = resolvedRelations[key];
                 if (relation && relation.type === "manyToMany") {
-                    if (otherValues.hasOwnProperty(key)) {
+                    if (Object.prototype.hasOwnProperty.call(otherValues, key)) {
                         manyToManyValues[key] = otherValues[key as keyof M];
                         delete otherValues[key as keyof M];
                     }
@@ -583,7 +583,7 @@ export class EntityService {
                     .returning({ id: idField });
 
                 const result = await insertQuery;
-                currentId = result[0].id;
+                currentId = result[0].id as string | number;
             }
 
             // Update many-to-many relations
@@ -860,6 +860,14 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
+        // Find the subcollection definition
+        const subcollections = parentCollection.subcollections?.() ?? [];
+        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
+
+        if (!subcollection) {
+            throw new Error(`Subcollection '${subcollectionSlug}' not found in '${parentPath}'`);
+        }
+
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
         const relation = resolvedRelations[subcollectionSlug];
@@ -870,38 +878,34 @@ export class EntityService {
         const typedRelation = relation as ManyRelation;
 
         const targetCollection = typedRelation.target();
-        const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
-        // Find the field in the target collection that relations the parent
-        let foreignKeyField: string | undefined;
-        for (const [key, prop] of Object.entries(targetCollection.properties)) {
-            const property = prop as Property;
-            if (property.type === "relation" &&
-                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
-                foreignKeyField = key;
-                break;
+        if (subcollection.relation) {
+            // If subcollection has an explicit relation, count all entities in the target collection
+            const table = collectionRegistry.getTable(targetCollection.dbPath);
+            if (!table) {
+                throw new Error(`Table not found for dbPath: ${targetCollection.dbPath}`);
             }
+
+            const result = await this.db
+                .select({ count: sql`count(*)` })
+                .from(table);
+
+            return Number(result[0]?.count || 0);
+        } else {
+            // No explicit relation - use the subcollection's dbPath
+            const subcollectionDbPath = subcollection.dbPath;
+            const table = collectionRegistry.getTable(subcollectionDbPath);
+            if (!table) {
+                throw new Error(`Table not found for dbPath: ${subcollectionDbPath}`);
+            }
+
+            // Count all entities in the subcollection's table
+            const result = await this.db
+                .select({ count: sql`count(*)` })
+                .from(table);
+
+            return Number(result[0]?.count || 0);
         }
-
-        if (!foreignKeyField) {
-            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
-        }
-
-        const table = collectionRegistry.getTable(targetCollection.dbPath);
-        if (!table) {
-            throw new Error(`Table not found for dbPath: ${targetCollection.dbPath}`);
-        }
-
-        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-        const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
-
-        const result = await this.db
-            .select({ count: sql`count(*)` })
-            .from(table)
-            .where(eq(foreignKeyColumn, parsedParentId));
-
-        return Number(result[0]?.count || 0);
     }
 
     generateEntityId(): string {
@@ -1235,6 +1239,14 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
+        // Find the subcollection definition
+        const subcollections = parentCollection.subcollections?.() ?? [];
+        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
+
+        if (!subcollection) {
+            throw new Error(`Subcollection '${subcollectionSlug}' not found in '${parentPath}'`);
+        }
+
         // Get all collections for relation resolution
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
@@ -1248,34 +1260,22 @@ export class EntityService {
         const targetCollection = typedRelation.target();
         const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
-        let foreignKeyField: string | undefined;
-        // Find the field in the target collection that relations the parent
-        for (const [key, prop] of Object.entries(targetCollection.properties)) {
-            const property = prop as Property;
-            if (property.type === "relation" && (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
-                foreignKeyField = key;
-                break;
-            }
+        if (subcollection.relation) {
+            // If subcollection has an explicit relation, we can skip foreign key lookup
+            // and just fetch all entities from the target collection.
+            console.log(`Using explicit relation definition for subcollection: ${subcollectionSlug}`);
+
+            // For subcollections with explicit relations, we can fetch all entities
+            return this.fetchCollection<M>(targetCollectionPath, options);
+        } else {
+            // No explicit relation - use the subcollection's dbPath as the target collection
+            // This handles cases like "mantenimiento" where it's a direct subcollection
+            const subcollectionDbPath = subcollection.dbPath;
+            console.log(`Using subcollection dbPath for direct subcollection: ${subcollectionDbPath}`);
+
+            // Fetch all entities from the subcollection's dbPath
+            // Since it's defined as a subcollection, it's implicitly related to the parent
+            return this.fetchCollection<M>(subcollectionDbPath, options);
         }
-
-        if (!foreignKeyField) {
-            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
-        }
-
-        const existingFilter = options.filter ?? {};
-        const parentIdInfo = this.getIdFieldInfo(parentPath);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-
-        // Add a filter condition to match the parent ID
-        const newFilter: FilterValues<Extract<keyof M, string>> = {
-            ...existingFilter,
-            [foreignKeyField as Extract<keyof M, string>]: ["==", parsedParentId]
-        };
-
-        // Delegate back to the main fetchCollection method with the new filter
-        return this.fetchCollection<M>(targetCollectionPath, {
-            ...options,
-            filter: newFilter
-        });
     }
 }
