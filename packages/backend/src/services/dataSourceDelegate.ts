@@ -296,9 +296,13 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
     async countEntities<M extends Record<string, any>>({
                                                            path,
-                                                           collection
+                                                           collection,
+                                                           filter
                                                        }: FetchCollectionProps<M>): Promise<number> {
-        return this.entityService.countEntities(path, collection?.databaseId);
+        return this.entityService.countEntities(
+            path,
+            { filter }
+        );
     }
 
     isFilterCombinationValid(): boolean {

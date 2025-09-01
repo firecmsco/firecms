@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, ilike, or, sql, SQLWrapper } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, or, sql, SQLWrapper } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -213,6 +213,56 @@ export class EntityService {
     constructor(private db: NodePgDatabase<any>) {
     }
 
+    private buildFilterConditions<M extends Record<string, any>>(
+        filter: FilterValues<Extract<keyof M, string>>,
+        table: PgTable<any>,
+        path: string
+    ): SQLWrapper[] {
+        const conditions: SQLWrapper[] = [];
+        for (const [field, filterParam] of Object.entries(filter)) {
+            if (!filterParam) continue;
+
+            const [op, value] = filterParam as [WhereFilterOp, any];
+            const fieldColumn = table[field as keyof typeof table] as AnyPgColumn;
+
+            if (!fieldColumn) {
+                console.warn(`Filtering by field '${field}', but it does not exist in table for path '${path}'`);
+                continue;
+            }
+
+            switch (op) {
+                case "==":
+                    conditions.push(eq(fieldColumn, value));
+                    break;
+                case "!=":
+                    conditions.push(sql`${fieldColumn} != ${value}`);
+                    break;
+                case ">":
+                    conditions.push(sql`${fieldColumn} > ${value}`);
+                    break;
+                case ">=":
+                    conditions.push(sql`${fieldColumn} >= ${value}`);
+                    break;
+                case "<":
+                    conditions.push(sql`${fieldColumn} < ${value}`);
+                    break;
+                case "<=":
+                    conditions.push(sql`${fieldColumn} <= ${value}`);
+                    break;
+                case "in":
+                    if (Array.isArray(value) && value.length > 0) {
+                        conditions.push(sql`${fieldColumn} = ANY(${value})`);
+                    }
+                    break;
+                case "array-contains":
+                    // For JSONB arrays
+                    conditions.push(sql`${fieldColumn} @> ${JSON.stringify([value])}`);
+                    break;
+            }
+        }
+        return conditions;
+    }
+
     private resolveCollectionAndIdsForPath(path: string): {
         collection: EntityCollection,
         parentIds: string[]
@@ -417,48 +467,7 @@ export class EntityService {
 
         // Apply filters
         if (options.filter) {
-            const conditions: SQLWrapper[] = [];
-            for (const [field, filterParam] of Object.entries(options.filter)) {
-                if (!filterParam) continue;
-
-                const [op, value] = filterParam as [WhereFilterOp, any];
-                const fieldColumn = table[field as keyof typeof table] as AnyPgColumn;
-
-                if (!fieldColumn) {
-                    console.warn(`Filtering by field '${field}', but it does not exist in table for path '${path}'`);
-                    continue;
-                }
-
-                switch (op) {
-                    case "==":
-                        conditions.push(eq(fieldColumn, value));
-                        break;
-                    case "!=":
-                        conditions.push(sql`${fieldColumn} != ${value}`);
-                        break;
-                    case ">":
-                        conditions.push(sql`${fieldColumn} > ${value}`);
-                        break;
-                    case ">=":
-                        conditions.push(sql`${fieldColumn} >= ${value}`);
-                        break;
-                    case "<":
-                        conditions.push(sql`${fieldColumn} < ${value}`);
-                        break;
-                    case "<=":
-                        conditions.push(sql`${fieldColumn} <= ${value}`);
-                        break;
-                    case "in":
-                        if (Array.isArray(value) && value.length > 0) {
-                            conditions.push(sql`${fieldColumn} = ANY(${value})`);
-                        }
-                        break;
-                    case "array-contains":
-                        // For JSONB arrays
-                        conditions.push(sql`${fieldColumn} @> ${JSON.stringify([value])}`);
-                        break;
-                }
-            }
+            const conditions = this.buildFilterConditions(options.filter, table, path);
             if (conditions.length > 0) {
                 query = query.where(and(...conditions));
             }
@@ -707,15 +716,22 @@ export class EntityService {
         }
 
         const result = await this.db
-            .select({ count: sql`count(*)` })
+            .select({ count: count() })
             .from(table)
             .where(and(...conditions));
 
-        const count = Number(result[0]?.count || 0);
-        return count === 0;
+        const countResult = Number(result[0]?.count || 0);
+        return countResult === 0;
     }
 
-    async countEntities(path: string, _databaseId?: string): Promise<number> {
+    async countEntities<M extends Record<string, any>>(
+        path: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            databaseId?: string;
+        } = {}
+    ): Promise<number> {
+        const { filter } = options;
         const pathSegments = path.split("/").filter(p => p);
 
         // Handle multi-segment paths (subcollections)
@@ -733,33 +749,40 @@ export class EntityService {
 
                 if (relation) {
                     if (relation.type === "manyToMany") {
-                        return this.countManyToManyCollection(parentPath, parentEntityId, subcollectionSlug);
+                        return this.countManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
                     } else if (relation.type === "many") {
-                        return this.countManyCollection(parentPath, parentEntityId, subcollectionSlug);
+                        return this.countManyCollection(path, parentPath, parentEntityId, subcollectionSlug, options);
                     }
                 } else {
                     // Direct subcollection - count with parent filter
-                    return this.countDirectSubcollection(path, parentPath, parentEntityId);
+                    return this.countDirectSubcollection(path, parentPath, parentEntityId, options);
                 }
             }
         }
 
         // Simple collection - count all entities
         const table = this.getTableForPath(path);
-        const result = await this.db
-            .select({ count: sql`count(*)` })
-            .from(table);
+        let query: any = this.db.select({ count: count() }).from(table);
 
+        if (filter) {
+            const conditions = this.buildFilterConditions(filter, table, path);
+            if (conditions.length > 0) {
+                query = query.where(and(...conditions));
+            }
+        }
+
+        const result = await query;
         return Number(result[0]?.count || 0);
     }
 
     /**
      * Count entities in a direct subcollection filtered by parent entity
      */
-    private async countDirectSubcollection(
+    private async countDirectSubcollection<M extends Record<string, any>>(
         path: string,
         parentPath: string,
-        parentEntityId: string | number
+        parentEntityId: string | number,
+        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
     ): Promise<number> {
         const { collection } = this.resolveCollectionAndIdsForPath(path);
         const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
@@ -776,34 +799,41 @@ export class EntityService {
             }
         }
 
+        const allConditions: SQLWrapper[] = [];
+
         if (!foreignKeyField) {
             console.warn(`Could not find foreign key field on ${path} pointing to ${parentPath}`);
-            // Fallback to counting all entities
-            const result = await this.db
-                .select({ count: sql`count(*)` })
-                .from(table);
-            return Number(result[0]?.count || 0);
+        } else {
+            const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+            const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+            const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
+            allConditions.push(eq(foreignKeyColumn, parsedParentId));
         }
 
-        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-        const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
+        if (options.filter) {
+            const filterConditions = this.buildFilterConditions(options.filter, table, path);
+            if (filterConditions.length > 0) {
+                allConditions.push(...filterConditions);
+            }
+        }
 
-        const result = await this.db
-            .select({ count: sql`count(*)` })
-            .from(table)
-            .where(eq(foreignKeyColumn, parsedParentId));
+        let query: any = this.db.select({ count: count() }).from(table);
+        if (allConditions.length > 0) {
+            query = query.where(and(...allConditions));
+        }
 
+        const result = await query;
         return Number(result[0]?.count || 0);
     }
 
     /**
      * Count entities in a many-to-many collection filtered by parent entity
      */
-    private async countManyToManyCollection(
+    private async countManyToManyCollection<M extends Record<string, any>>(
         parentPath: string,
         parentEntityId: string | number,
-        subcollectionSlug: string
+        subcollectionSlug: string,
+        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
     ): Promise<number> {
         const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         if (!parentCollection) {
@@ -820,18 +850,21 @@ export class EntityService {
         const typedRelation = relation as ManyToManyRelation;
 
         const targetCollection = typedRelation.target();
+        const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
+        const targetTable = this.getTableForPath(targetTablePath);
+
         const junctionDbPath = resolveJunctionTableName(typedRelation.through, parentCollection, targetCollection);
         const junctionTable = collectionRegistry.getTable(junctionDbPath);
         if (!junctionTable) {
             throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
         }
 
-        const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
+        const parentIdInfo = this.getIdFieldInfo(parentPath);
         const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
 
         const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
         const sourceJunctionKeyName = Array.isArray(typedRelation.through?.sourceJunctionKey)
-            ? (typedRelation.through?.sourceJunctionKey as string[])[0]
+            ? (typedRelation.through.sourceJunctionKey as string[])[0]
             : (typedRelation.through?.sourceJunctionKey ?? defaultSourceKey);
 
         const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
@@ -839,33 +872,54 @@ export class EntityService {
             throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
         }
 
-        const result = await this.db
-            .select({ count: sql`count(*)` })
-            .from(junctionTable)
-            .where(eq(sourceJunctionKey, parsedParentId));
+        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
+        const targetJunctionKeyName = Array.isArray(typedRelation.through?.targetJunctionKey)
+            ? (typedRelation.through.targetJunctionKey as string[])[0]
+            : (typedRelation.through?.targetJunctionKey ?? defaultTargetKey);
+        const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+        if (!targetJunctionKey) {
+            throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
+        }
 
+        const targetIdInfo = this.getIdFieldInfo(targetTablePath);
+        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+        if (!targetIdField) {
+            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in table for path '${targetTablePath}'`);
+        }
+
+        let query: any = this.db
+            .select({ count: count() })
+            .from(targetTable)
+            .innerJoin(junctionTable, eq(targetIdField, targetJunctionKey));
+
+        const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
+
+        if (options.filter) {
+            const conditions = this.buildFilterConditions(options.filter, targetTable, targetTablePath);
+            if (conditions.length > 0) {
+                allConditions.push(...conditions);
+            }
+        }
+
+        query = query.where(and(...allConditions));
+
+        const result = await query;
         return Number(result[0]?.count || 0);
     }
 
     /**
      * Count entities in a one-to-many collection filtered by parent entity
      */
-    private async countManyCollection(
+    private async countManyCollection<M extends Record<string, any>>(
+        path: string,
         parentPath: string,
         parentEntityId: string | number,
-        subcollectionSlug: string
+        subcollectionSlug: string,
+        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
     ): Promise<number> {
         const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         if (!parentCollection) {
             throw new Error(`Parent collection not found: ${parentPath}`);
-        }
-
-        // Find the subcollection definition
-        const subcollections = parentCollection.subcollections?.() ?? [];
-        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
-
-        if (!subcollection) {
-            throw new Error(`Subcollection '${subcollectionSlug}' not found in '${parentPath}'`);
         }
 
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
@@ -875,37 +929,8 @@ export class EntityService {
         if (!relation || relation.type !== "many") {
             throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
-        const typedRelation = relation as ManyRelation;
 
-        const targetCollection = typedRelation.target();
-
-        if (subcollection.relation) {
-            // If subcollection has an explicit relation, count all entities in the target collection
-            const table = collectionRegistry.getTable(targetCollection.dbPath);
-            if (!table) {
-                throw new Error(`Table not found for dbPath: ${targetCollection.dbPath}`);
-            }
-
-            const result = await this.db
-                .select({ count: sql`count(*)` })
-                .from(table);
-
-            return Number(result[0]?.count || 0);
-        } else {
-            // No explicit relation - use the subcollection's dbPath
-            const subcollectionDbPath = subcollection.dbPath;
-            const table = collectionRegistry.getTable(subcollectionDbPath);
-            if (!table) {
-                throw new Error(`Table not found for dbPath: ${subcollectionDbPath}`);
-            }
-
-            // Count all entities in the subcollection's table
-            const result = await this.db
-                .select({ count: sql`count(*)` })
-                .from(table);
-
-            return Number(result[0]?.count || 0);
-        }
+        return this.countDirectSubcollection(path, parentPath, parentEntityId, options);
     }
 
     generateEntityId(): string {
@@ -1134,47 +1159,7 @@ export class EntityService {
         const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
 
         if (options.filter) {
-            const conditions: SQLWrapper[] = [];
-            for (const [field, filterParam] of Object.entries(options.filter)) {
-                if (!filterParam) continue;
-
-                const [op, value] = filterParam as [WhereFilterOp, any];
-                const fieldColumn = targetTable[field as keyof typeof targetTable] as AnyPgColumn;
-
-                if (!fieldColumn) {
-                    console.warn(`Filtering by field '${field}', but it does not exist in table for path '${targetCollection.slug ?? targetCollection.dbPath}'`);
-                    continue;
-                }
-
-                switch (op) {
-                    case "==":
-                        conditions.push(eq(fieldColumn, value));
-                        break;
-                    case "!=":
-                        conditions.push(sql`${fieldColumn} != ${value}`);
-                        break;
-                    case ">":
-                        conditions.push(sql`${fieldColumn} > ${value}`);
-                        break;
-                    case ">=":
-                        conditions.push(sql`${fieldColumn} >= ${value}`);
-                        break;
-                    case "<":
-                        conditions.push(sql`${fieldColumn} < ${value}`);
-                        break;
-                    case "<=":
-                        conditions.push(sql`${fieldColumn} <= ${value}`);
-                        break;
-                    case "in":
-                        if (Array.isArray(value) && value.length > 0) {
-                            conditions.push(sql`${fieldColumn} = ANY(${value})`);
-                        }
-                        break;
-                    case "array-contains":
-                        conditions.push(sql`${fieldColumn} @> ${JSON.stringify([value])}`);
-                        break;
-                }
-            }
+            const conditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
             if (conditions.length > 0) {
                 allConditions.push(...conditions);
             }
