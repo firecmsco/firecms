@@ -691,21 +691,10 @@ export interface RelationProperty extends BaseProperty<EntityRelation | EntityRe
     type: "relation";
 
     /**
-     * Absolute collection path of the collection this reference points to.
-     * The collection of the entity is inferred based on the root navigation, so
-     * the filters and search delegate existing there are applied to this view
-     * as well.
-     * You can leave this prop undefined if the path is not yet know, e.g.
-     * you are using a property builder and the path depends on a different
-     * property.
-     */
-    path?: string;
-
-    /**
      * For SQL databases, you can specify the table name of the collection this
      * reference points to.
      */
-    relation?: Relation;
+    relation: Relation;
 
     /**
      * Allow selection of entities that pass the given filter only.

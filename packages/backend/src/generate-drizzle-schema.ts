@@ -10,7 +10,7 @@ import {
     resolveTargetTableName,
     toSnakeCase
 } from "./utils/collection-utils";
-import { resolveCollectionRelations } from "./utils/relations";
+import { resolveCollectionRelations } from "@firecms/common";
 
 let loadedCollections: EntityCollection[] | undefined = [];
 
@@ -64,8 +64,8 @@ const formatTerminalText = (text: string, options: {
 
 /**
  * Generates Drizzle column definitions for junction keys.
+ * @param keys The junction key(s) - can be a single string or array of strings
  * @param targetCollection The target collection to reference.
- * @param tableVarName The variable name of the target table.
  * @param refOptions Relation options.
  * @returns An array of Drizzle column definition strings.
  */
@@ -145,20 +145,22 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
                 return ""; // This is a virtual property for a many-to-many relation, handled by a junction table.
             }
 
-            // ensure we have a path or a target function
-            if (!refProp.path) return "";
-
             const collections = loadedCollections;
             if (!collections) {
                 console.warn("Could not find loaded collections in global scope. Skipping reference type resolution.");
                 return "";
             }
 
-            const targetCollectionPath = resolveTargetTableName(refProp.path);
-            const targetCollection = collections.find(c => getTableName(c) === targetCollectionPath);
+            // Use the new relation system instead of path-based references
+            let targetCollection: EntityCollection | undefined;
+
+            if (refProp.relation) {
+                // Use explicit relation definition
+                targetCollection = refProp.relation.target();
+            }
 
             if (!targetCollection) {
-                console.warn(`Could not find target collection with path ${targetCollectionPath}`);
+                console.warn(`Could not find target collection for relation property ${propName}`);
                 return `varchar("${colName}")`;
             }
 
@@ -168,9 +170,9 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const isNumberId = idProp?.type === "number" || (targetCollection.customId !== "optional" && !targetCollection.customId && typeof targetCollection.customId !== "object" && !idProp);
 
             const baseColumn = isNumberId ? `integer("${colName}")` : `varchar("${colName}")`;
-            const targetTableName = resolveTargetTableName(refProp.path);
+            const targetTableName = getTableName(targetCollection);
             const targetTableVar = getTableVarName(targetTableName);
-            const refOptions = (prop ).validation?.required
+            const refOptions = (prop as any).validation?.required
                 ? "{ onDelete: \"cascade\" }"
                 : "{ onDelete: \"set null\" }";
             columnDefinition = `${baseColumn}.references(() => ${targetTableVar}.${idField}, ${refOptions})`;
@@ -191,7 +193,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             return "";
     }
 
-    if ((prop ).validation?.required) {
+    if ((prop).validation?.required) {
         columnDefinition += ".notNull()";
     }
 
@@ -224,12 +226,12 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
         const collectionPath = getTableName(collection);
         Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
             const property = prop as Property;
-            if ((property.type === "string" || property.type === "number") && (property ).enum) {
+            if ((property.type === "string" || property.type === "number") && (property).enum) {
                 const enumVarName = getEnumVarName(collectionPath, propName);
                 const enumDbName = `${collectionPath}_${toSnakeCase(propName)}`;
-                const values = Array.isArray((property ).enum)
-                    ? (property ).enum.map((v: any) => String(v.id))
-                    : Object.keys((property ).enum);
+                const values = Array.isArray((property).enum)
+                    ? (property).enum.map((v: any) => String(v.id))
+                    : Object.keys((property).enum);
                 if (values.length > 0) {
                     schemaContent += `export const ${enumVarName} = pgEnum("${enumDbName}", [${values.map((v: any) => `'${v}'`).join(", ")}]);\n`;
                     if (!exportedEnumVars.includes(enumVarName)) exportedEnumVars.push(enumVarName);
@@ -386,6 +388,10 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
                     } else {
                         tableRelations.push(`\t${relationKey}: many(${junctionTableVarName})`);
                     }
+                } else if (relation.type === "through") {
+                    // Generate through relation - this is a virtual relation that doesn't map directly to Drizzle
+                    // The entity service will handle the traversal logic
+                    console.log(`Through relation ${relationKey} registered for collection ${collection.slug || collection.dbPath}`);
                 }
             } catch (e) {
                 console.warn(`Could not generate relation ${relationKey}:`, e);

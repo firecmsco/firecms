@@ -64,12 +64,9 @@ export function getTableVarName(tableName: string): string {
  * @param target The target reference
  * @returns The resolved table name
  */
-export function resolveTargetTableName(target: string | (() => EntityCollection)): string {
-    if (typeof target === "function") {
-        const col = target();
-        return getTableName(col);
-    }
-    return target;
+export function resolveTargetTableName(target: () => EntityCollection): string {
+    const col = target();
+    return getTableName(col);
 }
 
 /**

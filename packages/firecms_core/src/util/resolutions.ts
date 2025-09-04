@@ -13,7 +13,6 @@ import {
     Properties,
     Property,
     PropertyConfig,
-    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedEntityCollection,
     ResolvedNumberProperty,
@@ -495,4 +494,15 @@ export function resolvedSelectedEntityView<M extends Record<string, any>>(
         selectedEntityView,
         selectedSecondaryForm
     };
+}
+
+export function getSubcollections<M>(collection: EntityCollection<M>) {
+    const subcollections: EntityCollection<any>[] = [];
+    subcollections.push(...(collection.subcollections?.() ?? []));
+    subcollections.push(...(collection.relations?.map(relation => {
+        const targetCollection = relation.target();
+        const overrides = relation.collection;
+        return overrides ? mergeDeep(targetCollection, overrides) : targetCollection;
+    }) ?? []));
+    return subcollections;
 }

@@ -1,4 +1,5 @@
-import { EntityCollection, Subcollection } from "@firecms/types";
+import { EntityCollection } from "@firecms/types";
+import { resolveCollectionRelations } from "../util";
 
 export class CollectionRegistry {
 
@@ -24,6 +25,55 @@ export class CollectionRegistry {
 
     getAll(): EntityCollection[] {
         return this.collectionsArray;
+    }
+
+    /**
+     * Get collection by resolving multi-segment paths through relations
+     * e.g., "maquinaria/70/alquileres" resolves to the alquileres collection
+     */
+    getCollectionByPath(collectionPath: string): EntityCollection | undefined {
+        // Handle simple single collection path
+        if (!collectionPath.includes("/")) {
+            return this.get(collectionPath) ?? this.getBySlug(collectionPath);
+        }
+
+        // Handle multi-segment paths by resolving through relations
+        const pathSegments = collectionPath.split("/").filter(p => p);
+
+        if (pathSegments.length < 3 || pathSegments.length % 2 === 0) {
+            throw new Error(`Invalid relation path: ${collectionPath}. Expected format: collection/id/relation or collection/id/relation/id/relation`);
+        }
+
+        // Start with the root collection
+        const rootCollectionPath = pathSegments[0];
+        let currentCollection = this.get(rootCollectionPath) ?? this.getBySlug(rootCollectionPath);
+
+        if (!currentCollection) {
+            throw new Error(`Root collection not found: ${rootCollectionPath}`);
+        }
+
+        // Navigate through the path using relations
+        for (let i = 2; i < pathSegments.length; i += 2) {
+            const relationKey = pathSegments[i];
+
+            // Get relations for current collection
+            const resolvedRelations = resolveCollectionRelations(currentCollection, this.getAllCollectionsRecursively());
+            const relation = resolvedRelations[relationKey];
+
+            if (!relation) {
+                throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug || currentCollection.dbPath}'`);
+            }
+
+            // Move to the target collection
+            currentCollection = relation.target();
+
+            // If there are more segments, continue navigation
+            if (i + 1 < pathSegments.length) {
+                // Skip entity ID segment
+            }
+        }
+
+        return currentCollection;
     }
 
     getAllCollectionsRecursively(): EntityCollection[] {
@@ -79,12 +129,12 @@ export class CollectionRegistry {
 
             if (i + 1 < pathSegments.length) {
                 const subcollectionSlug = pathSegments[i + 1];
-                const subcollections: Subcollection[] | undefined = currentCollection.subcollections?.();
+                const subcollections: EntityCollection[] | undefined = currentCollection.subcollections?.();
                 if (!subcollections) {
                     throw new Error(`No subcollections found for ${currentCollection.slug || currentCollection.dbPath} in path: ${path}`);
                 }
 
-                const subcollection: Subcollection | undefined = subcollections.find(c => c.slug === subcollectionSlug);
+                const subcollection: EntityCollection | undefined = subcollections.find(c => c.slug === subcollectionSlug);
                 if (!subcollection) {
                     throw new Error(`Subcollection '${subcollectionSlug}' not found in ${currentCollection.slug || currentCollection.dbPath}`);
                 }

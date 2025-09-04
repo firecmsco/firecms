@@ -75,7 +75,7 @@ export const controlDiario = pgTable("control_diario", {
 export const alquileres = pgTable("alquileres", {
 	id: serial("id").primaryKey(),
 	maquina_referencia: integer("maquina_referencia").references(() => maquinaria.id, { onDelete: "cascade" }).notNull(),
-	cliente_referencia: integer("cliente_referencia").references(() => clientes.id, { onDelete: "cascade" }).notNull(),
+	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: "set null" }),
 	tipo_alquiler: alquileresTipo_alquiler("tipo_alquiler").notNull(),
 	precio_por_dia: numeric("precio_por_dia").notNull(),
 	fecha_salida: timestamp("fecha_salida", { withTimezone: true, mode: 'string' }).notNull(),
@@ -93,6 +93,7 @@ export const alquileres = pgTable("alquileres", {
 
 export const mantenimiento = pgTable("mantenimiento", {
 	id: serial("id").primaryKey(),
+	maquina_relacionada: integer("maquina_relacionada").references(() => maquinaria.id, { onDelete: "set null" }),
 	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
 	tipo_mantenimiento: mantenimientoTipo_mantenimiento("tipo_mantenimiento").notNull(),
 	horas_maquina: numeric("horas_maquina"),
@@ -159,9 +160,16 @@ export const alquileresRelations = drizzleRelations(alquileres, ({ one, many }) 
 		fields: [alquileres.maquina_referencia],
 		references: [maquinaria.id]
 	}),
-	cliente_referencia: one(clientes, {
-		fields: [alquileres.cliente_referencia],
+	cliente_relacionado: one(clientes, {
+		fields: [alquileres.cliente_relacionado],
 		references: [clientes.id]
+	})
+}));
+
+export const mantenimientoRelations = drizzleRelations(mantenimiento, ({ one }) => ({
+	maquina_relacionada: one(maquinaria, {
+		fields: [mantenimiento.maquina_relacionada],
+		references: [maquinaria.id]
 	})
 }));
 
@@ -196,5 +204,5 @@ export const maquinariaImplementosRelations = drizzleRelations(maquinariaImpleme
 
 export const tables = { maquinariaImplementos, clientes, implementos, maquinaria, controlDiario, alquileres, mantenimiento, horas, incidencias };
 export const enums = { maquinariaCategoria, maquinariaEstado_actual, alquileresTipo_alquiler, alquileresEstado_pago, mantenimientoTipo_mantenimiento, horasMotivo_lectura, incidenciasTipo_incidencia, incidenciasGravedad };
-export const relations = { clientesRelations, implementosRelations, maquinariaRelations, alquileresRelations, horasRelations, incidenciasRelations, maquinariaImplementosRelations };
+export const relations = { clientesRelations, implementosRelations, maquinariaRelations, alquileresRelations, mantenimientoRelations, horasRelations, incidenciasRelations, maquinariaImplementosRelations };
 

@@ -1,0 +1,925 @@
+{
+  "id": "bb395098-001a-49e3-9435-ced296e94d64",
+  "prevId": "80fc8241-8b29-47ad-845a-b4be9fab9509",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.alquileres": {
+      "name": "alquileres",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "maquina_referencia": {
+          "name": "maquina_referencia",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cliente_relacionado": {
+          "name": "cliente_relacionado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tipo_alquiler": {
+          "name": "tipo_alquiler",
+          "type": "alquileres_tipo_alquiler",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "precio_por_dia": {
+          "name": "precio_por_dia",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_salida": {
+          "name": "fecha_salida",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_devolucion_prevista": {
+          "name": "fecha_devolucion_prevista",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_devolucion_real": {
+          "name": "fecha_devolucion_real",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "situacion_obra": {
+          "name": "situacion_obra",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "horas_salida": {
+          "name": "horas_salida",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "horas_devolucion": {
+          "name": "horas_devolucion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "implementos_incluidos": {
+          "name": "implementos_incluidos",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activo": {
+          "name": "activo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas": {
+          "name": "notas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_facturado": {
+          "name": "total_facturado",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado_pago": {
+          "name": "estado_pago",
+          "type": "alquileres_estado_pago",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "alquileres_maquina_referencia_maquinaria_id_fk": {
+          "name": "alquileres_maquina_referencia_maquinaria_id_fk",
+          "tableFrom": "alquileres",
+          "tableTo": "maquinaria",
+          "columnsFrom": [
+            "maquina_referencia"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "alquileres_cliente_relacionado_clientes_id_fk": {
+          "name": "alquileres_cliente_relacionado_clientes_id_fk",
+          "tableFrom": "alquileres",
+          "tableTo": "clientes",
+          "columnsFrom": [
+            "cliente_relacionado"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.clientes": {
+      "name": "clientes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "telefono": {
+          "name": "telefono",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "direccion": {
+          "name": "direccion",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ciudad": {
+          "name": "ciudad",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pais": {
+          "name": "pais",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_registro": {
+          "name": "fecha_registro",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.control_diario": {
+      "name": "control_diario",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "facturacion_total": {
+          "name": "facturacion_total",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "facturacion_por_categoria": {
+          "name": "facturacion_por_categoria",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_maquinas": {
+          "name": "total_maquinas",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maquinas_alquiladas": {
+          "name": "maquinas_alquiladas",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maquinas_disponibles": {
+          "name": "maquinas_disponibles",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maquinas_mantenimiento": {
+          "name": "maquinas_mantenimiento",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subcontratas": {
+          "name": "subcontratas",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "previsiones": {
+          "name": "previsiones",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas_generales": {
+          "name": "notas_generales",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado_implementos": {
+          "name": "estado_implementos",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.horas": {
+      "name": "horas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "horas_totales": {
+          "name": "horas_totales",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "horas_periodo": {
+          "name": "horas_periodo",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "motivo_lectura": {
+          "name": "motivo_lectura",
+          "type": "horas_motivo_lectura",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "operador": {
+          "name": "operador",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas": {
+          "name": "notas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alquiler_relacionado": {
+          "name": "alquiler_relacionado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "horas_alquiler_relacionado_alquileres_id_fk": {
+          "name": "horas_alquiler_relacionado_alquileres_id_fk",
+          "tableFrom": "horas",
+          "tableTo": "alquileres",
+          "columnsFrom": [
+            "alquiler_relacionado"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.implementos": {
+      "name": "implementos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stock_total": {
+          "name": "stock_total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stock_alquilado": {
+          "name": "stock_alquilado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stock_libre": {
+          "name": "stock_libre",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.incidencias": {
+      "name": "incidencias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo_incidencia": {
+          "name": "tipo_incidencia",
+          "type": "incidencias_tipo_incidencia",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gravedad": {
+          "name": "gravedad",
+          "type": "incidencias_gravedad",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reportado_por": {
+          "name": "reportado_por",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cliente_relacionado": {
+          "name": "cliente_relacionado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alquiler_relacionado": {
+          "name": "alquiler_relacionado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "solucion": {
+          "name": "solucion",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_solucion": {
+          "name": "fecha_solucion",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "costo_reparacion": {
+          "name": "costo_reparacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "responsable_cliente": {
+          "name": "responsable_cliente",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resuelto": {
+          "name": "resuelto",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "incidencias_cliente_relacionado_clientes_id_fk": {
+          "name": "incidencias_cliente_relacionado_clientes_id_fk",
+          "tableFrom": "incidencias",
+          "tableTo": "clientes",
+          "columnsFrom": [
+            "cliente_relacionado"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "incidencias_alquiler_relacionado_alquileres_id_fk": {
+          "name": "incidencias_alquiler_relacionado_alquileres_id_fk",
+          "tableFrom": "incidencias",
+          "tableTo": "alquileres",
+          "columnsFrom": [
+            "alquiler_relacionado"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mantenimiento": {
+      "name": "mantenimiento",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "maquina_relacionada": {
+          "name": "maquina_relacionada",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo_mantenimiento": {
+          "name": "tipo_mantenimiento",
+          "type": "mantenimiento_tipo_mantenimiento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "horas_maquina": {
+          "name": "horas_maquina",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tecnico": {
+          "name": "tecnico",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taller_externo": {
+          "name": "taller_externo",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "costo": {
+          "name": "costo",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proxima_revision": {
+          "name": "proxima_revision",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proxima_revision_horas": {
+          "name": "proxima_revision_horas",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "repuestos_utilizados": {
+          "name": "repuestos_utilizados",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tiempo_parada": {
+          "name": "tiempo_parada",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "urgente": {
+          "name": "urgente",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completado": {
+          "name": "completado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mantenimiento_maquina_relacionada_maquinaria_id_fk": {
+          "name": "mantenimiento_maquina_relacionada_maquinaria_id_fk",
+          "tableFrom": "mantenimiento",
+          "tableTo": "maquinaria",
+          "columnsFrom": [
+            "maquina_relacionada"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.maquinaria": {
+      "name": "maquinaria",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "imagen": {
+          "name": "imagen",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoria": {
+          "name": "categoria",
+          "type": "maquinaria_categoria",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modelo": {
+          "name": "modelo",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado_actual": {
+          "name": "estado_actual",
+          "type": "maquinaria_estado_actual",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notas": {
+          "name": "notas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "horas_totales": {
+          "name": "horas_totales",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numero_serie": {
+          "name": "numero_serie",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ano_fabricacion": {
+          "name": "ano_fabricacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_ultima_lectura": {
+          "name": "fecha_ultima_lectura",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alquiler_activo_id": {
+          "name": "alquiler_activo_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proximo_mantenimiento": {
+          "name": "proximo_mantenimiento",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_adquisicion": {
+          "name": "fecha_adquisicion",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "precio_compra": {
+          "name": "precio_compra",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.maquinaria_implementos": {
+      "name": "maquinaria_implementos",
+      "schema": "",
+      "columns": {
+        "implemento_id": {
+          "name": "implemento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "maquinaria_id": {
+          "name": "maquinaria_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "maquinaria_implementos_implemento_id_implementos_id_fk": {
+          "name": "maquinaria_implementos_implemento_id_implementos_id_fk",
+          "tableFrom": "maquinaria_implementos",
+          "tableTo": "implementos",
+          "columnsFrom": [
+            "implemento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "maquinaria_implementos_maquinaria_id_maquinaria_id_fk": {
+          "name": "maquinaria_implementos_maquinaria_id_maquinaria_id_fk",
+          "tableFrom": "maquinaria_implementos",
+          "tableTo": "maquinaria",
+          "columnsFrom": [
+            "maquinaria_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "maquinaria_implementos_implemento_id_maquinaria_id_pk": {
+          "name": "maquinaria_implementos_implemento_id_maquinaria_id_pk",
+          "columns": [
+            "implemento_id",
+            "maquinaria_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.alquileres_estado_pago": {
+      "name": "alquileres_estado_pago",
+      "schema": "public",
+      "values": [
+        "pendiente",
+        "pagado",
+        "parcial"
+      ]
+    },
+    "public.alquileres_tipo_alquiler": {
+      "name": "alquileres_tipo_alquiler",
+      "schema": "public",
+      "values": [
+        "mensual",
+        "anual",
+        "diario"
+      ]
+    },
+    "public.horas_motivo_lectura": {
+      "name": "horas_motivo_lectura",
+      "schema": "public",
+      "values": [
+        "salida_alquiler",
+        "devolucion_alquiler",
+        "mantenimiento",
+        "control_rutinario",
+        "fin_mes"
+      ]
+    },
+    "public.incidencias_gravedad": {
+      "name": "incidencias_gravedad",
+      "schema": "public",
+      "values": [
+        "baja",
+        "media",
+        "alta",
+        "critica"
+      ]
+    },
+    "public.incidencias_tipo_incidencia": {
+      "name": "incidencias_tipo_incidencia",
+      "schema": "public",
+      "values": [
+        "averia",
+        "accidente",
+        "uso_indebido",
+        "observacion",
+        "fallo_mecanico",
+        "fallo_hidraulico",
+        "fallo_electrico"
+      ]
+    },
+    "public.mantenimiento_tipo_mantenimiento": {
+      "name": "mantenimiento_tipo_mantenimiento",
+      "schema": "public",
+      "values": [
+        "preventivo",
+        "correctivo",
+        "cambio_aceite",
+        "cambio_filtros",
+        "revision_general",
+        "reparacion"
+      ]
+    },
+    "public.maquinaria_categoria": {
+      "name": "maquinaria_categoria",
+      "schema": "public",
+      "values": [
+        "manipuladoras_telescopicas",
+        "excavadoras",
+        "minicargadora_ruedas",
+        "dumpers_obra",
+        "grupos_electrogenos",
+        "cortadoras",
+        "martillos_picadores",
+        "maquinaria_jardineria",
+        "compresor_aire",
+        "plataformas_articuladas",
+        "plataformas_articuladas_electricas",
+        "plataformas_telescopicas",
+        "plataformas_tijera",
+        "plataformas_tijera_electricas",
+        "plataformas_unipersonales_electricas",
+        "plataformas_articulada_cadena",
+        "rodillos",
+        "carretillas_elevadoras"
+      ]
+    },
+    "public.maquinaria_estado_actual": {
+      "name": "maquinaria_estado_actual",
+      "schema": "public",
+      "values": [
+        "stock",
+        "alquilado",
+        "mantenimiento",
+        "parada",
+        "libre"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

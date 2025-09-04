@@ -24,7 +24,13 @@ import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typogra
 import { EntityForm } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
-import { createFormexStub, getEntityFromCache, resolveCollection, resolvedSelectedEntityView } from "../util";
+import {
+    createFormexStub,
+    getEntityFromCache,
+    getSubcollections,
+    resolveCollection,
+    resolvedSelectedEntityView
+} from "../util";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -202,7 +208,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     }, [selectedTabProp]);
 
-    const subcollections = (collection.subcollections?.() ?? []).filter(c => !c.hideFromNavigation);
+    const subcollections = getSubcollections(collection).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.entityViews ?? [];
     const customViewsCount = customViews?.length ?? 0;

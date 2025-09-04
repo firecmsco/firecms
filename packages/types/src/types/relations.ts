@@ -7,7 +7,9 @@ export type OnAction = "cascade" | "restrict" | "no action" | "set null" | "set 
 
 /**
  * Represents a one() relation - equivalent to Drizzle's one() function
- * Used for one-to-one and many-to-one relationships
+ * Used for one-to-one and many-to-one relationships.
+ *  * e.g., In a Post-Author relationship, this would be defined on the Post
+ *  * collection to link its `author_id` field to the Author's `id`.
  * @group Models
  */
 export interface OneRelation {
@@ -58,6 +60,18 @@ export interface ManyRelation {
      */
     target: () => EntityCollection;
     /**
+     * The field in the target collection that references back to this collection.
+     * This is the foreign key field in the target collection.
+     * @example "maquinaria_id" or "maquinariaId"
+     */
+    targetForeignKey?: string;
+    /**
+     * The field in this collection that the foreign key references.
+     * Usually the primary key. Defaults to the idField of this collection.
+     * @example "id"
+     */
+    localKey?: string;
+    /**
      * Optional relationship name for explicit naming
      */
     relationName?: string;
@@ -80,8 +94,7 @@ export interface ManyToManyRelation {
      */
     through?: {
         /**
-         * Override for the junction table name.
-         * If not provided, the name is inferred from the `table` collection.
+         * Junction table name.
          */
         dbPath: string;
         /**
@@ -108,6 +121,41 @@ export interface ManyToManyRelation {
 }
 
 /**
+ * Represents a relation that traverses through multiple collections
+ * For cases like maquinaria -> alquileres -> incidencias
+ * @group Models
+ */
+export interface ThroughRelation {
+
+    type: "through";
+    /**
+     * Target collection this relation points to
+     */
+    target: () => EntityCollection;
+    /**
+     * Path of collections and properties to traverse
+     */
+    through: {
+        /**
+         * Junction table name.
+         */
+        dbPath: string;
+        /**
+         * Foreign key in junction table that references this collection
+         */
+        sourceJunctionKey: string | string[];
+        /**
+         * Foreign key in junction table that references the target collection
+         */
+        targetJunctionKey: string | string[];
+    }[];
+    /**
+     * Optional relationship name for explicit naming
+     */
+    relationName?: string;
+}
+
+/**
  * Base relation type that covers SQL relation patterns
  * @group Models
  */
@@ -115,6 +163,7 @@ export type BaseRelation =
     | OneRelation
     | ManyRelation
     | ManyToManyRelation
+    | ThroughRelation
 
 /**
  * Extended relation that combines base relation with FireCMS UI config
@@ -125,5 +174,9 @@ export type Relation = BaseRelation & {
      * Override target collection configuration for UI purposes
      */
     collection?: Partial<EntityCollection>;
+
+    validation?:{
+        required?: boolean;
+    }
 
 };

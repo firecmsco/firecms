@@ -46,19 +46,13 @@ export function RelationFieldBinding({
             customProps={customProps}
         />
     } else {
-        if (!property.path) {
-            throw new Error("Property path is required for ReferenceFieldBinding");
-        }
 
         const validValue = value && !Array.isArray(value) && value.isEntityRelation && value.isEntityRelation();
 
-        const navigationController = useNavigationController();
-        const collection: EntityCollection | undefined = useMemo(() => {
-            return property.path ? navigationController.getCollection(property.path) : undefined;
-        }, [property.path]);
+        const collection = property.relation.target();
 
         if (!collection) {
-            throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
+            throw Error(`Couldn't find the corresponding collection for the relation: ${propertyKey}`);
         }
 
         const onSingleEntitySelected = useCallback((e: Entity<any> | null) => {
@@ -67,7 +61,7 @@ export function RelationFieldBinding({
 
         const referenceDialogController = useEntitySelectionTable({
                 multiselect: false,
-                path: property.path,
+                path: collection.slug,
                 collection,
                 onSingleEntitySelected,
                 selectedEntityIds: validValue ? [value.id] : undefined,
@@ -96,7 +90,7 @@ export function RelationFieldBinding({
                 {collection && <>
 
                     {relation && <RelationPreview
-                        disabled={!property.path}
+                        disabled={!property.relation}
                         previewProperties={property.previewProperties}
                         hover={!disabled}
                         size={size}
@@ -158,11 +152,7 @@ export function MultipleRelationFieldBinding({
     }
 
     const selectedEntityIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
-
-    const navigationController = useNavigationController();
-    const collection: EntityCollection | undefined = useMemo(() => {
-        return property.path ? navigationController.getCollection(property.path) : undefined;
-    }, [property.path]);
+    const collection = property.relation.target();
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         setValue(entities.map(e => getRelationFrom(e)));
@@ -170,7 +160,7 @@ export function MultipleRelationFieldBinding({
 
     const referenceDialogController = useEntitySelectionTable({
             multiselect: true,
-            path: property.path,
+            path: collection.slug,
             collection,
             onMultipleEntitiesSelected,
             selectedEntityIds,
@@ -195,7 +185,6 @@ export function MultipleRelationFieldBinding({
         return (
             <RelationPreview
                 key={internalId}
-                disabled={!property.path}
                 previewProperties={property.previewProperties}
                 size={"medium"}
                 onClick={onEntryClick}
@@ -205,7 +194,7 @@ export function MultipleRelationFieldBinding({
                 includeEntityLink={property.includeEntityLink}
             />
         );
-    }, [property.path, property.previewProperties, value]);
+    }, [property.relation, property.previewProperties, value]);
 
     const title = (<>
         <LabelWithIconAndTooltip

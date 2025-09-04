@@ -11,8 +11,8 @@ import {
     EntityReference,
     EntityTableController,
     FilterValues,
-    PartialEntityCollection, Property,
-    PropertyOrBuilder,
+    PartialEntityCollection,
+    Property,
     ResolvedProperty,
     SaveEntityProps
 } from "@firecms/types";
@@ -22,7 +22,13 @@ import {
     useDataSourceTableController
 } from "../EntityCollectionTable";
 
-import { getPropertyInPath, resolveCollection, resolveEntityAction, resolveProperty } from "../../util";
+import {
+    getPropertyInPath,
+    getSubcollections,
+    resolveCollection,
+    resolveEntityAction,
+    resolveProperty
+} from "../../util";
 import {
     canCreateEntity,
     canDeleteEntity,
@@ -103,6 +109,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
     updateUrl?: boolean;
 
 } & EntityCollection<M>;
+
 
 /**
  * This component is in charge of binding a datasource path with an {@link EntityCollection}
@@ -397,9 +404,10 @@ export const EntityCollectionView = React.memo(
         }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
+        const subcollections = getSubcollections(collection);
 
         const additionalFields = useMemo(() => {
-            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.().map((subcollection) => {
+            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = subcollections.map((subcollection) => {
                 return {
                     key: getSubcollectionColumnId(subcollection),
                     name: subcollection.name,

@@ -11,13 +11,7 @@ import { User } from "../users";
 import { FireCMSContext } from "../firecms_context";
 import { Relation } from "./relations";
 
-export type Subcollection = EntityCollection<any, any> & {
-    /**
-     * Used for SQL datasource only.
-     * If you are using a custom datasource or a noSQL, you can ignore this property.
-     */
-    relation?: Relation
-};
+
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -173,7 +167,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * collections. The collections added here will be displayed when opening
      * the side dialog of an entity.
      */
-    subcollections?: () => Subcollection[];
+    subcollections?: () => EntityCollection<any>[];
+
+    /**
+     * For SQL databases, you can define the relations between collections here.
+     */
+    relations?: Relation[];
 
     /**
      * This interface defines all the callbacks that can be used when an entity

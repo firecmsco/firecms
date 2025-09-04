@@ -22,3 +22,4 @@ export * from "./storage";
 export * from "./arrays";
 export * from "./callbacks";
 export * from "./hash";
+export * from "./relations";

@@ -8,12 +8,13 @@ import {
     FilterValues,
     ManyRelation,
     ManyToManyRelation,
+    OneRelation,
     Properties,
     Property,
     WhereFilterOp
 } from "@firecms/types";
-import { resolveCollectionRelations } from "../utils/relations";
 import { getTableNameFromCollection, resolveJunctionTableName, toSnakeCase } from "../utils/collection-utils";
+import { resolveCollectionRelations } from "@firecms/common";
 
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) {
@@ -151,7 +152,7 @@ function parsePropertyFromServer(value: any, property: Property): any {
             if (typeof value === "string" || typeof value === "number") {
                 return {
                     id: value.toString(),
-                    path: property.path,
+                    path: property.relation.target().slug,
                     __type: "relation"
                 };
             }
@@ -216,7 +217,7 @@ export class EntityService {
     private buildFilterConditions<M extends Record<string, any>>(
         filter: FilterValues<Extract<keyof M, string>>,
         table: PgTable<any>,
-        path: string
+        collectionPath: string
     ): SQLWrapper[] {
         const conditions: SQLWrapper[] = [];
         for (const [field, filterParam] of Object.entries(filter)) {
@@ -226,7 +227,7 @@ export class EntityService {
             const fieldColumn = table[field as keyof typeof table] as AnyPgColumn;
 
             if (!fieldColumn) {
-                console.warn(`Filtering by field '${field}', but it does not exist in table for path '${path}'`);
+                console.warn(`Filtering by field '${field}', but it does not exist in table for collection '${collectionPath}'`);
                 continue;
             }
 
@@ -263,24 +264,15 @@ export class EntityService {
         return conditions;
     }
 
-    private resolveCollectionAndIdsForPath(path: string): {
-        collection: EntityCollection,
-        parentIds: string[]
-    } {
-        const {
-            finalCollection,
-            entityIds
-        } = collectionRegistry.resolvePathToCollections(path);
-
-        return {
-            collection: finalCollection,
-            parentIds: entityIds.map(id => String(id))
-        };
+    private getCollectionByPath(collectionPath: string): EntityCollection {
+        const collection = collectionRegistry.getCollectionByPath(collectionPath) ?? collectionRegistry.getBySlug(collectionPath);
+        if (!collection) {
+            throw new Error(`Collection not found: ${collectionPath}`);
+        }
+        return collection;
     }
 
-    // Map collection paths to actual database tables
-    private getTableForPath(path: string): PgTable<any> {
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
+    private getTableForCollection(collection: EntityCollection): PgTable<any> {
         const table = collectionRegistry.getTable(collection.dbPath);
         if (!table) {
             throw new Error(`Table not found for dbPath: ${collection.dbPath}`);
@@ -288,14 +280,12 @@ export class EntityService {
         return table;
     }
 
-    private getIdFieldInfo(path: string) {
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
-
+    private getIdFieldInfo(collection: EntityCollection) {
         const idFieldName = collection.idField ?? "id";
         const idFieldConfig = collection.properties[idFieldName] as Property;
 
         if (!idFieldConfig) {
-            throw new Error(`ID field '${idFieldName}' not found in properties for collection '${path}'`);
+            throw new Error(`ID field '${idFieldName}' not found in properties for collection '${collection.slug || collection.dbPath}'`);
         }
 
         return {
@@ -323,16 +313,19 @@ export class EntityService {
     }
 
     async fetchEntity<M extends Record<string, any>>(
-        path: string,
+        collectionPath: string,
         entityId: string | number,
         databaseId?: string
     ): Promise<Entity<M> | undefined> {
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
         if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
+            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
+
         const parsedId = this.parseIdValue(entityId, idInfo.type);
 
         const result = await this.db
@@ -344,242 +337,81 @@ export class EntityService {
         if (result.length === 0) return undefined;
 
         const raw = result[0] as M;
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         // Transform IDs back to relation objects and apply type conversion
-        let values = raw;
-        if (collection) {
-            values = parseDataFromServer(raw, collection.properties as Properties<M>);
-        }
+        const values = parseDataFromServer(raw, collection.properties as Properties<M>);
 
-        if (collection) {
-            const allCollections = collectionRegistry.getAllCollectionsRecursively();
-            const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+        // Load many-to-many relations
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
 
-            const m2mPromises = Object.entries(resolvedRelations).map(async ([key, relation]) => {
-                if (relation && relation.type === "manyToMany") {
-                    const manyToManyRelation = relation as ManyToManyRelation;
-                    const targetCollection = manyToManyRelation.target();
-                    const junctionDbPath = resolveJunctionTableName(manyToManyRelation.through, collection, targetCollection);
-                    const junctionTable = collectionRegistry.getTable(junctionDbPath);
+        const m2mPromises = Object.entries(resolvedRelations).map(async ([key, relation]) => {
+            if (relation.type === "manyToMany") {
+                const relatedEntities = await this.fetchManyToManyRelation(collection, parsedId, relation as ManyToManyRelation, {});
+                (values as any)[key] = relatedEntities.map(e => ({
+                    id: e.id,
+                    path: e.path
+                }));
+            }
+        });
 
-                    if (!junctionTable) {
-                        console.error(`Junction table not found for dbPath: ${junctionDbPath}`);
-                        return;
-                    }
-
-                    const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(collection))}_id`;
-                    const sourceJunctionKeyName = Array.isArray(manyToManyRelation.through?.sourceJunctionKey)
-                        ? (manyToManyRelation.through.sourceJunctionKey as string[])[0]
-                        : (manyToManyRelation.through?.sourceJunctionKey ?? defaultSourceKey);
-                    const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-
-                    const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
-                    const targetJunctionKeyName = Array.isArray(manyToManyRelation.through?.targetJunctionKey)
-                        ? (manyToManyRelation.through.targetJunctionKey as string[])[0]
-                        : (manyToManyRelation.through?.targetJunctionKey ?? defaultTargetKey);
-                    const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-
-                    if (!sourceJunctionKey || !targetJunctionKey) {
-                        console.error(`Junction keys not found in table ${junctionDbPath}`);
-                        return;
-                    }
-
-                    const relatedLinks = await this.db
-                        .select()
-                        .from(junctionTable)
-                        .where(eq(sourceJunctionKey, parsedId));
-
-                    const relationObjects = relatedLinks.map(link => ({
-                        id: link[targetJunctionKeyName].toString(),
-                        path: targetCollection.slug ?? targetCollection.dbPath,
-                        __type: "relation"
-                    }));
-
-                    values[key as keyof M] = relationObjects as any;
-                }
-            });
-            await Promise.all(m2mPromises);
-        }
+        await Promise.all(m2mPromises);
 
         return {
-            id: String(raw[idInfo.fieldName as keyof M]),
-            path,
+            id: entityId.toString(),
+            path: collectionPath,
             values: values as M,
             databaseId
         };
     }
 
-    /**
-     * Resolve a subcollection to a relation, creating a synthetic relation if only dbPath is defined
-     */
-    private resolveSubcollectionToRelation(
-        parentCollection: EntityCollection,
-        subcollectionSlug: string
-    ): { relation: ManyRelation | ManyToManyRelation, targetCollection: EntityCollection } | null {
-        // First try to get explicit relations
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-        const relation = resolvedRelations[subcollectionSlug];
-
-        if (relation) {
-            if (relation.type === "many") {
-                return {
-                    relation: relation as ManyRelation,
-                    targetCollection: (relation as ManyRelation).target()
-                };
-            } else if (relation.type === "manyToMany") {
-                return {
-                    relation: relation as ManyToManyRelation,
-                    targetCollection: (relation as ManyToManyRelation).target()
-                };
-            }
-        }
-
-        // If no explicit relation, try to find subcollection definition and create synthetic relation
-        const subcollections = parentCollection.subcollections?.() ?? [];
-        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
-
-        if (subcollection?.dbPath) {
-            console.log(`Creating synthetic many relation for dbPath-based subcollection: ${subcollectionSlug}`);
-
-            // Get the target collection based on dbPath
-            const { collection: targetCollection } = this.resolveCollectionAndIdsForPath(subcollection.dbPath);
-
-            // Create a synthetic ManyRelation
-            const syntheticRelation: ManyRelation = {
-                type: "many",
-                target: () => targetCollection,
-                relationName: subcollectionSlug
-            };
-
-            return {
-                relation: syntheticRelation,
-                targetCollection
-            };
-        }
-
-        return null;
-    }
-
-    /**
-     * Find the foreign key field that links target collection to parent collection
-     */
-    private findForeignKeyFieldForRelation(
-        targetCollection: EntityCollection,
-        parentCollection: EntityCollection,
-        parentCollectionName?: string
-    ): string | null {
-        // First try to find explicit relation fields
-        for (const [key, prop] of Object.entries(targetCollection.properties)) {
-            const property = prop as Property;
-            if (property.type === "relation" &&
-                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
-                return key;
-            }
-        }
-
-        // If no explicit relation field found, try naming conventions based on parent collection
-        const parentName = parentCollectionName || parentCollection.slug || parentCollection.dbPath.split('/').pop();
-        const possibleForeignKeys = [
-            // Standard naming patterns
-            `${parentName}_id`,
-            `${toSnakeCase(parentName)}_id`,
-            // Common reference patterns
-            `${parentName}_referencia`,
-            `${toSnakeCase(parentName)}_referencia`,
-            // Specific patterns for this collection structure
-            'maquina_referencia', // specific to this schema
-            'cliente_id',
-            'parent_id'
-        ];
-
-        for (const possibleKey of possibleForeignKeys) {
-            if (targetCollection.properties[possibleKey]) {
-                const property = targetCollection.properties[possibleKey] as Property;
-                // Accept foreign key fields regardless of their type (number, string, etc.)
-                // since foreign keys are often defined with their actual data type, not "relation"
-                if (property.type === "number" || property.type === "string" || property.type === "relation") {
-                    console.log(`Found foreign key field using naming convention: ${possibleKey}`);
-                    return possibleKey;
-                }
-            }
-        }
-
-        return null;
-    }
-
     async fetchCollection<M extends Record<string, any>>(
-        path: string,
+        collectionPath: string,
         options: {
             filter?: FilterValues<Extract<keyof M, string>>;
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
             startAfter?: any;
-            databaseId?: string;
             searchString?: string;
+            databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-
-        const pathSegments = path.split("/").filter(p => p);
-        if (pathSegments.length > 1 && pathSegments.length % 2 === 1) {
-            const parentPath = pathSegments.slice(0, -2).join("/");
-            const parentEntityId = pathSegments[pathSegments.length - 2];
-            const subcollectionSlug = pathSegments[pathSegments.length - 1];
-
-            const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-            if (parentCollection) {
-                const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
-
-                if (resolvedRelation) {
-                    if (resolvedRelation.relation.type === "manyToMany") {
-                        return this.fetchManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
-                    } else if (resolvedRelation.relation.type === "many") {
-                        return this.fetchManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
-                    }
-                } else {
-                    throw new Error(`Could not resolve relation for subcollection: ${subcollectionSlug}`);
-                }
-            }
+        // Handle multi-segment paths by resolving through relations
+        if (collectionPath.includes("/")) {
+            return this.fetchCollectionFromPath<M>(collectionPath, options);
         }
+
+        const collection = this.getCollectionByPath(collectionPath);
 
         if (options.searchString) {
-            return this.searchEntities<M>(
-                path,
-                options.searchString,
-                options.databaseId
-            );
+            return this.searchEntities<M>(collectionPath, options.searchString, options.databaseId);
         }
 
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
         if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
+            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
+
         let query: any = this.db.select().from(table);
 
         // Apply filters
         if (options.filter) {
-            const conditions = this.buildFilterConditions(options.filter, table, path);
-            if (conditions.length > 0) {
-                query = query.where(and(...conditions));
+            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
+            if (filterConditions.length > 0) {
+                query = query.where(and(...filterConditions));
             }
         }
 
         // Apply ordering
         const orderExpressions = [];
         if (options.orderBy) {
-            const orderField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
-            if (orderField) {
-                if (options.order === "desc") {
-                    orderExpressions.push(desc(orderField));
-                } else {
-                    orderExpressions.push(asc(orderField));
-                }
-            } else {
-                console.warn(`Ordering by field '${options.orderBy}', but it does not exist in table for path '${path}'`);
+            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+            if (orderByField) {
+                orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
             }
         }
 
@@ -596,87 +428,387 @@ export class EntityService {
         }
 
         const results = await query;
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         return results.map((entity: any) => {
-            // Transform IDs back to relation objects
-            let values = entity;
-            if (collection) {
-                values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
-            }
+            const values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
-                path,
+                path: collectionPath,
                 values: values as M,
                 databaseId: options.databaseId
             };
         });
     }
 
-    async saveEntity<M extends Record<string, any>>(
+    /**
+     * Handle multi-segment paths by resolving through relations
+     * e.g., "maquinaria/70/alquileres" resolves to alquileres related to maquinaria with id 70
+     */
+    private async fetchCollectionFromPath<M extends Record<string, any>>(
         path: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: any;
+            searchString?: string;
+            databaseId?: string;
+        } = {}
+    ): Promise<Entity<M>[]> {
+        const pathSegments = path.split("/").filter(p => p);
+
+        if (pathSegments.length < 3 || pathSegments.length % 2 === 0) {
+            throw new Error(`Invalid relation path: ${path}. Expected format: collection/id/relation or collection/id/relation/id/relation`);
+        }
+
+        // Start with the root collection
+        const rootCollectionPath = pathSegments[0];
+        let currentCollection = this.getCollectionByPath(rootCollectionPath);
+        let currentEntityId: string | number = pathSegments[1];
+
+        // Navigate through the path using relations
+        for (let i = 2; i < pathSegments.length; i += 2) {
+            const relationKey = pathSegments[i];
+
+            // Get relations for current collection
+            const allCollections = collectionRegistry.getAllCollectionsRecursively();
+            const resolvedRelations = resolveCollectionRelations(currentCollection, allCollections);
+            const relation = resolvedRelations[relationKey];
+
+            if (!relation) {
+                throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug || currentCollection.dbPath}'`);
+            }
+
+            // If this is the final segment, fetch the related entities
+            if (i === pathSegments.length - 1) {
+                return this.fetchRelatedEntities<M>(
+                    currentCollection.slug ?? currentCollection.dbPath,
+                    currentEntityId,
+                    relationKey,
+                    options
+                );
+            }
+
+            // If there are more segments, continue navigation
+            if (i + 1 < pathSegments.length) {
+                const nextEntityId = pathSegments[i + 1];
+                currentCollection = relation.target();
+                currentEntityId = nextEntityId;
+            }
+        }
+
+        throw new Error(`Unable to resolve path: ${path}`);
+    }
+
+    /**
+     * Fetch entities related to a parent entity through a specific relation
+     */
+    async fetchRelatedEntities<M extends Record<string, any>>(
+        parentCollectionPath: string,
+        parentEntityId: string | number,
+        relationKey: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: any;
+            databaseId?: string;
+        } = {}
+    ): Promise<Entity<M>[]> {
+        const parentCollection = this.getCollectionByPath(parentCollectionPath);
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const relation = resolvedRelations[relationKey];
+
+        if (!relation) {
+            throw new Error(`Relation '${relationKey}' not found in collection '${parentCollectionPath}'`);
+        }
+
+        switch (relation.type) {
+            case "one": {
+                const oneResults = await this.fetchOneRelation<M>(parentCollection, parentEntityId, relation as OneRelation, options);
+                return oneResults;
+            }
+            case "many": {
+                const manyResults = await this.fetchManyRelation<M>(parentCollection, parentEntityId, relation as ManyRelation, options);
+                return manyResults;
+            }
+            case "manyToMany": {
+                const manyToManyResults = await this.fetchManyToManyRelation<M>(parentCollection, parentEntityId, relation as ManyToManyRelation, options);
+                return manyToManyResults;
+            }
+            default:
+                throw new Error(`Unsupported relation type: ${(relation as any).type}`);
+        }
+    }
+
+    private async fetchOneRelation<M extends Record<string, any>>(
+        parentCollection: EntityCollection,
+        parentEntityId: string | number,
+        relation: OneRelation,
+        options: any
+    ): Promise<Entity<M>[]> {
+        // For one relations, we need to get the foreign key value from the parent entity
+        const parentEntity = await this.fetchEntity(parentCollection.slug ?? parentCollection.dbPath, parentEntityId);
+        if (!parentEntity) {
+            return [];
+        }
+
+        const sourceField = relation.sourceFields[0];
+        const targetField = relation.targetFields[0];
+        const foreignKeyValue = parentEntity.values[sourceField as keyof typeof parentEntity.values];
+
+        if (!foreignKeyValue) {
+            return [];
+        }
+
+        const targetCollection = relation.target();
+        const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
+
+        // Fetch the related entity
+        const relatedEntity = await this.fetchEntity<M>(targetCollectionPath, foreignKeyValue, options.databaseId);
+        return relatedEntity ? [relatedEntity] : [];
+    }
+
+    private async fetchManyRelation<M extends Record<string, any>>(
+        parentCollection: EntityCollection,
+        parentEntityId: string | number,
+        relation: ManyRelation,
+        options: any
+    ): Promise<Entity<M>[]> {
+        const targetCollection = relation.target();
+        const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
+
+        // Use explicit targetForeignKey if provided, otherwise fall back to guessing
+        let foreignKeyField: string | null = null;
+
+        if (relation.targetForeignKey) {
+            foreignKeyField = relation.targetForeignKey;
+        } else {
+            // Fall back to the old method of finding the foreign key field
+            foreignKeyField = this.findForeignKeyFieldForRelation(targetCollection, parentCollection);
+        }
+
+        if (!foreignKeyField) {
+            throw new Error(`Could not find foreign key field in ${targetCollectionPath} pointing to ${parentCollection.slug ?? parentCollection.dbPath}. Please specify targetForeignKey in the relation definition.`);
+        }
+
+        // Use explicit localKey if provided, otherwise use the default ID field
+        const localKeyField = relation.localKey || this.getIdFieldInfo(parentCollection).fieldName;
+
+        // Get the value from the parent entity's localKey field
+        let localKeyValue: string | number;
+        if (localKeyField === this.getIdFieldInfo(parentCollection).fieldName) {
+            // If we're using the ID field, we can use the provided parentEntityId directly
+            localKeyValue = parentEntityId;
+        } else {
+            // If we're using a different field, we need to fetch the parent entity to get that field's value
+            const parentEntity = await this.fetchEntity(parentCollection.slug ?? parentCollection.dbPath, parentEntityId);
+            if (!parentEntity) {
+                return [];
+            }
+            const rawValue = parentEntity.values[localKeyField as keyof typeof parentEntity.values];
+            if (rawValue === null || rawValue === undefined) {
+                return [];
+            }
+            localKeyValue = rawValue as string | number;
+        }
+
+        const existingFilter = options.filter ?? {};
+        const parentIdInfo = this.getIdFieldInfo(parentCollection);
+        const parsedLocalKeyValue = this.parseIdValue(localKeyValue, parentIdInfo.type);
+
+        // Add a filter condition to match the local key value
+        const newFilter: FilterValues<Extract<keyof M, string>> = {
+            ...existingFilter,
+            [foreignKeyField as Extract<keyof M, string>]: ["==", parsedLocalKeyValue]
+        };
+
+        // Delegate to the main fetchCollection method with the new filter
+        return this.fetchCollection<M>(targetCollectionPath, {
+            ...options,
+            filter: newFilter
+        });
+    }
+
+    private async fetchManyToManyRelation<M extends Record<string, any>>(
+        parentCollection: EntityCollection,
+        parentEntityId: string | number,
+        relation: ManyToManyRelation,
+        options: any
+    ): Promise<Entity<M>[]> {
+        const targetCollection = relation.target();
+        const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
+        const targetTable = this.getTableForCollection(targetCollection);
+
+        // Resolve junction table name and keys
+        const junctionDbPath = resolveJunctionTableName(relation.through, parentCollection, targetCollection);
+        const junctionTable = collectionRegistry.getTable(junctionDbPath);
+        if (!junctionTable) {
+            throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
+        }
+
+        const parentIdInfo = this.getIdFieldInfo(parentCollection);
+        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+
+        const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
+        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
+        const sourceJunctionKeyName = Array.isArray(relation.through?.sourceJunctionKey)
+            ? (relation.through?.sourceJunctionKey as string[])[0]
+            : (relation.through?.sourceJunctionKey ?? defaultSourceKey);
+        const targetJunctionKeyName = Array.isArray(relation.through?.targetJunctionKey)
+            ? (relation.through?.targetJunctionKey as string[])[0]
+            : (relation.through?.targetJunctionKey ?? defaultTargetKey);
+
+        const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+        const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
+
+        if (!sourceJunctionKey || !targetJunctionKey) {
+            throw new Error(`Junction keys not found in table '${junctionDbPath}'`);
+        }
+
+        const targetIdInfo = this.getIdFieldInfo(targetCollection);
+        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+
+        if (!targetIdField) {
+            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in target table`);
+        }
+
+        let query: any = this.db
+            .select()
+            .from(targetTable)
+            .innerJoin(junctionTable, eq(targetIdField, targetJunctionKey));
+
+        // Base condition for the join
+        const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
+
+        // Apply additional filters
+        if (options.filter) {
+            const conditions = this.buildFilterConditions(options.filter, targetTable, targetTablePath);
+            if (conditions.length > 0) {
+                allConditions.push(...conditions);
+            }
+        }
+
+        query = query.where(and(...allConditions));
+
+        // Apply ordering
+        const orderExpressions = [];
+        if (options.orderBy) {
+            const orderField = targetTable[options.orderBy as keyof typeof targetTable] as AnyPgColumn;
+            if (orderField) {
+                if (options.order === "desc") {
+                    orderExpressions.push(desc(orderField));
+                } else {
+                    orderExpressions.push(asc(orderField));
+                }
+            }
+        }
+        orderExpressions.push(desc(targetIdField));
+
+        if (orderExpressions.length > 0) {
+            query = query.orderBy(...orderExpressions);
+        }
+
+        if (options.limit) {
+            query = query.limit(options.limit);
+        }
+
+        const results = await query;
+
+        return results.map((row: any) => {
+            const entity = row[getTableNameFromCollection(targetCollection)];
+            const values = parseDataFromServer(entity as M, targetCollection.properties as Properties<M>);
+
+            return {
+                id: entity[targetIdInfo.fieldName].toString(),
+                path: targetTablePath,
+                values: values as M,
+                databaseId: options.databaseId
+            };
+        });
+    }
+
+    /**
+     * Find the foreign key field that links target collection to parent collection
+     */
+    private findForeignKeyFieldForRelation(
+        targetCollection: EntityCollection,
+        parentCollection: EntityCollection
+    ): string | null {
+
+        // Try naming conventions
+        const parentName = parentCollection.slug || parentCollection.dbPath.split("/").pop();
+        if (!parentName) return null;
+
+        const possibleForeignKeys = [
+            `${parentName}_id`,
+            `${toSnakeCase(parentName)}_id`,
+            `${parentName}_referencia`,
+            `${toSnakeCase(parentName)}_referencia`,
+        ];
+
+        for (const possibleKey of possibleForeignKeys) {
+            if (targetCollection.properties[possibleKey]) {
+                const property = targetCollection.properties[possibleKey] as Property;
+                if (property.type === "number" || property.type === "string" || property.type === "relation") {
+                    return possibleKey;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    async saveEntity<M extends Record<string, any>>(
+        collectionPath: string,
         values: Partial<M>,
         entityId?: string | number,
         databaseId?: string
     ): Promise<Entity<M>> {
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
         if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
+            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
 
         // Separate many-to-many relations
         const manyToManyValues: Record<string, any> = {};
         const otherValues: Partial<M> = { ...values };
 
-        if (collection) {
-            const allCollections = collectionRegistry.getAllCollectionsRecursively();
-            const resolvedRelations = resolveCollectionRelations(collection, allCollections);
-            for (const key in resolvedRelations) {
-                const relation = resolvedRelations[key];
-                if (relation && relation.type === "manyToMany") {
-                    if (Object.prototype.hasOwnProperty.call(otherValues, key)) {
-                        manyToManyValues[key] = otherValues[key as keyof M];
-                        delete otherValues[key as keyof M];
-                    }
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+
+        for (const key in resolvedRelations) {
+            const relation = resolvedRelations[key];
+            if (relation && relation.type === "manyToMany") {
+                if (Object.prototype.hasOwnProperty.call(otherValues, key)) {
+                    manyToManyValues[key] = otherValues[key as keyof M];
+                    delete otherValues[key as keyof M];
                 }
             }
         }
 
-        // Transform relations to IDs, map field names, then sanitize
-        let processedData = otherValues;
-        if (collection) {
-            processedData = serializeDataToServer(otherValues as M, collection.properties as Properties<M>);
-        }
-
-        // Auto-link to parent entities for subcollections
-        const {
-            collections,
-            entityIds
-        } = collectionRegistry.resolvePathToCollections(path);
-        if (entityIds.length > 0) {
-            // We have parent entities to link to
-            processedData = this.linkToParentEntities(processedData, collections, entityIds, collection);
-        }
-
+        // Transform relations to IDs, then sanitize
+        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties<M>);
         const entityData = sanitizeAndConvertDates(processedData);
 
         const savedId = await this.db.transaction(async (tx) => {
-
             let currentId: string | number;
 
             if (entityId) {
                 // Update existing entity
                 currentId = this.parseIdValue(entityId, idInfo.type);
-                const updateQuery = tx
+                await tx
                     .update(table)
                     .set(entityData)
                     .where(eq(idField, currentId));
-
-                await updateQuery;
             } else {
                 const dataForInsert = { ...entityData };
                 // Don't include the ID in the insert statement, so the database can generate it
@@ -684,17 +816,16 @@ export class EntityService {
                     delete dataForInsert[idInfo.fieldName];
                 }
 
-                const insertQuery = tx
+                const result = await tx
                     .insert(table)
                     .values(dataForInsert)
                     .returning({ id: idField });
 
-                const result = await insertQuery;
                 currentId = result[0].id as string | number;
             }
 
             // Update many-to-many relations
-            if (collection && Object.keys(manyToManyValues).length > 0) {
+            if (Object.keys(manyToManyValues).length > 0) {
                 await this.updateManyToManyRelations(tx, collection, currentId, manyToManyValues);
             }
 
@@ -702,7 +833,7 @@ export class EntityService {
         });
 
         // Fetch the updated/created entity to return with proper relation objects
-        const finalEntity = await this.fetchEntity<M>(path, savedId, databaseId);
+        const finalEntity = await this.fetchEntity<M>(collectionPath, savedId, databaseId);
         if (!finalEntity) throw new Error("Could not fetch entity after save.");
         return finalEntity;
     }
@@ -721,9 +852,7 @@ export class EntityService {
             if (!relation || relation.type !== "manyToMany") continue;
 
             const manyToManyRelation = relation as ManyToManyRelation;
-
             const targetEntityIds = (value && Array.isArray(value)) ? value.map((rel: any) => rel.id) : [];
-
             const targetCollection = manyToManyRelation.target();
             const junctionDbPath = resolveJunctionTableName(manyToManyRelation.through, collection, targetCollection);
             const junctionTable = collectionRegistry.getTable(junctionDbPath);
@@ -732,7 +861,7 @@ export class EntityService {
                 throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
             }
 
-            const parentIdInfo = this.getIdFieldInfoForCollection(collection);
+            const parentIdInfo = this.getIdFieldInfo(collection);
             const parsedParentId = this.parseIdValue(entityId, parentIdInfo.type);
 
             const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(collection))}_id`;
@@ -749,7 +878,7 @@ export class EntityService {
             await tx.delete(junctionTable).where(eq(sourceJunctionKey, parsedParentId));
 
             if (targetEntityIds.length > 0) {
-                const targetIdInfo = this.getIdFieldInfoForCollection(targetCollection);
+                const targetIdInfo = this.getIdFieldInfo(targetCollection);
                 const parsedTargetIds = targetEntityIds.map(id => this.parseIdValue(id, targetIdInfo.type));
 
                 const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
@@ -757,29 +886,28 @@ export class EntityService {
                     ? (manyToManyRelation.through.targetJunctionKey as string[])[0]
                     : (manyToManyRelation.through?.targetJunctionKey ?? defaultTargetKey);
 
-                const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-                if (!targetJunctionKey) {
-                    throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
-                }
-
                 const newLinks = parsedTargetIds.map(targetId => ({
                     [sourceJunctionKeyName]: parsedParentId,
                     [targetJunctionKeyName]: targetId
                 }));
 
-                if (newLinks.length > 0)
+                if (newLinks.length > 0) {
                     await tx.insert(junctionTable).values(newLinks);
+                }
             }
         }
     }
 
-    async deleteEntity(path: string, entityId: string | number, _databaseId?: string): Promise<void> {
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
+    async deleteEntity(collectionPath: string, entityId: string | number, _databaseId?: string): Promise<void> {
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
         if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
+            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
+
         const parsedId = this.parseIdValue(entityId, idInfo.type);
 
         await this.db
@@ -788,7 +916,7 @@ export class EntityService {
     }
 
     async checkUniqueField(
-        path: string,
+        collectionPath: string,
         fieldName: string,
         value: any,
         excludeEntityId?: string,
@@ -796,12 +924,10 @@ export class EntityService {
     ): Promise<boolean> {
         if (value === undefined || value === null) return true;
 
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
-        if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
-        }
         const field = table[fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!field) return true; // Field doesn't exist, consider it unique
@@ -823,198 +949,83 @@ export class EntityService {
     }
 
     async countEntities<M extends Record<string, any>>(
-        path: string,
+        collectionPath: string,
         options: {
             filter?: FilterValues<Extract<keyof M, string>>;
             databaseId?: string;
         } = {}
     ): Promise<number> {
-        const { filter } = options;
+        // Handle multi-segment paths
+        if (collectionPath.includes("/")) {
+            return this.countEntitiesFromPath<M>(collectionPath, options);
+        }
+
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+
+        let query: any = this.db.select({ count: count() }).from(table);
+
+        if (options.filter) {
+            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
+            if (filterConditions.length > 0) {
+                query = query.where(and(...filterConditions));
+            }
+        }
+
+        const result = await query;
+        return Number(result[0]?.count || 0);
+    }
+
+    /**
+     * Count entities from multi-segment path using relations
+     */
+    private async countEntitiesFromPath<M extends Record<string, any>>(
+        path: string,
+        options: { filter?: FilterValues<Extract<keyof M, string>>; databaseId?: string } = {}
+    ): Promise<number> {
         const pathSegments = path.split("/").filter(p => p);
 
-        // Handle multi-segment paths (subcollections)
-        if (pathSegments.length > 1 && pathSegments.length % 2 === 1) {
-            const parentPath = pathSegments.slice(0, -2).join("/");
-            const parentEntityId = pathSegments[pathSegments.length - 2];
-            const subcollectionSlug = pathSegments[pathSegments.length - 1];
+        if (pathSegments.length < 3 || pathSegments.length % 2 === 0) {
+            throw new Error(`Invalid relation path: ${path}. Expected format: collection/id/relation or collection/id/relation/id/relation`);
+        }
 
-            const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-            if (parentCollection) {
-                const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
+        // Start with the root collection
+        const rootCollectionPath = pathSegments[0];
+        let currentCollection = this.getCollectionByPath(rootCollectionPath);
+        let currentEntityId: string | number = pathSegments[1];
 
-                if (resolvedRelation) {
-                    if (resolvedRelation.relation.type === "manyToMany") {
-                        return this.countManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
-                    } else if (resolvedRelation.relation.type === "many") {
-                        return this.countManyCollection(path, parentPath, parentEntityId, subcollectionSlug, options);
-                    }
-                } else {
-                    throw new Error(`Could not resolve relation for subcollection: ${subcollectionSlug}`);
-                }
+        // Navigate through the path using relations
+        for (let i = 2; i < pathSegments.length; i += 2) {
+            const relationKey = pathSegments[i];
+
+            // Get relations for current collection
+            const allCollections = collectionRegistry.getAllCollectionsRecursively();
+            const resolvedRelations = resolveCollectionRelations(currentCollection, allCollections);
+            const relation = resolvedRelations[relationKey];
+
+            if (!relation) {
+                throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug || currentCollection.dbPath}'`);
+            }
+
+            // If this is the final segment, count the related entities
+            if (i === pathSegments.length - 1) {
+                return this.countRelatedEntities<M>(
+                    currentCollection.slug ?? currentCollection.dbPath,
+                    currentEntityId,
+                    relationKey,
+                    options
+                );
+            }
+
+            // If there are more segments, continue navigation
+            if (i + 1 < pathSegments.length) {
+                const nextEntityId = pathSegments[i + 1];
+                currentCollection = relation.target();
+                currentEntityId = nextEntityId;
             }
         }
 
-        // Simple collection - count all entities
-        const table = this.getTableForPath(path);
-        let query: any = this.db.select({ count: count() }).from(table);
-
-        if (filter) {
-            const conditions = this.buildFilterConditions(filter, table, path);
-            if (conditions.length > 0) {
-                query = query.where(and(...conditions));
-            }
-        }
-
-        const result = await query;
-        return Number(result[0]?.count || 0);
-    }
-
-    /**
-     * Count entities in a direct subcollection filtered by parent entity
-     */
-    private async countDirectSubcollection<M extends Record<string, any>>(
-        path: string,
-        parentPath: string,
-        parentEntityId: string | number,
-        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
-    ): Promise<number> {
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
-        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-        const table = this.getTableForPath(path);
-
-        // Find the foreign key field that references the parent
-        const foreignKeyField = this.findForeignKeyFieldForRelation(collection, parentCollection);
-
-        const allConditions: SQLWrapper[] = [];
-
-        if (!foreignKeyField) {
-            console.warn(`Could not find foreign key field on ${path} pointing to ${parentPath}`);
-        } else {
-            const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
-            const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-            const foreignKeyColumn = table[foreignKeyField as keyof typeof table] as AnyPgColumn;
-            allConditions.push(eq(foreignKeyColumn, parsedParentId));
-        }
-
-        if (options.filter) {
-            const filterConditions = this.buildFilterConditions(options.filter, table, path);
-            if (filterConditions.length > 0) {
-                allConditions.push(...filterConditions);
-            }
-        }
-
-        let query: any = this.db.select({ count: count() }).from(table);
-        if (allConditions.length > 0) {
-            query = query.where(and(...allConditions));
-        }
-
-        const result = await query;
-        return Number(result[0]?.count || 0);
-    }
-
-    /**
-     * Count entities in a many-to-many collection filtered by parent entity
-     */
-    private async countManyToManyCollection<M extends Record<string, any>>(
-        parentPath: string,
-        parentEntityId: string | number,
-        subcollectionSlug: string,
-        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
-    ): Promise<number> {
-        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-        if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentPath}`);
-        }
-
-        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
-
-        if (!resolvedRelation || resolvedRelation.relation.type !== "manyToMany") {
-            throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
-        }
-
-        const typedRelation = resolvedRelation.relation as ManyToManyRelation;
-        const targetCollection = resolvedRelation.targetCollection;
-        const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
-        const targetTable = this.getTableForPath(targetTablePath);
-
-        // Resolve junction table name and keys using same defaults as schema generation
-        const junctionDbPath = resolveJunctionTableName(typedRelation.through, parentCollection, targetCollection);
-        const junctionTable = collectionRegistry.getTable(junctionDbPath);
-        if (!junctionTable) {
-            throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
-        }
-
-        const parentIdInfo = this.getIdFieldInfo(parentPath);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-
-        const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
-        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
-        const sourceJunctionKeyName = Array.isArray(typedRelation.through?.sourceJunctionKey)
-            ? (typedRelation.through?.sourceJunctionKey as string[])[0]
-            : (typedRelation.through?.sourceJunctionKey ?? defaultSourceKey);
-        const targetJunctionKeyName = Array.isArray(typedRelation.through?.targetJunctionKey)
-            ? (typedRelation.through?.targetJunctionKey as string[])[0]
-            : (typedRelation.through?.targetJunctionKey ?? defaultTargetKey);
-
-        const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-        if (!sourceJunctionKey) {
-            throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
-        }
-        const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-        if (!targetJunctionKey) {
-            throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
-        }
-
-        const targetIdInfo = this.getIdFieldInfo(targetCollection.slug ?? targetCollection.dbPath);
-        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
-        if (!targetIdField) {
-            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in table for path '${targetCollection.slug ?? targetCollection.dbPath}'`);
-        }
-
-        let query: any = this.db
-            .select({ count: count() })
-            .from(targetTable)
-            .innerJoin(junctionTable, eq(targetIdField, targetJunctionKey));
-
-        // Start with the base condition for the join
-        const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
-
-        if (options.filter) {
-            const conditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
-            if (conditions.length > 0) {
-                allConditions.push(...conditions);
-            }
-        }
-
-        query = query.where(and(...allConditions));
-
-        const result = await query;
-        return Number(result[0]?.count || 0);
-    }
-
-
-    /**
-     * Count entities in a one-to-many collection filtered by parent entity
-     */
-    private async countManyCollection<M extends Record<string, any>>(
-        path: string,
-        parentPath: string,
-        parentEntityId: string | number,
-        subcollectionSlug: string,
-        options: { filter?: FilterValues<Extract<keyof M, string>> } = {}
-    ): Promise<number> {
-        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-        if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentPath}`);
-        }
-
-        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
-
-        if (!resolvedRelation || resolvedRelation.relation.type !== "many") {
-            throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
-        }
-
-        return this.countDirectSubcollection(path, parentPath, parentEntityId, options);
+        throw new Error(`Unable to resolve path: ${path}`);
     }
 
     generateEntityId(): string {
@@ -1023,110 +1034,18 @@ export class EntityService {
         return Date.now().toString() + Math.random().toString(36).substring(2, 7);
     }
 
-    /**
-     * Get all collections resolved from a multi-segment path like "products/123/locales"
-     * Returns all collections along the path, useful for navigation and UI purposes
-     */
-    getAllResolvedCollections(path: string): EntityCollection[] {
-        return collectionRegistry.getAllResolvedCollections(path);
-    }
-
-    /**
-     * Resolve a path to get detailed information about collections and entity IDs
-     */
-    resolvePathDetails(path: string): {
-        collections: EntityCollection[],
-        entityIds: (string | number)[],
-        finalCollection: EntityCollection
-    } {
-        return collectionRegistry.resolvePathToCollections(path);
-    }
-
-    /**
-     * Automatically link an entity to its parent entities by setting foreign key fields
-     */
-    private linkToParentEntities(
-        entityData: any,
-        collections: EntityCollection[],
-        parentEntityIds: (string | number)[],
-        targetCollection: EntityCollection
-    ): any {
-        const linkedData = { ...entityData };
-
-        // Iterate through parent collections and their corresponding entity IDs
-        for (let i = 0; i < collections.length - 1; i++) { // -1 because the last collection is the target collection
-            const parentCollection = collections[i];
-            const parentEntityId = parentEntityIds[i];
-
-            // Find foreign key field in target collection that relations this parent collection
-            const foreignKeyField = this.findForeignKeyForParent(targetCollection, parentCollection);
-
-            if (foreignKeyField) {
-                // Parse the parent entity ID according to the parent collection's ID type
-                const parentIdInfo = this.getIdFieldInfoForCollection(parentCollection);
-                const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-
-                // Set the foreign key field to link to the parent entity
-                linkedData[foreignKeyField] = parsedParentId;
-
-                console.log(`Auto-linking ${targetCollection.slug || targetCollection.dbPath}.${foreignKeyField} = ${parsedParentId} (${parentCollection.slug || parentCollection.dbPath})`);
-            }
-        }
-
-        return linkedData;
-    }
-
-    /**
-     * Find the foreign key in the target collection that references a parent collection
-     */
-    private findForeignKeyForParent(
-        targetCollection: EntityCollection,
-        parentCollection: EntityCollection
-    ): string | null {
-        for (const [fieldName, property] of Object.entries(targetCollection.properties)) {
-            const prop = property as Property;
-            if (prop.type === "relation" &&
-                (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath)) {
-                return fieldName;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get ID field information for a specific collection
-     */
-    private getIdFieldInfoForCollection(collection: EntityCollection) {
-        const idFieldName = collection.idField ?? "id";
-        const idFieldConfig = collection.properties[idFieldName] as Property;
-
-        if (!idFieldConfig) {
-            throw new Error(`ID field '${idFieldName}' not found in properties for collection '${collection.slug || collection.dbPath}'`);
-        }
-
-        return {
-            fieldName: idFieldName,
-            type: idFieldConfig.type
-        };
-    }
-
     private async searchEntities<M extends Record<string, any>>(
-        path: string,
+        collectionPath: string,
         searchString: string,
         databaseId?: string
     ): Promise<Entity<M>[]> {
-        const table = this.getTableForPath(path);
-        const idInfo = this.getIdFieldInfo(path);
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
+        const collection = this.getCollectionByPath(collectionPath);
+        const table = this.getTableForCollection(collection);
+        const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
-        }
-
-        console.log(`Searching for '${searchString}' in ${path}`, collection);
-        if (!collection) {
-            return [];
+            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
         const searchConditions: SQLWrapper[] = [];
@@ -1151,188 +1070,15 @@ export class EntityService {
             .limit(50);
 
         return results.map((entity: any) => {
-            // Transform IDs back to relation objects
-            let values = entity;
-            if (collection) {
-                values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
-            }
+            const values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
-                path: path,
+                path: collectionPath,
                 values: values as M,
                 databaseId
             };
         });
     }
-
-    async fetchManyToManyCollection<M extends Record<string, any>>(
-        parentPath: string,
-        parentEntityId: string | number,
-        subcollectionSlug: string,
-        options: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            orderBy?: string;
-            order?: "desc" | "asc";
-            limit?: number;
-            startAfter?: any;
-            databaseId?: string;
-        } = {}
-    ): Promise<Entity<M>[]> {
-        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-        if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentPath}`);
-        }
-
-        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
-
-        if (!resolvedRelation || resolvedRelation.relation.type !== "manyToMany") {
-            throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
-        }
-
-        const typedRelation = resolvedRelation.relation as ManyToManyRelation;
-        const targetCollection = resolvedRelation.targetCollection;
-        const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
-        const targetTable = this.getTableForPath(targetTablePath);
-
-        // Resolve junction table name and keys using same defaults as schema generation
-        const junctionDbPath = resolveJunctionTableName(typedRelation.through, parentCollection, targetCollection);
-        const junctionTable = collectionRegistry.getTable(junctionDbPath);
-        if (!junctionTable) {
-            throw new Error(`Junction table not found for dbPath: ${junctionDbPath}`);
-        }
-
-        const parentIdInfo = this.getIdFieldInfo(parentPath);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-
-        const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
-        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
-        const sourceJunctionKeyName = Array.isArray(typedRelation.through?.sourceJunctionKey)
-            ? (typedRelation.through?.sourceJunctionKey as string[])[0]
-            : (typedRelation.through?.sourceJunctionKey ?? defaultSourceKey);
-        const targetJunctionKeyName = Array.isArray(typedRelation.through?.targetJunctionKey)
-            ? (typedRelation.through?.targetJunctionKey as string[])[0]
-            : (typedRelation.through?.targetJunctionKey ?? defaultTargetKey);
-
-        const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-        if (!sourceJunctionKey) {
-            throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
-        }
-        const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
-        if (!targetJunctionKey) {
-            throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
-        }
-
-        const targetIdInfo = this.getIdFieldInfo(targetCollection.slug ?? targetCollection.dbPath);
-        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
-        if (!targetIdField) {
-            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in table for path '${targetCollection.slug ?? targetCollection.dbPath}'`);
-        }
-
-        let query: any = this.db
-            .select()
-            .from(targetTable)
-            .innerJoin(junctionTable, eq(targetIdField, targetJunctionKey));
-
-        // Start with the base condition for the join
-        const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
-
-        if (options.filter) {
-            const conditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
-            if (conditions.length > 0) {
-                allConditions.push(...conditions);
-            }
-        }
-
-        query = query.where(and(...allConditions));
-
-        const orderExpressions = [];
-        if (options.orderBy) {
-            const orderField = targetTable[options.orderBy as keyof typeof targetTable] as AnyPgColumn;
-            if (orderField) {
-                if (options.order === "desc") {
-                    orderExpressions.push(desc(orderField));
-                } else {
-                    orderExpressions.push(asc(orderField));
-                }
-            } else {
-                console.warn(`Ordering by field '${options.orderBy}', but it does not exist in table for path '${targetCollection.slug ?? targetCollection.dbPath}'`);
-            }
-        }
-        orderExpressions.push(desc(targetIdField));
-        if (orderExpressions.length > 0) {
-            query = query.orderBy(...orderExpressions);
-        }
-
-        if (options.limit) {
-            query = query.limit(options.limit);
-        }
-
-        const results = await query;
-
-        return results.map((row: any) => {
-            const entity = row[getTableNameFromCollection(targetCollection)];
-            let values = entity;
-            if (targetCollection) {
-                values = parseDataFromServer(entity as M, targetCollection.properties as Properties<M>);
-            }
-            return {
-                id: entity[targetIdInfo.fieldName].toString(),
-                path: targetCollection.slug ?? targetCollection.dbPath,
-                values: values as M,
-                databaseId: options.databaseId
-            };
-        });
-    }
-
-    async fetchManyCollection<M extends Record<string, any>>(
-        parentPath: string,
-        parentEntityId: string | number,
-        subcollectionSlug: string,
-        options: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            orderBy?: string;
-            order?: "desc" | "asc";
-            limit?: number;
-            startAfter?: any;
-            databaseId?: string;
-        } = {}
-    ): Promise<Entity<M>[]> {
-        const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
-        if (!parentCollection) {
-            throw new Error(`Parent collection not found: ${parentPath}`);
-        }
-
-        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
-
-        if (!resolvedRelation || resolvedRelation.relation.type !== "many") {
-            throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
-        }
-
-        const targetCollection = resolvedRelation.targetCollection;
-        const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
-
-        // Find the field in the target collection that references the parent
-        const foreignKeyField = this.findForeignKeyFieldForRelation(targetCollection, parentCollection);
-
-        if (!foreignKeyField) {
-            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
-        }
-
-        const existingFilter = options.filter ?? {};
-        const parentIdInfo = this.getIdFieldInfo(parentPath);
-        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
-
-        // Add a filter condition to match the parent ID
-        const newFilter: FilterValues<Extract<keyof M, string>> = {
-            ...existingFilter,
-            [foreignKeyField as Extract<keyof M, string>]: ["==", parsedParentId]
-        };
-
-        // Delegate back to the main fetchCollection method with the new filter
-        return this.fetchCollection<M>(targetCollectionPath, {
-            ...options,
-            filter: newFilter
-        });
-    }
 }
+
