@@ -11,6 +11,7 @@ export type OnAction = "cascade" | "restrict" | "no action" | "set null" | "set 
  * @group Models
  */
 export interface OneRelation {
+
     type: "one";
     /**
      * Target collection this relation points to
@@ -41,6 +42,7 @@ export interface OneRelation {
      * Action to perform on delete.
      */
     onDelete?: OnAction;
+
 }
 
 /**
@@ -49,6 +51,7 @@ export interface OneRelation {
  * @group Models
  */
 export interface ManyRelation {
+
     type: "many";
     /**
      * Target collection this relation points to
@@ -66,6 +69,7 @@ export interface ManyRelation {
  * @group Models
  */
 export interface ManyToManyRelation {
+
     type: "manyToMany";
     /**
      * Target collection this relation points to
@@ -103,9 +107,8 @@ export interface ManyToManyRelation {
     relationName?: string;
 }
 
-
 /**
- * Base relation type that covers ALL PostgreSQL relation patterns
+ * Base relation type that covers SQL relation patterns
  * @group Models
  */
 export type BaseRelation =
@@ -122,19 +125,5 @@ export type Relation = BaseRelation & {
      * Override target collection configuration for UI purposes
      */
     collection?: Partial<EntityCollection>;
-
-    /**
-     * How to render this relation in the UI
-     */
-    widget?: "select" | "subcollection" | "reference";
-
-    /**
-     * For hierarchical/self relations: how deep to load the tree
-     */
-    maxDepth?: number;
-
-    validation?: {
-        required?: boolean;
-    }
 
 };

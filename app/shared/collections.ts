@@ -160,197 +160,6 @@ const tiposAlquiler = {
 };
 
 // -----------------------------------------------------------------------------
-// Subcollección de Alquileres
-// -----------------------------------------------------------------------------
-
-export const alquileresSubcollection: EntityCollection = {
-    name: "Alquileres",
-    singularName: "Alquiler",
-    slug: "alquileres",
-    dbPath: "alquileres",
-    icon: "CalendarToday",
-    description: "Historial completo de alquileres de esta máquina",
-    properties: {
-        id: {
-            type: "number",
-            validation: { required: true }
-        },
-        maquina_referencia: {
-            name: "Máquina",
-            type: "relation",
-            path: "maquinaria",
-            validation: { required: true },
-            previewProperties: ["nombre", "estado_actual"]
-        },
-        cliente_referencia: {
-            name: "Cliente",
-            type: "relation",
-            path: "clientes",
-            validation: { required: true },
-            previewProperties: ["nombre", "apellido"]
-        },
-        tipo_alquiler: {
-            name: "Tipo de Alquiler",
-            type: "string",
-            enum: tiposAlquiler,
-            validation: { required: true }
-        },
-        precio_por_dia: {
-            name: "Precio por Día",
-            type: "number",
-            validation: { required: true }
-        },
-        fecha_salida: {
-            name: "Fecha de Salida",
-            type: "date",
-            validation: { required: true }
-        },
-        fecha_devolucion_prevista: {
-            name: "Fecha Devolución Prevista",
-            type: "date"
-        },
-        fecha_devolucion_real: {
-            name: "Fecha Devolución Real",
-            type: "date"
-        },
-        situacion_obra: {
-            name: "Situación / Obra",
-            type: "string",
-            validation: { required: true }
-        },
-        horas_salida: {
-            name: "Horas al Salir",
-            type: "number"
-        },
-        horas_devolucion: {
-            name: "Horas al Devolver",
-            type: "number"
-        },
-        implementos_incluidos: {
-            name: "Implementos Incluidos",
-            type: "string",
-            description: "Lista de implementos (ej: PINZAS + ARIDO)"
-        },
-        activo: {
-            name: "Alquiler Activo",
-            type: "boolean",
-            defaultValue: true
-        },
-        notas: {
-            name: "Notas del Alquiler",
-            type: "string",
-            multiline: true
-        },
-        total_facturado: {
-            name: "Total Facturado",
-            type: "number"
-        },
-        estado_pago: {
-            name: "Estado de Pago",
-            type: "string",
-            enum: {
-                pendiente: "Pendiente",
-                pagado: "Pagado",
-                parcial: "Pago Parcial"
-            }
-        }
-    },
-    subcollections: () => [
-        horasSubcollection,
-        incidenciasSubcollection
-    ]
-};
-
-// -----------------------------------------------------------------------------
-// Subcollección de Mantenimiento
-// -----------------------------------------------------------------------------
-
-export const mantenimientoSubcollection: EntityCollection = {
-    name: "Mantenimiento",
-    singularName: "Registro Mantenimiento",
-    slug: "mantenimiento",
-    dbPath: "mantenimiento",
-    icon: "Build",
-    description: "Historial completo de mantenimiento de esta máquina",
-    properties: {
-        id: {
-            type: "number",
-            validation: { required: true }
-        },
-        fecha: {
-            name: "Fecha del Mantenimiento",
-            type: "date",
-            validation: { required: true }
-        },
-        tipo_mantenimiento: {
-            name: "Tipo de Mantenimiento",
-            type: "string",
-            enum: {
-                preventivo: "Preventivo",
-                correctivo: "Correctivo",
-                cambio_aceite: "Cambio de Aceite",
-                cambio_filtros: "Cambio de Filtros",
-                revision_general: "Revisión General",
-                reparacion: "Reparación"
-            },
-            validation: { required: true }
-        },
-        horas_maquina: {
-            name: "Horas de la Máquina",
-            type: "number",
-            description: "Horas que tenía la máquina al momento del mantenimiento"
-        },
-        descripcion: {
-            name: "Descripción del Trabajo",
-            type: "string",
-            multiline: true,
-            validation: { required: true }
-        },
-        tecnico: {
-            name: "Técnico Responsable",
-            type: "string"
-        },
-        taller_externo: {
-            name: "Taller Externo",
-            type: "string",
-            description: "Si se realizó en taller externo"
-        },
-        costo: {
-            name: "Costo del Mantenimiento",
-            type: "number"
-        },
-        proxima_revision: {
-            name: "Próxima Revisión",
-            type: "date"
-        },
-        proxima_revision_horas: {
-            name: "Próxima Revisión (Horas)",
-            type: "number"
-        },
-        repuestos_utilizados: {
-            name: "Repuestos Utilizados",
-            type: "string",
-            multiline: true
-        },
-        tiempo_parada: {
-            name: "Tiempo de Parada (días)",
-            type: "number",
-            description: "Días que estuvo parada la máquina"
-        },
-        urgente: {
-            name: "Mantenimiento Urgente",
-            type: "boolean",
-            defaultValue: false
-        },
-        completado: {
-            name: "Trabajo Completado",
-            type: "boolean",
-            defaultValue: true
-        }
-    }
-};
-
-// -----------------------------------------------------------------------------
 // Subcollección de Horas
 // -----------------------------------------------------------------------------
 
@@ -502,10 +311,191 @@ export const incidenciasSubcollection: EntityCollection = {
 };
 
 // -----------------------------------------------------------------------------
-// Colección Principal de Maquinaria
+// Subcollección de Alquileres
 // -----------------------------------------------------------------------------
 
-export const maquinariaCollection: EntityCollection = {
+export const alquileresSubcollection: EntityCollection = {
+    name: "Alquileres",
+    singularName: "Alquiler",
+    slug: "alquileres",
+    dbPath: "alquileres",
+    icon: "CalendarToday",
+    description: "Historial completo de alquileres de esta máquina",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        maquina_referencia: {
+            name: "Máquina",
+            type: "relation",
+            path: "maquinaria",
+            validation: { required: true },
+            previewProperties: ["nombre", "estado_actual"]
+        },
+        tipo_alquiler: {
+            name: "Tipo de Alquiler",
+            type: "string",
+            enum: tiposAlquiler,
+            validation: { required: true }
+        },
+        precio_por_dia: {
+            name: "Precio por Día",
+            type: "number",
+            validation: { required: true }
+        },
+        fecha_salida: {
+            name: "Fecha de Salida",
+            type: "date",
+            validation: { required: true }
+        },
+        fecha_devolucion_prevista: {
+            name: "Fecha Devolución Prevista",
+            type: "date"
+        },
+        fecha_devolucion_real: {
+            name: "Fecha Devolución Real",
+            type: "date"
+        },
+        situacion_obra: {
+            name: "Situación / Obra",
+            type: "string",
+            validation: { required: true }
+        },
+        horas_salida: {
+            name: "Horas al Salir",
+            type: "number"
+        },
+        horas_devolucion: {
+            name: "Horas al Devolver",
+            type: "number"
+        },
+        implementos_incluidos: {
+            name: "Implementos Incluidos",
+            type: "string",
+            description: "Lista de implementos (ej: PINZAS + ARIDO)"
+        },
+        activo: {
+            name: "Alquiler Activo",
+            type: "boolean",
+            defaultValue: true
+        },
+        notas: {
+            name: "Notas del Alquiler",
+            type: "string",
+            multiline: true
+        },
+        total_facturado: {
+            name: "Total Facturado",
+            type: "number"
+        },
+        estado_pago: {
+            name: "Estado de Pago",
+            type: "string",
+            enum: {
+                pendiente: "Pendiente",
+                pagado: "Pagado",
+                parcial: "Pago Parcial"
+            }
+        }
+    },
+    subcollections: () => [
+        horasSubcollection,
+        incidenciasSubcollection
+    ]
+};
+
+// -----------------------------------------------------------------------------
+// Subcollección de Mantenimiento
+// -----------------------------------------------------------------------------
+export const mantenimientoSubcollection: EntityCollection = {
+    name: "Mantenimiento",
+    singularName: "Registro Mantenimiento",
+    slug: "mantenimiento",
+    dbPath: "mantenimiento",
+    icon: "Build",
+    description: "Historial completo de mantenimiento de esta máquina",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        fecha: {
+            name: "Fecha del Mantenimiento",
+            type: "date",
+            validation: { required: true }
+        },
+        tipo_mantenimiento: {
+            name: "Tipo de Mantenimiento",
+            type: "string",
+            enum: {
+                preventivo: "Preventivo",
+                correctivo: "Correctivo",
+                cambio_aceite: "Cambio de Aceite",
+                cambio_filtros: "Cambio de Filtros",
+                revision_general: "Revisión General",
+                reparacion: "Reparación"
+            },
+            validation: { required: true }
+        },
+        horas_maquina: {
+            name: "Horas de la Máquina",
+            type: "number",
+            description: "Horas que tenía la máquina al momento del mantenimiento"
+        },
+        descripcion: {
+            name: "Descripción del Trabajo",
+            type: "string",
+            multiline: true,
+            validation: { required: true }
+        },
+        tecnico: {
+            name: "Técnico Responsable",
+            type: "string"
+        },
+        taller_externo: {
+            name: "Taller Externo",
+            type: "string",
+            description: "Si se realizó en taller externo"
+        },
+        costo: {
+            name: "Costo del Mantenimiento",
+            type: "number"
+        },
+        proxima_revision: {
+            name: "Próxima Revisión",
+            type: "date"
+        },
+        proxima_revision_horas: {
+            name: "Próxima Revisión (Horas)",
+            type: "number"
+        },
+        repuestos_utilizados: {
+            name: "Repuestos Utilizados",
+            type: "string",
+            multiline: true
+        },
+        tiempo_parada: {
+            name: "Tiempo de Parada (días)",
+            type: "number",
+            description: "Días que estuvo parada la máquina"
+        },
+        urgente: {
+            name: "Mantenimiento Urgente",
+            type: "boolean",
+            defaultValue: false
+        },
+        completado: {
+            name: "Trabajo Completado",
+            type: "boolean",
+            defaultValue: true
+        }
+    }
+};
+
+export const maquinariaCollection
+    :
+    EntityCollection = {
     name: "Maquinaria",
     singularName: "Máquina",
     slug: "maquinaria",
@@ -605,7 +595,17 @@ export const maquinariaCollection: EntityCollection = {
         alquileresSubcollection,
         mantenimientoSubcollection,
         horasSubcollection,
-        incidenciasSubcollection
+        {
+            ...incidenciasSubcollection,
+            relation: {
+                type: "manyToMany",
+                through: {
+                    dbPath: "alquileres",
+                    sourceJunctionKey: ["maquina_referencia"],
+                    targetJunctionKey: [""]
+                }
+            }
+        }
     ]
 };
 

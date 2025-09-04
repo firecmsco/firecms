@@ -730,6 +730,11 @@ export interface RelationProperty extends BaseProperty<EntityRelation | EntityRe
      */
     includeEntityLink?: boolean;
 
+    /**
+     * How to render this relation in the UI
+     */
+    widget?: "select" | "subcollection" | "reference";
+
 }
 
 /**

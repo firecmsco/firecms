@@ -380,7 +380,6 @@ export class EntityService {
                         : (manyToManyRelation.through?.targetJunctionKey ?? defaultTargetKey);
                     const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
 
-
                     if (!sourceJunctionKey || !targetJunctionKey) {
                         console.error(`Junction keys not found in table ${junctionDbPath}`);
                         return;
@@ -411,6 +410,105 @@ export class EntityService {
         };
     }
 
+    /**
+     * Resolve a subcollection to a relation, creating a synthetic relation if only dbPath is defined
+     */
+    private resolveSubcollectionToRelation(
+        parentCollection: EntityCollection,
+        subcollectionSlug: string
+    ): { relation: ManyRelation | ManyToManyRelation, targetCollection: EntityCollection } | null {
+        // First try to get explicit relations
+        const allCollections = collectionRegistry.getAllCollectionsRecursively();
+        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const relation = resolvedRelations[subcollectionSlug];
+
+        if (relation) {
+            if (relation.type === "many") {
+                return {
+                    relation: relation as ManyRelation,
+                    targetCollection: (relation as ManyRelation).target()
+                };
+            } else if (relation.type === "manyToMany") {
+                return {
+                    relation: relation as ManyToManyRelation,
+                    targetCollection: (relation as ManyToManyRelation).target()
+                };
+            }
+        }
+
+        // If no explicit relation, try to find subcollection definition and create synthetic relation
+        const subcollections = parentCollection.subcollections?.() ?? [];
+        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
+
+        if (subcollection?.dbPath) {
+            console.log(`Creating synthetic many relation for dbPath-based subcollection: ${subcollectionSlug}`);
+
+            // Get the target collection based on dbPath
+            const { collection: targetCollection } = this.resolveCollectionAndIdsForPath(subcollection.dbPath);
+
+            // Create a synthetic ManyRelation
+            const syntheticRelation: ManyRelation = {
+                type: "many",
+                target: () => targetCollection,
+                relationName: subcollectionSlug
+            };
+
+            return {
+                relation: syntheticRelation,
+                targetCollection
+            };
+        }
+
+        return null;
+    }
+
+    /**
+     * Find the foreign key field that links target collection to parent collection
+     */
+    private findForeignKeyFieldForRelation(
+        targetCollection: EntityCollection,
+        parentCollection: EntityCollection,
+        parentCollectionName?: string
+    ): string | null {
+        // First try to find explicit relation fields
+        for (const [key, prop] of Object.entries(targetCollection.properties)) {
+            const property = prop as Property;
+            if (property.type === "relation" &&
+                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
+                return key;
+            }
+        }
+
+        // If no explicit relation field found, try naming conventions based on parent collection
+        const parentName = parentCollectionName || parentCollection.slug || parentCollection.dbPath.split('/').pop();
+        const possibleForeignKeys = [
+            // Standard naming patterns
+            `${parentName}_id`,
+            `${toSnakeCase(parentName)}_id`,
+            // Common reference patterns
+            `${parentName}_referencia`,
+            `${toSnakeCase(parentName)}_referencia`,
+            // Specific patterns for this collection structure
+            'maquina_referencia', // specific to this schema
+            'cliente_id',
+            'parent_id'
+        ];
+
+        for (const possibleKey of possibleForeignKeys) {
+            if (targetCollection.properties[possibleKey]) {
+                const property = targetCollection.properties[possibleKey] as Property;
+                // Accept foreign key fields regardless of their type (number, string, etc.)
+                // since foreign keys are often defined with their actual data type, not "relation"
+                if (property.type === "number" || property.type === "string" || property.type === "relation") {
+                    console.log(`Found foreign key field using naming convention: ${possibleKey}`);
+                    return possibleKey;
+                }
+            }
+        }
+
+        return null;
+    }
+
     async fetchCollection<M extends Record<string, any>>(
         path: string,
         options: {
@@ -432,19 +530,16 @@ export class EntityService {
 
             const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
             if (parentCollection) {
-                // Get all collections for relation resolution
-                const allCollections = collectionRegistry.getAllCollectionsRecursively();
-                const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-                const relation = resolvedRelations[subcollectionSlug];
+                const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-                if (relation) {
-                    if (relation.type === "manyToMany") {
+                if (resolvedRelation) {
+                    if (resolvedRelation.relation.type === "manyToMany") {
                         return this.fetchManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
-                    } else if (relation.type === "many") {
+                    } else if (resolvedRelation.relation.type === "many") {
                         return this.fetchManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
                     }
                 } else {
-                    throw new Error(`Relation not found for subcollection: ${subcollectionSlug}`);
+                    throw new Error(`Could not resolve relation for subcollection: ${subcollectionSlug}`);
                 }
             }
         }
@@ -512,7 +607,7 @@ export class EntityService {
 
             return {
                 id: entity[idInfo.fieldName].toString(),
-                path: path,
+                path,
                 values: values as M,
                 databaseId: options.databaseId
             };
@@ -558,7 +653,10 @@ export class EntityService {
         }
 
         // Auto-link to parent entities for subcollections
-        const { collections, entityIds } = collectionRegistry.resolvePathToCollections(path);
+        const {
+            collections,
+            entityIds
+        } = collectionRegistry.resolvePathToCollections(path);
         if (entityIds.length > 0) {
             // We have parent entities to link to
             processedData = this.linkToParentEntities(processedData, collections, entityIds, collection);
@@ -742,20 +840,16 @@ export class EntityService {
 
             const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
             if (parentCollection) {
-                // Get all collections for relation resolution
-                const allCollections = collectionRegistry.getAllCollectionsRecursively();
-                const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-                const relation = resolvedRelations[subcollectionSlug];
+                const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-                if (relation) {
-                    if (relation.type === "manyToMany") {
+                if (resolvedRelation) {
+                    if (resolvedRelation.relation.type === "manyToMany") {
                         return this.countManyToManyCollection(parentPath, parentEntityId, subcollectionSlug, options);
-                    } else if (relation.type === "many") {
+                    } else if (resolvedRelation.relation.type === "many") {
                         return this.countManyCollection(path, parentPath, parentEntityId, subcollectionSlug, options);
                     }
                 } else {
-                    // Direct subcollection - count with parent filter
-                    return this.countDirectSubcollection(path, parentPath, parentEntityId, options);
+                    throw new Error(`Could not resolve relation for subcollection: ${subcollectionSlug}`);
                 }
             }
         }
@@ -788,16 +882,8 @@ export class EntityService {
         const { collection: parentCollection } = this.resolveCollectionAndIdsForPath(parentPath);
         const table = this.getTableForPath(path);
 
-        // Find the foreign key field that relations the parent
-        let foreignKeyField: string | undefined;
-        for (const [key, prop] of Object.entries(collection.properties)) {
-            const property = prop as Property;
-            if (property.type === "relation" &&
-                (property.path === parentCollection.slug || property.path === parentCollection.dbPath)) {
-                foreignKeyField = key;
-                break;
-            }
-        }
+        // Find the foreign key field that references the parent
+        const foreignKeyField = this.findForeignKeyFieldForRelation(collection, parentCollection);
 
         const allConditions: SQLWrapper[] = [];
 
@@ -840,19 +926,18 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-        const relation = resolvedRelations[subcollectionSlug];
+        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-        if (!relation || relation.type !== "manyToMany") {
+        if (!resolvedRelation || resolvedRelation.relation.type !== "manyToMany") {
             throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
-        const typedRelation = relation as ManyToManyRelation;
 
-        const targetCollection = typedRelation.target();
+        const typedRelation = resolvedRelation.relation as ManyToManyRelation;
+        const targetCollection = resolvedRelation.targetCollection;
         const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
         const targetTable = this.getTableForPath(targetTablePath);
 
+        // Resolve junction table name and keys using same defaults as schema generation
         const junctionDbPath = resolveJunctionTableName(typedRelation.through, parentCollection, targetCollection);
         const junctionTable = collectionRegistry.getTable(junctionDbPath);
         if (!junctionTable) {
@@ -863,28 +948,27 @@ export class EntityService {
         const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
 
         const defaultSourceKey = `${toSnakeCase(getTableNameFromCollection(parentCollection))}_id`;
+        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
         const sourceJunctionKeyName = Array.isArray(typedRelation.through?.sourceJunctionKey)
-            ? (typedRelation.through.sourceJunctionKey as string[])[0]
+            ? (typedRelation.through?.sourceJunctionKey as string[])[0]
             : (typedRelation.through?.sourceJunctionKey ?? defaultSourceKey);
+        const targetJunctionKeyName = Array.isArray(typedRelation.through?.targetJunctionKey)
+            ? (typedRelation.through?.targetJunctionKey as string[])[0]
+            : (typedRelation.through?.targetJunctionKey ?? defaultTargetKey);
 
         const sourceJunctionKey = junctionTable[sourceJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
         if (!sourceJunctionKey) {
             throw new Error(`Source junction key '${sourceJunctionKeyName}' not found in table '${junctionDbPath}'`);
         }
-
-        const defaultTargetKey = `${toSnakeCase(getTableNameFromCollection(targetCollection))}_id`;
-        const targetJunctionKeyName = Array.isArray(typedRelation.through?.targetJunctionKey)
-            ? (typedRelation.through.targetJunctionKey as string[])[0]
-            : (typedRelation.through?.targetJunctionKey ?? defaultTargetKey);
         const targetJunctionKey = junctionTable[targetJunctionKeyName as keyof typeof junctionTable] as AnyPgColumn;
         if (!targetJunctionKey) {
             throw new Error(`Target junction key '${targetJunctionKeyName}' not found in table '${junctionDbPath}'`);
         }
 
-        const targetIdInfo = this.getIdFieldInfo(targetTablePath);
+        const targetIdInfo = this.getIdFieldInfo(targetCollection.slug ?? targetCollection.dbPath);
         const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
         if (!targetIdField) {
-            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in table for path '${targetTablePath}'`);
+            throw new Error(`ID field '${targetIdInfo.fieldName}' not found in table for path '${targetCollection.slug ?? targetCollection.dbPath}'`);
         }
 
         let query: any = this.db
@@ -892,10 +976,11 @@ export class EntityService {
             .from(targetTable)
             .innerJoin(junctionTable, eq(targetIdField, targetJunctionKey));
 
+        // Start with the base condition for the join
         const allConditions: SQLWrapper[] = [eq(sourceJunctionKey, parsedParentId)];
 
         if (options.filter) {
-            const conditions = this.buildFilterConditions(options.filter, targetTable, targetTablePath);
+            const conditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
             if (conditions.length > 0) {
                 allConditions.push(...conditions);
             }
@@ -906,6 +991,7 @@ export class EntityService {
         const result = await query;
         return Number(result[0]?.count || 0);
     }
+
 
     /**
      * Count entities in a one-to-many collection filtered by parent entity
@@ -922,11 +1008,9 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-        const relation = resolvedRelations[subcollectionSlug];
+        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-        if (!relation || relation.type !== "many") {
+        if (!resolvedRelation || resolvedRelation.relation.type !== "many") {
             throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
 
@@ -993,7 +1077,7 @@ export class EntityService {
     }
 
     /**
-     * Find the foreign key field in the target collection that relations a parent collection
+     * Find the foreign key in the target collection that references a parent collection
      */
     private findForeignKeyForParent(
         targetCollection: EntityCollection,
@@ -1001,11 +1085,9 @@ export class EntityService {
     ): string | null {
         for (const [fieldName, property] of Object.entries(targetCollection.properties)) {
             const prop = property as Property;
-            if (prop.type === "relation") {
-                // Check if this relation points to the parent collection
-                if (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath) {
-                    return fieldName;
-                }
+            if (prop.type === "relation" &&
+                (prop.path === parentCollection.slug || prop.path === parentCollection.dbPath)) {
+                return fieldName;
             }
         }
         return null;
@@ -1028,16 +1110,16 @@ export class EntityService {
         };
     }
 
-    // Search functionality for text search
-    async searchEntities<M extends Record<string, any>>(
+    private async searchEntities<M extends Record<string, any>>(
         path: string,
         searchString: string,
         databaseId?: string
     ): Promise<Entity<M>[]> {
         const table = this.getTableForPath(path);
-        const { collection } = this.resolveCollectionAndIdsForPath(path);
         const idInfo = this.getIdFieldInfo(path);
+        const { collection } = this.resolveCollectionAndIdsForPath(path);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
         if (!idField) {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for path '${path}'`);
         }
@@ -1102,17 +1184,14 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
-        // Get all collections for relation resolution
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-        const relation = resolvedRelations[subcollectionSlug];
+        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-        if (!relation || relation.type !== "manyToMany") {
+        if (!resolvedRelation || resolvedRelation.relation.type !== "manyToMany") {
             throw new Error(`ManyToMany relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
-        const typedRelation = relation as ManyToManyRelation;
 
-        const targetCollection = typedRelation.target();
+        const typedRelation = resolvedRelation.relation as ManyToManyRelation;
+        const targetCollection = resolvedRelation.targetCollection;
         const targetTablePath = targetCollection.slug ?? targetCollection.dbPath;
         const targetTable = this.getTableForPath(targetTablePath);
 
@@ -1224,43 +1303,36 @@ export class EntityService {
             throw new Error(`Parent collection not found: ${parentPath}`);
         }
 
-        // Find the subcollection definition
-        const subcollections = parentCollection.subcollections?.() ?? [];
-        const subcollection = subcollections.find(sc => sc.slug === subcollectionSlug);
+        const resolvedRelation = this.resolveSubcollectionToRelation(parentCollection, subcollectionSlug);
 
-        if (!subcollection) {
-            throw new Error(`Subcollection '${subcollectionSlug}' not found in '${parentPath}'`);
-        }
-
-        // Get all collections for relation resolution
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
-        const relation = resolvedRelations[subcollectionSlug];
-
-        if (!relation || relation.type !== "many") {
+        if (!resolvedRelation || resolvedRelation.relation.type !== "many") {
             throw new Error(`One-to-many relation '${subcollectionSlug}' not found in '${parentPath}'`);
         }
-        const typedRelation = relation as ManyRelation;
 
-        const targetCollection = typedRelation.target();
+        const targetCollection = resolvedRelation.targetCollection;
         const targetCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
-        if (subcollection.relation) {
-            // If subcollection has an explicit relation, we can skip foreign key lookup
-            // and just fetch all entities from the target collection.
-            console.log(`Using explicit relation definition for subcollection: ${subcollectionSlug}`);
+        // Find the field in the target collection that references the parent
+        const foreignKeyField = this.findForeignKeyFieldForRelation(targetCollection, parentCollection);
 
-            // For subcollections with explicit relations, we can fetch all entities
-            return this.fetchCollection<M>(targetCollectionPath, options);
-        } else {
-            // No explicit relation - use the subcollection's dbPath as the target collection
-            // This handles cases like "mantenimiento" where it's a direct subcollection
-            const subcollectionDbPath = subcollection.dbPath;
-            console.log(`Using subcollection dbPath for direct subcollection: ${subcollectionDbPath}`);
-
-            // Fetch all entities from the subcollection's dbPath
-            // Since it's defined as a subcollection, it's implicitly related to the parent
-            return this.fetchCollection<M>(subcollectionDbPath, options);
+        if (!foreignKeyField) {
+            throw new Error(`Could not find foreign key field on ${targetCollectionPath} pointing to ${parentPath}`);
         }
+
+        const existingFilter = options.filter ?? {};
+        const parentIdInfo = this.getIdFieldInfo(parentPath);
+        const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
+
+        // Add a filter condition to match the parent ID
+        const newFilter: FilterValues<Extract<keyof M, string>> = {
+            ...existingFilter,
+            [foreignKeyField as Extract<keyof M, string>]: ["==", parsedParentId]
+        };
+
+        // Delegate back to the main fetchCollection method with the new filter
+        return this.fetchCollection<M>(targetCollectionPath, {
+            ...options,
+            filter: newFilter
+        });
     }
 }
