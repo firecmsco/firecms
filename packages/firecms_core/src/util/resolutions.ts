@@ -496,12 +496,12 @@ export function resolvedSelectedEntityView<M extends Record<string, any>>(
     };
 }
 
-export function getSubcollections<M>(collection: EntityCollection<M>) {
+export function getSubcollections<M extends Record<string, any> = any>(collection: EntityCollection<M>) {
     const subcollections: EntityCollection<any>[] = [];
     subcollections.push(...(collection.subcollections?.() ?? []));
     subcollections.push(...(collection.relations?.map(relation => {
         const targetCollection = relation.target();
-        const overrides = relation.collection;
+        const overrides = relation.overrides;
         return overrides ? mergeDeep(targetCollection, overrides) : targetCollection;
     }) ?? []));
     return subcollections;

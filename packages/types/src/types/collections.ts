@@ -11,8 +11,6 @@ import { User } from "../users";
 import { FireCMSContext } from "../firecms_context";
 import { Relation } from "./relations";
 
-
-
 /**
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main

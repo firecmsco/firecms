@@ -29,7 +29,7 @@ export class CollectionRegistry {
 
     /**
      * Get collection by resolving multi-segment paths through relations
-     * e.g., "maquinaria/70/alquileres" resolves to the alquileres collection
+     * e.g., "authors/70/posts" resolves to the posts collection
      */
     getCollectionByPath(collectionPath: string): EntityCollection | undefined {
         // Handle simple single collection path

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare"
-import { useBlocker, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
     AuthController,
@@ -11,7 +11,6 @@ import {
     EntityCollectionsBuilder,
     EntityReference,
     FireCMSPlugin,
-    NavigationBlocker,
     NavigationController,
     NavigationEntry,
     NavigationGroupMapping,
@@ -22,13 +21,15 @@ import {
 } from "@firecms/types";
 import {
     applyPermissionsFunctionIfEmpty,
-    getCollectionBySlugWithin, getParentReferencesFromPath,
+    getCollectionBySlugWithin,
+    getParentReferencesFromPath,
     mergeDeep,
     removeFunctions,
     removeInitialAndTrailingSlashes,
     resolveCollectionPathIds,
     resolvePermissions
 } from "@firecms/common";
+import { getSubcollections } from "../util";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -414,14 +415,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const collections = collectionsRef.current;
         if (collections === undefined)
             throw Error("getCollectionFromPaths: Collections have not been initialised yet");
-        let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
+        let currentCollections: EntityCollection[] = [...(collections ?? [])];
 
         for (let i = 0; i < pathSegments.length; i++) {
             const pathSegment = pathSegments[i];
             const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === pathSegment);
             if (!collection)
                 return undefined;
-            currentCollections = collection.subcollections?.();
+            currentCollections = getSubcollections(collection) ?? [];
             if (i === pathSegments.length - 1)
                 return collection as EC;
         }
@@ -435,14 +436,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const collections = collectionsRef.current;
         if (collections === undefined)
             throw Error("getCollectionFromIds: Collections have not been initialised yet");
-        let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
+        let currentCollections: EntityCollection[] = [...(collections ?? [])];
 
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
             const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
             if (!collection)
                 return undefined;
-            currentCollections = collection.subcollections?.();
+            currentCollections = getSubcollections(collection) ?? [];
             if (i === ids.length - 1)
                 return collection as EC;
         }
@@ -500,7 +501,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
             paths.push(collection.dbPath);
-            currentCollections = collection.subcollections?.();
+            currentCollections = getSubcollections(collection) ?? [];
         }
         return paths;
     }, [getCollectionFromIds]);
@@ -647,57 +648,6 @@ function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
         return false;
     }
     return equal(removeFunctions(restA), removeFunctions(restB));
-}
-
-function useCustomBlocker(): NavigationBlocker {
-    const [blockListeners, setBlockListeners] = useState<Record<string, {
-        block: boolean,
-        basePath?: string
-    }>>({});
-
-    const shouldBlock = Object.values(blockListeners).some(b => b.block);
-
-    let blocker: any;
-    try {
-        blocker = useBlocker(({
-                                  nextLocation
-                              }) => {
-            const allBasePaths = Object.values(blockListeners).map(b => b.basePath).filter(Boolean) as string[];
-            if (allBasePaths && allBasePaths.some(path => nextLocation.pathname.startsWith(path)))
-                return false;
-            return shouldBlock;
-        });
-    } catch (e) {
-        // console.warn("Blocker not available, navigation will not be blocked");
-    }
-
-    const updateBlockListener = (path: string, block: boolean, basePath?: string) => {
-        setBlockListeners(prev => ({
-            ...prev,
-            [path]: {
-                block,
-                basePath
-            }
-        }));
-        return () => setBlockListeners(prev => {
-            const {
-                [path]: removed,
-                ...rest
-            } = prev;
-            return rest;
-        })
-    };
-
-    const isBlocked = (path: string) => {
-        return (blockListeners[path]?.block ?? false) && blocker?.state === "blocked";
-    }
-
-    return {
-        updateBlockListener,
-        isBlocked,
-        proceed: blocker?.proceed,
-        reset: blocker?.reset
-    }
 }
 
 function computeNavigationGroups({

@@ -181,7 +181,7 @@ export class RealtimeService extends EventEmitter {
             this.sendEntityUpdate(clientId, subscriptionId, entity || null);
 
         } catch (error) {
-            this.sendError(clientId, `Failed to subscribe to entity: ${error}`, subscriptionId);
+            this.sendError(clientId, `Failed to subscribe to entity: ${request.path, request.entityId} ${error}`, subscriptionId);
         }
     }
 
