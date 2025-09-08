@@ -3,8 +3,6 @@
 import { primaryKey, pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, numeric, serial } from 'drizzle-orm/pg-core';
 import { relations as drizzleRelations } from 'drizzle-orm';
 
-import { getTableName, getTableVarName, getEnumVarName, getColumnName, toSnakeCase } from "@firecms/common";
-
 export const maquinariaCategoria = pgEnum("maquinaria_categoria", ['manipuladoras_telescopicas', 'excavadoras', 'minicargadora_ruedas', 'dumpers_obra', 'grupos_electrogenos', 'cortadoras', 'martillos_picadores', 'maquinaria_jardineria', 'compresor_aire', 'plataformas_articuladas', 'plataformas_articuladas_electricas', 'plataformas_telescopicas', 'plataformas_tijera', 'plataformas_tijera_electricas', 'plataformas_unipersonales_electricas', 'plataformas_articulada_cadena', 'rodillos', 'carretillas_elevadoras']);
 export const maquinariaEstado_actual = pgEnum("maquinaria_estado_actual", ['stock', 'alquilado', 'mantenimiento', 'parada', 'libre']);
 export const alquileresTipo_alquiler = pgEnum("alquileres_tipo_alquiler", ['mensual', 'anual', 'diario']);
@@ -69,8 +67,8 @@ export const controlDiario = pgTable("control_diario", {
 
 export const alquileres = pgTable("alquileres", {
 	id: serial("id").primaryKey(),
-	maquina_referencia: integer("maquina_referencia").references(() => maquinaria.id, { onDelete: 'cascade' }).notNull(),
-	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: 'set null' }),
+	maquina_referencia: integer("maquina_referencia").references(() => maquinaria.id, { onDelete: "cascade" }).notNull(),
+	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: "set null" }),
 	tipo_alquiler: alquileresTipo_alquiler("tipo_alquiler").notNull(),
 	precio_por_dia: numeric("precio_por_dia").notNull(),
 	fecha_salida: timestamp("fecha_salida", { withTimezone: true, mode: 'string' }).notNull(),
@@ -88,7 +86,7 @@ export const alquileres = pgTable("alquileres", {
 
 export const mantenimiento = pgTable("mantenimiento", {
 	id: serial("id").primaryKey(),
-	maquina_relacionada: integer("maquina_relacionada").references(() => maquinaria.id, { onDelete: 'set null' }),
+	maquina_relacionada: integer("maquina_relacionada").references(() => maquinaria.id, { onDelete: "set null" }),
 	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
 	tipo_mantenimiento: mantenimientoTipo_mantenimiento("tipo_mantenimiento").notNull(),
 	horas_maquina: numeric("horas_maquina"),
@@ -112,7 +110,7 @@ export const horas = pgTable("horas", {
 	motivo_lectura: horasMotivo_lectura("motivo_lectura"),
 	operador: varchar("operador"),
 	notas: varchar("notas"),
-	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: 'set null' })
+	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: "set null" })
 });
 
 export const incidencias = pgTable("incidencias", {
@@ -122,8 +120,8 @@ export const incidencias = pgTable("incidencias", {
 	gravedad: incidenciasGravedad("gravedad").notNull(),
 	descripcion: varchar("descripcion").notNull(),
 	reportado_por: varchar("reportado_por"),
-	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: 'set null' }),
-	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: 'set null' }),
+	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: "set null" }),
+	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: "set null" }),
 	solucion: varchar("solucion"),
 	fecha_solucion: timestamp("fecha_solucion", { withTimezone: true, mode: 'string' }),
 	costo_reparacion: numeric("costo_reparacion"),
