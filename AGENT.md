@@ -8,3 +8,8 @@ The library code can all be found under `packages`
 Especially relevant for the backend are:
 - `packages/backend`
 - `packages/firecms_core`
+
+Be careful when escaping strings, avoid this lint error and similar ones:
+ESLint: Unnecessary escape character: \". (no-useless-escape)
+
+NEVER convert to any.

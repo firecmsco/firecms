@@ -26,7 +26,7 @@ function normalizeRelation(relation: Relation, sourceCollection: EntityCollectio
             }];
         } else { // cardinality: "many"
             // Has-many relation: FK is on the target table
-            const targetFkField = `${toSnakeCase(sourceCollection.name)}_id`;
+            const targetFkField = `${toSnakeCase(sourceCollection.slug ?? sourceCollection.name)}_id`;
             newRelation.joins = [{
                 table: targetTableName,
                 sourceColumn: `${sourceTableName}.${sourceCollection.idField ?? "id"}`,
@@ -84,6 +84,10 @@ export function resolveCollectionRelations(
             if (relation) {
                 // Use property name as relation key if not already defined
                 if (!relations[propKey]) {
+                    // FIX: Set relationName to propKey if not defined, before normalizing
+                    if (!relation.relationName) {
+                        relation.relationName = propKey;
+                    }
                     relations[propKey] = normalizeRelation(relation, collection);
                 }
             }
@@ -91,10 +95,6 @@ export function resolveCollectionRelations(
     }
 
     return relations;
-}
-
-export function findCollectionBySlugOrDbPath(collections: EntityCollection[], slugOrPath: string): EntityCollection | undefined {
-    return collections.find(c => c.slug === slugOrPath || c.dbPath === slugOrPath);
 }
 
 export function resolvePropertyRelation({
@@ -142,7 +142,6 @@ export function resolvePropertyRelation({
     return undefined;
 }
 
-
 export function getTableName(collection: EntityCollection): string {
     return collection.dbPath ?? toSnakeCase(collection.slug) ?? toSnakeCase(collection.name);
 }
@@ -158,5 +157,5 @@ export function getEnumVarName(tableName: string, propName: string): string {
 }
 
 export function getColumnName(fullColumn: string): string {
-    return fullColumn.includes('.') ? fullColumn.split('.').pop()! : fullColumn;
+    return fullColumn.includes(".") ? fullColumn.split(".").pop()! : fullColumn;
 }
