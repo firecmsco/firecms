@@ -35,7 +35,7 @@ const getJunctionKeyColumns = (keys: string | string[], targetCollection: Entity
     return keyArray.map(key => {
         const columnName = getColumnName(key);
         const targetIdField = getColumnName(idField);
-        return `\t${columnName}: ${columnType}(\"${toSnakeCase(columnName)}\").references(() => ${targetTableVar}.${targetIdField}, ${refOptions}).notNull()`;
+        return `	${columnName}: ${columnType}("${toSnakeCase(columnName)}").references(() => ${targetTableVar}.${targetIdField}, ${refOptions}).notNull()`;
     });
 };
 
@@ -43,13 +43,13 @@ const getDrizzleIdColumn = (collection: EntityCollection): string => {
     const idField = collection.idField ?? "id";
     if (collection.customId) {
         const idType = isNumericId(collection) ? "integer" : "varchar";
-        return `\t${idField}: ${idType}(\"${toSnakeCase(idField)}\").primaryKey()`;
+        return `	${idField}: ${idType}("${toSnakeCase(idField)}").primaryKey()`;
     } else {
-        return `\t${idField}: serial(\"${toSnakeCase(idField)}\").primaryKey()`;
+        return `	${idField}: serial("${toSnakeCase(idField)}").primaryKey()`;
     }
 }
 
-const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCollection, allCollections: EntityCollection[]): string | null => {
+const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCollection): string | null => {
     const colName = toSnakeCase(propName);
     const collectionPath = getTableName(collection);
     let columnDefinition: string;
@@ -59,9 +59,9 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const stringProp = prop as StringProperty;
             if (stringProp.enum) {
                 const enumName = getEnumVarName(collectionPath, propName);
-                columnDefinition = `${enumName}(\"${colName}\")`;
+                columnDefinition = `${enumName}("${colName}")`;
             } else {
-                columnDefinition = `varchar(\"${colName}\")`;
+                columnDefinition = `varchar("${colName}")`;
             }
             break;
         }
@@ -69,20 +69,20 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const numProp = prop as NumberProperty;
             if (numProp.enum) {
                 const enumName = getEnumVarName(collectionPath, propName);
-                columnDefinition = `${enumName}(\"${colName}\")`;
+                columnDefinition = `${enumName}("${colName}")`;
             } else {
-                columnDefinition = numProp.validation?.integer ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
+                columnDefinition = numProp.validation?.integer ? `integer("${colName}")` : `numeric("${colName}")`;
             }
             break;
         }
         case "boolean":
-            columnDefinition = `boolean(\"${colName}\")`;
+            columnDefinition = `boolean("${colName}")`;
             break;
         case "date":
-            columnDefinition = `timestamp(\"${colName}\", { withTimezone: true, mode: 'string' })`;
+            columnDefinition = `timestamp("${colName}", { withTimezone: true, mode: 'string' })`;
             break;
         case "map":
-            columnDefinition = `jsonb(\"${colName}\")`;
+            columnDefinition = `jsonb("${colName}")`;
             break;
         case "relation": {
             const refProp = prop as RelationProperty;
@@ -112,17 +112,17 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const fkColumnName = getColumnName(join.sourceColumn);
             const targetIdField = getColumnName(join.targetColumn);
 
-            const baseColumn = isNumericId(targetCollection) ? `integer(\"${fkColumnName}\")` : `varchar(\"${fkColumnName}\")`;
+            const baseColumn = isNumericId(targetCollection) ? `integer("${fkColumnName}")` : `varchar("${fkColumnName}")`;
             const targetTableVar = getTableVarName(getTableName(targetCollection));
 
-            const onUpdate = relation.onUpdate ? `onUpdate: \"${relation.onUpdate}\"` : "";
+            const onUpdate = relation.onUpdate ? `onUpdate: "${relation.onUpdate}"` : "";
             const required = (prop).validation?.required;
 
             let onDeleteVal = relation.onDelete;
             if (!onDeleteVal) {
                 onDeleteVal = required ? "cascade" : "set null";
             }
-            const onDelete = `onDelete: \"${onDeleteVal}\"`;
+            const onDelete = `onDelete: "${onDeleteVal}"`;
 
             const refOptionsParts = [onUpdate, onDelete].filter(Boolean);
             const refOptions = refOptionsParts.length > 0 ? `{ ${refOptionsParts.join(", ")} }` : "";
@@ -137,10 +137,10 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         }
         case "array": {
             const arrayProp = prop;
-            if (arrayProp.of?.type === "relation") {
+            if (Array.isArray(arrayProp.of) || arrayProp.of?.type === "relation") {
                 return null; // Virtual property for relation, no column needed.
             }
-            columnDefinition = `jsonb(\"${colName}\")`;
+            columnDefinition = `jsonb("${colName}")`;
             break;
         }
         default:
@@ -171,7 +171,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
         const collectionPath = getTableName(collection);
         Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
             const property = prop as Property;
-            const enumData = (property).enum;
+            const enumData = "enum" in property ? property.enum : undefined;
             if ((property.type === "string" || property.type === "number") && enumData) {
                 const enumVarName = getEnumVarName(collectionPath, propName);
                 const enumDbName = `${collectionPath}_${toSnakeCase(propName)}`;
@@ -190,7 +190,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 }
 
                 if (values.length > 0) {
-                    schemaContent += `export const ${enumVarName} = pgEnum(\"${enumDbName}\", [${values.map((v: any) => `\'${v}\'`).join(", ")}]);\n`;
+                    schemaContent += `export const ${enumVarName} = pgEnum("${enumDbName}", [${values.map((v: any) => `'${v}'`).join(", ")}]);\n`;
                     if (!exportedEnumVars.includes(enumVarName)) exportedEnumVars.push(enumVarName);
                 }
             }
@@ -257,10 +257,10 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 const targetJunctionKey = targetJoin.sourceColumn;
 
                 const onSourceDelete = relation.onDelete ?? "cascade";
-                const sourceRefOptionsString = `{ onDelete: \"${onSourceDelete}\" }`;
+                const sourceRefOptionsString = `{ onDelete: "${onSourceDelete}" }`;
 
                 const onTargetDelete = relation.onDelete ?? "cascade";
-                const targetRefOptionsString = `{ onDelete: \"${onTargetDelete}\" }`;
+                const targetRefOptionsString = `{ onDelete: "${onTargetDelete}" }`;
 
                 const sourceJunctionColumns = getJunctionKeyColumns(sourceJunctionKey, sourceCollection, sourceRefOptionsString);
                 const targetJunctionColumns = getJunctionKeyColumns(targetJunctionKey, targetCollection, targetRefOptionsString);
@@ -268,25 +268,25 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 const sourceKeyArray = (Array.isArray(sourceJunctionKey) ? sourceJunctionKey : [sourceJunctionKey]).map(key => getColumnName(key));
                 const targetKeyArray = (Array.isArray(targetJunctionKey) ? targetJunctionKey : [targetJunctionKey]).map(key => getColumnName(key));
 
-                schemaContent += `export const ${tableVarName} = pgTable(\"${tableName}\", {\n`;
+                schemaContent += `export const ${tableVarName} = pgTable("${tableName}", {\n`;
                 schemaContent += `${sourceJunctionColumns.join(",\n")},\n`;
                 schemaContent += `${targetJunctionColumns.join(",\n")}\n`;
                 schemaContent += `}, (table) => ({\n`;
-                schemaContent += `\tpk: primaryKey({ columns: [${[...sourceKeyArray, ...targetKeyArray].map(key => `table.${key}`).join(", ")}] })\n`;
+                schemaContent += `	pk: primaryKey({ columns: [${[...sourceKeyArray, ...targetKeyArray].map(key => `table.${key}`).join(", ")}] })\n`;
                 schemaContent += `}));\n\n`;
 
             } catch (e) {
                 console.warn("Could not generate junction table:", e);
             }
         } else {
-            schemaContent += `export const ${tableVarName} = pgTable(\"${tableName}\", {\n`;
+            schemaContent += `export const ${tableVarName} = pgTable("${tableName}", {\n`;
             schemaContent += getDrizzleIdColumn(collection);
 
             const columns = new Set<string>();
             Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
                 if (propName === (collection.idField ?? "id")) return;
-                const columnString = getDrizzleColumn(propName, prop as Property, collection, collections);
-                if (columnString) columns.add(`\t${columnString}`);
+                const columnString = getDrizzleColumn(propName, prop as Property, collection);
+                if (columnString) columns.add(`	${columnString}`);
             });
 
             if (columns.size > 0) {
@@ -321,8 +321,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             const sourceJunctionKey = getColumnName(relation.joins[0].targetColumn);
             const targetJunctionKey = getColumnName(relation.joins[1].sourceColumn);
 
-            tableRelations.push(`\t${sourceJunctionKey}: one(${sourceTableVarName}, {\n\t\tfields: [${tableVarName}.${sourceJunctionKey}],\n\t\treferences: [${sourceTableVarName}.${sourceIdField}]\n\t})`);
-            tableRelations.push(`\t${targetJunctionKey}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${targetJunctionKey}],\n\t\treferences: [${targetTableVarName}.${targetIdField}]\n\t})`);
+            tableRelations.push(`	${sourceJunctionKey}: one(${sourceTableVarName}, {\n		fields: [${tableVarName}.${sourceJunctionKey}],\n		references: [${sourceTableVarName}.${sourceIdField}]\n	})`);
+            tableRelations.push(`	${targetJunctionKey}: one(${targetTableVarName}, {\n		fields: [${tableVarName}.${targetJunctionKey}],\n		references: [${targetTableVarName}.${targetIdField}]\n	})`);
         } else {
             const collection = allTablesToGenerate.get(tableName)!.collection;
             const resolvedRelations = resolveCollectionRelations(collection, collections);
@@ -340,8 +340,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                         const fieldsStr = `${tableVarName}.${sourceColumnName}`;
                         const referencesStr = `${targetTableVarName}.${targetColumnName}`;
                         const relationName = relation.relationName ?? relationKey;
-                        const relationArgs = `{\n\t\tfields: [${fieldsStr}],\n\t\treferences: [${referencesStr}],\n\t\trelationName: \"${relationName}\"\n\t}`;
-                        tableRelations.push(`\t${relationKey}: one(${targetTableVarName}, ${relationArgs})`);
+                        const relationArgs = `{\n		fields: [${fieldsStr}],\n		references: [${referencesStr}],\n		relationName: "${relationName}"\n	}`;
+                        tableRelations.push(`	${relationKey}: one(${targetTableVarName}, ${relationArgs})`);
                     } else if (relation.cardinality === "many") {
                         if (!relation.joins) {
                             console.warn(`Could not generate Drizzle relation for ${relationKey}: joins not defined.`);
@@ -351,9 +351,9 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                         if (relation.joins.length > 1) { // Many-to-many
                             const junctionTableName = relation.joins[0].table;
                             const junctionTableVarName = getTableVarName(junctionTableName);
-                            tableRelations.push(`\t${relationKey}: many(${junctionTableVarName}, { relationName: \"${relationName}\" })`);
+                            tableRelations.push(`	${relationKey}: many(${junctionTableVarName}, { relationName: "${relationName}" })`);
                         } else { // One-to-many
-                            tableRelations.push(`\t${relationKey}: many(${targetTableVarName}, { relationName: \"${relationName}\" })`);
+                            tableRelations.push(`	${relationKey}: many(${targetTableVarName}, { relationName: "${relationName}" })`);
                         }
                     }
                 } catch (e) {
