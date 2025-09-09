@@ -27,8 +27,6 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-
-// Import the new PostgreSQL package
 import { usePostgresDataSource } from "@firecms/postgresql";
 import { collections } from "shared";
 

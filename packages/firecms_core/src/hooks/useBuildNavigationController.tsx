@@ -21,7 +21,7 @@ import {
 } from "@firecms/types";
 import {
     applyPermissionsFunctionIfEmpty,
-    getCollectionBySlugWithin,
+    CollectionRegistry,
     getParentReferencesFromPath,
     mergeDeep,
     removeFunctions,
@@ -122,7 +122,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const navigate = useNavigate();
 
-    const collectionsRef = useRef<EntityCollection[] | undefined>();
+    const resolvedCollectionsRef = useRef<EntityCollection[] | undefined>();
+    const collectionRegistryRef = useRef<CollectionRegistry | undefined>();
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
     const navigationEntriesOrderRef = useRef<string[] | undefined>();
@@ -315,15 +316,18 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
 
             let shouldUpdateTopLevelNav = false;
-            if (!areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
-                collectionsRef.current = resolvedCollections;
+            let collectionsChanged = !areCollectionListsEqual(resolvedCollectionsRef.current ?? [], resolvedCollections);
+            if (resolvedCollectionsRef.current === undefined) {
+                collectionsChanged = true;
+            }
+
+            if (collectionsChanged) {
+                resolvedCollectionsRef.current = resolvedCollections;
                 console.debug("Collections have changed", resolvedCollections);
+                collectionRegistryRef.current = new CollectionRegistry(resolvedCollections);
                 shouldUpdateTopLevelNav = true;
             }
-            if (collectionsRef.current === undefined) {
-                collectionsRef.current = resolvedCollections;
-                shouldUpdateTopLevelNav = true;
-            }
+
             if (!equal(viewsRef.current, resolvedViews)) {
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;
@@ -371,85 +375,109 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         slugOrPath: string,
         includeUserOverride = false
     ): EC | undefined => {
-        const collections = collectionsRef.current;
-        if (!collections)
+        const registry = collectionRegistryRef.current;
+        if (!registry)
             return undefined;
 
-        const baseCollection = getCollectionBySlugWithin(removeInitialAndTrailingSlashes(slugOrPath), collections);
+        const cleanedPath = removeInitialAndTrailingSlashes(slugOrPath);
+        if (!cleanedPath) return undefined;
 
-        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(slugOrPath) : undefined;
-        const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride ?? {}) : undefined;
+        const pathSegments = cleanedPath.split("/");
 
-        let result: Partial<EntityCollection> | undefined = overriddenCollection;
-
-        if (overriddenCollection) {
-            const subcollections = overriddenCollection.subcollections;
-            const callbacks = overriddenCollection.callbacks;
-            const permissions = overriddenCollection.permissions;
-            result = {
-                ...result,
-                subcollections: result?.subcollections ?? subcollections,
-                callbacks: result?.callbacks ?? callbacks,
-                permissions: result?.permissions ?? permissions
-            };
+        let collectionPath = cleanedPath;
+        // If the path has an even number of segments, it points to an entity, so we get the parent collection
+        if (pathSegments.length > 0 && pathSegments.length % 2 === 0) {
+            collectionPath = pathSegments.slice(0, -1).join("/");
         }
 
-        if (!result) return undefined;
+        if (!collectionPath) return undefined;
+
+        let collection: EntityCollection | undefined;
+        try {
+            collection = registry.resolvePathToCollections(collectionPath).finalCollection;
+        } catch (e) {
+            // This can happen if the path is not a valid collection path, which is a valid case.
+            // We just return undefined.
+            console.debug(`Could not resolve path to collection: ${collectionPath}`, e);
+            return undefined;
+        }
+
+        if (!collection) {
+            return undefined;
+        }
+
+        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(slugOrPath) : undefined;
+        const overriddenCollection = collection ? mergeDeep(collection, userOverride ?? {}) : undefined;
+
+        if (!overriddenCollection) return undefined;
+
+        // This is to preserve functions that are lost in `mergeDeep`
+        let result: Partial<EntityCollection> | undefined = overriddenCollection;
+        const subcollections = overriddenCollection.subcollections;
+        const callbacks = overriddenCollection.callbacks;
+        const permissions = overriddenCollection.permissions;
+        result = {
+            ...result,
+            subcollections: result?.subcollections ?? subcollections,
+            callbacks: result?.callbacks ?? callbacks,
+            permissions: result?.permissions ?? permissions
+        };
 
         return { ...overriddenCollection, ...result } as EC;
 
     }, [userConfigPersistence]);
 
     const getCollectionBySlug = useCallback((slug: string): EC | undefined => {
-        const collections = collectionsRef.current;
-        if (collections === undefined)
+        const registry = collectionRegistryRef.current;
+        if (registry === undefined)
             throw Error("getCollectionById: Collections have not been initialised yet");
-        const collection: EntityCollection | undefined = collections.find(c => c.slug === slug);
-        if (!collection)
-            return undefined;
-        return collection as EC;
+        return registry.getBySlug(slug) as EC | undefined;
     }, []);
 
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
-
-        const collections = collectionsRef.current;
-        if (collections === undefined)
+        const registry = collectionRegistryRef.current;
+        if (registry === undefined)
             throw Error("getCollectionFromPaths: Collections have not been initialised yet");
-        let currentCollections: EntityCollection[] = [...(collections ?? [])];
 
-        for (let i = 0; i < pathSegments.length; i++) {
-            const pathSegment = pathSegments[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === pathSegment);
-            if (!collection)
-                return undefined;
-            currentCollections = getSubcollections(collection) ?? [];
-            if (i === pathSegments.length - 1)
-                return collection as EC;
+        if (!pathSegments?.length) {
+            return undefined;
         }
 
-        return undefined;
+        const path = pathSegments.reduce((acc, segment, i) => {
+            if (i === 0) return segment;
+            return `${acc}/fake_id/${segment}`;
+        }, "");
 
+        try {
+            const { finalCollection } = registry.resolvePathToCollections(path);
+            return finalCollection as EC | undefined;
+        } catch (e) {
+            console.debug(`Could not resolve path segments to collection: ${pathSegments.join("/")}`, e);
+            return undefined;
+        }
     }, []);
 
     const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
-
-        const collections = collectionsRef.current;
-        if (collections === undefined)
+        const registry = collectionRegistryRef.current;
+        if (registry === undefined)
             throw Error("getCollectionFromIds: Collections have not been initialised yet");
-        let currentCollections: EntityCollection[] = [...(collections ?? [])];
 
-        for (let i = 0; i < ids.length; i++) {
-            const id = ids[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
-            if (!collection)
-                return undefined;
-            currentCollections = getSubcollections(collection) ?? [];
-            if (i === ids.length - 1)
-                return collection as EC;
+        if (!ids?.length) {
+            return undefined;
         }
 
-        return undefined;
+        const path = ids.reduce((acc, segment, i) => {
+            if (i === 0) return segment;
+            return `${acc}/fake_id/${segment}`;
+        }, "");
 
+        try {
+            const { finalCollection } = registry.resolvePathToCollections(path);
+            return finalCollection as EC | undefined;
+        } catch (e) {
+            console.debug(`Could not resolve ids to collection: ${ids.join("/")}`, e);
+            return undefined;
+        }
     }, []);
 
     const isUrlCollectionPath = useCallback(
@@ -463,15 +491,21 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     }, [fullCollectionPath]);
 
     const resolveIdsFrom = useCallback((path: string): string => {
-        const collections = collectionsRef.current ?? [];
-        return resolveCollectionPathIds(path, collections);
+        const registry = collectionRegistryRef.current;
+        if (!registry) {
+            return resolveCollectionPathIds(path, []);
+        }
+        return resolveCollectionPathIds(path, registry.getAllCollectionsRecursively());
     }, []);
 
     const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
-        const collections = collectionsRef.current ?? [];
+        const registry = collectionRegistryRef.current;
+        if (!registry) {
+            return [];
+        }
         return getParentReferencesFromPath({
             path,
-            collections
+            collections: registry.getAllCollectionsRecursively()
         });
     }, []);
 
@@ -492,22 +526,25 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     }, [getAllParentReferencesForPath])
 
     const convertIdsToPaths = useCallback((ids: string[]): string[] => {
-        const collections = collectionsRef.current;
-        let currentCollections = collections;
+        const registry = collectionRegistryRef.current;
+        if (!registry) {
+            throw new Error("convertIdsToPaths: collectionRegistryRef not initialised");
+        }
+        let currentCollections: EntityCollection[] = registry.getAll();
         const paths: string[] = [];
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
+            const collection: EntityCollection | undefined = currentCollections.find(c => c.slug === id);
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
             paths.push(collection.dbPath);
             currentCollections = getSubcollections(collection) ?? [];
         }
         return paths;
-    }, [getCollectionFromIds]);
+    }, []);
 
     return {
-        collections: collectionsRef.current,
+        collections: resolvedCollectionsRef.current,
         views: viewsRef.current,
         adminViews: adminViewsRef.current,
         loading: !initialised || navigationLoading,

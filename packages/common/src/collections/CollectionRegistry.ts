@@ -5,14 +5,42 @@ export class CollectionRegistry {
 
     private collectionsByDbPath = new Map<string, EntityCollection>();
     private collectionsBySlug = new Map<string, EntityCollection>();
-    private collectionsArray: EntityCollection[] = [];
+    private rootCollections: EntityCollection[] = [];
+
+    constructor(collections?: EntityCollection[]) {
+        if (collections) {
+            this.registerMultiple(collections);
+        }
+    }
+
+    registerMultiple(collections: EntityCollection[]) {
+        collections.forEach(c => this.register(c));
+    }
 
     register(collection: EntityCollection) {
+        // avoid adding duplicates
+        if (this.rootCollections.some(c => c.slug === collection.slug)) {
+            return;
+        }
+        this.rootCollections.push(collection);
+        this._registerRecursively(collection);
+    }
+
+    private _registerRecursively(collection: EntityCollection) {
+        if (this.collectionsByDbPath.has(collection.dbPath)) return;
+
         this.collectionsByDbPath.set(collection.dbPath, collection);
         if (collection.slug) {
             this.collectionsBySlug.set(collection.slug, collection);
         }
-        this.collectionsArray.push(collection);
+
+        const subcollections = (typeof collection.subcollections === "function"
+            ? (collection.subcollections as Function)()
+            : collection.subcollections) as EntityCollection[] | undefined;
+
+        if (subcollections) {
+            subcollections.forEach(subCollection => this._registerRecursively(subCollection));
+        }
     }
 
     get(path: string): EntityCollection | undefined {
@@ -24,7 +52,7 @@ export class CollectionRegistry {
     }
 
     getAll(): EntityCollection[] {
-        return this.collectionsArray;
+        return this.rootCollections;
     }
 
     /**
@@ -77,18 +105,7 @@ export class CollectionRegistry {
     }
 
     getAllCollectionsRecursively(): EntityCollection[] {
-        const result: EntityCollection[] = [];
-
-        function addCollection(collection: EntityCollection) {
-            result.push(collection);
-            const subcollections = collection.subcollections?.();
-            if (subcollections) {
-                subcollections.forEach(addCollection);
-            }
-        }
-
-        this.collectionsArray.forEach(addCollection);
-        return result;
+        return Array.from(this.collectionsByDbPath.values());
     }
 
     /**
