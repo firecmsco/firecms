@@ -255,7 +255,7 @@ export class EntityService {
     }
 
     private getCollectionByPath(collectionPath: string): EntityCollection {
-        const collection = collectionRegistry.getCollectionByPath(collectionPath) ?? collectionRegistry.getBySlug(collectionPath);
+        const collection = collectionRegistry.getCollectionByPath(collectionPath);
         if (!collection) {
             throw new Error(`Collection not found: ${collectionPath}`);
         }

@@ -431,7 +431,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const registry = collectionRegistryRef.current;
         if (registry === undefined)
             throw Error("getCollectionById: Collections have not been initialised yet");
-        return registry.getBySlug(slug) as EC | undefined;
+        return registry.get(slug) as EC | undefined;
     }, []);
 
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {

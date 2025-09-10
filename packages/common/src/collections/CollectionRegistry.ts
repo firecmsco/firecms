@@ -35,7 +35,7 @@ export class CollectionRegistry {
         }
 
         const subcollections = (typeof collection.subcollections === "function"
-            ? (collection.subcollections as Function)()
+            ? collection.subcollections()
             : collection.subcollections) as EntityCollection[] | undefined;
 
         if (subcollections) {
@@ -44,15 +44,7 @@ export class CollectionRegistry {
     }
 
     get(path: string): EntityCollection | undefined {
-        return this.collectionsByDbPath.get(path);
-    }
-
-    getBySlug(slug: string): EntityCollection | undefined {
-        return this.collectionsBySlug.get(slug);
-    }
-
-    getAll(): EntityCollection[] {
-        return this.rootCollections;
+        return this.collectionsBySlug.get(path);
     }
 
     /**
@@ -62,7 +54,7 @@ export class CollectionRegistry {
     getCollectionByPath(collectionPath: string): EntityCollection | undefined {
         // Handle simple single collection path
         if (!collectionPath.includes("/")) {
-            return this.get(collectionPath) ?? this.getBySlug(collectionPath);
+            return this.get(collectionPath);
         }
 
         // Handle multi-segment paths by resolving through relations
@@ -74,7 +66,7 @@ export class CollectionRegistry {
 
         // Start with the root collection
         const rootCollectionPath = pathSegments[0];
-        let currentCollection = this.get(rootCollectionPath) ?? this.getBySlug(rootCollectionPath);
+        let currentCollection = this.get(rootCollectionPath);
 
         if (!currentCollection) {
             throw new Error(`Root collection not found: ${rootCollectionPath}`);
@@ -131,7 +123,7 @@ export class CollectionRegistry {
         const entityIds: (string | number)[] = [];
 
         // Start with the first collection
-        let currentCollection = this.getBySlug(pathSegments[0]) ?? this.get(pathSegments[0]);
+        let currentCollection = this.get(pathSegments[0]);
 
         if (!currentCollection) {
             throw new Error(`Unknown collection path or slug: ${pathSegments[0]}`);
@@ -167,17 +159,4 @@ export class CollectionRegistry {
         };
     }
 
-    /**
-     * Get all collections that are resolved from a multi-segment path
-     */
-    getAllResolvedCollections(path: string): EntityCollection[] {
-        try {
-            const { collections } = this.resolvePathToCollections(path);
-            return collections;
-        } catch (error) {
-            // If path resolution fails, try to resolve as a simple path
-            const collection = this.getBySlug(path) ?? this.get(path);
-            return collection ? [collection] : [];
-        }
-    }
 }
