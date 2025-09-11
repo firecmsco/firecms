@@ -28,7 +28,7 @@ import {
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresDataSource } from "@firecms/postgresql";
-import { collections } from "shared";
+import { machinery_collections } from "shared";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
@@ -91,7 +91,7 @@ export function App() {
 
     const collectionsBuilder = useCallback(() => {
         return [
-            ...collections // Use all shared collections
+            ...machinery_collections // Use all shared collections
         ];
     }, []);
 

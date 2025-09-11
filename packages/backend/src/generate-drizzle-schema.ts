@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
 import chokidar from "chokidar";
-import { EntityCollection } from "@firecms/types";
 import { generateSchema } from "./generate-drizzle-schema-logic";
 
 // --- Helper Functions ---

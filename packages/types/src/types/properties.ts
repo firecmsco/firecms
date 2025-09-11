@@ -690,10 +690,11 @@ export interface RelationProperty extends BaseProperty<EntityRelation | EntityRe
     type: "relation";
 
     /**
-     * For SQL databases, you can specify the table name of the collection this
-     * reference points to.
+     * The name of the relation this property refers to. This name must match
+     * one of the `relationName`s defined in the top-level `relations` array
+     * of the collection.
      */
-    relation?: Relation;
+    relationName: string;
 
     /**
      * Allow selection of entities that pass the given filter only.
@@ -721,7 +722,7 @@ export interface RelationProperty extends BaseProperty<EntityRelation | EntityRe
     /**
      * How to render this relation in the UI
      */
-    widget?: "select" | "subcollection" | "reference";
+    widget?: "select" | "dialog";
 
 }
 

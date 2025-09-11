@@ -28,9 +28,42 @@ export interface Relation {
     cardinality: "one" | "many";
 
     /**
+     * Which side owns the persistence for this relationship.
+     * - "owning": The foreign key (for one-to-one/many-to-one) or the junction table (for many-to-many) is managed by this collection.
+     * - "inverse": The foreign key is on the target collection's table. This side of the relation is typically read-only.
+     * Defaults to "owning".
+     */
+    direction?: "owning" | "inverse";
+
+    /**
+     * Column on THIS table that stores the foreign key to the target.
+     * Required when `direction` is "owning" and `cardinality` is "one".
+     * @example "author_id"
+     */
+    localKey?: string;
+
+    /**
+     * Column on the TARGET table that stores the foreign key to this entity.
+     * Required when `direction` is "inverse".
+     * @example "post_id"
+     */
+    foreignKeyOnTarget?: string;
+
+    /**
+     * Defines the junction table for a many-to-many relationship.
+     * Required when `cardinality` is "many" and `direction` is "owning".
+     */
+    through?: {
+        table: string;
+        sourceColumn: string; // FK to "this" collection's PK
+        targetColumn: string; // FK to the target collection's PK
+    };
+
+    /**
      * An explicit, ordered array of JOINs to perform to get from the source
      * collection to the `targetTable`.
-     * If not provided, it will be inferred from the target collection path.
+     * This is an advanced feature for multi-hop relations and overrides the automatic join inference
+     * from `localKey`, `foreignKeyOnTarget`, and `through`.
      */
     joins?: JoinCondition[];
 

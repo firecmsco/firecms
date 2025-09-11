@@ -930,7 +930,7 @@ export const controlDiarioCollection: EntityCollection = {
 };
 
 // Export all collections for easy import
-export const collections = [
+export const machinery_collections = [
     clientesCollection,
     implementosCollection,
     maquinariaCollection,
