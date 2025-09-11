@@ -1,7 +1,7 @@
 import React from "react";
 
 import { resolveArrayProperty } from "../../util";
-import { ResolvedProperty } from "@firecms/types";
+import { CMSType, ResolvedProperty } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
@@ -17,7 +17,7 @@ export function ArrayPropertyPreview({
                                          property: inputProperty,
                                          // entity,
                                          size
-                                     }: PropertyPreviewProps<any[]>) {
+                                     }: PropertyPreviewProps<CMSType[]>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();

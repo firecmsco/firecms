@@ -130,7 +130,7 @@ export type ResolvedRelationProperty =
 /**
  * @group Entity properties
  */
-export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any>
+export type ResolvedArrayProperty<T extends ArrayT[] = any, ArrayT extends CMSType = any>
     =
     Omit<ArrayProperty<T, ArrayT>, "of" | "oneOf" | "type"> &
     {

@@ -16,7 +16,7 @@ export function ArrayOfStorageComponentsPreview({
                                                     value,
                                                     property: inputProperty,
                                                     size
-                                                }: PropertyPreviewProps<any[]>) {
+                                                }: PropertyPreviewProps<string[]>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();

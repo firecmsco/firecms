@@ -5,7 +5,7 @@ import { Field, useFormex } from "@firecms/formex";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import { FieldProps, FormContext, Property, PropertyFieldBindingProps } from "@firecms/types";
+import { CMSType, FieldProps, FormContext, Property, PropertyFieldBindingProps } from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor, mergeDeep, } from "@firecms/common";
 import { getIconForProperty, } from "../../util";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
@@ -20,21 +20,21 @@ import { ArrayContainer, ArrayEntryParams } from "../../components";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function BlockFieldBinding<T extends Array<any>>({
-                                                            propertyKey,
-                                                            value,
-                                                            error,
-                                                            showError,
-                                                            isSubmitting,
-                                                            setValue,
-                                                            setFieldValue,
-                                                            minimalistView: minimalistViewProp,
-                                                            property,
-                                                            includeDescription,
-                                                            underlyingValueHasChanged,
-                                                            context,
-                                                            disabled
-                                                        }: FieldProps<T>) {
+export function BlockFieldBinding({
+                                      propertyKey,
+                                      value,
+                                      error,
+                                      showError,
+                                      isSubmitting,
+                                      setValue,
+                                      setFieldValue,
+                                      minimalistView: minimalistViewProp,
+                                      property,
+                                      includeDescription,
+                                      underlyingValueHasChanged,
+                                      context,
+                                      disabled
+                                  }: FieldProps<Array<CMSType>>) {
 
     const minimalistView = minimalistViewProp || property.minimalistView;
 

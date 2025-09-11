@@ -145,7 +145,7 @@ function RelationPreviewExisting<M extends Record<string, any> = any>({
                           collection={collection}
                           onClick={onClick}
                           includeEntityLink={includeEntityLink}
-                          includeId={includeId}
+                          includeId={false}
                           hover={hover}/>;
 
 }

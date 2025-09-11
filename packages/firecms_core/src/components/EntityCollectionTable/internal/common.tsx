@@ -58,6 +58,8 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
         return 200;
     } else if (property.type === "reference") {
         return 220;
+    } else if (property.type === "relation") {
+        return 280;
     } else if (property.type === "boolean") {
         return 140;
     } else {

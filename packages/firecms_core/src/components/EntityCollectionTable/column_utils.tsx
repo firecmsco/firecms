@@ -62,7 +62,7 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
 
 function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
     if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.type);
+        return ["string", "number", "date", "reference", "relation"].includes(property.type);
     }
     if (property.type === "array") {
         if (property.of)
@@ -70,5 +70,5 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
         else
             return false;
     }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.type);
+    return ["string", "number", "boolean", "date", "reference", "relation", "array"].includes(property.type);
 }

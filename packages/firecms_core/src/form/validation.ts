@@ -33,12 +33,12 @@ export type CustomFieldValidator = (props: {
     value: any,
     property: ResolvedProperty,
     entityId?: string | number,
-    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
+    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty<any>,
 }) => Promise<boolean>;
 
 interface PropertyContext<T extends CMSType> {
     property: ResolvedProperty<T>,
-    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
+    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty<any>,
     entityId: string | number,
     customFieldValidator?: CustomFieldValidator,
     name?: any
@@ -61,7 +61,7 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     return yup.object().shape(objectSchema);
 }
 
-export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
+export function mapPropertyToYup(propertyContext: PropertyContext<CMSType>): AnySchema<unknown> {
 
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
@@ -86,7 +86,7 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
     } else if (property.type === "reference") {
         return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
     } else if (property.type === "relation") {
-        return getYupRelationSchema(propertyContext as PropertyContext<EntityRelation>);
+        return getYupRelationSchema(propertyContext as PropertyContext<EntityRelation | EntityRelation[]>);
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
@@ -102,7 +102,7 @@ export function getYupMapObjectSchema({
     const validation = property.validation;
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
-            objectSchema[childName] = mapPropertyToYup<any>({
+            objectSchema[childName] = mapPropertyToYup({
                 property: childProperty,
                 parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
@@ -377,7 +377,7 @@ function getYupArraySchema({
                                customFieldValidator,
                                name,
                                entityId
-                           }: PropertyContext<any[]>): AnySchema<any> {
+                           }: PropertyContext<CMSType[]>): AnySchema<any> {
 
     let arraySchema: ArraySchema<any> = yup.array();
 

@@ -4,7 +4,6 @@ import {
     EntityReference,
     getPropertyInPath,
     isPropertyBuilder,
-    mergeDeep,
     Properties,
     Property,
     PropertyOrBuilder,
@@ -14,6 +13,7 @@ import {
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
+import { mergeDeep } from "@firecms/common";
 
 export function convertDataToEntity(authController: AuthController,
                                     data: Record<any, any>,

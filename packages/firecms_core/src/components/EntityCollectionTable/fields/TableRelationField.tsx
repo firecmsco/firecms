@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
 import { RelationPreview } from "../../../preview";
-import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues } from "@firecms/types";
+import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useCustomizationController, useNavigationController, useEntitySelectionTable } from "../../../hooks";
@@ -20,7 +20,7 @@ type TableRelationFieldProps = {
     multiselect: boolean;
     previewProperties?: string[];
     title?: string;
-    path: string;
+    relation: Relation;
     forceFilter?: FilterValues<string>;
     includeId?: boolean;
     includeEntityLink?: boolean;
@@ -28,17 +28,7 @@ type TableRelationFieldProps = {
 
 export function TableRelationField(props: TableRelationFieldProps) {
     const customizationController = useCustomizationController();
-
-    const navigationController = useNavigationController();
-    const { path } = props;
-    const collection = navigationController.getCollection(path);
-    if (!collection) {
-        // if (customizationController.components?.missingRelation) {
-        //     return <customizationController.components.missingRelation path={path}/>;
-        // } else {
-            throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-        // }
-    }
+    const collection = props.relation.target();
     return <TableRelationFieldInternal {...props} collection={collection}/>;
 }
 
@@ -51,7 +41,7 @@ export const TableRelationFieldInternal = React.memo(
             internalValue,
             updateValue,
             multiselect,
-            path,
+            relation,
             size,
             previewProperties,
             title,
@@ -78,7 +68,7 @@ export const TableRelationFieldInternal = React.memo(
 
         const relationDialogController = useEntitySelectionTable({
                 multiselect,
-                path,
+                path: collection.slug,
                 collection,
                 onMultipleEntitiesSelected,
                 onSingleEntitySelected,
@@ -102,7 +92,6 @@ export const TableRelationFieldInternal = React.memo(
                     size={getPreviewSizeFrom(size)}
                     relation={internalValue as EntityRelation}
                     hover={!disabled}
-                    disabled={!path}
                     previewProperties={previewProperties}
                     includeId={includeId}
                     includeEntityLink={includeEntityLink}
@@ -126,7 +115,6 @@ export const TableRelationFieldInternal = React.memo(
                                 size={"small"}
                                 relation={relation}
                                 hover={!disabled}
-                                disabled={!path}
                                 previewProperties={previewProperties}
                                 includeId={includeId}
                                 includeEntityLink={includeEntityLink}

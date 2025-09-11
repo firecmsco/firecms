@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps } from "@firecms/types";
+import { CMSType, FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
@@ -15,7 +15,7 @@ import { useAuthController } from "../../hooks";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
+export function ArrayCustomShapedFieldBinding({
                                                                         propertyKey,
                                                                         value,
                                                                         error,
@@ -27,7 +27,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         includeDescription,
                                                                         context,
                                                                         disabled
-                                                                    }: FieldProps<T, any, any>) {
+                                                                    }: FieldProps<Array<CMSType>>) {
 
     const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;

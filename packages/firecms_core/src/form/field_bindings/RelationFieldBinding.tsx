@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityRelation, FieldProps } from "@firecms/types";
+import React, { useCallback } from "react";
+import { Entity, EntityRelation, FieldProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, EntityPreviewContainer, ErrorView } from "../../components";
 import { getIconForProperty, IconForView } from "../../util";
 import { getRelationFrom } from "@firecms/common";
 
-import { useEntitySelectionTable, useNavigationController } from "../../hooks";
+import { useEntitySelectionTable } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { RelationPreview } from "../../preview";
 
@@ -29,7 +29,7 @@ export function RelationFieldBinding({
         throw Error("RelationFieldBinding expected a property containing a relation");
     }
 
-    const manyRelation = property.relation?.type === "many" || property.relation?.type === "manyToMany";
+    const manyRelation = property.relation?.cardinality === "many";
     if (manyRelation) {
         return <MultipleRelationFieldBinding
             propertyKey={propertyKey}
@@ -49,7 +49,7 @@ export function RelationFieldBinding({
 
         const validValue = value && !Array.isArray(value) && value.isEntityRelation && value.isEntityRelation();
 
-        const collection = property.relation.target();
+        const collection = property.relation?.target();
 
         if (!collection) {
             throw Error(`Couldn't find the corresponding collection for the relation: ${propertyKey}`);
@@ -145,11 +145,19 @@ export function MultipleRelationFieldBinding({
                                                  setFieldValue
                                              }: FieldProps<EntityRelation[]>) {
 
-    console.log("MultipleRelationFieldBinding render", {propertyKey, value});
+    console.log("MultipleRelationFieldBinding render", {
+        propertyKey,
+        value
+    });
 
     if (property.type !== "relation") {
         throw Error("RelationFieldBinding expected a property containing a relation");
     }
+
+    if (!property.relation)
+        throw Error(
+            "Property relation is required for MultipleRelationFieldBinding"
+        )
 
     const selectedEntityIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
     const collection = property.relation.target();

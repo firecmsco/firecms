@@ -296,7 +296,7 @@ export function resolveArrayProperty<T extends any[], M>({
     propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
     authController: AuthController;
-}): ResolvedArrayProperty {
+}): ResolvedArrayProperty<T> {
     const propertyValue = propertyKey ? getIn(props.values, propertyKey) : undefined;
 
     if (property.of) {
@@ -314,7 +314,7 @@ export function resolveArrayProperty<T extends any[], M>({
                         index,
                     });
                 })
-            } as ResolvedArrayProperty;
+            } as ResolvedArrayProperty<T>;
         } else {
             const of = property.of;
             const resolvedProperties = getArrayResolvedProperties({
@@ -337,7 +337,7 @@ export function resolveArrayProperty<T extends any[], M>({
                 fromBuilder: props.fromBuilder,
                 of: ofProperty,
                 resolvedProperties
-            } as ResolvedArrayProperty;
+            } as ResolvedArrayProperty<T>;
         }
     } else if (property.oneOf) {
         const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
@@ -369,7 +369,7 @@ export function resolveArrayProperty<T extends any[], M>({
             },
             fromBuilder: props.fromBuilder,
             resolvedProperties
-        } as ResolvedArrayProperty;
+        } as ResolvedArrayProperty<T>;
     } else if (!property.Field) {
         throw Error(`The array property (${propertyKey}) needs to declare an 'of' or a 'oneOf' property, or provide a custom \`Field\` component`);
     } else {
@@ -377,7 +377,7 @@ export function resolveArrayProperty<T extends any[], M>({
             ...property,
             resolved: true,
             fromBuilder: props.fromBuilder
-        } as ResolvedArrayProperty;
+        } as ResolvedArrayProperty<T>;
     }
 
 }

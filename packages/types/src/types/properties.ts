@@ -18,11 +18,10 @@ export type DataType<T extends CMSType = CMSType> =
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityRelation | Array<EntityRelation> ? "relation" :
-                                T extends EntityRelation | EntityRelation[] ? "relation" :
-                                    T extends EntityReference ? "reference" :
-                                        T extends CMSType[] ? "array" :
-                                            T extends Record<string, any> ? "map" : never;
+                            T extends EntityRelation | EntityRelation[] ? "relation" :
+                                T extends EntityReference ? "reference" :
+                                    T extends CMSType[] ? "array" :
+                                        T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -694,7 +693,7 @@ export interface RelationProperty extends BaseProperty<EntityRelation | EntityRe
      * For SQL databases, you can specify the table name of the collection this
      * reference points to.
      */
-    relation: Relation;
+    relation?: Relation;
 
     /**
      * Allow selection of entities that pass the given filter only.

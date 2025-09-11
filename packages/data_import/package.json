@@ -9,6 +9,7 @@
   "source": "src/index.ts",
   "dependencies": {
     "@firecms/core": "3.0.0-canary.258",
+    "@firecms/common": "3.0.0-canary.258",
     "@firecms/types": "3.0.0-canary.258",
     "@firecms/formex": "3.0.0-canary.258",
     "@firecms/schema_inference": "3.0.0-canary.258",

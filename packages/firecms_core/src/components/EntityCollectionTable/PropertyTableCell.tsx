@@ -3,7 +3,8 @@ import equal from "react-fast-compare"
 import {
     CMSType,
     Entity,
-    EntityReference, EntityRelation,
+    EntityReference,
+    EntityRelation,
     ReferenceProperty,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
@@ -382,23 +383,23 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 }
                 allowScroll = false;
             } else if (property.type === "relation") {
-                if (typeof property.path === "string") {
+                if (property.relation) {
                     innerComponent =
                         <TableRelationField name={propertyKey as string}
-                                             internalValue={internalValue as EntityRelation}
-                                             updateValue={updateValue}
-                                             disabled={disabled}
-                                             size={size}
-                                             path={property.path}
-                                             multiselect={false}
-                                             previewProperties={property.previewProperties}
-                                             includeId={property.includeId}
-                                             includeEntityLink={property.includeEntityLink}
-                                             title={property.name ?? propertyKey}
-                                             forceFilter={property.forceFilter}
+                                            internalValue={internalValue as EntityRelation}
+                                            updateValue={updateValue}
+                                            disabled={disabled}
+                                            size={size}
+                                            multiselect={false}
+                                            relation={property.relation}
+                                            previewProperties={property.previewProperties}
+                                            includeId={property.includeId}
+                                            includeEntityLink={property.includeEntityLink}
+                                            title={property.name ?? propertyKey}
+                                            forceFilter={property.forceFilter}
                         />;
+                    allowScroll = false;
                 }
-                allowScroll = false;
             } else if (property.type === "array") {
                 const arrayProperty = (property as ResolvedArrayProperty);
 

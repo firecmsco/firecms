@@ -89,7 +89,7 @@ export function useStorageUploadController<M extends object>({
         }
     }, [internalInitialValue, value, initialValue]);
 
-    const resolvedProperty = resolveProperty({
+    const resolvedProperty = resolveProperty<any>({
         propertyOrBuilder: property,
         values: entityValues,
         authController

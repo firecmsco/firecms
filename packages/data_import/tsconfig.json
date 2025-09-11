@@ -38,6 +38,9 @@
       "@firecms/types": [
         "../types/src"
       ],
+      "@firecms/common": [
+        "../common/src"
+      ],
       "@firecms/schema_inference": [
         "../schema_inference/src"
       ],

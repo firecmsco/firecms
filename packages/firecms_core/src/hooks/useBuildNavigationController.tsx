@@ -530,7 +530,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         if (!registry) {
             throw new Error("convertIdsToPaths: collectionRegistryRef not initialised");
         }
-        let currentCollections: EntityCollection[] = registry.getAll();
+        let currentCollections: EntityCollection[] = registry.getAllCollectionsRecursively();
         const paths: string[] = [];
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];

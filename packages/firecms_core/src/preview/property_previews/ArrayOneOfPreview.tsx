@@ -1,8 +1,7 @@
 import React from "react";
 import { resolveArrayProperty } from "../../util";
-import { ResolvedProperty } from "@firecms/types";
+import { CMSType, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
@@ -17,7 +16,7 @@ export function ArrayOneOfPreview({
                                       property: inputProperty,
                                       size,
                                       // entity
-                                  }: PropertyPreviewProps<any[]>) {
+                                  }: PropertyPreviewProps<CMSType[]>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -55,8 +54,10 @@ export function ArrayOneOfPreview({
                             <ErrorBoundary>
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}
+                                    // @ts-ignore
                                     value={value[valueField]}
                                     // entity={entity}
+                                    // @ts-ignore
                                     property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
                                     size={childSize}/>}
                             </ErrorBoundary>
