@@ -86,7 +86,7 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
     } else if (property.type === "reference") {
         return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
     } else if (property.type === "relation") {
-        return getYupRelationSchema(propertyContext as PropertyContext<EntityReference>);
+        return getYupRelationSchema(propertyContext as PropertyContext<EntityRelation>);
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");

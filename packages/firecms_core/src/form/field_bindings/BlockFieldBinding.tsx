@@ -5,7 +5,7 @@ import { Field, useFormex } from "@firecms/formex";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import { FieldProps, FormContext, Property, PropertyFieldBindingProps, PropertyOrBuilder } from "@firecms/types";
+import { FieldProps, FormContext, Property, PropertyFieldBindingProps } from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor, mergeDeep, } from "@firecms/common";
 import { getIconForProperty, } from "../../util";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
