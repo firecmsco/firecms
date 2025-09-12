@@ -193,7 +193,7 @@ function BlockEntry({
     const typeFieldName = `${name}.${typeField}`;
     const valueFieldName = `${name}.${valueField}`;
 
-    const fieldProps: PropertyFieldBindingProps<any, any> | undefined = property
+    const fieldProps: PropertyFieldBindingProps | undefined = property
         ? {
             propertyKey: valueFieldName,
             property,

@@ -77,7 +77,7 @@ export class CollectionRegistry {
             const relationKey = pathSegments[i];
 
             // Get relations for current collection
-            const resolvedRelations = resolveCollectionRelations(currentCollection, this.getAllCollectionsRecursively());
+            const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
             if (!relation) {

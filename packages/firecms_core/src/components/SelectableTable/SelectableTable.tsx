@@ -280,7 +280,7 @@ function createFilterField({
     const { resolvedProperty } = column.custom;
 
     const isArray = resolvedProperty?.type === "array";
-    const baseProperty: ResolvedProperty = isArray ? resolvedProperty.of : resolvedProperty;
+    const baseProperty: ResolvedProperty | undefined = isArray ? resolvedProperty.of : resolvedProperty;
     if (!baseProperty) {
         return null;
     }

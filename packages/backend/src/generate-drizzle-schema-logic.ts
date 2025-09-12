@@ -86,7 +86,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             break;
         case "relation": {
             const refProp = prop as RelationProperty;
-            const relation = refProp.relation;
+            const relation = collection.relations?.find((rel) => rel.relationName === refProp.relationName)
 
             if (!relation || relation.cardinality === "many") {
                 return null; // Many-to-many is virtual here, handled by junction table.
@@ -214,7 +214,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     }
 
     collections.forEach(sourceCollection => {
-        const resolvedRelations = resolveCollectionRelations(sourceCollection, collections);
+        const resolvedRelations = resolveCollectionRelations(sourceCollection);
         Object.entries(resolvedRelations).forEach(([, relation]) => {
             if (relation.cardinality === "many" && relation.joins && relation.joins.length > 1) {
                 const junctionTableName = relation.joins[0].table;
@@ -325,7 +325,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             tableRelations.push(`	${targetJunctionKey}: one(${targetTableVarName}, {\n		fields: [${tableVarName}.${targetJunctionKey}],\n		references: [${targetTableVarName}.${targetIdField}]\n	})`);
         } else {
             const collection = allTablesToGenerate.get(tableName)!.collection;
-            const resolvedRelations = resolveCollectionRelations(collection, collections);
+            const resolvedRelations = resolveCollectionRelations(collection);
             Object.entries(resolvedRelations).forEach(([relationKey, relation]) => {
                 try {
                     const targetCollection = relation.target();

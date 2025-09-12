@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { createPostgresDatabaseConnection, initializeFireCMSBackend } from "@firecms/backend";
 
 import { tables, enums, relations } from "./schema.generated";
-import { machinery_collections } from "shared";
+import { collections } from "shared";
 
 import * as dotenv from "dotenv";
 
@@ -27,7 +27,7 @@ if (!databaseUrl) {
 const db = createPostgresDatabaseConnection(databaseUrl);
 
 initializeFireCMSBackend({
-    collections: machinery_collections,
+    collections,
     tables,
     enums,
     relations,

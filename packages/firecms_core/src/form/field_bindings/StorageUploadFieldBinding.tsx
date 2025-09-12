@@ -99,7 +99,7 @@ export function StorageUploadFieldBinding({
     const resolvedProperty = resolveProperty({
         property,
         authController
-    });
+    }) as ResolvedStringProperty | ResolvedArrayProperty;
 
     return (
 

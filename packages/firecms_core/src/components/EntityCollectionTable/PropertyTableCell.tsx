@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import equal from "react-fast-compare"
 import {
-    CMSType,
     Entity,
     EntityReference,
     EntityRelation,
@@ -426,7 +425,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                             hideOverflow = false;
                         }
                     } else if (arrayProperty.of.type === "reference") {
-                        if (typeof arrayProperty.of.slug === "string") {
+                        if (typeof arrayProperty.of.path === "string") {
                             innerComponent =
                                 <TableReferenceField
                                     name={propertyKey as string}
@@ -435,8 +434,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                     updateValue={updateValue}
                                     size={size}
                                     multiselect={true}
-                                    path={arrayProperty.of.slug}
-                                    previewProperties={arrayProperty.of.previewKeys}
+                                    path={arrayProperty.of.path}
+                                    previewProperties={arrayProperty.of.previewProperties}
                                     title={arrayProperty.name}
                                     forceFilter={arrayProperty.of.forceFilter}
                                     includeId={arrayProperty.of.includeId}

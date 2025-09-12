@@ -112,7 +112,8 @@ function serializePropertyToServer(value: any, property: Property): any {
 }
 
 // Transform IDs back to relation objects for frontend
-function parseDataFromServer<M extends Record<string, any>>(data: M, properties: Properties): M {
+function parseDataFromServer<M extends Record<string, any>>(data: M,  collection: EntityCollection): M {
+    const properties = collection.properties;
     if (!data || !properties) return data;
 
     const result: Record<string, any> = {};
@@ -124,13 +125,13 @@ function parseDataFromServer<M extends Record<string, any>>(data: M, properties:
             continue;
         }
 
-        result[key] = parsePropertyFromServer(value, property);
+        result[key] = parsePropertyFromServer(value, property, collection);
     }
 
     return result as M;
 }
 
-function parsePropertyFromServer(value: any, property: Property): any {
+function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection): any {
     if (value === null || value === undefined) {
         return value;
     }
@@ -139,10 +140,11 @@ function parsePropertyFromServer(value: any, property: Property): any {
         case "relation":
             // Transform ID back to relation object with type information
             if (typeof value === "string" || typeof value === "number") {
-                if (!property.relation) throw new Error("Relation not defined in property");
+                const relation = collection.relations?.find((rel) => rel.relationName === property.relationName);
+                if (!relation) throw new Error("Relation not defined in property");
                 return {
                     id: value.toString(),
-                    path: property.relation.target().slug,
+                    path: relation.target().slug,
                     __type: "relation"
                 };
             }
@@ -150,7 +152,7 @@ function parsePropertyFromServer(value: any, property: Property): any {
 
         case "array":
             if (Array.isArray(value) && property.of) {
-                return value.map(item => parsePropertyFromServer(item, property.of as Property));
+                return value.map(item => parsePropertyFromServer(item, property.of as Property, collection));
             }
             return value;
 
@@ -160,7 +162,7 @@ function parsePropertyFromServer(value: any, property: Property): any {
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
-                        result[subKey] = parsePropertyFromServer(subValue, subProperty);
+                        result[subKey] = parsePropertyFromServer(subValue, subProperty, collection);
                     } else {
                         result[subKey] = subValue;
                     }
@@ -329,11 +331,11 @@ export class EntityService {
         const raw = result[0] as M;
 
         // Transform IDs back to relation objects and apply type conversion
-        const values = parseDataFromServer(raw, collection.properties as Properties);
+        const values = parseDataFromServer(raw, collection);
 
         // Load relations based on new cardinality system
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+        const resolvedRelations = resolveCollectionRelations(collection);
 
         const relationPromises = Object.entries(resolvedRelations).map(async ([key, relation]) => {
             if (relation.cardinality === "many") {
@@ -425,7 +427,7 @@ export class EntityService {
         const results = await query;
 
         return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection.properties as Properties);
+            const values = parseDataFromServer(entity as M, collection);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
@@ -469,7 +471,7 @@ export class EntityService {
 
             // Get relations for current collection
             const allCollections = collectionRegistry.getAllCollectionsRecursively();
-            const resolvedRelations = resolveCollectionRelations(currentCollection, allCollections);
+            const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
             if (!relation) {
@@ -515,7 +517,7 @@ export class EntityService {
     ): Promise<Entity<M>[]> {
         const parentCollection = this.getCollectionByPath(parentCollectionPath);
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
 
         if (!relation) {
@@ -630,8 +632,13 @@ export class EntityService {
         const results = await query;
         return results.map((row: any) => {
             const entity = row[getTableName(targetCollection)] || row;
-            const values = parseDataFromServer(entity as M, targetCollection.properties as Properties);
-            return { id: entity[targetIdInfo.fieldName].toString(), path: targetCollection.slug ?? targetCollection.dbPath, values: values as M, databaseId: options.databaseId };
+            const values = parseDataFromServer(entity as M, targetCollection);
+            return {
+                id: entity[targetIdInfo.fieldName].toString(),
+                path: targetCollection.slug ?? targetCollection.dbPath,
+                values: values as M,
+                databaseId: options.databaseId
+            };
         });
     }
 
@@ -644,7 +651,7 @@ export class EntityService {
     ): Promise<number> {
         const parentCollection = this.getCollectionByPath(parentCollectionPath);
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(parentCollection, allCollections);
+        const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
         if (!relation) throw new Error(`Relation '${relationKey}' not found in collection '${parentCollectionPath}'`);
 
@@ -726,7 +733,7 @@ export class EntityService {
 
                     // If we\'re at the last segment, we are saving into the target of this relation
                     const allCollections = collectionRegistry.getAllCollectionsRecursively();
-                    const resolvedRelations = resolveCollectionRelations(currentCollection, allCollections);
+                    const resolvedRelations = resolveCollectionRelations(currentCollection);
                     const relation = resolvedRelations[relationKey];
                     if (!relation) {
                         throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug || currentCollection.dbPath}'`);
@@ -778,7 +785,7 @@ export class EntityService {
         const otherValues: Partial<M> = { ...effectiveValues };
 
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+        const resolvedRelations = resolveCollectionRelations(collection);
 
         for (const key in resolvedRelations) {
             const relation = resolvedRelations[key];
@@ -840,7 +847,7 @@ export class EntityService {
         relationValues: Partial<M>
     ) {
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
-        const resolvedRelations = resolveCollectionRelations(collection, allCollections);
+        const resolvedRelations = resolveCollectionRelations(collection);
 
         for (const [key, value] of Object.entries(relationValues)) {
             const relation = resolvedRelations[key];
@@ -1007,7 +1014,7 @@ export class EntityService {
 
             // Get relations for current collection
             const allCollections = collectionRegistry.getAllCollectionsRecursively();
-            const resolvedRelations = resolveCollectionRelations(currentCollection, allCollections);
+            const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
             if (!relation) {
@@ -1077,7 +1084,7 @@ export class EntityService {
             .limit(50);
 
         return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection.properties as Properties);
+            const values = parseDataFromServer(entity as M, collection);
 
             return {
                 id: entity[idInfo.fieldName].toString(),

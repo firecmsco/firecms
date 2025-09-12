@@ -177,6 +177,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
         if (typeof value === "object") {
             content =
                 <MapPropertyPreview {...props}
+                                    value={value}
                                     property={property as ResolvedMapProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);

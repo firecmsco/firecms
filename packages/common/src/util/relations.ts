@@ -57,7 +57,6 @@ function normalizeRelation(relation: Relation, sourceCollection: EntityCollectio
 
 export function resolveCollectionRelations(
     collection: EntityCollection,
-    allCollections: EntityCollection[]
 ): Record<string, Relation> {
     const relations: Record<string, Relation> = {};
 
@@ -78,7 +77,6 @@ export function resolveCollectionRelations(
             const relation = resolvePropertyRelation({
                 propertyKey: propKey,
                 property: prop as Property,
-                allCollections,
                 sourceCollection: collection
             });
             if (relation) {
@@ -100,46 +98,22 @@ export function resolveCollectionRelations(
 export function resolvePropertyRelation({
                                             propertyKey,
                                             property,
-                                            allCollections,
                                             sourceCollection
                                         }: {
     propertyKey: string;
     property: Property;
-    allCollections: EntityCollection[];
     sourceCollection: EntityCollection;
 }): Relation | undefined {
     if (property.type !== "relation") return undefined;
 
-    if (!property.relation) return undefined;
-
-    const explicitRelation = property.relation as any;
-
-    // New-style relation format
-    if (explicitRelation.cardinality) {
-        return explicitRelation as Relation;
+    const relation = sourceCollection.relations?.find((rel) => rel.relationName === property.relationName)
+    if (!relation) {
+        console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug || sourceCollection.dbPath}'`);
+        return undefined;
     }
 
-    // Legacy relation format
-    if (explicitRelation.type && explicitRelation.target) {
-        const targetCollection = explicitRelation.target();
-        const targetIdField = targetCollection.idField ?? "id";
+    return relation as Relation;
 
-        return {
-            relationName: propertyKey,
-            cardinality: explicitRelation.type === "many" ? "many" : "one",
-            target: explicitRelation.target,
-            joins: [
-                {
-                    table: targetCollection.dbPath,
-                    sourceColumn: `${sourceCollection.dbPath}.${propertyKey}`,
-                    targetColumn: `${targetCollection.dbPath}.${targetIdField}`
-                }
-            ]
-        } as Relation;
-    }
-
-    console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug || sourceCollection.dbPath}'`);
-    return undefined;
 }
 
 export function getTableName(collection: EntityCollection): string {

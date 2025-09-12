@@ -103,27 +103,31 @@ export const resolveCollection = <M extends Record<string, any>, >
 /**
  * Resolve property builders, enums and arrays.
  */
-export function resolveProperty<M extends Record<string, any> = any>(
-    {
+
+export type ResolvePropertyProps<M extends Record<string, any> = any> = {
+    property: Property | ResolvedProperty
+    propertyKey?: string,
+    values?: Partial<M>,
+    previousValues?: Partial<M>,
+    path?: string,
+    entityId?: string | number,
+    index?: number,
+    fromBuilder?: boolean;
+    propertyConfigs?: Record<string, PropertyConfig<any>>;
+    ignoreMissingFields?: boolean;
+    authController: AuthController;
+}
+
+export function resolveProperty<M extends Record<string, any> = any>(props: ResolvePropertyProps<M> ): ResolvedProperty {
+
+    const {
         property,
         fromBuilder = false,
         ignoreMissingFields = false,
-        ...props
-    }: {
-        propertyKey?: string,
-        property: Property | ResolvedProperty,
-        values?: Partial<M>,
-        previousValues?: Partial<M>,
-        path?: string,
-        entityId?: string | number,
-        index?: number,
-        fromBuilder?: boolean;
-        propertyConfigs?: Record<string, PropertyConfig<any>>;
-        ignoreMissingFields?: boolean;
-        authController: AuthController;
-    }): ResolvedProperty  {
+        ...rest
+    } = props;
 
-    if (typeof property === "object" && "resolved" in property) {
+    if (typeof property === "object" && "resolved" in property && property.resolved) {
         return property as ResolvedProperty;
     }
 
@@ -131,17 +135,17 @@ export function resolveProperty<M extends Record<string, any> = any>(
     let isFromBuilder = fromBuilder;
 
     if (isPropertyBuilder(property)) {
-        const path = props.path;
+        const path = rest.path;
         if (!path)
             throw Error("Trying to resolve a property builder without specifying the entity path");
 
-        const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
+        const usedPropertyValue = rest.propertyKey ? getIn(rest.values, rest.propertyKey) : undefined;
         const dynamicProps = property.dynamicProps?.({
-            ...props,
+            ...rest,
             path,
             propertyValue: usedPropertyValue,
-            values: props.values ?? {},
-            previousValues: props.previousValues ?? props.values ?? {}
+            values: rest.values ?? {},
+            previousValues: rest.previousValues ?? rest.values ?? {}
         });
         resultProperty = mergeDeep(property, dynamicProps ?? {});
         isFromBuilder = true;
@@ -152,17 +156,17 @@ export function resolveProperty<M extends Record<string, any> = any>(
 
     // Apply dynamic properties if they exist
     if (resultProperty.dynamicProps) {
-        const path = props.path;
+        const path = rest.path;
         if (!path)
             throw Error("Trying to resolve dynamicProps without specifying the entity path");
 
-        const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
+        const usedPropertyValue = rest.propertyKey ? getIn(rest.values, rest.propertyKey) : undefined;
         const dynamicPropsResult = resultProperty.dynamicProps({
-            ...props,
+            ...rest,
             path,
             propertyValue: usedPropertyValue,
-            values: props.values ?? {},
-            previousValues: props.previousValues ?? props.values ?? {}
+            values: rest.values ?? {},
+            previousValues: rest.previousValues ?? rest.values ?? {}
         });
 
         if (dynamicPropsResult) {
@@ -175,7 +179,7 @@ export function resolveProperty<M extends Record<string, any> = any>(
     if (resultProperty?.type === "map" && resultProperty.properties) {
         const properties = resolveProperties({
             ignoreMissingFields,
-            ...props,
+            ...rest,
             properties: resultProperty.properties,
         });
         resolvedProperty = {
@@ -189,7 +193,7 @@ export function resolveProperty<M extends Record<string, any> = any>(
             property: resultProperty,
             fromBuilder: isFromBuilder,
             ignoreMissingFields,
-            ...props
+            ...rest
         }) as ResolvedProperty;
     } else if ((resultProperty?.type === "string" || resultProperty?.type === "number") && resultProperty.enum) {
         resolvedProperty = resolvePropertyEnum(resultProperty, isFromBuilder) as ResolvedProperty;
@@ -204,7 +208,7 @@ export function resolveProperty<M extends Record<string, any> = any>(
     }
 
     if (resolvedProperty?.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
-        const cmsFields = props.propertyConfigs;
+        const cmsFields = rest.propertyConfigs;
         if (!cmsFields && !ignoreMissingFields) {
             throw Error(`Trying to resolve a property with key '${resolvedProperty.propertyConfig}' that inherits from a custom property config but no custom property configs were provided. Use the property 'propertyConfigs' in your app config to provide them`);
         }
@@ -225,7 +229,7 @@ export function resolveProperty<M extends Record<string, any> = any>(
             const customFieldProperty = resolveProperty({
                 property: configPropertyOrBuilder,
                 ignoreMissingFields,
-                ...props
+                ...rest
             });
             if (customFieldProperty) {
                 resolvedProperty = mergeDeep(customFieldProperty, resolvedProperty);
@@ -236,7 +240,7 @@ export function resolveProperty<M extends Record<string, any> = any>(
 
     return {
         ...resolvedProperty,
-        resolved: true
+        resolved: true,
     };
 }
 

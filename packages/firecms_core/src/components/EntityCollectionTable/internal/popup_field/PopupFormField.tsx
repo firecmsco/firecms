@@ -306,7 +306,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     };
 
     const property: ResolvedProperty | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);
-    const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
+    const fieldProps: PropertyFieldBindingProps<M> | undefined = propertyKey && property
         ? {
             propertyKey: propertyKey as string,
             disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
