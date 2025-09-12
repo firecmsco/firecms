@@ -2,7 +2,7 @@ import React from "react";
 
 import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { PreviewType } from "@firecms/types";
+import { PreviewType, StringProperty } from "@firecms/types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "@firecms/types";
 import { ErrorBoundary } from "../../components";
@@ -16,7 +16,7 @@ export function StringPropertyPreview({
                                           value,
                                           property,
                                           size
-                                      }: PropertyPreviewProps<string>): React.ReactElement {
+                                      }: PropertyPreviewProps<StringProperty>): React.ReactElement {
 
     if (property.enum) {
         const enumKey = value;

@@ -6,7 +6,6 @@ import {
     Properties,
     Property,
     PropertyConfig,
-    PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
 } from "@firecms/types";
@@ -21,7 +20,7 @@ export function isReferenceProperty(
     fields: Record<string, PropertyConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
-        propertyOrBuilder,
+        property: propertyOrBuilder,
         propertyConfigs: fields,
         authController
     });
@@ -43,7 +42,7 @@ export function getIconForWidget(widget: PropertyConfig | undefined,
 }
 
 export function getIconForProperty(
-    property: PropertyOrBuilder<any> | ResolvedProperty<any>,
+    property: Property | ResolvedProperty,
     size: "small" | "medium" | "large" = "small",
     fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {
@@ -62,15 +61,20 @@ export function getIconForProperty(
  * @param properties
  * @param path
  */
-export function getPropertyInPath<M extends Record<string, any>>(properties: Properties<M> | ResolvedProperties, path: string): Property<M> | undefined {
+export function getPropertyInPath(properties: Properties, path: string): Property | undefined;
+export function getPropertyInPath(properties: ResolvedProperties, path: string): ResolvedProperty | undefined;
+export function getPropertyInPath(properties: Properties | ResolvedProperties, path: string): Property | ResolvedProperty | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
-            return properties[path];
+            // @ts-ignore
+            return properties[path as keyof typeof properties];
         }
         if (path.includes(".")) {
             const pathSegments = path.split(".");
-            const childProperty = properties[pathSegments[0]];
+            // @ts-ignore
+            const childProperty = properties[pathSegments[0] as keyof typeof properties];
             if (typeof childProperty === "object" && childProperty.type === "map" && childProperty.properties) {
+                // @ts-ignore
                 return getPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
             }
         }
@@ -105,9 +109,9 @@ export function getBracketNotation(path: string): string {
  * @param properties
  * @param propertiesOrder
  */
-export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: Properties<M>, propertiesOrder?: Extract<keyof M, string>[]): Properties<M> {
+export function getPropertiesWithPropertiesOrder(properties: Properties, propertiesOrder?: string[]): Properties {
     if (!propertiesOrder) return properties;
-    const result: Properties<any> = {};
+    const result: Properties = {};
     propertiesOrder.filter(Boolean).forEach(path => {
         const property = getPropertyInPath(properties, path);
         if (typeof property === "object" && property.type === "map" && property.properties) {

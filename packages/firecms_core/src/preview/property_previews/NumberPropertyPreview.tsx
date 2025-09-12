@@ -1,7 +1,7 @@
 import React from "react";
 
 import { EnumValuesChip } from "../../preview";
-import { PropertyPreviewProps } from "@firecms/types";
+import { NumberProperty, PropertyPreviewProps } from "@firecms/types";
 import { enumToObjectEntries } from "@firecms/common";
 
 /**
@@ -11,7 +11,7 @@ export function NumberPropertyPreview({
                                           value,
                                           property,
                                           size
-                                      }: PropertyPreviewProps<number>): React.ReactElement {
+                                      }: PropertyPreviewProps<NumberProperty>): React.ReactElement {
 
     if (property.enum) {
         const enumKey = value;

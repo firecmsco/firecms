@@ -1,6 +1,6 @@
 import { EntityValues, ResolvedProperties, ResolvedProperty } from "@firecms/core";
 
-export function countStringCharacters(values: EntityValues<any>, properties: ResolvedProperties<any>) {
+export function countStringCharacters(values: EntityValues<any>, properties: ResolvedProperties) {
     let count = 0;
 
     for (const key in values) {

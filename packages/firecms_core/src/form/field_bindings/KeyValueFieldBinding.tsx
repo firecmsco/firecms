@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataType, FieldProps, GeoPoint } from "@firecms/types";
+import { DataType, FieldProps, GeoPoint, MapProperty } from "@firecms/types";
 
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
@@ -47,7 +47,7 @@ export function KeyValueFieldBinding({
                                          underlyingValueHasChanged,
                                          autoFocus,
                                          context
-                                     }: FieldProps<Record<string, any>>) {
+                                     }: FieldProps<MapProperty>) {
 
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
 

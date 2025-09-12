@@ -1,4 +1,4 @@
-import { ResolvedNumberProperty, ResolvedStringProperty } from "@firecms/types";
+import { ArrayProperty, ResolvedNumberProperty, ResolvedStringProperty } from "@firecms/types";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 import { PropertyPreviewProps } from "@firecms/types";
 
@@ -10,7 +10,7 @@ export function ArrayPropertyEnumPreview({
                                              value,
                                              property,
                                              size
-                                         }: PropertyPreviewProps<string[] | number[]>) {
+                                         }: PropertyPreviewProps<ArrayProperty>) {
 
     if (property.type !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");

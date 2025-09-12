@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "@firecms/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
-import {  getReferenceFrom } from "@firecms/common";
+import { getReferenceFrom } from "@firecms/common";
 
-import { useNavigationController, useEntitySelectionTable } from "../../hooks";
+import { useEntitySelectionTable, useNavigationController } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
+type ArrayOfReferencesFieldProps = FieldProps<ArrayProperty, EntityReference[]>;
 
 /**
  * This field allows selecting multiple references.
@@ -123,7 +123,7 @@ export function ArrayOfReferencesFieldBinding({
                             buildEntry={buildEntry}
                             canAddElements={false}
                             addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
-                            newDefaultEntry={property.of.defaultValue}
+                            newDefaultEntry={property.of && "defaultValue" in property.of ? property.of?.defaultValue : null}
                             onValueChange={(value) => setFieldValue(propertyKey, value)}
             />
 

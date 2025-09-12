@@ -113,7 +113,7 @@ export function prepareCollectionForPersistence<M extends {
     return newCollection;
 }
 
-function cleanPropertyConfigs(properties: Properties<any>, propertyConfigs: Record<string, PropertyConfig>) {
+function cleanPropertyConfigs(properties: Properties, propertyConfigs: Record<string, PropertyConfig>) {
     const res: Record<string, Property> = {};
     Object.entries(properties).forEach(([key, property]) => {
         if (typeof property === "object") {

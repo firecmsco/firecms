@@ -16,7 +16,7 @@ contains all the configurations related to a property. This is an array of
 `PropertyConfig` objects, which are defined as follows:
 
 ```typescript
-export type PropertyConfig<T extends CMSType = any> = {
+export type PropertyConfig<T = any> = {
 
     /**
      * Key used to identify this property config.
@@ -36,7 +36,7 @@ export type PropertyConfig<T extends CMSType = any> = {
      * You can use a builder function to generate the property based on the values or the path.
      * You can also define a custom Field as a React component to be used for this property.
      */
-    property: Property<T>;
+    property: Property;
 
     /**
      * Optional icon to be used in the field selector.

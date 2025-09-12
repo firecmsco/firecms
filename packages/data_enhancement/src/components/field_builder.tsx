@@ -21,7 +21,7 @@ import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_con
 import { countStringCharacters } from "../utils/strings_counter";
 import { EditorAIController } from "@firecms/editor";
 
-export function fieldBuilder<T extends CMSType = CMSType>
+export function fieldBuilder<T>
 (params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {
 
     const {
@@ -67,7 +67,7 @@ export function fieldBuilder<T extends CMSType = CMSType>
     return null;
 }
 
-interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string, any> = any> {
+interface FieldInnerParams<T  = CMSType, M extends Record<string, any> = any> {
     loading: boolean;
     props: FieldProps<T, any, M>;
     suggestedValue: string | number;
@@ -78,7 +78,7 @@ interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string,
     editorAIController?: EditorAIController;
 }
 
-const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M extends Record<string, any> = any>({
+const FieldInner = React.memo(function FieldInner<T, M extends Record<string, any> = any>({
                                                                                                                         loading,
                                                                                                                         props,
                                                                                                                         suggestedValue,

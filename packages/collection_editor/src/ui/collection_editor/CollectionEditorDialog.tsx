@@ -353,7 +353,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             };
 
             if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
-                values.properties = inferredCollection.properties as Properties<M>;
+                values.properties = inferredCollection.properties as Properties;
                 values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
             }
 
@@ -803,7 +803,7 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
         properties,
         ...rest
     } = collection;
-    const propertiesResult: Properties<any> = {};
+    const propertiesResult: Properties = {};
     if (properties) {
         Object.keys(properties).forEach((key) => {
             propertiesResult[key] = applyPropertiesConfig(properties[key], propertyConfigs);

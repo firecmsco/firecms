@@ -32,7 +32,7 @@ export function TableStorageUpload(props: {
     updateValue: (newValue: (string | string[] | null)) => void;
     selected: boolean;
     focused: boolean;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty;
     entity: Entity<any>;
     path: string;
     previewSize: PreviewSize;
@@ -105,7 +105,7 @@ interface StorageUploadProps {
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     error?: Error;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -142,7 +142,7 @@ function StorageUpload({
 
     const previewSize = previewSizeInput;
     if (multipleFilesSupported) {
-        const arrayProperty = property as ResolvedArrayProperty<string[]>;
+        const arrayProperty = property as ResolvedArrayProperty;
         if (Array.isArray(arrayProperty.of)) {
             throw Error("Using array properties instead of single one in `of` in ArrayProperty");
         }
@@ -202,7 +202,7 @@ function StorageUpload({
         : "Drag 'n' drop a file here, or click here edit";
 
     const renderProperty = multipleFilesSupported
-        ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty
+        ? (property as ResolvedArrayProperty).of as ResolvedStringProperty
         : property as ResolvedStringProperty;
 
     const imageSize = useMemo(() => getThumbnailMeasure(previewSize), [previewSize]);

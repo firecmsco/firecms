@@ -16,7 +16,7 @@ interface Header {
 export interface DownloadEntitiesExportParams<M extends Record<string, any>> {
     data: Entity<M>[];
     additionalData: Record<string, any>[] | undefined;
-    properties: ResolvedProperties<M>;
+    properties: ResolvedProperties;
     propertiesOrder: string[] | undefined;
     name: string;
     flattenArrays: boolean;
@@ -102,7 +102,7 @@ export function getEntityJsonExportableData(data: Entity<any>[],
     return mergedData;
 }
 
-function getExportHeaders<M extends Record<string, any>>(properties: ResolvedProperties<M>,
+function getExportHeaders<M extends Record<string, any>>(properties: ResolvedProperties,
                                                          propertiesOrder: string[] | undefined,
                                                          additionalHeaders: string[] | undefined,
                                                          arrayValuesCount?: ArrayValuesCount): Header[] {
@@ -197,7 +197,7 @@ function processValueForExport(inputValue: any,
 
 function processValuesForExport<M extends Record<string, any>>
 (inputValues: Record<keyof M, any>,
- properties: ResolvedProperties<M>,
+ properties: ResolvedProperties,
  exportType: "csv" | "json",
  dateExportType: "timestamp" | "string"
 ): Record<keyof M, any> {

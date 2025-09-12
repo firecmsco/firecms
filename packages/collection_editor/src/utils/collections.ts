@@ -1,11 +1,13 @@
 import {
     EntityCallbacks,
     EntityCollection,
-    joinCollectionLists,
-    makePropertiesEditable,
     ModifyCollectionProps,
     Properties
 } from "@firecms/core";
+import {
+    joinCollectionLists,
+    makePropertiesEditable,
+} from "@firecms/common";
 import { PersistedCollection } from "../types/persisted_collection";
 
 /**

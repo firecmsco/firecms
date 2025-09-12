@@ -1,9 +1,14 @@
 import React from "react";
 
 import { resolveArrayProperty } from "../../util";
-import { CMSType, ResolvedProperty } from "@firecms/types";
+import {
+    ArrayProperty,
+    PreviewSize,
+    PropertyPreviewProps,
+    ResolvedArrayProperty,
+    ResolvedProperty
+} from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
@@ -15,25 +20,24 @@ export function ArrayPropertyPreview({
                                          propertyKey,
                                          value,
                                          property: inputProperty,
-                                         // entity,
                                          size
-                                     }: PropertyPreviewProps<CMSType[]>) {
+                                     }: PropertyPreviewProps<ArrayProperty>) {
+
+    if (inputProperty.type !== "array")
+        throw Error("Picked wrong preview component ArrayPreview");
+
+    if (!inputProperty.of) {
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
+    }
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
-        property: inputProperty,
+        property: inputProperty as ArrayProperty | ResolvedArrayProperty,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
-
-    if (!property.of) {
-        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
-    }
-
-    if (property.type !== "array")
-        throw Error("Picked wrong preview component ArrayPreview");
 
     const values = value;
 
@@ -45,6 +49,9 @@ export function ArrayPropertyPreview({
         <div className="flex flex-col gap-2">
             {values &&
                 values.map((value, index) => {
+                        if (!property.resolvedProperties) {
+                            throw Error("Property resolvedProperties is undefined");
+                        }
                         const of: ResolvedProperty = property.resolvedProperties[index] ??
                             (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
                         return of
@@ -54,7 +61,6 @@ export function ArrayPropertyPreview({
                                     <ErrorBoundary>
                                         <PropertyPreview
                                             propertyKey={propertyKey}
-                                            // entity={entity}
                                             value={value}
                                             property={of}
                                             size={childSize}/>

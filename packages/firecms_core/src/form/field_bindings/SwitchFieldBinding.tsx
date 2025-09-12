@@ -1,13 +1,12 @@
 import React from "react";
 
-import { FieldProps } from "@firecms/types";
+import { BooleanProperty, FieldProps } from "@firecms/types";
 import { getIconForProperty } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { BooleanSwitchWithLabel } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
 
-type SwitchFieldProps = FieldProps<boolean>;
 
 /**
  * Simple boolean switch biding to a boolean property.
@@ -27,7 +26,7 @@ export const SwitchFieldBinding = function SwitchFieldBinding({
                                                                   size = "large",
                                                                   property,
                                                                   includeDescription
-                                                              }: SwitchFieldProps) {
+                                                              }: FieldProps<BooleanProperty>) {
 
     useClearRestoreValue({
         property,

@@ -2,7 +2,6 @@ import {
     AdditionalFieldDelegate,
     ArrayProperty,
     BooleanProperty,
-    CMSType,
     DateProperty,
     EntityCallbacks,
     EntityCollection,
@@ -39,7 +38,7 @@ export function buildCollection<
  * @param property
  * @group Builder
  */
-export function buildProperty<T extends CMSType = CMSType, P extends Property<T> = Property<T>>(
+export function buildProperty<T, P extends Property = Property>(
     property: P
 ):
     P extends StringProperty ? StringProperty :
@@ -60,8 +59,8 @@ export function buildProperty<T extends CMSType = CMSType, P extends Property<T>
  * @group Builder
  */
 export function buildProperties<M extends Record<string, any>>(
-    properties: Properties<M>
-): Properties<M> {
+    properties: Properties
+): Properties {
     return properties;
 }
 
@@ -72,8 +71,8 @@ export function buildProperties<M extends Record<string, any>>(
  * @group Builder
  */
 export function buildPropertiesOrBuilder<M extends Record<string, any>>(
-    propertiesOrBuilder: Properties<M>
-): Properties<M> {
+    propertiesOrBuilder: Properties
+): Properties {
     return propertiesOrBuilder;
 }
 
@@ -131,7 +130,7 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, USER
  * @param propertyConfig
  * @group Builder
  */
-export function buildFieldConfig<T extends CMSType = CMSType>(
+export function buildFieldConfig<T>(
     propertyConfig: PropertyConfig<T>
 ): PropertyConfig<T> {
     return propertyConfig;

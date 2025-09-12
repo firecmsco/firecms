@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FieldProps } from "@firecms/types";
-import { useNavigationController, useEntitySelectionTable } from "../../hooks";
+import { Entity, EntityCollection, EntityReference, FieldProps, Property, ReferenceProperty } from "@firecms/types";
+import { useEntitySelectionTable, useNavigationController } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer, ErrorView } from "../../components";
@@ -18,10 +18,10 @@ import { cls } from "@firecms/ui";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function ReferenceFieldBinding(props: FieldProps<EntityReference>) {
+export function ReferenceFieldBinding(props: FieldProps<ReferenceProperty>) {
 
     if (typeof props.property.path !== "string") {
-        return <ReadOnlyFieldBinding {...props}/>
+        return <ReadOnlyFieldBinding {...props as FieldProps<Property>}/>
     }
 
     return <ReferenceFieldBindingInternal {...props}/>;
@@ -42,7 +42,7 @@ function ReferenceFieldBindingInternal({
                                            property,
                                            includeDescription,
                                            size = "medium"
-                                       }: FieldProps<EntityReference>) {
+                                       }: FieldProps<ReferenceProperty>) {
     if (!property.path) {
         throw new Error("Property path is required for ReferenceFieldBinding");
     }

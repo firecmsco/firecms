@@ -28,7 +28,7 @@ export function MapFieldBinding({
                                     autoFocus,
                                     context,
                                     onPropertyChange
-                                }: FieldProps<Record<string, any>>) {
+                                }: FieldProps<MapProperty>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
@@ -38,7 +38,7 @@ export function MapFieldBinding({
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
 
-    let mapProperties: ResolvedProperties;
+    let mapProperties: ResolvedProperties | Properties;
     if (pickOnlySomeKeys) {
         if (value) {
             mapProperties = pick(property.properties,

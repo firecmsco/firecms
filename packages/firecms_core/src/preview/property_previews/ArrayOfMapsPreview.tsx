@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary } from "../../components";
 import { useAuthController, useCustomizationController } from "../../hooks";
-import { PropertyPreviewProps } from "@firecms/types";
+import { ArrayProperty, Property, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { resolveArrayProperty } from "../../util";
 
@@ -14,7 +14,8 @@ export function ArrayOfMapsPreview({
                                        property: inputProperty,
                                        size,
                                        // entity
-                                   }: PropertyPreviewProps<Record<string, any>[]>) {
+                                   }: PropertyPreviewProps<ArrayProperty>) {
+
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
@@ -37,7 +38,7 @@ export function ArrayOfMapsPreview({
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
     const values = value;
-    const previewProperties: string[] | undefined = mapProperty.previewKeys;
+    const previewProperties: string[] | undefined = mapProperty.previewProperties;
 
     if (!values) return null;
 
@@ -66,7 +67,7 @@ export function ArrayOfMapsPreview({
                                                 <PropertyPreview
                                                     propertyKey={key as string}
                                                     value={(v)[key]}
-                                                    property={properties[key as string]}
+                                                    property={properties[key as string] as Property}
                                                     // entity={entity}
                                                     size={"small"}/>
                                             </ErrorBoundary>

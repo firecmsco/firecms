@@ -1,6 +1,6 @@
 import React from "react";
 import { resolveArrayProperty } from "../../util";
-import { CMSType, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
@@ -16,13 +16,18 @@ export function ArrayOneOfPreview({
                                       property: inputProperty,
                                       size,
                                       // entity
-                                  }: PropertyPreviewProps<CMSType[]>) {
+                                  }: PropertyPreviewProps<ArrayProperty>) {
+
+    if (inputProperty.type !== "array")
+        throw Error(
+            `You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`
+        )
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
-        property: inputProperty,
+        property: inputProperty as ArrayProperty,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
@@ -47,7 +52,7 @@ export function ArrayOneOfPreview({
     return (
         <div className={"flex flex-col"}>
             {values &&
-                values.map((value, index) =>
+                values.map((value:any, index:number) =>
                     <React.Fragment
                         key={"preview_array_" + value + "_" + index}>
                         <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0 py-2")}>
@@ -58,7 +63,7 @@ export function ArrayOneOfPreview({
                                     value={value[valueField]}
                                     // entity={entity}
                                     // @ts-ignore
-                                    property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
+                                    property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty}
                                     size={childSize}/>}
                             </ErrorBoundary>
                         </div>

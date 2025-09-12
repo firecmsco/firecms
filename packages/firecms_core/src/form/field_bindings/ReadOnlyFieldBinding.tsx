@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FieldProps } from "@firecms/types";
+import { FieldProps, Property } from "@firecms/types";
 
 import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
@@ -25,7 +25,7 @@ export function ReadOnlyFieldBinding({
                                          property,
                                          includeDescription,
                                          context
-                                     }: FieldProps<any>) {
+                                     }: FieldProps<Property>) {
 
     // if (!context.entityId)
     //     throw new Error("ReadOnlyFieldBinding: Entity id is null");

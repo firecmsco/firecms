@@ -5,7 +5,7 @@ import { IconButton, InfoIcon, Tooltip, Typography } from "@firecms/ui";
  * Component in charge of rendering the description of a field
  * as well as the error message if any.
  */
-export function FieldHelperText({
+export function FieldHelperText<T>({
                                     error,
                                     showError,
                                     property,

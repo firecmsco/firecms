@@ -122,9 +122,9 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     defaultSize?: CollectionSize;
 
-    properties: ResolvedProperties<M>;
+    properties: ResolvedProperties;
 
-    getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties<M>[string];
+    getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties[string];
 
     filterable?: boolean;
 

@@ -2,13 +2,14 @@ import React, { createElement } from "react";
 import equal from "react-fast-compare"
 
 import {
-    CMSType,
     EntityReference,
     EntityRelation,
+    Property,
     PropertyPreviewProps,
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
+    ResolvedProperty,
     ResolvedStringProperty
 } from "@firecms/types";
 
@@ -37,7 +38,7 @@ import { RelationPreview } from "./components/RelationPreview";
 /**
  * @group Preview components
  */
-export const PropertyPreview = React.memo(function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
+export const PropertyPreview = React.memo(function PropertyPreview<P extends Property | ResolvedProperty>(props: PropertyPreviewProps<P>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -55,7 +56,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
 
     const property = resolveProperty({
         propertyKey,
-        propertyOrBuilder: inputProperty,
+        property: inputProperty,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
@@ -63,7 +64,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
     if (property === null) {
         content = <EmptyValue/>;
     } else if (property.Preview) {
-        content = createElement(property.Preview as React.ComponentType<PropertyPreviewProps>,
+        content = createElement(property.Preview,
             {
                 propertyKey,
                 value,
@@ -132,17 +133,17 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                 if (Array.isArray(arrayProperty.of)) {
                     content = <ArrayPropertyPreview {...props}
                                                     value={value}
-                                                    property={property as ResolvedArrayProperty}/>;
+                                                    property={arrayProperty}/>;
                 } else if (arrayProperty.of.type === "reference") {
                     content = <ArrayOfReferencesPreview {...props}
                                                         value={value}
-                                                        property={property as ResolvedArrayProperty}/>;
+                                                        property={property}/>;
                 } else if (arrayProperty.of.type === "string") {
                     if (arrayProperty.of.enum) {
                         content = <ArrayPropertyEnumPreview
                             {...props}
-                            value={value as string[]}
-                            property={property as ResolvedArrayProperty}/>;
+                            value={value}
+                            property={property}/>;
                     } else if (arrayProperty.of.storage) {
                         content = <ArrayOfStorageComponentsPreview
                             {...props}
@@ -157,7 +158,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                 } else if (arrayProperty.of.type === "number" && arrayProperty.of.enum) {
                     content = <ArrayPropertyEnumPreview
                         {...props}
-                        value={value as string[]}
+                        value={value as number[]}
                         property={property as ResolvedArrayProperty}/>;
                 } else {
                     content = <ArrayPropertyPreview {...props}
@@ -210,7 +211,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         }
         if (typeof value === "object" && "isEntityRelation" in value && value.isEntityRelation()) {
             content = <RelationPreview
-                disabled={!property.path}
+                disabled={!property.relation}
                 previewProperties={property.previewProperties}
                 includeId={property.includeId}
                 includeEntityLink={property.includeEntityLink}

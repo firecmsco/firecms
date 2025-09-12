@@ -1,14 +1,12 @@
 import React, { useCallback } from "react";
 
-import { EnumType, FieldProps } from "@firecms/types";
+import { FieldProps, NumberProperty, StringProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, resolveEnumValues } from "../../util";
 import { CloseIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
-
-type SelectProps<T extends EnumType> = FieldProps<T>;
 
 /**
  * If `enumValues` are set in the string config, this field renders a select
@@ -18,7 +16,7 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  * and tables to the specified properties.
  * @group Form fields
  */
-export function SelectFieldBinding<T extends EnumType>({
+export function SelectFieldBinding({
                                                            propertyKey,
                                                            value,
                                                            setValue,
@@ -30,7 +28,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            property,
                                                            includeDescription,
                                                            size = "large"
-                                                       }: SelectProps<T>) {
+                                                       }: FieldProps<StringProperty | NumberProperty>) {
 
     const enumValues = resolveEnumValues(property.enum ?? []);
 
@@ -76,7 +74,7 @@ export function SelectFieldBinding<T extends EnumType>({
                     const newValue = updatedValue
                         ? (property.type === "number" ? parseFloat(updatedValue) : updatedValue)
                         : null;
-                    return setValue(newValue as T);
+                    return setValue(newValue);
                 }}
                 renderValue={(enumKey: any) => {
                     return <EnumValuesChip

@@ -525,11 +525,11 @@ export function EntityForm<M extends Record<string, any>>({
                         const hidden = isHidden(property);
                         if (hidden) return null;
                         const widthPercentage = property.widthPercentage ?? 100;
-                        const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
+                        const cmsFormFieldProps: PropertyFieldBindingProps< M> = {
                             propertyKey: key,
                             disabled,
                             property,
-                            includeDescription: property.description || property.longDescription,
+                            includeDescription: Boolean(property.description || property.longDescription),
                             underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
                             context: formContext,
                             partOfArray: false,

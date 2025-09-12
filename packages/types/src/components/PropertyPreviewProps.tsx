@@ -1,4 +1,4 @@
-import { CMSType, Property, ResolvedProperty } from "../types";
+import { InferPropertyType, Property, ResolvedProperty } from "../types";
 
 /**
  * @group Preview components
@@ -8,21 +8,21 @@ export type PreviewSize = "small" | "medium" | "large";
 /**
  * @group Preview components
  */
-export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any> {
+export interface PropertyPreviewProps<P extends Property | ResolvedProperty, CustomProps = any> {
     /**
      * Name of the property
      */
     propertyKey?: string;
 
     /**
-     * Current value of the property
+     * Current value of the property, inferred from the property schema P
      */
-    value: T;
+    value: InferPropertyType<P>;
 
     /**
-     * Property this display is related to
+     * Property this display is related to, now strongly typed to P
      */
-    property: Property<T> | ResolvedProperty<T>;
+    property: P;
 
     /**
      * Desired size of the preview, depending on the context.

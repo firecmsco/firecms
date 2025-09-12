@@ -36,14 +36,14 @@ import { getRowHeight } from "../common/table_height";
 import { isReadOnly } from "@firecms/common";
 import { TableRelationField } from "./fields/TableRelationField";
 
-export interface PropertyTableCellProps<T extends CMSType> {
+export interface PropertyTableCellProps<T > {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
     customFieldValidator?: CustomFieldValidator;
     value: T;
     readonly: boolean;
-    property: ResolvedProperty<T>;
+    property: ResolvedProperty;
     height: number;
     width: number;
     entity: Entity<any>;
@@ -69,7 +69,7 @@ function isStorageProperty(property: ResolvedProperty) {
 }
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
-    function PropertyTableCell<T extends CMSType, M extends Record<string, any>>({
+    function PropertyTableCell<T, M extends Record<string, any>>({
                                                                                      propertyKey,
                                                                                      customFieldValidator,
                                                                                      value,
@@ -281,7 +281,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                      focused={selected}
                                                      selected={selected}
                                                      openPopup={setPopupCell ? openPopup : undefined}
-                                                     property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
+                                                     property={property as ResolvedStringProperty | ResolvedArrayProperty}
                                                      entity={entity}
                                                      path={path}
                                                      value={internalValue}

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { CMSType, Property, ResolvedProperty } from "@firecms/types";
+import { Property, ResolvedProperty } from "@firecms/types";
 
 /**
  * Hook we use to restore a value after it has been cleared
@@ -8,14 +8,14 @@ import { CMSType, Property, ResolvedProperty } from "@firecms/types";
  * @param setValue
  * @ignore
  */
-export function useClearRestoreValue<T extends CMSType>({
+export function useClearRestoreValue<T>({
                                                             property,
                                                             value,
                                                             setValue
                                                         }:
                                                             {
-                                                                property: Property<T> | ResolvedProperty<T>,
-                                                                value: T,
+                                                                property: Property | ResolvedProperty,
+                                                                value: T | null,
                                                                 setValue: (value: T | null, shouldValidate?: boolean) => void
                                                             }) {
 

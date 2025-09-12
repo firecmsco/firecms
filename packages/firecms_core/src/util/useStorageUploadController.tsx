@@ -50,7 +50,7 @@ export function useStorageUploadController<M extends object>({
                                                                  value: string | string[] | null;
                                                                  path?: string,
                                                                  propertyKey: string,
-                                                                 property: StringProperty | ArrayProperty<string[]> | ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+                                                                 property: StringProperty | ArrayProperty | ResolvedStringProperty | ResolvedArrayProperty,
                                                                  storageSource: StorageSource,
                                                                  disabled: boolean,
                                                                  onChange: (value: string | string[] | null) => void
@@ -89,11 +89,11 @@ export function useStorageUploadController<M extends object>({
         }
     }, [internalInitialValue, value, initialValue]);
 
-    const resolvedProperty = resolveProperty<any>({
-        propertyOrBuilder: property,
+    const resolvedProperty = resolveProperty({
+        property: property,
         values: entityValues,
         authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    }) as ResolvedStringProperty | ResolvedArrayProperty;
 
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {

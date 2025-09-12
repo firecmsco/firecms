@@ -1,4 +1,4 @@
-import { CMSType, Property, PropertyOrBuilder } from "./properties";
+import { InferPropertyType, Property } from "./properties";
 import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 import { Entity } from "./entities";
 import { FormexController } from "../components/formex";
@@ -9,7 +9,10 @@ import { FormexController } from "../components/formex";
  *
  * @group Form custom fields
  */
-export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = any> {
+export interface FieldProps<
+    P extends Property | ResolvedProperty = Property,
+    CustomProps = any,
+    M extends Record<string, any> = any> {
 
     /**
      * Key of the property
@@ -18,14 +21,14 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
     propertyKey: string;
 
     /**
-     * Current value of this field
+     * Current value of this field, inferred from the property type P
      */
-    value: T;
+    value: InferPropertyType<P>;
 
     /**
      * Set value of field directly
      */
-    setValue: (value: T | null, shouldValidate?: boolean) => void;
+    setValue: (value: InferPropertyType<P> | null, shouldValidate?: boolean) => void;
 
     /**
      * Set value of a different field directly
@@ -33,7 +36,7 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
      * @param value
      * @param shouldValidate
      */
-    setFieldValue: (propertyKey: string, value: CMSType | null, shouldValidate?: boolean) => void;
+    setFieldValue: (propertyKey: string, value: any | null, shouldValidate?: boolean) => void;
 
     /**
      * Is the form currently submitting
@@ -61,9 +64,9 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
     touched?: boolean;
 
     /**
-     * Property related to this field
+     * Property related to this field, now strongly typed to P
      */
-    property: Property<T> | ResolvedProperty<T>;
+    property: P;
 
     /**
      * Should this field include a description
@@ -119,9 +122,10 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
      *
      * @param property
      */
-    onPropertyChange?: (property: Partial<Property<any>>) => void;
+    onPropertyChange?: (property: Partial<Property>) => void;
 
 }
+
 
 /**
  * Context passed to custom fields
@@ -185,7 +189,7 @@ export interface FormContext<M extends Record<string, any> = any> {
  * custom field you can use {@link PropertyFieldBinding} with these props.
  * @group Form custom fields
  */
-export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<string, any> = any> {
+export interface PropertyFieldBindingProps<M extends Record<string, any> = any> {
 
     /**
      * The key/path of the property, such as `age`. You can use nested and array
@@ -196,7 +200,7 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     /**
      * The CMS property you are binding this field to
      */
-    property: Property<T> | ResolvedProperty<T>;
+    property: Property | ResolvedProperty;
 
     /**
      * The context where this field is being rendered. You get a context as a
@@ -255,5 +259,5 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      *
      * @param property
      */
-    onPropertyChange?: (property: Partial<Property<any>>) => void;
+    onPropertyChange?: (property: Partial<Property>) => void;
 }

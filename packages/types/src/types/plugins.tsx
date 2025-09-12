@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 
 import { CollectionActionsProps, EntityCollection, EntityTableController } from "./collections";
 import { FieldProps, FormContext } from "./fields";
-import { CMSType, Property } from "./properties";
+import { Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
 import { FireCMSContext } from "../firecms_context";
@@ -176,9 +176,9 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          */
         ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
-        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
+        fieldBuilder?: <T>(props: PluginFieldBuilderParams<any, EC>) => React.ComponentType<FieldProps<any>> | null;
 
-        fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
+        fieldBuilderEnabled?: <T>(props: PluginFieldBuilderParams) => boolean;
     }
 
     collection?: {
@@ -238,11 +238,11 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
     openEntityMode: "side_panel" | "full_screen";
 }
 
-export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {
+export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {
     fieldConfigId: string;
     propertyKey: string;
-    property: Property<T> | ResolvedProperty<T>;
-    Field: React.ComponentType<FieldProps<T, any, M>>;
+    property: Property | ResolvedProperty;
+    Field: React.ComponentType<FieldProps<any, any, M>>;
     plugin: FireCMSPlugin;
     path?: string;
     collection?: EC;

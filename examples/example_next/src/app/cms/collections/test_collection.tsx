@@ -718,7 +718,7 @@ export const testCollection = buildCollection<any>({
             //     },
             // },
             // source: ({ values, previousValues }) => {
-            //     const properties = buildProperties<any>({
+            //     const properties = buildProperties({
             //         type: {
             //             type: "string",
             //             enumValues: {

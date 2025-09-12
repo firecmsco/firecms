@@ -1,16 +1,12 @@
 import React, { useCallback } from "react";
 
 import { CloseIcon, Collapse, IconButton, TextField } from "@firecms/ui";
-import { FieldProps, PreviewType } from "@firecms/types";
+import { FieldProps, NumberProperty, PreviewType, StringProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
 import { PropertyPreview } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
-
-interface TextFieldBindingProps<T extends string | number> extends FieldProps<T> {
-    allowInfinity?: boolean
-}
 
 /**
  * Generic text field.
@@ -29,7 +25,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 property,
                                                                 includeDescription,
                                                                 size = "large"
-                                                            }: TextFieldBindingProps<T>) {
+                                                            }: FieldProps<StringProperty | NumberProperty>) {
 
     let multiline: boolean | undefined;
     let url: boolean | PreviewType | undefined;
@@ -72,7 +68,7 @@ export function TextFieldBinding<T extends string | number>({
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
                 <TextField
                     size={size}
-                    value={value}
+                    value={value ?? ""}
                     onChange={onChange}
                     autoFocus={autoFocus}
                     className={property.widthPercentage !== undefined ? "mt-8" : undefined}

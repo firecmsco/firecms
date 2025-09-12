@@ -51,7 +51,7 @@ function sanitizeAndConvertDates(obj: any): any {
 }
 
 // Transform relations for database storage (relation objects to IDs)
-function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties<M>): any {
+function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties): any {
     if (!entity || !properties) return entity;
 
     const result: Record<string, any> = {};
@@ -112,7 +112,7 @@ function serializePropertyToServer(value: any, property: Property): any {
 }
 
 // Transform IDs back to relation objects for frontend
-function parseDataFromServer<M extends Record<string, any>>(data: M, properties: Properties<M>): M {
+function parseDataFromServer<M extends Record<string, any>>(data: M, properties: Properties): M {
     if (!data || !properties) return data;
 
     const result: Record<string, any> = {};
@@ -329,7 +329,7 @@ export class EntityService {
         const raw = result[0] as M;
 
         // Transform IDs back to relation objects and apply type conversion
-        const values = parseDataFromServer(raw, collection.properties as Properties<M>);
+        const values = parseDataFromServer(raw, collection.properties as Properties);
 
         // Load relations based on new cardinality system
         const allCollections = collectionRegistry.getAllCollectionsRecursively();
@@ -425,7 +425,7 @@ export class EntityService {
         const results = await query;
 
         return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
+            const values = parseDataFromServer(entity as M, collection.properties as Properties);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
@@ -630,7 +630,7 @@ export class EntityService {
         const results = await query;
         return results.map((row: any) => {
             const entity = row[getTableName(targetCollection)] || row;
-            const values = parseDataFromServer(entity as M, targetCollection.properties as Properties<M>);
+            const values = parseDataFromServer(entity as M, targetCollection.properties as Properties);
             return { id: entity[targetIdInfo.fieldName].toString(), path: targetCollection.slug ?? targetCollection.dbPath, values: values as M, databaseId: options.databaseId };
         });
     }
@@ -791,7 +791,7 @@ export class EntityService {
         }
 
         // Transform relations to IDs, then sanitize
-        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties<M>);
+        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties);
         const entityData = sanitizeAndConvertDates(processedData);
 
         const savedId = await this.db.transaction(async (tx) => {
@@ -1077,7 +1077,7 @@ export class EntityService {
             .limit(50);
 
         return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection.properties as Properties<M>);
+            const values = parseDataFromServer(entity as M, collection.properties as Properties);
 
             return {
                 id: entity[idInfo.fieldName].toString(),

@@ -222,7 +222,7 @@ export function useBuildDataSource({
                 })
                 : undefined;
 
-            const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
+            const properties: ResolvedProperties | undefined = resolvedCollection?.properties;
 
             const updatedValues: Partial<EntityValues<M>> = properties
                 ? updateDateAutoValues(

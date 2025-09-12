@@ -1,7 +1,6 @@
 import React from "react";
 
-import { ResolvedMapProperty } from "@firecms/types";
-import { PropertyPreviewProps } from "@firecms/types";
+import { MapProperty, PropertyPreviewProps, ResolvedMapProperty } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
@@ -10,13 +9,12 @@ import { EmptyValue } from "../components/EmptyValue";
 /**
  * @group Preview components
  */
-export function MapPropertyPreview<T extends Record<string, any> = Record<string, any>>({
-                                                                                            propertyKey,
-                                                                                            value,
-                                                                                            property,
-                                                                                            // entity,
-                                                                                            size
-                                                                                        }: PropertyPreviewProps<T>) {
+export function MapPropertyPreview({
+                                       propertyKey,
+                                       value,
+                                       property,
+                                       size
+                                   }: PropertyPreviewProps<MapProperty>) {
 
     if (property.type !== "map") {
         throw Error("Picked wrong preview component MapPropertyPreview");
@@ -58,7 +56,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     const childProperty = mapProperty.properties![key];
-                    const isArrayOrMap = childProperty.type === "map" || childProperty === "array";
+                    const isArrayOrMap = childProperty.type === "map" || childProperty.type === "array";
                     return (
                         <div
                             key={`map_preview_table_${key}}`}

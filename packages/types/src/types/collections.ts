@@ -91,7 +91,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Set of properties that compose an entity
      */
-    properties: Properties<M>;
+    properties: Properties;
 
     /**
      * Default preview properties displayed when this collection is referenced to.

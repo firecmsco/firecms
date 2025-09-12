@@ -1,81 +1,80 @@
 import React from "react";
 import { FieldProps } from "./fields";
-import { EntityReference, EntityRelation, EntityValues, GeoPoint, Vector } from "./entities";
+import { EntityReference, EntityRelation, EntityValues, GeoPoint } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { PropertyPreviewProps } from "../components";
 import { ColorKey, ColorScheme } from "./chips";
 import { AuthController } from "../controllers";
-import { Relation } from "./relations";
 
 /**
  * @group Entity properties
  */
-export type DataType<T extends CMSType = CMSType> =
-    T extends string ? "string" :
-        T extends number ? "number" :
-            T extends boolean ? "boolean" :
-                T extends Date ? "date" :
-                    T extends GeoPoint ? "geopoint" :
-                        T extends Vector ? "vector" :
-                            T extends EntityRelation | EntityRelation[] ? "relation" :
-                                T extends EntityReference ? "reference" :
-                                    T extends CMSType[] ? "array" :
-                                        T extends Record<string, any> ? "map" : never;
+export type DataType =
+    | "string"
+    | "number"
+    | "boolean"
+    | "date"
+    | "geopoint"
+    | "reference"
+    | "relation"
+    | "array"
+    | "map";
+
+export type Property =
+    | StringProperty
+    | NumberProperty
+    | BooleanProperty
+    | DateProperty
+    | GeopointProperty
+    | ReferenceProperty
+    | RelationProperty
+    | ArrayProperty
+    | MapProperty;
+
+export type Properties = {
+    [key: string]: Property;
+};
 
 /**
+ * A helper type to infer the underlying data type from a Property definition.
+ * This is the core of the type inference system.
+ */
+export type InferPropertyType<P extends Property> =
+    P extends StringProperty ? string :
+        P extends NumberProperty ? number :
+            P extends BooleanProperty ? boolean :
+                P extends DateProperty ? Date :
+                    P extends GeopointProperty ? GeoPoint :
+                        P extends ReferenceProperty ? EntityReference :
+                            P extends RelationProperty ? EntityRelation | EntityRelation[] :
+                                P extends ArrayProperty ? (P["of"] extends Property ? InferPropertyType<P["of"]>[] : any[]) :
+                                    P extends MapProperty ? (P["properties"] extends Properties ? InferEntityType<P["properties"]> : Record<string, any>) :
+                                        never;
+
+/**
+ * A generic type that converts a `Properties` schema definition into a corresponding
+ * TypeScript entity type. It correctly handles required and optional properties.
+ *
+ * @example
+ * const productSchema = {
+ * name: { type: 'string', validation: { required: true } },
+ * price: { type: 'number' }
+ * };
+ * type Product = InferEntityType<typeof productSchema>;
+ * // Result: { name: string; price?: number; }
+ */
+export type InferEntityType<P extends Properties> = {
+    -readonly [K in keyof P as P[K] extends { validation?: { required: true } } ? K : never]: InferPropertyType<P[K]>;
+} & {
+    -readonly [K in keyof P as P[K] extends { validation?: { required: true } } ? never : K]?: InferPropertyType<P[K]>;
+};
+
+/**
+ * Interface including all common properties of a CMS property.
  * @group Entity properties
  */
-export type CMSType =
-    | string
-    | number
-    | boolean
-    | Date
-    | GeoPoint
-    | EntityRelation
-    | EntityReference
-    | Record<string, any>
-    | CMSType[];
-
-/**
- * @ignore
- */
-export type AnyProperty =
-    StringProperty |
-    NumberProperty |
-    BooleanProperty |
-    DateProperty |
-    GeopointProperty |
-    ReferenceProperty |
-    RelationProperty |
-    ArrayProperty<any, any> |
-    MapProperty<any>;
-
-/**
- * @group Entity properties
- */
-export type Property<T extends CMSType = any> =
-    T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? DateProperty :
-                    T extends GeoPoint ? GeopointProperty :
-                        T extends EntityRelation | EntityRelation[] ? RelationProperty :
-                            T extends EntityReference ? ReferenceProperty :
-                                T extends Array<CMSType> ? ArrayProperty<T> :
-                                    T extends Record<string, any> ? MapProperty<T> : AnyProperty;
-
-/**
- * Interface including all common properties of a CMS property
- * @group Entity properties
- */
-export interface BaseProperty<T extends CMSType, CustomProps = any> {
-
-    /**
-     * type of the property
-     */
-    type: DataType;
-
+export interface BaseProperty<CustomProps = any> {
     /**
      * Property name (e.g. Product)
      */
@@ -87,17 +86,17 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     description?: string;
 
     /**
+     * Longer description of a field, displayed under a popover
+     */
+    longDescription?: string;
+
+    /**
      * You can use this prop to reuse a property that has been defined
      * in the top level of the CMS in the prop `fields`.
      * All the configuration will be taken from the inherited config, and
      * overwritten by the current property config.
      */
     propertyConfig?: string;
-
-    /**
-     * Longer description of a field, displayed under a popover
-     */
-    longDescription?: string;
 
     /**
      * Width in pixels of this column in the collection view. If not set
@@ -131,31 +130,9 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     validation?: PropertyValidationSchema;
 
     /**
-     * If you need to render a custom field, you can create a component that
-     * takes `FieldProps` as props. You receive the value, a function to
-     * update the value and additional utility props such as if there is an error.
-     * You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
-
-    /**
-     * Configure how a property is displayed as a preview, e.g. in the collection
-     * view. You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Preview?: React.ComponentType<PropertyPreviewProps<T, CustomProps>>;
-
-    /**
-     * Additional props that are passed to the components defined in `field`
-     * or in `preview`.
-     */
-    customProps?: CustomProps;
-
-    /**
      * This value will be set by default for new entities.
      */
-    defaultValue?: T | null;
+    defaultValue?: any;
 
     /**
      * Should this property be editable. If set to true, the user will be able to modify the property and
@@ -170,19 +147,384 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     widthPercentage?: number;
 
     /**
+     * Additional props that are passed to the components defined in `field`
+     * or in `preview`.
+     */
+    customProps?: CustomProps;
+
+    /**
+     * If you need to render a custom field, you can create a component that
+     * takes `FieldProps` as props. You receive the value, a function to
+     * update the value and additional utility props such as if there is an error.
+     * You can customize it by passing custom props that are received
+     * in the component.
+     */
+    Field?: React.ComponentType<FieldProps<any, CustomProps>>;
+
+    /**
+     * Configure how a property is displayed as a preview, e.g. in the collection
+     * view. You can customize it by passing custom props that are received
+     * in the component.
+     */
+    Preview?: React.ComponentType<PropertyPreviewProps<any, CustomProps>>;
+
+    /**
      * Use this to define dynamic properties that change based on the
      * entity's values. For example, you can make a field read-only if
      * another field has a certain value.
      * This function receives the same props as a `PropertyBuilder` and should return a partial `Property` object.
      */
-    dynamicProps?: (props: PropertyBuilderProps) => Partial<Property<T>>;
+    dynamicProps?: (props: PropertyBuilderProps) => Partial<Property>;
 }
 
 /**
  * @group Entity properties
  */
-export interface PropertyDisabledConfig {
+export interface StringProperty extends BaseProperty {
+    type: "string";
+    /**
+     * Rules for validating this property
+     */
+    validation?: StringPropertyValidationSchema;
+    /**
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown. You can use a simple object with the format
+     * `value` => `label`, or with the format `value` => `EnumValueConfig` if you
+     * need extra customization, (like disabling specific options or assigning
+     * colors). If you need to ensure the order of the elements, you can pass
+     * a `Map` instead of a plain object.
+     *
+     */
+    enum?: EnumValues;
+    /**
+     * Is this string property long enough so it should be displayed in
+     * a multiple line field. Defaults to false. If set to true,
+     * the number of lines adapts to the content
+     */
+    multiline?: boolean;
+    /**
+     * Should this string property be displayed as a markdown field. If true,
+     * the field is rendered as a text editors that supports markdown highlight
+     * syntax. It also includes a preview of the result.
+     */
+    markdown?: boolean;
+    /**
+     * You can specify a `Storage` configuration. It is used to
+     * indicate that this string refers to a path in your storage provider.
+     */
+    storage?: StorageConfig;
+    /**
+     * If the value of this property is a URL, you can set this flag to true
+     * to add a link, or one of the supported media types to render a preview
+     */
+    url?: boolean | PreviewType;
+    /**
+     * Does this field include an email
+     */
+    email?: boolean;
+    /**
+     * Should this string be rendered as a tag instead of just text.
+     */
+    previewAsTag?: boolean;
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
+    /**
+     * You can use this property (a string) to behave as a reference to another
+     * collection. The stored value is the ID of the entity in the
+     * collection, and the `path` prop is used to
+     * define the collection this reference points to.
+     */
+    reference?: ReferenceProperty;
+}
 
+/**
+ * @group Entity properties
+ */
+export interface NumberProperty extends BaseProperty {
+    type: "number";
+    /**
+     * Rules for validating this property
+     */
+    validation?: NumberPropertyValidationSchema;
+    /**
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown.
+     */
+    enum?: EnumValues;
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface BooleanProperty extends BaseProperty {
+    type: "boolean";
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface DateProperty extends BaseProperty {
+    type: "date";
+    /**
+     * Rules for validating this property
+     */
+    validation?: DatePropertyValidationSchema;
+    /**
+     * Set the granularity of the field to a date or date + time.
+     * Defaults to `date_time`.
+     *
+     */
+    mode?: "date" | "date_time";
+    /**
+     * If this flag is  set to `on_create` or `on_update` this timestamp is
+     * updated automatically on creation of the entity only or on every
+     * update (including creation). Useful for creating `created_on` or
+     * `updated_on` fields
+     */
+    autoValue?: "on_create" | "on_update";
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface GeopointProperty extends BaseProperty {
+    type: "geopoint";
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface ReferenceProperty extends BaseProperty {
+    type: "reference";
+    /**
+     * Absolute collection path of the collection this reference points to.
+     * The collection of the entity is inferred based on the root navigation, so
+     * the filters and search delegate existing there are applied to this view
+     * as well.
+     * You can leave this prop undefined if the path is not yet know, e.g.
+     * you are using a property builder and the path depends on a different
+     * property.
+     */
+    path?: string;
+    /**
+     * Allow selection of entities that pass the given filter only.
+     * e.g. `forceFilter: { age: [">=", 18] }`
+     */
+    forceFilter?: FilterValues<string>;
+    /**
+     * Properties that need to be rendered when displaying a preview of this
+     * reference. If not specified the first 3 are used. Only the first 3
+     * specified values are considered.
+     */
+    previewProperties?: string[];
+    /**
+     * Should the reference include the ID of the entity. Defaults to `true`
+     */
+    includeId?: boolean;
+    /**
+     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
+     */
+    includeEntityLink?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface RelationProperty extends BaseProperty {
+    type: "relation";
+    /**
+     * The name of the relation this property refers to. This name must match
+     * one of the `relationName`s defined in the top-level `relations` array
+     * of the collection.
+     */
+    relationName: string;
+    /**
+     * Allow selection of entities that pass the given filter only.
+     * e.g. `forceFilter: { age: [">=", 18] }`
+     */
+    forceFilter?: FilterValues<string>;
+    /**
+     * Properties that need to be rendered when displaying a preview of this
+     * reference. If not specified the first 3 are used. Only the first 3
+     * specified values are considered.
+     */
+    previewProperties?: string[];
+    /**
+     * Should the reference include the ID of the entity. Defaults to `true`
+     */
+    includeId?: boolean;
+    /**
+     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
+     */
+    includeEntityLink?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface ArrayProperty extends BaseProperty {
+    type: "array";
+    /**
+     * The property of this array.
+     * You can specify any property (except another Array property)
+     * You can leave this field empty only if you are providing a custom field,
+     * or using the `oneOf` prop, otherwise an error will be thrown.
+     */
+    of?: Property;
+    /**
+     * Use this field if you would like to have an array of typed objects.
+     * It is useful if you need to have values of different types in the same
+     * array.
+     * Each entry of the array is an object with the shape:
+     * ```
+     * { type: "YOUR_TYPE", value: "YOUR_VALUE"}
+     * ```
+     * Note that you can use any property so `value` can take any value (strings,
+     * numbers, array, objects...)
+     * You can customise the `type` and `value` fields to suit your needs.
+     *
+     * An example use case for this feature may be a blog entry, where you have
+     * images and text blocks using markdown.
+     */
+    oneOf?: {
+        /**
+         * Record of properties, where the key is the `type` and the value
+         * is the corresponding property
+         */
+        properties: Properties;
+        /**
+         * Order in which the properties are displayed.
+         * If you are specifying your collection as code, the order is the same as the
+         * one you define in `properties`, and you don't need to specify this prop.
+         */
+        propertiesOrder?: string[];
+        /**
+         * Name of the field to use as the discriminator for type
+         * Defaults to `type`
+         */
+        typeField?: string;
+        /**
+         * Name of the  field to use as the value
+         * Defaults to `value`
+         */
+        valueField?: string;
+    };
+    /**
+     * Rules for validating this property
+     */
+    validation?: ArrayPropertyValidationSchema;
+    /**
+     * Should the field be initially expanded. Defaults to `true`
+     */
+    expanded?: boolean;
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel.
+     */
+    minimalistView?: boolean;
+    /**
+     * Can the elements in this array be reordered. Defaults to `true`.
+     * This prop has no effect if `disabled` is set to true.
+     */
+    sortable?: boolean;
+    /**
+     * Can the elements in this array be added. Defaults to `true`
+     * This prop has no effect if `disabled` is set to true.
+     */
+    canAddElements?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export interface MapProperty extends BaseProperty {
+    type: "map";
+    /**
+     * Record of properties included in this map.
+     */
+    properties?: Properties;
+    /**
+     * Order in which the properties are displayed.
+     * If you are specifying your collection as code, the order is the same as the
+     * one you define in `properties`, and you don't need to specify this prop.
+     */
+    propertiesOrder?: string[];
+    /**
+     * Rules for validating this property.
+     * NOTE: If you don't set `required` in the map property, an empty object
+     * will be considered valid, even if you set `required` in the properties.
+     */
+    validation?: PropertyValidationSchema;
+    /**
+     * Properties that are displayed when rendered as a preview
+     */
+    previewProperties?: string[];
+    /**
+     * Allow the user to add only some keys in this map.
+     * By default, all properties of the map have the corresponding field in
+     * the form view. Setting this flag to true allows to pick only some.
+     * Useful for map that can have a lot of sub-properties that may not be
+     * needed
+     */
+    pickOnlySomeKeys?: boolean;
+    /**
+     * Display the child properties as independent columns in the collection
+     * view
+     */
+    spreadChildren?: boolean;
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel. Note that this will also hide the title of this property.
+     */
+    minimalistView?: boolean;
+    /**
+     * Should the field be initially expanded. Defaults to `true`
+     */
+    expanded?: boolean;
+    /**
+     * Render this map as a key-value table that allows to use
+     * arbitrary keys. You don't need to define the properties in this case.
+     */
+    keyValue?: boolean;
+}
+
+/**
+ * @group Entity properties
+ */
+export type PropertyBuilderProps<M extends Record<string, any> = any> = {
+    values: Partial<M>;
+    previousValues?: Partial<M>;
+    propertyValue?: any;
+    index?: number;
+    path: string;
+    entityId?: string | number;
+    authController: AuthController;
+};
+
+/**
+ * @group Entity properties
+ */
+export interface PropertyDisabledConfig {
     /**
      * Enable this flag if you would like to clear the value of the field
      * when the corresponding property gets disabled.
@@ -205,11 +547,6 @@ export interface PropertyDisabledConfig {
 }
 
 /**
- * @group Entity properties
- */
-export type EnumType = number | string;
-
-/**
  * We use this type to define mapping between string or number values in
  * the data source to a label (such in a select dropdown).
  * The key in this Record is the value saved in the datasource, and the value in
@@ -220,8 +557,7 @@ export type EnumType = number | string;
  * If you need to ensure the order of the elements use an array of {@link EnumValueConfig}
  * @group Entity properties
  */
-export type EnumValues = EnumValueConfig[]
-    | Record<string | number, string | EnumValueConfig>;
+export type EnumValues = EnumValueConfig[] | Record<string | number, string | EnumValueConfig>;
 
 /**
  * Configuration for a particular entry in an `EnumValues`
@@ -245,485 +581,6 @@ export type EnumValueConfig = {
      * your own {@link ColorScheme}
      */
     color?: ColorKey | ColorScheme;
-}
-
-/**
- * Record of properties of an entity or a map property
- * @group Entity properties
- */
-export type Properties<M extends Record<string, any> = any> = {
-    [k in keyof M]: Property<M[keyof M]>;
-};
-
-/**
- * @group Entity properties
- */
-export type PropertyBuilderProps<M extends Record<string, any> = any> =
-    {
-        /**
-         * Current values of the entity
-         */
-        values: Partial<M>;
-        /**
-         * Previous values of the entity before being saved
-         */
-        previousValues?: Partial<M>;
-        /**
-         * Current value of this property
-         */
-        propertyValue?: any;
-        /**
-         * Index of this property (only for arrays)
-         */
-        index?: number;
-        /**
-         * Path of the entity in the data source
-         */
-        path: string;
-        /**
-         * Entity ID
-         */
-        entityId?: string | number;
-
-        /**
-         * Controller to manage authentication
-         */
-        authController: AuthController;
-    };
-
-/**
- * You can use this type to define a property dynamically, based
- * on the current values of the entity, the previous values and the
- * current value of the property, as well as the path and entity ID.
- * @group Entity properties
- * @deprecated Use `dynamicProps` within a static `Property` definition instead. This will be removed in a future version.
- */
-export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
-    ({
-         values,
-         previousValues,
-         propertyValue,
-         index,
-         path,
-         entityId,
-         authController
-     }: PropertyBuilderProps<M>) => Property<T> | null;
-
-/**
- * @group Entity properties
- * @deprecated Use `Properties` with `dynamicProps` instead. This will be removed in a future version.
- */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
-    Property<T>
-    | PropertyBuilder<T, M>;
-
-/**
- * @group Entity properties
- * @deprecated Use `Properties` with `dynamicProps` instead. This will be removed in a future version.
- */
-export type PropertiesOrBuilders<M extends Record<string, any> = any> = {
-    [k in keyof M]: PropertyOrBuilder<M[k], M>;
-};
-
-/**
- * @group Entity properties
- */
-export interface NumberProperty extends BaseProperty<number> {
-
-    type: "number";
-
-    /**
-     * You can use the enum values providing a map of possible
-     * exclusive values the property can take, mapped to the label that it is
-     * displayed in the dropdown.
-     */
-    enum?: EnumValues;
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: NumberPropertyValidationSchema,
-
-    /**
-     * Add an icon to clear the value and set it to `null`. Defaults to `false`
-     */
-    clearable?: boolean;
-}
-
-/**
- * @group Entity properties
- */
-export interface BooleanProperty extends BaseProperty<boolean> {
-
-    type: "boolean";
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: PropertyValidationSchema,
-
-}
-
-/**
- * @group Entity properties
- */
-export interface StringProperty extends BaseProperty<string> {
-
-    type: "string";
-
-    /**
-     * Is this string property long enough so it should be displayed in
-     * a multiple line field. Defaults to false. If set to true,
-     * the number of lines adapts to the content
-     */
-    multiline?: boolean;
-
-    /**
-     * Should this string property be displayed as a markdown field. If true,
-     * the field is rendered as a text editors that supports markdown highlight
-     * syntax. It also includes a preview of the result.
-     */
-    markdown?: boolean;
-
-    /**
-     * You can use the enum values providing a map of possible
-     * exclusive values the property can take, mapped to the label that it is
-     * displayed in the dropdown. You can use a simple object with the format
-     * `value` => `label`, or with the format `value` => `EnumValueConfig` if you
-     * need extra customization, (like disabling specific options or assigning
-     * colors). If you need to ensure the order of the elements, you can pass
-     * a `Map` instead of a plain object.
-     *
-     */
-    enum?: EnumValues;
-
-    /**
-     * You can specify a `Storage` configuration. It is used to
-     * indicate that this string refers to a path in your storage provider.
-     */
-    storage?: StorageConfig;
-
-    /**
-     * If the value of this property is a URL, you can set this flag to true
-     * to add a link, or one of the supported media types to render a preview
-     */
-    url?: boolean | PreviewType;
-
-    /**
-     * Does this field include an email
-     */
-    email?: boolean;
-
-    /**
-     * Should this string be rendered as a tag instead of just text.
-     */
-    previewAsTag?: boolean;
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: StringPropertyValidationSchema;
-
-    /**
-     * Add an icon to clear the value and set it to `null`. Defaults to `false`
-     */
-    clearable?: boolean;
-
-    /**
-     * You can use this property (a string) to behave as a reference to another
-     * collection. The stored value is the ID of the entity in the
-     * collection, and the `path` prop is used to
-     * define the collection this reference points to.
-     */
-    reference?: ReferenceProperty;
-}
-
-/**
- * @group Entity properties
- */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any>
-    extends BaseProperty<T> {
-
-    type: "array";
-
-    /**
-     * The property of this array.
-     * You can specify any property (except another Array property)
-     * You can leave this field empty only if you are providing a custom field,
-     * or using the `oneOf` prop, otherwise an error will be thrown.
-     */
-    of?: Property<ArrayT> | Property<ArrayT>[];
-
-    /**
-     * Use this field if you would like to have an array of typed objects.
-     * It is useful if you need to have values of different types in the same
-     * array.
-     * Each entry of the array is an object with the shape:
-     * ```
-     * { type: "YOUR_TYPE", value: "YOUR_VALUE"}
-     * ```
-     * Note that you can use any property so `value` can take any value (strings,
-     * numbers, array, objects...)
-     * You can customise the `type` and `value` fields to suit your needs.
-     *
-     * An example use case for this feature may be a blog entry, where you have
-     * images and text blocks using markdown.
-     */
-    oneOf?: {
-        /**
-         * Record of properties, where the key is the `type` and the value
-         * is the corresponding property
-         */
-        properties: Properties;
-
-        /**
-         * Order in which the properties are displayed.
-         * If you are specifying your collection as code, the order is the same as the
-         * one you define in `properties`, and you don't need to specify this prop.
-         */
-        propertiesOrder?: string[];
-
-        /**
-         * Name of the field to use as the discriminator for type
-         * Defaults to `type`
-         */
-        typeField?: string;
-
-        /**
-         * Name of the  field to use as the value
-         * Defaults to `value`
-         */
-        valueField?: string;
-    };
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: ArrayPropertyValidationSchema;
-
-    /**
-     * Should the field be initially expanded. Defaults to `true`
-     */
-    expanded?: boolean;
-
-    /**
-     * Display the child properties directly, without being wrapped in an
-     * extendable panel.
-     */
-    minimalistView?: boolean;
-
-    /**
-     * Can the elements in this array be reordered. Defaults to `true`.
-     * This prop has no effect if `disabled` is set to true.
-     */
-    sortable?: boolean;
-
-    /**
-     * Can the elements in this array be added. Defaults to `true`
-     * This prop has no effect if `disabled` is set to true.
-     */
-    canAddElements?: boolean;
-
-}
-
-/**
- * @group Entity properties
- */
-export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>> extends BaseProperty<T> {
-
-    type: "map";
-
-    /**
-     * Record of properties included in this map.
-     */
-    properties?: Properties<T>;
-
-    /**
-     * Order in which the properties are displayed.
-     * If you are specifying your collection as code, the order is the same as the
-     * one you define in `properties`, and you don't need to specify this prop.
-     */
-    propertiesOrder?: Extract<keyof T, string>[];
-
-    /**
-     * Rules for validating this property.
-     * NOTE: If you don't set `required` in the map property, an empty object
-     * will be considered valid, even if you set `required` in the properties.
-     */
-    validation?: PropertyValidationSchema,
-
-    /**
-     * Properties that are displayed when rendered as a preview
-     */
-    previewProperties?: Partial<Extract<keyof T, string>>[];
-
-    /**
-     * Allow the user to add only some keys in this map.
-     * By default, all properties of the map have the corresponding field in
-     * the form view. Setting this flag to true allows to pick only some.
-     * Useful for map that can have a lot of sub-properties that may not be
-     * needed
-     */
-    pickOnlySomeKeys?: boolean;
-
-    /**
-     * Display the child properties as independent columns in the collection
-     * view
-     */
-    spreadChildren?: boolean;
-
-    /**
-     * Display the child properties directly, without being wrapped in an
-     * extendable panel. Note that this will also hide the title of this property.
-     */
-    minimalistView?: boolean;
-
-    /**
-     * Should the field be initially expanded. Defaults to `true`
-     */
-    expanded?: boolean;
-
-    /**
-     * Render this map as a key-value table that allows to use
-     * arbitrary keys. You don't need to define the properties in this case.
-     */
-    keyValue?: boolean;
-
-}
-
-/**
- * @group Entity properties
- */
-export interface DateProperty extends BaseProperty<Date> {
-
-    type: "date";
-
-    /**
-     * Set the granularity of the field to a date or date + time.
-     * Defaults to `date_time`.
-     *
-     */
-    mode?: "date" | "date_time";
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: DatePropertyValidationSchema;
-
-    /**
-     * If this flag is  set to `on_create` or `on_update` this timestamp is
-     * updated automatically on creation of the entity only or on every
-     * update (including creation). Useful for creating `created_on` or
-     * `updated_on` fields
-     */
-    autoValue?: "on_create" | "on_update"
-
-    /**
-     * Add an icon to clear the value and set it to `null`. Defaults to `false`
-     */
-    clearable?: boolean;
-}
-
-/**
- * @group Entity properties
- */
-// TODO: currently this is the only unsupported field
-export interface GeopointProperty extends BaseProperty<GeoPoint> {
-
-    type: "geopoint";
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: PropertyValidationSchema,
-
-}
-
-/**
- * @group Entity properties
- */
-export interface ReferenceProperty extends BaseProperty<EntityReference> {
-
-    type: "reference";
-
-    /**
-     * Absolute collection path of the collection this reference points to.
-     * The collection of the entity is inferred based on the root navigation, so
-     * the filters and search delegate existing there are applied to this view
-     * as well.
-     * You can leave this prop undefined if the path is not yet know, e.g.
-     * you are using a property builder and the path depends on a different
-     * property.
-     */
-    path?: string;
-
-    /**
-     * Allow selection of entities that pass the given filter only.
-     * e.g. `forceFilter: { age: [">=", 18] }`
-     */
-    forceFilter?: FilterValues<string>;
-
-    /**
-     * Properties that need to be rendered when displaying a preview of this
-     * reference. If not specified the first 3 are used. Only the first 3
-     * specified values are considered.
-     */
-    previewProperties?: string[];
-
-    /**
-     * Should the reference include the ID of the entity. Defaults to `true`
-     */
-    includeId?: boolean;
-
-    /**
-     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
-     */
-    includeEntityLink?: boolean;
-
-}
-
-/**
- * @group Entity properties
- */
-export interface RelationProperty extends BaseProperty<EntityRelation | EntityRelation[]> {
-
-    type: "relation";
-
-    /**
-     * The name of the relation this property refers to. This name must match
-     * one of the `relationName`s defined in the top-level `relations` array
-     * of the collection.
-     */
-    relationName: string;
-
-    /**
-     * Allow selection of entities that pass the given filter only.
-     * e.g. `forceFilter: { age: [">=", 18] }`
-     */
-    forceFilter?: FilterValues<string>;
-
-    /**
-     * Properties that need to be rendered when displaying a preview of this
-     * reference. If not specified the first 3 are used. Only the first 3
-     * specified values are considered.
-     */
-    previewProperties?: string[];
-
-    /**
-     * Should the reference include the ID of the entity. Defaults to `true`
-     */
-    includeId?: boolean;
-
-    /**
-     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
-     */
-    includeEntityLink?: boolean;
-
-    /**
-     * How to render this relation in the UI
-     */
-    widget?: "select" | "dialog";
-
 }
 
 /**
@@ -812,7 +669,6 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
  * @group Entity properties
  */
 export type StorageConfig = {
-
     /**
      * File MIME types that can be uploaded to this reference. Don't specify for
      * all.
@@ -919,7 +775,7 @@ export interface UploadedFileContext {
     /**
      * Property related to this upload
      */
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty;
 
     /**
      * Entity ID
@@ -954,7 +810,7 @@ export type PreviewType = "image" | "video" | "audio" | "file";
  * @group Entity properties
  */
 export type FileType =
-    "image/*"
+    | "image/*"
     | "video/*"
     | "audio/*"
     | "application/*"

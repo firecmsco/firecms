@@ -1,7 +1,6 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
     DateProperty,
     EnumValueConfig,
     GeopointProperty,
@@ -11,8 +10,9 @@ import {
     RelationProperty,
     StringProperty
 } from "./properties";
-import { EntityReference, EntityRelation, GeoPoint } from "./entities";
+
 import { EntityCollection } from "./collections";
+import { Relation } from "./relations";
 
 /**
  * This is the same entity collection you define, only all the property builders
@@ -23,7 +23,7 @@ export type ResolvedEntityCollection<M extends Record<string, any> = any> =
     Omit<EntityCollection<M>, "properties">
     &
     {
-        properties: ResolvedProperties<M>,
+        properties: ResolvedProperties,
         originalCollection?: EntityCollection<M>,
         editable?: boolean;
     }
@@ -31,131 +31,104 @@ export type ResolvedEntityCollection<M extends Record<string, any> = any> =
 /**
  * @group Entity properties
  */
-export type ResolvedProperty<T extends CMSType = CMSType> =
-    T extends string ? ResolvedStringProperty :
-        T extends number ? ResolvedNumberProperty :
-            T extends boolean ? ResolvedBooleanProperty :
-                T extends Date ? ResolvedTimestampProperty :
-                    T extends GeoPoint ? ResolvedGeopointProperty :
-                        T extends EntityReference ? ResolvedReferenceProperty :
-                            T extends EntityRelation | EntityRelation[] ? ResolvedRelationProperty :
-                                T extends CMSType[] ? ResolvedArrayProperty<T> :
-                                    T extends Record<string, any> ? ResolvedMapProperty<T> : any;
+export type ResolvedProperty =
+    | ResolvedStringProperty
+    | ResolvedNumberProperty
+    | ResolvedBooleanProperty
+    | ResolvedDateProperty
+    | ResolvedGeopointProperty
+    | ResolvedReferenceProperty
+    | ResolvedRelationProperty
+    | ResolvedArrayProperty
+    | ResolvedMapProperty;
 
 /**
  * @group Entity properties
  */
-export type ResolvedProperties<M extends Record<string, any> = any> = {
-    [k in keyof M]: ResolvedProperty<M[k]>;
+export type ResolvedProperties = {
+    [k: string]: ResolvedProperty;
 };
 
 /**
  * @group Entity properties
  */
-export type ResolvedStringProperty =
-    Omit<StringProperty, "enum" | "type"> &
-    {
-        type: "string";
-        resolved: true;
-        enum?: EnumValueConfig[];
-        fromBuilder: boolean;
-    }
+export interface ResolvedStringProperty extends StringProperty {
+    resolved: true;
+    fromBuilder: boolean;
+    enum?: EnumValueConfig[];
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedNumberProperty =
-    Omit<NumberProperty, "enum" | "type"> &
-    {
-        type: "number";
-        resolved: true;
-        enum?: EnumValueConfig[];
-        fromBuilder: boolean;
-    }
+export interface ResolvedNumberProperty extends NumberProperty {
+    resolved: true;
+    fromBuilder: boolean;
+    enum?: EnumValueConfig[];
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedBooleanProperty =
-    Omit<BooleanProperty, "type"> &
-    {
-        type: "boolean";
-        resolved: true;
-        fromBuilder: boolean;
-    }
+export interface ResolvedBooleanProperty extends BooleanProperty {
+    resolved: true;
+    fromBuilder: boolean;
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedTimestampProperty =
-    Omit<DateProperty, "type"> &
-    {
-        type: "date";
-        resolved: true;
-        fromBuilder: boolean;
-    }
+export interface ResolvedDateProperty extends DateProperty {
+    resolved: true;
+    fromBuilder: boolean;
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedGeopointProperty =
-    Omit<GeopointProperty, "type"> &
-    {
-        type: "geopoint";
-        resolved: true;
-        fromBuilder: boolean;
-    }
+export interface ResolvedGeopointProperty extends GeopointProperty {
+    resolved: true;
+    fromBuilder: boolean;
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedReferenceProperty =
-    Omit<ReferenceProperty, "type"> &
-    {
-        type: "reference";
-        resolved: true;
-        fromBuilder: boolean;
-    }
-/**
- * @group Entity properties
- */
-export type ResolvedRelationProperty =
-    Omit<RelationProperty, "type"> &
-    {
-        type: "relation";
-        resolved: true;
-        fromBuilder: boolean;
-    }
+export interface ResolvedReferenceProperty extends ReferenceProperty {
+    resolved: true;
+    fromBuilder: boolean;
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedArrayProperty<T extends ArrayT[] = any, ArrayT extends CMSType = any>
-    =
-    Omit<ArrayProperty<T, ArrayT>, "of" | "oneOf" | "type"> &
-    {
-        type: "array";
-        resolved: true;
-        of?: ResolvedProperty<any> | ResolvedProperty<any>[],
-        oneOf?: {
-            properties: ResolvedProperties
-            typeField?: string;
-            valueField?: string;
-        },
-        resolvedProperties: ResolvedProperty<any>[];
-        fromBuilder: boolean;
-    }
+export interface ResolvedRelationProperty extends RelationProperty {
+    resolved: true;
+    fromBuilder: boolean;
+    relation: Relation;
+}
 
 /**
  * @group Entity properties
  */
-export type ResolvedMapProperty<T extends Record<string, any> = any> =
-    Omit<MapProperty, "properties" | "type" | "propertiesOrder"> &
-    {
-        type: "map";
-        resolved: true;
-        properties?: ResolvedProperties<T>;
-        propertiesOrder?: Extract<keyof T, string>[];
-        fromBuilder: boolean;
-    }
+export interface ResolvedArrayProperty extends ArrayProperty {
+    resolved: true;
+    fromBuilder: boolean;
+    of?: ResolvedProperty;
+    oneOf?: {
+        properties: ResolvedProperties
+        typeField?: string;
+        valueField?: string;
+    },
+    resolvedProperties?: ResolvedProperty[];
+}
 
+/**
+ * @group Entity properties
+ */
+export interface ResolvedMapProperty extends MapProperty {
+    resolved: true;
+    fromBuilder: boolean;
+    properties?: ResolvedProperties;
+    propertiesOrder?: string[];
+}

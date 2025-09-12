@@ -7858,7 +7858,7 @@ export const userSchema: EntityCollection = buildCollection<User>({
     name: "User",
     properties: {
         source: ({ values }) => {
-            const properties = buildProperties<any>({
+            const properties = buildProperties({
                 type: {
                     dataType: "string",
                     enum: {
@@ -8063,7 +8063,7 @@ contains all the configurations related to a property. This is an array of
 `PropertyConfig` objects, which are defined as follows:
 
 ```typescript
-export type PropertyConfig<T extends CMSType = any> = {
+export type PropertyConfig<T = any> = {
 
     /**
      * Key used to identify this property config.

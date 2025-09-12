@@ -6,7 +6,6 @@ import {
     isPropertyBuilder,
     Properties,
     Property,
-    PropertyOrBuilder,
     ResolvedProperty,
     resolveProperty
 } from "@firecms/core";
@@ -81,7 +80,7 @@ export function processValueMapping(authController: AuthController, value: any, 
 
     if (property === undefined) return value;
     const usedProperty: ResolvedProperty | null = resolveProperty({
-        propertyOrBuilder: property,
+        property,
         authController
     })
     if (usedProperty === null) return value;

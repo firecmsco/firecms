@@ -110,7 +110,6 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 
 } & EntityCollection<M>;
 
-
 /**
  * This component is in charge of binding a datasource path with an {@link EntityCollection}
  * where it's configuration is defined. It includes an infinite scrolling table
@@ -384,17 +383,19 @@ export const EntityCollectionView = React.memo(
                                                 propertyKey,
                                                 entity
                                             }: GetPropertyForProps<M>) => {
-            let propertyOrBuilder: Property | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+            let property: Property | undefined = getPropertyInPath(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
-            if (!propertyOrBuilder) {
+            if (!property) {
                 // these 2 properties are coming from the resolved collection with default values
-                propertyOrBuilder = getPropertyInPath<M>(resolvedCollection.properties, propertyKey);
+                property = getPropertyInPath(resolvedCollection.properties, propertyKey);
             }
+            if (!property)
+                throw Error(`Property ${propertyKey} not found in collection ${collection.slug}`);
 
             return resolveProperty({
                 propertyKey,
-                propertyOrBuilder,
+                property,
                 path: entity.path,
                 values: entity.values,
                 entityId: entity.id,

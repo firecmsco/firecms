@@ -18,7 +18,7 @@ export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
 }
 
 export interface PropertiesToColumnsParams<M extends Record<string, any>> {
-    properties: ResolvedProperties<M>;
+    properties: ResolvedProperties;
     sortable?: boolean;
     forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
     AdditionalHeaderWidget?: React.ComponentType<{

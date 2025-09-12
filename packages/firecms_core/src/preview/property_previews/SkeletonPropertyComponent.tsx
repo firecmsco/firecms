@@ -46,7 +46,7 @@ export function SkeletonPropertyComponent({
                 content = <>{arrayProperty.of.map((p, i) => renderGenericArrayCell(p, i))} </>;
             } else {
                 if (arrayProperty.of.type === "map" && arrayProperty.of.properties) {
-                    content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewKeys);
+                    content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
                 } else if (arrayProperty.of.type === "string") {
                     if (arrayProperty.of.enum) {
                         content = renderArrayEnumTableCell();
@@ -75,7 +75,7 @@ export function SkeletonPropertyComponent({
     return (content || null);
 }
 
-function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<T>, size: PreviewSize) {
+function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty, size: PreviewSize) {
 
     if (!property.properties)
         return <></>;
@@ -138,7 +138,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
     );
 }
 
-function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
+function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedProperties, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties) as string[];

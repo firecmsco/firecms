@@ -6,6 +6,7 @@ import {
     LabelWithIconAndTooltip,
     ResolvedArrayProperty,
     ResolvedStringProperty,
+    StringProperty,
     useAuthController,
     useStorageSource
 } from "../../index";
@@ -32,7 +33,7 @@ export function MarkdownEditorFieldBinding({
                                                isSubmitting,
                                                context,
                                                customProps,
-                                           }: FieldProps<string, MarkdownEditorFieldProps>) {
+                                           }: FieldProps<StringProperty, MarkdownEditorFieldProps>) {
 
     const authController = useAuthController();
     const disabled = disabledProp || isSubmitting;
@@ -64,10 +65,10 @@ export function MarkdownEditorFieldBinding({
     }, [value]);
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property,
+        property: property,
         values: entityValues,
         authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    }) as ResolvedStringProperty | ResolvedArrayProperty;
 
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage?.fileName) {
@@ -92,10 +93,10 @@ export function MarkdownEditorFieldBinding({
     const storagePathBuilder = useCallback((file: File) => {
         if (!storage) return "/";
         const resolvedProperty = resolveProperty({
-            propertyOrBuilder: property,
+            property: property,
             values: entityValues,
             authController
-        }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+        }) as ResolvedStringProperty | ResolvedArrayProperty;
         return resolveStoragePathString({
             input: storage.storagePath,
             storage,

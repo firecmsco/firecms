@@ -96,7 +96,7 @@ export const userSchema: EntityCollection = buildCollection<User>({
     name: "User",
     properties: {
         source: ({ values }) => {
-            const properties = buildProperties<any>({
+            const properties = buildProperties({
                 type: {
                     dataType: "string",
                     enum: {

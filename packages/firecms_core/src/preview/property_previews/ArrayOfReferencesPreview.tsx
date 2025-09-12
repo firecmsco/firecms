@@ -1,4 +1,11 @@
-import { CMSType, EntityReference, PreviewSize, PropertyPreviewProps, ResolvedReferenceProperty } from "@firecms/types";
+import {
+    ArrayProperty,
+    EntityReference,
+    PreviewSize,
+    PropertyPreviewProps,
+    ReferenceProperty,
+    ResolvedReferenceProperty
+} from "@firecms/types";
 import { resolveArrayProperty } from "../../util";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { ReferencePreview } from "../components/ReferencePreview";
@@ -11,7 +18,8 @@ export function ArrayOfReferencesPreview({
                                              value,
                                              property: inputProperty,
                                              size
-                                         }: PropertyPreviewProps<EntityReference[]>) {
+                                         }: PropertyPreviewProps<ArrayProperty>) {
+
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({

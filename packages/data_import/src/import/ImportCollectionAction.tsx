@@ -108,7 +108,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
         authController
     });
 
-    const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;
+    const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties;
 
     const propertiesAndLevel = Object.entries(properties)
         .flatMap(([key, property]) => getPropertiesAndLevel(key, property, 0));
@@ -387,7 +387,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
                                                                      propertiesOrder
                                                                  }: {
     importConfig: ImportConfig,
-    properties: ResolvedProperties<M>,
+    properties: ResolvedProperties,
     propertiesOrder: Extract<keyof M, string>[],
 }) {
     const authController = useAuthController();
@@ -418,7 +418,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
 }
 
-function buildHeadersMappingFromData(objArr: object[], properties?: Properties<any>) {
+function buildHeadersMappingFromData(objArr: object[], properties?: Properties) {
     const headersMapping: Record<string, string> = {};
     objArr.filter(Boolean).forEach((obj) => {
         Object.keys(obj).forEach((key) => {

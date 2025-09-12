@@ -1,8 +1,8 @@
 import {
-    CMSType,
     DataType,
     Entity,
-    EntityReference, EntityRelation,
+    EntityReference,
+    EntityRelation,
     EntityStatus,
     EntityValues,
     Properties,
@@ -12,7 +12,7 @@ import {
 } from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
-export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
+export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
         return true;
     if (property.type === "date") {
@@ -20,7 +20,7 @@ export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boo
             return true;
     }
     if (property.type === "reference") {
-        return !property.path && !property.relation;
+        return !property.path;
     }
     return false;
 }
@@ -33,7 +33,7 @@ export function isPropertyBuilder(propertyOrBuilder?: Property | ResolvedPropert
     return typeof propertyOrBuilder?.dynamicProps === "function";
 }
 
-export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties | ResolvedProperties): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -89,7 +89,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                     }:
                                                                     {
                                                                         inputValues: Partial<EntityValues<M>>,
-                                                                        properties: ResolvedProperties<M>,
+                                                                        properties: ResolvedProperties,
                                                                         status: EntityStatus,
                                                                         timestampNowValue: any,
                                                                         setDateToMidnight: (input?: any) => any | undefined
@@ -127,7 +127,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
 export function sanitizeData<M extends Record<string, any>>
 (
     values: EntityValues<M>,
-    properties: ResolvedProperties<M>
+    properties: ResolvedProperties
 ) {
     const result: any = values;
     Object.entries(properties)
@@ -148,7 +148,7 @@ export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>
 
 export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
-    properties: ResolvedProperties<M>,
+    properties: ResolvedProperties,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> | undefined {
     const updatedValues = Object.entries(properties)

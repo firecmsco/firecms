@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
 import { getDefaultValueFor, mergeDeep } from "@firecms/common";
@@ -17,7 +17,7 @@ import { useAuthController } from "../../hooks";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function RepeatFieldBinding<T extends Array<any>>({
+export function RepeatFieldBinding({
                                                              propertyKey,
                                                              value,
                                                              error,
@@ -31,9 +31,14 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              underlyingValueHasChanged,
                                                              context,
                                                              disabled
-                                                         }: FieldProps<T>) {
+                                                         }: FieldProps<ArrayProperty>) {
 
     const authController = useAuthController();
+
+    if (property.type !== "array" || !property.of || Array.isArray(property.of)) {
+        throw Error("RepeatFieldBinding misconfiguration. Property `type` is not `array`");
+    }
+
     const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.of)
@@ -51,7 +56,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     }
 
     const expanded = property.expanded === undefined ? true : property.expanded;
-    const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
+    const ofProperty = property.of;
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
@@ -67,8 +72,9 @@ export function RepeatFieldBinding<T extends Array<any>>({
                             storedProps,
                             storeProps
                         }: ArrayEntryParams) => {
+        // @ts-ignore
         const childProperty = resolvedProperties[index] ?? ofProperty;
-        const fieldProps: PropertyFieldBindingProps<any, any> = {
+        const fieldProps: PropertyFieldBindingProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,
             property: storedProps ? mergeDeep(childProperty, storedProps) : childProperty,
@@ -89,7 +95,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     const sortable = property.sortable === undefined ? true : property.sortable;
     const arrayContainer = <ArrayContainer droppableId={propertyKey}
                                            addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
-                                           value={value}
+                                           value={value ?? []}
                                            buildEntry={buildEntry}
                                            onInternalIdAdded={setLastAddedId}
                                            disabled={isSubmitting || Boolean(property.disabled)}

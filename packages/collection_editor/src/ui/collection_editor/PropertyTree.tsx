@@ -51,7 +51,7 @@ export const PropertyTree = React.memo(
         namespace?: string;
         selectedPropertyKey?: string;
         onPropertyClick?: (propertyKey: string, namespace?: string) => void;
-        properties: Properties<M>;
+        properties: Properties;
         propertiesOrder?: string[];
         additionalFields?: AdditionalFieldDelegate<M>[];
         errors: Record<string, any>;

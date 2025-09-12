@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSType, FieldProps } from "@firecms/types";
+import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
@@ -16,23 +16,25 @@ import { useAuthController } from "../../hooks";
  * @group Form fields
  */
 export function ArrayCustomShapedFieldBinding({
-                                                                        propertyKey,
-                                                                        value,
-                                                                        error,
-                                                                        showError,
-                                                                        isSubmitting,
-                                                                        setValue,
-                                                                        minimalistView: minimalistViewProp,
-                                                                        property,
-                                                                        includeDescription,
-                                                                        context,
-                                                                        disabled
-                                                                    }: FieldProps<Array<CMSType>>) {
+                                                  propertyKey,
+                                                  value,
+                                                  error,
+                                                  showError,
+                                                  isSubmitting,
+                                                  setValue,
+                                                  setFieldValue,
+                                                  customProps,
+                                                  minimalistView: minimalistViewProp,
+                                                  property,
+                                                  includeDescription,
+                                                  context,
+                                                  disabled
+                                              }: FieldProps<ArrayProperty | ResolvedArrayProperty>) {
 
     const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;
 
-    let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
+    let resolvedProperties: ResolvedProperty[] | undefined = "resolvedProperties" in property ? property.resolvedProperties : undefined;
     if (!resolvedProperties) {
         resolvedProperties = getArrayResolvedProperties({
             propertyValue: value,
@@ -71,8 +73,12 @@ export function ArrayCustomShapedFieldBinding({
             context,
             partOfArray: true,
             minimalistView: false,
-            autoFocus: false
-        };
+            autoFocus: false,
+            value,
+            setValue,
+            setFieldValue,
+            customProps
+        } as FieldProps<any>;
         return <div key={`custom_shaped_array_${index}`} className="pb-4">
             <PropertyFieldBinding {...fieldProps}/>
         </div>;

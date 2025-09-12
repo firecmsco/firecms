@@ -1,6 +1,4 @@
-import React from "react";
-
-import { ArrayProperty, FieldProps, Property, PropertyConfig, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, Property, PropertyConfig, ResolvedProperty } from "@firecms/types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -46,7 +44,7 @@ export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
 }
 
-export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
+export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig> = {
     text_field: {
         key: "text_field",
         name: "Text field",
@@ -193,7 +191,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             storage: {
                 storagePath: "{path}"
             },
-            Field: StorageUploadFieldBinding as React.ComponentType<FieldProps<string>>
+            Field: StorageUploadFieldBinding
         }
     },
     multi_file_upload: {
@@ -256,6 +254,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: AddLinkIcon,
         color: "#ff0042",
         property: {
+            relationName: "",
             type: "relation",
             Field: RelationFieldBinding
         }
@@ -317,7 +316,6 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         color: "#ff9408",
         property: {
             type: "array",
-            of: [],
             Field: ArrayCustomShapedFieldBinding
         }
     },

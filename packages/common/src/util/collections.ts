@@ -7,13 +7,13 @@ import {
 } from "@firecms/types";
 import { isPropertyBuilder } from "./entities";
 
-export function sortProperties<M extends Record<string, any>>(properties: Properties<M>, propertiesOrder?: (keyof M)[]): Properties<M> {
+export function sortProperties<M extends Record<string, any>>(properties: Properties, propertiesOrder?: string[]): Properties {
     try {
         const propertiesKeys = Object.keys(properties);
         const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
         return allPropertiesOrder
             .map((key) => {
-                if (properties[key as keyof M]) {
+                if (properties[key]) {
                     const property = properties[key];
                     if (!isPropertyBuilder(property) && property?.type === "map" && property.properties) {
                         return ({
@@ -30,7 +30,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
                 }
             })
             .filter((a) => a !== undefined)
-            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as Properties<M>;
+            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as Properties;
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;

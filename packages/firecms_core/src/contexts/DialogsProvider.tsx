@@ -3,7 +3,7 @@ import { DialogControllerEntryProps, DialogsController } from "@firecms/types";
 
 export const DialogsControllerContext = React.createContext<DialogsController>({} as DialogsController);
 
-export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const DialogsProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     const [dialogEntries, setDialogEntries] = useState<DialogControllerEntryProps[]>([]);
     const dialogEntriesRef = useRef<DialogControllerEntryProps[]>(dialogEntries);

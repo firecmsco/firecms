@@ -13,7 +13,7 @@ export function editableProperty(property: Property): boolean {
     }
 }
 
-export function removeNonEditableProperties(properties: Properties<any>): Properties {
+export function removeNonEditableProperties(properties: Properties): Properties {
     return Object.entries(properties)
         .filter(([_, property]) => editableProperty(property))
         .map(([key, propertyOrBuilder]) => {

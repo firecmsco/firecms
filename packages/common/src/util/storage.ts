@@ -13,7 +13,7 @@ interface ResolveFilenameStringParams<M extends object> {
     values: EntityValues<M>;
     entityId?: string | number;
     path?: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+    property: ResolvedStringProperty | ResolvedArrayProperty,
     file: File;
     propertyKey: string;
 }
@@ -65,7 +65,7 @@ interface ResolveStoragePathStringParams<M extends object> {
     values: EntityValues<M>;
     entityId?: string | number;
     path?: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty;
     file: File;
     propertyKey: string;
 }

@@ -220,8 +220,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         return getYupEntitySchema(
             entityId,
             propertyKey && collection.properties[propertyKey as string]
-                ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties<any>
-                : {} as ResolvedProperties<any>,
+                ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties
+                : {} as ResolvedProperties,
             customFieldValidator);
     }, [collection, entityId, propertyKey, customFieldValidator]);
 
@@ -305,7 +305,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         disabled: false,
     };
 
-    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);
+    const property: ResolvedProperty | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);
     const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
         ? {
             propertyKey: propertyKey as string,

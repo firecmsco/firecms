@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { EnumType, FieldProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, FieldProps, ResolvedProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
@@ -26,9 +26,9 @@ export function MultiSelectFieldBinding({
                                             includeDescription,
                                             size = "large",
                                             autoFocus
-                                        }: FieldProps<EnumType[], any, any>) {
+                                        }: FieldProps<ArrayProperty, any, any>) {
 
-    const of: ResolvedProperty<any> | ResolvedProperty<any>[] = property.of;
+    const of = property.of;
     if (!of) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
@@ -41,7 +41,7 @@ export function MultiSelectFieldBinding({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = enumToObjectEntries(of.enum);
+    const enumValues = of.enum ? enumToObjectEntries(of.enum) : undefined;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
@@ -72,7 +72,7 @@ export function MultiSelectFieldBinding({
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setValue(value.filter(v => v !== enumKey));
+                    setValue((value ?? []).filter(v => v !== enumKey));
                 }}
             >
                 <CloseIcon size="smallest"/>
@@ -95,7 +95,7 @@ export function MultiSelectFieldBinding({
                     title={property.name ?? propertyKey}
                     className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
                 onValueChange={(updatedValue: string[]) => {
-                    let newValue: EnumType[] | null;
+                    let newValue;
                     if (of && (of as ResolvedProperty)?.type === "number") {
                         newValue = updatedValue ? (updatedValue as string[]).map((e) => parseFloat(e)) : [];
                     } else {

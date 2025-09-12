@@ -1,5 +1,5 @@
 import React from "react";
-import { PropertyPreviewProps, ResolvedStringProperty } from "@firecms/types";
+import { ArrayProperty, PropertyPreviewProps, ResolvedStringProperty } from "@firecms/types";
 
 import { resolveArrayProperty } from "../../util";
 import { StringPropertyPreview } from "../../preview";
@@ -15,7 +15,7 @@ export function ArrayOfStringsPreview({
                                           property: inputProperty,
                                           // entity,
                                           size
-                                      }: PropertyPreviewProps<string[]>) {
+                                      }: PropertyPreviewProps<ArrayProperty>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
@@ -45,7 +45,6 @@ export function ArrayOfStringsPreview({
                             <StringPropertyPreview propertyKey={propertyKey}
                                                    property={stringProperty}
                                                    value={v}
-                                // entity={entity}
                                                    size={size}/>
                         </ErrorBoundary>
                     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { resolveArrayProperty } from "../../util";
-import { PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
 
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
@@ -16,7 +16,7 @@ export function ArrayOfStorageComponentsPreview({
                                                     value,
                                                     property: inputProperty,
                                                     size
-                                                }: PropertyPreviewProps<string[]>) {
+                                                }: PropertyPreviewProps<ArrayProperty>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -36,6 +36,9 @@ export function ArrayOfStorageComponentsPreview({
 
     const childSize: PreviewSize = size === "medium" ? "medium" : "small";
 
+    if (!property.of) {
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
+    }
     return (
         <div className={"flex flex-wrap gap-2"}>
             {value &&
@@ -44,8 +47,7 @@ export function ArrayOfStorageComponentsPreview({
                         <PropertyPreview
                             propertyKey={propertyKey}
                             value={v}
-                            // entity={entity}
-                            property={property.of as ResolvedProperty<string>}
+                            property={property.of as ResolvedProperty}
                             size={childSize}/>
                     </ErrorBoundary>
                 )}

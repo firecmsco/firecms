@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from "react";
 
 import {
+    ArrayProperty,
     FieldProps,
     PreviewSize,
     ResolvedArrayProperty,
     ResolvedStringProperty,
-    StorageConfig
+    StorageConfig, StringProperty
 } from "@firecms/types";
 import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
@@ -49,7 +50,6 @@ const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
 const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500"
 
-type StorageUploadFieldProps = FieldProps<string | string[]>;
 
 export function StorageUploadFieldBinding({
                                               propertyKey,
@@ -63,7 +63,7 @@ export function StorageUploadFieldBinding({
                                               includeDescription,
                                               context,
                                               isSubmitting,
-                                          }: StorageUploadFieldProps) {
+                                          }: FieldProps<StringProperty | ArrayProperty>) {
 
     const authController = useAuthController();
 
@@ -97,9 +97,9 @@ export function StorageUploadFieldBinding({
     });
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property,
+        property,
         authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    });
 
     return (
 
@@ -359,7 +359,7 @@ export interface StorageUploadProps {
     value: StorageFieldItem[];
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -386,7 +386,7 @@ export function StorageUpload({
                               }: StorageUploadProps) {
 
     if (multipleFilesSupported) {
-        const arrayProperty = property as ResolvedArrayProperty<string[]>;
+        const arrayProperty = property as ResolvedArrayProperty;
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
                 throw Error("Storage field using array must be of data type string");
@@ -462,7 +462,7 @@ export function StorageUpload({
         : "Drag 'n' drop a file here, or click to select one";
 
     const renderProperty: ResolvedStringProperty = multipleFilesSupported
-        ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty
+        ? (property as ResolvedArrayProperty).of as ResolvedStringProperty
         : property as ResolvedStringProperty;
 
     const fileDropProps = {

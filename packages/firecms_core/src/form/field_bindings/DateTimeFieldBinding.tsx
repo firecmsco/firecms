@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FieldProps } from "@firecms/types";
+import { DateProperty, FieldProps } from "@firecms/types";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useCustomizationController } from "../../hooks";
@@ -9,7 +9,7 @@ import { DateTimeField } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
 
-type DateTimeFieldProps = FieldProps<Date>;
+type DateTimeFieldProps = FieldProps<DateProperty>;
 
 /**
  * Field that allows selecting a date
