@@ -1,6 +1,5 @@
 import React from "react";
-import { resolveArrayProperty } from "../../util";
-import { ArrayProperty, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
@@ -13,24 +12,18 @@ import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "@firecms/common";
 export function ArrayOneOfPreview({
                                       propertyKey,
                                       value,
-                                      property: inputProperty,
+                                      property: property,
                                       size,
                                       // entity
                                   }: PropertyPreviewProps<ArrayProperty>) {
 
-    if (inputProperty.type !== "array")
+    if (property.type !== "array")
         throw Error(
             `You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`
         )
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
-        propertyKey,
-        property: inputProperty as ArrayProperty,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
     if (property?.type !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
@@ -63,7 +56,7 @@ export function ArrayOneOfPreview({
                                     value={value[valueField]}
                                     // entity={entity}
                                     // @ts-ignore
-                                    property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty}
+                                    property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as Property}
                                     size={childSize}/>}
                             </ErrorBoundary>
                         </div>

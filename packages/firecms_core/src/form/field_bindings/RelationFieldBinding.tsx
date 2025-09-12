@@ -2,8 +2,8 @@ import React, { useCallback } from "react";
 import { Entity, FieldProps, RelationProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer, ErrorView } from "../../components";
-import { getIconForProperty, IconForView, resolveRelationProperty } from "../../util";
-import { getRelationFrom } from "@firecms/common";
+import { getIconForProperty, IconForView } from "../../util";
+import { getRelationFrom, resolveRelationProperty } from "@firecms/common";
 
 import { useEntitySelectionTable } from "../../hooks";
 import { cls } from "@firecms/ui";

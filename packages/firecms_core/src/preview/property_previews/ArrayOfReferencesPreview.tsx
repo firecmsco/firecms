@@ -1,13 +1,4 @@
-import {
-    ArrayProperty,
-    EntityReference,
-    PreviewSize,
-    PropertyPreviewProps,
-    ReferenceProperty,
-    ResolvedReferenceProperty
-} from "@firecms/types";
-import { resolveArrayProperty } from "../../util";
-import { useAuthController, useCustomizationController } from "../../hooks";
+import { ArrayProperty, PreviewSize, PropertyPreviewProps, ReferenceProperty } from "@firecms/types";
 import { ReferencePreview } from "../components/ReferencePreview";
 
 /**
@@ -16,18 +7,9 @@ import { ReferencePreview } from "../components/ReferencePreview";
 export function ArrayOfReferencesPreview({
                                              propertyKey,
                                              value,
-                                             property: inputProperty,
+                                             property: property,
                                              size
                                          }: PropertyPreviewProps<ArrayProperty>) {
-
-    const authController = useAuthController();
-    const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
-        propertyKey,
-        property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
     if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
@@ -42,7 +24,7 @@ export function ArrayOfReferencesPreview({
         <div className="flex flex-col w-full">
             {value &&
                 value.map((reference, index) => {
-                        const ofProperty = property.of as ResolvedReferenceProperty;
+                        const ofProperty = property.of as ReferenceProperty;
                         return <div className="mt-1 mb-1 w-full"
                                     key={`preview_array_ref_${propertyKey}_${index}`}>
                             <ReferencePreview

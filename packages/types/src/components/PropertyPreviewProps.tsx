@@ -1,4 +1,4 @@
-import { InferPropertyType, Property, ResolvedProperty } from "../types";
+import { InferPropertyType, Property } from "../types";
 
 /**
  * @group Preview components
@@ -8,7 +8,7 @@ export type PreviewSize = "small" | "medium" | "large";
 /**
  * @group Preview components
  */
-export interface PropertyPreviewProps<P extends Property | ResolvedProperty, CustomProps = any> {
+export interface PropertyPreviewProps<P extends Property, CustomProps = any> {
     /**
      * Name of the property
      */

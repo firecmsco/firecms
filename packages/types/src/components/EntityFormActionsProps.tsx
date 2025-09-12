@@ -1,9 +1,9 @@
-import { Entity, FormContext, ResolvedEntityCollection } from "../types";
+import { Entity, EntityCollection, FormContext } from "../types";
 import { FormexController } from "./formex";
 
 export interface EntityFormActionsProps {
     path: string;
-    collection: ResolvedEntityCollection;
+    collection: EntityCollection;
     entity?: Entity;
     layout: "bottom" | "side";
     savingError?: Error;

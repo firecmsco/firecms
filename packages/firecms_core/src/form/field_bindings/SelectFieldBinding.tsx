@@ -3,10 +3,11 @@ import React, { useCallback } from "react";
 import { FieldProps, NumberProperty, StringProperty } from "@firecms/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty, resolveEnumValues } from "../../util";
+import { getIconForProperty } from "../../util";
 import { CloseIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
+import { resolveEnumValues } from "@firecms/common";
 
 /**
  * If `enumValues` are set in the string config, this field renders a select

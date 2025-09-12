@@ -1,9 +1,9 @@
 import { collection, getFirestore, onSnapshot, query } from "@firebase/firestore";
-import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "@firecms/types";
 import Fuse from "fuse.js"
 
 import { FirebaseApp } from "@firebase/app";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
+import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 
 const MAX_SEARCH_RESULTS = 80;
 
@@ -32,7 +32,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                       databaseId
                   }: {
         path: string,
-        collection?: EntityCollection | ResolvedEntityCollection,
+        collection?: EntityCollection ,
         databaseId?: string
     }): Promise<boolean> => {
 
@@ -112,7 +112,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
     }
 }
 
-function buildIndex(list: (object & { id: string })[], collection: EntityCollection | ResolvedEntityCollection) {
+function buildIndex(list: (object & { id: string })[], collection: EntityCollection ) {
 
     const keys = ["id", ...Object.keys(collection.properties)];
 

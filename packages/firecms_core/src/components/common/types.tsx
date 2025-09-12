@@ -1,4 +1,4 @@
-import { CollectionSize, ResolvedProperty, SelectedCellProps } from "@firecms/types";
+import { CollectionSize, Property, SelectedCellProps } from "@firecms/types";
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 
@@ -45,7 +45,7 @@ export interface OnCellValueChangeParams<T = any, D = any> {
 export type UniqueFieldValidator = (props: {
     name: string,
     value: any,
-    property: ResolvedProperty,
+    property: Property,
     entityId?: string | number
 }) => Promise<boolean>;
 

@@ -7,7 +7,6 @@ import {
     ExportConfig,
     getDefaultValuesFor,
     resolveCollection,
-    ResolvedEntityCollection,
     useAuthController,
     useCustomizationController,
     useDataSource,
@@ -70,7 +69,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         collection: inputCollection
     });
 
-    const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
+    const collection: EntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path: path,
         propertyConfigs: customizationController.propertyConfigs,
@@ -126,7 +125,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         return [...resolvedExportColumnsValues, ...resolvedColumnsValues];
     }, [exportConfig?.additionalFields]);
 
-    const doDownload = useCallback(async (collection: ResolvedEntityCollection<M>,
+    const doDownload = useCallback(async (collection: EntityCollection<M>,
                                           exportConfig: ExportConfig<any> | undefined) => {
 
         onAnalyticsEvent?.("export_collection", {

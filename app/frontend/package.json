@@ -1,10 +1,10 @@
 {
-  "name": "firecms-example-postgres",
+  "name": "firecms-app-frontend",
   "version": "3.0.0-canary.258",
   "private": true,
   "type": "module",
   "dependencies": {
-    "shared": "workspace:*",
+    "firecms-app-shared": "workspace:*",
     "@apollo/client": "^3.12.6",
     "@firecms/collection_editor": "3.0.0-canary.258",
     "@firecms/collection_editor_firebase": "3.0.0-canary.258",

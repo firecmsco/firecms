@@ -14,7 +14,7 @@ const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
 
 export async function enhanceDataAPIStream<M extends object>(props: {
     apiKey: string,
-    entityId: string | number,
+    entityId?: string | number,
     entityName: string,
     entityDescription?: string,
     propertyKey?: string,

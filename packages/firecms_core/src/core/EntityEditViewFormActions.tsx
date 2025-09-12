@@ -2,15 +2,16 @@ import React, { useMemo } from "react";
 import {
     Entity,
     EntityAction,
-    EntityActionClickProps, EntityFormActionsProps,
+    EntityActionClickProps,
+    EntityCollection,
+    EntityFormActionsProps,
     FireCMSContext,
     FormContext,
-    ResolvedEntityCollection,
     SideEntityController
 } from "@firecms/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "@firecms/common";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "@firecms/common";
 import {
     Button,
     CircularProgress,
@@ -30,7 +31,6 @@ import {
     useSnackbarController
 } from "../hooks";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
-import { resolveEntityAction } from "../util";
 
 export function EntityEditViewFormActions({
                                               collection,
@@ -111,7 +111,7 @@ type ActionsViewProps<M extends object> = {
     savingError: Error | undefined,
     entity: Entity<M> | undefined,
     formActions: EntityAction[],
-    collection: ResolvedEntityCollection,
+    collection: EntityCollection,
     context: FireCMSContext,
     sideEntityController: SideEntityController,
     isSubmitting: boolean,

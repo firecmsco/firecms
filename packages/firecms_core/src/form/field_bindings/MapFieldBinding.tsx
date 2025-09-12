@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "@firecms/types";
+import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps } from "@firecms/types";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
@@ -38,7 +38,7 @@ export function MapFieldBinding({
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
 
-    let mapProperties: ResolvedProperties | Properties;
+    let mapProperties: Properties;
     if (pickOnlySomeKeys) {
         if (value) {
             mapProperties = pick(property.properties,

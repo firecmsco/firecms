@@ -1,5 +1,13 @@
-import { EntityCollection } from "@firecms/types";
-import { resolveCollectionRelations } from "../util";
+import {
+    EntityCollection,
+    NumberProperty,
+    Properties,
+    Property,
+    Relation,
+    RelationProperty,
+    StringProperty
+} from "@firecms/types";
+import { enumToObjectEntries, resolveCollectionRelations } from "../util";
 
 export class CollectionRegistry {
 
@@ -27,12 +35,14 @@ export class CollectionRegistry {
     }
 
     private _registerRecursively(collection: EntityCollection) {
-        if (this.collectionsByDbPath.has(collection.dbPath)) return;
-
-        this.collectionsByDbPath.set(collection.dbPath, collection);
-        if (collection.slug) {
-            this.collectionsBySlug.set(collection.slug, collection);
+        if (this.collectionsByDbPath.has(collection.dbPath)) {
+            return;
         }
+
+        const normalizedCollection = this.normalizeCollection(collection);
+        this.collectionsByDbPath.set(normalizedCollection.dbPath, normalizedCollection);
+        if (normalizedCollection.slug)
+            this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);
 
         const subcollections = (typeof collection.subcollections === "function"
             ? collection.subcollections()
@@ -41,6 +51,52 @@ export class CollectionRegistry {
         if (subcollections) {
             subcollections.forEach(subCollection => this._registerRecursively(subCollection));
         }
+    }
+
+    private normalizeCollection(collection: EntityCollection): EntityCollection {
+        const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
+        return {
+            ...collection,
+            properties
+        };
+    }
+
+    private normalizeProperties(properties: Properties, relations: Relation[]): Properties {
+        const newProperties: Properties = {};
+        for (const key in properties) {
+            newProperties[key] = this.normalizeProperty(properties[key], relations);
+        }
+        return newProperties;
+    }
+
+    private normalizeProperty(property: Property, relations: Relation[]): Property {
+        const newProperty = { ...property };
+
+        if (newProperty.type === "map" && newProperty.properties) {
+            newProperty.properties = this.normalizeProperties(newProperty.properties, relations);
+        } else if (newProperty.type === "array") {
+            if (newProperty.of) {
+                newProperty.of = this.normalizeProperty(newProperty.of, relations);
+            } else if (newProperty.oneOf && newProperty.oneOf.properties) {
+                newProperty.oneOf.properties = this.normalizeProperties(newProperty.oneOf.properties, relations);
+            }
+        } else if ((newProperty.type === "string" || newProperty.type === "number") && newProperty.enum) {
+            const stringOrNumberProperty = newProperty as StringProperty | NumberProperty;
+            if (typeof stringOrNumberProperty.enum === "object" && !Array.isArray(stringOrNumberProperty.enum)) {
+                (stringOrNumberProperty as any).enum = enumToObjectEntries(stringOrNumberProperty.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [];
+            }
+        } else if (newProperty.type === "relation") {
+            const relationProperty = newProperty as RelationProperty;
+            const relation = relations.find(r => r.relationName === relationProperty.relationName);
+            if (relation) {
+                // we attach the resolved relation to the property
+                (relationProperty as any).relation = relation;
+            } else {
+                console.warn(`Could not find relation for property with relationName: ${relationProperty.relationName}`);
+            }
+        }
+
+        return newProperty;
     }
 
     get(path: string): EntityCollection | undefined {

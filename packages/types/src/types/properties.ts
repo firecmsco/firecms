@@ -1,11 +1,11 @@
 import React from "react";
 import { FieldProps } from "./fields";
 import { EntityReference, EntityRelation, EntityValues, GeoPoint } from "./entities";
-import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { PropertyPreviewProps } from "../components";
 import { ColorKey, ColorScheme } from "./chips";
 import { AuthController } from "../controllers";
+import { Relation } from "./relations";
 
 /**
  * @group Entity properties
@@ -358,6 +358,8 @@ export interface RelationProperty extends BaseProperty {
      * of the collection.
      */
     relationName: string;
+
+    relation?: Relation;
     /**
      * Allow selection of entities that pass the given filter only.
      * e.g. `forceFilter: { age: [">=", 18] }`
@@ -775,7 +777,7 @@ export interface UploadedFileContext {
     /**
      * Property related to this upload
      */
-    property: ResolvedStringProperty | ResolvedArrayProperty;
+    property: StringProperty | ArrayProperty;
 
     /**
      * Entity ID

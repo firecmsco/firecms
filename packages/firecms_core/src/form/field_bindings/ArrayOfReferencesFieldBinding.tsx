@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { ArrayProperty, Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, Entity, EntityCollection, EntityReference, FieldProps, Property } from "@firecms/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
@@ -35,7 +35,7 @@ export function ArrayOfReferencesFieldBinding({
 
     const minimalistView = minimalistViewProp || property.minimalistView;
 
-    const ofProperty = property.of as ResolvedProperty;
+    const ofProperty = property.of as Property;
     if (ofProperty.type !== "reference") {
         throw Error("ArrayOfReferencesField expected a property containing references");
     }

@@ -1,4 +1,4 @@
-import { Entity, EntityCollection, ResolvedEntityCollection } from "../types";
+import { Entity, EntityCollection } from "../types";
 import { EntityFormProps } from "../components";
 
 /**
@@ -38,7 +38,7 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      * Collection representing the entities of this view.
      * If you leave it blank it will be induced by your navigation
      */
-    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> ;
 
     /**
      * Should update the URL when opening the dialog.

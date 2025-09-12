@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "@firecms/types";
+import { EntityCollection, Property } from "@firecms/types";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 
 export const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
-export function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
+export function useColumnIds<M extends Record<string, any>>(collection: EntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
         if (collection.propertiesOrder) {
             const propertyColumnConfigs = hideAndExpandKeys(collection, collection.propertiesOrder);
@@ -21,7 +21,7 @@ export function useColumnIds<M extends Record<string, any>>(collection: Resolved
     }, [collection, includeSubcollections]);
 }
 
-function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): PropertyColumnConfig[] {
+function hideAndExpandKeys<M extends Record<string, any>>(collection: EntityCollection<M>, keys: string[]): PropertyColumnConfig[] {
 
     return keys.flatMap((key) => {
         const property = collection.properties[key];
@@ -69,7 +69,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
     }).filter(Boolean) as PropertyColumnConfig[];
 }
 
-function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubCollections: boolean) {
+function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: EntityCollection<M>, includeSubCollections: boolean) {
     const propertyKeys = Object.keys(collection.properties);
 
     const additionalFields = collection.additionalFields ?? [];
@@ -93,7 +93,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
     return hideAndExpandKeys(collection, columnIds);
 }
 
-export function getColumnKeysForProperty(property: ResolvedProperty, key: string, disabled?: boolean): PropertyColumnConfig[] {
+export function getColumnKeysForProperty(property: Property, key: string, disabled?: boolean): PropertyColumnConfig[] {
     if (property.type === "map" && property.spreadChildren && property.properties) {
         return Object.entries(property.properties)
             .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(

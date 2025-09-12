@@ -1,5 +1,5 @@
 {
-  "name": "@firecms/custom-backend",
+  "name": "firecms-app-backend",
   "version": "1.0.0",
   "description": "Custom PostgreSQL backend for FireCMS with real-time sync",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "shared": "workspace:*",
+    "firecms-app-shared": "workspace:*",
     "@firecms/backend": "3.0.0-canary.258",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",

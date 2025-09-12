@@ -1,17 +1,10 @@
-import {
-    ResolvedArrayProperty,
-    ResolvedMapProperty,
-    ResolvedProperties,
-    ResolvedProperty,
-    ResolvedStringProperty,
-    PreviewSize
-} from "@firecms/types";
+import { ArrayProperty, MapProperty, PreviewSize, Properties, Property, StringProperty } from "@firecms/types";
 import React from "react";
 import { Skeleton } from "@firecms/ui";
 import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonPropertyComponentProps {
-    property: ResolvedProperty,
+    property: Property,
     size: PreviewSize
 }
 
@@ -30,7 +23,7 @@ export function SkeletonPropertyComponent({
 
     let content: React.ReactNode | any;
     if (property.type === "string") {
-        const stringProperty = property as ResolvedStringProperty;
+        const stringProperty = property as StringProperty;
         if (stringProperty.url) {
             content = renderUrlComponent(stringProperty, size);
         } else if (stringProperty.storage) {
@@ -39,7 +32,7 @@ export function SkeletonPropertyComponent({
             content = renderSkeletonText();
         }
     } else if (property.type === "array") {
-        const arrayProperty = property as ResolvedArrayProperty;
+        const arrayProperty = property as ArrayProperty;
 
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
@@ -62,7 +55,7 @@ export function SkeletonPropertyComponent({
         }
 
     } else if (property.type === "map") {
-        content = renderMap(property as ResolvedMapProperty, size);
+        content = renderMap(property as MapProperty, size);
     } else if (property.type === "date") {
         content = renderSkeletonText();
     } else if (property.type === "reference") {
@@ -75,7 +68,7 @@ export function SkeletonPropertyComponent({
     return (content || null);
 }
 
-function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty, size: PreviewSize) {
+function renderMap<T extends Record<string, any>>(property: MapProperty, size: PreviewSize) {
 
     if (!property.properties)
         return <></>;
@@ -138,7 +131,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty,
     );
 }
 
-function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedProperties, size: PreviewSize, previewProperties?: string[]) {
+function renderArrayOfMaps(properties: Properties, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties) as string[];
@@ -197,7 +190,7 @@ function renderArrayEnumTableCell() {
 }
 
 function renderGenericArrayCell(
-    property: ResolvedProperty,
+    property: Property,
     index = 0
 ) {
     return (
@@ -244,7 +237,7 @@ function renderReference() {
     return <Skeleton width={200} height={100}/>;
 }
 
-function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "large") {
+function renderUrlComponent(property: StringProperty, size: PreviewSize = "large") {
 
     if (typeof property.url === "boolean") {
         return <div style={{

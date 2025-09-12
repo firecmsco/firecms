@@ -4,7 +4,7 @@ import {
     Entity,
     EntityTableController,
     FilterValues,
-    ResolvedProperty,
+    Property,
     SelectedCellProps
 } from "@firecms/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
@@ -269,7 +269,7 @@ function createFilterField({
                                hidden,
                                setHidden
                            }: FilterFormFieldProps<{
-    resolvedProperty: ResolvedProperty,
+    resolvedProperty: Property,
     disabled: boolean,
 }>): React.ReactNode {
 
@@ -280,7 +280,7 @@ function createFilterField({
     const { resolvedProperty } = column.custom;
 
     const isArray = resolvedProperty?.type === "array";
-    const baseProperty: ResolvedProperty | undefined = isArray ? resolvedProperty.of : resolvedProperty;
+    const baseProperty: Property | undefined = isArray ? resolvedProperty.of : resolvedProperty;
     if (!baseProperty) {
         return null;
     }
@@ -327,7 +327,7 @@ function createFilterField({
     );
 }
 
-function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
+function filterableProperty(property: Property, partOfArray = false): boolean {
     if (partOfArray) {
         return ["string", "number", "date", "reference"].includes(property.type);
     }

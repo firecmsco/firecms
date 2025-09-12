@@ -1,11 +1,11 @@
-import { EntityValues, ResolvedProperties, ResolvedProperty } from "@firecms/core";
+import { EntityValues, Property, ResolvedProperties } from "@firecms/core";
 
 export function countStringCharacters(values: EntityValues<any>, properties: ResolvedProperties) {
     let count = 0;
 
     for (const key in values) {
         const value = values[key];
-        const property: ResolvedProperty = properties[key];
+        const property: Property = properties[key];
 
         if (property && !property.disabled) {
             if (property.type === "string" || property.type === "number") {

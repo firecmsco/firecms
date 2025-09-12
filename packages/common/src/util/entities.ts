@@ -7,12 +7,10 @@ import {
     EntityValues,
     Properties,
     Property,
-    ResolvedProperties,
-    ResolvedProperty
 } from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
-export function isReadOnly(property: Property | ResolvedProperty): boolean {
+export function isReadOnly(property: Property): boolean {
     if (property.readOnly)
         return true;
     if (property.type === "date") {
@@ -25,15 +23,15 @@ export function isReadOnly(property: Property | ResolvedProperty): boolean {
     return false;
 }
 
-export function isHidden(property: Property | ResolvedProperty): boolean {
+export function isHidden(property: Property): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder(propertyOrBuilder?: Property | ResolvedProperty) {
+export function isPropertyBuilder(propertyOrBuilder?: Property) {
     return typeof propertyOrBuilder?.dynamicProps === "function";
 }
 
-export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties | ResolvedProperties): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -89,7 +87,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                     }:
                                                                     {
                                                                         inputValues: Partial<EntityValues<M>>,
-                                                                        properties: ResolvedProperties,
+                                                                        properties: Properties,
                                                                         status: EntityStatus,
                                                                         timestampNowValue: any,
                                                                         setDateToMidnight: (input?: any) => any | undefined
@@ -127,7 +125,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
 export function sanitizeData<M extends Record<string, any>>
 (
     values: EntityValues<M>,
-    properties: ResolvedProperties
+    properties: Properties
 ) {
     const result: any = values;
     Object.entries(properties)
@@ -148,7 +146,7 @@ export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>
 
 export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
-    properties: ResolvedProperties,
+    properties: Properties,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> | undefined {
     const updatedValues = Object.entries(properties)
@@ -171,7 +169,7 @@ export function traverseValueProperty(inputValue: any,
 
     let value;
     if (property.type === "map" && property.properties) {
-        value = traverseValuesProperties(inputValue, property.properties as ResolvedProperties, operation);
+        value = traverseValuesProperties(inputValue, property.properties, operation);
     } else if (property.type === "array") {
         const of = property.of;
         if (of && Array.isArray(inputValue) && !Array.isArray(of)) {
@@ -179,7 +177,7 @@ export function traverseValueProperty(inputValue: any,
         } else if (of && Array.isArray(inputValue) && Array.isArray(of)) {
             value = inputValue.map((e, i) => {
                 if (i < of.length)
-                    return traverseValuesProperties(e, of[i], operation);
+                    return traverseValueProperty(e, of[i], operation);
                 return null
             }).filter(Boolean);
         } else if (property.oneOf && Array.isArray(inputValue)) {

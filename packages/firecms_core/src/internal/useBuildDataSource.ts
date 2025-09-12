@@ -13,13 +13,11 @@ import {
     FireCMSContext,
     ListenCollectionProps,
     ListenEntityProps,
-    NavigationController,
+    NavigationController, Properties,
     PropertyConfig,
-    ResolvedProperties,
     SaveEntityProps
 } from "@firecms/types";
 import { updateDateAutoValues } from "@firecms/common";
-import { resolveCollection } from "../util";
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
@@ -212,17 +210,7 @@ export function useBuildDataSource({
             const collection = collectionProp ?? navigationController.getCollection(path);
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
-            const resolvedCollection = collection
-                ? resolveCollection<M>({
-                    collection,
-                    path,
-                    entityId,
-                    propertyConfigs: propertyConfigs,
-                    authController
-                })
-                : undefined;
-
-            const properties: ResolvedProperties | undefined = resolvedCollection?.properties;
+            const properties: Properties | undefined = collection?.properties;
 
             const updatedValues: Partial<EntityValues<M>> = properties
                 ? updateDateAutoValues(

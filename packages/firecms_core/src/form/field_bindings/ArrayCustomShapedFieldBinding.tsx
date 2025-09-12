@@ -1,10 +1,10 @@
 import React from "react";
-import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, FieldProps, Property } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
-import { isReadOnly } from "@firecms/common";
-import { getArrayResolvedProperties, getIconForProperty, } from "../../util";
+import { getArrayResolvedProperties, isReadOnly } from "@firecms/common";
+import { getIconForProperty, } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useAuthController } from "../../hooks";
 
@@ -29,21 +29,18 @@ export function ArrayCustomShapedFieldBinding({
                                                   includeDescription,
                                                   context,
                                                   disabled
-                                              }: FieldProps<ArrayProperty | ResolvedArrayProperty>) {
+                                              }: FieldProps<ArrayProperty | ArrayProperty>) {
 
     const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;
 
-    let resolvedProperties: ResolvedProperty[] | undefined = "resolvedProperties" in property ? property.resolvedProperties : undefined;
-    if (!resolvedProperties) {
-        resolvedProperties = getArrayResolvedProperties({
-            propertyValue: value,
-            propertyKey,
-            property,
-            ignoreMissingFields: false,
-            authController
-        })
-    }
+    const resolvedProperties: Property[] | undefined = getArrayResolvedProperties({
+        propertyValue: value,
+        propertyKey,
+        property,
+        ignoreMissingFields: false,
+        authController
+    })
 
     const expanded = property.expanded === undefined ? true : property.expanded;
 

@@ -1,7 +1,6 @@
 import React from "react";
 
-import { resolveArrayProperty } from "../../util";
-import { ArrayProperty, PreviewSize, PropertyPreviewProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@firecms/types";
 
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
@@ -14,18 +13,12 @@ export function ArrayOfStorageComponentsPreview({
                                                     propertyKey,
                                                     // entity,
                                                     value,
-                                                    property: inputProperty,
+                                                    property: property,
                                                     size
                                                 }: PropertyPreviewProps<ArrayProperty>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
-        propertyKey,
-        property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
@@ -47,7 +40,7 @@ export function ArrayOfStorageComponentsPreview({
                         <PropertyPreview
                             propertyKey={propertyKey}
                             value={v}
-                            property={property.of as ResolvedProperty}
+                            property={property.of as Property}
                             size={childSize}/>
                     </ErrorBoundary>
                 )}

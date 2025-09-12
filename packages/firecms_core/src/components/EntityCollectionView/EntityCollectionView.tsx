@@ -13,7 +13,6 @@ import {
     FilterValues,
     PartialEntityCollection,
     Property,
-    ResolvedProperty,
     SaveEntityProps
 } from "@firecms/types";
 import {
@@ -22,20 +21,14 @@ import {
     useDataSourceTableController
 } from "../EntityCollectionTable";
 
-import {
-    getPropertyInPath,
-    getSubcollections,
-    resolveCollection,
-    resolveEntityAction,
-    resolveProperty
-} from "../../util";
+import { getPropertyInPath } from "../../util";
 import {
     canCreateEntity,
     canDeleteEntity,
-    canEditEntity,
+    canEditEntity, getSubcollections,
     mergeDeep,
     mergeEntityActions,
-    navigateToEntity,
+    navigateToEntity, resolveEntityAction
 } from "@firecms/common";
 import { ReferencePreview } from "../../preview";
 import {
@@ -49,7 +42,6 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import {
     AddIcon,
     Button,
@@ -72,7 +64,6 @@ import {
     deleteEntityAction,
     editEntityAction,
     OnCellValueChange,
-    OnColumnResizeParams,
     UniqueFieldValidator,
     useColumnIds,
     useTableSearchHelper
@@ -85,6 +76,8 @@ import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "../common/useScrollRestoration";
+import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import { OnColumnResizeParams } from "../common/types";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 
@@ -209,7 +202,7 @@ export const EntityCollectionView = React.memo(
 
         const tableController = useDataSourceTableController<M>({
             path,
-            collection,
+            collection: collection,
             lastDeleteTimestamp,
             scrollRestoration,
             updateUrl
@@ -230,11 +223,11 @@ export const EntityCollectionView = React.memo(
                 entityId: clickedEntity.id
             });
 
-            if (collection) {
-                addRecentId(collection.slug, clickedEntity.id);
+            if (collectionRef.current) {
+                addRecentId(collectionRef.current.slug, clickedEntity.id);
             }
 
-            const usedPath = collection?.collectionGroup ? clickedEntity.path : (path ?? clickedEntity.path);
+            const usedPath = collectionRef.current?.collectionGroup ? clickedEntity.path : (path ?? clickedEntity.path);
             navigateToEntity({
                 navigation,
                 path: usedPath,
@@ -349,7 +342,7 @@ export const EntityCollectionView = React.memo(
                 entityId: entity.id,
                 values: updatedValues,
                 previousValues: entity.values,
-                collection,
+                collection: collection,
                 status: "existing"
             };
 
@@ -372,12 +365,6 @@ export const EntityCollectionView = React.memo(
         };
 
         const resolvedFullPath = navigation.resolveDatabasePathsFrom(path);
-        const resolvedCollection = useMemo(() => resolveCollection<M>({
-            collection,
-            path: path,
-            propertyConfigs: customizationController.propertyConfigs,
-            authController,
-        }), [collection, path]);
 
         const getPropertyFor = useCallback(({
                                                 propertyKey,
@@ -387,24 +374,15 @@ export const EntityCollectionView = React.memo(
 
             // we might not find the property in the collection if combining property builders and map spread
             if (!property) {
-                // these 2 properties are coming from the resolved collection with default values
-                property = getPropertyInPath(resolvedCollection.properties, propertyKey);
+                property = getPropertyInPath(collection.properties, propertyKey);
             }
             if (!property)
                 throw Error(`Property ${propertyKey} not found in collection ${collection.slug}`);
 
-            return resolveProperty({
-                propertyKey,
-                property,
-                path: entity.path,
-                values: entity.values,
-                entityId: entity.id,
-                propertyConfigs: customizationController.propertyConfigs,
-                authController
-            });
-        }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
+            return property;
+        }, [customizationController.propertyConfigs, collection.properties]);
 
-        const displayedColumnIds = useColumnIds(resolvedCollection, true);
+        const displayedColumnIds = useColumnIds(collection, true);
         const subcollections = getSubcollections(collection);
 
         const additionalFields = useMemo(() => {
@@ -423,7 +401,7 @@ export const EntityCollectionView = React.memo(
                                     event.stopPropagation();
                                     navigateToEntity({
                                         openEntityMode,
-                                        collection,
+                                        collection: collection,
                                         entityId: entity.id,
                                         selectedTab: subcollection.slug,
                                         path,
@@ -546,7 +524,7 @@ export const EntityCollectionView = React.memo(
 
         const title = <Popover
             open={popOverOpen}
-            onOpenChange={setPopOverOpen}
+            onOpenChange={(open) => setPopOverOpen(open)}
             enabled={Boolean(collection.description)}
             trigger={<div className="flex flex-col items-start">
                 <Typography
@@ -583,7 +561,7 @@ export const EntityCollectionView = React.memo(
                                                              propertyKey,
                                                              onHover
                                                          }: {
-            property: ResolvedProperty,
+            property: Property,
             propertyKey: string,
             onHover: boolean
         }) => {
@@ -624,7 +602,7 @@ export const EntityCollectionView = React.memo(
             onTextSearchClick,
             textSearchEnabled
         } = useTableSearchHelper({
-            collection,
+            collection: collection,
             path: resolvedFullPath,
             parentCollectionIds
         });
@@ -646,9 +624,8 @@ export const EntityCollectionView = React.memo(
                     uniqueFieldValidator={uniqueFieldValidator}
                     title={title}
                     selectionController={usedSelectionController}
-                    highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
                     defaultSize={collection.defaultSize}
-                    properties={resolvedCollection.properties}
+                    properties={collection.properties}
                     getPropertyFor={getPropertyFor}
                     onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
                     onScroll={tableController.onScroll}

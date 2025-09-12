@@ -9,6 +9,8 @@ export * from "./paths";
 export * from "./regexp";
 export * from "./navigation_utils";
 export * from "./entity_actions";
+export * from "./fields";
+export * from "./resolutions";
 export * from "./permissions";
 export * from "./plurals";
 export * from "./references";

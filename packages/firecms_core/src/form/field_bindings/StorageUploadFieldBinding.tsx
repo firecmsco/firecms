@@ -1,18 +1,11 @@
 import React, { useCallback, useState } from "react";
 
-import {
-    ArrayProperty,
-    FieldProps,
-    PreviewSize,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig, StringProperty
-} from "@firecms/types";
+import { ArrayProperty, FieldProps, PreviewSize, StorageConfig, StringProperty } from "@firecms/types";
 import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { isReadOnly } from "@firecms/common";
-import { getIconForProperty, resolveProperty } from "../../util";
+import { getIconForProperty } from "../../util";
 import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
 import {
     closestCenter,
@@ -96,11 +89,6 @@ export function StorageUploadFieldBinding({
         setValue
     });
 
-    const resolvedProperty = resolveProperty({
-        property,
-        authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty;
-
     return (
 
         <>
@@ -118,7 +106,7 @@ export function StorageUploadFieldBinding({
                 name={propertyKey}
                 disabled={disabled ?? false}
                 autoFocus={autoFocus ?? false}
-                property={resolvedProperty}
+                property={property}
                 onChange={setValue}
                 setInternalValue={setInternalValue}
                 onFilesAdded={onFilesAdded}
@@ -140,7 +128,7 @@ export function StorageUploadFieldBinding({
 interface SortableStorageItemProps {
     id: number;
     entry: StorageFieldItem;
-    property: ResolvedStringProperty;
+    property: StringProperty;
     name: string;
     metadata?: Record<string, unknown>;
     storagePathBuilder: (file: File) => string;
@@ -249,7 +237,7 @@ function FileDropComponent({
     multipleFilesSupported: boolean,
     autoFocus: boolean,
     internalValue: StorageFieldItem[],
-    property: ResolvedStringProperty,
+    property: StringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata?: any,
     storagePathBuilder: (file: File) => string,
@@ -359,7 +347,7 @@ export interface StorageUploadProps {
     value: StorageFieldItem[];
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty;
+    property: StringProperty | ArrayProperty;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -386,7 +374,7 @@ export function StorageUpload({
                               }: StorageUploadProps) {
 
     if (multipleFilesSupported) {
-        const arrayProperty = property as ResolvedArrayProperty;
+        const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
                 throw Error("Storage field using array must be of data type string");
@@ -461,9 +449,9 @@ export function StorageUpload({
         ? "Drag 'n' drop some files here, or click to select files. Drag to reorder."
         : "Drag 'n' drop a file here, or click to select one";
 
-    const renderProperty: ResolvedStringProperty = multipleFilesSupported
-        ? (property as ResolvedArrayProperty).of as ResolvedStringProperty
-        : property as ResolvedStringProperty;
+    const renderProperty: StringProperty = multipleFilesSupported
+        ? (property as ArrayProperty).of as StringProperty
+        : property as StringProperty;
 
     const fileDropProps = {
         storage,

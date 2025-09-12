@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Property, ResolvedProperty } from "@firecms/types";
+import { Property } from "@firecms/types";
 
 /**
  * Hook we use to restore a value after it has been cleared
@@ -14,7 +14,7 @@ export function useClearRestoreValue<T>({
                                                             setValue
                                                         }:
                                                             {
-                                                                property: Property | ResolvedProperty,
+                                                                property: Property,
                                                                 value: T | null,
                                                                 setValue: (value: T | null, shouldValidate?: boolean) => void
                                                             }) {

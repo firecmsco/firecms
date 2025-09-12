@@ -1,5 +1,5 @@
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "@firecms/types";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
 /**
  * Utility function to perform a text search in an external index,
@@ -20,7 +20,7 @@ export function buildExternalSearchController({
 
         const init = (props: {
             path: string,
-            collection?: EntityCollection | ResolvedEntityCollection
+            collection?: EntityCollection
         }) => {
             return Promise.resolve(isPathSupported(props.path));
         }

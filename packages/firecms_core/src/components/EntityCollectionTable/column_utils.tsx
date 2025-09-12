@@ -1,6 +1,6 @@
 import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
-import { FilterValues, ResolvedProperties, ResolvedProperty } from "@firecms/types";
+import { FilterValues, Properties, Property } from "@firecms/types";
 import { VirtualTableColumn } from "../VirtualTable";
 import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
 import { getColumnKeysForProperty } from "../common/useColumnsIds";
@@ -18,11 +18,11 @@ export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
 }
 
 export interface PropertiesToColumnsParams<M extends Record<string, any>> {
-    properties: ResolvedProperties;
+    properties: Properties;
     sortable?: boolean;
     forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
     AdditionalHeaderWidget?: React.ComponentType<{
-        property: ResolvedProperty,
+        property: Property,
         propertyKey: string,
         onHover: boolean,
     }>;
@@ -30,7 +30,7 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
 
 export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forceFilter, AdditionalHeaderWidget }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
     const disabledFilter = Boolean(forceFilter);
-    return Object.entries<ResolvedProperty>(properties)
+    return Object.entries<Property>(properties)
         .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
         .map(({
                   key,
@@ -60,12 +60,12 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
         });
 }
 
-function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
+function filterableProperty(property: Property, partOfArray = false): boolean {
     if (partOfArray) {
         return ["string", "number", "date", "reference", "relation"].includes(property.type);
     }
     if (property.type === "array") {
-        if (property.of)
+        if (property.of && !Array.isArray(property.of))
             return filterableProperty(property.of, true);
         else
             return false;

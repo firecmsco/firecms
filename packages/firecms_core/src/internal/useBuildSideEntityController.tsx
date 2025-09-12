@@ -5,7 +5,7 @@ import {
     EntityCollection,
     EntitySidePanelProps,
     NavigationController,
-    ResolvedProperty,
+    Property,
     SideDialogPanelProps,
     SideDialogsController,
     SideEntityController
@@ -15,18 +15,17 @@ import {
     getNavigationEntriesFromPath,
     NavigationViewInternal,
     removeInitialAndTrailingSlashes,
-    resolveDefaultSelectedView,
+    resolveDefaultSelectedView, resolvedSelectedEntityView,
 } from "@firecms/common";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { useCustomizationController, useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";
 import { JSON_TAB_VALUE } from "../core/EntityEditView";
-import { resolveCollection, resolvedSelectedEntityView } from "../util";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";
 
-export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean, customizationController: CustomizationController, authController: AuthController): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean, customizationController: CustomizationController): string {
     if (small) return CONTAINER_FULL_WIDTH;
 
     const {
@@ -50,27 +49,21 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
         } else if (!props.collection) {
             return FORM_CONTAINER_WIDTH;
         } else {
-            return calculateCollectionDesiredWidth(props.collection, authController);
+            return calculateCollectionDesiredWidth(props.collection);
         }
     }
 }
 
 const collectionViewWidthCache: { [key: string]: string } = {};
 
-function calculateCollectionDesiredWidth(collection: EntityCollection<any>, authController: AuthController): string {
+function calculateCollectionDesiredWidth(collection: EntityCollection<any>): string {
     if (collectionViewWidthCache[collection.slug]) {
         return collectionViewWidthCache[collection.slug];
     }
-    const resolvedCollection = resolveCollection({
-        collection,
-        path: "__ignored",
-        ignoreMissingFields: true,
-        authController
-    });
 
     let result = FORM_CONTAINER_WIDTH
-    if (resolvedCollection?.properties) {
-        const values = Object.values(resolvedCollection.properties).map((p: ResolvedProperty) => getNestedPropertiesDepth(p));
+    if (collection?.properties) {
+        const values = Object.values(collection.properties).map((p: Property) => getNestedPropertiesDepth(p));
         const maxDepth = Math.max(...values);
         if (maxDepth < 3) {
             result = FORM_CONTAINER_WIDTH;
@@ -82,7 +75,7 @@ function calculateCollectionDesiredWidth(collection: EntityCollection<any>, auth
     return result;
 }
 
-function getNestedPropertiesDepth(property: ResolvedProperty, accumulator: number = 0): number {
+function getNestedPropertiesDepth(property: Property, accumulator: number = 0): number {
     if (property.type === "map" && property.properties) {
         const values = Object.values(property.properties).flatMap((property) => getNestedPropertiesDepth(property, accumulator + 1));
         return Math.max(...values);
@@ -283,7 +276,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
         formProps: props.formProps
     };
 
-    const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController, authController);
+    const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController);
     return {
         key: `${props.path}/${props.entityId}`,
         component: <EntitySidePanel {...resolvedPanelProps}/>,
@@ -293,8 +286,4 @@ const propsToSidePanel = (props: EntitySidePanelProps,
         onClose: props.onClose,
         additional: props
     };
-}
-
-function isSideUrl(url: string): boolean {
-    return url.endsWith("#" + SIDE_URL_HASH) || url.endsWith("#" + NEW_URL_HASH);
 }

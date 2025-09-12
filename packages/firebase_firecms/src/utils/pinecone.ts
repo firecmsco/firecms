@@ -1,6 +1,6 @@
 import { User as FirebaseUser } from "@firebase/auth";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "@firecms/types";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
 const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
 
@@ -60,7 +60,7 @@ export function buildPineconeSearchController({
 
         const init = (props: {
             path: string,
-            collection?: EntityCollection | ResolvedEntityCollection
+            collection?: EntityCollection
         }) => {
             // do nothing
             return Promise.resolve(isPathSupported(props.path));

@@ -10,7 +10,7 @@
 //     FormContext,
 //     PluginFormActionProps,
 //     PropertyFieldBindingProps,
-//     ResolvedEntityCollection
+//     EntityCollection
 // } from "@firecms/types";
 // import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 // import { PropertyFieldBinding } from "./PropertyFieldBinding";
@@ -109,7 +109,7 @@
 // }
 //
 // export type EntityFormSaveParams<M extends Record<string, any>> = {
-//     collection: ResolvedEntityCollection<M>,
+//     collection: EntityCollection<M>,
 //     path: string,
 //     entityId: string | number | undefined,
 //     values: EntityValues<M>,
@@ -137,7 +137,7 @@
 //             equal(a.entity?.values, b.entity?.values);
 //     }) as typeof EntityFormInternal;
 //
-// function getDataSourceEntityValues<M extends object>(initialResolvedCollection: ResolvedEntityCollection,
+// function getDataSourceEntityValues<M extends object>(initialResolvedCollection: EntityCollection,
 //                                                      status: "new" | "existing" | "copy",
 //                                                      entity: Entity<M> | undefined): Partial<EntityValues<M>> {
 //     const properties = initialResolvedCollection.properties;
@@ -503,7 +503,7 @@
 //     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
 //     underlyingChanges: Partial<M>,
 //     entity: Entity<M> | undefined,
-//     resolvedCollection: ResolvedEntityCollection<M>,
+//     resolvedCollection: EntityCollection<M>,
 //     formContext: FormContext<M>,
 //     onDiscard?: () => void,
 //     status: "new" | "existing" | "copy",

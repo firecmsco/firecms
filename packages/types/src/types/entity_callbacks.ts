@@ -1,6 +1,5 @@
 import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
-import { ResolvedEntityCollection } from "./resolved_entities";
 import { User } from "../users";
 import { FireCMSContext } from "../firecms_context";
 
@@ -125,7 +124,7 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, USER ext
     /**
      * Resolved collection of the entity
      */
-    collection: ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Full path of the CMS where this entity is being saved.
@@ -168,7 +167,7 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER e
     /**
      * collection of the entity being deleted
      */
-    collection: ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Path of the parent collection
@@ -200,7 +199,7 @@ export interface EntityIdUpdateProps<M extends Record<string, any> = any> {
     /**
      * collection of the entity being deleted
      */
-    collection: ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Path of the parent collection

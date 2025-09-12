@@ -16,7 +16,7 @@ import {
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { IconForView, resolveCollection } from "../../util";
+import { IconForView } from "../../util";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
@@ -251,15 +251,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
             error={"Could not find collection with id " + collection}/>
     }
 
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection: collection,
-        path: path,
-        values: {},
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, customizationController.propertyConfigs, path]);
-
-    const displayedColumnIds = useColumnIds(resolvedCollection, false);
+    const displayedColumnIds = useColumnIds(collection, false);
 
     const tableController = useDataSourceTableController<M>({
         path,
@@ -305,7 +297,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
                                                                                               from ${collection.name}`}
                         </Typography>}
                         defaultSize={collection.defaultSize}
-                        properties={resolvedCollection.properties}
+                        properties={collection.properties}
                         forceFilter={forceFilter}
                         inlineEditing={false}
                         selectionController={selectionController}

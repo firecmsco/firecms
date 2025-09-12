@@ -1,6 +1,6 @@
 import { User as FirebaseUser } from "@firebase/auth";
 import { FirebaseApp } from "@firebase/app";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
 export type FirestoreTextSearchControllerBuilder = (props: {
     firebaseApp: FirebaseApp;
@@ -25,7 +25,7 @@ export type FirestoreTextSearchController = {
     init: (props: {
         path: string,
         databaseId?: string,
-        collection?: EntityCollection | ResolvedEntityCollection
+        collection?: EntityCollection
     }) => Promise<boolean>,
     /**
      * Do the search and return a list of ids.

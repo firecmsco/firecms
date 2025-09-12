@@ -4,9 +4,8 @@ import {
     CollectionSize,
     Entity,
     EntityTableController,
-    FilterValues,
-    ResolvedProperties,
-    ResolvedProperty,
+    FilterValues, Properties,
+    Property,
     SelectionController,
     User
 } from "@firecms/types";
@@ -122,9 +121,9 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     defaultSize?: CollectionSize;
 
-    properties: ResolvedProperties;
+    properties: Properties;
 
-    getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties[string];
+    getPropertyFor?: (props: GetPropertyForProps<M>) => Property | null;
 
     filterable?: boolean;
 
@@ -133,7 +132,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     endAdornment?: React.ReactNode;
 
     AdditionalHeaderWidget?: React.ComponentType<{
-        property: ResolvedProperty,
+        property: Property,
         propertyKey: string,
         onHover: boolean,
     }>;

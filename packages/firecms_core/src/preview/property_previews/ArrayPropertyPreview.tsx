@@ -1,17 +1,11 @@
 import React from "react";
 
-import { resolveArrayProperty } from "../../util";
-import {
-    ArrayProperty,
-    PreviewSize,
-    PropertyPreviewProps,
-    ResolvedArrayProperty,
-    ResolvedProperty
-} from "@firecms/types";
+import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@firecms/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
+import { resolveArrayProperties } from "@firecms/common";
 
 /**
  * @group Preview components
@@ -19,22 +13,22 @@ import { ErrorBoundary } from "../../components";
 export function ArrayPropertyPreview({
                                          propertyKey,
                                          value,
-                                         property: inputProperty,
+                                         property: property,
                                          size
                                      }: PropertyPreviewProps<ArrayProperty>) {
 
-    if (inputProperty.type !== "array")
+    if (property.type !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
 
-    if (!inputProperty.of) {
+    if (!property.of) {
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
     }
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
+    const resolvedProperties = resolveArrayProperties({
         propertyKey,
-        property: inputProperty as ArrayProperty | ResolvedArrayProperty,
+        property: property as ArrayProperty,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
@@ -49,11 +43,11 @@ export function ArrayPropertyPreview({
         <div className="flex flex-col gap-2">
             {values &&
                 values.map((value, index) => {
-                        if (!property.resolvedProperties) {
+                        if (!resolvedProperties) {
                             throw Error("Property resolvedProperties is undefined");
                         }
-                        const of: ResolvedProperty = property.resolvedProperties[index] ??
-                            (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
+                        const of: Property = resolvedProperties[index] ??
+                            (resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
                         return of
                             ? <React.Fragment
                                 key={"preview_array_" + index}>

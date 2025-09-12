@@ -6,7 +6,6 @@ import {
     FetchCollectionDelegateProps,
     FetchEntityProps,
     FilterValues,
-    ResolvedEntityCollection,
     SaveEntityDelegateProps,
     WhereFilterOp
 } from "@firecms/core";
@@ -25,7 +24,7 @@ export type SupabaseDelegate = DataSourceDelegate & {
     initTextSearch: (props: {
         path: string,
         databaseId?: string,
-        collection?: EntityCollection | ResolvedEntityCollection
+        collection?: EntityCollection 
     }) => Promise<boolean>,
 }
 

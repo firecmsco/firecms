@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, EntityCollection, PreviewSize, ResolvedProperty } from "@firecms/types";
+import { Entity, EntityCollection, PreviewSize, Property } from "@firecms/types";
 
 import { getEntityImagePreviewPropertyKey, getValueInPath, } from "@firecms/common";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
@@ -13,7 +13,7 @@ import {
     useSideEntityController
 } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { getPropertyInPath, IconForView, resolveCollection } from "../util";
+import { getPropertyInPath, IconForView } from "../util";
 import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/references";
 
 export type EntityPreviewProps = {
@@ -63,20 +63,12 @@ export function EntityPreview({
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);
     }
 
-    const resolvedCollection = React.useMemo(() => resolveCollection({
-        collection,
-        path: entity.path,
-        values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection]);
+    const listProperties = useMemo(() => previewKeys ?? getEntityPreviewKeys(authController, collection, customizationController.propertyConfigs, previewKeys, size === "medium" || size === "large" ? 3 : 1),
+        [previewKeys, collection, size]);
 
-    const listProperties = useMemo(() => previewKeys ?? getEntityPreviewKeys(authController, resolvedCollection, customizationController.propertyConfigs, previewKeys, size === "medium" || size === "large" ? 3 : 1),
-        [previewKeys, resolvedCollection, size]);
-
-    const titleProperty = includeTitle ? getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs) : undefined;
-    const imagePropertyKey = includeImage ? getEntityImagePreviewPropertyKey(resolvedCollection) : undefined;
-    const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
+    const titleProperty = includeTitle ? getEntityTitlePropertyKey(collection, customizationController.propertyConfigs) : undefined;
+    const imagePropertyKey = includeImage ? getEntityImagePreviewPropertyKey(collection) : undefined;
+    const imageProperty = imagePropertyKey ? collection.properties[imagePropertyKey] : undefined;
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
 
@@ -122,17 +114,17 @@ export function EntityPreview({
                             ? <PropertyPreview
                                 propertyKey={titleProperty as string}
                                 value={getValueInPath(entity.values, titleProperty)}
-                                property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
+                                property={collection.properties[titleProperty as string] as Property}
                                 size={"large"}/>
                             : <SkeletonPropertyComponent
-                                property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
+                                property={collection.properties[titleProperty as string] as Property}
                                 size={"large"}/>
                     }
                 </div>
             )}
 
             {restProperties && restProperties.map((key) => {
-                const childProperty = getPropertyInPath(resolvedCollection.properties, key);
+                const childProperty = getPropertyInPath(collection.properties, key);
                 if (!childProperty) return null;
 
                 const valueInPath = getValueInPath(entity.values, key);
@@ -144,10 +136,10 @@ export function EntityPreview({
                                 ? <PropertyPreview
                                     propertyKey={key as string}
                                     value={valueInPath}
-                                    property={childProperty as ResolvedProperty}
+                                    property={childProperty as Property}
                                     size={"small"}/>
                                 : <SkeletonPropertyComponent
-                                    property={childProperty as ResolvedProperty}
+                                    property={childProperty as Property}
                                     size={"small"}/>
                         }
                     </div>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { ArrayProperty, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, FieldProps, PropertyFieldBindingProps } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
-import { getDefaultValueFor, mergeDeep } from "@firecms/common";
-import { getArrayResolvedProperties, getIconForProperty } from "../../util";
+import { getArrayResolvedProperties, getDefaultValueFor, mergeDeep } from "@firecms/common";
+import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";

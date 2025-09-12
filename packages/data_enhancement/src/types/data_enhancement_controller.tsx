@@ -55,7 +55,7 @@ export type DataEnhancementRequest = {
 };
 
 export type InputEntity = {
-    entityId: string | number;
+    entityId?: string | number;
     values: Record<string, any>;
 };
 

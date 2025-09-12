@@ -1,5 +1,5 @@
 import { NavigationController } from "./navigation";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, ResolvedEntityCollection } from "../types";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues } from "../types";
 import { FireCMSContext } from "../firecms_context";
 
 /**
@@ -27,7 +27,7 @@ export type ListenEntityProps<M extends Record<string, any> = any> =
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
-    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> ;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
     startAfter?: any;
@@ -54,7 +54,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
     values: Partial<EntityValues<M>>;
     entityId?: string | number; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
-    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> ;
     status: EntityStatus;
 }
 
@@ -63,7 +63,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
-    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> ;
 }
 
 /**

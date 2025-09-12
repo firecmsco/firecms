@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { ArrayProperty, FieldProps, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, FieldProps, Property } from "@firecms/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
@@ -96,7 +96,7 @@ export function MultiSelectFieldBinding({
                     className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
                 onValueChange={(updatedValue: string[]) => {
                     let newValue;
-                    if (of && (of as ResolvedProperty)?.type === "number") {
+                    if (of && (of as Property)?.type === "number") {
                         newValue = updatedValue ? (updatedValue as string[]).map((e) => parseFloat(e)) : [];
                     } else {
                         newValue = updatedValue;

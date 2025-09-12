@@ -12,7 +12,6 @@ import {
     ListenCollectionDelegateProps,
     ListenEntityDelegateProps,
     NavigationController,
-    ResolvedEntityCollection,
     SaveEntityDelegateProps,
     WhereFilterOp
 } from "@firecms/core";
@@ -84,7 +83,7 @@ export type FirestoreDelegate = DataSourceDelegate & {
     initTextSearch: (props: {
         path: string,
         databaseId?: string,
-        collection?: EntityCollection | ResolvedEntityCollection
+        collection?: EntityCollection
     }) => Promise<boolean>,
 }
 
@@ -281,7 +280,7 @@ export function useFirestoreDelegate({
         initTextSearch: useCallback(async (props: {
             path: string,
             databaseId?: string,
-            collection?: EntityCollection | ResolvedEntityCollection
+            collection?: EntityCollection
         }) => {
             console.debug("Init text search controller", searchControllerRef.current, props.path);
             if (!searchControllerRef.current) {
@@ -796,7 +795,7 @@ function buildTextSearchControllerWithLocalSearch({
         init: async (props: {
             path: string,
             databaseId?: string,
-            collection?: EntityCollection | ResolvedEntityCollection
+            collection?: EntityCollection
         }) => {
             const b = await textSearchController.init(props);
             if (b) {

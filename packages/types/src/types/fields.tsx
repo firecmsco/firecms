@@ -1,7 +1,32 @@
 import { InferPropertyType, Property } from "./properties";
-import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 import { Entity } from "./entities";
 import { FormexController } from "../components/formex";
+import { EntityCollection } from "./collections";
+
+export type DefaultFieldConfig =
+    | "text_field"
+    | "multiline"
+    | "markdown"
+    | "url"
+    | "email"
+    | "switch"
+    | "select"
+    | "multi_select"
+    | "number_input"
+    | "number_select"
+    | "multi_number_select"
+    | "file_upload"
+    | "multi_file_upload"
+    | "reference_as_string"
+    | "reference"
+    | "multi_references"
+    | "relation"
+    | "date_time"
+    | "group"
+    | "key_value"
+    | "repeat"
+    | "custom_array"
+    | "block";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -10,7 +35,7 @@ import { FormexController } from "../components/formex";
  * @group Form custom fields
  */
 export interface FieldProps<
-    P extends Property | ResolvedProperty = Property,
+    P extends Property = Property,
     CustomProps = any,
     M extends Record<string, any> = any> {
 
@@ -126,7 +151,6 @@ export interface FieldProps<
 
 }
 
-
 /**
  * Context passed to custom fields
  * @group Form custom fields
@@ -154,7 +178,7 @@ export interface FormContext<M extends Record<string, any> = any> {
     /**
      * Collection of the entity being modified
      */
-    collection?: ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M>;
 
     /**
      * Entity id, it can be undefined if it's a new entity
@@ -200,7 +224,7 @@ export interface PropertyFieldBindingProps<M extends Record<string, any> = any> 
     /**
      * The CMS property you are binding this field to
      */
-    property: Property | ResolvedProperty;
+    property: Property;
 
     /**
      * The context where this field is being rendered. You get a context as a

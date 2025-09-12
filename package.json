@@ -12,6 +12,7 @@
     "packages/firecms",
     "packages/firecms_cloud",
     "packages/firecms_core",
+    "packages/common",
     "packages/types",
     "packages/backend",
     "packages/postgresql",

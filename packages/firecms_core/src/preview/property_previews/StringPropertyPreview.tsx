@@ -1,10 +1,8 @@
 import React from "react";
 
-import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { PreviewType, StringProperty } from "@firecms/types";
+import { PreviewType, PropertyPreviewProps, StringProperty } from "@firecms/types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
-import { PropertyPreviewProps } from "@firecms/types";
 import { ErrorBoundary } from "../../components";
 import { Chip, cls, getColorSchemeForSeed } from "@firecms/ui";
 
@@ -20,10 +18,9 @@ export function StringPropertyPreview({
 
     if (property.enum) {
         const enumKey = value;
-        const resolvedProperty = resolvePropertyEnum(property);
         return <EnumValuesChip
             enumKey={enumKey}
-            enumValues={resolvedProperty.enum}
+            enumValues={property.enum as any}
             size={size}/>;
     } else if (property.previewAsTag) {
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");

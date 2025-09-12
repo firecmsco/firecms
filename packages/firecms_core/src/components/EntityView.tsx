@@ -1,16 +1,8 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { PropertyPreview } from "../preview";
-import {
-    CustomizationController,
-    Entity,
-    EntityCollection,
-    ResolvedEntityCollection,
-    ResolvedProperties
-} from "@firecms/types";
+import { CustomizationController, Entity, EntityCollection, Properties } from "@firecms/types";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon } from "@firecms/ui";
 import { useCustomizationController } from "../hooks/useCustomizationController";
-import { useAuthController } from "../hooks";
-import { resolveCollection } from "../util";
 
 /**
  * @group Components
@@ -30,18 +22,9 @@ export function EntityView<M extends Record<string, any>>(
         className
     }: EntityViewProps<M>) {
 
-    const authController = useAuthController();
     const customizationController: CustomizationController = useCustomizationController();
-    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
-        collection,
-        path: path,
-        entityId: entity.id,
-        values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, path, entity, customizationController.propertyConfigs]);
 
-    const properties: ResolvedProperties = resolvedCollection.properties;
+    const properties: Properties = collection.properties;
 
     return (
         <div className={"w-full " + className}>

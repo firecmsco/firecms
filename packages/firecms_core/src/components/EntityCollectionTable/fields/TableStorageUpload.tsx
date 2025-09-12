@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, PreviewSize, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "@firecms/types";
+import { ArrayProperty, Entity, PreviewSize, StorageConfig, StringProperty } from "@firecms/types";
 import { useDropzone } from "react-dropzone";
 import { PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
@@ -32,7 +32,7 @@ export function TableStorageUpload(props: {
     updateValue: (newValue: (string | string[] | null)) => void;
     selected: boolean;
     focused: boolean;
-    property: ResolvedStringProperty | ResolvedArrayProperty;
+    property: StringProperty | ArrayProperty;
     entity: Entity<any>;
     path: string;
     previewSize: PreviewSize;
@@ -105,7 +105,7 @@ interface StorageUploadProps {
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     error?: Error;
-    property: ResolvedStringProperty | ResolvedArrayProperty;
+    property: StringProperty | ArrayProperty;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -142,7 +142,7 @@ function StorageUpload({
 
     const previewSize = previewSizeInput;
     if (multipleFilesSupported) {
-        const arrayProperty = property as ResolvedArrayProperty;
+        const arrayProperty = property as ArrayProperty;
         if (Array.isArray(arrayProperty.of)) {
             throw Error("Using array properties instead of single one in `of` in ArrayProperty");
         }
@@ -202,8 +202,8 @@ function StorageUpload({
         : "Drag 'n' drop a file here, or click here edit";
 
     const renderProperty = multipleFilesSupported
-        ? (property as ResolvedArrayProperty).of as ResolvedStringProperty
-        : property as ResolvedStringProperty;
+        ? (property as ArrayProperty).of as StringProperty
+        : property as StringProperty;
 
     const imageSize = useMemo(() => getThumbnailMeasure(previewSize), [previewSize]);
     const showError = !disabled && error;
@@ -280,7 +280,7 @@ function StorageUpload({
 }
 
 interface TableStorageItemPreviewProps {
-    property: ResolvedStringProperty;
+    property: StringProperty;
     value: string,
     size: PreviewSize;
     entity: Entity<any>;

@@ -1,11 +1,12 @@
-import { EnumValueConfig } from "@firecms/types";
+import { EnumValues } from "@firecms/types";
 import { EnumValuesChip } from "../../../preview";
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
+import { resolveEnumValues } from "@firecms/common";
 
 export function VirtualTableSelect(props: {
     name: string;
-    enumValues: EnumValueConfig[];
+    enumValues: EnumValues;
     error: Error | undefined;
     multiple: boolean;
     disabled: boolean;
@@ -57,6 +58,8 @@ export function VirtualTableSelect(props: {
         }
     }, [multiple, updateValue, valueType]);
 
+    const resolvedEnumValues = resolveEnumValues(enumValues);
+
     const renderValue = (enumKey?: string | number) => {
         return <EnumValuesChip
             key={`${enumKey}`}
@@ -78,7 +81,7 @@ export function VirtualTableSelect(props: {
                     ? ((internalValue as any[]).map(v => v.toString()))
                     : ([])}
                 onValueChange={onChange}>
-                {enumValues?.map((enumConfig) => (
+                {resolvedEnumValues?.map((enumConfig) => (
                     <MultiSelectItem
                         key={enumConfig.id}
                         value={String(enumConfig.id)}>
@@ -102,7 +105,7 @@ export function VirtualTableSelect(props: {
                     : ""}
                 onValueChange={onChange}
                 renderValue={renderValue}>
-                {enumValues?.map((enumConfig) => (
+                {resolvedEnumValues?.map((enumConfig) => (
                     <SelectItem
                         key={enumConfig.id}
                         value={String(enumConfig.id)}>

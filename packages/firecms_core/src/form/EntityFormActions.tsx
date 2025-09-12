@@ -1,16 +1,15 @@
 import React from "react";
 import {
     Entity,
-    EntityAction, EntityFormActionsProps,
+    EntityAction,
+    EntityCollection,
+    EntityFormActionsProps,
     FireCMSContext,
     FormContext,
-    ResolvedEntityCollection,
     SideEntityController
 } from "@firecms/types";
 import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButton, Typography } from "@firecms/ui";
-import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
-
 
 export function EntityFormActions({
                                       path,
@@ -68,7 +67,7 @@ type ActionsViewProps<M extends object> = {
     savingError: Error | undefined,
     entity: Entity<M> | undefined,
     formActions?: EntityAction[],
-    collection: ResolvedEntityCollection,
+    collection: EntityCollection,
     context: FireCMSContext,
     sideEntityController: SideEntityController,
     isSubmitting: boolean,

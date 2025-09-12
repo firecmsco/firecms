@@ -1,10 +1,4 @@
-import {
-    EntityValues,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig,
-    UploadedFileContext
-} from "@firecms/types";
+import { ArrayProperty, EntityValues, StorageConfig, StringProperty, UploadedFileContext } from "@firecms/types";
 import { randomString } from "./strings";
 
 interface ResolveFilenameStringParams<M extends object> {
@@ -13,7 +7,7 @@ interface ResolveFilenameStringParams<M extends object> {
     values: EntityValues<M>;
     entityId?: string | number;
     path?: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty,
+    property: StringProperty | ArrayProperty,
     file: File;
     propertyKey: string;
 }
@@ -65,7 +59,7 @@ interface ResolveStoragePathStringParams<M extends object> {
     values: EntityValues<M>;
     entityId?: string | number;
     path?: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty;
+    property: StringProperty | ArrayProperty;
     file: File;
     propertyKey: string;
 }

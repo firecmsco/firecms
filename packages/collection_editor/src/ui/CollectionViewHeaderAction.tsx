@@ -1,4 +1,4 @@
-import { EntityTableController, ResolvedProperty } from "@firecms/core";
+import { EntityTableController, Property } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip } from "@firecms/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -13,7 +13,7 @@ export function CollectionViewHeaderAction({
                                                collection,
                                                tableController
                                            }: {
-    property: ResolvedProperty,
+    property: Property,
     propertyKey: string,
     onHover: boolean,
     path: string,

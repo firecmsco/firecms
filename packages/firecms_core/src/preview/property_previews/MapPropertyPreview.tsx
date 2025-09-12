@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MapProperty, PropertyPreviewProps, ResolvedMapProperty } from "@firecms/types";
+import { MapProperty, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
@@ -20,7 +20,7 @@ export function MapPropertyPreview({
         throw Error("Picked wrong preview component MapPropertyPreview");
     }
 
-    const mapProperty = property as ResolvedMapProperty;
+    const mapProperty = property as MapProperty;
 
     if (!mapProperty.properties || Object.keys(mapProperty.properties ?? {}).length === 0) {
         return (

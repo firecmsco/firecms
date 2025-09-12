@@ -11,7 +11,12 @@ import {
 } from "@firecms/types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
-import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, } from "@firecms/common";
+import {
+    canEditEntity,
+    getSubcollections,
+    removeInitialAndTrailingSlashes,
+    resolveDefaultSelectedView, resolvedSelectedEntityView,
+} from "@firecms/common";
 
 import {
     useAuthController,
@@ -24,13 +29,7 @@ import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typogra
 import { EntityForm } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
-import {
-    createFormexStub,
-    getEntityFromCache,
-    getSubcollections,
-    resolveCollection,
-    resolvedSelectedEntityView
-} from "../util";
+import { createFormexStub, getEntityFromCache } from "../util";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -225,8 +224,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const mainViewVisible = selectedTab === MAIN_TAB_VALUE || Boolean(selectedSecondaryForm);
 
-    const authController = useAuthController();
-
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .filter(e => !e.includeActions)
         .map((customView) => {
@@ -256,15 +253,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 save: () => {
                     throw new Error("You can't save in read only mode");
                 },
-                collection: resolveCollection<M>({
-                    collection,
-                    path: path,
-                    entityId,
-                    values: usedEntity?.values ?? {},
-                    previousValues: usedEntity?.values ?? {},
-                    propertyConfigs: customizationController.propertyConfigs,
-                    authController
-                }),
+                collection,
                 path: path,
                 entity: usedEntity,
                 savingError: undefined,
@@ -514,4 +503,3 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     return result;
 }
-

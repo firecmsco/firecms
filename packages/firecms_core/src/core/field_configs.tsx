@@ -1,4 +1,4 @@
-import { ArrayProperty, Property, PropertyConfig, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, DefaultFieldConfig, Property, PropertyConfig } from "@firecms/types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -40,11 +40,8 @@ import {
 } from "@firecms/ui";
 import { RelationFieldBinding } from "../form/field_bindings/RelationFieldBinding";
 
-export function isDefaultFieldConfigId(id: string) {
-    return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
-}
 
-export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig> = {
+export const DEFAULT_FIELD_CONFIGS: Record<DefaultFieldConfig, PropertyConfig> = {
     text_field: {
         key: "text_field",
         name: "Text field",
@@ -335,7 +332,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig> = {
     }
 };
 
-export function getDefaultFieldConfig(property: Property | ResolvedProperty): PropertyConfig | undefined {
+export function getDefaultFieldConfig(property: Property): PropertyConfig | undefined {
     const fieldId = getDefaultFieldId(property);
     if (!fieldId) {
         console.error("No field id found for property", property);
@@ -344,7 +341,7 @@ export function getDefaultFieldConfig(property: Property | ResolvedProperty): Pr
     return DEFAULT_FIELD_CONFIGS[fieldId];
 }
 
-export function getFieldConfig(property: Property | ResolvedProperty, propertyConfigs: Record<string, PropertyConfig<any>>): PropertyConfig | undefined {
+export function getFieldConfig(property: Property, propertyConfigs: Record<string, PropertyConfig>): PropertyConfig | undefined {
     const fieldId = getFieldId(property);
     const defaultFieldId = getDefaultFieldId(property);
     if (!defaultFieldId) {
@@ -356,7 +353,7 @@ export function getFieldConfig(property: Property | ResolvedProperty, propertyCo
     return mergeDeep(defaultFieldConfig ?? {}, customField ?? {} as PropertyConfig);
 }
 
-export function getDefaultFieldId(property: Property | ResolvedProperty) {
+export function getDefaultFieldId(property: Property) {
     if (property.type === "string") {
         if (property.multiline) {
             return "multiline";
@@ -420,7 +417,7 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
     return undefined;
 }
 
-export function getFieldId(property: Property | ResolvedProperty): string | undefined {
+export function getFieldId(property: Property): string | undefined {
     if (property.propertyConfig)
         return property.propertyConfig;
     return getDefaultFieldId(property);

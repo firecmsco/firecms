@@ -3,7 +3,6 @@ export * from "./icon_list";
 export * from "./icon_synonyms";
 export * from "./icons";
 export * from "./createFormexStub";
-export * from "./resolutions";
 export * from "./entity_cache";
 export * from "./useDebouncedCallback";
 export * from "./useStorageUploadController";

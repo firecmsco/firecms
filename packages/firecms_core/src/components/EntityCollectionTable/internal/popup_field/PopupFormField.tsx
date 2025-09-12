@@ -7,17 +7,15 @@ import {
     EntityCollection,
     EntityValues,
     FireCMSPlugin,
-    FormContext,
+    FormContext, Properties,
+    Property,
     PropertyFieldBindingProps,
-    ResolvedEntityCollection,
-    ResolvedProperties,
-    ResolvedProperty
 } from "@firecms/types";
 import { Formex, useCreateFormex } from "@firecms/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { getPropertyInPath, resolveCollection } from "../../../../util";
+import { getPropertyInPath } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
 import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
@@ -94,7 +92,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           entityId,
                                                                           customFieldValidator,
                                                                           propertyKey,
-                                                                          collection: inputCollection,
+                                                                          collection,
                                                                           path,
                                                                           cellRect,
                                                                           open,
@@ -115,17 +113,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         x: number,
         y: number
     }>();
-
-    const collection: ResolvedEntityCollection<M> | undefined = inputCollection
-        ? resolveCollection<M>({
-            collection: inputCollection,
-            path: path,
-            values: entity?.values,
-            entityId,
-            propertyConfigs: customizationController.propertyConfigs,
-            authController
-        })
-        : undefined;
 
     const windowSize = useWindowSize();
 
@@ -220,8 +207,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         return getYupEntitySchema(
             entityId,
             propertyKey && collection.properties[propertyKey as string]
-                ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties
-                : {} as ResolvedProperties,
+                ? { [propertyKey]: collection.properties[propertyKey as string] } as Properties
+                : {} as Properties,
             customFieldValidator);
     }, [collection, entityId, propertyKey, customFieldValidator]);
 
@@ -250,7 +237,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const saveValue = async (values: M) => {
         setSavingError(null);
-        if (inputCollection && entity && onCellValueChange && propertyKey) {
+        if (collection && entity && onCellValueChange && propertyKey) {
             return onCellValueChange({
                 value: values[propertyKey as string],
                 propertyKey: propertyKey as string,
@@ -293,7 +280,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const disabled = isSubmitting;
 
     const formContext: FormContext<M> = {
-        collection,
+        collection: collection,
         entityId,
         values,
         path,
@@ -305,7 +292,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         disabled: false,
     };
 
-    const property: ResolvedProperty | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);
+    const property: Property | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as Properties, propertyKey as string);
     const fieldProps: PropertyFieldBindingProps<M> | undefined = propertyKey && property
         ? {
             propertyKey: propertyKey as string,

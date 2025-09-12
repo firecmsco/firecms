@@ -1,6 +1,6 @@
-import { ArrayProperty, ResolvedNumberProperty, ResolvedStringProperty } from "@firecms/types";
+import { ArrayProperty, NumberProperty, PropertyPreviewProps, StringProperty } from "@firecms/types";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
-import { PropertyPreviewProps } from "@firecms/types";
+import { resolveEnumValues } from "@firecms/common";
 
 /**
  * @group Preview components
@@ -15,14 +15,20 @@ export function ArrayPropertyEnumPreview({
     if (property.type !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
-    const ofProperty = property.of as ResolvedStringProperty | ResolvedNumberProperty;
+    const ofProperty = property.of as StringProperty | NumberProperty;
     if (!ofProperty.enum)
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     if (!value) return null;
 
+    const enumValues = resolveEnumValues(ofProperty.enum);
+    if(!enumValues)
+        throw Error(
+            `Enum values not resolved for property ${propertyKey}`
+        )
+
     return <ArrayEnumPreview name={propertyKey}
                              value={value}
-                             enumValues={ofProperty.enum}
+                             enumValues={enumValues}
                              size={size}/>;
 }

@@ -1,15 +1,15 @@
 import React, { ComponentType, useMemo } from "react";
 import {
+    ArrayProperty,
     FieldProps,
     getIconForProperty,
     LabelWithIcon,
     MapFieldBinding,
     MapProperty,
+    NumberProperty,
+    Property,
     RepeatFieldBinding,
-    ResolvedArrayProperty,
-    ResolvedNumberProperty,
-    ResolvedProperty,
-    ResolvedStringProperty,
+    StringProperty,
     TextFieldBinding
 } from "@firecms/core";
 import { BooleanSwitchWithLabel, Paper, Select, SelectItem } from "@firecms/ui";
@@ -113,20 +113,20 @@ function UnionField({
                     }: FieldProps<string | number | (string | number)[]>) {
 
     const [type, setType] = React.useState<string>(inferTypeFromValue(value));
-    const internalProperty: ResolvedProperty = useMemo(() => {
+    const internalProperty: Property = useMemo(() => {
         if (type === "string") {
             return {
-                ...property as ResolvedStringProperty,
+                ...property as StringProperty,
                 type: "string"
             }
         } else if (type === "number") {
             return {
-                ...property as ResolvedNumberProperty,
+                ...property as NumberProperty,
                 type: "number"
             }
         } else if (type === "string[]") {
             return {
-                ...property as ResolvedArrayProperty,
+                ...property as ArrayProperty,
                 type: "array",
                 of: {
                     type: "string"
@@ -134,7 +134,7 @@ function UnionField({
             };
         } else if (type === "number[]") {
             return {
-                ...property as ResolvedArrayProperty,
+                ...property as ArrayProperty,
                 type: "array",
                 of: {
                     type: "number"
@@ -161,7 +161,7 @@ function UnionField({
 
     return (<>
             <LabelWithIcon
-                icon={getIconForProperty(property as ResolvedProperty, "small")}
+                icon={getIconForProperty(property as Property, "small")}
                 required={property.validation?.required}
                 title={property.name ?? propertyKey}
                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}

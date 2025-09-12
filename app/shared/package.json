@@ -1,7 +1,7 @@
 {
-  "name": "shared",
+  "name": "firecms-app-shared",
   "version": "1.0.0",
-  "description": "Shared collections and types for FireCMS app",
+  "description": "Shared collections and config for FireCMS app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",

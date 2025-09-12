@@ -1,11 +1,15 @@
 import {
-    EntityReference,
-    EntityRelation,
-    GeoPoint,
-    ResolvedArrayProperty, ResolvedBooleanProperty, ResolvedDateProperty, ResolvedGeopointProperty,
-    ResolvedMapProperty, ResolvedNumberProperty,
-    ResolvedProperties,
-    ResolvedProperty, ResolvedReferenceProperty, ResolvedRelationProperty, ResolvedStringProperty, StringProperty
+    ArrayProperty,
+    MapProperty,
+    NumberProperty,
+    Property,
+    BooleanProperty,
+    DateProperty,
+    GeopointProperty,
+    Properties,
+    ReferenceProperty,
+    RelationProperty,
+    StringProperty
 } from "@firecms/types";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
@@ -30,14 +34,14 @@ yup.addMethod(yup.array, "uniqueInArray", function (
 export type CustomFieldValidator = (props: {
     name: string,
     value: any,
-    property: ResolvedProperty,
+    property: Property,
     entityId?: string | number,
-    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
+    parentProperty?: MapProperty | ArrayProperty,
 }) => Promise<boolean>;
 
-interface PropertyContext<P extends ResolvedProperty> {
+interface PropertyContext<P extends Property> {
     property: P,
-    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
+    parentProperty?: MapProperty | ArrayProperty,
     entityId: string | number,
     customFieldValidator?: CustomFieldValidator,
     name?: any
@@ -45,13 +49,13 @@ interface PropertyContext<P extends ResolvedProperty> {
 
 export function getYupEntitySchema<M extends Record<string, any>>(
     entityId: string | number,
-    properties: ResolvedProperties,
+    properties: Properties,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
-    Object.entries(properties as Record<string, ResolvedProperty>)
+    Object.entries(properties as Record<string, Property>)
         .forEach(([name, property]) => {
             objectSchema[name] = mapPropertyToYup({
-                property: property as ResolvedProperty,
+                property: property as Property,
                 customFieldValidator,
                 name,
                 entityId
@@ -60,7 +64,7 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     return yup.object().shape(objectSchema);
 }
 
-export function mapPropertyToYup(propertyContext: PropertyContext<ResolvedProperty>): AnySchema<unknown> {
+export function mapPropertyToYup(propertyContext: PropertyContext<Property>): AnySchema<unknown> {
 
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
@@ -69,23 +73,23 @@ export function mapPropertyToYup(propertyContext: PropertyContext<ResolvedProper
     }
 
     if (property.type === "string") {
-        return getYupStringSchema(propertyContext as PropertyContext<ResolvedStringProperty>);
+        return getYupStringSchema(propertyContext as PropertyContext<StringProperty>);
     } else if (property.type === "number") {
-        return getYupNumberSchema(propertyContext as PropertyContext<ResolvedNumberProperty>);
+        return getYupNumberSchema(propertyContext as PropertyContext<NumberProperty>);
     } else if (property.type === "boolean") {
-        return getYupBooleanSchema(propertyContext as PropertyContext<ResolvedBooleanProperty>);
+        return getYupBooleanSchema(propertyContext as PropertyContext<BooleanProperty>);
     } else if (property.type === "map") {
-        return getYupMapObjectSchema(propertyContext as PropertyContext<ResolvedMapProperty>);
+        return getYupMapObjectSchema(propertyContext as PropertyContext<MapProperty>);
     } else if (property.type === "array") {
-        return getYupArraySchema(propertyContext as PropertyContext<ResolvedArrayProperty>);
+        return getYupArraySchema(propertyContext as PropertyContext<ArrayProperty>);
     } else if (property.type === "date") {
-        return getYupDateSchema(propertyContext as PropertyContext<ResolvedDateProperty>);
+        return getYupDateSchema(propertyContext as PropertyContext<DateProperty>);
     } else if (property.type === "geopoint") {
-        return getYupGeoPointSchema(propertyContext as PropertyContext<ResolvedGeopointProperty>);
+        return getYupGeoPointSchema(propertyContext as PropertyContext<GeopointProperty>);
     } else if (property.type === "reference") {
-        return getYupReferenceSchema(propertyContext as PropertyContext<ResolvedReferenceProperty>);
+        return getYupReferenceSchema(propertyContext as PropertyContext<ReferenceProperty>);
     } else if (property.type === "relation") {
-        return getYupRelationSchema(propertyContext as PropertyContext<ResolvedRelationProperty>);
+        return getYupRelationSchema(propertyContext as PropertyContext<RelationProperty>);
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
@@ -96,14 +100,14 @@ export function getYupMapObjectSchema({
                                           entityId,
                                           customFieldValidator,
                                           name
-                                      }: PropertyContext<ResolvedMapProperty>): ObjectSchema<any> {
+                                      }: PropertyContext<MapProperty>): ObjectSchema<any> {
     const objectSchema: any = {};
     const validation = property.validation;
     if (property.properties)
-        Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
+        Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
             objectSchema[childName] = mapPropertyToYup({
                 property: childProperty,
-                parentProperty: property as ResolvedMapProperty,
+                parentProperty: property as MapProperty,
                 customFieldValidator,
                 name: `${name}[${childName}]`,
                 entityId
@@ -123,7 +127,7 @@ function getYupStringSchema({
                                 customFieldValidator,
                                 name,
                                 entityId
-                            }: PropertyContext<ResolvedStringProperty>): StringSchema {
+                            }: PropertyContext<StringProperty>): StringSchema {
     let collection: StringSchema<any> = yup.string();
     const validation = property.validation;
     if (property.enum) {
@@ -180,7 +184,7 @@ function getYupNumberSchema({
                                 customFieldValidator,
                                 name,
                                 entityId
-                            }: PropertyContext<ResolvedNumberProperty>): NumberSchema {
+                            }: PropertyContext<NumberProperty>): NumberSchema {
     const validation = property.validation;
     let collection: NumberSchema<any> = yup.number().typeError("Must be a number");
     if (validation) {
@@ -216,7 +220,7 @@ function getYupGeoPointSchema({
                                   customFieldValidator,
                                   name,
                                   entityId
-                              }: PropertyContext<ResolvedGeopointProperty>): AnySchema {
+                              }: PropertyContext<GeopointProperty>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.unique && customFieldValidator && name)
@@ -243,7 +247,7 @@ function getYupDateSchema({
                               customFieldValidator,
                               name,
                               entityId
-                          }: PropertyContext<ResolvedDateProperty>): AnySchema | DateSchema {
+                          }: PropertyContext<DateProperty>): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable();
     }
@@ -279,7 +283,7 @@ function getYupReferenceSchema({
                                    customFieldValidator,
                                    name,
                                    entityId
-                               }: PropertyContext<ResolvedReferenceProperty>): AnySchema {
+                               }: PropertyContext<ReferenceProperty>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
@@ -308,7 +312,7 @@ function getYupRelationSchema({
                                   customFieldValidator,
                                   name,
                                   entityId
-                              }: PropertyContext<ResolvedRelationProperty>): AnySchema {
+                              }: PropertyContext<RelationProperty>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
@@ -337,7 +341,7 @@ function getYupBooleanSchema({
                                  customFieldValidator,
                                  name,
                                  entityId
-                             }: PropertyContext<ResolvedBooleanProperty>): BooleanSchema {
+                             }: PropertyContext<BooleanProperty>): BooleanSchema {
     let collection: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
     if (validation) {
@@ -360,7 +364,7 @@ function getYupBooleanSchema({
     return collection;
 }
 
-function hasUniqueInArrayModifier(property: ResolvedProperty): boolean | [string, ResolvedProperty][] {
+function hasUniqueInArrayModifier(property: Property): boolean | [string, Property][] {
     if (property.validation?.uniqueInArray) {
         return true;
     } else if (property.type === "map" && property.properties) {
@@ -376,15 +380,15 @@ function getYupArraySchema({
                                customFieldValidator,
                                name,
                                entityId
-                           }: PropertyContext<ResolvedArrayProperty>): AnySchema<any> {
+                           }: PropertyContext<ArrayProperty>): AnySchema<any> {
 
     let arraySchema: ArraySchema<any> = yup.array();
 
     if (property.of) {
         if (Array.isArray(property.of)) {
-            const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => ({
+            const yupProperties = (property.of as Property[]).map((p, index) => ({
                 [`${name}[${index}]`]: mapPropertyToYup({
-                    property: p as ResolvedProperty,
+                    property: p as Property,
                     parentProperty: property,
                     entityId
                 })

@@ -1,4 +1,4 @@
-import { Property, ResolvedProperty } from "@firecms/types";
+import { Property } from "@firecms/types";
 import { IconButton, InfoIcon, Tooltip, Typography } from "@firecms/ui";
 
 /**
@@ -14,7 +14,7 @@ export function FieldHelperText<T>({
                                 }: {
                                     error?: string,
                                     showError?: boolean,
-                                    property: ResolvedProperty | Property,
+                                    property: Property | Property,
                                     includeDescription?: boolean,
                                     disabled?: boolean,
                                 }

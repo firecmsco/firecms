@@ -1,14 +1,5 @@
-import {
-    DataSource,
-    Entity, EntityCollection,
-    EntityValues,
-    FireCMSContext,
-    ResolvedEntityCollection,
-    SaveEntityProps,
-    User
-} from "@firecms/types";
+import { DataSource, Entity, EntityCollection, EntityValues, FireCMSContext, SaveEntityProps } from "@firecms/types";
 import { useDataSource } from "./useDataSource";
-import { resolveCollection } from "../../util";
 
 /**
  * @group Hooks and utilities
@@ -62,7 +53,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
                                                                                                     onPreSaveHookError,
                                                                                                     onSaveSuccessHookError
                                                                                                 }: SaveEntityWithCallbacksProps<M> & {
-                                                                                                    collection: EntityCollection | ResolvedEntityCollection,
+                                                                                                    collection: EntityCollection ,
                                                                                                     dataSource: DataSource,
                                                                                                     context: FireCMSContext,
                                                                                                 }
@@ -78,16 +69,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
         try {
-            const resolvedCollection = resolveCollection<M>({
-                collection,
-                path: path,
-                values: previousValues as EntityValues<M>,
-                entityId,
-                propertyConfigs: customizationController.propertyConfigs,
-                authController: context.authController
-            });
             updatedValues = await callbacks.onPreSave({
-                collection: resolvedCollection,
+                collection,
                 path,
                 entityId,
                 values,
@@ -115,16 +98,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
-                const resolvedCollection = resolveCollection<M>({
-                    collection,
-                    path,
-                    values: updatedValues as EntityValues<M>,
-                    entityId,
-                    propertyConfigs: customizationController.propertyConfigs,
-                    authController: context.authController
-                });
                 callbacks.onSaveSuccess({
-                    collection: resolvedCollection,
+                    collection: collection,
                     path,
                     entityId: entity.id,
                     values: updatedValues,
@@ -143,16 +118,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
 
-                const resolvedCollection = resolveCollection<M>({
-                    collection,
-                    path,
-                    values: updatedValues as EntityValues<M>,
-                    entityId,
-                    propertyConfigs: customizationController.propertyConfigs,
-                    authController: context.authController
-                });
                 callbacks.onSaveFailure({
-                    collection: resolvedCollection,
+                    collection: collection,
                     path,
                     entityId,
                     values: updatedValues,

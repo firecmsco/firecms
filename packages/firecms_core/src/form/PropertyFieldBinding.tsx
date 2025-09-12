@@ -4,22 +4,20 @@ import equal from "react-fast-compare"
 import { Field, FieldProps as FormexFieldProps, getIn } from "@firecms/formex";
 
 import {
+    EntityCollection,
     FieldProps,
     FireCMSPlugin,
     PluginFieldBuilderParams,
     Property,
-    PropertyFieldBindingProps,
-    ResolvedEntityCollection,
-    ResolvedProperty
+    PropertyFieldBindingProps
 } from "@firecms/types";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
-import { isHidden, isPropertyBuilder, isReadOnly } from "@firecms/common";
+import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "@firecms/common";
 import { useAuthController, useCustomizationController } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
-import { resolveProperty } from "../util";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -100,7 +98,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
             {(fieldProps) => {
 
                 let Component: ComponentType<FieldProps> | undefined;
-                const resolvedProperty: ResolvedProperty | null = resolveProperty({
+                const resolvedProperty: Property | null = resolveProperty({
                     propertyKey,
                     property: property,
                     values: fieldProps.form.values,
@@ -111,7 +109,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                     authController
                 });
 
-                const readOnly = isReadOnly(resolvedProperty);
+                const readOnly = resolvedProperty ? isReadOnly(resolvedProperty) : true;
                 const disabled = disabledProp || readOnly || Boolean(resolvedProperty?.disabled) || context.disabled;
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
@@ -144,7 +142,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                         index,
                         authController
                     });
-                    Component = configProperty.Field as ComponentType<FieldProps>;
+                    Component = configProperty?.Field as ComponentType<FieldProps>;
                 }
                 if (!Component) {
                     console.warn(`No field component found for property ${propertyKey}`);
@@ -180,10 +178,10 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
 
 }
 
-type ResolvedPropertyFieldBindingProps< M extends Record<string, any> = any> =
+type ResolvedPropertyFieldBindingProps<M extends Record<string, any> = any> =
     Omit<PropertyFieldBindingProps<M>, "property">
     & {
-    property: ResolvedProperty
+    property: Property
 };
 
 function FieldInternal<CustomProps, M extends Record<string, any>>
@@ -206,7 +204,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
  }:
  {
      Component: ComponentType<FieldProps>,
-     componentProps: ResolvedPropertyFieldBindingProps< M>,
+     componentProps: ResolvedPropertyFieldBindingProps<M>,
      formexFieldProps: FormexFieldProps<any, any>
  }) {
 
@@ -253,7 +251,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
         showError,
         isSubmitting,
         includeDescription: includeDescription ?? true,
-        property: property as ResolvedProperty,
+        property: property as Property,
         disabled: disabled ?? false,
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         partOfArray: partOfArray ?? false,
@@ -279,30 +277,30 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
 
 }
 
-const shouldPropertyReRender = (property: Property | ResolvedProperty, plugins?: FireCMSPlugin[]): boolean => {
+const shouldPropertyReRender = (property: Property, plugins?: FireCMSPlugin[]): boolean => {
     if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
         return true;
     }
     if (isPropertyBuilder(property)) {
         return true;
     }
-    const defAProperty = property as Property | ResolvedProperty;
+    const defAProperty = property as Property;
     const rerenderThisProperty = Boolean(defAProperty.Field) || ("fromBuilder" in defAProperty && defAProperty.fromBuilder);
     if (defAProperty.type === "map" && defAProperty.properties) {
-        return rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins));
+        return Boolean(rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins)));
     } else if (defAProperty.type === "array" && "resolvedProperties" in defAProperty) {
         // @ts-ignore
         return rerenderThisProperty || defAProperty.resolvedProperties?.some((childProperty) => childProperty && shouldPropertyReRender(childProperty, plugins));
     } else {
-        return rerenderThisProperty;
+        return Boolean(rerenderThisProperty);
     }
 }
 
-interface UseWrappedComponentParams< M extends Record<string, any> = any> {
+interface UseWrappedComponentParams<M extends Record<string, any> = any> {
     path?: string,
-    collection?: ResolvedEntityCollection<M>,
+    collection?: EntityCollection<M>,
     propertyKey: string,
-    property: ResolvedProperty,
+    property: Property,
     Component: ComponentType<FieldProps<any, any, M>>,
     plugins?: FireCMSPlugin[]
 }
@@ -315,7 +313,7 @@ function useWrappedComponent<T, M extends Record<string, any> = any>(
         property,
         Component,
         plugins
-    }: UseWrappedComponentParams< M>
+    }: UseWrappedComponentParams<M>
 ): ComponentType<FieldProps<any, any, M>> | null {
 
     const wrapperRef = useRef<ComponentType<FieldProps<any, any, M>> | null>((() => {

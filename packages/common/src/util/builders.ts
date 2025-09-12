@@ -130,8 +130,8 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, USER
  * @param propertyConfig
  * @group Builder
  */
-export function buildFieldConfig<T>(
-    propertyConfig: PropertyConfig<T>
-): PropertyConfig<T> {
+export function buildFieldConfig(
+    propertyConfig: PropertyConfig
+): PropertyConfig{
     return propertyConfig;
 }

@@ -1,9 +1,7 @@
 import React from "react";
 import { ErrorBoundary } from "../../components";
-import { useAuthController, useCustomizationController } from "../../hooks";
 import { ArrayProperty, Property, PropertyPreviewProps } from "@firecms/types";
 import { PropertyPreview } from "../PropertyPreview";
-import { resolveArrayProperty } from "../../util";
 
 /**
  * @group Preview components
@@ -11,19 +9,10 @@ import { resolveArrayProperty } from "../../util";
 export function ArrayOfMapsPreview({
                                        propertyKey,
                                        value,
-                                       property: inputProperty,
+                                       property,
                                        size,
                                        // entity
                                    }: PropertyPreviewProps<ArrayProperty>) {
-
-    const authController = useAuthController();
-    const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
-        propertyKey,
-        property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
     if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");

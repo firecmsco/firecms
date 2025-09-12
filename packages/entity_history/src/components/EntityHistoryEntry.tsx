@@ -4,8 +4,8 @@ import {
     Chip,
     cls,
     defaultBorderMixin,
-    DescriptionIcon,
-    IconButton, KeyboardBackspaceIcon,
+    IconButton,
+    KeyboardBackspaceIcon,
     KeyboardTabIcon,
     Tooltip,
     Typography
@@ -20,7 +20,6 @@ import {
     Property,
     PropertyPreview,
     resolveCollection,
-    ResolvedProperty,
     SkeletonPropertyComponent,
     useAuthController,
     useCustomizationController,
@@ -69,7 +68,7 @@ function PreviousValueView({
                 <PropertyPreview
                     propertyKey={key as string}
                     value={previousValueInPath}
-                    property={childProperty as ResolvedProperty}
+                    property={childProperty as Property}
                     size={"small"}/>
             </div>}>
             <KeyboardBackspaceIcon size={"smallest"} color={"disabled"} className={"mb-1"}/>
@@ -180,10 +179,10 @@ export function EntityHistoryEntry({
                             ? <PropertyPreview
                                 propertyKey={key as string}
                                 value={valueInPath}
-                                property={childProperty as ResolvedProperty}
+                                property={childProperty as Property}
                                 size={"small"}/>
                             : <SkeletonPropertyComponent
-                                property={childProperty as ResolvedProperty}
+                                property={childProperty as Property}
                                 size={"small"}/>) :
                         <Typography variant={"body2"}>
                             {typeof valueInPath === "string" ? valueInPath : JSON.stringify(valueInPath)}
@@ -199,7 +198,7 @@ export function EntityHistoryEntry({
                             <div className="w-4/5">
                                 {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
                                     <PreviousValueView previousValueInPath={previousValueInPath}
-                                                       childProperty={childProperty as ResolvedProperty}
+                                                       childProperty={childProperty as Property}
                                                        key={key}/>
                                 }
                                 {element}

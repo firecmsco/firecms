@@ -4,7 +4,6 @@ import { CollectionActionsProps, EntityCollection, EntityTableController } from 
 import { FieldProps, FormContext } from "./fields";
 import { Property } from "./properties";
 import { EntityStatus } from "./entities";
-import { ResolvedProperty } from "./resolved_entities";
 import { FireCMSContext } from "../firecms_context";
 import { NavigationGroupMapping } from "../controllers";
 import { User } from "../users";
@@ -139,7 +138,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * @param props
          */
         HeaderAction?: React.ComponentType<{
-            property: ResolvedProperty,
+            property: Property,
             propertyKey: string,
             path: string,
             parentCollectionIds: string[],
@@ -241,7 +240,7 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
 export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {
     fieldConfigId: string;
     propertyKey: string;
-    property: Property | ResolvedProperty;
+    property: Property;
     Field: React.ComponentType<FieldProps<any, any, M>>;
     plugin: FireCMSPlugin;
     path?: string;

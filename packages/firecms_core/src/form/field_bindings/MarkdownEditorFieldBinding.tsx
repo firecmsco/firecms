@@ -1,18 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+    ArrayProperty,
     FieldHelperText,
     FieldProps,
     getIconForProperty,
     LabelWithIconAndTooltip,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
     StringProperty,
     useAuthController,
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
-import { resolveProperty } from "../../util";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/common";
 
 interface MarkdownEditorFieldProps {
@@ -64,12 +62,6 @@ export function MarkdownEditorFieldBinding({
         }
     }, [value]);
 
-    const resolvedProperty = resolveProperty({
-        property: property,
-        values: entityValues,
-        authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty;
-
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage?.fileName) {
             const fileName = await resolveStorageFilenameString({
@@ -78,7 +70,7 @@ export function MarkdownEditorFieldBinding({
                 values: entityValues,
                 entityId,
                 path,
-                property: resolvedProperty,
+                property: property,
                 file,
                 propertyKey
             });
@@ -88,22 +80,17 @@ export function MarkdownEditorFieldBinding({
             return fileName;
         }
         return randomString() + "_" + file.name;
-    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
+    }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
         if (!storage) return "/";
-        const resolvedProperty = resolveProperty({
-            property: property,
-            values: entityValues,
-            authController
-        }) as ResolvedStringProperty | ResolvedArrayProperty;
         return resolveStoragePathString({
             input: storage.storagePath,
             storage,
             values: entityValues,
             entityId,
             path,
-            property: resolvedProperty,
+            property,
             file,
             propertyKey
         }) ?? "/";

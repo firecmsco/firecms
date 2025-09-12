@@ -6,8 +6,6 @@ import {
     isPropertyBuilder,
     Properties,
     Property,
-    ResolvedProperty,
-    resolveProperty
 } from "@firecms/core";
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@firecms/formex";
@@ -79,10 +77,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     if (value === null) return null;
 
     if (property === undefined) return value;
-    const usedProperty: ResolvedProperty | null = resolveProperty({
-        property,
-        authController
-    })
+    const usedProperty: Property | null = property;
     if (usedProperty === null) return value;
     const from = inferTypeFromValue(value);
     const to = usedProperty.type;

@@ -2,18 +2,16 @@ import React, { createElement } from "react";
 import equal from "react-fast-compare"
 
 import {
+    ArrayProperty,
     EntityReference,
     EntityRelation,
+    MapProperty,
+    NumberProperty,
     Property,
     PropertyPreviewProps,
-    ResolvedArrayProperty,
-    ResolvedMapProperty,
-    ResolvedNumberProperty,
-    ResolvedProperty,
-    ResolvedStringProperty
+    StringProperty
 } from "@firecms/types";
 
-import { resolveProperty } from "../util";
 
 import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
@@ -34,11 +32,12 @@ import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 import { ErrorView } from "../components";
 import { RelationPreview } from "./components/RelationPreview";
+import { resolveProperty } from "@firecms/common";
 
 /**
  * @group Preview components
  */
-export const PropertyPreview = React.memo(function PropertyPreview<P extends Property | ResolvedProperty>(props: PropertyPreviewProps<P>) {
+export const PropertyPreview = React.memo(function PropertyPreview<P extends Property>(props: PropertyPreviewProps<P>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -78,7 +77,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
     } else if (value === undefined || value === null) {
         content = <EmptyValue/>;
     } else if (property.type === "string") {
-        const stringProperty = property as ResolvedStringProperty;
+        const stringProperty = property as StringProperty;
         if (typeof value === "string") {
             if (stringProperty.storage) {
                 const filePath = stringProperty.storage.previewUrl ? stringProperty.storage.previewUrl(value) : value;
@@ -123,8 +122,8 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             content = buildWrongValueType(propertyKey, property.type, value);
         }
     } else if (property.type === "array") {
-        if (value instanceof Array) {
-            const arrayProperty = property as ResolvedArrayProperty;
+        if (Array.isArray(value)) {
+            const arrayProperty = property as ArrayProperty;
             if (!arrayProperty.of && !arrayProperty.oneOf) {
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }
@@ -148,27 +147,27 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
                         content = <ArrayOfStorageComponentsPreview
                             {...props}
                             value={value}
-                            property={property as ResolvedArrayProperty}/>;
+                            property={property as ArrayProperty}/>;
                     } else {
                         content = <ArrayOfStringsPreview
                             {...props}
-                            value={value as string[]}
-                            property={property as ResolvedArrayProperty}/>;
+                            property={property as ArrayProperty}
+                            value={value as string[]}/>;
                     }
                 } else if (arrayProperty.of.type === "number" && arrayProperty.of.enum) {
                     content = <ArrayPropertyEnumPreview
                         {...props}
                         value={value as number[]}
-                        property={property as ResolvedArrayProperty}/>;
+                        property={property as ArrayProperty}/>;
                 } else {
                     content = <ArrayPropertyPreview {...props}
                                                     value={value}
-                                                    property={property as ResolvedArrayProperty}/>;
+                                                    property={property as ArrayProperty}/>;
                 }
             } else if (arrayProperty.oneOf) {
                 content = <ArrayOneOfPreview {...props}
                                              value={value}
-                                             property={property as ResolvedArrayProperty}/>;
+                                             property={property as ArrayProperty}/>;
             }
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);
@@ -178,7 +177,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             content =
                 <MapPropertyPreview {...props}
                                     value={value}
-                                    property={property as ResolvedMapProperty}/>;
+                                    property={property as MapProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);
         }
@@ -233,7 +232,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
         if (typeof value === "number") {
             content = <NumberPropertyPreview {...props}
                                              value={value}
-                                             property={property as ResolvedNumberProperty}/>;
+                                             property={property as NumberProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);
         }

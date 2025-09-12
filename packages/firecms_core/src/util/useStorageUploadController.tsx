@@ -7,15 +7,12 @@ import {
     ImageCompression,
     PreviewSize,
     Property,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
     StorageConfig,
     StorageSource,
     StringProperty
 } from "@firecms/types";
 import { useCallback, useEffect, useState } from "react";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@firecms/common";
-import { resolveProperty } from "./resolutions";
 import { useAuthController } from "../hooks";
 
 /**
@@ -50,7 +47,7 @@ export function useStorageUploadController<M extends object>({
                                                                  value: string | string[] | null;
                                                                  path?: string,
                                                                  propertyKey: string,
-                                                                 property: StringProperty | ArrayProperty | ResolvedStringProperty | ResolvedArrayProperty,
+                                                                 property: StringProperty | ArrayProperty | StringProperty | ArrayProperty,
                                                                  storageSource: StorageSource,
                                                                  disabled: boolean,
                                                                  onChange: (value: string | string[] | null) => void
@@ -89,12 +86,6 @@ export function useStorageUploadController<M extends object>({
         }
     }, [internalInitialValue, value, initialValue]);
 
-    const resolvedProperty = resolveProperty({
-        property: property,
-        values: entityValues,
-        authController
-    }) as ResolvedStringProperty | ResolvedArrayProperty;
-
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {
             const fileName = await resolveStorageFilenameString({
@@ -103,7 +94,7 @@ export function useStorageUploadController<M extends object>({
                 values: entityValues,
                 entityId,
                 path,
-                property: resolvedProperty,
+                property: property,
                 file,
                 propertyKey
             });
@@ -113,7 +104,7 @@ export function useStorageUploadController<M extends object>({
             return fileName;
         }
         return randomString() + "_" + file.name;
-    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
+    }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
         return resolveStoragePathString({
@@ -122,11 +113,11 @@ export function useStorageUploadController<M extends object>({
             values: entityValues,
             entityId,
             path,
-            property: resolvedProperty,
+            property: property,
             file,
             propertyKey
         }) ?? "/";
-    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
+    }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
                                                     entry: StorageFieldItem,

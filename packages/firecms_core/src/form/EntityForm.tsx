@@ -11,18 +11,11 @@ import {
     PluginFormActionProps,
     PropertyConfig,
     PropertyFieldBindingProps,
-    ResolvedEntityCollection
 } from "@firecms/types";
 import equal from "react-fast-compare";
 
 import { ErrorBoundary, getFormFieldKeys } from "../components";
-import {
-    getDefaultValuesFor,
-    getValueInPath,
-    isHidden,
-    isReadOnly,
-    mergeDeep,
-} from "@firecms/common";
+import { getDefaultValuesFor, getValueInPath, isHidden, isReadOnly, mergeDeep, } from "@firecms/common";
 
 import {
     saveEntityWithCallbacks,
@@ -45,7 +38,6 @@ import { ErrorFocus } from "../form/components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { EntityFormActions } from "./EntityFormActions";
 import { useDebouncedCallback } from "../util/useDebouncedCallback";
-import { resolveCollection } from "../util";
 import { getEntityTitlePropertyKey } from "../util/references";
 
 export function EntityForm<M extends Record<string, any>>({
@@ -217,16 +209,6 @@ export function EntityForm<M extends Record<string, any>>({
 
     }, [formex]);
 
-    const resolvedCollection = useMemo(() => resolveCollection<M>({
-        collection,
-        path: path,
-        entityId,
-        values: formex.values,
-        previousValues: formex.initialValues,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, path, entityId, formex.values, formex.initialValues, customizationController.propertyConfigs]);
-
     const onPreSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
@@ -292,7 +274,7 @@ export function EntityForm<M extends Record<string, any>>({
                             collection,
                             path
                         }: {
-        collection: EntityCollection<M> | ResolvedEntityCollection<M>,
+        collection: EntityCollection<M> ,
         path: string,
         entityId: string | number | undefined,
         values: M,
@@ -315,7 +297,7 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     type EntityFormSaveParams<M extends Record<string, any>> = {
-        collection: ResolvedEntityCollection<M>,
+        collection: EntityCollection<M>,
         path: string,
         entityId: string | number | undefined,
         values: EntityValues<M>,
@@ -350,7 +332,7 @@ export function EntityForm<M extends Record<string, any>>({
     const save = (values: EntityValues<M>): Promise<void> => {
         lastSavedValues.current = values;
         return onSaveEntityRequest({
-            collection: resolvedCollection,
+            collection: collection,
             path,
             entityId,
             values,
@@ -373,7 +355,7 @@ export function EntityForm<M extends Record<string, any>>({
         // @ts-ignore
         setFieldValue: useCallback(formex.setFieldValue, []),
         values: formex.values,
-        collection: resolvedCollection,
+        collection: collection,
         entityId: entityId as string,
         path,
         save,
@@ -387,7 +369,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     useEffect(() => {
         onFormContextReady?.(formContext);
-    }, [formex.version, resolvedCollection, entityId, path]);
+    }, [formex.version, collection, entityId, path]);
 
     const onIdUpdateError = useCallback((error: any) => {
         snackbarController.open({
@@ -422,7 +404,7 @@ export function EntityForm<M extends Record<string, any>>({
         )).filter(Boolean));
     }
 
-    const titlePropertyKey = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
+    const titlePropertyKey = getEntityTitlePropertyKey(collection, customizationController.propertyConfigs);
     const title = (formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) : undefined)
         ?? collection.singularName
         ?? collection.name;
@@ -433,7 +415,7 @@ export function EntityForm<M extends Record<string, any>>({
             setCustomIdLoading(true);
             try {
                 const updatedId = await onIdUpdate({
-                    collection: resolvedCollection,
+                    collection: collection,
                     path,
                     entityId,
                     values: formex.values,
@@ -446,7 +428,7 @@ export function EntityForm<M extends Record<string, any>>({
             }
             setCustomIdLoading(false);
         }
-    }, [entityId, formex.values, status, onIdUpdate, resolvedCollection, path, context, onIdUpdateError]);
+    }, [entityId, formex.values, status, onIdUpdate, collection, path, context, onIdUpdateError]);
 
     useEffect(() => {
         doOnIdUpdate();
@@ -471,10 +453,10 @@ export function EntityForm<M extends Record<string, any>>({
     const validationSchema = useMemo(() => entityId
             ? getYupEntitySchema(
                 entityId,
-                resolvedCollection.properties,
+                collection.properties,
                 uniqueFieldValidator)
             : undefined,
-        [entityId, resolvedCollection.properties, uniqueFieldValidator]);
+        [entityId, collection.properties, uniqueFieldValidator]);
 
     useEffect(() => {
         const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
@@ -499,7 +481,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [formex.isSubmitting, autoSave, underlyingChanges, entity, formex.values, formex.touched, formex.setFieldValue]);
 
-    const formFieldKeys = getFormFieldKeys(resolvedCollection);
+    const formFieldKeys = getFormFieldKeys(collection);
 
     const formFields = () => {
 
@@ -514,7 +496,7 @@ export function EntityForm<M extends Record<string, any>>({
         return (
             <FormLayout>
                 {formFieldKeys.map((key) => {
-                    const property = resolvedCollection.properties[key];
+                    const property = collection.properties[key];
                     if (property) {
 
                         const underlyingValueHasChanged: boolean =
@@ -546,7 +528,7 @@ export function EntityForm<M extends Record<string, any>>({
                         );
                     }
 
-                    const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
+                    const additionalField = collection.additionalFields?.find(f => f.key === key);
                     if (additionalField && entity) {
                         const Builder = additionalField.Builder;
                         if (!Builder && !additionalField.value) {
@@ -578,7 +560,7 @@ export function EntityForm<M extends Record<string, any>>({
                         );
                     }
 
-                    console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
+                    console.warn(`Property ${key} not found in collection ${collection.name} in properties or additional fields. Skipping.`);
                     return null;
                 }).filter(Boolean)}
             </FormLayout>
@@ -641,12 +623,12 @@ export function EntityForm<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
-    if (!resolvedCollection || !path) {
+    if (!collection || !path) {
         throw Error("INTERNAL: Collection and path must be defined in form context");
     }
 
     const dialogActions = <EntityFormActionsComponent
-        collection={resolvedCollection}
+        collection={collection}
         path={path}
         entity={entity}
         layout={forceActionsAtTheBottom ? "bottom" : "side"}
@@ -710,14 +692,7 @@ function getInitialEntityValues<M extends object>(
     entity: Entity<M> | undefined,
     propertyConfigs?: Record<string, PropertyConfig>,
 ): Partial<EntityValues<M>> {
-    const resolvedCollection = resolveCollection({
-        collection,
-        path: path,
-        values: entity?.values,
-        propertyConfigs,
-        authController
-    });
-    const properties = resolvedCollection.properties;
+    const properties = collection.properties;
     if ((status === "existing" || status === "copy") && entity) {
         if (!collection.alwaysApplyDefaultValues) {
             return entity.values ?? getDefaultValuesFor(properties);

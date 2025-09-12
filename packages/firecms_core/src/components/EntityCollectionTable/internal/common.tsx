@@ -1,6 +1,6 @@
-import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "@firecms/types";
+import { ArrayProperty, EntityCollection, Property } from "@firecms/types";
 
-export function getTableCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
+export function getTableCellAlignment(property: Property): "right" | "left" | "center" {
     if (property.type === "boolean") {
         return "center";
     } else if (property.type === "number") {
@@ -14,7 +14,7 @@ export function getTableCellAlignment(property: Property | ResolvedProperty): "r
     }
 }
 
-export function getTablePropertyColumnWidth(property: ResolvedProperty): number {
+export function getTablePropertyColumnWidth(property: Property): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -37,12 +37,12 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
             return 200;
         }
     } else if (property.type === "array") {
-        const arrayProperty = property as ResolvedArrayProperty;
+        const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of) {
             if (Array.isArray(property.of)) {
                 return 300;
             } else {
-                return getTablePropertyColumnWidth(arrayProperty.of as ResolvedProperty);
+                return getTablePropertyColumnWidth(arrayProperty.of as Property);
             }
         } else {
             return 300;

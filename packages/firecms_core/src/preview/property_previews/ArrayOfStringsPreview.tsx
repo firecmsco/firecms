@@ -1,9 +1,7 @@
 import React from "react";
-import { ArrayProperty, PropertyPreviewProps, ResolvedStringProperty } from "@firecms/types";
+import { ArrayProperty, PropertyPreviewProps, StringProperty } from "@firecms/types";
 
-import { resolveArrayProperty } from "../../util";
 import { StringPropertyPreview } from "../../preview";
-import { useAuthController, useCustomizationController } from "../../hooks";
 import { ErrorBoundary } from "../../components";
 
 /**
@@ -12,18 +10,10 @@ import { ErrorBoundary } from "../../components";
 export function ArrayOfStringsPreview({
                                           propertyKey,
                                           value,
-                                          property: inputProperty,
+                                          property: property,
                                           // entity,
                                           size
                                       }: PropertyPreviewProps<ArrayProperty>) {
-    const authController = useAuthController();
-    const customizationController = useCustomizationController();
-    const property = resolveArrayProperty({
-        propertyKey,
-        property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
@@ -34,7 +24,7 @@ export function ArrayOfStringsPreview({
     if (value && !Array.isArray(value)) {
         return <div>{`Unexpected value: ${value}`}</div>;
     }
-    const stringProperty = property.of as ResolvedStringProperty;
+    const stringProperty = property.of as StringProperty;
 
     return (
         <div className="flex flex-col gap-2">

@@ -9,10 +9,8 @@ import {
 import {
     DataSource,
     Entity,
-    EntityCollection,
-    getValueInPath,
+    EntityCollection, getValueInPath,
     PluginFormActionProps,
-    resolveCollection,
     useAuthController,
     useCustomizationController,
     useDataSource,
@@ -70,22 +68,13 @@ export function DataEnhancementControllerProvider({
     const [suggestions, setSuggestions] = useState<Record<string, string | number>>({});
     const [loadingSuggestions, setLoadingSuggestions] = useState<string[]>([]);
 
-    const customizationController = useCustomizationController();
     const enhancingInProgress = useRef(false);
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
 
-    const resolvedCollection = resolveCollection({
-        collection,
-        path: path,
-        entityId: formContext?.entityId,
-        values: formContext?.values,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
 
-    const properties = useMemo(() => getSimplifiedProperties(resolvedCollection.properties, formContext?.values), [formContext?.values]);
+    const properties = useMemo(() => getSimplifiedProperties(collection.properties, formContext?.values), [formContext?.values]);
     // const preEnhanceValuesRef = React.useRef(formContext?.values ?? {});
     const valuesRef = React.useRef(formContext?.values ?? {});
     useEffect(() => {

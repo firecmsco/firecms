@@ -3,9 +3,9 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCallbacks,
+    EntityCollection,
     EntityOnDeleteProps,
     FireCMSContext,
-    ResolvedEntityCollection,
     User
 } from "@firecms/types";
 
@@ -54,7 +54,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
                                                                                                           onDeleteSuccessHookError,
                                                                                                           context
                                                                                                       }: DeleteEntityWithCallbacksProps<M> & {
-                                                                                                          collection: ResolvedEntityCollection<M>,
+                                                                                                          collection: EntityCollection<M>,
                                                                                                           dataSource: DataSource,
                                                                                                           context: FireCMSContext<USER>
                                                                                                       }

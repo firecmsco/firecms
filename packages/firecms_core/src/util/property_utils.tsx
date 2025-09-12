@@ -6,21 +6,18 @@ import {
     Properties,
     Property,
     PropertyConfig,
-    ResolvedProperties,
-    ResolvedProperty
 } from "@firecms/types";
-import { isPropertyBuilder } from "@firecms/common";
+import { isPropertyBuilder, resolveProperty } from "@firecms/common";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
 import { getFieldConfig } from "../core";
-import { resolveProperty } from "./resolutions";
 
 export function isReferenceProperty(
     authController: AuthController,
-    propertyOrBuilder: Property,
+    property: Property,
     fields: Record<string, PropertyConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
-        property: propertyOrBuilder,
+        property: property,
         propertyConfigs: fields,
         authController
     });
@@ -42,7 +39,7 @@ export function getIconForWidget(widget: PropertyConfig | undefined,
 }
 
 export function getIconForProperty(
-    property: Property | ResolvedProperty,
+    property: Property,
     size: "small" | "medium" | "large" = "small",
     fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {
@@ -61,9 +58,7 @@ export function getIconForProperty(
  * @param properties
  * @param path
  */
-export function getPropertyInPath(properties: Properties, path: string): Property | undefined;
-export function getPropertyInPath(properties: ResolvedProperties, path: string): ResolvedProperty | undefined;
-export function getPropertyInPath(properties: Properties | ResolvedProperties, path: string): Property | ResolvedProperty | undefined {
+export function getPropertyInPath(properties: Properties, path: string): Property | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             // @ts-ignore
@@ -82,7 +77,7 @@ export function getPropertyInPath(properties: Properties | ResolvedProperties, p
     return undefined;
 }
 
-export function getResolvedPropertyInPath(properties: Record<string, ResolvedProperty>, path: string): ResolvedProperty | undefined {
+export function getResolvedPropertyInPath(properties: Record<string, Property>, path: string): Property | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             return properties[path];

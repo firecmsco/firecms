@@ -22,14 +22,13 @@ import {
 import {
     applyPermissionsFunctionIfEmpty,
     CollectionRegistry,
-    getParentReferencesFromPath,
+    getParentReferencesFromPath, getSubcollections,
     mergeDeep,
     removeFunctions,
     removeInitialAndTrailingSlashes,
     resolveCollectionPathIds,
     resolvePermissions
 } from "@firecms/common";
-import { getSubcollections } from "../util";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";

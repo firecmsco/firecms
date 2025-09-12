@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import equal from "react-fast-compare"
 import {
+    ArrayProperty,
     Entity,
     EntityReference,
     EntityRelation,
+    NumberProperty,
+    Property,
     ReferenceProperty,
-    ResolvedArrayProperty,
-    ResolvedNumberProperty,
-    ResolvedProperty,
-    ResolvedStringProperty,
     StringProperty
 } from "@firecms/types";
 
@@ -42,7 +41,7 @@ export interface PropertyTableCellProps<T > {
     customFieldValidator?: CustomFieldValidator;
     value: T;
     readonly: boolean;
-    property: ResolvedProperty;
+    property: Property;
     height: number;
     width: number;
     entity: Entity<any>;
@@ -51,17 +50,17 @@ export interface PropertyTableCellProps<T > {
     enablePopupIcon?: boolean;
 }
 
-function isStorageProperty(property: ResolvedProperty) {
+function isStorageProperty(property: Property) {
     if (property.type === "string" && property.markdown)
         return false;
-    if (property.type === "string" && (property as ResolvedStringProperty).storage)
+    if (property.type === "string" && (property as StringProperty).storage)
         return true;
     if (property.type === "array") {
         if (Array.isArray(property.of)) {
             return false;
         } else {
-            return ((property as ResolvedArrayProperty).of as ResolvedProperty)?.type === "string" &&
-                ((property as ResolvedArrayProperty).of as ResolvedStringProperty)?.storage
+            return ((property as ArrayProperty).of as Property)?.type === "string" &&
+                ((property as ArrayProperty).of as StringProperty)?.storage
         }
     }
     return false;
@@ -280,7 +279,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                      focused={selected}
                                                      selected={selected}
                                                      openPopup={setPopupCell ? openPopup : undefined}
-                                                     property={property as ResolvedStringProperty | ResolvedArrayProperty}
+                                                     property={property as StringProperty | ArrayProperty}
                                                      entity={entity}
                                                      path={path}
                                                      value={internalValue}
@@ -293,7 +292,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 fullHeight = true;
                 removePadding = true;
             } else if (selected && property.type === "number") {
-                const numberProperty = property as ResolvedNumberProperty;
+                const numberProperty = property as NumberProperty;
                 if (numberProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
                                                          multiple={false}
@@ -319,7 +318,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     allowScroll = true;
                 }
             } else if (selected && property.type === "string") {
-                const stringProperty = property as ResolvedStringProperty;
+                const stringProperty = property as StringProperty;
                 if (stringProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
                                                          multiple={false}
@@ -400,7 +399,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     allowScroll = false;
                 }
             } else if (property.type === "array") {
-                const arrayProperty = (property as ResolvedArrayProperty);
+                const arrayProperty = (property as ArrayProperty);
 
                 if (!arrayProperty.of && !arrayProperty.oneOf) {
                     throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);

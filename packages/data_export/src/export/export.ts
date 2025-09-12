@@ -4,8 +4,8 @@ import {
     EntityReference,
     getArrayValuesCount,
     getValueInPath,
-    ResolvedProperties,
-    ResolvedProperty
+    Property,
+    ResolvedProperties
 } from "@firecms/core";
 
 interface Header {
@@ -121,10 +121,10 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
                 }
                 if (arrayValuesCount && arrayValuesCount[childKey] > 1) {
                     return Array.from({ length: arrayValuesCount[childKey] },
-                        (_, i) => getHeaders(property as ResolvedProperty, `${childKey}[${i}]`, ""))
+                        (_, i) => getHeaders(property as Property, `${childKey}[${i}]`, ""))
                         .flat();
                 } else {
-                    return getHeaders(property as ResolvedProperty, childKey, "");
+                    return getHeaders(property as Property, childKey, "");
                 }
             })
     ];
@@ -145,7 +145,7 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
  * @param propertyKey
  * @param prefix
  */
-function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""): Header[] {
+function getHeaders(property: Property, propertyKey: string, prefix = ""): Header[] {
     const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
     if (property.type === "map" && property.properties) {
         return Object.entries(property.properties)
@@ -160,7 +160,7 @@ function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""
 }
 
 function processValueForExport(inputValue: any,
-                               property: ResolvedProperty,
+                               property: Property,
                                exportType: "csv" | "json",
                                dateExportType: "timestamp" | "string"
 ): any {
@@ -175,10 +175,10 @@ function processValueForExport(inputValue: any,
             } else if (property.of.type === "map") {
                 value = exportType === "csv"
                     ? inputValue.map((e) => JSON.stringify(e))
-                    : inputValue.map((e) => processValueForExport(e, property.of as ResolvedProperty, exportType, dateExportType));
+                    : inputValue.map((e) => processValueForExport(e, property.of as Property, exportType, dateExportType));
                 ;
             } else {
-                value = inputValue.map((e) => processValueForExport(e, property.of as ResolvedProperty, exportType, dateExportType));
+                value = inputValue.map((e) => processValueForExport(e, property.of as Property, exportType, dateExportType));
             }
         } else {
             value = inputValue;
@@ -204,7 +204,7 @@ function processValuesForExport<M extends Record<string, any>>
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];
-            const updatedValue = processValueForExport(inputValue, property as ResolvedProperty, exportType, dateExportType);
+            const updatedValue = processValueForExport(inputValue, property as Property, exportType, dateExportType);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { PreviewSize, ResolvedStringProperty } from "@firecms/types";
+import { PreviewSize, StringProperty } from "@firecms/types";
 import { PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
@@ -8,7 +8,7 @@ import { ErrorBoundary } from "../../components";
 
 interface StorageItemPreviewProps {
     name: string;
-    property: ResolvedStringProperty;
+    property: StringProperty;
     value: string,
     onRemove: (value: string) => void;
     size: PreviewSize;
