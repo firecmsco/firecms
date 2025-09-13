@@ -117,12 +117,12 @@ export function resolveProperty<M extends Record<string, any> = any>(props: Reso
             return resolvedProperty;
         }
         if (customField.property) {
-            const configPropertyOrBuilder = customField.property;
-            if ("propertyConfig" in configPropertyOrBuilder) {
-                delete configPropertyOrBuilder.propertyConfig;
+            const configProperty = customField.property;
+            if ("propertyConfig" in configProperty) {
+                delete configProperty.propertyConfig;
             }
             const customFieldProperty = resolveProperty({
-                property: configPropertyOrBuilder,
+                property: configProperty,
                 ignoreMissingFields,
                 ...rest
             });

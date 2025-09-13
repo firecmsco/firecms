@@ -124,6 +124,7 @@ export function EntityHistoryView({
         const revertValues = {
             ...revertVersion.values,
             __metadata: {
+                // @ts-ignore
                 ...revertVersion.values?.["__metadata"],
                 reverted: true,
                 updated_on: new Date(),
@@ -184,7 +185,10 @@ export function EntityHistoryView({
             </>}
 
             {revisions.map((revision, index) => {
+
+                // @ts-ignore
                 const previewKeys = revision.values?.["__metadata"]?.["changed_fields"];
+                // @ts-ignore
                 const previousValues: object | undefined = revision.values?.["__metadata"]?.["previous_values"];
                 return <div key={index} className="flex flex-cols gap-2 w-full">
                     <EntityHistoryEntry size={"large"}

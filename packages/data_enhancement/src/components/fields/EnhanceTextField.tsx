@@ -6,10 +6,12 @@ import {
     FieldProps,
     getIconForProperty,
     LabelWithIconAndTooltip,
+    NumberProperty,
     PropertyIdCopyTooltip,
+    StringProperty,
     useClearRestoreValue
 } from "@firecms/core";
-import { AdvancedTextField, InputType } from "./AdvancedTextField";
+import { AdvancedTextField } from "./AdvancedTextField";
 
 /**
  * Generic text field.
@@ -17,7 +19,7 @@ import { AdvancedTextField, InputType } from "./AdvancedTextField";
  * and tables to the specified properties.
  * @group Form fields
  */
-export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBinding<T extends string | number>({
+export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBinding({
                                                                                                                   propertyKey,
                                                                                                                   value,
                                                                                                                   setValue,
@@ -29,7 +31,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
                                                                                                                   includeDescription,
                                                                                                                   highlight,
                                                                                                                   size
-                                                                                                              }: FieldProps<T> & {
+                                                                                                              }: FieldProps<StringProperty | NumberProperty> & {
     highlight?: string
 }) {
 
@@ -44,13 +46,13 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
         setValue
     });
 
-    const internalValue: T = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
+    const internalValue:string | number | null = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
 
     return (
         <>
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
                 <AdvancedTextField
-                    inputType={(property.type === "number" ? "number" : "text") as InputType<T>}
+                    inputType={property.type === "number" ? "number" : "text"}
                     label={<LabelWithIconAndTooltip
                         propertyKey={propertyKey}
                         icon={getIconForProperty(property)}

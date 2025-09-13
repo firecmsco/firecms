@@ -27,6 +27,7 @@
     "packages/user_management",
     "packages/formex",
     "packages/types",
+    "packages/common",
     "app/frontend",
     "app/backend",
     "examples/example_cloud",

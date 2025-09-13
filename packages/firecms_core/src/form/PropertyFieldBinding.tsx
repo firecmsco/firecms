@@ -285,12 +285,9 @@ const shouldPropertyReRender = (property: Property, plugins?: FireCMSPlugin[]): 
         return true;
     }
     const defAProperty = property as Property;
-    const rerenderThisProperty = Boolean(defAProperty.Field) || ("fromBuilder" in defAProperty && defAProperty.fromBuilder);
+    const rerenderThisProperty = Boolean(defAProperty.Field);
     if (defAProperty.type === "map" && defAProperty.properties) {
         return Boolean(rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins)));
-    } else if (defAProperty.type === "array" && "resolvedProperties" in defAProperty) {
-        // @ts-ignore
-        return rerenderThisProperty || defAProperty.resolvedProperties?.some((childProperty) => childProperty && shouldPropertyReRender(childProperty, plugins));
     } else {
         return Boolean(rerenderThisProperty);
     }

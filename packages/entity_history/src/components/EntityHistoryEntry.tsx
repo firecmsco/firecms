@@ -19,7 +19,6 @@ import {
     PreviewSize,
     Property,
     PropertyPreview,
-    resolveCollection,
     SkeletonPropertyComponent,
     useAuthController,
     useCustomizationController,
@@ -107,14 +106,6 @@ export function EntityHistoryEntry({
     const { getUser } = useHistoryController();
     const user = getUser?.(updatedBy);
 
-    const resolvedCollection = React.useMemo(() => resolveCollection({
-        collection,
-        path: entity.path,
-        values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection]);
-
     return <div className={"w-full flex flex-col gap-2 mt-4"}>
         <div className={"ml-4 flex items-center gap-4"}>
             <Typography variant={"body2"} color={"secondary"}>{updatedOn.toLocaleString()}</Typography>
@@ -170,7 +161,7 @@ export function EntityHistoryEntry({
             <div className={"flex flex-col grow w-full m-1 shrink min-w-0"}>
 
                 {previewKeys && previewKeys.map((key) => {
-                    const childProperty = getPropertyInPath(resolvedCollection.properties, key);
+                    const childProperty = getPropertyInPath(collection.properties, key);
 
                     const valueInPath = getValueInPath(entity.values, key);
                     const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;

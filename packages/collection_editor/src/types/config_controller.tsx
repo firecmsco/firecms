@@ -1,4 +1,4 @@
-import { CMSType, NavigationGroupMapping, Property } from "@firecms/core";
+import { NavigationGroupMapping, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 /**
@@ -13,8 +13,8 @@ export interface CollectionsConfigController {
 
     getCollection: (id: string) => PersistedCollection;
 
-    saveCollection: <M extends { [Key: string]: CMSType }>(params: SaveCollectionParams<M>) => Promise<void>;
-    updateCollection: <M extends { [Key: string]: CMSType }>(params: UpdateCollectionParams<M>) => Promise<void>;
+    saveCollection: <M extends { [Key: string]: any }>(params: SaveCollectionParams<M>) => Promise<void>;
+    updateCollection: <M extends { [Key: string]: any }>(params: UpdateCollectionParams<M>) => Promise<void>;
 
     saveProperty: (params: SavePropertyParams) => Promise<void>;
     deleteProperty: (params: DeletePropertyParams) => Promise<void>;

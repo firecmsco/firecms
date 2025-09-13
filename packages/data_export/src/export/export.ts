@@ -3,9 +3,8 @@ import {
     Entity,
     EntityReference,
     getArrayValuesCount,
-    getValueInPath,
+    getValueInPath, Properties,
     Property,
-    ResolvedProperties
 } from "@firecms/core";
 
 interface Header {
@@ -16,7 +15,7 @@ interface Header {
 export interface DownloadEntitiesExportParams<M extends Record<string, any>> {
     data: Entity<M>[];
     additionalData: Record<string, any>[] | undefined;
-    properties: ResolvedProperties;
+    properties: Properties;
     propertiesOrder: string[] | undefined;
     name: string;
     flattenArrays: boolean;
@@ -61,7 +60,7 @@ export function downloadEntitiesExport<M extends Record<string, any>>({
 
 export function getEntityCSVExportableData(data: Entity<any>[],
                                            additionalData: Record<string, any>[] | undefined,
-                                           properties: ResolvedProperties,
+                                           properties: Properties,
                                            headers: Header[],
                                            dateExportType: "timestamp" | "string"
 ) {
@@ -84,7 +83,7 @@ export function getEntityCSVExportableData(data: Entity<any>[],
 
 export function getEntityJsonExportableData(data: Entity<any>[],
                                             additionalData: Record<string, any>[] | undefined,
-                                            properties: ResolvedProperties,
+                                            properties: Properties,
                                             dateExportType: "timestamp" | "string"
 ) {
 
@@ -102,7 +101,7 @@ export function getEntityJsonExportableData(data: Entity<any>[],
     return mergedData;
 }
 
-function getExportHeaders<M extends Record<string, any>>(properties: ResolvedProperties,
+function getExportHeaders<M extends Record<string, any>>(properties: Properties,
                                                          propertiesOrder: string[] | undefined,
                                                          additionalHeaders: string[] | undefined,
                                                          arrayValuesCount?: ArrayValuesCount): Header[] {
@@ -167,7 +166,7 @@ function processValueForExport(inputValue: any,
 
     let value;
     if (property.type === "map" && property.properties) {
-        value = processValuesForExport(inputValue, property.properties as ResolvedProperties, exportType, dateExportType);
+        value = processValuesForExport(inputValue, property.properties as Properties, exportType, dateExportType);
     } else if (property.type === "array") {
         if (property.of && Array.isArray(inputValue)) {
             if (Array.isArray(property.of)) {
@@ -197,7 +196,7 @@ function processValueForExport(inputValue: any,
 
 function processValuesForExport<M extends Record<string, any>>
 (inputValues: Record<keyof M, any>,
- properties: ResolvedProperties,
+ properties: Properties,
  exportType: "csv" | "json",
  dateExportType: "timestamp" | "string"
 ): Record<keyof M, any> {

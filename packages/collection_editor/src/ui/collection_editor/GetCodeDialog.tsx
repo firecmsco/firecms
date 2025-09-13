@@ -102,11 +102,9 @@ function collectionToCode(collection: EntityCollection): object {
                     }
                 }
             });
-            delete valueCopy.fromBuilder;
             delete valueCopy.resolved;
             delete valueCopy.propertiesOrder;
             delete valueCopy.propertyConfig;
-            delete valueCopy.resolvedProperties;
             delete valueCopy.editable;
 
         }

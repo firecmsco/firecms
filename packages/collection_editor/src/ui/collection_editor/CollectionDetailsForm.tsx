@@ -106,10 +106,6 @@ export function CollectionDetailsForm({
     let customIdValue: "true" | "false" | "optional" | "code_defined" | undefined;
     if (typeof values.customId === "object") {
         customIdValue = "code_defined";
-    } else if (values.customId === true) {
-        customIdValue = "true";
-    } else if (values.customId === false) {
-        customIdValue = "false";
     } else if (values.customId === "optional") {
         customIdValue = "optional";
     }

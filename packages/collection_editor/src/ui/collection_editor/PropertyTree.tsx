@@ -1,13 +1,7 @@
 import React from "react";
 import equal from "react-fast-compare"
 
-import {
-    AdditionalFieldDelegate,
-    CMSType,
-    isPropertyBuilder,
-    Properties,
-    Property
-} from "@firecms/core";
+import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property } from "@firecms/core";
 import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import {
@@ -33,7 +27,7 @@ import { editableProperty } from "../../utils/entities";
 
 export const PropertyTree = React.memo(
     function PropertyTree<M extends {
-        [Key: string]: CMSType
+        [Key: string]: any
     }>({
            namespace,
            selectedPropertyKey,
@@ -140,7 +134,7 @@ export const PropertyTree = React.memo(
                                         key={id}
                                         id={id}
                                         propertyKey={propertyKey}
-                                        propertyOrBuilder={property}
+                                        property={property}
                                         additionalField={additionalField}
                                         errors={errors}
                                         namespace={namespace}
@@ -165,7 +159,7 @@ export function PropertyTreeEntry({
                                       id,
                                       propertyKey,
                                       namespace,
-                                      propertyOrBuilder,
+                                      property,
                                       additionalField,
                                       selectedPropertyKey,
                                       errors,
@@ -178,7 +172,7 @@ export function PropertyTreeEntry({
     id: string;
     propertyKey: string;
     namespace?: string;
-    propertyOrBuilder: Property;
+    property: Property;
     additionalField?: AdditionalFieldDelegate<any>;
     selectedPropertyKey?: string;
     errors: Record<string, any>;
@@ -214,8 +208,7 @@ export function PropertyTreeEntry({
     const hasError = fullIdPath in errors;
 
     let subtree;
-    if (typeof propertyOrBuilder === "object") {
-        const property = propertyOrBuilder;
+    if (typeof property === "object") {
         if (property.type === "map" && property.properties) {
             subtree = <PropertyTree
                 selectedPropertyKey={selectedPropertyKey}
@@ -232,7 +225,7 @@ export function PropertyTreeEntry({
     }
 
     const selected = selectedPropertyKey === fullId;
-    const editable = propertyOrBuilder && ((collectionEditable && !isPropertyBuilder(propertyOrBuilder)) || editableProperty(propertyOrBuilder));
+    const editable = property && ((collectionEditable && !isPropertyBuilder(property)) || editableProperty(property));
 
     return (
         <div
@@ -250,15 +243,15 @@ export function PropertyTreeEntry({
                     }}/>}
 
                 <div>
-                    {!isPropertyBuilder(propertyOrBuilder) && !additionalField && editable
+                    {!isPropertyBuilder(property) && !additionalField && editable
                         ? <PropertyFieldPreview
-                            property={propertyOrBuilder}
+                            property={property}
                             onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                             includeName={true}
                             selected={selected}
                             hasError={hasError}/>
                         : <NonEditablePropertyPreview name={propertyKey}
-                                                      property={propertyOrBuilder}
+                                                      property={property}
                                                       onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                                                       selected={selected}/>}
                 </div>

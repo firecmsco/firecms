@@ -14,8 +14,8 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { ImportConfig } from "@firecms/types";
 import { getIn, setIn } from "@firecms/formex";
+import { ImportConfig } from "../types";
 
 export interface DataPropertyMappingProps {
     importConfig: ImportConfig;

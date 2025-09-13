@@ -611,6 +611,7 @@ const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
     multi_number_select: "Select",
     file_upload: "File",
     multi_file_upload: "File",
+    relation: "Relation",
     reference: "Reference",
     reference_as_string: "Text",
     multi_references: "Reference",

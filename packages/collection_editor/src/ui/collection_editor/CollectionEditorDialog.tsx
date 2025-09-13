@@ -11,10 +11,8 @@ import {
     mergeDeep,
     NavigationResult,
     Properties,
-    PropertiesOrBuilders,
     Property,
     PropertyConfig,
-    PropertyOrBuilder,
     randomString,
     removeInitialAndTrailingSlashes,
     removeUndefined,
@@ -159,7 +157,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
 
     const initialValuesProp = props.initialValues;
     const includeTemplates = !initialValuesProp?.slug && (props.parentCollectionIds ?? []).length === 0;
-    const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections : collections) ?? [];
+    const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections?.() : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.dbPath.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.slug?.trim().toLowerCase()).filter(Boolean) as string[];
     const [collection, setCollection] = React.useState<PersistedCollection<any> | undefined>();
@@ -263,7 +261,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                                                      includeTemplates: boolean,
                                                                      collection: PersistedCollection<M> | undefined,
                                                                      setCollection: (collection: PersistedCollection<M>) => void,
-                                                                     propertyConfigs: Record<string, PropertyConfig<any>>,
+                                                                     propertyConfigs: Record<string, PropertyConfig>,
                                                                      groups: string[],
                                                                  }
 ) {
@@ -798,7 +796,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
 }
 
-function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>): PersistedCollection<M> {
+function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig>): PersistedCollection<M> {
     const {
         properties,
         ...rest
@@ -816,7 +814,7 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
     };
 }
 
-function applyPropertiesConfig(property: Property, propertyConfigs: Record<string, PropertyConfig<any>>) {
+function applyPropertiesConfig(property: Property, propertyConfigs: Record<string, PropertyConfig>) {
     let internalProperty = property;
     if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];

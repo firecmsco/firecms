@@ -8,8 +8,6 @@ import {
     Properties,
     Property,
     PropertyConfigBadge,
-    resolveCollection,
-    ResolvedProperties,
     slugify,
     useAuthController,
     useCustomizationController,
@@ -36,7 +34,7 @@ import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { useImportConfig } from "../hooks";
 import { convertDataToEntity, getInferenceType } from "../utils";
 import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
-import { ImportConfig } from "@firecms/types";
+import { ImportConfig } from "../types";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 
@@ -48,9 +46,6 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                                                                                              onAnalyticsEvent?: (event: string, params?: any) => void;
                                                                                          }
 ) {
-
-    const authController = useAuthController();
-    const customizationController = useCustomizationController();
 
     const snackbarController = useSnackbarController();
 
@@ -101,18 +96,11 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
         // setStep("mapping");
     };
 
-    const resolvedCollection = resolveCollection({
-        collection,
-        path: path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    });
-
-    const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties;
+    const properties = getPropertiesWithPropertiesOrder(collection.properties, collection.propertiesOrder as Extract<keyof M, string>[]);
 
     const propertiesAndLevel = Object.entries(properties)
         .flatMap(([key, property]) => getPropertiesAndLevel(key, property, 0));
-    const propertiesOrder = (resolvedCollection.propertiesOrder ?? Object.keys(resolvedCollection.properties)) as Extract<keyof M, string>[];
+    const propertiesOrder = (collection.propertiesOrder ?? Object.keys(collection.properties)) as Extract<keyof M, string>[];
     if (collection.collectionGroup) {
         return null;
     }
@@ -387,7 +375,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
                                                                      propertiesOrder
                                                                  }: {
     importConfig: ImportConfig,
-    properties: ResolvedProperties,
+    properties: Properties,
     propertiesOrder: Extract<keyof M, string>[],
 }) {
     const authController = useAuthController();

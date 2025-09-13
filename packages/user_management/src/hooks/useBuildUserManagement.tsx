@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { UserManagement } from "@firecms/types";
 import {
     AuthController,
     Authenticator,
@@ -14,6 +13,7 @@ import {
     User
 } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
+import { UserManagement } from "../types";
 
 type UserWithRoleIds<USER extends User = any> = Omit<USER, "roles"> & { roles: string[] };
 

@@ -173,7 +173,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             } = props as any;
             return client.listenCollection(
                 cleanProps,
-                (entities: Entity<M>[]) => props.onUpdate(entities.map(e => ({
+                (entities: Entity[]) => props.onUpdate(entities.map(e => ({
                     ...e,
                     values: delegateToCMSModel(e.values)
                 }))),
@@ -190,7 +190,7 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
             } = props as any;
             return client.listenEntity(
                 cleanProps,
-                (entity: Entity<M> | null) => {
+                (entity: Entity | null) => {
                     if (entity !== null) {
                         props.onUpdate({
                             ...entity,

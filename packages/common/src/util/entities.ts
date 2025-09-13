@@ -27,8 +27,8 @@ export function isHidden(property: Property): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder(propertyOrBuilder?: Property) {
-    return typeof propertyOrBuilder?.dynamicProps === "function";
+export function isPropertyBuilder(property?: Property) {
+    return typeof property?.dynamicProps === "function";
 }
 
 export function getDefaultValuesFor<M extends Record<string, any>>(properties: Properties): Partial<EntityValues<M>> {

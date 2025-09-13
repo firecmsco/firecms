@@ -18,20 +18,20 @@ import { useAuthController } from "../../hooks";
  * @group Form fields
  */
 export function RepeatFieldBinding({
-                                                             propertyKey,
-                                                             value,
-                                                             error,
-                                                             showError,
-                                                             isSubmitting,
-                                                             setValue,
-                                                             setFieldValue,
-                                                             minimalistView: minimalistViewProp,
-                                                             property,
-                                                             includeDescription,
-                                                             underlyingValueHasChanged,
-                                                             context,
-                                                             disabled
-                                                         }: FieldProps<ArrayProperty>) {
+                                       propertyKey,
+                                       value,
+                                       error,
+                                       showError,
+                                       isSubmitting,
+                                       setValue,
+                                       setFieldValue,
+                                       minimalistView: minimalistViewProp,
+                                       property,
+                                       includeDescription,
+                                       underlyingValueHasChanged,
+                                       context,
+                                       disabled
+                                   }: FieldProps<ArrayProperty>) {
 
     const authController = useAuthController();
 
@@ -44,16 +44,13 @@ export function RepeatFieldBinding({
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
 
-    let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
-    if (!resolvedProperties) {
-        resolvedProperties = getArrayResolvedProperties({
-            propertyValue: value,
-            propertyKey,
-            property,
-            ignoreMissingFields: false,
-            authController
-        })
-    }
+    const resolvedProperties = getArrayResolvedProperties({
+        propertyValue: value,
+        propertyKey,
+        property,
+        ignoreMissingFields: false,
+        authController
+    })
 
     const expanded = property.expanded === undefined ? true : property.expanded;
     const ofProperty = property.of;

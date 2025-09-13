@@ -257,8 +257,8 @@ export class PostgresDataSourceClient {
 
     // Subscription methods
     listenCollection<M extends Record<string, any>>(
-        props: FetchCollectionProps<M>,
-        onUpdate: (entities: Entity<M>[]) => void,
+        props: FetchCollectionProps,
+        onUpdate: (entities: Entity[]) => void,
         onError?: (error: Error) => void
     ): () => void {
         const subscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -295,7 +295,7 @@ export class PostgresDataSourceClient {
 
     listenEntity<M extends Record<string, any>>(
         props: FetchEntityProps<M>,
-        onUpdate: (entity: Entity<M> | null) => void,
+        onUpdate: (entity: Entity | null) => void,
         onError?: (error: Error) => void
     ): () => void {
         const subscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

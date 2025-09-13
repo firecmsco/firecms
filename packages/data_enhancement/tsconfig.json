@@ -11,7 +11,6 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
-
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,

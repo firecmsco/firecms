@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/firecmsco/firecms.git",
-    "directory": "packages/firecms_core"
+    "directory": "packages/common"
   },
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",

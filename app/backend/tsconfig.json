@@ -15,6 +15,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "jsx": "preserve",
     "paths": {
       "@firecms/types": [
         "../../packages/types/src"

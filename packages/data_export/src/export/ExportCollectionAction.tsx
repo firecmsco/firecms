@@ -6,7 +6,6 @@ import {
     EntityCollection,
     ExportConfig,
     getDefaultValuesFor,
-    resolveCollection,
     useAuthController,
     useCustomizationController,
     useDataSource,
@@ -33,7 +32,7 @@ import { downloadEntitiesExport } from "./export";
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
-                                                                                             collection: inputCollection,
+                                                                                             collection,
                                                                                              path: inputPath,
                                                                                              collectionEntitiesCount,
                                                                                              onAnalyticsEvent,
@@ -45,9 +44,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     onAnalyticsEvent?: (event: string, params?: any) => void;
 }) {
 
-    const customizationController = useCustomizationController();
-
-    const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
+    const exportConfig = typeof collection.exportable === "object" ? collection.exportable : undefined;
 
     const dateRef = React.useRef<Date>(new Date());
 
@@ -56,7 +53,6 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
-    const authController = useAuthController();
     const context = useFireCMSContext<USER>();
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
@@ -66,15 +62,9 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount,
         path,
-        collection: inputCollection
+        collection
     });
 
-    const collection: EntityCollection<M> = React.useMemo(() => resolveCollection({
-        collection: inputCollection,
-        path: path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController,
-    }), [inputCollection, path]);
 
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();

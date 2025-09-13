@@ -16,8 +16,7 @@ export function editableProperty(property: Property): boolean {
 export function removeNonEditableProperties(properties: Properties): Properties {
     return Object.entries(properties)
         .filter(([_, property]) => editableProperty(property))
-        .map(([key, propertyOrBuilder]) => {
-            const property = propertyOrBuilder;
+        .map(([key, property]) => {
             if (!editableProperty(property)) {
                 return undefined;
             } else if (property.type === "map" && property.properties) {

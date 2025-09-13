@@ -653,7 +653,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
 
 export type SelectedCellProps<M extends Record<string, any> = any> = {
     propertyKey: Extract<keyof M, string>;
-    cellRect: DOMRect;
+    cellRect: any;
     width: number;
     height: number;
     entityPath: string;

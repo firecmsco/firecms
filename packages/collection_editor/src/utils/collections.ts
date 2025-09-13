@@ -20,7 +20,7 @@ export const mergeCollections = (baseCollections: EntityCollection[],
 
     const markAsEditable = (c: PersistedCollection) => {
         makePropertiesEditable(c.properties as Properties);
-        c.subcollections?.forEach(markAsEditable);
+        c.subcollections?.().forEach(markAsEditable);
     };
 
     backendCollections.forEach(markAsEditable);

@@ -82,7 +82,7 @@ export function RolesDetailsForm({
                         });
                         handleClose();
                     })
-                    .catch(e => {
+                    .catch((e:any) => {
                         setSavingError(e);
                     });
             } catch (e: any) {

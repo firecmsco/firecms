@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Entity, ResolvedProperties } from "@firecms/core";
+import { Entity, Properties } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Button,
@@ -17,7 +17,7 @@ import { downloadEntitiesExport } from "./export";
 
 export type BasicExportActionProps = {
     data: Entity<any>[];
-    properties: ResolvedProperties;
+    properties: Properties;
     propertiesOrder?: string[];
 }
 

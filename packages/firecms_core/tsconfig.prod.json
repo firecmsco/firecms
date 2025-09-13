@@ -7,7 +7,5 @@
   "exclude": [
     "node_modules",
     "dist",
-    "../ui/src",
-    "../formex/src",
   ],
 }

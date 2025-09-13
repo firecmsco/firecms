@@ -1,7 +1,13 @@
 import React, { useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, } from "@firecms/core";
+import {
+    FieldProps,
+    MarkdownEditorFieldBinding, NumberProperty,
+    PluginFieldBuilderParams,
+    Property,
+    StringProperty,
+} from "@firecms/core";
 import {
     AutoAwesomeIcon,
     CircularProgress,
@@ -21,15 +27,15 @@ import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_con
 import { countStringCharacters } from "../utils/strings_counter";
 import { EditorAIController } from "@firecms/editor";
 
-export function fieldBuilder<T>
-(params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {
+export function fieldBuilder<P extends Property= Property>
+(params: PluginFieldBuilderParams<P>): React.ComponentType<FieldProps<P>> | null {
 
     const {
         fieldConfigId,
         property
     } = params;
 
-    const wrappedComponent = React.useMemo(() => function FieldWrapper(props: FieldProps<T, any, any>) {
+    const wrappedComponent = React.useMemo(() => function FieldWrapper(props: FieldProps<P, any, any>) {
 
         const {
             enabled,
@@ -67,27 +73,27 @@ export function fieldBuilder<T>
     return null;
 }
 
-interface FieldInnerParams<T  = CMSType, M extends Record<string, any> = any> {
+interface FieldInnerParams<P extends Property = Property, M extends Record<string, any> = any> {
     loading: boolean;
-    props: FieldProps<T, any, M>;
+    props: FieldProps<P, any, M>;
     suggestedValue: string | number;
     enabled: boolean;
     enoughData: boolean;
-    Field: React.ComponentType<FieldProps<T, any, M>>;
+    Field: React.ComponentType<FieldProps<P, any, M>>;
     enhance: (props: EnhanceParams<M>) => Promise<EnhancedDataResult | null>;
     editorAIController?: EditorAIController;
 }
 
-const FieldInner = React.memo(function FieldInner<T, M extends Record<string, any> = any>({
-                                                                                                                        loading,
-                                                                                                                        props,
-                                                                                                                        suggestedValue,
-                                                                                                                        enabled,
-                                                                                                                        enoughData,
-                                                                                                                        Field,
-                                                                                                                        enhance,
-                                                                                                                        editorAIController
-                                                                                                                    }: FieldInnerParams<T, M>) {
+const FieldInner = React.memo(function FieldInner<P extends Property = Property, M extends Record<string, any> = any>({
+                                                                                                                          loading,
+                                                                                                                          props,
+                                                                                                                          suggestedValue,
+                                                                                                                          enabled,
+                                                                                                                          enoughData,
+                                                                                                                          Field,
+                                                                                                                          enhance,
+                                                                                                                          editorAIController
+                                                                                                                      }: FieldInnerParams<P, M>) {
 
     const [dataLoading, setDataLoading] = useState(false);
 
@@ -129,7 +135,7 @@ const FieldInner = React.memo(function FieldInner<T, M extends Record<string, an
 
     let fieldBinding: React.ReactElement;
     if (property.type === "string" && property.markdown) {
-        fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
+        fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<StringProperty>}
                                                    customProps={{
                                                        highlight: highlightRange,
                                                        editorProps: {
@@ -137,7 +143,7 @@ const FieldInner = React.memo(function FieldInner<T, M extends Record<string, an
                                                        }
                                                    }}/>;
     } else if (property.type === "string" && !property.enum) {
-        fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
+        fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<StringProperty | NumberProperty>}
                                                 highlight={suggestedValue as string}/>;
     } else {
         fieldBinding = <Field {...props} />;

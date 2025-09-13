@@ -21,8 +21,8 @@ export function getEntityPreviewKeys(
         return listProperties
             .filter(key => key !== targetCollection.idField && key !== "id")
             .filter(key => {
-            const propertyOrBuilder = targetCollection.properties[key];
-            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(authController, propertyOrBuilder, fields);
+            const property = targetCollection.properties[key];
+            return property && !isPropertyBuilder(property) && !isReferenceProperty(authController, property, fields);
         }).slice(0, limit);
     }
 }

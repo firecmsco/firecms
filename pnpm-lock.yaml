@@ -413,6 +413,9 @@ importers:
       '@firecms/common':
         specifier: 3.0.0-canary.258
         version: link:../common
+      '@firecms/core':
+        specifier: 3.0.0-canary.258
+        version: link:../firecms_core
       '@firecms/data_export':
         specifier: 3.0.0-canary.258
         version: link:../data_export
@@ -633,6 +636,9 @@ importers:
       '@firecms/types':
         specifier: 3.0.0-canary.258
         version: link:../types
+      '@firecms/ui':
+        specifier: 3.0.0-canary.258
+        version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0
         version: 10.14.1

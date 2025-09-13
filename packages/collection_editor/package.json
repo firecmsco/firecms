@@ -7,6 +7,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
+    "@firecms/core": "3.0.0-canary.258",
     "@firecms/common": "3.0.0-canary.258",
     "@firecms/data_export": "3.0.0-canary.258",
     "@firecms/data_import": "3.0.0-canary.258",

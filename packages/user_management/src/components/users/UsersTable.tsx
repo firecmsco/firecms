@@ -25,7 +25,7 @@ import {
 } from "@firecms/ui";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "../roles";
-import { PersistedUser } from "@firecms/types";
+import { PersistedUser } from "../../types";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: User) => void;

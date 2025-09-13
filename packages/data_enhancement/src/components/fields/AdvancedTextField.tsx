@@ -12,7 +12,7 @@ import {
 
 export type InputType<T> = T extends string ? "text" : "number";
 
-export function AdvancedTextField<T extends string | number>({
+export function AdvancedTextField({
                                                                  value,
                                                                  setValue,
                                                                  label,
@@ -24,9 +24,9 @@ export function AdvancedTextField<T extends string | number>({
                                                                  size = "large",
                                                                  className
                                                              }: {
-    inputType: InputType<T>,
-    value: T,
-    setValue: (value: T | null) => void,
+    inputType: InputType<string | number>,
+    value: string | number,
+    setValue: (value: string | number | null) => void,
     highlight?: string,
     label: React.ReactNode,
     multiline?: boolean,
@@ -71,7 +71,7 @@ export function AdvancedTextField<T extends string | number>({
                     setValue(null);
                     setInternalValue("");
                 } else if (numberValue !== undefined && numberValue !== null) {
-                    setValue(numberValue as T);
+                    setValue(numberValue as string | number);
                     setInternalValue(numberValue.toString());
                 } else {
                     setValue(null);
@@ -79,7 +79,7 @@ export function AdvancedTextField<T extends string | number>({
                 }
             }
         } else {
-            setValue(stringValue as T);
+            setValue(stringValue as string | number);
             setInternalValue(stringValue);
         }
     }, [inputType, setValue]);
