@@ -4,7 +4,7 @@ import {
     Property,
     Relation,
     RelationProperty,
-    StringProperty,
+    StringProperty
 } from "@firecms/types";
 import {
     getColumnName,
@@ -17,13 +17,22 @@ import {
 
 // --- Helper Functions ---
 
+/**
+ * Helper function to extract column name(s) from fully qualified column reference(s)
+ */
+function getColumnNamesFromColumns(columns: string | string[]): string[] {
+    if (Array.isArray(columns)) {
+        return columns.map(col => getColumnName(col));
+    }
+    return [getColumnName(columns)];
+}
+
 const isNumericId = (collection: EntityCollection): boolean => {
     const idField = collection.idField ?? "id";
     const idProp = collection.properties?.[idField] as Property | undefined;
     if (idProp?.type === "number") return true;
     // Default serial IDs are numbers, so if no customId is specified, it's numeric.
-    if (!collection.customId) return true;
-    return false;
+    return !collection.customId;
 };
 
 const getJunctionKeyColumns = (keys: string | string[], targetCollection: EntityCollection, refOptions: string): string[] => {
@@ -95,7 +104,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             let targetCollection: EntityCollection | undefined;
             try {
                 targetCollection = relation.target();
-            } catch (e) {
+            } catch {
                 // This can happen if the target collection is not in the list, which is a valid case for subcollections.
                 return null;
             }
@@ -109,8 +118,12 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
                 return null;
             }
             const join = relation.joins[0];
-            const fkColumnName = getColumnName(join.sourceColumn);
-            const targetIdField = getColumnName(join.targetColumn);
+
+            // Handle multi-column joins - use first column for simple FK cases
+            const sourceColumnNames = getColumnNamesFromColumns(join.sourceColumn);
+            const targetColumnNames = getColumnNamesFromColumns(join.targetColumn);
+            const fkColumnName = sourceColumnNames[0];
+            const targetIdField = targetColumnNames[0];
 
             const baseColumn = isNumericId(targetCollection) ? `integer("${fkColumnName}")` : `varchar("${fkColumnName}")`;
             const targetTableVar = getTableVarName(getTableName(targetCollection));
@@ -318,38 +331,46 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             const sourceIdField = sourceCollection.idField ?? "id";
             const targetIdField = targetCollection.idField ?? "id";
 
-            const sourceJunctionKey = getColumnName(relation.joins[0].targetColumn);
-            const targetJunctionKey = getColumnName(relation.joins[1].sourceColumn);
+            // Handle multi-column joins - use first column for junction relations
+            const sourceJunctionKeyNames = getColumnNamesFromColumns(relation.joins[0].targetColumn);
+            const targetJunctionKeyNames = getColumnNamesFromColumns(relation.joins[1].sourceColumn);
+            const sourceJunctionKey = sourceJunctionKeyNames[0];
+            const targetJunctionKey = targetJunctionKeyNames[0];
 
             tableRelations.push(`	${sourceJunctionKey}: one(${sourceTableVarName}, {\n		fields: [${tableVarName}.${sourceJunctionKey}],\n		references: [${sourceTableVarName}.${sourceIdField}]\n	})`);
             tableRelations.push(`	${targetJunctionKey}: one(${targetTableVarName}, {\n		fields: [${tableVarName}.${targetJunctionKey}],\n		references: [${targetTableVarName}.${targetIdField}]\n	})`);
         } else {
             const collection = allTablesToGenerate.get(tableName)!.collection;
             const resolvedRelations = resolveCollectionRelations(collection);
-            Object.entries(resolvedRelations).forEach(([relationKey, relation]) => {
+            Object.entries(resolvedRelations).forEach(([relationKey, relationDef]) => {
                 try {
-                    const targetCollection = relation.target();
+                    const targetCollection = relationDef.target();
                     const targetTableName = getTableName(targetCollection);
                     const targetTableVarName = getTableVarName(targetTableName);
 
-                    if (relation.cardinality === "one") {
-                        if (!relation.joins || relation.joins.length === 0) return;
-                        const join = relation.joins[0];
-                        const sourceColumnName = getColumnName(join.sourceColumn);
-                        const targetColumnName = getColumnName(join.targetColumn);
+                    if (relationDef.cardinality === "one") {
+                        if (!relationDef.joins || relationDef.joins.length === 0) return;
+                        const join = relationDef.joins[0];
+
+                        // Handle multi-column joins - use first column for relation definitions
+                        const sourceColumnNames = getColumnNamesFromColumns(join.sourceColumn);
+                        const targetColumnNames = getColumnNamesFromColumns(join.targetColumn);
+                        const sourceColumnName = sourceColumnNames[0];
+                        const targetColumnName = targetColumnNames[0];
+
                         const fieldsStr = `${tableVarName}.${sourceColumnName}`;
                         const referencesStr = `${targetTableVarName}.${targetColumnName}`;
-                        const relationName = relation.relationName ?? relationKey;
+                        const relationName = relationDef.relationName ?? relationKey;
                         const relationArgs = `{\n		fields: [${fieldsStr}],\n		references: [${referencesStr}],\n		relationName: "${relationName}"\n	}`;
                         tableRelations.push(`	${relationKey}: one(${targetTableVarName}, ${relationArgs})`);
-                    } else if (relation.cardinality === "many") {
-                        if (!relation.joins) {
+                    } else if (relationDef.cardinality === "many") {
+                        if (!relationDef.joins) {
                             console.warn(`Could not generate Drizzle relation for ${relationKey}: joins not defined.`);
                             return;
                         }
-                        const relationName = relation.relationName ?? relationKey;
-                        if (relation.joins.length > 1) { // Many-to-many
-                            const junctionTableName = relation.joins[0].table;
+                        const relationName = relationDef.relationName ?? relationKey;
+                        if (relationDef.joins.length > 1) { // Many-to-many
+                            const junctionTableName = relationDef.joins[0].table;
                             const junctionTableVarName = getTableVarName(junctionTableName);
                             tableRelations.push(`	${relationKey}: many(${junctionTableVarName}, { relationName: "${relationName}" })`);
                         } else { // One-to-many

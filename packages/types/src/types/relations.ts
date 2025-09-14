@@ -85,6 +85,7 @@ export interface Relation {
 
 /**
  * Defines a single, explicit JOIN condition between two tables.
+ * Supports both single-column and multi-column joins.
  */
 export interface JoinCondition {
     /**
@@ -94,15 +95,17 @@ export interface JoinCondition {
     table: string;
 
     /**
-     * The column on the SOURCE table for this join.
+     * The column(s) on the SOURCE table for this join.
      * (For the first join, the source is the collection where the relation is defined).
-     * @example "authors.id" or "id"
+     * Can be a single column or an array for composite keys.
+     * @example "authors.id" or "id" or ["order_id", "tenant_id"]
      */
-    sourceColumn: string;
+    sourceColumn: string | string[];
 
     /**
-     * The column on the TARGET table for this join (the `table` specified above).
-     * @example "posts.author_id" or "author_id"
+     * The column(s) on the TARGET table for this join (the `table` specified above).
+     * Must match the structure of sourceColumn (single vs array).
+     * @example "posts.author_id" or "author_id" or ["order_id", "tenant_id"]
      */
-    targetColumn: string;
+    targetColumn: string | string[];
 }

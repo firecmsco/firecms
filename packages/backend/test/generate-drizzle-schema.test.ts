@@ -127,13 +127,17 @@ describe("generateDrizzleSchema", () => {
                 title: { type: "string" },
                 author: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
-                    }
+                    relationName: "author"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "author",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, postsCollection]);
@@ -163,14 +167,18 @@ describe("generateDrizzleSchema", () => {
                 user: {
                     type: "relation",
                     validation: { required: true },
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        onDelete: "cascade",
-                        joins: [{ sourceColumn: "user_id", targetColumn: "id" }]
-                    }
+                    relationName: "user"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "user",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    onDelete: "cascade",
+                    joins: [{ sourceColumn: "user_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, profilesCollection]);
@@ -187,15 +195,19 @@ describe("generateDrizzleSchema", () => {
             properties: {
                 id: { type: "number" },
                 name: { type: "string" },
-            }
-        };
-        categoriesCollection.properties!.parent = {
-            type: "relation",
-            relation: {
-                target: () => categoriesCollection,
-                cardinality: "one",
-                joins: [{ sourceColumn: "parent_id", targetColumn: "id" }]
-            }
+                parent: {
+                    type: "relation",
+                    relationName: "parent"
+                }
+            },
+            relations: [
+                {
+                    relationName: "parent",
+                    target: () => categoriesCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "parent_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([categoriesCollection]);
@@ -212,8 +224,23 @@ describe("generateDrizzleSchema", () => {
             dbPath: "posts",
             properties: {
                 id: { type: "number" },
-                title: { type: "string" }
-            }
+                title: { type: "string" },
+                tags: {
+                    type: "relation",
+                    relationName: "tags"
+                }
+            },
+            relations: [
+                {
+                    relationName: "tags",
+                    target: () => tagsCollection,
+                    cardinality: "many",
+                    joins: [
+                        { table: "posts_tags", sourceColumn: "id", targetColumn: "post_id" },
+                        { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
+                    ]
+                }
+            ]
         };
         const tagsCollection: EntityCollection = {
             slug: "tags",
@@ -222,17 +249,6 @@ describe("generateDrizzleSchema", () => {
             properties: {
                 id: { type: "number" },
                 name: { type: "string" }
-            }
-        };
-        postsCollection.properties!.tags = {
-            type: "relation",
-            relation: {
-                target: () => tagsCollection,
-                cardinality: "many",
-                joins: [
-                    { table: "posts_tags", sourceColumn: "id", targetColumn: "post_id" },
-                    { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
-                ]
             }
         };
 
@@ -352,13 +368,17 @@ describe("generateDrizzleSchema", () => {
                 bio: { type: "string" },
                 user: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        joins: [{ sourceColumn: "user_id", targetColumn: "id" }]
-                    }
+                    relationName: "user"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "user",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "user_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, profilesCollection]);
@@ -380,14 +400,18 @@ describe("generateDrizzleSchema", () => {
                 title: { type: "string" },
                 author: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        onUpdate: "cascade",
-                        joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
-                    }
+                    relationName: "author"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "author",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    onUpdate: "cascade",
+                    joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, postsCollection]);
@@ -417,13 +441,17 @@ describe("generateDrizzleSchema", () => {
                 title: { type: "string" },
                 author: {
                     type: "relation",
-                    relation: {
-                        target: () => authorsCollection,
-                        cardinality: "one",
-                        joins: [{ sourceColumn: "author_uuid", targetColumn: "author_uuid" }]
-                    }
+                    relationName: "author"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "author",
+                    target: () => authorsCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "author_uuid", targetColumn: "author_uuid" }]
+                }
+            ]
         };
 
         const result = await generateSchema([authorsCollection, booksCollection]);
@@ -460,15 +488,19 @@ describe("generateDrizzleSchema", () => {
                 title: { type: "string" },
                 author: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        onUpdate: "cascade",
-                        onDelete: "restrict",
-                        joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
-                    }
+                    relationName: "author"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "author",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    onUpdate: "cascade",
+                    onDelete: "restrict",
+                    joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, postsCollection]);
@@ -489,21 +521,27 @@ describe("generateDrizzleSchema", () => {
                 title: { type: "string" },
                 author: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
-                    }
+                    relationName: "author"
                 },
                 editor: {
                     type: "relation",
-                    relation: {
-                        target: () => usersCollection,
-                        cardinality: "one",
-                        joins: [{ sourceColumn: "editor_id", targetColumn: "id" }]
-                    }
+                    relationName: "editor"
                 }
-            }
+            },
+            relations: [
+                {
+                    relationName: "author",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "author_id", targetColumn: "id" }]
+                },
+                {
+                    relationName: "editor",
+                    target: () => usersCollection,
+                    cardinality: "one",
+                    joins: [{ sourceColumn: "editor_id", targetColumn: "id" }]
+                }
+            ]
         };
 
         const result = await generateSchema([usersCollection, storiesCollection]);
@@ -518,22 +556,29 @@ describe("generateDrizzleSchema", () => {
     it("should handle many-to-many with a custom string ID on one side", async () => {
         const postsCollection: EntityCollection = {
             slug: "posts", name: "Posts", dbPath: "posts", idField: "post_uuid", customId: true,
-            properties: { post_uuid: { type: "string" }, title: { type: "string" } }
+            properties: {
+                post_uuid: { type: "string" },
+                title: { type: "string" },
+                tags: {
+                    type: "relation",
+                    relationName: "tags"
+                }
+            },
+            relations: [
+                {
+                    relationName: "tags",
+                    target: () => tagsCollection,
+                    cardinality: "many",
+                    joins: [
+                        { table: "posts_tags", sourceColumn: "post_uuid", targetColumn: "post_id" },
+                        { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
+                    ]
+                }
+            ]
         };
         const tagsCollection: EntityCollection = {
             slug: "tags", name: "Tags", dbPath: "tags",
             properties: { id: { type: "number" }, name: { type: "string" } }
-        };
-        postsCollection.properties!.tags = {
-            type: "relation",
-            relation: {
-                target: () => tagsCollection,
-                cardinality: "many",
-                joins: [
-                    { table: "posts_tags", sourceColumn: "post_uuid", targetColumn: "post_id" },
-                    { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
-                ]
-            }
         };
 
         const result = await generateSchema([postsCollection, tagsCollection]);

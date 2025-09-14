@@ -1,6 +1,42 @@
 import { EntityCollection, Property, Relation } from "@firecms/types";
 import { toSnakeCase } from "./strings";
 
+/**
+ * Helper function to check if a column reference includes a table prefix
+ */
+function hasTablePrefix(column: string | string[]): boolean {
+    if (Array.isArray(column)) {
+        return column.some(col => col.includes("."));
+    }
+    return column.includes(".");
+}
+
+/**
+ * Helper function to add table prefix to column(s) if not already present
+ */
+function addTablePrefix(column: string | string[], tableName: string): string | string[] {
+    if (Array.isArray(column)) {
+        return column.map(col => col.includes(".") ? col : `${tableName}.${col}`);
+    }
+    return column.includes(".") ? column : `${tableName}.${column}`;
+}
+
+/**
+ * Helper function to validate that source and target columns have compatible structures
+ */
+function validateColumnStructure(sourceColumn: string | string[], targetColumn: string | string[], relationName?: string): void {
+    const sourceIsArray = Array.isArray(sourceColumn);
+    const targetIsArray = Array.isArray(targetColumn);
+
+    if (sourceIsArray !== targetIsArray) {
+        throw new Error(`Invalid join configuration for relation "${relationName}": sourceColumn and targetColumn must both be strings or both be arrays`);
+    }
+
+    if (sourceIsArray && targetIsArray && sourceColumn.length !== targetColumn.length) {
+        throw new Error(`Invalid join configuration for relation "${relationName}": sourceColumn and targetColumn arrays must have the same length`);
+    }
+}
+
 export function normalizeRelation(relation: Relation, sourceCollection: EntityCollection): Relation {
     const newRelation = { ...relation };
     const targetCollection = newRelation.target();
@@ -94,13 +130,18 @@ export function normalizeRelation(relation: Relation, sourceCollection: EntityCo
             join.table = getTableName(targetCollection);
         }
 
-        if (!join.sourceColumn.includes(".")) {
-            join.sourceColumn = `${previousJoinTable}.${join.sourceColumn}`;
+        // Validate column structure compatibility
+        validateColumnStructure(join.sourceColumn, join.targetColumn, newRelation.relationName);
+
+        // Add table prefixes if not already present
+        if (!hasTablePrefix(join.sourceColumn)) {
+            join.sourceColumn = addTablePrefix(join.sourceColumn, previousJoinTable);
         }
 
-        if (!join.targetColumn.includes(".")) {
-            join.targetColumn = `${join.table}.${join.targetColumn}`;
+        if (!hasTablePrefix(join.targetColumn)) {
+            join.targetColumn = addTablePrefix(join.targetColumn, join.table);
         }
+
         previousJoinTable = join.table;
     }
 

@@ -5,6 +5,55 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues, Properties, Property, Relation, WhereFilterOp } from "@firecms/types";
 import { getColumnName, getTableName, resolveCollectionRelations } from "@firecms/common";
 
+/**
+ * Helper function to extract table name(s) from column reference(s)
+ */
+function getTableNamesFromColumns(columns: string | string[]): string[] {
+    if (Array.isArray(columns)) {
+        return columns.map(col => col.includes(".") ? col.split(".")[0] : "");
+    }
+    return [columns.includes(".") ? columns.split(".")[0] : ""];
+}
+
+/**
+ * Helper function to extract column name(s) from fully qualified column reference(s)
+ */
+function getColumnNamesFromColumns(columns: string | string[]): string[] {
+    if (Array.isArray(columns)) {
+        return columns.map(col => getColumnName(col));
+    }
+    return [getColumnName(columns)];
+}
+
+/**
+ * Helper function to build join condition(s) for single or multi-column joins
+ */
+function buildJoinCondition(
+    sourceTable: PgTable<any>,
+    targetTable: PgTable<any>,
+    sourceColumns: string | string[],
+    targetColumns: string | string[]
+): SQLWrapper {
+    const sourceColNames = getColumnNamesFromColumns(sourceColumns);
+    const targetColNames = getColumnNamesFromColumns(targetColumns);
+
+    if (sourceColNames.length === 1 && targetColNames.length === 1) {
+        // Single column join
+        const sourceCol = sourceTable[sourceColNames[0] as keyof typeof sourceTable] as AnyPgColumn;
+        const targetCol = targetTable[targetColNames[0] as keyof typeof targetTable] as AnyPgColumn;
+        return eq(sourceCol, targetCol);
+    } else {
+        // Multi-column join - combine with AND
+        const conditions: SQLWrapper[] = [];
+        for (let i = 0; i < sourceColNames.length; i++) {
+            const sourceCol = sourceTable[sourceColNames[i] as keyof typeof sourceTable] as AnyPgColumn;
+            const targetCol = targetTable[targetColNames[i] as keyof typeof targetTable] as AnyPgColumn;
+            conditions.push(eq(sourceCol, targetCol));
+        }
+        return and(...conditions)!;
+    }
+}
+
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) {
         return null;
@@ -112,7 +161,7 @@ function serializePropertyToServer(value: any, property: Property): any {
 }
 
 // Transform IDs back to relation objects for frontend
-function parseDataFromServer<M extends Record<string, any>>(data: M,  collection: EntityCollection): M {
+function parseDataFromServer<M extends Record<string, any>>(data: M, collection: EntityCollection): M {
     const properties = collection.properties;
     if (!data || !properties) return data;
 
@@ -334,7 +383,6 @@ export class EntityService {
         const values = parseDataFromServer(raw, collection);
 
         // Load relations based on new cardinality system
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(collection);
 
         const relationPromises = Object.entries(resolvedRelations).map(async ([key, relation]) => {
@@ -470,7 +518,6 @@ export class EntityService {
             const relationKey = pathSegments[i];
 
             // Get relations for current collection
-            const allCollections = collectionRegistry.getAllCollectionsRecursively();
             const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
@@ -516,7 +563,6 @@ export class EntityService {
         } = {}
     ): Promise<Entity<M>[]> {
         const parentCollection = this.getCollectionByPath(parentCollectionPath);
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
 
@@ -564,42 +610,39 @@ export class EntityService {
         for (const join of [...relation.joins].reverse()) {
             const joinTargetTable = collectionRegistry.getTable(join.table);
             if (!joinTargetTable) throw new Error(`Join table not found: ${join.table}`);
-            const sourceTableName = join.sourceColumn.split(".")[0];
-            const targetColumnName = getColumnName(join.targetColumn);
-            const sourceColumnName = getColumnName(join.sourceColumn);
 
-            // If currentTable is the declared join.table, we need to join the SOURCE table (reverse direction)
+            // Get table names from source columns (handles both single and multi-column)
+            const sourceTableNames = getTableNamesFromColumns(join.sourceColumn);
+            const sourceTableName = sourceTableNames[0]; // Use first table name for navigation
+
             if (currentTable === joinTargetTable) {
                 const sourceTable = collectionRegistry.getTable(sourceTableName);
                 if (!sourceTable) throw new Error(`Source table not found: ${sourceTableName}`);
-                const sourceCol = sourceTable[sourceColumnName as keyof typeof sourceTable] as AnyPgColumn;
-                const targetCol = joinTargetTable[targetColumnName as keyof typeof joinTargetTable] as AnyPgColumn;
-                query = query.innerJoin(sourceTable, eq(sourceCol, targetCol));
+
+                const joinCondition = buildJoinCondition(sourceTable, joinTargetTable, join.sourceColumn, join.targetColumn);
+                query = query.innerJoin(sourceTable, joinCondition);
                 currentTable = sourceTable;
-            }
-            // Else if currentTable is the SOURCE table already (should not usually happen in reverse traversal), join forward table
-            else if (currentTable === collectionRegistry.getTable(sourceTableName)) {
-                // join forward (rare case)
+            } else if (currentTable === collectionRegistry.getTable(sourceTableName)) {
                 const targetForwardTable = joinTargetTable;
-                const sourceCol = currentTable[sourceColumnName as keyof typeof currentTable] as AnyPgColumn;
-                const targetCol = targetForwardTable[targetColumnName as keyof typeof targetForwardTable] as AnyPgColumn;
-                query = query.innerJoin(targetForwardTable, eq(sourceCol, targetCol));
+                const joinCondition = buildJoinCondition(currentTable, targetForwardTable, join.sourceColumn, join.targetColumn);
+                query = query.innerJoin(targetForwardTable, joinCondition);
                 currentTable = targetForwardTable;
             } else {
                 // We are missing an intermediate link; attempt to join both sides (fallback)
                 const sourceTable = collectionRegistry.getTable(sourceTableName);
                 if (sourceTable && currentTable !== sourceTable) {
-                    const sourceCol = sourceTable[sourceColumnName as keyof typeof sourceTable] as AnyPgColumn;
-                    const targetCol = joinTargetTable[targetColumnName as keyof typeof joinTargetTable] as AnyPgColumn;
                     // Prefer joining table that links to currentTable by matching either side
                     if (joinTargetTable === currentTable) {
-                        query = query.innerJoin(sourceTable, eq(sourceCol, targetCol));
+                        const joinCondition = buildJoinCondition(sourceTable, joinTargetTable, join.sourceColumn, join.targetColumn);
+                        query = query.innerJoin(sourceTable, joinCondition);
                         currentTable = sourceTable;
                     } else {
-                        const maybeSourceInCurrent = currentTable[sourceColumnName as keyof typeof currentTable] as AnyPgColumn;
-                        if (maybeSourceInCurrent) {
-                            const targetCol2 = joinTargetTable[targetColumnName as keyof typeof joinTargetTable] as AnyPgColumn;
-                            query = query.innerJoin(joinTargetTable, eq(maybeSourceInCurrent, targetCol2));
+                        // Try to find matching columns in current table for the join
+                        const sourceColumnNames = getColumnNamesFromColumns(join.sourceColumn);
+                        const sourceColumnInCurrent = currentTable[sourceColumnNames[0] as keyof typeof currentTable] as AnyPgColumn;
+                        if (sourceColumnInCurrent) {
+                            const joinCondition = buildJoinCondition(currentTable, joinTargetTable, join.sourceColumn, join.targetColumn);
+                            query = query.innerJoin(joinTargetTable, joinCondition);
                             currentTable = joinTargetTable;
                         }
                     }
@@ -650,7 +693,6 @@ export class EntityService {
         options: { filter?: FilterValues<Extract<keyof M, string>>; databaseId?: string } = {}
     ): Promise<number> {
         const parentCollection = this.getCollectionByPath(parentCollectionPath);
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
         if (!relation) throw new Error(`Relation '${relationKey}' not found in collection '${parentCollectionPath}'`);
@@ -674,26 +716,47 @@ export class EntityService {
         let query: any = this.db.select({ count: sql<number>`count(distinct ${targetIdField})` }).from(targetTable);
         let currentTable = targetTable;
 
+        // Process joins in reverse to walk back to parent
         for (const join of [...relation.joins].reverse()) {
             const joinTargetTable = collectionRegistry.getTable(join.table);
             if (!joinTargetTable) throw new Error(`Join table not found: ${join.table}`);
-            const sourceTableName = join.sourceColumn.split(".")[0];
-            const targetColumnName = getColumnName(join.targetColumn);
-            const sourceColumnName = getColumnName(join.sourceColumn);
+            const sourceColumnNames = getColumnNamesFromColumns(join.sourceColumn);
+            const targetColumnNames = getColumnNamesFromColumns(join.targetColumn);
+            const sourceColumnName = sourceColumnNames[0]; // Use first column for simple FK cases
+            const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
 
             if (currentTable === joinTargetTable) {
-                const sourceTable = collectionRegistry.getTable(sourceTableName);
-                if (!sourceTable) throw new Error(`Source table not found: ${sourceTableName}`);
+                const sourceTable = collectionRegistry.getTable(sourceColumnNames[0]);
+                if (!sourceTable) throw new Error(`Source table not found: ${sourceColumnNames[0]}`);
                 const sourceCol = sourceTable[sourceColumnName as keyof typeof sourceTable] as AnyPgColumn;
                 const targetCol = joinTargetTable[targetColumnName as keyof typeof joinTargetTable] as AnyPgColumn;
                 query = query.innerJoin(sourceTable, eq(sourceCol, targetCol));
                 currentTable = sourceTable;
-            } else if (currentTable === collectionRegistry.getTable(sourceTableName)) {
+            } else if (currentTable === collectionRegistry.getTable(sourceColumnNames[0])) {
                 const targetForwardTable = joinTargetTable;
                 const sourceCol = currentTable[sourceColumnName as keyof typeof currentTable] as AnyPgColumn;
                 const targetCol = targetForwardTable[targetColumnName as keyof typeof targetForwardTable] as AnyPgColumn;
                 query = query.innerJoin(targetForwardTable, eq(sourceCol, targetCol));
                 currentTable = targetForwardTable;
+            } else {
+                // We are missing an intermediate link; attempt to join both sides (fallback)
+                const sourceTable = collectionRegistry.getTable(sourceColumnNames[0]);
+                if (sourceTable && currentTable !== sourceTable) {
+                    // Prefer joining table that links to currentTable by matching either side
+                    if (joinTargetTable === currentTable) {
+                        const joinCondition = buildJoinCondition(sourceTable, joinTargetTable, join.sourceColumn, join.targetColumn);
+                        query = query.innerJoin(sourceTable, joinCondition);
+                        currentTable = sourceTable;
+                    } else {
+                        // Try to find matching columns in current table for the join
+                        const sourceColumnInCurrent = currentTable[sourceColumnName as keyof typeof currentTable] as AnyPgColumn;
+                        if (sourceColumnInCurrent) {
+                            const joinCondition = buildJoinCondition(currentTable, joinTargetTable, join.sourceColumn, join.targetColumn);
+                            query = query.innerJoin(joinTargetTable, joinCondition);
+                            currentTable = joinTargetTable;
+                        }
+                    }
+                }
             }
         }
 
@@ -731,8 +794,7 @@ export class EntityService {
                 for (let i = 2; i < segments.length; i += 2) {
                     const relationKey = segments[i];
 
-                    // If we\'re at the last segment, we are saving into the target of this relation
-                    const allCollections = collectionRegistry.getAllCollectionsRecursively();
+                    // If we're at the last segment, we are saving into the target of this relation
                     const resolvedRelations = resolveCollectionRelations(currentCollection);
                     const relation = resolvedRelations[relationKey];
                     if (!relation) {
@@ -750,7 +812,8 @@ export class EntityService {
 
                         // Prefill/override FK from the first join target column with the parent entity id
                         const firstJoin = relation.joins[0];
-                        const targetColumnName = getColumnName(firstJoin.targetColumn);
+                        const targetColumnNames = getColumnNamesFromColumns(firstJoin.targetColumn);
+                        const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
 
                         const parentIdInfo = this.getIdFieldInfo(currentCollection);
                         const parsedParentId = this.parseIdValue(currentEntityId, parentIdInfo.type);
@@ -784,7 +847,6 @@ export class EntityService {
         const relationValues: Record<string, any> = {};
         const otherValues: Partial<M> = { ...effectiveValues };
 
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(collection);
 
         for (const key in resolvedRelations) {
@@ -846,7 +908,6 @@ export class EntityService {
         entityId: string | number,
         relationValues: Partial<M>
     ) {
-        const allCollections = collectionRegistry.getAllCollectionsRecursively();
         const resolvedRelations = resolveCollectionRelations(collection);
 
         for (const [key, value] of Object.entries(relationValues)) {
@@ -876,8 +937,10 @@ export class EntityService {
                 if (join.table !== parentTableName && join.table !== targetTableName) {
                     junctionTable = joinTableObj;
 
-                    const sourceColumnName = getColumnName(join.sourceColumn);
-                    const targetColumnName = getColumnName(join.targetColumn);
+                    const sourceColumnNames = getColumnNamesFromColumns(join.sourceColumn);
+                    const targetColumnNames = getColumnNamesFromColumns(join.targetColumn);
+                    const sourceColumnName = sourceColumnNames[0]; // Use first column for simple FK cases
+                    const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
 
                     sourceJunctionColumn = junctionTable[sourceColumnName as keyof typeof junctionTable] as AnyPgColumn;
                     targetJunctionColumn = junctionTable[targetColumnName as keyof typeof junctionTable] as AnyPgColumn;
@@ -1013,7 +1076,6 @@ export class EntityService {
             const relationKey = pathSegments[i];
 
             // Get relations for current collection
-            const allCollections = collectionRegistry.getAllCollectionsRecursively();
             const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 

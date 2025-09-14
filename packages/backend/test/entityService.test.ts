@@ -12,8 +12,16 @@ const mockPostsTagsTable = { post_id: { name: "post_id" }, tag_id: { name: "tag_
 // --- Correctly typed Mock Entity Collections ---
 let authorsCollection: EntityCollection;
 const tagsCollection: EntityCollection = {
-    slug: "tags", name: "Tags", dbPath: "tags", properties: { id: { type: "number" }, name: { type: "string" } }, idField: "id",
+    slug: "tags",
+    name: "Tags",
+    dbPath: "tags",
+    properties: {
+        id: { type: "number" },
+        name: { type: "string" }
+    },
+    idField: "id",
 };
+
 const postsCollection: EntityCollection = {
     slug: "posts",
     name: "Posts",
@@ -21,25 +29,36 @@ const postsCollection: EntityCollection = {
     properties: {
         id: { type: "number" },
         title: { type: "string" },
+        author_id: { type: "number" },
         author: {
             type: "relation",
-            relation: {
-                target: () => authorsCollection,
-                cardinality: "one",
-            }
+            relationName: "author"
         },
         tags: {
             type: "relation",
-            relation: {
-                target: () => tagsCollection,
-                cardinality: "many",
-                joins: [
-                    { table: "posts_tags", sourceColumn: "id", targetColumn: "post_id" },
-                    { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
-                ]
-            }
+            relationName: "tags"
         }
     },
+    relations: [
+        {
+            relationName: "author",
+            target: () => authorsCollection,
+            cardinality: "one",
+            direction: "owning",
+            localKey: "author_id"
+        },
+        {
+            relationName: "tags",
+            target: () => tagsCollection,
+            cardinality: "many",
+            direction: "owning",
+            through: {
+                table: "posts_tags",
+                sourceColumn: "post_id",
+                targetColumn: "tag_id"
+            }
+        }
+    ],
     idField: "id",
 };
 
@@ -52,15 +71,18 @@ authorsCollection = {
         name: { type: "string" },
         posts: {
             type: "relation",
-            relation: {
-                target: () => postsCollection,
-                cardinality: "many",
-                joins: [
-                    { table: "posts", sourceColumn: "id", targetColumn: "author_id" }
-                ]
-            }
+            relationName: "posts"
         }
     },
+    relations: [
+        {
+            relationName: "posts",
+            target: () => postsCollection,
+            cardinality: "many",
+            direction: "inverse",
+            foreignKeyOnTarget: "author_id"
+        }
+    ],
     idField: "id",
 };
 
@@ -123,7 +145,7 @@ describe("EntityService", () => {
             db.returning.mockResolvedValue([{ id: 4 }]);
             // Mock the fetch-back call after the save
             db.limit.mockResolvedValue([{ id: 4, title: "Post by Jane", author: 3 }]);
-            
+
             const entity = await entityService.saveEntity("posts", newPost);
 
             // 1. Check that the relation was serialized to a number for the database insert
