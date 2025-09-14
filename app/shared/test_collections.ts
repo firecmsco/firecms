@@ -23,11 +23,10 @@ const profilesCollection: EntityCollection = {
             name: "Website",
             type: "string"
         },
-        // This is the "owning" side of the one-to-one relationship.
-        // The `profiles` table will contain the `author_id` foreign key.
-        author_id: {
+        author: {
             name: "Author ID",
-            type: "number"
+            type: "relation",
+            relationName: "author"
         }
     },
     relations: [
@@ -65,6 +64,11 @@ const authorsCollection: EntityCollection = {
             type: "string",
             email: true,
             validation: { required: true }
+        },
+        profile: {
+            name: "Profile",
+            type: "relation",
+            relationName: "profile"
         }
     },
     relations: [
@@ -149,12 +153,6 @@ const postsCollection: EntityCollection = {
             name: "Content",
             type: "string",
             multiline: true
-        },
-        // This is the "owning" side of the many-to-one relationship.
-        // The `posts` table will contain the `author_id` foreign key.
-        author_id: {
-            name: "Author ID",
-            type: "number"
         },
         // A property to demonstrate a relation field in the UI
         author: {

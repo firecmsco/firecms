@@ -100,10 +100,21 @@ function sanitizeAndConvertDates(obj: any): any {
 }
 
 // Transform relations for database storage (relation objects to IDs)
-function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties): any {
+function serializeDataToServer<M extends Record<string, any>>(entity: M, properties: Properties, collection?: EntityCollection): any {
     if (!entity || !properties) return entity;
 
     const result: Record<string, any> = {};
+
+    // Get normalized relations if collection is provided
+    const resolvedRelations = collection ? resolveCollectionRelations(collection) : {};
+
+    // Track inverse relations that need to be handled separately
+    const inverseRelationUpdates: Array<{
+        relationKey: string;
+        relation: Relation;
+        newValue: any;
+        currentEntityId?: string | number;
+    }> = [];
 
     for (const [key, value] of Object.entries(entity)) {
         const property = properties[key as keyof M] as Property;
@@ -112,7 +123,39 @@ function serializeDataToServer<M extends Record<string, any>>(entity: M, propert
             continue;
         }
 
+        // Handle relation properties specially
+        if (property.type === "relation" && collection) {
+            const relation = resolvedRelations[key];
+            if (relation) {
+                if (relation.direction === "owning" && relation.localKey) {
+                    // Owning relation: Map relation object to FK column on current table
+                    const serializedValue = serializePropertyToServer(value, property);
+                    if (serializedValue !== null && serializedValue !== undefined) {
+                        result[relation.localKey] = serializedValue;
+                    }
+                    // Don't add the original relation property to the result
+                    continue;
+                } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
+                    // Inverse relation: Need to update the target table's FK
+                    const serializedValue = serializePropertyToServer(value, property);
+                    inverseRelationUpdates.push({
+                        relationKey: key,
+                        relation,
+                        newValue: serializedValue,
+                        currentEntityId: entity.id || entity[collection.idField || "id"]
+                    });
+                    // Don't add the original relation property to the result
+                    continue;
+                }
+            }
+        }
+
         result[key] = serializePropertyToServer(value, property);
+    }
+
+    // Add inverse relation updates to the result for the EntityService to handle
+    if (inverseRelationUpdates.length > 0) {
+        result.__inverseRelationUpdates = inverseRelationUpdates;
     }
 
     return result;
@@ -167,20 +210,61 @@ function parseDataFromServer<M extends Record<string, any>>(data: M, collection:
 
     const result: Record<string, any> = {};
 
+    // Get the normalized relations once
+    const resolvedRelations = resolveCollectionRelations(collection);
+
+    // Get list of FK columns that are used only for relations and not defined as properties
+    const internalFKColumns = new Set<string>();
+    Object.values(resolvedRelations).forEach(relation => {
+        if (relation.localKey && !properties[relation.localKey]) {
+            // This FK is used internally but not exposed as a property
+            internalFKColumns.add(relation.localKey);
+        }
+    });
+
+    // Process only the properties that are defined in the collection
     for (const [key, value] of Object.entries(data)) {
-        const property = properties[key as keyof M] as Property;
-        if (!property) {
-            result[key] = value;
+        // Skip internal FK columns that aren't defined as properties
+        if (internalFKColumns.has(key)) {
             continue;
         }
 
-        result[key] = parsePropertyFromServer(value, property, collection);
+        const property = properties[key as keyof M] as Property;
+        if (!property) {
+            // Also skip any other database columns not defined in properties
+            continue;
+        }
+
+        result[key] = parsePropertyFromServer(value, property, collection, key);
+    }
+
+    // Add relation properties that should be populated from FK values
+    for (const [propKey, property] of Object.entries(properties)) {
+        if (property.type === "relation" && !(propKey in result)) {
+            // Find the normalized relation for this property
+            const relation = resolvedRelations[propKey];
+            if (relation && relation.localKey && relation.localKey in data) {
+                const fkValue = data[relation.localKey as keyof M];
+                if (fkValue !== null && fkValue !== undefined) {
+                    try {
+                        const targetCollection = relation.target();
+                        result[propKey] = {
+                            id: fkValue.toString(),
+                            path: targetCollection.slug || targetCollection.dbPath,
+                            __type: "relation"
+                        };
+                    } catch (e) {
+                        console.warn(`Could not resolve target collection for relation property: ${propKey}`, e);
+                    }
+                }
+            }
+        }
     }
 
     return result as M;
 }
 
-function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection): any {
+function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection, propertyKey?: string): any {
     if (value === null || value === undefined) {
         return value;
     }
@@ -189,13 +273,19 @@ function parsePropertyFromServer(value: any, property: Property, collection: Ent
         case "relation":
             // Transform ID back to relation object with type information
             if (typeof value === "string" || typeof value === "number") {
-                const relation = collection.relations?.find((rel) => rel.relationName === property.relationName);
-                if (!relation) throw new Error("Relation not defined in property");
-                return {
-                    id: value.toString(),
-                    path: relation.target().slug,
-                    __type: "relation"
-                };
+                const relationDef = collection.relations?.find((rel) => rel.relationName === property.relationName);
+                if (!relationDef) throw new Error("Relation not defined in property");
+                try {
+                    const targetCollection = relationDef.target();
+                    return {
+                        id: value.toString(),
+                        path: targetCollection.slug || targetCollection.dbPath,
+                        __type: "relation"
+                    };
+                } catch (e) {
+                    console.warn(`Could not resolve target collection for relation property: ${property.relationName}`, e);
+                    return value;
+                }
             }
             return value;
 
@@ -211,7 +301,7 @@ function parsePropertyFromServer(value: any, property: Property, collection: Ent
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
-                        result[subKey] = parsePropertyFromServer(subValue, subProperty, collection);
+                        result[subKey] = parsePropertyFromServer(subValue, subProperty, collection, subKey);
                     } else {
                         result[subKey] = subValue;
                     }
@@ -860,7 +950,12 @@ export class EntityService {
         }
 
         // Transform relations to IDs, then sanitize
-        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties);
+        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties, collection);
+
+        // Extract inverse relation updates before sanitizing
+        const inverseRelationUpdates = processedData.__inverseRelationUpdates || [];
+        delete processedData.__inverseRelationUpdates;
+
         const entityData = sanitizeAndConvertDates(processedData);
 
         const savedId = await this.db.transaction(async (tx) => {
@@ -875,7 +970,7 @@ export class EntityService {
                     .where(eq(idField, currentId));
             } else {
                 const dataForInsert = { ...entityData };
-                // Don\'t include the ID in the insert statement, so the database can generate it
+                // Don't include the ID in the insert statement, so the database can generate it
                 if (idInfo.fieldName in dataForInsert) {
                     delete (dataForInsert as any)[idInfo.fieldName];
                 }
@@ -886,6 +981,11 @@ export class EntityService {
                     .returning({ id: idField });
 
                 currentId = result[0].id as string | number;
+            }
+
+            // Handle inverse relation updates
+            if (inverseRelationUpdates.length > 0) {
+                await this.updateInverseRelations(tx, collection, currentId, inverseRelationUpdates);
             }
 
             // Update many-to-many relations using the new join system
@@ -900,6 +1000,72 @@ export class EntityService {
         const finalEntity = await this.fetchEntity<M>(collection.dbPath ?? collection.slug, savedId, databaseId);
         if (!finalEntity) throw new Error("Could not fetch entity after save.");
         return finalEntity;
+    }
+
+    private async updateInverseRelations(
+        tx: NodePgDatabase<any>,
+        sourceCollection: EntityCollection,
+        sourceEntityId: string | number,
+        inverseRelationUpdates: Array<{
+            relationKey: string;
+            relation: Relation;
+            newValue: any;
+            currentEntityId?: string | number;
+        }>
+    ) {
+        for (const update of inverseRelationUpdates) {
+            const { relation, newValue } = update;
+
+            try {
+                const targetCollection = relation.target();
+                const targetTable = this.getTableForCollection(targetCollection);
+                const targetIdInfo = this.getIdFieldInfo(targetCollection);
+                const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
+
+                const foreignKeyColumn = targetTable[relation.foreignKeyOnTarget! as keyof typeof targetTable] as AnyPgColumn;
+                if (!foreignKeyColumn) {
+                    console.warn(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table for relation '${relation.relationName}'`);
+                    continue;
+                }
+
+                const parsedSourceId = this.parseIdValue(sourceEntityId, sourceIdInfo.type);
+
+                if (newValue === null || newValue === undefined) {
+                    // Setting relation to null - update the target entity to clear the FK
+                    // First, find the current target entity that points to this source entity
+                    const currentTargetEntities = await tx
+                        .select()
+                        .from(targetTable)
+                        .where(eq(foreignKeyColumn, parsedSourceId));
+
+                    // Clear the FK in all entities that currently point to this source entity
+                    if (currentTargetEntities.length > 0) {
+                        await tx
+                            .update(targetTable)
+                            .set({ [relation.foreignKeyOnTarget!]: null })
+                            .where(eq(foreignKeyColumn, parsedSourceId));
+                    }
+                } else {
+                    // Setting relation to a specific target entity
+                    const parsedNewTargetId = this.parseIdValue(newValue, targetIdInfo.type);
+                    const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+
+                    // First, clear any existing FK that points to this source entity
+                    await tx
+                        .update(targetTable)
+                        .set({ [relation.foreignKeyOnTarget!]: null })
+                        .where(eq(foreignKeyColumn, parsedSourceId));
+
+                    // Then, update the new target entity to point to this source entity
+                    await tx
+                        .update(targetTable)
+                        .set({ [relation.foreignKeyOnTarget!]: parsedSourceId })
+                        .where(eq(targetIdField, parsedNewTargetId));
+                }
+            } catch (e) {
+                console.warn(`Failed to update inverse relation '${relation.relationName}':`, e);
+            }
+        }
     }
 
     private async updateRelationsUsingJoins<M extends Record<string, any>>(

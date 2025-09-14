@@ -3,212 +3,85 @@
 import { primaryKey, pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, numeric, serial } from 'drizzle-orm/pg-core';
 import { relations as drizzleRelations } from 'drizzle-orm';
 
-export const maquinariaCategoria = pgEnum("maquinaria_categoria", ['manipuladoras_telescopicas', 'excavadoras', 'minicargadora_ruedas', 'dumpers_obra', 'grupos_electrogenos', 'cortadoras', 'martillos_picadores', 'maquinaria_jardineria', 'compresor_aire', 'plataformas_articuladas', 'plataformas_articuladas_electricas', 'plataformas_telescopicas', 'plataformas_tijera', 'plataformas_tijera_electricas', 'plataformas_unipersonales_electricas', 'plataformas_articulada_cadena', 'rodillos', 'carretillas_elevadoras']);
-export const maquinariaEstado_actual = pgEnum("maquinaria_estado_actual", ['stock', 'alquilado', 'mantenimiento', 'parada', 'libre']);
-export const alquileresTipo_alquiler = pgEnum("alquileres_tipo_alquiler", ['mensual', 'anual', 'diario']);
-export const alquileresEstado_pago = pgEnum("alquileres_estado_pago", ['pendiente', 'pagado', 'parcial']);
-export const mantenimientoTipo_mantenimiento = pgEnum("mantenimiento_tipo_mantenimiento", ['preventivo', 'correctivo', 'cambio_aceite', 'cambio_filtros', 'revision_general', 'reparacion']);
-export const horasMotivo_lectura = pgEnum("horas_motivo_lectura", ['salida_alquiler', 'devolucion_alquiler', 'mantenimiento', 'control_rutinario', 'fin_mes']);
-export const incidenciasTipo_incidencia = pgEnum("incidencias_tipo_incidencia", ['averia', 'accidente', 'uso_indebido', 'observacion', 'fallo_mecanico', 'fallo_hidraulico', 'fallo_electrico']);
-export const incidenciasGravedad = pgEnum("incidencias_gravedad", ['baja', 'media', 'alta', 'critica']);
-
-
-export const clientes = pgTable("clientes", {
+export const authors = pgTable("authors", {
 	id: serial("id").primaryKey(),
-	nombre: varchar("nombre").notNull(),
-	email: varchar("email").notNull(),
-	telefono: varchar("telefono"),
-	direccion: varchar("direccion"),
-	ciudad: varchar("ciudad"),
-	pais: varchar("pais"),
-	fecha_registro: timestamp("fecha_registro", { withTimezone: true, mode: 'string' })
+	name: varchar("name").notNull(),
+	email: varchar("email").notNull()
 });
 
-export const implementos = pgTable("implementos", {
+export const profiles = pgTable("profiles", {
 	id: serial("id").primaryKey(),
-	nombre: varchar("nombre").notNull(),
-	stock_total: integer("stock_total"),
-	stock_alquilado: integer("stock_alquilado"),
-	stock_libre: integer("stock_libre")
+	bio: varchar("bio"),
+	website: varchar("website"),
+	author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
-export const maquinaria = pgTable("maquinaria", {
+export const posts = pgTable("posts", {
 	id: serial("id").primaryKey(),
-	nombre: varchar("nombre").notNull(),
-	imagen: varchar("imagen"),
-	categoria: maquinariaCategoria("categoria").notNull(),
-	modelo: varchar("modelo"),
-	estado_actual: maquinariaEstado_actual("estado_actual").notNull(),
-	notas: varchar("notas"),
-	horas_totales: numeric("horas_totales"),
-	numero_serie: varchar("numero_serie"),
-	ano_fabricacion: numeric("ano_fabricacion"),
-	fecha_ultima_lectura: timestamp("fecha_ultima_lectura", { withTimezone: true, mode: 'string' }),
-	alquiler_activo_id: varchar("alquiler_activo_id"),
-	proximo_mantenimiento: timestamp("proximo_mantenimiento", { withTimezone: true, mode: 'string' }),
-	fecha_adquisicion: timestamp("fecha_adquisicion", { withTimezone: true, mode: 'string' }),
-	precio_compra: numeric("precio_compra")
+	title: varchar("title").notNull(),
+	content: varchar("content"),
+	author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
-export const controlDiario = pgTable("control_diario", {
+export const tags = pgTable("tags", {
 	id: serial("id").primaryKey(),
-	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
-	facturacion_total: numeric("facturacion_total"),
-	facturacion_por_categoria: jsonb("facturacion_por_categoria"),
-	total_maquinas: numeric("total_maquinas"),
-	maquinas_alquiladas: numeric("maquinas_alquiladas"),
-	maquinas_disponibles: numeric("maquinas_disponibles"),
-	maquinas_mantenimiento: numeric("maquinas_mantenimiento"),
-	subcontratas: jsonb("subcontratas"),
-	previsiones: jsonb("previsiones"),
-	notas_generales: varchar("notas_generales"),
-	estado_implementos: jsonb("estado_implementos")
+	name: varchar("name").notNull()
 });
 
-export const alquileres = pgTable("alquileres", {
-	id: serial("id").primaryKey(),
-	maquina_referencia: integer("maquina_referencia").references(() => maquinaria.id, { onDelete: "cascade" }).notNull(),
-	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: "set null" }),
-	tipo_alquiler: alquileresTipo_alquiler("tipo_alquiler").notNull(),
-	precio_por_dia: numeric("precio_por_dia").notNull(),
-	fecha_salida: timestamp("fecha_salida", { withTimezone: true, mode: 'string' }).notNull(),
-	fecha_devolucion_prevista: timestamp("fecha_devolucion_prevista", { withTimezone: true, mode: 'string' }),
-	fecha_devolucion_real: timestamp("fecha_devolucion_real", { withTimezone: true, mode: 'string' }),
-	situacion_obra: varchar("situacion_obra").notNull(),
-	horas_salida: numeric("horas_salida"),
-	horas_devolucion: numeric("horas_devolucion"),
-	implementos_incluidos: varchar("implementos_incluidos"),
-	activo: boolean("activo"),
-	notas: varchar("notas"),
-	total_facturado: numeric("total_facturado"),
-	estado_pago: alquileresEstado_pago("estado_pago")
-});
-
-export const mantenimiento = pgTable("mantenimiento", {
-	id: serial("id").primaryKey(),
-	maquina_relacionada: integer("maquina_relacionada").references(() => maquinaria.id, { onDelete: "set null" }),
-	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
-	tipo_mantenimiento: mantenimientoTipo_mantenimiento("tipo_mantenimiento").notNull(),
-	horas_maquina: numeric("horas_maquina"),
-	descripcion: varchar("descripcion").notNull(),
-	tecnico: varchar("tecnico"),
-	taller_externo: varchar("taller_externo"),
-	costo: numeric("costo"),
-	proxima_revision: timestamp("proxima_revision", { withTimezone: true, mode: 'string' }),
-	proxima_revision_horas: numeric("proxima_revision_horas"),
-	repuestos_utilizados: varchar("repuestos_utilizados"),
-	tiempo_parada: numeric("tiempo_parada"),
-	urgente: boolean("urgente"),
-	completado: boolean("completado")
-});
-
-export const horas = pgTable("horas", {
-	id: serial("id").primaryKey(),
-	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
-	horas_totales: numeric("horas_totales").notNull(),
-	horas_periodo: numeric("horas_periodo"),
-	motivo_lectura: horasMotivo_lectura("motivo_lectura"),
-	operador: varchar("operador"),
-	notas: varchar("notas"),
-	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: "set null" })
-});
-
-export const incidencias = pgTable("incidencias", {
-	id: serial("id").primaryKey(),
-	fecha: timestamp("fecha", { withTimezone: true, mode: 'string' }).notNull(),
-	tipo_incidencia: incidenciasTipo_incidencia("tipo_incidencia").notNull(),
-	gravedad: incidenciasGravedad("gravedad").notNull(),
-	descripcion: varchar("descripcion").notNull(),
-	reportado_por: varchar("reportado_por"),
-	cliente_relacionado: integer("cliente_relacionado").references(() => clientes.id, { onDelete: "set null" }),
-	alquiler_relacionado: integer("alquiler_relacionado").references(() => alquileres.id, { onDelete: "set null" }),
-	solucion: varchar("solucion"),
-	fecha_solucion: timestamp("fecha_solucion", { withTimezone: true, mode: 'string' }),
-	costo_reparacion: numeric("costo_reparacion"),
-	responsable_cliente: boolean("responsable_cliente"),
-	resuelto: boolean("resuelto")
-});
-
-export const maquinariaImplementos = pgTable("maquinaria_implementos", {
-	implemento_id: integer("implemento_id").references(() => implementos.id, { onDelete: "cascade" }).notNull(),
-	maquinaria_id: integer("maquinaria_id").references(() => maquinaria.id, { onDelete: "cascade" }).notNull()
+export const postsTags = pgTable("posts_tags", {
+	post_id: integer("post_id").references(() => posts.id, { onDelete: "cascade" }).notNull(),
+	tag_id: integer("tag_id").references(() => tags.id, { onDelete: "cascade" }).notNull()
 }, (table) => ({
-	pk: primaryKey({ columns: [table.implemento_id, table.maquinaria_id] })
+	pk: primaryKey({ columns: [table.post_id, table.tag_id] })
 }));
 
-export const clientesRelations = drizzleRelations(clientes, ({ many }) => ({
-	alquileres: many(alquileres, { relationName: "alquileres" }),
-	incidencias: many(incidencias, { relationName: "incidencias" })
-}));
-
-export const implementosRelations = drizzleRelations(implementos, ({ many }) => ({
-	maquinaria: many(maquinariaImplementos, { relationName: "maquinaria" })
-}));
-
-export const maquinariaRelations = drizzleRelations(maquinaria, ({ many }) => ({
-	implementos: many(maquinariaImplementos, { relationName: "implementos" }),
-	alquileres: many(alquileres, { relationName: "alquileres" }),
-	mantenimiento: many(mantenimiento, { relationName: "mantenimiento" }),
-	horas: many(alquileres, { relationName: "horas" }),
-	incidencias: many(alquileres, { relationName: "incidencias" })
-}));
-
-export const alquileresRelations = drizzleRelations(alquileres, ({ one, many }) => ({
-	horas: many(horas, { relationName: "horas" }),
-	incidencias: many(incidencias, { relationName: "incidencias" }),
-	maquina_referencia: one(maquinaria, {
-		fields: [alquileres.maquina_referencia],
-		references: [maquinaria.id],
-		relationName: "maquinaria"
+export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({
+	profile: one(profiles, {
+		fields: [authors.id],
+		references: [profiles.author_id],
+		relationName: "profile"
 	}),
-	cliente_relacionado: one(clientes, {
-		fields: [alquileres.cliente_relacionado],
-		references: [clientes.id],
-		relationName: "clientes"
+	posts: many(posts, { relationName: "posts" })
+}));
+
+export const profilesRelations = drizzleRelations(profiles, ({ one }) => ({
+	author: one(authors, {
+		fields: [profiles.author_id],
+		references: [authors.id],
+		relationName: "author"
 	})
 }));
 
-export const mantenimientoRelations = drizzleRelations(mantenimiento, ({ one }) => ({
-	maquina_relacionada: one(maquinaria, {
-		fields: [mantenimiento.maquina_relacionada],
-		references: [maquinaria.id],
-		relationName: "maquina_relacionada"
-	})
-}));
-
-export const horasRelations = drizzleRelations(horas, ({ one }) => ({
-	alquiler_relacionado: one(alquileres, {
-		fields: [horas.alquiler_relacionado],
-		references: [alquileres.id],
-		relationName: "alquiler_relacionado"
-	})
-}));
-
-export const incidenciasRelations = drizzleRelations(incidencias, ({ one }) => ({
-	cliente_relacionado: one(clientes, {
-		fields: [incidencias.cliente_relacionado],
-		references: [clientes.id],
-		relationName: "cliente_relacionado"
+export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({
+	author: one(authors, {
+		fields: [posts.author_id],
+		references: [authors.id],
+		relationName: "author"
 	}),
-	alquiler_relacionado: one(alquileres, {
-		fields: [incidencias.alquiler_relacionado],
-		references: [alquileres.id],
-		relationName: "alquiler_relacionado"
+	tags: many(postsTags, { relationName: "tags" }),
+	author_profile: one(profiles, {
+		fields: [posts.author_id],
+		references: [profiles.id],
+		relationName: "author_profile"
 	})
 }));
 
-export const maquinariaImplementosRelations = drizzleRelations(maquinariaImplementos, ({ one }) => ({
-	implemento_id: one(implementos, {
-		fields: [maquinariaImplementos.implemento_id],
-		references: [implementos.id]
+export const tagsRelations = drizzleRelations(tags, ({ many }) => ({
+	posts: many(postsTags, { relationName: "posts" })
+}));
+
+export const postsTagsRelations = drizzleRelations(postsTags, ({ one }) => ({
+	post_id: one(posts, {
+		fields: [postsTags.post_id],
+		references: [posts.id]
 	}),
-	maquinaria_id: one(maquinaria, {
-		fields: [maquinariaImplementos.maquinaria_id],
-		references: [maquinaria.id]
+	tag_id: one(tags, {
+		fields: [postsTags.tag_id],
+		references: [tags.id]
 	})
 }));
 
-export const tables = { clientes, implementos, maquinaria, controlDiario, alquileres, mantenimiento, horas, incidencias, maquinariaImplementos };
-export const enums = { maquinariaCategoria, maquinariaEstado_actual, alquileresTipo_alquiler, alquileresEstado_pago, mantenimientoTipo_mantenimiento, horasMotivo_lectura, incidenciasTipo_incidencia, incidenciasGravedad };
-export const relations = { clientesRelations, implementosRelations, maquinariaRelations, alquileresRelations, mantenimientoRelations, horasRelations, incidenciasRelations, maquinariaImplementosRelations };
+export const tables = { authors, profiles, posts, tags, postsTags };
+export const enums = {  };
+export const relations = { authorsRelations, profilesRelations, postsRelations, tagsRelations, postsTagsRelations };
 
