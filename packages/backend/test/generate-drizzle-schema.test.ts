@@ -236,8 +236,8 @@ describe("generateDrizzleSchema", () => {
                     target: () => tagsCollection,
                     cardinality: "many",
                     joins: [
-                        { table: "posts_tags", sourceColumn: "id", targetColumn: "post_id" },
-                        { table: "tags", sourceColumn: "tag_id", targetColumn: "id" }
+                        { table: "posts", sourceColumn: "id", targetColumn: "post_id" },
+                        { table: "tags", sourceColumn: "id", targetColumn: "tag_id" }
                     ]
                 }
             ]

@@ -974,7 +974,7 @@ export class EntityService {
                             throw new Error(`Relation '${relationKey}' in '${currentCollection.slug || currentCollection.dbPath}' should have been normalized and have at least one join defined.`);
                         }
 
-                        // Find the appropriate join that connects to the target collection
+                        // Find the join that connects to the target collection
                         // For path-based saving, we need to find the FK column that should store the parent ID
                         let targetColumnName: string;
 
@@ -982,22 +982,18 @@ export class EntityService {
                             // Use localKey if available (preferred approach)
                             targetColumnName = relation.localKey;
                         } else {
-                            // Find the join that references the target table (where we're saving)
+                            // Find the join where the target table is the one we're saving to
                             const targetTableName = getTableName(targetCollection);
-                            const relevantJoin = relation.joins.find(join =>
-                                join.table === targetTableName ||
-                                (Array.isArray(join.targetColumn) ? join.targetColumn : [join.targetColumn])
-                                    .some(col => col.startsWith(targetTableName + "."))
-                            );
+                            const relevantJoin = relation.joins.find(join => join.table === targetTableName);
 
                             if (relevantJoin) {
+                                // For joins to the target table, targetColumn represents the FK column in target table
                                 const targetColumnNames = getColumnNamesFromColumns(relevantJoin.targetColumn);
-                                targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
+                                targetColumnName = targetColumnNames[0];
                             } else {
-                                // Fallback to first join, but warn about potential issues
+                                // Fallback: use the first join's targetColumn
                                 console.warn(`Could not find specific join for target table ${targetTableName} in relation '${relationKey}'. Using first join as fallback.`);
-                                const firstJoin = relation.joins[0];
-                                const targetColumnNames = getColumnNamesFromColumns(firstJoin.targetColumn);
+                                const targetColumnNames = getColumnNamesFromColumns(relation.joins[0].targetColumn);
                                 targetColumnName = targetColumnNames[0];
                             }
                         }

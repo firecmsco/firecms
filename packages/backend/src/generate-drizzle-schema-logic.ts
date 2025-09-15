@@ -287,24 +287,19 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     // Through table format: many-to-many with through table
                     junctionTableName = relation.through.table;
                 } else if (relation.joins && relation.joins.length > 1) {
-                    // Joins format: many-to-many with joins - find the junction table
-                    // Junction table is the one that appears in the joins but isn't the source or target table
+                    // Joins format: many-to-many with joins - for the corrected format
+                    // The junction table name should be inferred from the relation
                     const sourceTableName = getTableName(sourceCollection);
-
-                    // Find junction table by looking for tables in joins that aren't source or target
-                    const joinTables = new Set(relation.joins.map(join => join.table));
-                    joinTables.delete(sourceTableName); // Remove source table
-
+                    
                     try {
                         const targetCollection = relation.target();
                         const targetTableName = getTableName(targetCollection);
-                        joinTables.delete(targetTableName); // Remove target table
+                        
+                        // Infer junction table name from source and target
+                        junctionTableName = `${sourceTableName}_${targetTableName}`;
                     } catch (e) {
                         // Target collection might not be available, continue anyway
                     }
-
-                    // The remaining table should be the junction table
-                    junctionTableName = Array.from(joinTables)[0];
                 }
 
                 if (junctionTableName && !allTablesToGenerate.has(junctionTableName)) {
@@ -380,26 +375,24 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
 
                     // Use the joins we found, or fall back to safer logic for backwards compatibility
                     if (sourceJoin && targetJoin) {
-                        sourceJunctionKey = getColumnName(sourceJoin.targetColumn);
-                        targetJunctionKey = getColumnName(targetJoin.targetColumn);
+                        const sourceColumnNames = getColumnNamesFromColumns(sourceJoin.targetColumn);
+                        const targetColumnNames = getColumnNamesFromColumns(targetJoin.targetColumn);
+                        sourceJunctionKey = sourceColumnNames[0];
+                        targetJunctionKey = targetColumnNames[0];
                     } else {
-                        // Enhanced fallback: try to infer from available joins
-                        const availableJoins = relation.joins.filter(join => join.table === tableName);
-                        if (availableJoins.length >= 2) {
-                            // Use first two joins that connect to the junction table
-                            const sourceColumnNames = getColumnNamesFromColumns(availableJoins[0].targetColumn);
-                            const targetColumnNames = getColumnNamesFromColumns(availableJoins[1].targetColumn);
+                        // For the corrected joins format, each join specifies:
+                        // { table: "source_table", sourceColumn: "id", targetColumn: "junction_column" }
+                        // So we find the joins that specify source and target tables
+                        const sourceJoin = relation.joins.find(join => join.table === sourceTableName);
+                        const targetJoin = relation.joins.find(join => join.table === targetTableName);
+                        
+                        if (sourceJoin && targetJoin) {
+                            const sourceColumnNames = getColumnNamesFromColumns(sourceJoin.targetColumn);
+                            const targetColumnNames = getColumnNamesFromColumns(targetJoin.targetColumn);
                             sourceJunctionKey = sourceColumnNames[0];
                             targetJunctionKey = targetColumnNames[0];
-                        } else if (relation.joins.length >= 2) {
-                            // Last resort: use first two joins but warn about potential issues
-                            console.warn(`Using fallback join logic for relation ${relation.relationName}. Consider using 'through' format for better reliability.`);
-                            const sourceJunctionKeyNames = getColumnNamesFromColumns(relation.joins[0].targetColumn);
-                            const targetJunctionKeyNames = getColumnNamesFromColumns(relation.joins[1].sourceColumn);
-                            sourceJunctionKey = sourceJunctionKeyNames[0];
-                            targetJunctionKey = targetJunctionKeyNames[0];
                         } else {
-                            console.warn(`Could not determine junction keys for relation ${relation.relationName}: insufficient join configuration.`);
+                            console.warn(`Could not determine junction keys for relation ${relation.relationName}: missing source or target join`);
                             continue;
                         }
                     }
@@ -514,23 +507,17 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     sourceJunctionKey = getColumnName(sourceJoin.targetColumn);
                     targetJunctionKey = getColumnName(targetJoin.targetColumn);
                 } else {
-                    // Enhanced fallback: try to infer from available joins
-                    const availableJoins = relation.joins.filter(join => join.table === tableName);
-                    if (availableJoins.length >= 2) {
-                        // Use first two joins that connect to the junction table
-                        const sourceColumnNames = getColumnNamesFromColumns(availableJoins[0].targetColumn);
-                        const targetColumnNames = getColumnNamesFromColumns(availableJoins[1].targetColumn);
-                        sourceJunctionKey = sourceColumnNames[0];
-                        targetJunctionKey = targetColumnNames[0];
-                    } else if (relation.joins.length >= 2) {
-                        // Last resort: use first two joins but warn about potential issues
-                        console.warn(`Using fallback join logic for relation ${relation.relationName}. Consider using 'through' format for better reliability.`);
-                        const sourceJunctionKeyNames = getColumnNamesFromColumns(relation.joins[0].targetColumn);
-                        const targetJunctionKeyNames = getColumnNamesFromColumns(relation.joins[1].sourceColumn);
-                        sourceJunctionKey = sourceJunctionKeyNames[0];
-                        targetJunctionKey = targetJunctionKeyNames[0];
+                    // For the corrected joins format, each join specifies:
+                    // { table: "source_table", sourceColumn: "id", targetColumn: "junction_column" }
+                    // So we find the joins that specify source and target tables
+                    const sourceJoin = relation.joins.find(join => join.table === sourceTableName);
+                    const targetJoin = relation.joins.find(join => join.table === targetTableName);
+                    
+                    if (sourceJoin && targetJoin) {
+                        sourceJunctionKey = getColumnName(sourceJoin.targetColumn);
+                        targetJunctionKey = getColumnName(targetJoin.targetColumn);
                     } else {
-                        console.warn(`Could not determine junction keys for relation ${relation.relationName}: insufficient join configuration.`);
+                        console.warn(`Could not determine junction keys for relation ${relation.relationName}: missing source or target join`);
                         continue;
                     }
                 }
