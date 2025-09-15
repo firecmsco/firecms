@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { EntityCollection, Property } from "@firecms/types";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
+import { getSubcollections } from "@firecms/common";
 
 export const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -47,8 +48,9 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: EntityColl
             }];
         }
 
-        if (collection.subcollections) {
-            const subCollection = collection.subcollections?.()
+        const subcollections = getSubcollections(collection);
+        if (subcollections) {
+            const subCollection = subcollections
                 .find(subCol => getSubcollectionColumnId(subCol) === key);
             if (subCollection) {
                 return [{
@@ -73,7 +75,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: E
     const propertyKeys = Object.keys(collection.properties);
 
     const additionalFields = collection.additionalFields ?? [];
-    const subCollections: EntityCollection[] = collection.subcollections?.() ?? [];
+    const subCollections: EntityCollection[] = getSubcollections(collection) ?? [];
 
     const columnIds: string[] = [
         ...propertyKeys,

@@ -3,85 +3,81 @@
 import { primaryKey, pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, numeric, serial } from 'drizzle-orm/pg-core';
 import { relations as drizzleRelations } from 'drizzle-orm';
 
+
 export const authors = pgTable("authors", {
-	id: serial("id").primaryKey(),
-	name: varchar("name").notNull(),
-	email: varchar("email").notNull()
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull(),
+    email: varchar("email").notNull()
 });
 
 export const profiles = pgTable("profiles", {
-	id: serial("id").primaryKey(),
-	bio: varchar("bio"),
-	website: varchar("website"),
-	author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
+    id: serial("id").primaryKey(),
+    bio: varchar("bio"),
+    website: varchar("website"),
+    author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
 export const posts = pgTable("posts", {
-	id: serial("id").primaryKey(),
-	title: varchar("title").notNull(),
-	content: varchar("content"),
-	author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
-});
-
-export const tags = pgTable("tags", {
-	id: serial("id").primaryKey(),
-	name: varchar("name").notNull()
+    id: serial("id").primaryKey(),
+    title: varchar("title").notNull(),
+    content: varchar("content"),
+    author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
 export const postsTags = pgTable("posts_tags", {
-	post_id: integer("post_id").references(() => posts.id, { onDelete: "cascade" }).notNull(),
-	tag_id: integer("tag_id").references(() => tags.id, { onDelete: "cascade" }).notNull()
+    post_id: integer("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
+    tag_id: integer("tag_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
 }, (table) => ({
-	pk: primaryKey({ columns: [table.post_id, table.tag_id] })
+    pk: primaryKey({ columns: [table.post_id, table.tag_id] })
 }));
+
+export const tags = pgTable("tags", {
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull()
+});
 
 export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({
-	profile: one(profiles, {
-		fields: [authors.id],
-		references: [profiles.author_id],
-		relationName: "profile"
-	}),
-	posts: many(posts, { relationName: "posts" })
+    profile: one(profiles, {
+        fields: [authors.id],
+        references: [profiles.author_id],
+        relationName: "profile"
+    }),
+    posts: many(posts, { relationName: "posts" })
 }));
 
-export const profilesRelations = drizzleRelations(profiles, ({ one }) => ({
-	author: one(authors, {
-		fields: [profiles.author_id],
-		references: [authors.id],
-		relationName: "author"
-	})
+export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({
+    author: one(authors, {
+        fields: [profiles.author_id],
+        references: [authors.id],
+        relationName: "author"
+    })
 }));
 
 export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({
-	author: one(authors, {
-		fields: [posts.author_id],
-		references: [authors.id],
-		relationName: "author"
-	}),
-	tags: many(postsTags, { relationName: "tags" }),
-	author_profile: one(profiles, {
-		fields: [posts.author_id],
-		references: [profiles.id],
-		relationName: "author_profile"
-	})
+    author: one(authors, {
+        fields: [posts.author_id],
+        references: [authors.id],
+        relationName: "author"
+    }),
+    tags: many(postsTags, { relationName: "tags" })
 }));
 
-export const tagsRelations = drizzleRelations(tags, ({ many }) => ({
-	posts: many(postsTags, { relationName: "posts" })
+export const postsTagsRelations = drizzleRelations(postsTags, ({ one, many }) => ({
+    post_id: one(posts, {
+        fields: [postsTags.post_id],
+        references: [posts.id]
+    }),
+    tag_id: one(tags, {
+        fields: [postsTags.tag_id],
+        references: [tags.id]
+    })
 }));
 
-export const postsTagsRelations = drizzleRelations(postsTags, ({ one }) => ({
-	post_id: one(posts, {
-		fields: [postsTags.post_id],
-		references: [posts.id]
-	}),
-	tag_id: one(tags, {
-		fields: [postsTags.tag_id],
-		references: [tags.id]
-	})
+export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
+    posts: many(posts, { relationName: "posts" })
 }));
 
-export const tables = { authors, profiles, posts, tags, postsTags };
+export const tables = { authors, profiles, posts, postsTags, tags };
 export const enums = {  };
-export const relations = { authorsRelations, profilesRelations, postsRelations, tagsRelations, postsTagsRelations };
+export const relations = { authorsRelations, profilesRelations, postsRelations, postsTagsRelations, tagsRelations };
 

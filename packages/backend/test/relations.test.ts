@@ -1,5 +1,5 @@
 import { EntityCollection, Relation } from "@firecms/types";
-import { normalizeRelation } from "@firecms/common";
+import { sanitizeRelation } from "@firecms/common";
 
 const mockAuthorCollection: EntityCollection = {
     name: "Author",
@@ -49,117 +49,71 @@ const mockTagCollection: EntityCollection = {
 
 describe("normalizeRelation", () => {
 
-    it("should not modify a fully defined relation with joins", () => {
-        const relation: Relation = {
-            relationName: "custom_posts",
-            target: () => mockPostCollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "posts",
-                    sourceColumn: "authors.id",
-                    targetColumn: "posts.author_id"
-                }
-            ]
-        };
-        const normalized = normalizeRelation(relation, mockAuthorCollection);
-        expect(normalized.joins).toEqual([
-            {
-                table: "posts",
-                sourceColumn: "authors.id",
-                targetColumn: "posts.author_id"
-            }
-        ]);
-        expect(normalized.relationName).toBe("custom_posts");
-    });
-
     it("should generate a default relationName if not provided", () => {
-        const relation: Relation = {
+        const relation: Partial<Relation> = {
             target: () => mockPostCollection,
             cardinality: "one"
         };
-        const normalized = normalizeRelation(relation, mockAuthorCollection);
+        const normalized = sanitizeRelation(relation, mockAuthorCollection);
         expect(normalized.relationName).toBe("posts");
     });
 
     // --- Belongs-To (cardinality: 'one', direction: 'owning') ---
     describe("Belongs-To (one-to-one/many-to-one)", () => {
-        it("should generate default joins for a simple belongs-to relation", () => {
-            const relation: Relation = {
+        it("should generate default localKey for a simple belongs-to relation", () => {
+            const relation: Partial<Relation> = {
                 relationName: "post",
                 target: () => mockPostCollection,
                 cardinality: "one"
             };
-            const normalized = normalizeRelation(relation, mockAuthorCollection);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts",
-                    sourceColumn: "authors.post_id",
-                    targetColumn: "posts.id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockAuthorCollection);
+            expect(normalized.localKey).toEqual("post_id");
+            expect(normalized.direction).toEqual("owning");
         });
 
-        it("should use `localKey` for a belongs-to relation", () => {
-            const relation: Relation = {
+        it("should use provided `localKey` for a belongs-to relation", () => {
+            const relation: Partial<Relation> = {
                 relationName: "post",
                 target: () => mockPostCollection,
                 cardinality: "one",
                 localKey: "custom_post_fk"
             };
-            const normalized = normalizeRelation(relation, mockAuthorCollection);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts",
-                    sourceColumn: "authors.custom_post_fk",
-                    targetColumn: "posts.id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockAuthorCollection);
+            expect(normalized.localKey).toEqual("custom_post_fk");
+            expect(normalized.direction).toEqual("owning");
         });
     });
 
     // --- Has-Many (cardinality: 'many', direction: 'inverse') ---
     describe("Has-Many (one-to-many)", () => {
-        it("should generate default joins for a simple has-many relation", () => {
-            const relation: Relation = {
+        it("should generate default foreignKeyOnTarget for a simple has-many relation", () => {
+            const relation: Partial<Relation> = {
                 relationName: "posts",
                 target: () => mockPostCollection,
                 cardinality: "many",
                 direction: "inverse"
             };
-            const normalized = normalizeRelation(relation, mockAuthorCollection);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts",
-                    sourceColumn: "authors.id",
-                    targetColumn: "posts.author_id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockAuthorCollection);
+            expect(normalized.foreignKeyOnTarget).toEqual("author_id");
         });
 
-        it("should use `foreignKeyOnTarget` for a has-many relation", () => {
-            const relation: Relation = {
+        it("should use provided `foreignKeyOnTarget` for a has-many relation", () => {
+            const relation: Partial<Relation> = {
                 relationName: "posts",
                 target: () => mockPostCollection,
                 cardinality: "many",
                 direction: "inverse",
                 foreignKeyOnTarget: "writer_id"
             };
-            const normalized = normalizeRelation(relation, mockAuthorCollection);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts",
-                    sourceColumn: "authors.id",
-                    targetColumn: "posts.writer_id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockAuthorCollection);
+            expect(normalized.foreignKeyOnTarget).toEqual("writer_id");
         });
     });
 
     // --- Many-To-Many (cardinality: 'many', through) ---
     describe("Many-To-Many", () => {
-        it("should generate joins for a many-to-many relation using `through`", () => {
-            const relation: Relation = {
+        it("should use provided `through` for a many-to-many relation", () => {
+            const relation: Partial<Relation> = {
                 relationName: "tags",
                 target: () => mockTagCollection,
                 cardinality: "many",
@@ -169,118 +123,39 @@ describe("normalizeRelation", () => {
                     targetColumn: "tag_id"
                 }
             };
-            const normalized = normalizeRelation(relation, mockPostCollection);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts_tags",
-                    sourceColumn: "posts.id",
-                    targetColumn: "posts_tags.post_id"
-                },
-                {
-                    table: "tags",
-                    sourceColumn: "posts_tags.tag_id",
-                    targetColumn: "tags.id"
-                }
-            ]);
-        });
-
-        it("should handle custom source/target ID fields in many-to-many", () => {
-            const postWithCustomId: EntityCollection = { ...mockPostCollection, idField: "post_uuid" };
-            const tagWithCustomId: EntityCollection = { ...mockTagCollection, idField: "tag_uuid" };
-            const relation: Relation = {
-                relationName: "tags",
-                target: () => tagWithCustomId,
-                cardinality: "many",
-                through: {
-                    table: "posts_tags",
-                    sourceColumn: "post_reference",
-                    targetColumn: "tag_reference"
-                }
-            };
-            const normalized = normalizeRelation(relation, postWithCustomId);
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts_tags",
-                    sourceColumn: "posts.post_uuid",
-                    targetColumn: "posts_tags.post_reference"
-                },
-                {
-                    table: "tags",
-                    sourceColumn: "posts_tags.tag_reference",
-                    targetColumn: "tags.tag_uuid"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockPostCollection);
+            expect(normalized.through).toEqual({
+                table: "posts_tags",
+                sourceColumn: "post_id",
+                targetColumn: "tag_id"
+            });
+            expect(normalized.direction).toEqual("owning");
         });
     });
 
     // --- Fallback/Default Behavior ---
     describe("Fallback Behavior", () => {
-        it("should use fallback logic for ambiguous 'many' without direction or through", () => {
-            const relation: Relation = {
+        it("should fallback to has-many for ambiguous 'many' without direction or through", () => {
+            const relation: Partial<Relation> = {
                 relationName: "posts",
                 target: () => mockPostCollection,
                 cardinality: "many"
             };
-            const normalized = normalizeRelation(relation, mockAuthorCollection);
-            // Should default to has-many (inverse) behavior for cardinality 'many'
-            expect(normalized.joins).toEqual([
-                {
-                    table: "posts",
-                    sourceColumn: "authors.id",
-                    targetColumn: "posts.author_id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockAuthorCollection);
+            // Should default to has-many (inverse) behavior
+            expect(normalized.direction).toEqual("inverse");
+            expect(normalized.foreignKeyOnTarget).toEqual("author_id");
         });
 
-        it("should use fallback logic for 'one' with 'inverse' direction", () => {
-            const relation: Relation = {
+        it("should handle 'one' with 'owning' direction", () => {
+            const relation: Partial<Relation> = {
                 relationName: "author",
                 target: () => mockAuthorCollection,
                 cardinality: "one",
-                direction: "inverse"
+                direction: "owning" // Changed from "inverse"
             };
-            const normalized = normalizeRelation(relation, mockPostCollection);
-            // Falls back to the 'one'/'belongs-to' style join generation
-            expect(normalized.joins).toEqual([
-                {
-                    table: "authors",
-                    sourceColumn: "posts.author_id",
-                    targetColumn: "authors.id"
-                }
-            ]);
+            const normalized = sanitizeRelation(relation, mockPostCollection);
+            expect(normalized.localKey).toEqual("author_id");
         });
-    });
-
-    it("should normalize join columns to include table names", () => {
-        const relation: Relation = {
-            relationName: "tags",
-            target: () => mockTagCollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "posts_tags",
-                    sourceColumn: "id", // should become posts.id
-                    targetColumn: "post_id" // should become posts_tags.post_id
-                },
-                {
-                    table: "tags",
-                    sourceColumn: "tag_id", // should become posts_tags.tag_id
-                    targetColumn: "id" // should become tags.id
-                }
-            ]
-        };
-        const normalized = normalizeRelation(relation, mockPostCollection);
-        expect(normalized.joins).toEqual([
-            {
-                table: "posts_tags",
-                sourceColumn: "posts.id",
-                targetColumn: "posts_tags.post_id"
-            },
-            {
-                table: "tags",
-                sourceColumn: "posts_tags.tag_id",
-                targetColumn: "tags.id"
-            }
-        ]);
     });
 });

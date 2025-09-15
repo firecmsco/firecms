@@ -1,151 +1,65 @@
 import { EntityCollection, Property, Relation } from "@firecms/types";
 import { toSnakeCase } from "./strings";
 
-/**
- * Helper function to check if a column reference includes a table prefix
- */
-function hasTablePrefix(column: string | string[]): boolean {
-    if (Array.isArray(column)) {
-        return column.some(col => col.includes("."));
+export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: EntityCollection): Relation {
+    if (!relation.target) {
+        throw new Error("Relation is missing a `target` collection.");
     }
-    return column.includes(".");
-}
+    const targetCollection = relation.target();
 
-/**
- * Helper function to add table prefix to column(s) if not already present
- */
-function addTablePrefix(column: string | string[], tableName: string): string | string[] {
-    if (Array.isArray(column)) {
-        return column.map(col => col.includes(".") ? col : `${tableName}.${col}`);
-    }
-    return column.includes(".") ? column : `${tableName}.${column}`;
-}
+    const newRelation: Partial<Relation> = { ...relation };
 
-/**
- * Helper function to validate that source and target columns have compatible structures
- */
-function validateColumnStructure(sourceColumn: string | string[], targetColumn: string | string[], relationName?: string): void {
-    const sourceIsArray = Array.isArray(sourceColumn);
-    const targetIsArray = Array.isArray(targetColumn);
-
-    if (sourceIsArray !== targetIsArray) {
-        throw new Error(`Invalid join configuration for relation "${relationName}": sourceColumn and targetColumn must both be strings or both be arrays`);
-    }
-
-    if (sourceIsArray && targetIsArray && sourceColumn.length !== targetColumn.length) {
-        throw new Error(`Invalid join configuration for relation "${relationName}": sourceColumn and targetColumn arrays must have the same length`);
-    }
-}
-
-export function normalizeRelation(relation: Relation, sourceCollection: EntityCollection): Relation {
-    const newRelation = { ...relation };
-    const targetCollection = newRelation.target();
-
-    // Infer or default direction if absent
-    if (!newRelation.direction) {
-        if (newRelation.foreignKeyOnTarget) {
-            newRelation.direction = "inverse";
-        } else if (newRelation.through) {
-            newRelation.direction = "owning";
-        } else if (newRelation.localKey) {
-            newRelation.direction = "owning";
-        } else if (newRelation.cardinality === "many") {
-            // Ambiguous: assume inverse (has-many) unless through specified
-            newRelation.direction = "inverse";
-        } else {
-            newRelation.direction = "owning";
-        }
-    }
-
-    // Default relationName from target collection slug or dbPath
+    // 1. Default relationName from target collection slug or dbPath
     if (!newRelation.relationName) {
         newRelation.relationName = toSnakeCase(targetCollection.slug ?? targetCollection.dbPath);
     }
 
-    // Create default joins if not provided
-    if (!newRelation.joins) {
-        const sourceTableName = getTableName(sourceCollection);
-        const targetTableName = getTableName(targetCollection);
-        const targetIdField = targetCollection.idField ?? "id";
-        const sourceIdField = sourceCollection.idField ?? "id";
+    // 2. Infer or default direction if absent
+    if (!newRelation.direction) {
+        if (newRelation.foreignKeyOnTarget) newRelation.direction = "inverse";
+        else if (newRelation.through) newRelation.direction = "owning";
+        else if (newRelation.cardinality === "many") newRelation.direction = "inverse"; // Default has-many to be inverse
+        else newRelation.direction = "owning"; // Default all others to owning
+    }
 
-        if (newRelation.cardinality === "one" && newRelation.direction === "owning") { // Belongs-to / many-to-one
-            const localKey = newRelation.localKey ?? `${newRelation.relationName}_id`;
-            newRelation.localKey = localKey;
-            newRelation.joins = [{
-                table: targetTableName,
-                sourceColumn: `${sourceTableName}.${localKey}`,
-                targetColumn: `${targetTableName}.${targetIdField}`
-            }];
-        } else if (newRelation.cardinality === "many" && newRelation.direction === "inverse") { // Has-many / one-to-many (FK on target)
-            const foreignKeyOnTarget = newRelation.foreignKeyOnTarget
-                ?? `${toSnakeCase(sourceCollection.slug ?? sourceCollection.name)}_id`;
-            newRelation.foreignKeyOnTarget = foreignKeyOnTarget;
-            newRelation.joins = [{
-                table: targetTableName,
-                sourceColumn: `${sourceTableName}.${sourceIdField}`,
-                targetColumn: `${targetTableName}.${foreignKeyOnTarget}`
-            }];
-        } else if (newRelation.cardinality === "many" && newRelation.through) { // Many-to-many owning
-            const junctionTable = newRelation.through.table;
-            const sourceJunctionColumn = newRelation.through.sourceColumn;
-            const targetJunctionColumn = newRelation.through.targetColumn;
-            newRelation.joins = [
-                {
-                    table: junctionTable,
-                    sourceColumn: `${sourceTableName}.${sourceIdField}`,
-                    targetColumn: `${junctionTable}.${sourceJunctionColumn}`
-                },
-                {
-                    table: targetTableName,
-                    sourceColumn: `${junctionTable}.${targetJunctionColumn}`,
-                    targetColumn: `${targetTableName}.${targetIdField}`
-                }
-            ];
-        } else if (newRelation.cardinality === "one" && newRelation.direction === "inverse") { // One-to-one inverse - fallback to belongs-to
-            // For ambiguous one-to-one inverse, fall back to belongs-to style join
-            const localKey = newRelation.localKey ?? `${newRelation.relationName}_id`;
-            newRelation.localKey = localKey;
-            newRelation.joins = [{
-                table: targetTableName,
-                sourceColumn: `${sourceTableName}.${localKey}`,
-                targetColumn: `${targetTableName}.${targetIdField}`
-            }];
-        } else {
-            // Default fallback for simple relations if no other config is provided
-            const localKey = newRelation.localKey ?? `${newRelation.relationName}_id`;
-            newRelation.localKey = localKey;
-            newRelation.joins = [{
-                table: targetTableName,
-                sourceColumn: `${sourceTableName}.${localKey}`,
-                targetColumn: `${targetTableName}.${targetIdField}`
-            }];
+    // Do not default keys if a custom joinPath is provided; it's an advanced override.
+    if (!newRelation.joinPath) {
+        const sourceName = toSnakeCase(sourceCollection.slug ?? sourceCollection.name);
+
+        // 3. Default keys based on the relation type (cardinality and direction)
+        if (newRelation.cardinality === "one" && newRelation.direction === "owning") {
+            // Belongs-to / many-to-one
+            if (!newRelation.localKey) {
+                newRelation.localKey = `${newRelation.relationName}_id`;
+            }
+        } else if (newRelation.cardinality === "many" && newRelation.direction === "inverse") {
+            // Has-many / one-to-many
+            if (!newRelation.foreignKeyOnTarget) {
+                newRelation.foreignKeyOnTarget = `${sourceName}_id`;
+            }
+        } else if (newRelation.cardinality === "many" && newRelation.direction === "owning") {
+
+            // Many-to-many via junction table
+            const sourceTableName = getTableName(sourceCollection);
+            const targetTableName = getTableName(targetCollection);
+
+            newRelation.through = {
+                table: newRelation.through?.table ?? [sourceTableName, targetTableName].sort().join("_to_"),
+                sourceColumn: newRelation.through?.sourceColumn ?? `${sourceName}_id`,
+                targetColumn: newRelation.through?.targetColumn ?? `${newRelation.relationName}_id`,
+            };
         }
     }
 
-    // Default table in joins and columns
-    let previousJoinTable = getTableName(sourceCollection);
-    for (const join of newRelation.joins) {
-        if (!join.table) {
-            join.table = getTableName(targetCollection);
-        }
-
-        // Validate column structure compatibility
-        validateColumnStructure(join.sourceColumn, join.targetColumn, newRelation.relationName);
-
-        // Add table prefixes if not already present
-        if (!hasTablePrefix(join.sourceColumn)) {
-            join.sourceColumn = addTablePrefix(join.sourceColumn, previousJoinTable);
-        }
-
-        if (!hasTablePrefix(join.targetColumn)) {
-            join.targetColumn = addTablePrefix(join.targetColumn, join.table);
-        }
-
-        previousJoinTable = join.table;
+    // 4. Basic validation to catch configuration errors early
+    if (newRelation.cardinality === "one" && newRelation.direction === "owning" && !newRelation.localKey && !newRelation.joinPath) {
+        throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'owning' one-to-one relation requires a 'localKey'. Check the relation config for '${newRelation.relationName}'`);
+    }
+    if (newRelation.cardinality === "many" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath) {
+        throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'inverse' one-to-many relation requires a 'foreignKeyOnTarget'. Check the relation config for '${newRelation.relationName}'`);
     }
 
-    return newRelation;
+    return newRelation as Relation;
 }
 
 export function resolveCollectionRelations(
@@ -156,7 +70,7 @@ export function resolveCollectionRelations(
     // 1. Process explicit relations from the new `relations` field
     if (collection.relations) {
         collection.relations.forEach((relation) => {
-            const normalizedRelation = normalizeRelation(relation, collection);
+            const normalizedRelation = sanitizeRelation(relation, collection);
             const relationKey = normalizedRelation.relationName;
             if (relationKey) {
                 relations[relationKey] = normalizedRelation;
@@ -179,7 +93,7 @@ export function resolveCollectionRelations(
                     if (!relation.relationName) {
                         relation.relationName = propKey;
                     }
-                    relations[propKey] = normalizeRelation(relation, collection); // Already normalized in collection.relations
+                    relations[propKey] = sanitizeRelation(relation, collection); // Already normalized in collection.relations
                 }
             }
         });

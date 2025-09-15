@@ -56,26 +56,16 @@ export const clientesCollection: EntityCollection = {
         {
             relationName: "alquileres",
             target: () => alquileresSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "alquileres",
-                    sourceColumn: "clientes.id",
-                    targetColumn: "alquileres.cliente_relacionado"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "cliente_relacionado"
         },
         {
             relationName: "incidencias",
             target: () => incidenciasSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "incidencias",
-                    sourceColumn: "clientes.id",
-                    targetColumn: "incidencias.cliente_relacionado"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "cliente_relacionado"
         }
     ]
 };
@@ -131,18 +121,11 @@ export const implementosCollection: EntityCollection = {
             relationName: "maquinaria",
             target: () => maquinariaCollection,
             cardinality: "many",
-            joins: [
-                {
-                    table: "maquinaria_implementos",
-                    sourceColumn: "implementos.id",
-                    targetColumn: "maquinaria_implementos.implemento_id"
-                },
-                {
-                    table: "maquinaria",
-                    sourceColumn: "maquinaria_implementos.maquinaria_id",
-                    targetColumn: "maquinaria.id"
-                }
-            ]
+            through: {
+                table: "maquinaria_implementos",
+                sourceColumn: "implemento_id",
+                targetColumn: "maquinaria_id"
+            }
         }
     ]
 };
@@ -246,12 +229,9 @@ export const horasSubcollection: EntityCollection<any> = {
     relations: [{
         relationName: "alquiler_relacionado",
         cardinality: "one",
+        direction: "owning",
         target: () => alquileresSubcollection,
-        joins: [{
-            table: "alquileres",
-            sourceColumn: "horas.alquiler_relacionado",
-            targetColumn: "alquileres.id"
-        }]
+        localKey: "alquiler_relacionado"
     }]
 };
 
@@ -349,26 +329,16 @@ export const incidenciasSubcollection: EntityCollection = {
         {
             relationName: "cliente_relacionado",
             cardinality: "one",
+            direction: "owning",
             target: () => clientesCollection,
-            joins: [
-                {
-                    table: "clientes",
-                    sourceColumn: "incidencias.cliente_relacionado",
-                    targetColumn: "clientes.id"
-                }
-            ]
+            localKey: "cliente_relacionado"
         },
         {
             relationName: "alquiler_relacionado",
             cardinality: "one",
+            direction: "owning",
             target: () => alquileresSubcollection,
-            joins: [
-                {
-                    table: "alquileres",
-                    sourceColumn: "incidencias.alquiler_relacionado",
-                    targetColumn: "alquileres.id"
-                }
-            ]
+            localKey: "alquiler_relacionado"
         }
     ]
 };
@@ -470,50 +440,30 @@ export const alquileresSubcollection: EntityCollection = {
         {
             relationName: "horas",
             target: () => horasSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "horas",
-                    sourceColumn: "alquileres.id",
-                    targetColumn: "horas.alquiler_relacionado"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "alquiler_relacionado"
         },
         {
             relationName: "incidencias",
             target: () => incidenciasSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "incidencias",
-                    sourceColumn: "alquileres.id",
-                    targetColumn: "incidencias.alquiler_relacionado"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "alquiler_relacionado"
         },
         {
             relationName: "maquinaria",
             cardinality: "one",
+            direction: "owning",
             target: () => maquinariaCollection,
-            joins: [
-                {
-                    table: "maquinaria",
-                    sourceColumn: "alquileres.maquina_referencia",
-                    targetColumn: "maquinaria.id"
-                }
-            ]
+            localKey: "maquina_referencia"
         },
         {
             relationName: "clientes",
             cardinality: "one",
+            direction: "owning",
             target: () => clientesCollection,
-            joins: [
-                {
-                    table: "clientes",
-                    sourceColumn: "alquileres.cliente_relacionado",
-                    targetColumn: "clientes.id"
-                }
-            ]
+            localKey: "cliente_relacionado"
         }
     ]
 };
@@ -612,14 +562,9 @@ export const mantenimientoSubcollection: EntityCollection = {
         {
             relationName: "maquina_relacionada",
             cardinality: "one",
+            direction: "owning",
             target: () => maquinariaCollection,
-            joins: [
-                {
-                    table: "maquinaria",
-                    sourceColumn: "mantenimiento.maquina_relacionada",
-                    targetColumn: "maquinaria.id"
-                }
-            ]
+            localKey: "maquina_relacionada"
         }
     ]
 
@@ -711,58 +656,45 @@ export const maquinariaCollection: EntityCollection = {
         {
             relationName: "implementos",
             target: () => implementosCollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "maquinaria_implementos",
-                    sourceColumn: "maquinaria.id",
-                    targetColumn: "maquinaria_implementos.maquinaria_id"
-                },
-                {
-                    table: "implementos",
-                    sourceColumn: "maquinaria_implementos.implemento_id",
-                    targetColumn: "implementos.id"
-                }
-            ]
+            cardinality: "many", // many-to-many
+            through: {
+                table: "maquinaria_implementos",
+                sourceColumn: "maquinaria_id",
+                targetColumn: "implemento_id"
+            }
         },
         {
             relationName: "alquileres",
             target: () => alquileresSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "alquileres",
-                    sourceColumn: "maquinaria.id",
-                    targetColumn: "alquileres.maquina_referencia"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "maquina_referencia"
         },
         {
             relationName: "mantenimiento",
             target: () => mantenimientoSubcollection,
-            cardinality: "many",
-            joins: [
-                {
-                    table: "mantenimiento",
-                    sourceColumn: "maquinaria.id",
-                    targetColumn: "mantenimiento.maquina_relacionada"
-                }
-            ]
+            cardinality: "many", // one-to-many
+            direction: "inverse",
+            foreignKeyOnTarget: "maquina_relacionada"
         },
         {
             relationName: "horas",
             target: () => horasSubcollection,
             cardinality: "many",
-            joins: [
+            joinPath: [
                 {
-                    table: "alquileres",
-                    sourceColumn: "maquinaria.id",
-                    targetColumn: "alquileres.maquina_referencia"
+                    table: "alquileres", // Intermediate table
+                    on: {
+                        from: "id",
+                        to: "maquina_referencia"
+                    }
                 },
                 {
-                    table: "horas",
-                    sourceColumn: "alquileres.id",
-                    targetColumn: "horas.alquiler_relacionado"
+                    table: "horas", // Final target table
+                    on: {
+                        from: "id",
+                        to: "alquiler_relacionado"
+                    }
                 }
             ]
         },
@@ -770,17 +702,21 @@ export const maquinariaCollection: EntityCollection = {
             relationName: "incidencias",
             target: () => incidenciasSubcollection,
             cardinality: "many",
-            joins: [
+            joinPath: [
                 // Join incidencias through alquileres to avoid relying on a non-existent columna 'incidencias.maquina_relacionada'
                 {
-                    table: "alquileres",
-                    sourceColumn: "maquinaria.id",
-                    targetColumn: "alquileres.maquina_referencia"
+                    table: "alquileres", // Intermediate table
+                    on: {
+                        from: "id",
+                        to: "maquina_referencia"
+                    }
                 },
                 {
-                    table: "incidencias",
-                    sourceColumn: "alquileres.id",
-                    targetColumn: "incidencias.alquiler_relacionado"
+                    table: "incidencias", // Final target table
+                    on: {
+                        from: "id",
+                        to: "alquiler_relacionado"
+                    }
                 }
             ]
         }

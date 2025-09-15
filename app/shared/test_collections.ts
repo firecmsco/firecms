@@ -9,6 +9,7 @@ const profilesCollection: EntityCollection = {
     slug: "profiles",
     dbPath: "profiles",
     icon: "AccountCircle",
+    textSearchEnabled: true,
     properties: {
         id: {
             type: "number",
@@ -35,7 +36,7 @@ const profilesCollection: EntityCollection = {
             target: () => authorsCollection,
             cardinality: "one",
             direction: "owning",
-            localKey: "author_id", // FK column in the 'profiles' table
+            localKey: "author_id"
         }
     ]
 };
@@ -159,7 +160,13 @@ const postsCollection: EntityCollection = {
             name: "Author",
             type: "relation",
             relationName: "author" // This now refers to the relation defined below
+        },
+        profile: {
+            name: "Profile",
+            type: "relation",
+            relationName: "author_profile"
         }
+
     },
     relations: [
         // Owning side of the Many-to-One relationship with Authors.
@@ -184,24 +191,28 @@ const postsCollection: EntityCollection = {
             }
         },
         // Advanced: A multi-hop, read-only relation from Post -> Author -> Profile.
-        // This demonstrates the use of the `joins` property for complex lookups.
+        // This demonstrates the use of the `joinPath` property for complex lookups.
         {
             relationName: "author_profile",
             target: () => profilesCollection,
             cardinality: "one",
             direction: "inverse", // Read-only from the post's perspective
-            joins: [
+            joinPath: [
                 {
                     // First, join posts to authors
                     table: "authors",
-                    sourceColumn: "posts.author_id",
-                    targetColumn: "authors.id"
+                    on: {
+                        from: "posts.author_id",
+                        to: "authors.id"
+                    }
                 },
                 {
                     // Then, join authors to profiles
                     table: "profiles",
-                    sourceColumn: "authors.id",
-                    targetColumn: "profiles.author_id"
+                    on: {
+                        from: "authors.id",
+                        to: "profiles.author_id"
+                    }
                 }
             ]
         }

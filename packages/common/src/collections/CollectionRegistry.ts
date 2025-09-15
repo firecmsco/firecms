@@ -56,6 +56,7 @@ export class CollectionRegistry {
 
     private normalizeCollection(collection: EntityCollection): EntityCollection {
         const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
+        collection.textSearchEnabled = collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled;
         return {
             ...collection,
             properties

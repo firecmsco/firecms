@@ -761,7 +761,7 @@ function EntitiesCount({
                 orderBy: sortByProperty,
                 order: currentSort
             }).then(setCount).catch(setError);
-    }, [path, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
+    }, [resolvedPath, filter, sortByProperty, currentSort]);
 
     useEffect(() => {
         if (onCountChange) {

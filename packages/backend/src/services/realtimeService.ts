@@ -149,7 +149,8 @@ export class RealtimeService extends EventEmitter {
                 order: request.order,
                 limit: request.limit,
                 startAfter: request.startAfter,
-                databaseId: request.collection?.databaseId
+                databaseId: request.collection?.databaseId,
+                searchString: request.searchString
             });
 
             this.sendCollectionUpdate(clientId, subscriptionId, entities);
