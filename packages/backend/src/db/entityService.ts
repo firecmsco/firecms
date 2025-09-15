@@ -3,7 +3,8 @@ import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues, Properties, Property, Relation, WhereFilterOp } from "@firecms/types";
-import { getColumnName, getTableName, resolveCollectionRelations } from "@firecms/common";
+import { CollectionRegistry, getColumnName, getTableName, resolveCollectionRelations } from "@firecms/common";
+import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 
 /**
  * Helper function to extract table name(s) from column reference(s)
@@ -204,7 +205,12 @@ function serializePropertyToServer(value: any, property: Property): any {
 }
 
 // Transform IDs back to relation objects for frontend
-function parseDataFromServer<M extends Record<string, any>>(data: M, collection: EntityCollection): M {
+async function parseDataFromServer<M extends Record<string, any>>(
+    data: M,
+    collection: EntityCollection,
+    db?: NodePgDatabase<any>,
+    registry?: BackendCollectionRegistry
+): Promise<M> {
     const properties = collection.properties;
     if (!data || !properties) return data;
 
@@ -235,26 +241,71 @@ function parseDataFromServer<M extends Record<string, any>>(data: M, collection:
             continue;
         }
 
-        result[key] = parsePropertyFromServer(value, property, collection, key);
+        result[key] = parsePropertyFromServer(value, property, collection);
     }
 
-    // Add relation properties that should be populated from FK values
+    // Add relation properties that should be populated from FK values or inverse queries
     for (const [propKey, property] of Object.entries(properties)) {
         if (property.type === "relation" && !(propKey in result)) {
             // Find the normalized relation for this property
             const relation = resolvedRelations[propKey];
-            if (relation && relation.localKey && relation.localKey in data) {
-                const fkValue = data[relation.localKey as keyof M];
-                if (fkValue !== null && fkValue !== undefined) {
+            if (relation) {
+                if (relation.direction === "owning" && relation.localKey && relation.localKey in data) {
+                    // Owning relation: FK is in current table
+                    const fkValue = data[relation.localKey as keyof M];
+                    if (fkValue !== null && fkValue !== undefined) {
+                        try {
+                            const targetCollection = relation.target();
+                            result[propKey] = {
+                                id: fkValue.toString(),
+                                path: targetCollection.slug || targetCollection.dbPath,
+                                __type: "relation"
+                            };
+                        } catch (e) {
+                            console.warn(`Could not resolve target collection for relation property: ${propKey}`, e);
+                        }
+                    }
+                } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget && db && registry) {
+                    // Inverse relation: FK is in target table, need to query for it
                     try {
                         const targetCollection = relation.target();
-                        result[propKey] = {
-                            id: fkValue.toString(),
-                            path: targetCollection.slug || targetCollection.dbPath,
-                            __type: "relation"
-                        };
+                        const targetTable = registry.getTable(targetCollection.dbPath);
+                        const currentEntityId = data[collection.idField || "id"];
+
+                        if (targetTable && currentEntityId !== null && currentEntityId !== undefined) {
+                            const foreignKeyColumn = targetTable[relation.foreignKeyOnTarget as keyof typeof targetTable] as AnyPgColumn;
+                            if (foreignKeyColumn) {
+                                // Query the target table to find entity that references this entity
+                                const relatedEntities = await db
+                                    .select()
+                                    .from(targetTable)
+                                    .where(eq(foreignKeyColumn, currentEntityId))
+                                    .limit(relation.cardinality === "one" ? 1 : 100); // Limit for one-to-one vs one-to-many
+
+                                if (relatedEntities.length > 0) {
+                                    if (relation.cardinality === "one") {
+                                        // One-to-one: return single relation object
+                                        const targetIdField = targetCollection.idField || "id";
+                                        const relatedEntity = relatedEntities[0] as Record<string, any>;
+                                        result[propKey] = {
+                                            id: relatedEntity[targetIdField].toString(),
+                                            path: targetCollection.slug || targetCollection.dbPath,
+                                            __type: "relation"
+                                        };
+                                    } else {
+                                        // One-to-many: return array of relation objects
+                                        const targetIdField = targetCollection.idField || "id";
+                                        result[propKey] = relatedEntities.map((entity: any) => ({
+                                            id: entity[targetIdField].toString(),
+                                            path: targetCollection.slug || targetCollection.dbPath,
+                                            __type: "relation"
+                                        }));
+                                    }
+                                }
+                            }
+                        }
                     } catch (e) {
-                        console.warn(`Could not resolve target collection for relation property: ${propKey}`, e);
+                        console.warn(`Could not resolve inverse relation property: ${propKey}`, e);
                     }
                 }
             }
@@ -264,7 +315,7 @@ function parseDataFromServer<M extends Record<string, any>>(data: M, collection:
     return result as M;
 }
 
-function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection, propertyKey?: string): any {
+function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection): any {
     if (value === null || value === undefined) {
         return value;
     }
@@ -301,7 +352,7 @@ function parsePropertyFromServer(value: any, property: Property, collection: Ent
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
-                        result[subKey] = parsePropertyFromServer(subValue, subProperty, collection, subKey);
+                        result[subKey] = parsePropertyFromServer(subValue, subProperty, collection);
                     } else {
                         result[subKey] = subValue;
                     }
@@ -425,6 +476,26 @@ export class EntityService {
         };
     }
 
+    private getInverseRelations<M extends Record<string, any>>(entity: M, collection: EntityCollection): Array<{ key: string, value: any }> {
+        const properties = collection.properties;
+        const resolvedRelations = resolveCollectionRelations(collection);
+
+        const inverseRelations: Array<{ key: string, value: any }> = [];
+
+        for (const [key, value] of Object.entries(entity)) {
+            const property = properties[key as keyof M] as Property;
+            if (property && property.type === "relation") {
+                const relation = resolvedRelations[key];
+                if (relation && relation.direction === "inverse" && relation.foreignKeyOnTarget) {
+                    // Inverse relation: Add to updates
+                    inverseRelations.push({ key, value });
+                }
+            }
+        }
+
+        return inverseRelations;
+    }
+
     private parseIdValue(idValue: string | number, idType: string): string | number {
         if (idType === "number") {
             if (typeof idValue === "number") {
@@ -470,7 +541,7 @@ export class EntityService {
         const raw = result[0] as M;
 
         // Transform IDs back to relation objects and apply type conversion
-        const values = parseDataFromServer(raw, collection);
+        const values = await parseDataFromServer(raw, collection, this.db, collectionRegistry);
 
         // Load relations based on new cardinality system
         const resolvedRelations = resolveCollectionRelations(collection);
@@ -564,8 +635,8 @@ export class EntityService {
 
         const results = await query;
 
-        return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection);
+        const entityPromises = results.map(async (entity: any) => {
+            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
@@ -574,6 +645,8 @@ export class EntityService {
                 databaseId: options.databaseId
             };
         });
+
+        return Promise.all(entityPromises);
     }
 
     /**
@@ -763,9 +836,9 @@ export class EntityService {
         if (options.limit) query = query.limit(options.limit);
 
         const results = await query;
-        return results.map((row: any) => {
+        const entityPromises = results.map(async (row: any) => {
             const entity = row[getTableName(targetCollection)] || row;
-            const values = parseDataFromServer(entity as M, targetCollection);
+            const values = await parseDataFromServer(entity as M, targetCollection, this.db, collectionRegistry);
             return {
                 id: entity[targetIdInfo.fieldName].toString(),
                 path: targetCollection.slug ?? targetCollection.dbPath,
@@ -773,6 +846,7 @@ export class EntityService {
                 databaseId: options.databaseId
             };
         });
+        return Promise.all(entityPromises);
     }
 
     // Updated countRelatedEntities implementation
@@ -900,10 +974,33 @@ export class EntityService {
                             throw new Error(`Relation '${relationKey}' in '${currentCollection.slug || currentCollection.dbPath}' should have been normalized and have at least one join defined.`);
                         }
 
-                        // Prefill/override FK from the first join target column with the parent entity id
-                        const firstJoin = relation.joins[0];
-                        const targetColumnNames = getColumnNamesFromColumns(firstJoin.targetColumn);
-                        const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
+                        // Find the appropriate join that connects to the target collection
+                        // For path-based saving, we need to find the FK column that should store the parent ID
+                        let targetColumnName: string;
+
+                        if (relation.localKey) {
+                            // Use localKey if available (preferred approach)
+                            targetColumnName = relation.localKey;
+                        } else {
+                            // Find the join that references the target table (where we're saving)
+                            const targetTableName = getTableName(targetCollection);
+                            const relevantJoin = relation.joins.find(join =>
+                                join.table === targetTableName ||
+                                (Array.isArray(join.targetColumn) ? join.targetColumn : [join.targetColumn])
+                                    .some(col => col.startsWith(targetTableName + "."))
+                            );
+
+                            if (relevantJoin) {
+                                const targetColumnNames = getColumnNamesFromColumns(relevantJoin.targetColumn);
+                                targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
+                            } else {
+                                // Fallback to first join, but warn about potential issues
+                                console.warn(`Could not find specific join for target table ${targetTableName} in relation '${relationKey}'. Using first join as fallback.`);
+                                const firstJoin = relation.joins[0];
+                                const targetColumnNames = getColumnNamesFromColumns(firstJoin.targetColumn);
+                                targetColumnName = targetColumnNames[0];
+                            }
+                        }
 
                         const parentIdInfo = this.getIdFieldInfo(currentCollection);
                         const parsedParentId = this.parseIdValue(currentEntityId, parentIdInfo.type);
@@ -1311,8 +1408,8 @@ export class EntityService {
             .orderBy(desc(idField))
             .limit(50);
 
-        return results.map((entity: any) => {
-            const values = parseDataFromServer(entity as M, collection);
+        const entityPromises = results.map(async (entity: any) => {
+            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
@@ -1321,5 +1418,7 @@ export class EntityService {
                 databaseId
             };
         });
+
+        return Promise.all(entityPromises);
     }
 }

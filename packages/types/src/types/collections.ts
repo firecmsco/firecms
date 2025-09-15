@@ -53,7 +53,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
 
     /**
      * Path or table name of the collection in the database.
-     * If not specified, the `name` property is used, converted to snake_case.
+     * If not specified, the `slug` property is used, converted to snake_case.
      */
     dbPath: string;
 

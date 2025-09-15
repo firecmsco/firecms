@@ -40,6 +40,7 @@ export class CollectionRegistry {
         }
 
         const normalizedCollection = this.normalizeCollection(collection);
+        console.log("Registering collection", normalizedCollection);
         this.collectionsByDbPath.set(normalizedCollection.dbPath, normalizedCollection);
         if (normalizedCollection.slug)
             this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);

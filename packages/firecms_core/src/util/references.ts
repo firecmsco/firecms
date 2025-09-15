@@ -1,6 +1,6 @@
 import { AuthController, EntityCollection, PropertyConfig } from "@firecms/types";
 import { isPropertyBuilder } from "@firecms/common";
-import { isReferenceProperty } from "./property_utils";
+import { isReferenceProperty, isRelationProperty } from "./property_utils";
 import { getFieldConfig } from "../core";
 
 export function getEntityPreviewKeys(
@@ -22,7 +22,7 @@ export function getEntityPreviewKeys(
             .filter(key => key !== targetCollection.idField && key !== "id")
             .filter(key => {
             const property = targetCollection.properties[key];
-            return property && !isPropertyBuilder(property) && !isReferenceProperty(authController, property, fields);
+            return property && !isPropertyBuilder(property) && !isReferenceProperty(property)&& !isRelationProperty( property);
         }).slice(0, limit);
     }
 }

@@ -47,7 +47,7 @@ export function EntityPreview({
                                   includeTitle = true,
                                   includeEntityLink = true,
                                   includeImage = true,
-                                  entity,
+                                  entity
                               }: EntityPreviewProps) {
 
     const authController = useAuthController();
