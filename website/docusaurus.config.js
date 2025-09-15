@@ -268,6 +268,11 @@ module.exports = {
                         label: "Pricing",
                         position: "left"
                     },
+                    {
+                        to: "security",
+                        label: "Security & Privacy",
+                        position: "left"
+                    },
                     // {
                     //     label: "Blog",
                     //     to: "blog",
