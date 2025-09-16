@@ -165,6 +165,11 @@ const postsCollection: EntityCollection = {
             name: "Profile",
             type: "relation",
             relationName: "author_profile"
+        },
+        tags: {
+            name: "Tags",
+            type: "relation",
+            relationName: "tags"
         }
 
     },

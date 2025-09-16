@@ -5,11 +5,12 @@ import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useCustomizationController, useNavigationController, useEntitySelectionTable } from "../../../hooks";
+import { useEntitySelectionTable } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
 import { getRelationFrom } from "@firecms/common";
+import { TableMultipleRelationField } from "./TableMultipleRelationField";
 
 type TableRelationFieldProps = {
     name: string;
@@ -27,8 +28,27 @@ type TableRelationFieldProps = {
 };
 
 export function TableRelationField(props: TableRelationFieldProps) {
-    const customizationController = useCustomizationController();
     const collection = props.relation.target();
+
+    // Check if this is a many-to-many relation
+    const manyRelation = props.relation?.cardinality === "many";
+
+    if (manyRelation) {
+        return <TableMultipleRelationField
+            name={props.name}
+            disabled={props.disabled}
+            internalValue={Array.isArray(props.internalValue) ? props.internalValue : []}
+            updateValue={(newValue) => props.updateValue(newValue)}
+            size={props.size}
+            previewProperties={props.previewProperties}
+            title={props.title}
+            relation={props.relation}
+            forceFilter={props.forceFilter}
+            includeId={props.includeId}
+            includeEntityLink={props.includeEntityLink}
+        />;
+    }
+
     return <TableRelationFieldInternal {...props} collection={collection}/>;
 }
 
@@ -107,13 +127,13 @@ export const TableRelationFieldInternal = React.memo(
         const buildMultipleRelationField = () => {
             if (Array.isArray(internalValue))
                 return <>
-                    {internalValue.map((relation, index) =>
+                    {internalValue.map((relationItem, index) =>
                         <div className="w-full my-0.5"
                              key={`preview_array_ref_${name}_${index}`}>
                             <RelationPreview
                                 onClick={disabled ? undefined : handleOpen}
                                 size={"small"}
-                                relation={relation}
+                                relation={relationItem}
                                 hover={!disabled}
                                 previewProperties={previewProperties}
                                 includeId={includeId}
