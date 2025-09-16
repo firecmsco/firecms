@@ -1,5 +1,6 @@
 import { EntityCollection, EntityCustomView } from "@firecms/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import { getSubcollections } from "./resolutions";
 
 export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewEntityInternal<M>
@@ -85,6 +86,7 @@ export function getNavigationEntriesFromPath(props: {
                         .map((entry) => resolveEntityView(entry, props.contextEntityViews))
                         .filter(Boolean)
                         .find((entry) => entry!.key === newPath);
+                    const subcollections = getSubcollections(collection);
                     if (customView) {
                         result.push({
                             type: "custom_view",
@@ -93,10 +95,10 @@ export function getNavigationEntriesFromPath(props: {
                             path: path + "/" + customView.key,
                             view: customView
                         });
-                    } else if (collection.subcollections) {
+                    } else if (subcollections) {
                         result.push(...getNavigationEntriesFromPath({
                             path: newPath,
-                            collections: collection.subcollections?.(),
+                            collections: subcollections,
                             currentFullPath: path,
                             contextEntityViews: props.contextEntityViews
                         }));

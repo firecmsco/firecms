@@ -1,4 +1,5 @@
 import { EntityCollection, NavigationController, SideEntityController } from "@firecms/types";
+import { getSubcollections } from "./resolutions";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));
@@ -90,7 +91,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
             }
 
             resolvedPathParts.push(entityId); // Append entity ID
-            currentCollections = foundCollection.subcollections?.(); // Move to subcollections
+            currentCollections = getSubcollections(foundCollection); // Move to subcollections
             foundMatch = true;
 
             if (!currentCollections && remainingPath.length > 0) {
@@ -143,7 +144,7 @@ export function getCollectionBySlugWithin(slugOrPath: string, collections: Entit
             } else if (navigationEntry.subcollections) {
                 const newPath = slugOrPath.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionBySlugWithin(newPath, navigationEntry.subcollections?.());
+                    result = getCollectionBySlugWithin(newPath, getSubcollections(navigationEntry));
             }
         }
         if (result) break;

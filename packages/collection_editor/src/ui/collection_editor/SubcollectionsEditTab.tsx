@@ -2,7 +2,7 @@ import React from "react";
 import {
     ConfirmationDialog,
     EntityCollection,
-    EntityCustomView,
+    EntityCustomView, getSubcollections,
     resolveEntityView,
     useCustomizationController,
     User
@@ -61,7 +61,7 @@ export function SubcollectionsEditTab({
         setFieldValue,
     } = useFormex<EntityCollection>();
 
-    const [subcollections, setSubcollections] = React.useState<EntityCollection[]>(collection.subcollections ?? []);
+    const [subcollections, setSubcollections] = React.useState<EntityCollection[]>(getSubcollections(collection) ?? []);
     const resolvedEntityViews = values.entityViews?.filter(e => typeof e === "string")
         .map(e => resolveEntityView(e, contextEntityViews))
         .filter(Boolean) as EntityCustomView[] ?? [];

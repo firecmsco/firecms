@@ -1,5 +1,6 @@
 import { EntityCollection, EntityReference } from "@firecms/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import { getSubcollections } from "./resolutions";
 
 export function getParentReferencesFromPath(props: {
     path: string,
@@ -42,7 +43,7 @@ export function getParentReferencesFromPath(props: {
                     if (collection.subcollections) {
                         result.push(...getParentReferencesFromPath({
                             path: newPath,
-                            collections: collection.subcollections?.(),
+                            collections: getSubcollections(collection),
                             currentFullPath: path
                         }));
                     }

@@ -5,7 +5,7 @@ import {
     ConfirmationDialog,
     Entity,
     EntityCollection,
-    ErrorView,
+    ErrorView, getSubcollections,
     isPropertyBuilder,
     MapProperty,
     mergeDeep,
@@ -157,7 +157,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
 
     const initialValuesProp = props.initialValues;
     const includeTemplates = !initialValuesProp?.slug && (props.parentCollectionIds ?? []).length === 0;
-    const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections?.() : collections) ?? [];
+    const collectionsInThisLevel = (props.parentCollection ? getSubcollections(props.parentCollection) : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.dbPath.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.slug?.trim().toLowerCase()).filter(Boolean) as string[];
     const [collection, setCollection] = React.useState<PersistedCollection<any> | undefined>();

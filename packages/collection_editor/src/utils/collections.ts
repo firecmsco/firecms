@@ -1,6 +1,6 @@
 import {
     EntityCallbacks,
-    EntityCollection,
+    EntityCollection, getSubcollections,
     ModifyCollectionProps,
     Properties
 } from "@firecms/core";
@@ -20,7 +20,7 @@ export const mergeCollections = (baseCollections: EntityCollection[],
 
     const markAsEditable = (c: PersistedCollection) => {
         makePropertiesEditable(c.properties as Properties);
-        c.subcollections?.().forEach(markAsEditable);
+        getSubcollections(c).forEach(markAsEditable);
     };
 
     backendCollections.forEach(markAsEditable);
