@@ -361,7 +361,7 @@ describe("EntityService - Relation Types Tests", () => {
 
         it("should apply filters on related entities", async () => {
             const mockOrders = [
-                { orders: { id: 1, total: 100 } }
+                { id: 1, total: 100, customer_id: 1 }
             ];
             db.orderBy.mockResolvedValue(mockOrders);
 
@@ -375,8 +375,8 @@ describe("EntityService - Relation Types Tests", () => {
 
         it("should order related entities correctly", async () => {
             const mockOrders = [
-                { orders: { id: 2, total: 200 } },
-                { orders: { id: 1, total: 100 } }
+                { id: 2, total: 200, customer_id: 1 },
+                { id: 1, total: 100, customer_id: 1 }
             ];
             db.orderBy.mockResolvedValue(mockOrders);
 
