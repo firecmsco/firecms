@@ -1086,6 +1086,7 @@ export class EntityService {
                                 }
                             } catch (e) {
                                 console.warn(`Could not resolve one-to-one relation property: ${key}`, e);
+                                throw e;
                             }
                         }
                     }
