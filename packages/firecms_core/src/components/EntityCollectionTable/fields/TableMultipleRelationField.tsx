@@ -4,11 +4,10 @@ import equal from "react-fast-compare";
 import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
 
-import { getPreviewSizeFrom } from "../../../preview/util";
 import { useEntitySelectionTable } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
-import { cls, Button, EditIcon, Typography, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
-import { ArrayContainer, ArrayEntryParams } from "../../ArrayContainer";
+import { cls, EditIcon } from "@firecms/ui";
+import { EntityPreviewContainer } from "../../EntityPreview";
 import { getRelationFrom } from "@firecms/common";
 
 type TableMultipleRelationFieldProps = {
@@ -38,7 +37,6 @@ export const TableMultipleRelationFieldInternal = React.memo(
             name,
             internalValue,
             updateValue,
-            size,
             previewProperties,
             title,
             disabled,
@@ -72,78 +70,53 @@ export const TableMultipleRelationFieldInternal = React.memo(
             relationDialogController.open();
         };
 
-        const buildEntry = useCallback(({
-                                            index,
-                                            internalId
-                                        }: ArrayEntryParams) => {
-            const entryValue = value && Array.isArray(value) && value.length > index ? value[index] : undefined;
-            if (!entryValue)
-                return <div>Internal ERROR</div>;
-            return (
-                <RelationPreview
-                    key={internalId}
-                    previewProperties={previewProperties}
-                    size={getPreviewSizeFrom(size)}
-                    onClick={handleOpen}
-                    hover={!disabled}
-                    relation={entryValue}
-                    includeId={includeId}
-                    includeEntityLink={includeEntityLink}
-                />
-            );
-        }, [previewProperties, value, handleOpen, disabled, size, includeId, includeEntityLink]);
+        const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
-        const onValueChange = useCallback((newValue: EntityRelation[]) => {
-            updateValue(newValue);
-        }, [updateValue]);
+        const buildMultipleRelationField = () => {
+            if (Array.isArray(internalValue))
+                return <>
+                    {internalValue.map((relationItem, index) =>
+                        <div className="w-full my-0.5"
+                             key={`preview_array_ref_${name}_${index}`}>
+                            <RelationPreview
+                                onClick={disabled ? undefined : handleOpen}
+                                size={"small"}
+                                relation={relationItem}
+                                hover={!disabled}
+                                previewProperties={previewProperties}
+                                includeId={includeId}
+                                includeEntityLink={includeEntityLink}
+                            />
+                        </div>
+                    )
+                    }
+                </>;
+            else
+                return <ErrorView error={"Data is not an array of relations"}/>;
+        };
 
         if (!collection)
             return <ErrorView error={"The specified collection does not exist"}/>;
 
-        const titleContent = (
-            <>
-                <Typography variant="body2" className="font-medium text-text-secondary dark:text-text-secondary-dark">
-                    {title}
-                </Typography>
-                {Array.isArray(value) && <Typography variant={"caption"} className={"px-2"}>({value.length})</Typography>}
-            </>
-        );
-
-        const bodyContent = (
-            <div className={"group"}>
-                <ArrayContainer
-                    droppableId={name}
-                    value={value}
-                    disabled={disabled}
-                    buildEntry={buildEntry}
-                    canAddElements={false}
-                    addLabel={title ? "Add reference to " + title : "Add reference"}
-                    newDefaultEntry={null as any}
-                    onValueChange={onValueChange}
-                />
-
-                <Button
-                    className="ml-2 my-2 justify-center text-left"
-                    variant="text"
-                    color="primary"
-                    size="small"
-                    disabled={disabled}
-                    onClick={handleOpen}>
-                    <EditIcon size={"small"}/>
-                    Edit {title}
-                </Button>
-            </div>
-        );
-
         return (
-            <div className="w-full">
-                <ExpandablePanel
-                    titleClassName={cls("px-2 py-1", fieldBackgroundMixin)}
-                    innerClassName={cls("px-2 pb-2 pt-1", fieldBackgroundMixin)}
-                    title={titleContent}
-                    initiallyExpanded={value.length > 0}>
-                    {bodyContent}
-                </ExpandablePanel>
+            <div className="w-full group">
+
+                {internalValue && buildMultipleRelationField()}
+
+                {valueNotSet &&
+                    <EntityPreviewContainer
+                        className={cls("px-3 py-2 text-sm font-medium flex items-center gap-4",
+                            disabled
+                                ? "text-surface-accent-500"
+                                : "cursor-pointer text-text-secondary dark:text-text-secondary-dark hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800")}
+                        onClick={handleOpen}
+                        size={"medium"}>
+                        <EditIcon
+                            size={"small"}
+                            className={"ml-2 mr-1 text-surface-300 dark:text-surface-600"}/>
+                        {title}
+                    </EntityPreviewContainer>}
+
             </div>
         );
     }, equal);
