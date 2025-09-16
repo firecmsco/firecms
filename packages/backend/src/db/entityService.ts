@@ -1,31 +1,11 @@
-import { and, asc, count, desc, eq, inArray, sql, SQLWrapper } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, sql, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues, Properties, Property, Relation } from "@firecms/types";
-import { getColumnName, getTableName, resolveCollectionRelations } from "@firecms/common";
+import { getTableName, resolveCollectionRelations } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
-
-/**
- * Helper function to extract table name(s) from column reference(s)
- */
-function getTableNamesFromColumns(columns: string | string[]): string[] {
-    if (Array.isArray(columns)) {
-        return columns.map(col => col.includes(".") ? col.split(".")[0] : "");
-    }
-    return [columns.includes(".") ? columns.split(".")[0] : ""];
-}
-
-/**
- * Helper function to extract column name(s) from fully qualified column reference(s)
- */
-function getColumnNamesFromColumns(columns: string | string[]): string[] {
-    if (Array.isArray(columns)) {
-        return columns.map(col => getColumnName(col));
-    }
-    return [getColumnName(columns)];
-}
 
 /**
  * Helper function to sanitize and convert dates to ISO strings
@@ -392,7 +372,7 @@ export class EntityService {
         filter: FilterValues<Extract<keyof M, string>>,
         table: PgTable<any>,
         collectionPath: string
-    ): SQLWrapper[] {
+    ): SQL[] {
         return DrizzleConditionBuilder.buildFilterConditions(filter, table, collectionPath);
     }
 
@@ -425,7 +405,6 @@ export class EntityService {
             type: idFieldConfig.type
         };
     }
-
 
     private parseIdValue(idValue: string | number, idType: string): string | number {
         if (idType === "number") {
@@ -528,7 +507,10 @@ export class EntityService {
         };
     }
 
-    async fetchCollection<M extends Record<string, any>>(
+    /**
+     * Unified method to fetch entities with optional search functionality
+     */
+    private async fetchEntitiesWithConditions<M extends Record<string, any>>(
         collectionPath: string,
         options: {
             filter?: FilterValues<Extract<keyof M, string>>;
@@ -540,23 +522,7 @@ export class EntityService {
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-        // Handle multi-segment paths by resolving through relations
-        if (collectionPath.includes("/")) {
-            return this.fetchCollectionFromPath<M>(collectionPath, options);
-        }
-
         const collection = this.getCollectionByPath(collectionPath);
-
-        if (options.searchString) {
-            return this.searchEntities<M>(collectionPath, options.searchString, {
-                filter: options.filter,
-                orderBy: options.orderBy,
-                order: options.order,
-                limit: options.limit,
-                databaseId: options.databaseId
-            });
-        }
-
         const table = this.getTableForCollection(collection);
         const idInfo = this.getIdFieldInfo(collection);
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
@@ -566,12 +532,36 @@ export class EntityService {
         }
 
         let query: any = this.db.select().from(table);
+        const allConditions: SQL[] = [];
 
-        // Apply filters
+        // Add search conditions if search string is provided
+        if (options.searchString) {
+            const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                options.searchString,
+                collection.properties,
+                table
+            );
+
+            if (searchConditions.length === 0) {
+                return []; // No searchable fields found
+            }
+
+            allConditions.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+        }
+
+        // Add filter conditions
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
             if (filterConditions.length > 0) {
-                query = query.where(and(...filterConditions));
+                allConditions.push(...filterConditions);
+            }
+        }
+
+        // Apply all conditions
+        if (allConditions.length > 0) {
+            const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+            if (finalCondition) {
+                query = query.where(finalCondition);
             }
         }
 
@@ -591,34 +581,64 @@ export class EntityService {
             query = query.orderBy(...orderExpressions);
         }
 
-        // Apply limit
-        if (options.limit) {
-            query = query.limit(options.limit);
+        // Apply limit (use search default of 50 if searching, otherwise use provided limit)
+        const limitValue = options.searchString ? (options.limit || 50) : options.limit;
+        if (limitValue) {
+            query = query.limit(limitValue);
         }
 
         const results = await query;
 
+        return this.processEntityResults<M>(results, collection, collectionPath, idInfo, options.databaseId);
+    }
+
+    /**
+     * Process raw database results into Entity objects with relations
+     */
+    private async processEntityResults<M extends Record<string, any>>(
+        results: any[],
+        collection: EntityCollection,
+        collectionPath: string,
+        idInfo: { fieldName: string; type: string },
+        databaseId?: string
+    ): Promise<Entity<M>[]> {
         const entityPromises = results.map(async (entity: any) => {
             const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
 
-            // Additionally, for one-to-one relations (owning or inverse) that use joinPath (or otherwise),
-            // populate a relation ref if not already set by parseDataFromServer
+            // Populate one-to-one relations that might be missing
             const resolvedRelations = resolveCollectionRelations(collection);
             const propertyKeys = new Set(Object.keys(collection.properties));
-            const singleOnePromises = Object.entries(resolvedRelations)
+            const relationPromises = Object.entries(resolvedRelations)
                 .filter(([key]) => propertyKeys.has(key))
                 .map(async ([key, relation]) => {
-                    if (relation.cardinality === "one") {
+                    if (relation.cardinality === "many") {
+                        try {
+                            const relatedEntities = await this.fetchRelatedEntities(
+                                collectionPath,
+                                entity[idInfo.fieldName],
+                                key,
+                                {}
+                            );
+                            (values as any)[key] = relatedEntities.map(e => ({
+                                id: e.id,
+                                path: e.path,
+                                __type: "relation"
+                            }));
+                        } catch (e) {
+                            console.warn(`Could not resolve many relation property: ${key}`, e);
+                        }
+                    } else if (relation.cardinality === "one") {
+                        // Populate any missing one-to-one relation
                         if ((values as any)[key] == null) {
                             try {
-                                const related = await this.fetchRelatedEntities(
+                                const relatedEntities = await this.fetchRelatedEntities(
                                     collectionPath,
                                     entity[idInfo.fieldName],
                                     key,
                                     { limit: 1 }
                                 );
-                                if (related.length > 0) {
-                                    const e = related[0];
+                                if (relatedEntities.length > 0) {
+                                    const e = relatedEntities[0];
                                     (values as any)[key] = {
                                         id: e.id,
                                         path: e.path,
@@ -626,28 +646,64 @@ export class EntityService {
                                     };
                                 }
                             } catch (e) {
-                                console.warn(`Could not resolve one-to-one relation property in list: ${key}`, e);
+                                console.warn(`Could not resolve one-to-one relation property: ${key}`, e);
                             }
                         }
                     }
                 });
-            await Promise.all(singleOnePromises);
+
+            await Promise.all(relationPromises);
 
             return {
                 id: entity[idInfo.fieldName].toString(),
                 path: collectionPath,
                 values: values as M,
-                databaseId: options.databaseId
+                databaseId
             };
         });
 
         return Promise.all(entityPromises);
     }
 
-    /**
-     * Handle multi-segment paths by resolving through relations
-     * e.g., "authors/70/posts" resolves to posts related to authors with id 70
-     */
+    async fetchCollection<M extends Record<string, any>>(
+        collectionPath: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: any;
+            searchString?: string;
+            databaseId?: string;
+        } = {}
+    ): Promise<Entity<M>[]> {
+        // Handle multi-segment paths by resolving through relations
+        if (collectionPath.includes("/")) {
+            return this.fetchCollectionFromPath<M>(collectionPath, options);
+        }
+
+        // Use unified method for both search and regular fetch
+        return this.fetchEntitiesWithConditions<M>(collectionPath, options);
+    }
+
+    async searchEntities<M extends Record<string, any>>(
+        collectionPath: string,
+        searchString: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            databaseId?: string;
+        } = {}
+    ): Promise<Entity<M>[]> {
+        // Use unified method with search string
+        return this.fetchEntitiesWithConditions<M>(collectionPath, {
+            ...options,
+            searchString
+        });
+    }
+
     private async fetchCollectionFromPath<M extends Record<string, any>>(
         path: string,
         options: {
@@ -780,7 +836,7 @@ export class EntityService {
             }
 
             // Ensure the foreign key value is of the correct type
-            relationKeyValue = typeof foreignKeyValue === 'string' || typeof foreignKeyValue === 'number'
+            relationKeyValue = typeof foreignKeyValue === "string" || typeof foreignKeyValue === "number"
                 ? foreignKeyValue
                 : String(foreignKeyValue);
         }
@@ -789,7 +845,7 @@ export class EntityService {
         let query: any = this.db.select().from(targetTable);
 
         // Build additional filter conditions
-        const additionalFilters: SQLWrapper[] = [];
+        const additionalFilters: SQL[] = [];
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
             additionalFilters.push(...filterConditions);
@@ -890,145 +946,6 @@ export class EntityService {
         return Date.now().toString() + Math.random().toString(36).substring(2, 7);
     }
 
-    async searchEntities<M extends Record<string, any>>(
-        collectionPath: string,
-        searchString: string,
-        options: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            orderBy?: string;
-            order?: "desc" | "asc";
-            limit?: number;
-            databaseId?: string;
-        } = {}
-    ): Promise<Entity<M>[]> {
-
-        const collection = this.getCollectionByPath(collectionPath);
-        const table = this.getTableForCollection(collection);
-        const idInfo = this.getIdFieldInfo(collection);
-        const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
-
-        if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
-        }
-
-        // Build search conditions using the unified utility
-        const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
-            searchString,
-            collection.properties,
-            table
-        );
-
-        if (searchConditions.length === 0) {
-            return []; // No searchable fields found
-        }
-
-        // Start building the query
-        let query: any = this.db.select().from(table);
-
-        // Combine search conditions with any additional filters
-        const allConditions: SQLWrapper[] = [
-            DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!
-        ];
-
-        if (options.filter) {
-            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
-            if (filterConditions.length > 0) {
-                allConditions.push(...filterConditions);
-            }
-        }
-
-        // Apply all conditions
-        const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
-        if (finalCondition) {
-            query = query.where(finalCondition);
-        }
-
-        // Apply ordering
-        const orderExpressions = [];
-        if (options.orderBy) {
-            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
-            if (orderByField) {
-                orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
-            }
-        }
-
-        // Default ordering by ID, always applied as a secondary sort
-        orderExpressions.push(desc(idField));
-
-        if (orderExpressions.length > 0) {
-            query = query.orderBy(...orderExpressions);
-        }
-
-        // Apply limit (default to 50 if not specified)
-        const searchLimit = options.limit || 50;
-        query = query.limit(searchLimit);
-
-        const results = await query;
-
-        const entityPromises = results.map(async (entity: any) => {
-            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
-
-            // Populate relations like in fetchCollection
-            const resolvedRelations = resolveCollectionRelations(collection);
-            const propertyKeys = new Set(Object.keys(collection.properties));
-
-            const relationPromises = Object.entries(resolvedRelations)
-                .filter(([key]) => propertyKeys.has(key))
-                .map(async ([key, relation]) => {
-                    if (relation.cardinality === "many") {
-                        try {
-                            const relatedEntities = await this.fetchRelatedEntities(
-                                collectionPath,
-                                entity[idInfo.fieldName],
-                                key,
-                                {}
-                            );
-                            (values as any)[key] = relatedEntities.map(e => ({
-                                id: e.id,
-                                path: e.path,
-                                __type: "relation"
-                            }));
-                        } catch (e) {
-                            console.warn(`Could not resolve many relation property in search: ${key}`, e);
-                        }
-                    } else if (relation.cardinality === "one") {
-                        // Populate any missing one-to-one relation (owning or inverse), including joinPath-based
-                        if ((values as any)[key] == null) {
-                            try {
-                                const relatedEntities = await this.fetchRelatedEntities(
-                                    collectionPath,
-                                    entity[idInfo.fieldName],
-                                    key,
-                                    { limit: 1 }
-                                );
-                                if (relatedEntities.length > 0) {
-                                    const e = relatedEntities[0];
-                                    (values as any)[key] = {
-                                        id: e.id,
-                                        path: e.path,
-                                        __type: "relation"
-                                    };
-                                }
-                            } catch (e) {
-                                console.warn(`Could not resolve one-to-one relation property in search: ${key}`, e);
-                            }
-                        }
-                    }
-                });
-
-            await Promise.all(relationPromises);
-
-            return {
-                id: entity[idInfo.fieldName].toString(),
-                path: collectionPath,
-                values: values as M,
-                databaseId: options.databaseId
-            };
-        });
-
-        return Promise.all(entityPromises);
-    }
-
     // Updated countRelatedEntities implementation
     private async countRelatedEntities<M extends Record<string, any>>(
         parentCollectionPath: string,
@@ -1056,7 +973,7 @@ export class EntityService {
         let query: any = this.db.select({ count: sql<number>`count(distinct ${targetIdField})` }).from(targetTable);
 
         // Build additional filter conditions
-        const additionalFilters: SQLWrapper[] = [];
+        const additionalFilters: SQL[] = [];
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
             additionalFilters.push(...filterConditions);
@@ -1209,12 +1126,12 @@ export class EntityService {
 
                             if (relevantJoinStep) {
                                 // For join steps to the target table, to represents the FK column in target table
-                                const targetColumnNames = getColumnNamesFromColumns(relevantJoinStep.on.to);
+                                const targetColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(relevantJoinStep.on.to);
                                 targetColumnName = targetColumnNames[0];
                             } else {
                                 // Fallback: use the first join step's to column
                                 console.warn(`Could not find specific join step for target table ${targetTableName} in relation '${relationKey}'. Using first join step as fallback.`);
-                                const targetColumnNames = getColumnNamesFromColumns(relation.joinPath[0].on.to);
+                                const targetColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(relation.joinPath[0].on.to);
                                 targetColumnName = targetColumnNames[0];
                             }
                         } else {
@@ -1358,8 +1275,8 @@ export class EntityService {
                     if (joinStep.table !== parentTableName && joinStep.table !== targetTableName) {
                         junctionTable = joinTableObj;
 
-                        const sourceColumnNames = getColumnNamesFromColumns(joinStep.on.from);
-                        const targetColumnNames = getColumnNamesFromColumns(joinStep.on.to);
+                        const sourceColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.from);
+                        const targetColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.to);
                         const sourceColumnName = sourceColumnNames[0]; // Use first column for simple FK cases
                         const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
 
@@ -1485,7 +1402,7 @@ export class EntityService {
         const parentTableName = getTableName(parentCollection);
         // Last step determines the target FK column
         const lastStep = relation.joinPath[relation.joinPath.length - 1];
-        const targetFKColName = getColumnNamesFromColumns(lastStep.on.to)[0];
+        const targetFKColName = DrizzleConditionBuilder.getColumnNamesFromColumns(lastStep.on.to)[0];
         let currentFrom = lastStep.on.from; // fully-qualified
 
         // Walk back until we reach a column on the parent table
@@ -1495,7 +1412,7 @@ export class EntityService {
         // Safety to avoid infinite loops
         let safety = 0;
         while (safety++ < 10) {
-            const currentFromTable = getTableNamesFromColumns(currentFrom)[0];
+            const currentFromTable = DrizzleConditionBuilder.getTableNamesFromColumns(currentFrom)[0];
             if (currentFromTable === parentTableName) {
                 break;
             }
@@ -1508,7 +1425,7 @@ export class EntityService {
             }
             currentFrom = prevStep.on.from;
         }
-        const parentSourceColName = getColumnNamesFromColumns(currentFrom)[0];
+        const parentSourceColName = DrizzleConditionBuilder.getColumnNamesFromColumns(currentFrom)[0];
         return {
             targetFKColName,
             parentSourceColName

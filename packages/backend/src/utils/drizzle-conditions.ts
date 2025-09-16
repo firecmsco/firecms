@@ -1,4 +1,4 @@
-import { and, eq, or, sql, SQLWrapper, ilike } from "drizzle-orm";
+import { and, eq, or, sql, SQL, ilike } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
 import { getColumnName } from "@firecms/common";
@@ -16,8 +16,8 @@ export class DrizzleConditionBuilder {
         filter: FilterValues<Extract<keyof M, string>>,
         table: PgTable<any>,
         collectionPath: string
-    ): SQLWrapper[] {
-        const conditions: SQLWrapper[] = [];
+    ): SQL[] {
+        const conditions: SQL[] = [];
 
         for (const [field, filterParam] of Object.entries(filter)) {
             if (!filterParam) continue;
@@ -46,7 +46,7 @@ export class DrizzleConditionBuilder {
         column: AnyPgColumn,
         op: WhereFilterOp,
         value: any
-    ): SQLWrapper | null {
+    ): SQL | null {
         switch (op) {
             case "==":
                 return eq(column, value);
@@ -86,11 +86,11 @@ export class DrizzleConditionBuilder {
         targetIdColumn: AnyPgColumn,
         registry: BackendCollectionRegistry
     ): {
-        joinConditions: { table: PgTable<any>; condition: SQLWrapper }[];
-        whereConditions: SQLWrapper[];
+        joinConditions: { table: PgTable<any>; condition: SQL }[];
+        whereConditions: SQL[];
     } {
-        const joinConditions: { table: PgTable<any>; condition: SQLWrapper }[] = [];
-        const whereConditions: SQLWrapper[] = [];
+        const joinConditions: { table: PgTable<any>; condition: SQL }[] = [];
+        const whereConditions: SQL[] = [];
 
         if (relation.joinPath && relation.joinPath.length > 0) {
             // Handle join path relations
@@ -147,10 +147,10 @@ export class DrizzleConditionBuilder {
         parentEntityId: string | number,
         registry: BackendCollectionRegistry
     ): {
-        joins: { table: PgTable<any>; condition: SQLWrapper }[];
-        finalCondition: SQLWrapper;
+        joins: { table: PgTable<any>; condition: SQL }[];
+        finalCondition: SQL;
     } {
-        const joins: { table: PgTable<any>; condition: SQLWrapper }[] = [];
+        const joins: { table: PgTable<any>; condition: SQL }[] = [];
         let currentTable = targetTable;
 
         // Process join steps in reverse order to build path back to parent
@@ -210,9 +210,9 @@ export class DrizzleConditionBuilder {
         toColName: string,
         fromTableName: string,
         toTableName: string
-    ): { joinTable: PgTable<any>; condition: SQLWrapper } {
+    ): { joinTable: PgTable<any>; condition: SQL } {
         let joinTable: PgTable<any>;
-        let condition: SQLWrapper;
+        let condition: SQL;
 
         if (currentTable === toTable) {
             // current -> toTable, so join the fromTable
@@ -254,7 +254,7 @@ export class DrizzleConditionBuilder {
         targetIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry
-    ): { join: { table: PgTable<any>; condition: SQLWrapper }; condition: SQLWrapper } {
+    ): { join: { table: PgTable<any>; condition: SQL }; condition: SQL } {
         const junctionTable = registry.getTable(through.table);
         if (!junctionTable) {
             throw new Error(`Junction table not found: ${through.table}`);
@@ -287,7 +287,7 @@ export class DrizzleConditionBuilder {
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentEntityId: string | number
-    ): SQLWrapper {
+    ): SQL {
         if (relation.direction === "owning" && relation.localKey) {
             // For owning relations, the parentEntityId is actually the foreign key value
             // that should match the target table's primary key
@@ -318,7 +318,7 @@ export class DrizzleConditionBuilder {
     /**
      * Combine multiple conditions with AND operator
      */
-    static combineConditionsWithAnd(conditions: SQLWrapper[]): SQLWrapper | undefined {
+    static combineConditionsWithAnd(conditions: SQL[]): SQL | undefined {
         if (conditions.length === 0) return undefined;
         if (conditions.length === 1) return conditions[0];
         return and(...conditions);
@@ -327,7 +327,7 @@ export class DrizzleConditionBuilder {
     /**
      * Combine multiple conditions with OR operator
      */
-    static combineConditionsWithOr(conditions: SQLWrapper[]): SQLWrapper | undefined {
+    static combineConditionsWithOr(conditions: SQL[]): SQL | undefined {
         if (conditions.length === 0) return undefined;
         if (conditions.length === 1) return conditions[0];
         return or(...conditions);
@@ -340,8 +340,8 @@ export class DrizzleConditionBuilder {
         searchString: string,
         properties: Record<string, any>,
         table: PgTable<any>
-    ): SQLWrapper[] {
-        const searchConditions: SQLWrapper[] = [];
+    ): SQL[] {
+        const searchConditions: SQL[] = [];
 
         for (const [key, prop] of Object.entries(properties)) {
             if (prop.type === "string") {
@@ -363,8 +363,8 @@ export class DrizzleConditionBuilder {
         value: any,
         idColumn?: AnyPgColumn,
         excludeId?: string | number
-    ): SQLWrapper[] {
-        const conditions: SQLWrapper[] = [eq(fieldColumn, value)];
+    ): SQL[] {
+        const conditions: SQL[] = [eq(fieldColumn, value)];
 
         if (excludeId && idColumn) {
             conditions.push(sql`${idColumn} != ${excludeId}`);
@@ -385,7 +385,7 @@ export class DrizzleConditionBuilder {
         parentIdColumn: AnyPgColumn,
         targetIdColumn: AnyPgColumn,
         registry: BackendCollectionRegistry,
-        additionalFilters?: SQLWrapper[]
+        additionalFilters?: SQL[]
     ): any {
         const { joinConditions, whereConditions } = this.buildRelationConditions(
             relation,
@@ -430,7 +430,7 @@ export class DrizzleConditionBuilder {
         parentIdColumn: AnyPgColumn,
         targetIdColumn: AnyPgColumn,
         registry: BackendCollectionRegistry,
-        additionalFilters?: SQLWrapper[]
+        additionalFilters?: SQL[]
     ): any {
         // For count queries, we need to handle joins differently to avoid duplicates
         if (relation.joinPath && relation.joinPath.length > 0) {
@@ -482,7 +482,7 @@ export class DrizzleConditionBuilder {
         parentIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry,
-        additionalFilters?: SQLWrapper[]
+        additionalFilters?: SQL[]
     ): any {
         let query = baseCountQuery;
         let currentTable = targetTable;
@@ -536,7 +536,7 @@ export class DrizzleConditionBuilder {
         targetIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry,
-        additionalFilters?: SQLWrapper[]
+        additionalFilters?: SQL[]
     ): any {
         const junctionTable = registry.getTable(through.table);
         if (!junctionTable) {
@@ -566,7 +566,7 @@ export class DrizzleConditionBuilder {
     /**
      * Helper method to extract table names from columns
      */
-    private static getTableNamesFromColumns(columns: string | string[]): string[] {
+    static getTableNamesFromColumns(columns: string | string[]): string[] {
         if (Array.isArray(columns)) {
             return columns.map(col => col.includes(".") ? col.split(".")[0] : "");
         }
@@ -576,7 +576,7 @@ export class DrizzleConditionBuilder {
     /**
      * Helper method to extract column names from columns
      */
-    private static getColumnNamesFromColumns(columns: string | string[]): string[] {
+    static getColumnNamesFromColumns(columns: string | string[]): string[] {
         if (Array.isArray(columns)) {
             return columns.map(col => getColumnName(col));
         }

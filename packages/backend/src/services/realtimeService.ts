@@ -242,7 +242,13 @@ export class RealtimeService extends EventEmitter {
                         entities = await this.entityService.searchEntities(
                             path,
                             collectionRequest.searchString,
-                            collectionRequest.databaseId
+                            {
+                                filter: collectionRequest.filter,
+                                orderBy: collectionRequest.orderBy,
+                                order: collectionRequest.order,
+                                limit: collectionRequest.limit,
+                                databaseId: collectionRequest.databaseId
+                            }
                         );
                     } else {
                         entities = await this.entityService.fetchCollection(path, {
@@ -290,7 +296,13 @@ export class RealtimeService extends EventEmitter {
                         entities = await this.entityService.searchEntities(
                             path,
                             collectionRequest.searchString,
-                            collectionRequest.databaseId
+                            {
+                                filter: collectionRequest.filter,
+                                orderBy: collectionRequest.orderBy,
+                                order: collectionRequest.order,
+                                limit: collectionRequest.limit,
+                                databaseId: collectionRequest.databaseId
+                            }
                         );
                     } else {
                         entities = await this.entityService.fetchCollection(path, {
