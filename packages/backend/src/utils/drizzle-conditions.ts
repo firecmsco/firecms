@@ -119,6 +119,17 @@ export class DrizzleConditionBuilder {
             joinConditions.push(junctionResult.join);
             whereConditions.push(junctionResult.condition);
 
+        } else if (relation.through && relation.cardinality === "many" && relation.direction === "inverse") {
+            // Handle inverse many-to-many relations with junction table
+            const junctionResult = this.buildInverseJunctionTableConditions(
+                relation.through,
+                targetIdColumn,
+                parentEntityId,
+                registry
+            );
+            joinConditions.push(junctionResult.join);
+            whereConditions.push(junctionResult.condition);
+
         } else {
             // Handle simple relations
             const simpleCondition = this.buildSimpleRelationCondition(
@@ -275,6 +286,45 @@ export class DrizzleConditionBuilder {
         }
 
         // Handle both single ID and array of IDs
+        const condition = Array.isArray(parentEntityId)
+            ? sql`${junctionSourceCol} = ANY(${parentEntityId})`
+            : eq(junctionSourceCol, parentEntityId);
+
+        return {
+            join: {
+                table: junctionTable,
+                condition: eq(targetIdColumn, junctionTargetCol)
+            },
+            condition
+        };
+    }
+
+    /**
+     * Build conditions for inverse junction table (many-to-many) relations
+     */
+    private static buildInverseJunctionTableConditions(
+        through: { table: string; sourceColumn: string; targetColumn: string },
+        targetIdColumn: AnyPgColumn,
+        parentEntityId: string | number | (string | number)[],
+        registry: BackendCollectionRegistry
+    ): { join: { table: PgTable<any>; condition: SQL }; condition: SQL } {
+        const junctionTable = registry.getTable(through.table);
+        if (!junctionTable) {
+            throw new Error(`Junction table not found: ${through.table}`);
+        }
+
+        const junctionSourceCol = junctionTable[through.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+        const junctionTargetCol = junctionTable[through.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+
+        if (!junctionSourceCol) {
+            throw new Error(`Source column '${through.sourceColumn}' not found in junction table '${through.table}'`);
+        }
+        if (!junctionTargetCol) {
+            throw new Error(`Target column '${through.targetColumn}' not found in junction table '${through.table}'`);
+        }
+
+        // For inverse relations, the parentEntityId (tag ID) should match the sourceColumn (tag_id)
+        // and we want to find target entities (posts) through the targetColumn (post_id)
         const condition = Array.isArray(parentEntityId)
             ? sql`${junctionSourceCol} = ANY(${parentEntityId})`
             : eq(junctionSourceCol, parentEntityId);
@@ -468,6 +518,15 @@ export class DrizzleConditionBuilder {
                 registry,
                 additionalFilters
             );
+        } else if (relation.through && relation.cardinality === "many" && relation.direction === "inverse") {
+            return this.buildInverseJunctionCountQuery(
+                baseCountQuery,
+                relation.through,
+                targetIdColumn,
+                parentEntityId,
+                registry,
+                additionalFilters
+            );
         } else {
             // Simple relations
             const simpleCondition = this.buildSimpleRelationCondition(
@@ -546,6 +605,42 @@ export class DrizzleConditionBuilder {
      * Build junction table conditions for count queries
      */
     private static buildJunctionCountQuery(
+        baseCountQuery: any,
+        through: { table: string; sourceColumn: string; targetColumn: string },
+        targetIdColumn: AnyPgColumn,
+        parentEntityId: string | number,
+        registry: BackendCollectionRegistry,
+        additionalFilters?: SQL[]
+    ): any {
+        const junctionTable = registry.getTable(through.table);
+        if (!junctionTable) {
+            throw new Error(`Junction table not found: ${through.table}`);
+        }
+
+        const junctionSourceCol = junctionTable[through.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+        const junctionTargetCol = junctionTable[through.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+
+        if (!junctionSourceCol) {
+            throw new Error(`Source column '${through.sourceColumn}' not found in junction table '${through.table}'`);
+        }
+        if (!junctionTargetCol) {
+            throw new Error(`Target column '${through.targetColumn}' not found in junction table '${through.table}'`);
+        }
+
+        const baseConditions = [eq(junctionSourceCol, parentEntityId)];
+        if (additionalFilters && additionalFilters.length > 0) {
+            baseConditions.push(...additionalFilters);
+        }
+
+        return baseCountQuery
+            .innerJoin(junctionTable, eq(targetIdColumn, junctionTargetCol))
+            .where(and(...baseConditions));
+    }
+
+    /**
+     * Build inverse junction table conditions for count queries
+     */
+    private static buildInverseJunctionCountQuery(
         baseCountQuery: any,
         through: { table: string; sourceColumn: string; targetColumn: string },
         targetIdColumn: AnyPgColumn,
