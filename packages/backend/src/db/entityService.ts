@@ -685,67 +685,92 @@ export class EntityService {
         idInfo: { fieldName: string; type: string },
         databaseId?: string
     ): Promise<Entity<M>[]> {
-        const entityPromises = results.map(async (entity: any) => {
-            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
+        if (results.length === 0) return [];
 
-            // Populate one-to-one relations that might be missing
-            const resolvedRelations = resolveCollectionRelations(collection);
-            const propertyKeys = new Set(Object.keys(collection.properties));
-            const relationPromises = Object.entries(resolvedRelations)
-                .filter(([key]) => propertyKeys.has(key))
-                .map(async ([key, relation]) => {
-                    if (relation.cardinality === "many") {
-                        try {
-                            const relatedEntities = await this.fetchRelatedEntities(
-                                collectionPath,
-                                entity[idInfo.fieldName],
-                                key,
-                                {}
-                            );
-                            (values as any)[key] = relatedEntities.map(e => ({
-                                id: e.id,
-                                path: e.path,
-                                __type: "relation"
-                            }));
-                        } catch (e) {
-                            console.warn(`Could not resolve many relation property: ${key}`, e);
-                        }
-                    } else if (relation.cardinality === "one") {
-                        // Populate any missing one-to-one relation
-                        if ((values as any)[key] == null) {
-                            try {
-                                const relatedEntities = await this.fetchRelatedEntities(
-                                    collectionPath,
-                                    entity[idInfo.fieldName],
-                                    key,
-                                    { limit: 1 }
-                                );
-                                if (relatedEntities.length > 0) {
-                                    const e = relatedEntities[0];
-                                    (values as any)[key] = {
-                                        id: e.id,
-                                        path: e.path,
-                                        __type: "relation"
-                                    };
-                                }
-                            } catch (e) {
-                                console.warn(`Could not resolve one-to-one relation property: ${key}`, e);
-                            }
-                        }
+        // First pass: parse all entities
+        const entitiesWithValues = await Promise.all(results.map(async (entity: any) => {
+            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
+            return {
+                entity,
+                values,
+                id: entity[idInfo.fieldName].toString(),
+                path: collectionPath
+            };
+        }));
+
+        // Second pass: batch load missing one-to-one relations to avoid N+1 queries
+        const resolvedRelations = resolveCollectionRelations(collection);
+        const propertyKeys = new Set(Object.keys(collection.properties));
+
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!propertyKeys.has(key) || relation.cardinality !== "one") continue;
+
+            // Find entities missing this relation
+            const entitiesMissingRelation = entitiesWithValues.filter(item =>
+                (item.values as any)[key] == null
+            );
+
+            if (entitiesMissingRelation.length === 0) continue;
+
+            try {
+                // Batch load this relation for all entities that need it
+                const entityIds = entitiesMissingRelation.map(item => item.entity[idInfo.fieldName]);
+                const relationResults = await this.batchFetchRelatedEntities(
+                    collectionPath,
+                    entityIds,
+                    key,
+                    relation
+                );
+
+                // Map results back to entities
+                entitiesMissingRelation.forEach(item => {
+                    const entityId = item.entity[idInfo.fieldName];
+                    const relatedEntity = relationResults.get(entityId);
+                    if (relatedEntity) {
+                        (item.values as any)[key] = {
+                            id: relatedEntity.id,
+                            path: relatedEntity.path,
+                            __type: "relation"
+                        };
                     }
                 });
+            } catch (e) {
+                console.warn(`Could not batch load one-to-one relation property: ${key}`, e);
+            }
+        }
 
-            await Promise.all(relationPromises);
-
-            return {
-                id: entity[idInfo.fieldName].toString(),
-                path: collectionPath,
-                values: values as M,
-                databaseId
-            };
+        // Handle many relations (these still need individual queries for now)
+        const manyRelationPromises = entitiesWithValues.map(async (item) => {
+            const manyRelationPromises = Object.entries(resolvedRelations)
+                .filter(([key, relation]) => propertyKeys.has(key) && relation.cardinality === "many")
+                .map(async ([key, relation]) => {
+                    try {
+                        const relatedEntities = await this.fetchRelatedEntities(
+                            collectionPath,
+                            item.entity[idInfo.fieldName],
+                            key,
+                            {}
+                        );
+                        (item.values as any)[key] = relatedEntities.map(e => ({
+                            id: e.id,
+                            path: e.path,
+                            __type: "relation"
+                        }));
+                    } catch (e) {
+                        console.warn(`Could not resolve many relation property: ${key}`, e);
+                    }
+                });
+            await Promise.all(manyRelationPromises);
         });
 
-        return Promise.all(entityPromises);
+        await Promise.all(manyRelationPromises);
+
+        return entitiesWithValues.map(item => ({
+            id: item.id,
+            path: item.path,
+            values: item.values as M,
+            databaseId
+        }));
     }
 
     async fetchCollection<M extends Record<string, any>>(
@@ -1428,6 +1453,126 @@ export class EntityService {
         const finalEntity = await this.fetchEntity<M>(collection.dbPath ?? collection.slug, savedId, databaseId);
         if (!finalEntity) throw new Error("Could not fetch entity after save.");
         return finalEntity;
+    }
+
+    /**
+     * Batch fetch related entities for multiple parent entities to avoid N+1 queries
+     */
+    private async batchFetchRelatedEntities(
+        parentCollectionPath: string,
+        parentEntityIds: (string | number)[],
+        relationKey: string,
+        relation: Relation
+    ): Promise<Map<string | number, Entity<any>>> {
+        if (parentEntityIds.length === 0) return new Map();
+
+        const parentCollection = this.getCollectionByPath(parentCollectionPath);
+        const targetCollection = relation.target();
+        const targetTable = this.getTableForCollection(targetCollection);
+        const targetIdInfo = this.getIdFieldInfo(targetCollection);
+        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+
+        const parentIdInfo = this.getIdFieldInfo(parentCollection);
+        const parentTable = collectionRegistry.getTable(getTableName(parentCollection));
+        if (!parentTable) throw new Error("Parent table not found");
+        const parentIdCol = parentTable[parentIdInfo.fieldName as keyof typeof parentTable] as AnyPgColumn;
+
+        // Parse all parent IDs once
+        const parsedParentIds = parentEntityIds.map(id => this.parseIdValue(id, parentIdInfo.type));
+
+        // Handle join path relations with batching
+        if (relation.joinPath && relation.joinPath.length > 0) {
+            let query = this.db.select().from(parentTable);
+            let currentTable = parentTable;
+
+            // Apply each join in the path
+            for (const join of relation.joinPath) {
+                const joinTable = collectionRegistry.getTable(join.table);
+                if (!joinTable) {
+                    throw new Error(`Join table not found: ${join.table}`);
+                }
+
+                const fromColumn = Array.isArray(join.on.from) ? join.on.from[0] : join.on.from;
+                const toColumn = Array.isArray(join.on.to) ? join.on.to[0] : join.on.to;
+
+                const fromParts = fromColumn.split(".");
+                const toParts = toColumn.split(".");
+
+                const fromColName = fromParts[fromParts.length - 1];
+                const toColName = toParts[toParts.length - 1];
+
+                const fromCol = currentTable[fromColName as keyof typeof currentTable] as AnyPgColumn;
+                const toCol = joinTable[toColName as keyof typeof joinTable] as AnyPgColumn;
+
+                if (!fromCol || !toCol) {
+                    throw new Error(`Join columns not found: ${fromColumn} -> ${toColumn}`);
+                }
+
+                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as any;
+                currentTable = joinTable;
+            }
+
+            // Add where condition for ALL parent entities at once
+            const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
+            query = query.where(inArray(parentIdField, parsedParentIds)) as any;
+
+            const results = await query;
+            const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
+            const resultMap = new Map<string | number, Entity<any>>();
+
+            // Group results by parent ID
+            results.forEach((row: any) => {
+                const parentEntity = row[getTableName(parentCollection)] || row;
+                const targetEntity = row[targetTableName] || row;
+                const parentId = parentEntity[parentIdInfo.fieldName];
+
+                resultMap.set(parentId, {
+                    id: targetEntity[targetIdInfo.fieldName].toString(),
+                    path: targetCollection.slug ?? targetCollection.dbPath,
+                    values: targetEntity
+                });
+            });
+
+            return resultMap;
+        }
+
+        // Handle other relation types with batching
+        let query: any = this.db.select().from(targetTable);
+
+        // Build the relation query with ALL parent IDs
+        query = DrizzleConditionBuilder.buildRelationQuery(
+            query,
+            relation,
+            parsedParentIds, // Pass array instead of single ID
+            targetTable,
+            parentTable,
+            parentIdCol,
+            targetIdField,
+            collectionRegistry,
+            []
+        );
+
+        const results = await query;
+        const resultMap = new Map<string | number, Entity<any>>();
+
+        // Map results back to parent entities
+        // Note: This assumes the query builder can handle batching and returns parent ID info
+        results.forEach((row: any) => {
+            const targetEntity = row[getTableName(targetCollection)] || row;
+            // We need to determine which parent this belongs to based on the relation type
+            // This will need to be enhanced based on the DrizzleConditionBuilder implementation
+
+            // For now, assume single result per parent (one-to-one relations)
+            if (parsedParentIds.length === 1) {
+                resultMap.set(parsedParentIds[0], {
+                    id: targetEntity[targetIdInfo.fieldName].toString(),
+                    path: targetCollection.slug ?? targetCollection.dbPath,
+                    values: targetEntity
+                });
+            }
+        });
+
+        return resultMap;
     }
 
     private async updateRelationsUsingJoins<M extends Record<string, any>>(

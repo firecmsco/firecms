@@ -79,7 +79,7 @@ export class DrizzleConditionBuilder {
      */
     static buildRelationConditions(
         relation: Relation,
-        parentEntityId: string | number,
+        parentEntityId: string | number | (string | number)[],
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentIdColumn: AnyPgColumn,
@@ -144,7 +144,7 @@ export class DrizzleConditionBuilder {
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentIdColumn: AnyPgColumn,
-        parentEntityId: string | number,
+        parentEntityId: string | number | (string | number)[],
         registry: BackendCollectionRegistry
     ): {
         joins: { table: PgTable<any>; condition: SQL }[];
@@ -192,7 +192,11 @@ export class DrizzleConditionBuilder {
             throw new Error("Join path did not result in connecting to parent table");
         }
 
-        const finalCondition = eq(parentIdColumn, parentEntityId);
+        // Handle both single ID and array of IDs
+        const finalCondition = Array.isArray(parentEntityId)
+            ? sql`${parentIdColumn} = ANY(${parentEntityId})`
+            : eq(parentIdColumn, parentEntityId);
+
         return {
             joins,
             finalCondition
@@ -252,7 +256,7 @@ export class DrizzleConditionBuilder {
     private static buildJunctionTableConditions(
         through: { table: string; sourceColumn: string; targetColumn: string },
         targetIdColumn: AnyPgColumn,
-        parentEntityId: string | number,
+        parentEntityId: string | number | (string | number)[],
         registry: BackendCollectionRegistry
     ): { join: { table: PgTable<any>; condition: SQL }; condition: SQL } {
         const junctionTable = registry.getTable(through.table);
@@ -270,12 +274,17 @@ export class DrizzleConditionBuilder {
             throw new Error(`Target column '${through.targetColumn}' not found in junction table '${through.table}'`);
         }
 
+        // Handle both single ID and array of IDs
+        const condition = Array.isArray(parentEntityId)
+            ? sql`${junctionSourceCol} = ANY(${parentEntityId})`
+            : eq(junctionSourceCol, parentEntityId);
+
         return {
             join: {
                 table: junctionTable,
                 condition: eq(targetIdColumn, junctionTargetCol)
             },
-            condition: eq(junctionSourceCol, parentEntityId)
+            condition
         };
     }
 
@@ -286,7 +295,7 @@ export class DrizzleConditionBuilder {
         relation: Relation,
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
-        parentEntityId: string | number
+        parentEntityId: string | number | (string | number)[]
     ): SQL {
         if (relation.direction === "owning" && relation.localKey) {
             // For owning relations, the parentEntityId is actually the foreign key value
@@ -298,9 +307,13 @@ export class DrizzleConditionBuilder {
                 if (!idCol) {
                     throw new Error(`No primary key or 'id' column found in target table`);
                 }
-                return eq(idCol, parentEntityId);
+                return Array.isArray(parentEntityId)
+                    ? sql`${idCol} = ANY(${parentEntityId})`
+                    : eq(idCol, parentEntityId);
             }
-            return eq(targetIdCol, parentEntityId);
+            return Array.isArray(parentEntityId)
+                ? sql`${targetIdCol} = ANY(${parentEntityId})`
+                : eq(targetIdCol, parentEntityId);
 
         } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
             // Inverse relation: use foreign key on target table
@@ -308,7 +321,9 @@ export class DrizzleConditionBuilder {
             if (!foreignKeyCol) {
                 throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table`);
             }
-            return eq(foreignKeyCol, parentEntityId);
+            return Array.isArray(parentEntityId)
+                ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
+                : eq(foreignKeyCol, parentEntityId);
 
         } else {
             throw new Error(`Relation '${relation.relationName}' lacks proper configuration. For many-to-many relations, use 'through' property. For simple relations, use 'localKey' or 'foreignKeyOnTarget'.`);
@@ -379,7 +394,7 @@ export class DrizzleConditionBuilder {
     static buildRelationQuery(
         baseQuery: any,
         relation: Relation,
-        parentEntityId: string | number,
+        parentEntityId: string | number | (string | number)[],
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentIdColumn: AnyPgColumn,
