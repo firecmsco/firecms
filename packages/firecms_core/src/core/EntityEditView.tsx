@@ -3,10 +3,12 @@ import {
     Entity,
     EntityCollection,
     EntityFormProps,
+    EntityRelation,
     EntityStatus,
     FireCMSPlugin,
     FormContext,
     PluginFormActionProps,
+    Relation,
     User
 } from "@firecms/types";
 
@@ -15,7 +17,8 @@ import {
     canEditEntity,
     getSubcollections,
     removeInitialAndTrailingSlashes,
-    resolveDefaultSelectedView, resolvedSelectedEntityView,
+    resolveDefaultSelectedView,
+    resolvedSelectedEntityView,
 } from "@firecms/common";
 
 import {
@@ -502,4 +505,76 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }
 
     return result;
+}
+
+function OneToOneRelationForm({
+                                  relation,
+                                  value,
+                                  databaseId,
+                                  layout,
+                                  status,
+                                  actionsAtTheBottom
+                              }: {
+    relation: Relation,
+    value: EntityRelation,
+    databaseId: string,
+    layout: "side_panel" | "full_screen",
+    status: EntityStatus,
+    actionsAtTheBottom: boolean,
+}) {
+    if (!relation)
+        return null;
+
+    const collection = relation.target();
+    const path = collection.slug;
+
+    const entityId = value.id;
+
+    const {
+        entity,
+        dataLoading,
+        dataLoadingError
+    } = useEntityFetch({
+        path: path,
+        entityId: entityId,
+        collection: collection,
+        databaseId: databaseId,
+        useCache: false
+    });
+
+    return <EntityForm
+        collection={collection}
+        path={path}
+        entityId={entityId}
+        // onValuesModified={onValuesModified}
+        entity={entity}
+        // initialDirtyValues={cachedDirtyValues}
+        openEntityMode={layout}
+        forceActionsAtTheBottom={actionsAtTheBottom}
+        initialStatus={status}
+        // className={cls((!mainViewVisible || !canEdit) && !selectedSecondaryForm ? "hidden" : "", formProps?.className)}
+        EntityFormActionsComponent={EntityEditViewFormActions}
+        // disabled={!canEdit}
+        // onEntityChange={(entity) => {
+        //     setUsedEntity(entity);
+        //     formProps?.onEntityChange?.(entity);
+        // }}
+        // onStatusChange={(status) => {
+        //     setStatus(status);
+        //     formProps?.onStatusChange?.(status);
+        // }}
+        // onFormContextReady={(formContext) => {
+        //     setFormContext(formContext);
+        //     formProps?.onFormContextReady?.(formContext);
+        // }}
+        // onSaved={(params) => {
+        //     const res = {
+        //         ...params,
+        //         selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
+        //     };
+        //     onSaved?.(res);
+        //     formProps?.onSaved?.(res);
+        // }}
+        // Builder={selectedSecondaryForm?.Builder}
+    />
 }

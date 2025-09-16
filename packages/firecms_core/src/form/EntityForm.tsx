@@ -32,12 +32,11 @@ import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecm
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
-import { removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
-import { CustomIdField } from "../form/components/CustomIdField";
-import { ErrorFocus } from "../form/components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
+import { removeEntityFromCache, saveEntityToCache, useDebouncedCallback } from "../util";
+import { CustomIdField } from "./components/CustomIdField";
+import { ErrorFocus } from "./components/ErrorFocus";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
-import { useDebouncedCallback } from "../util/useDebouncedCallback";
 import { getEntityTitlePropertyKey } from "../util/references";
 
 export function EntityForm<M extends Record<string, any>>({
