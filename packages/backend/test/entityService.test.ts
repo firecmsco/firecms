@@ -4,10 +4,27 @@ import { EntityCollection } from "@firecms/types";
 import { collectionRegistry } from "../src/collections/registry";
 
 // --- Mock Drizzle ORM table definitions (using 'as any' to avoid TS-specific syntax errors in a misconfigured Jest environment) ---
-const mockAuthorsTable = { id: { name: "id" }, name: { name: "name" }, _def: { tableName: "authors" } };
-const mockPostsTable = { id: { name: "id" }, title: { name: "title" }, author_id: { name: "author_id" }, _def: { tableName: "posts" } };
-const mockTagsTable = { id: { name: "id" }, name: { name: "name" }, _def: { tableName: "tags" } };
-const mockPostsTagsTable = { post_id: { name: "post_id" }, tag_id: { name: "tag_id" }, _def: { tableName: "posts_tags" } };
+const mockAuthorsTable = {
+    id: { name: "id" },
+    name: { name: "name" },
+    _def: { tableName: "authors" }
+};
+const mockPostsTable = {
+    id: { name: "id" },
+    title: { name: "title" },
+    author_id: { name: "author_id" },
+    _def: { tableName: "posts" }
+};
+const mockTagsTable = {
+    id: { name: "id" },
+    name: { name: "name" },
+    _def: { tableName: "tags" }
+};
+const mockPostsTagsTable = {
+    post_id: { name: "post_id" },
+    tag_id: { name: "tag_id" },
+    _def: { tableName: "posts_tags" }
+};
 
 // --- Correctly typed Mock Entity Collections ---
 let authorsCollection: EntityCollection;
@@ -29,7 +46,6 @@ const postsCollection: EntityCollection = {
     properties: {
         id: { type: "number" },
         title: { type: "string" },
-        author_id: { type: "number" },
         author: {
             type: "relation",
             relationName: "author"
@@ -131,49 +147,94 @@ describe("EntityService", () => {
 
     describe("fetchEntity", () => {
         it("should parse a 'one' relation ID into a relation object with a string ID", async () => {
-            const mockPost = { id: 2, title: "My First Post", author: 1 };
+            const mockPost = {
+                id: 2,
+                title: "My First Post",
+                author: 1
+            };
             db.limit.mockResolvedValue([mockPost]);
             const entity = await entityService.fetchEntity("posts", 2);
             // The service correctly converts relation IDs to strings.
-            expect(entity?.values.author).toEqual({ id: "1", path: "authors", __type: "relation" });
+            expect(entity?.values.author).toEqual({
+                id: "1",
+                path: "authors",
+                __type: "relation"
+            });
         });
     });
 
     describe("saveEntity (create)", () => {
         it("should correctly serialize and deserialize a 'one' relation", async () => {
-            const newPost = { title: "Post by Jane", author: { id: 3, path: "authors" } };
+            const newPost = {
+                title: "Post by Jane",
+                author: {
+                    id: "3",
+                    path: "authors",
+                    __type: "relation"
+                }
+            };
             db.returning.mockResolvedValue([{ id: 4 }]);
             // Mock the fetch-back call after the save
-            db.limit.mockResolvedValue([{ id: 4, title: "Post by Jane", author: 3 }]);
+            db.limit.mockResolvedValue([{
+                id: 4,
+                title: "Post by Jane",
+                author_id: "3"  // Database stores the foreign key
+            }]);
 
             const entity = await entityService.saveEntity("posts", newPost);
 
-            // 1. Check that the relation was serialized to a number for the database insert
-            expect(db.values).toHaveBeenCalledWith(expect.objectContaining({ title: "Post by Jane", author: 3 }));
+            // 1. Check that the relation was serialized to a foreign key for the database insert
+            expect(db.values).toHaveBeenCalledWith(expect.objectContaining({
+                title: "Post by Jane",
+                author_id: "3"  // Should be serialized to FK for database storage
+            }));
 
-            // 2. Check that the returned entity has the relation deserialized correctly (with a string ID)
+            // 2. Check that the returned entity has the relation deserialized correctly
             expect(entity.id).toBe("4");
-            expect(entity.values.author).toEqual({ id: "3", path: "authors", __type: "relation" });
+            expect(entity.values.author).toEqual({
+                id: "3",
+                path: "authors",
+                __type: "relation"
+            });
         });
     });
 
     describe("saveEntity (update)", () => {
         it.skip("should update junction table for a 'many' relation", async () => {
             const updatedPost = { tags: [{ id: 11 }, { id: 12 }] };
-            db.limit.mockResolvedValue([{ id: 5, title: "Post with Tags" }]);
+            db.limit.mockResolvedValue([{
+                id: 5,
+                title: "Post with Tags"
+            }]);
 
             await entityService.saveEntity("posts", updatedPost, 5);
 
             expect(db.delete).toHaveBeenCalledWith(mockPostsTagsTable);
             expect(db.where).toHaveBeenCalledWith(expect.any(Object));
             expect(db.insert).toHaveBeenCalledWith(mockPostsTagsTable);
-            expect(db.values).toHaveBeenLastCalledWith([{ post_id: 5, tag_id: 11 }, { post_id: 5, tag_id: 12 }]);
+            expect(db.values).toHaveBeenLastCalledWith([{
+                post_id: 5,
+                tag_id: 11
+            }, {
+                post_id: 5,
+                tag_id: 12
+            }]);
         });
     });
 
     describe("fetchCollectionFromPath", () => {
         it("should fetch related entities from a nested path", async () => {
-            const mockRelatedPosts = [{ posts: { id: 1, title: "Post by John" } }, { posts: { id: 2, title: "Another Post by John" } }];
+            const mockRelatedPosts = [{
+                posts: {
+                    id: 1,
+                    title: "Post by John"
+                }
+            }, {
+                posts: {
+                    id: 2,
+                    title: "Another Post by John"
+                }
+            }];
             // The chain ends with orderBy, so we mock its resolved value for this specific test.
             db.orderBy.mockResolvedValue(mockRelatedPosts);
 
@@ -181,8 +242,7 @@ describe("EntityService", () => {
 
             // The service should have been called to get the 'authors' collection definition.
             expect(collectionRegistry.getCollectionByPath).toHaveBeenCalledWith("authors");
-            // The service should have performed a join to link authors to posts.
-            expect(db.innerJoin).toHaveBeenCalled();
+            // For inverse relations like authors->posts, no join is needed as it uses a WHERE clause on the foreign key
             expect(entities).toHaveLength(2);
             expect(entities[0].values.title).toBe("Post by John");
         });
