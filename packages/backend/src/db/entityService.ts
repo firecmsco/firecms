@@ -596,7 +596,13 @@ export class EntityService {
         const collection = this.getCollectionByPath(collectionPath);
 
         if (options.searchString) {
-            return this.searchEntities<M>(collectionPath, options.searchString, options.databaseId);
+            return this.searchEntities<M>(collectionPath, options.searchString, {
+                filter: options.filter,
+                orderBy: options.orderBy,
+                order: options.order,
+                limit: options.limit,
+                databaseId: options.databaseId
+            });
         }
 
         const table = this.getTableForCollection(collection);
@@ -976,7 +982,13 @@ export class EntityService {
     async searchEntities<M extends Record<string, any>>(
         collectionPath: string,
         searchString: string,
-        databaseId?: string
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            databaseId?: string;
+        } = {}
     ): Promise<Entity<M>[]> {
 
         const collection = this.getCollectionByPath(collectionPath);
@@ -1004,28 +1016,102 @@ export class EntityService {
             return []; // No searchable fields found
         }
 
-        // Build the query and log it
-        const query = this.db
-            .select()
-            .from(table)
-            .where(or(...searchConditions))
-            .orderBy(desc(idField))
-            .limit(50);
+        // Start building the query
+        let query: any = this.db.select().from(table);
 
-        // Convert query to SQL for debugging
-        const sqlString = query.toSQL();
-        console.log(`[SEARCH DEBUG] SQL:`, sqlString);
+        // Combine search conditions with any additional filters
+        const allConditions: SQLWrapper[] = [or(...searchConditions)];
+
+        if (options.filter) {
+            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
+            if (filterConditions.length > 0) {
+                allConditions.push(...filterConditions);
+            }
+        }
+
+        // Apply all conditions
+        query = query.where(and(...allConditions));
+
+        // Apply ordering
+        const orderExpressions = [];
+        if (options.orderBy) {
+            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+            if (orderByField) {
+                orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
+            }
+        }
+
+        // Default ordering by ID, always applied as a secondary sort
+        orderExpressions.push(desc(idField));
+
+        if (orderExpressions.length > 0) {
+            query = query.orderBy(...orderExpressions);
+        }
+
+        // Apply limit (default to 50 if not specified)
+        const searchLimit = options.limit || 50;
+        query = query.limit(searchLimit);
 
         const results = await query;
 
         const entityPromises = results.map(async (entity: any) => {
             const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
 
+            // Populate relations like in fetchCollection
+            const resolvedRelations = resolveCollectionRelations(collection);
+            const propertyKeys = new Set(Object.keys(collection.properties));
+
+            const relationPromises = Object.entries(resolvedRelations)
+                .filter(([key]) => propertyKeys.has(key))
+                .map(async ([key, relation]) => {
+                    if (relation.cardinality === "many") {
+                        try {
+                            const relatedEntities = await this.fetchRelatedEntities(
+                                collectionPath,
+                                entity[idInfo.fieldName],
+                                key,
+                                {}
+                            );
+                            (values as any)[key] = relatedEntities.map(e => ({
+                                id: e.id,
+                                path: e.path,
+                                __type: "relation"
+                            }));
+                        } catch (e) {
+                            console.warn(`Could not resolve many relation property in search: ${key}`, e);
+                        }
+                    } else if (relation.cardinality === "one") {
+                        // Populate any missing one-to-one relation (owning or inverse), including joinPath-based
+                        if ((values as any)[key] == null) {
+                            try {
+                                const relatedEntities = await this.fetchRelatedEntities(
+                                    collectionPath,
+                                    entity[idInfo.fieldName],
+                                    key,
+                                    { limit: 1 }
+                                );
+                                if (relatedEntities.length > 0) {
+                                    const e = relatedEntities[0];
+                                    (values as any)[key] = {
+                                        id: e.id,
+                                        path: e.path,
+                                        __type: "relation"
+                                    };
+                                }
+                            } catch (e) {
+                                console.warn(`Could not resolve one-to-one relation property in search: ${key}`, e);
+                            }
+                        }
+                    }
+                });
+
+            await Promise.all(relationPromises);
+
             return {
                 id: entity[idInfo.fieldName].toString(),
                 path: collectionPath,
                 values: values as M,
-                databaseId
+                databaseId: options.databaseId
             };
         });
 
