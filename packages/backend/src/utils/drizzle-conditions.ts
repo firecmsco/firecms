@@ -1,28 +1,8 @@
 import { and, eq, or, sql, SQLWrapper, ilike } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
-import { getColumnName, getTableName } from "@firecms/common";
+import { getColumnName } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
-
-/**
- * Helper function to extract table name(s) from column reference(s)
- */
-function getTableNamesFromColumns(columns: string | string[]): string[] {
-    if (Array.isArray(columns)) {
-        return columns.map(col => col.includes(".") ? col.split(".")[0] : "");
-    }
-    return [columns.includes(".") ? columns.split(".")[0] : ""];
-}
-
-/**
- * Helper function to extract column name(s) from fully qualified column reference(s)
- */
-function getColumnNamesFromColumns(columns: string | string[]): string[] {
-    if (Array.isArray(columns)) {
-        return columns.map(col => getColumnName(col));
-    }
-    return [getColumnName(columns)];
-}
 
 /**
  * Unified condition builder for drizzle queries
@@ -144,6 +124,7 @@ export class DrizzleConditionBuilder {
             const simpleCondition = this.buildSimpleRelationCondition(
                 relation,
                 targetTable,
+                parentTable,
                 parentEntityId
             );
             whereConditions.push(simpleCondition);
@@ -174,10 +155,10 @@ export class DrizzleConditionBuilder {
 
         // Process join steps in reverse order to build path back to parent
         for (const joinStep of [...joinPath].reverse()) {
-            const fromTableName = getTableNamesFromColumns(joinStep.on.from)[0];
-            const toTableName = getTableNamesFromColumns(joinStep.on.to)[0];
-            const fromColName = getColumnNamesFromColumns(joinStep.on.from)[0];
-            const toColName = getColumnNamesFromColumns(joinStep.on.to)[0];
+            const fromTableName = this.getTableNamesFromColumns(joinStep.on.from)[0];
+            const toTableName = this.getTableNamesFromColumns(joinStep.on.to)[0];
+            const fromColName = this.getColumnNamesFromColumns(joinStep.on.from)[0];
+            const toColName = this.getColumnNamesFromColumns(joinStep.on.to)[0];
 
             const fromTable = registry.getTable(fromTableName);
             const toTable = registry.getTable(toTableName);
@@ -304,15 +285,22 @@ export class DrizzleConditionBuilder {
     private static buildSimpleRelationCondition(
         relation: Relation,
         targetTable: PgTable<any>,
+        parentTable: PgTable<any>,
         parentEntityId: string | number
     ): SQLWrapper {
         if (relation.direction === "owning" && relation.localKey) {
-            // Owning relation: use foreign key on target table
-            const localKeyCol = targetTable[relation.localKey as keyof typeof targetTable] as AnyPgColumn;
-            if (!localKeyCol) {
-                throw new Error(`Local key column '${relation.localKey}' not found in target table`);
+            // For owning relations, the parentEntityId is actually the foreign key value
+            // that should match the target table's primary key
+            const targetIdCol = Object.values(targetTable).find((col: any) => col.primary) as AnyPgColumn;
+            if (!targetIdCol) {
+                // Fallback to looking for an 'id' column by name
+                const idCol = Object.values(targetTable).find((col: any) => col.name === 'id') as AnyPgColumn;
+                if (!idCol) {
+                    throw new Error(`No primary key or 'id' column found in target table`);
+                }
+                return eq(idCol, parentEntityId);
             }
-            return eq(localKeyCol, parentEntityId);
+            return eq(targetIdCol, parentEntityId);
 
         } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
             // Inverse relation: use foreign key on target table
@@ -383,5 +371,215 @@ export class DrizzleConditionBuilder {
         }
 
         return conditions;
+    }
+
+    /**
+     * Build relation-based query with joins and conditions
+     */
+    static buildRelationQuery(
+        baseQuery: any,
+        relation: Relation,
+        parentEntityId: string | number,
+        targetTable: PgTable<any>,
+        parentTable: PgTable<any>,
+        parentIdColumn: AnyPgColumn,
+        targetIdColumn: AnyPgColumn,
+        registry: BackendCollectionRegistry,
+        additionalFilters?: SQLWrapper[]
+    ): any {
+        const { joinConditions, whereConditions } = this.buildRelationConditions(
+            relation,
+            parentEntityId,
+            targetTable,
+            parentTable,
+            parentIdColumn,
+            targetIdColumn,
+            registry
+        );
+
+        let query = baseQuery;
+
+        // Apply joins
+        for (const { table, condition } of joinConditions) {
+            query = query.innerJoin(table, condition);
+        }
+
+        // Combine all conditions
+        const allConditions = [...whereConditions];
+        if (additionalFilters) {
+            allConditions.push(...additionalFilters);
+        }
+
+        // Apply where conditions
+        if (allConditions.length > 0) {
+            query = query.where(and(...allConditions));
+        }
+
+        return query;
+    }
+
+    /**
+     * Build count query for relations with proper joins and conditions
+     */
+    static buildRelationCountQuery(
+        baseCountQuery: any,
+        relation: Relation,
+        parentEntityId: string | number,
+        targetTable: PgTable<any>,
+        parentTable: PgTable<any>,
+        parentIdColumn: AnyPgColumn,
+        targetIdColumn: AnyPgColumn,
+        registry: BackendCollectionRegistry,
+        additionalFilters?: SQLWrapper[]
+    ): any {
+        // For count queries, we need to handle joins differently to avoid duplicates
+        if (relation.joinPath && relation.joinPath.length > 0) {
+            return this.buildJoinPathCountQuery(
+                baseCountQuery,
+                relation.joinPath,
+                targetTable,
+                parentTable,
+                parentIdColumn,
+                parentEntityId,
+                registry,
+                additionalFilters
+            );
+        } else if (relation.through && relation.cardinality === "many" && relation.direction === "owning") {
+            return this.buildJunctionCountQuery(
+                baseCountQuery,
+                relation.through,
+                targetIdColumn,
+                parentEntityId,
+                registry,
+                additionalFilters
+            );
+        } else {
+            // Simple relations
+            const simpleCondition = this.buildSimpleRelationCondition(
+                relation,
+                targetTable,
+                parentTable,
+                parentEntityId
+            );
+
+            const allConditions = [simpleCondition];
+            if (additionalFilters) {
+                allConditions.push(...additionalFilters);
+            }
+
+            return baseCountQuery.where(and(...allConditions));
+        }
+    }
+
+    /**
+     * Build join path conditions for count queries
+     */
+    private static buildJoinPathCountQuery(
+        baseCountQuery: any,
+        joinPath: any[],
+        targetTable: PgTable<any>,
+        parentTable: PgTable<any>,
+        parentIdColumn: AnyPgColumn,
+        parentEntityId: string | number,
+        registry: BackendCollectionRegistry,
+        additionalFilters?: SQLWrapper[]
+    ): any {
+        let query = baseCountQuery;
+        let currentTable = targetTable;
+
+        // Process join steps in reverse order
+        for (const joinStep of [...joinPath].reverse()) {
+            const fromTableName = this.getTableNamesFromColumns(joinStep.on.from)[0];
+            const toTableName = this.getTableNamesFromColumns(joinStep.on.to)[0];
+            const fromColName = this.getColumnNamesFromColumns(joinStep.on.from)[0];
+            const toColName = this.getColumnNamesFromColumns(joinStep.on.to)[0];
+
+            const fromTable = registry.getTable(fromTableName);
+            const toTable = registry.getTable(toTableName);
+
+            if (!fromTable || !toTable) {
+                throw new Error(`Join tables not found for step: from ${fromTableName} to ${toTableName}`);
+            }
+
+            const { joinTable, condition } = this.buildSingleJoinCondition(
+                currentTable,
+                fromTable,
+                toTable,
+                fromColName,
+                toColName,
+                fromTableName,
+                toTableName
+            );
+
+            query = query.innerJoin(joinTable, condition);
+            currentTable = joinTable;
+        }
+
+        if (currentTable !== parentTable) {
+            throw new Error("Join path did not result in connecting to parent table");
+        }
+
+        const allConditions = [eq(parentIdColumn, parentEntityId)];
+        if (additionalFilters) {
+            allConditions.push(...additionalFilters);
+        }
+
+        return query.where(and(...allConditions));
+    }
+
+    /**
+     * Build junction table conditions for count queries
+     */
+    private static buildJunctionCountQuery(
+        baseCountQuery: any,
+        through: { table: string; sourceColumn: string; targetColumn: string },
+        targetIdColumn: AnyPgColumn,
+        parentEntityId: string | number,
+        registry: BackendCollectionRegistry,
+        additionalFilters?: SQLWrapper[]
+    ): any {
+        const junctionTable = registry.getTable(through.table);
+        if (!junctionTable) {
+            throw new Error(`Junction table not found: ${through.table}`);
+        }
+
+        const junctionSourceCol = junctionTable[through.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+        const junctionTargetCol = junctionTable[through.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+
+        if (!junctionSourceCol) {
+            throw new Error(`Source column '${through.sourceColumn}' not found in junction table '${through.table}'`);
+        }
+        if (!junctionTargetCol) {
+            throw new Error(`Target column '${through.targetColumn}' not found in junction table '${through.table}'`);
+        }
+
+        const baseConditions = [eq(junctionSourceCol, parentEntityId)];
+        if (additionalFilters && additionalFilters.length > 0) {
+            baseConditions.push(...additionalFilters);
+        }
+
+        return baseCountQuery
+            .innerJoin(junctionTable, eq(targetIdColumn, junctionTargetCol))
+            .where(and(...baseConditions));
+    }
+
+    /**
+     * Helper method to extract table names from columns
+     */
+    private static getTableNamesFromColumns(columns: string | string[]): string[] {
+        if (Array.isArray(columns)) {
+            return columns.map(col => col.includes(".") ? col.split(".")[0] : "");
+        }
+        return [columns.includes(".") ? columns.split(".")[0] : ""];
+    }
+
+    /**
+     * Helper method to extract column names from columns
+     */
+    private static getColumnNamesFromColumns(columns: string | string[]): string[] {
+        if (Array.isArray(columns)) {
+            return columns.map(col => getColumnName(col));
+        }
+        return [getColumnName(columns)];
     }
 }

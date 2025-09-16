@@ -258,7 +258,7 @@ describe("EntityService - Comprehensive Tests", () => {
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
             limit: jest.fn().mockReturnThis(),
-            orderBy: jest.fn().mockReturnThis(), // Should return this for chaining, not resolve
+            orderBy: jest.fn().mockReturnThis(),
             innerJoin: jest.fn().mockReturnThis(),
             insert: jest.fn().mockReturnThis(),
             values: jest.fn().mockReturnThis(),
