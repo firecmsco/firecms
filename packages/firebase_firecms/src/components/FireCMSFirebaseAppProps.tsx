@@ -19,7 +19,7 @@ import {
     FirebaseSignInProvider,
     FirebaseUserWrapper,
     FirestoreTextSearchControllerBuilder
-} from "@firecms/types";
+} from "../types";
 import { FirestoreIndexesBuilder } from "../hooks";
 
 /**

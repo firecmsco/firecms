@@ -23,7 +23,7 @@ import {
     User as FirebaseUser
 } from "@firebase/auth";
 import { FirebaseApp } from "@firebase/app";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirebaseUserWrapper } from "@firecms/types";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirebaseUserWrapper } from "../types";
 import { Role, User } from "@firecms/core";
 
 export interface FirebaseAuthControllerProps {

@@ -1,6 +1,5 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
 import {
-    CMSType,
     makePropertiesEditable,
     Properties,
     Property,
@@ -49,7 +48,7 @@ export const docsToCollectionTree = (docs: DocumentSnapshot[]): PersistedCollect
             const parentId = id.split(COLLECTION_PATH_SEPARATOR).slice(0, -1).join(COLLECTION_PATH_SEPARATOR);
             const parentCollection = collectionsMap[parentId];
             if (parentCollection)
-                parentCollection.subcollections = [...(parentCollection.subcollections ?? []), collection];
+                parentCollection.subcollections = () => [...(parentCollection.subcollections?.() ?? []), collection];
             delete collectionsMap[id];
         }
     });
@@ -73,7 +72,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
 }
 
 export function prepareCollectionForPersistence<M extends {
-    [Key: string]: CMSType
+    [Key: string]: any
 }>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
 
     const {

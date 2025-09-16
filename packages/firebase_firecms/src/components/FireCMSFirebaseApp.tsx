@@ -29,7 +29,7 @@ import {
     useInitialiseFirebase,
 } from "../hooks";
 import { CenteredView } from "@firecms/ui";
-import { FirebaseAuthController } from "@firecms/types";
+import { FirebaseAuthController } from "../types";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
