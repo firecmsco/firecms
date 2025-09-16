@@ -200,7 +200,7 @@ describe("EntityService", () => {
     });
 
     describe("saveEntity (update)", () => {
-        it.skip("should update junction table for a 'many' relation", async () => {
+        it("should update junction table for a 'many' relation", async () => {
             const updatedPost = { tags: [{ id: 11 }, { id: 12 }] };
             db.limit.mockResolvedValue([{
                 id: 5,
