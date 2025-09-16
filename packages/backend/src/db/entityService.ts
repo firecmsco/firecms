@@ -5,6 +5,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues, Properties, Property, Relation, WhereFilterOp } from "@firecms/types";
 import { getColumnName, getTableName, resolveCollectionRelations } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
+import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
 
 /**
  * Helper function to extract table name(s) from column reference(s)
@@ -392,49 +393,7 @@ export class EntityService {
         table: PgTable<any>,
         collectionPath: string
     ): SQLWrapper[] {
-        const conditions: SQLWrapper[] = [];
-        for (const [field, filterParam] of Object.entries(filter)) {
-            if (!filterParam) continue;
-
-            const [op, value] = filterParam as [WhereFilterOp, any];
-            const fieldColumn = table[field as keyof typeof table] as AnyPgColumn;
-
-            if (!fieldColumn) {
-                console.warn(`Filtering by field '${field}', but it does not exist in table for collection '${collectionPath}'`);
-                continue;
-            }
-
-            switch (op) {
-                case "==":
-                    conditions.push(eq(fieldColumn, value));
-                    break;
-                case "!=":
-                    conditions.push(sql`${fieldColumn} != ${value}`);
-                    break;
-                case ">":
-                    conditions.push(sql`${fieldColumn} > ${value}`);
-                    break;
-                case ">=":
-                    conditions.push(sql`${fieldColumn} >= ${value}`);
-                    break;
-                case "<":
-                    conditions.push(sql`${fieldColumn} < ${value}`);
-                    break;
-                case "<=":
-                    conditions.push(sql`${fieldColumn} <= ${value}`);
-                    break;
-                case "in":
-                    if (Array.isArray(value) && value.length > 0) {
-                        conditions.push(sql`${fieldColumn} = ANY(${value})`);
-                    }
-                    break;
-                case "array-contains":
-                    // For JSONB arrays
-                    conditions.push(sql`${fieldColumn} @> ${JSON.stringify([value])}`);
-                    break;
-            }
-        }
-        return conditions;
+        return DrizzleConditionBuilder.buildFilterConditions(filter, table, collectionPath);
     }
 
     private getCollectionByPath(collectionPath: string): EntityCollection {
@@ -795,8 +754,8 @@ export class EntityService {
     ): Promise<Entity<M>[]> {
         const targetCollection = relation.target();
         const targetTable = this.getTableForCollection(targetCollection);
-        const targetIdInfo = this.getIdFieldInfo(targetCollection);
-        const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+        const idInfo = this.getIdFieldInfo(targetCollection);
+        const idField = targetTable[idInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
 
         const parentIdInfo = this.getIdFieldInfo(parentCollection);
         const parsedParentId = this.parseIdValue(parentEntityId, parentIdInfo.type);
@@ -806,95 +765,34 @@ export class EntityService {
 
         // Start query from target table
         let query: any = this.db.select().from(targetTable);
-        let currentTable = targetTable;
 
-        // Use joinPath if available, otherwise handle through property
-        if (relation.joinPath && relation.joinPath.length > 0) {
-            // Process join steps in reverse order to build path back to parent, using from/to columns
-            for (const joinStep of [...relation.joinPath].reverse()) {
-                const fromTableName = getTableNamesFromColumns(joinStep.on.from)[0];
-                const toTableName = getTableNamesFromColumns(joinStep.on.to)[0];
-                const fromColName = getColumnNamesFromColumns(joinStep.on.from)[0];
-                const toColName = getColumnNamesFromColumns(joinStep.on.to)[0];
+        // Build relation conditions using the unified utility
+        const { joinConditions, whereConditions } = DrizzleConditionBuilder.buildRelationConditions(
+            relation,
+            parsedParentId,
+            targetTable,
+            parentTable,
+            parentIdCol,
+            idField,
+            collectionRegistry
+        );
 
-                const fromTable = collectionRegistry.getTable(fromTableName);
-                const toTable = collectionRegistry.getTable(toTableName);
-                if (!fromTable || !toTable) throw new Error(`Join tables not found for step: from ${fromTableName} to ${toTableName}`);
-
-                let joinTable: PgTable<any>;
-                let condition: SQLWrapper;
-                if (currentTable === toTable) {
-                    // current -> toTable, so join the fromTable
-                    const left = fromTable[fromColName as keyof typeof fromTable] as AnyPgColumn;
-                    const right = (currentTable as any)[toColName] as AnyPgColumn;
-                    if (!left || !right) throw new Error(`Join columns not found: ${fromTableName}.${fromColName} = ${toTableName}.${toColName}`);
-                    joinTable = fromTable;
-                    condition = eq(left, right);
-                } else if (currentTable === fromTable) {
-                    // current -> fromTable, so join the toTable
-                    const left = toTable[toColName as keyof typeof toTable] as AnyPgColumn;
-                    const right = (currentTable as any)[fromColName] as AnyPgColumn;
-                    if (!left || !right) throw new Error(`Join columns not found: ${toTableName}.${toColName} = ${fromTableName}.${fromColName}`);
-                    joinTable = toTable;
-                    condition = eq(left, right);
-                } else {
-                    throw new Error(`Join step does not match current table. Current: ${getTableName(targetCollection)}, step from: ${fromTableName}, to: ${toTableName}`);
-                }
-
-                query = query.innerJoin(joinTable, condition);
-                currentTable = joinTable;
-            }
-
-            // Filter by parent id (current table should now be the parent table)
-            if (currentTable !== parentTable) {
-                throw new Error("Join path did not result in connecting to parent table");
-            }
-            query = query.where(eq(parentIdCol, parsedParentId));
-        } else if (relation.through && relation.cardinality === "many" && relation.direction === "owning") {
-            // Handle many-to-many relations with junction table
-            const junctionTable = collectionRegistry.getTable(relation.through.table);
-            if (!junctionTable) throw new Error(`Junction table not found: ${relation.through.table}`);
-
-            const junctionSourceCol = junctionTable[relation.through.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
-            const junctionTargetCol = junctionTable[relation.through.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
-
-            if (!junctionSourceCol) throw new Error(`Source column '${relation.through.sourceColumn}' not found in junction table '${relation.through.table}'`);
-            if (!junctionTargetCol) throw new Error(`Target column '${relation.through.targetColumn}' not found in junction table '${relation.through.table}'`);
-
-            // Join target -> junction -> parent
-            query = query
-                .innerJoin(junctionTable, eq(targetIdField, junctionTargetCol))
-                .where(eq(junctionSourceCol, parsedParentId));
-        } else {
-            // Handle simple relations without joinPath or through
-            if (relation.direction === "owning" && relation.localKey) {
-                // Owning relation: use foreign key on target table
-                const localKeyCol = targetTable[relation.localKey as keyof typeof targetTable] as AnyPgColumn;
-                if (localKeyCol) {
-                    query = query.where(eq(localKeyCol, parsedParentId));
-                } else {
-                    throw new Error(`Local key column '${relation.localKey}' not found in target table`);
-                }
-            } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
-                // Inverse relation: use foreign key on target table
-                const foreignKeyCol = targetTable[relation.foreignKeyOnTarget as keyof typeof targetTable] as AnyPgColumn;
-                if (foreignKeyCol) {
-                    query = query.where(eq(foreignKeyCol, parsedParentId));
-                } else {
-                    throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table`);
-                }
-            } else {
-                throw new Error(`Relation '${relation.relationName}' lacks proper configuration. For many-to-many relations, use 'through' property. For simple relations, use 'localKey' or 'foreignKeyOnTarget'.`);
-            }
+        // Apply joins
+        for (const { table, condition } of joinConditions) {
+            query = query.innerJoin(table, condition);
         }
 
         // Additional filters on target table
+        const allConditions = [...whereConditions];
         if (options.filter) {
-            const conds = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
-            if (conds.length > 0) {
-                const existingWhere = query.config.where;
-                query = query.where(existingWhere ? and(existingWhere, ...conds) : and(...conds));
-            }
+            const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
+            allConditions.push(...filterConditions);
+        }
+
+        // Apply where conditions
+        const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+        if (finalCondition) {
+            query = query.where(finalCondition);
         }
 
         // Ordering
@@ -903,7 +801,7 @@ export class EntityService {
             const orderField = targetTable[options.orderBy as keyof typeof targetTable] as AnyPgColumn;
             if (orderField) orderExpressions.push(options.order === "asc" ? asc(orderField) : desc(orderField));
         }
-        orderExpressions.push(desc(targetIdField));
+        orderExpressions.push(desc(idField));
         if (orderExpressions.length > 0) query = query.orderBy(...orderExpressions);
 
         if (options.limit) query = query.limit(options.limit);
@@ -913,7 +811,7 @@ export class EntityService {
             const entity = row[getTableName(targetCollection)] || row;
             const values = await parseDataFromServer(entity as M, targetCollection, this.db, collectionRegistry);
             return {
-                id: entity[targetIdInfo.fieldName].toString(),
+                id: entity[idInfo.fieldName].toString(),
                 path: targetCollection.slug ?? targetCollection.dbPath,
                 values: values as M,
                 databaseId: options.databaseId
@@ -1000,17 +898,12 @@ export class EntityService {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
-        const searchConditions: SQLWrapper[] = [];
-
-        for (const [key, prop] of Object.entries(collection.properties)) {
-            if ((prop as Property).type === "string") {
-                const fieldColumn = table[key as keyof typeof table] as AnyPgColumn;
-                if (fieldColumn) {
-                    searchConditions.push(ilike(fieldColumn, `%${searchString}%`));
-                } else {
-                }
-            }
-        }
+        // Build search conditions using the unified utility
+        const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+            searchString,
+            collection.properties,
+            table
+        );
 
         if (searchConditions.length === 0) {
             return []; // No searchable fields found
@@ -1020,7 +913,9 @@ export class EntityService {
         let query: any = this.db.select().from(table);
 
         // Combine search conditions with any additional filters
-        const allConditions: SQLWrapper[] = [or(...searchConditions)];
+        const allConditions: SQLWrapper[] = [
+            DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!
+        ];
 
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
@@ -1030,7 +925,10 @@ export class EntityService {
         }
 
         // Apply all conditions
-        query = query.where(and(...allConditions));
+        const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+        if (finalCondition) {
+            query = query.where(finalCondition);
+        }
 
         // Apply ordering
         const orderExpressions = [];
@@ -1284,19 +1182,21 @@ export class EntityService {
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
         const field = table[fieldName as keyof typeof table] as AnyPgColumn;
 
-        if (!field) return true; // Field doesn\'t exist, consider it unique
+        if (!field) return true; // Field doesn't exist, consider it unique
 
-        const conditions = [eq(field, value)];
-
-        if (excludeEntityId) {
-            const parsedExcludeId = this.parseIdValue(excludeEntityId, idInfo.type);
-            conditions.push(sql`${idField} != ${parsedExcludeId}`);
-        }
+        // Build unique field conditions using the unified utility
+        const parsedExcludeId = excludeEntityId ? this.parseIdValue(excludeEntityId, idInfo.type) : undefined;
+        const conditions = DrizzleConditionBuilder.buildUniqueFieldCondition(
+            field,
+            value,
+            idField,
+            parsedExcludeId
+        );
 
         const result = await this.db
             .select({ count: count() })
             .from(table)
-            .where(and(...conditions));
+            .where(DrizzleConditionBuilder.combineConditionsWithAnd(conditions)!);
 
         const countResult = Number(result[0]?.count || 0);
         return countResult === 0;

@@ -25,7 +25,7 @@ const profilesCollection: EntityCollection = {
             type: "string"
         },
         author: {
-            name: "Author ID",
+            name: "Author",
             type: "relation",
             relationName: "author"
         }

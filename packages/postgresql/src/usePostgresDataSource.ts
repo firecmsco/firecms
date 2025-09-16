@@ -155,7 +155,6 @@ export function usePostgresDataSource(config: PostgresDataSourceConfig): Postgre
         },
 
         async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
-            console.log("Counting entities", props);
             // Strip out navigationController and any other unnecessary props before sending to client
             const {
                 navigationController,

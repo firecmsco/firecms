@@ -22,7 +22,8 @@ import {
 import {
     applyPermissionsFunctionIfEmpty,
     CollectionRegistry,
-    getParentReferencesFromPath, getSubcollections,
+    getParentReferencesFromPath,
+    getSubcollections,
     mergeDeep,
     removeFunctions,
     removeInitialAndTrailingSlashes,
@@ -121,8 +122,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const navigate = useNavigate();
 
+    const collectionRegistryRef = useRef<CollectionRegistry>(new CollectionRegistry());
+
     const resolvedCollectionsRef = useRef<EntityCollection[] | undefined>();
-    const collectionRegistryRef = useRef<CollectionRegistry | undefined>();
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
     const navigationEntriesOrderRef = useRef<string[] | undefined>();
@@ -305,7 +307,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         try {
 
-            const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
+            const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
+                [
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate),
                     resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
@@ -323,7 +326,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             if (collectionsChanged) {
                 resolvedCollectionsRef.current = resolvedCollections;
                 console.debug("Collections have changed", resolvedCollections);
-                collectionRegistryRef.current = new CollectionRegistry(resolvedCollections);
+                collectionRegistryRef.current.reset();
+                collectionRegistryRef.current.registerMultiple(resolvedCollections);
                 shouldUpdateTopLevelNav = true;
             }
 
@@ -374,9 +378,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         slugOrPath: string,
         includeUserOverride = false
     ): EC | undefined => {
+
         const registry = collectionRegistryRef.current;
-        if (!registry)
-            return undefined;
 
         const cleanedPath = removeInitialAndTrailingSlashes(slugOrPath);
         if (!cleanedPath) return undefined;

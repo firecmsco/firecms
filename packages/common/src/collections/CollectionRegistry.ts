@@ -21,6 +21,12 @@ export class CollectionRegistry {
         }
     }
 
+    reset() {
+        this.collectionsByDbPath.clear();
+        this.collectionsBySlug.clear();
+        this.rootCollections = [];
+    }
+
     registerMultiple(collections: EntityCollection[]) {
         collections.forEach(c => this.register(c));
     }
@@ -40,7 +46,6 @@ export class CollectionRegistry {
         }
 
         const normalizedCollection = this.normalizeCollection(collection);
-        console.log("Registering collection", normalizedCollection);
         this.collectionsByDbPath.set(normalizedCollection.dbPath, normalizedCollection);
         if (normalizedCollection.slug)
             this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);
@@ -54,11 +59,11 @@ export class CollectionRegistry {
         }
     }
 
-    private normalizeCollection(collection: EntityCollection): EntityCollection {
+    public normalizeCollection(collection: EntityCollection): EntityCollection {
         const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
-        collection.textSearchEnabled = collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled;
         return {
             ...collection,
+            textSearchEnabled: collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled,
             properties
         };
     }
