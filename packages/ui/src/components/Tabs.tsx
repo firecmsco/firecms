@@ -1,6 +1,7 @@
 import React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cls } from "../util";
+import { defaultBorderMixin } from "../styles.ts";
 
 export type TabsProps = {
     value: string,
@@ -17,11 +18,11 @@ export function Tabs({
                          innerClassName,
                          children
                      }: TabsProps) {
-
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={className}>
         <TabsPrimitive.List className={cls(
-            "w-max",
-            "flex text-sm font-medium text-center text-surface-accent-800 dark:text-white max-w-full overflow-auto no-scrollbar items-end",
+            "border",
+            defaultBorderMixin,
+            "inline-flex h-10 items-center justify-center rounded-md bg-surface-50 p-1 text-surface-600 dark:bg-surface-800 dark:text-surface-400",
             innerClassName)
         }>
             {children}
@@ -47,19 +48,14 @@ export function Tab({
     return <TabsPrimitive.Trigger value={value}
                                   disabled={disabled}
                                   className={cls(
-                                      "border-b-2 border-transparent",
-                                      "data-[state=active]:border-secondary",
-                                      disabled
-                                          ? "text-surface-accent-400 dark:text-surface-accent-500"
-                                          : cls("text-surface-accent-700 dark:text-surface-accent-300",
-                                              "data-[state=active]:text-surface-accent-900 dark:data-[state=active]:text-white",
-                                              "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
-                                      className)}>
-        <div className={cls("line-clamp-1",
-            "uppercase inline-block p-2 px-4 rounded-xs",
-            "hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
-            innerClassName)}>
-            {children}
-        </div>
+                                      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all",
+                                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400 focus-visible:ring-offset-2",
+                                      "disabled:pointer-events-none disabled:opacity-50",
+                                      "data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-900 dark:data-[state=active]:text-surface-50",
+                                      // "data-[state=active]:border",
+                                      // defaultBorderMixin,
+                                      className,
+                                      innerClassName)}>
+        {children}
     </TabsPrimitive.Trigger>;
 }

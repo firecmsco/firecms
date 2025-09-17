@@ -400,7 +400,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
         <Tab
-            className="text-sm min-w-[120px]"
+            className="text-sm min-w-[90px]"
             value={subcollection.slug}
             key={`entity_detail_collection_tab_${subcollection.name}`}>
             {subcollection.name}
@@ -410,7 +410,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const customViewTabsStart = resolvedEntityViews.filter(view => view.position === "start")
         .map((view) =>
             <Tab
-                className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
+                className={!view.tabComponent ? "text-sm min-w-[90px]" : undefined}
                 value={view.key}
                 key={`entity_detail_collection_tab_${view.name}`}>
                 {view.tabComponent ?? view.name}
@@ -419,7 +419,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const customViewTabsEnd = resolvedEntityViews.filter(view => !view.position || view.position === "end")
         .map((view) =>
             <Tab
-                className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
+                className={!view.tabComponent ? "text-sm min-w-[90px]" : undefined}
                 value={view.key}
                 key={`entity_detail_collection_tab_${view.name}`}>
                 {view.tabComponent ?? view.name}
@@ -444,7 +444,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             </div>}
 
             {hasAdditionalViews && <Tabs
-                className={"self-end"}
+                // className={"self-end"}
                 value={selectedTab}
                 onValueChange={(value) => {
                     onSideTabClick(value);
@@ -462,7 +462,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 <Tab
                     disabled={!hasAdditionalViews}
                     value={MAIN_TAB_VALUE}
-                    className={"text-sm min-w-[120px]"}>
+                    className={"text-sm min-w-[90px]"}>
                     {collection.singularName ?? collection.name}
                 </Tab>
 
