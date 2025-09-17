@@ -1,5 +1,6 @@
 import { EntityCollection, Property, Relation } from "@firecms/types";
 import { toSnakeCase } from "./strings";
+import { generateForeignKeyName } from "./names";
 
 export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: EntityCollection): Relation {
     if (!relation.target) {
@@ -30,7 +31,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
         if (newRelation.cardinality === "one" && newRelation.direction === "owning") {
             // Belongs-to / many-to-one
             if (!newRelation.localKey) {
-                newRelation.localKey = `${newRelation.relationName}_id`;
+                newRelation.localKey = generateForeignKeyName(newRelation.relationName);
             }
         } else if (newRelation.cardinality === "one" && newRelation.direction === "inverse") {
             // Inverse one-to-one: the foreign key is on the target table pointing back to this collection
@@ -69,13 +70,13 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
                     const keyPrefix = newRelation.inverseRelationName
                         ? toSnakeCase(newRelation.inverseRelationName)
                         : sourceName;
-                    newRelation.foreignKeyOnTarget = `${keyPrefix}_id`;
+                    newRelation.foreignKeyOnTarget = generateForeignKeyName(keyPrefix);
                 }
             }
         } else if (newRelation.cardinality === "many" && newRelation.direction === "inverse") {
             // Has-many / one-to-many
             if (!newRelation.foreignKeyOnTarget) {
-                newRelation.foreignKeyOnTarget = `${sourceName}_id`;
+                newRelation.foreignKeyOnTarget = generateForeignKeyName(sourceName);
             }
         } else if (newRelation.cardinality === "many" && newRelation.direction === "owning") {
 
@@ -85,8 +86,8 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
 
             newRelation.through = {
                 table: newRelation.through?.table ?? [sourceTableName, targetTableName].sort().join("_"),
-                sourceColumn: newRelation.through?.sourceColumn ?? `${sourceName}_id`,
-                targetColumn: newRelation.through?.targetColumn ?? `${newRelation.relationName}_id`,
+                sourceColumn: newRelation.through?.sourceColumn ?? generateForeignKeyName(sourceName),
+                targetColumn: newRelation.through?.targetColumn ?? generateForeignKeyName(newRelation.relationName),
             };
         }
     }

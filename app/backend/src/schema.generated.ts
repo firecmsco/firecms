@@ -24,11 +24,11 @@ export const posts = pgTable("posts", {
     author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
-export const postsToTags = pgTable("posts_tags", {
-    posts_id: integer("posts_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
-    tags_id: integer("tags_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
+export const postsTags = pgTable("posts_tags", {
+    post_id: integer("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
+    tag_id: integer("tag_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
 }, (table) => ({
-    pk: primaryKey({ columns: [table.posts_id, table.tags_id] })
+    pk: primaryKey({ columns: [table.post_id, table.tag_id] })
 }));
 
 export const tags = pgTable("tags", {
@@ -59,16 +59,16 @@ export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({
         references: [authors.id],
         relationName: "author"
     }),
-    tags: many(postsToTags, { relationName: "tags" })
+    tags: many(postsTags, { relationName: "tags" })
 }));
 
-export const postsToTagsRelations = drizzleRelations(postsToTags, ({ one, many }) => ({
-    posts_id: one(posts, {
-        fields: [postsToTags.posts_id],
+export const postsTagsRelations = drizzleRelations(postsTags, ({ one, many }) => ({
+    post_id: one(posts, {
+        fields: [postsTags.post_id],
         references: [posts.id]
     }),
-    tags_id: one(tags, {
-        fields: [postsToTags.tags_id],
+    tag_id: one(tags, {
+        fields: [postsTags.tag_id],
         references: [tags.id]
     })
 }));
@@ -77,7 +77,7 @@ export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
     posts: many(posts, { relationName: "tags" })
 }));
 
-export const tables = { authors, profiles, posts, postsToTags, tags };
+export const tables = { authors, profiles, posts, postsTags, tags };
 export const enums = {  };
-export const relations = { authorsRelations, profilesRelations, postsRelations, postsToTagsRelations, tagsRelations };
+export const relations = { authorsRelations, profilesRelations, postsRelations, postsTagsRelations, tagsRelations };
 
