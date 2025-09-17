@@ -12,7 +12,7 @@ import {
     User
 } from "@firecms/types";
 
-import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
+import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary, ErrorView } from "../components";
 import {
     canEditEntity,
     getSubcollections,
@@ -20,7 +20,7 @@ import {
     resolveDefaultSelectedView,
     resolvedSelectedEntityView,
 } from "@firecms/common";
-
+import { CenteredView, CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import {
     useAuthController,
     useCustomizationController,
@@ -28,7 +28,6 @@ import {
     useFireCMSContext,
     useLargeLayout
 } from "../hooks";
-import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import { EntityForm } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
@@ -111,6 +110,12 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
             return entity ? canEditEntity(props.collection, authController, props.path, entity ?? null) : undefined;
         }
     }, [authController, entity, status]);
+
+    if (!dataLoading && dataLoadingError) {
+        return <CenteredView>
+            <ErrorView error={dataLoadingError}/>
+        </CenteredView>
+    }
 
     if ((dataLoading && !cachedValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
         return <CircularProgressCenter/>;
