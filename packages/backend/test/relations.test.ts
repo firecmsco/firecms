@@ -362,7 +362,7 @@ describe("Comprehensive Relations Test Suite", () => {
             expect(cleanResult).toContain(`export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({ author: one(authors, { fields: [profiles.author_id], references: [authors.id], relationName: "author" }) }));`);
 
             // Should create inverse relation on authors (this was previously missing)
-            expect(cleanResult).toContain(`export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({ profile: one(profiles, { fields: [authors.id], references: [profiles.author_id], relationName: "author" }) }));`);
+            expect(cleanResult).toContain(`export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({ profile: one(profiles, { fields: [authors.id], references: [profiles.author_id], relationName: "profile" }) }));`);
         });
 
         it("should generate owning one-to-many relations", async () => {

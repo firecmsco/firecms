@@ -244,10 +244,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     const relationName = rel.relationName ?? relationKey;
 
                     // Determine the correct relation name for Drizzle
-                    // For inverse relations, use inverseRelationName if specified
-                    const drizzleRelationName = (rel.direction === "inverse" && rel.inverseRelationName)
-                        ? rel.inverseRelationName
-                        : relationName;
+                    // For inverse relations, we should use the current relation's name, not the inverse name
+                    const drizzleRelationName = relationName;
 
                     if (rel.cardinality === "one") {
                         if (rel.direction === "owning" && rel.localKey) {

@@ -40,9 +40,9 @@ export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({
     profile: one(profiles, {
         fields: [authors.id],
         references: [profiles.author_id],
-        relationName: "author"
+        relationName: "profile"
     }),
-    posts: many(posts, { relationName: "author" })
+    posts: many(posts, { relationName: "posts" })
 }));
 
 export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({
@@ -74,7 +74,7 @@ export const postsTagsRelations = drizzleRelations(postsTags, ({ one, many }) =>
 }));
 
 export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
-    posts: many(posts, { relationName: "tags" })
+    posts: many(posts, { relationName: "posts" })
 }));
 
 export const tables = { authors, profiles, posts, postsTags, tags };
