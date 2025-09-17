@@ -84,7 +84,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
             const targetTableName = getTableName(targetCollection);
 
             newRelation.through = {
-                table: newRelation.through?.table ?? [sourceTableName, targetTableName].sort().join("_to_"),
+                table: newRelation.through?.table ?? [sourceTableName, targetTableName].sort().join("_"),
                 sourceColumn: newRelation.through?.sourceColumn ?? `${sourceName}_id`,
                 targetColumn: newRelation.through?.targetColumn ?? `${newRelation.relationName}_id`,
             };

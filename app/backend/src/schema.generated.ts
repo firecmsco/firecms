@@ -24,7 +24,7 @@ export const posts = pgTable("posts", {
     author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
 });
 
-export const postsToTags = pgTable("posts_to_tags", {
+export const postsToTags = pgTable("posts_tags", {
     posts_id: integer("posts_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
     tags_id: integer("tags_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
 }, (table) => ({
