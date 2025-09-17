@@ -1,7 +1,7 @@
 import { and, eq, or, sql, SQL, ilike } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
-import { getColumnName } from "@firecms/common";
+import { getColumnName, resolveCollectionRelations } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 
 /**
@@ -129,6 +129,23 @@ export class DrizzleConditionBuilder {
             );
             joinConditions.push(junctionResult.join);
             whereConditions.push(junctionResult.condition);
+
+        } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through) {
+            // Handle inverse many-to-many relations without explicit through property
+            // Find the corresponding owning relation to get junction table info
+            const junctionInfo = this.findCorrespondingJunctionTable(relation, registry);
+            if (junctionInfo) {
+                const junctionResult = this.buildInverseJunctionTableConditions(
+                    junctionInfo,
+                    targetIdColumn,
+                    parentEntityId,
+                    registry
+                );
+                joinConditions.push(junctionResult.join);
+                whereConditions.push(junctionResult.condition);
+            } else {
+                throw new Error(`Cannot resolve junction table for inverse many-to-many relation '${relation.relationName}'. Either specify 'through' property or ensure corresponding owning relation exists.`);
+            }
 
         } else {
             // Handle simple relations
@@ -836,5 +853,44 @@ export class DrizzleConditionBuilder {
             return columns.map(col => getColumnName(col));
         }
         return [getColumnName(columns)];
+    }
+
+    /**
+     * Find the corresponding junction table for an inverse many-to-many relation
+     */
+    private static findCorrespondingJunctionTable(
+        relation: Relation,
+        registry: BackendCollectionRegistry
+    ): { table: string; sourceColumn: string; targetColumn: string } | null {
+        try {
+            // Get the target collection of the inverse relation
+            const targetCollection = relation.target();
+
+            // We need to find the corresponding owning relation on the target collection
+            // that points back to the current collection
+            const targetCollectionRelations = resolveCollectionRelations(targetCollection);
+
+            // Look for an owning many-to-many relation that has the inverse relation name
+            for (const [relationKey, targetRelation] of Object.entries(targetCollectionRelations)) {
+                if (targetRelation.cardinality === "many" &&
+                    targetRelation.direction === "owning" &&
+                    targetRelation.through &&
+                    (targetRelation.relationName === relation.inverseRelationName || relationKey === relation.inverseRelationName)) {
+
+                    // Found the corresponding owning relation with junction table info
+                    // For inverse relation, we need to swap source and target columns
+                    return {
+                        table: targetRelation.through.table,
+                        sourceColumn: targetRelation.through.targetColumn, // Swapped
+                        targetColumn: targetRelation.through.sourceColumn  // Swapped
+                    };
+                }
+            }
+
+            return null;
+        } catch (error) {
+            console.warn(`Error finding corresponding junction table for relation '${relation.relationName}':`, error);
+            return null;
+        }
     }
 }
