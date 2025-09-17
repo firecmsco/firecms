@@ -16,16 +16,16 @@ This application consists of three main parts:
 
 - Node.js 18+ 
 - PostgreSQL database
-- npm or yarn
+- pnpm
 
 ### Installation
 
 ```bash
 # Install all dependencies
-npm run install:all
+pnpm install
 
 # Or install individually
-npm install
+pnpm install
 ```
 
 ### Environment Setup
@@ -41,7 +41,7 @@ DATABASE_URL=postgresql://username:password@localhost:5432/your_database
 Start both frontend and backend with a single command:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 This will:
@@ -54,15 +54,15 @@ This will:
 
 ```bash
 # Backend only
-npm run dev:backend
+pnpm dev:backend
 
 # Frontend only  
-npm run dev:frontend
+pnpm dev:frontend
 
 # Database operations
-npm run db:migrate     # Run database migrations
-npm run db:studio     # Open Drizzle Studio
-npm run generate:schema # Generate schema from collections
+pnpm db:migrate     # Run database migrations
+pnpm db:studio     # Open Drizzle Studio
+pnpm generate:schema # Generate schema from collections
 ```
 
 ## 📦 Production Deployment
@@ -70,7 +70,7 @@ npm run generate:schema # Generate schema from collections
 ### Build Everything
 
 ```bash
-npm run build
+pnpm build
 ```
 
 This builds:
@@ -81,13 +81,13 @@ This builds:
 ### Deploy
 
 ```bash
-npm run deploy
+pnpm deploy
 ```
 
 Or start the production server:
 
 ```bash
-npm start
+pnpm start
 ```
 
 The backend serves the frontend statically in production, so you only need to deploy one application.
@@ -125,13 +125,13 @@ app/
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start both frontend and backend |
-| `npm run build` | Build all packages |
-| `npm run start` | Start production server |
-| `npm run deploy` | Build and deploy |
-| `npm run clean` | Clean all build artifacts |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:studio` | Open database studio |
+| `pnpm dev` | Start both frontend and backend |
+| `pnpm build` | Build all packages |
+| `pnpm start` | Start production server |
+| `pnpm deploy` | Build and deploy |
+| `pnpm clean` | Clean all build artifacts |
+| `pnpm db:migrate` | Run database migrations |
+| `pnpm db:studio` | Open database studio |
 
 ## 📊 Database
 
@@ -150,7 +150,7 @@ Currently configured with Firebase Authentication, but can be easily adapted to 
 1. **Shared Collections**: Edit collections in `shared/collections/` - changes are immediately available to both frontend and backend
 2. **Environment Variables**: All configuration is in the root `.env` file
 3. **Hot Reloading**: Both frontend and backend support hot reloading during development
-4. **Database Schema**: Run `npm run generate:schema` after changing collections
+4. **Database Schema**: Run `pnpm generate:schema` after changing collections
 
 ## 📝 License
 
