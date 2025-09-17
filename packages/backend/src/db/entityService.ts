@@ -145,7 +145,7 @@ function serializePropertyToServer(value: any, property: Property): any {
         case "relation":
             if (Array.isArray(value)) {
                 return value.map(v => serializePropertyToServer(v, property));
-            } else if (typeof value === "object" && value !== null && value.id !== undefined) {
+            } else if (typeof value === "object" && value?.id !== undefined) {
                 return value.id;
             }
             return value;
@@ -157,7 +157,7 @@ function serializePropertyToServer(value: any, property: Property): any {
             return value;
 
         case "map":
-            if (typeof value === "object" && value !== null && property.properties) {
+            if (typeof value === "object" && property.properties) {
                 const result: Record<string, any> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
@@ -1965,6 +1965,20 @@ export class EntityService {
 
                 const parsedSourceId = this.parseIdValue(sourceEntityId, sourceIdInfo.type);
 
+                // Handle inverse relation name mapping
+                // If inverseRelationName is provided, we need to update the target entity's inverse relation
+                if (relation.inverseRelationName) {
+                    await this.updateInverseRelationProperty(
+                        tx,
+                        targetCollection,
+                        sourceCollection,
+                        relation,
+                        parsedSourceId,
+                        newValue,
+                        targetIdInfo
+                    );
+                }
+
                 if (newValue === null || newValue === undefined) {
                     // Setting relation to null - update the target entity to clear the FK
                     // First, find the current target entity that points to this source entity
@@ -2000,6 +2014,57 @@ export class EntityService {
             } catch (e) {
                 console.warn(`Failed to update inverse relation '${relation.relationName}':`, e);
             }
+        }
+    }
+
+    /**
+     * Handle inverse relation name mapping when updating relations
+     * This ensures that when a relation has an inverseRelationName, the target entity's
+     * corresponding relation property is properly updated
+     */
+    private async updateInverseRelationProperty(
+        tx: NodePgDatabase<any>,
+        targetCollection: EntityCollection,
+        sourceCollection: EntityCollection,
+        relation: Relation,
+        sourceEntityId: string | number,
+        newValue: any,
+        targetIdInfo: { fieldName: string; type: string }
+    ) {
+        try {
+            // Find the inverse relation on the target collection using inverseRelationName
+            const targetResolvedRelations = resolveCollectionRelations(targetCollection);
+            const inverseRelation = targetResolvedRelations[relation.inverseRelationName!];
+
+            if (!inverseRelation) {
+                console.warn(`Inverse relation '${relation.inverseRelationName}' not found on target collection '${targetCollection.slug || targetCollection.dbPath}'`);
+                return;
+            }
+
+            // Update the inverse relation on the target entity
+            if (newValue === null || newValue === undefined) {
+                // Clear the inverse relation on all target entities that currently reference this source entity
+                const targetTable = this.getTableForCollection(targetCollection);
+                const foreignKeyColumn = targetTable[relation.foreignKeyOnTarget! as keyof typeof targetTable] as AnyPgColumn;
+
+                await tx
+                    .update(targetTable)
+                    .set({ [relation.foreignKeyOnTarget!]: null })
+                    .where(eq(foreignKeyColumn, sourceEntityId));
+            } else {
+                // Set the inverse relation on the specific target entity
+                const parsedNewTargetId = this.parseIdValue(newValue, targetIdInfo.type);
+                const targetTable = this.getTableForCollection(targetCollection);
+                const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+
+                // Update the target entity to reference the source entity
+                await tx
+                    .update(targetTable)
+                    .set({ [relation.foreignKeyOnTarget!]: sourceEntityId })
+                    .where(eq(targetIdField, parsedNewTargetId));
+            }
+        } catch (e) {
+            console.warn(`Failed to update inverse relation property '${relation.inverseRelationName}':`, e);
         }
     }
 }

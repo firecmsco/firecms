@@ -128,11 +128,6 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     const exportedEnumVars: string[] = [];
     const exportedRelationVars: string[] = [];
 
-    let viewSqlToGenerate = "/*\n--- SQL VIEWS FOR COMPLEX RELATIONS ---\n" +
-        "The following SQL should be executed in your database to create read-only views for complex relations.\n" +
-        "This is typically done in a migration file.\n*/\n\n";
-    let hasViews = false;
-
     const allTablesToGenerate = new Map<string, {
         collection: EntityCollection,
         isJunction?: boolean,
@@ -152,14 +147,14 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     : Object.keys(prop.enum);
                 if (values.length > 0) {
                     schemaContent += `export const ${enumVarName} = pgEnum(\"${enumDbName}\", [${values.map(v => `'${v}'`).join(", ")}]);\n`;
-                    if (!exportedEnumVars.includes(enumVarName)) exportedEnumVars.push(enumVarName); // <<< ADDED
+                    if (!exportedEnumVars.includes(enumVarName)) exportedEnumVars.push(enumVarName);
                 }
             }
         });
     });
     schemaContent += "\n";
 
-    // 2. Identify all tables and generate SQL Views for joinPath relations
+    // 2. Identify all tables (collections and junction tables only)
     for (const collection of collections) {
         const tableName = getTableName(collection);
         if (tableName) {
@@ -178,38 +173,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                         sourceCollection: collection
                     });
                 }
-            } else if (relation.joinPath) { // Complex relation view
-                hasViews = true;
-                const sourceTable = getTableName(collection);
-                const targetCollection = relation.target();
-                const viewName = `view_${sourceTable}_to_${getTableName(targetCollection)}`;
-                const viewVarName = getTableVarName(viewName);
-                const sourceIdField = collection.idField ?? "id";
-
-                let sql = `CREATE OR REPLACE VIEW ${viewName} AS\nSELECT\n`;
-                sql += `  ${sourceTable}.${sourceIdField} AS source_id,\n`;
-                sql += `  ${getTableName(targetCollection)}.* \n`;
-                sql += `FROM ${sourceTable}\n`;
-
-                let previousTable = sourceTable;
-                relation.joinPath.forEach(step => {
-                    const fromCols = Array.isArray(step.on.from) ? step.on.from : [step.on.from];
-                    const toCols = Array.isArray(step.on.to) ? step.on.to : [step.on.to];
-                    const conditions = fromCols.map((col, i) => `${previousTable}.${col} = ${step.table}.${toCols[i]}`).join(" AND ");
-                    sql += `JOIN ${step.table} ON ${conditions}\n`;
-                    previousTable = step.table;
-                });
-                viewSqlToGenerate += `\n-- View for relation '${relation.relationName}' on '${collection.name}'\n${sql};\n`;
-
-                schemaContent += `export const ${viewVarName} = pgTable(\"${viewName}\", {\n`;
-                schemaContent += `    source_id: ${isNumericId(collection) ? 'integer' : 'varchar'}(\"source_id\"),\n`;
-                Object.entries(targetCollection.properties).forEach(([propName, prop]) => {
-                    const columnString = getDrizzleColumn(propName, prop as Property, targetCollection);
-                    if (columnString) schemaContent += columnString.replace(/^\s*/, '    ') + ',\n';
-                });
-                schemaContent += "});\n\n";
-                if (!exportedTableVars.includes(viewVarName)) exportedTableVars.push(viewVarName); // <<< ADDED
             }
+            // joinPath relations use existing user-controlled tables - no generation needed
         }
     }
 
@@ -246,7 +211,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             if (columns.size > 0) schemaContent += `,\n${Array.from(columns).join(",\n")}`;
             schemaContent += "\n});\n\n";
         }
-        if (!exportedTableVars.includes(tableVarName)) exportedTableVars.push(tableVarName); // <<< ADDED
+        if (!exportedTableVars.includes(tableVarName)) exportedTableVars.push(tableVarName);
     }
 
     // 4. Generate Drizzle Relations
@@ -278,25 +243,51 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     const targetTableVar = getTableVarName(getTableName(target));
                     const relationName = rel.relationName ?? relationKey;
 
+                    // Determine the correct relation name for Drizzle
+                    // For inverse relations, use inverseRelationName if specified
+                    const drizzleRelationName = (rel.direction === "inverse" && rel.inverseRelationName)
+                        ? rel.inverseRelationName
+                        : relationName;
+
                     if (rel.cardinality === "one") {
                         if (rel.direction === "owning" && rel.localKey) {
-                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${rel.localKey}],\n        references: [${targetTableVar}.${target.idField ?? "id"}],\n        relationName: \"${relationName}\"\n    })`);
+                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${rel.localKey}],\n        references: [${targetTableVar}.${target.idField ?? "id"}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
                         }
                         else if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
                             const sourceIdField = collection.idField ?? "id";
-                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${rel.foreignKeyOnTarget}],\n        relationName: \"${relationName}\"\n    })`);
+                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${rel.foreignKeyOnTarget}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
+                        }
+                        else if (rel.direction === "inverse" && !rel.foreignKeyOnTarget) {
+                            // Handle inverse one-to-one relations where the FK is on the target table
+                            // but foreignKeyOnTarget is not explicitly specified
+                            // In this case, we need to find the corresponding owning relation on the target
+                            try {
+                                const targetCollection = rel.target();
+                                const targetResolvedRelations = resolveCollectionRelations(targetCollection);
+
+                                // Find the owning relation on the target that points back to this collection
+                                const correspondingRelation = Object.values(targetResolvedRelations).find(targetRel =>
+                                    targetRel.direction === "owning" &&
+                                    targetRel.cardinality === "one" &&
+                                    targetRel.target().slug === collection.slug
+                                );
+
+                                if (correspondingRelation && correspondingRelation.localKey) {
+                                    const sourceIdField = collection.idField ?? "id";
+                                    tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${correspondingRelation.localKey}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
+                                }
+                            } catch (e) {
+                                console.warn(`Could not resolve inverse one-to-one relation '${relationKey}':`, e);
+                            }
                         }
                     } else if (rel.cardinality === "many") {
                         if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
-                            tableRelations.push(`    ${relationKey}: many(${targetTableVar}, { relationName: \"${relationName}\" })`);
+                            tableRelations.push(`    ${relationKey}: many(${targetTableVar}, { relationName: \"${drizzleRelationName}\" })`);
                         } else if (rel.through) {
                             const junctionTableVar = getTableVarName(rel.through.table);
-                            tableRelations.push(`    ${relationKey}: many(${junctionTableVar}, { relationName: \"${relationName}\" })`);
-                        } else if(rel.joinPath) {
-                            const viewName = `view_${getTableName(collection)}_to_${getTableName(target)}`;
-                            const viewVarName = getTableVarName(viewName);
-                            tableRelations.push(`    ${relationKey}: many(${viewVarName}, { relationName: \"${relationName}\" })`);
+                            tableRelations.push(`    ${relationKey}: many(${junctionTableVar}, { relationName: \"${drizzleRelationName}\" })`);
                         }
+                        // joinPath relations don't generate Drizzle relations - they use existing user tables
                     }
                 } catch (e) {
                     console.warn(`Could not generate relation ${relationKey} for ${collection.name}:`, e);
@@ -307,7 +298,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
         if (tableRelations.length > 0) {
             const relVarName = `${tableVarName}Relations`;
             schemaContent += `export const ${relVarName} = drizzleRelations(${tableVarName}, ({ one, many }) => ({\n${tableRelations.join(",\n")}\n}));\n\n`;
-            if (!exportedRelationVars.includes(relVarName)) exportedRelationVars.push(relVarName); // <<< ADDED
+            if (!exportedRelationVars.includes(relVarName)) exportedRelationVars.push(relVarName);
         }
     }
 
@@ -316,10 +307,6 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     const enumsExport = `export const enums = { ${exportedEnumVars.join(", ")} };\n`;
     const relationsExport = `export const relations = { ${exportedRelationVars.join(", ")} };\n\n`;
     schemaContent += tablesExport + enumsExport + relationsExport;
-
-    if (hasViews) {
-        schemaContent += viewSqlToGenerate + "*/\n";
-    }
 
     return schemaContent;
 };

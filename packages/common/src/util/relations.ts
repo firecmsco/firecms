@@ -32,6 +32,46 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
             if (!newRelation.localKey) {
                 newRelation.localKey = `${newRelation.relationName}_id`;
             }
+        } else if (newRelation.cardinality === "one" && newRelation.direction === "inverse") {
+            // Inverse one-to-one: the foreign key is on the target table pointing back to this collection
+            if (!newRelation.foreignKeyOnTarget) {
+                // First, try to find the corresponding owning relation's localKey on the target collection
+                let foundForeignKey = false;
+
+                try {
+                    // Look for an owning relation on the target that points back to this collection
+                    const targetRelations = targetCollection.relations || [];
+                    for (const targetRel of targetRelations) {
+                        if (targetRel.direction === "owning" &&
+                            targetRel.cardinality === "one" &&
+                            targetRel.localKey) {
+                            try {
+                                const targetRelTarget = targetRel.target();
+                                if (targetRelTarget.slug === sourceCollection.slug ||
+                                    targetRelTarget.dbPath === sourceCollection.dbPath) {
+                                    // Found the corresponding owning relation, use its localKey
+                                    newRelation.foreignKeyOnTarget = targetRel.localKey;
+                                    foundForeignKey = true;
+                                    break;
+                                }
+                            } catch (e) {
+                                // Continue looking if we can't resolve this target
+                                continue;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // If we can't inspect the target collection, fall back to naming convention
+                }
+
+                // If we couldn't find an explicit foreign key, fall back to naming convention
+                if (!foundForeignKey) {
+                    const keyPrefix = newRelation.inverseRelationName
+                        ? toSnakeCase(newRelation.inverseRelationName)
+                        : sourceName;
+                    newRelation.foreignKeyOnTarget = `${keyPrefix}_id`;
+                }
+            }
         } else if (newRelation.cardinality === "many" && newRelation.direction === "inverse") {
             // Has-many / one-to-many
             if (!newRelation.foreignKeyOnTarget) {
@@ -54,6 +94,9 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
     // 4. Basic validation to catch configuration errors early
     if (newRelation.cardinality === "one" && newRelation.direction === "owning" && !newRelation.localKey && !newRelation.joinPath) {
         throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'owning' one-to-one relation requires a 'localKey'. Check the relation config for '${newRelation.relationName}'`);
+    }
+    if (newRelation.cardinality === "one" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath) {
+        throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'inverse' one-to-one relation requires a 'foreignKeyOnTarget'. Check the relation config for '${newRelation.relationName}'`);
     }
     if (newRelation.cardinality === "many" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath) {
         throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'inverse' one-to-many relation requires a 'foreignKeyOnTarget'. Check the relation config for '${newRelation.relationName}'`);

@@ -35,6 +35,8 @@ const profilesCollection: EntityCollection = {
             relationName: "author",
             target: () => authorsCollection,
             cardinality: "one",
+            direction: "owning",
+            localKey: "author_id"
         }
     ]
 };
@@ -78,7 +80,7 @@ const authorsCollection: EntityCollection = {
             target: () => profilesCollection,
             cardinality: "one",
             direction: "inverse",
-            inverseRelationName: "author"
+            foreignKeyOnTarget: "author_id" // FK is on the 'profiles' table
         },
         // Inverse side of the One-to-Many relationship with Posts.
         // The author entity doesn't store post_ids.
@@ -87,7 +89,7 @@ const authorsCollection: EntityCollection = {
             target: () => postsCollection,
             cardinality: "many",
             direction: "inverse",
-            inverseRelationName: "author"
+            foreignKeyOnTarget: "author_id" // FK is on the 'posts' table
         }
     ]
 };
@@ -120,7 +122,11 @@ const tagsCollection: EntityCollection = {
             target: () => postsCollection,
             cardinality: "many",
             direction: "inverse",
-            inverseRelationName: "tags",
+            through: {
+                table: "posts_tags",
+                sourceColumn: "tag_id", // FK to this collection's PK in junction table
+                targetColumn: "post_id" // FK to the target collection's PK in junction table
+            }
         }
     ]
 };
@@ -174,6 +180,7 @@ const postsCollection: EntityCollection = {
             target: () => authorsCollection,
             cardinality: "one",
             direction: "owning",
+            localKey: "author_id" // FK column in the 'posts' table
         },
         // Owning side of the Many-to-Many relationship with Tags.
         // This side manages the junction table.
@@ -182,6 +189,11 @@ const postsCollection: EntityCollection = {
             target: () => tagsCollection,
             cardinality: "many",
             direction: "owning",
+            through: {
+                table: "posts_tags",
+                sourceColumn: "post_id", // FK to this collection's PK in junction table
+                targetColumn: "tag_id"  // FK to the target collection's PK in junction table
+            }
         },
         // Advanced: A multi-hop, read-only relation from Post -> Author -> Profile.
         // This demonstrates the use of the `joinPath` property for complex lookups.

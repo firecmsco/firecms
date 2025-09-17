@@ -36,6 +36,13 @@ export interface Relation {
     direction?: "owning" | "inverse";
 
     /**
+     * The name of the inverse relation.
+     * This is only needed when the inverse relation is not the same as the relation name.
+     * For example, if the relation name is "posts", the inverse relation name might be "author".
+     */
+    inverseRelationName?: string
+
+    /**
      * Column on THIS table that stores the foreign key to the target.
      * Required when `direction` is "owning" and `cardinality` is "one".
      * @example "author_id"
