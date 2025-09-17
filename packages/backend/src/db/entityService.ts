@@ -1468,7 +1468,8 @@ export class EntityService {
             }
 
             // Handle junction table creation for many-to-many path-based saves
-            if (junctionTableInfo) {
+            // Only create junction table entries for NEW entities, not updates
+            if (junctionTableInfo && !entityId) {
                 await this.handleJunctionTableCreation(tx, currentId, junctionTableInfo);
             }
 
