@@ -1324,6 +1324,24 @@ export class EntityService {
                         const targetCollection = relation.target();
                         effectiveCollectionPath = targetCollection.slug ?? targetCollection.dbPath;
 
+                        // For many-to-many relationships with junction tables, we need special handling
+                        if (relation.cardinality === "many" && relation.through) {
+                            // For many-to-many with junction table, we don't modify the target entity
+                            // The junction table relationship will be handled after the target entity is saved
+                            // We store the parent info for later use in junction table creation
+                            const parentIdInfo = this.getIdFieldInfo(currentCollection);
+                            const parsedParentId = this.parseIdValue(currentEntityId, parentIdInfo.type);
+
+                            // Store metadata for junction table handling
+                            (effectiveValues as any).__junction_table_info = {
+                                parentCollection: currentCollection,
+                                parentId: parsedParentId,
+                                relation: relation,
+                                relationKey: relationKey
+                            };
+                            break; // resolved final target
+                        }
+
                         // For path-based saving, we need to find the FK column that should store the parent ID
                         let targetColumnName: string;
 
@@ -1402,8 +1420,10 @@ export class EntityService {
         // Extract relation updates before sanitizing
         const inverseRelationUpdates = (processedData as any).__inverseRelationUpdates || [];
         const joinPathRelationUpdates = (processedData as any).__joinPathRelationUpdates || [];
+        const junctionTableInfo = (processedData as any).__junction_table_info;
         delete (processedData as any).__inverseRelationUpdates;
         delete (processedData as any).__joinPathRelationUpdates;
+        delete (processedData as any).__junction_table_info;
 
         const entityData = sanitizeAndConvertDates(processedData);
 
@@ -1445,6 +1465,11 @@ export class EntityService {
             // Apply joinPath one-to-one relation updates
             if (joinPathRelationUpdates.length > 0) {
                 await this.updateJoinPathOneToOneRelations(tx, collection, currentId, joinPathRelationUpdates);
+            }
+
+            // Handle junction table creation for many-to-many path-based saves
+            if (junctionTableInfo) {
+                await this.handleJunctionTableCreation(tx, currentId, junctionTableInfo);
             }
 
             return currentId;
@@ -1764,6 +1789,67 @@ export class EntityService {
             targetFKColName,
             parentSourceColName
         };
+    }
+
+    /**
+     * Handle junction table creation for many-to-many path-based saves
+     */
+    private async handleJunctionTableCreation(
+        tx: NodePgDatabase<any>,
+        newEntityId: string | number,
+        junctionTableInfo: {
+            parentCollection: EntityCollection;
+            parentId: string | number;
+            relation: Relation;
+            relationKey: string;
+        }
+    ) {
+        const {
+            parentCollection,
+            parentId,
+            relation,
+            relationKey
+        } = junctionTableInfo;
+        const targetCollection = relation.target();
+
+        try {
+            // Get the junction table from the relation configuration
+            const junctionTable = collectionRegistry.getTable(relation.through!.table);
+            if (!junctionTable) {
+                console.warn(`Junction table '${relation.through!.table}' not found for relation '${relationKey}' in collection '${parentCollection.slug || parentCollection.dbPath}'`);
+                return;
+            }
+
+            const sourceJunctionColumn = junctionTable[relation.through!.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+            const targetJunctionColumn = junctionTable[relation.through!.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+
+            if (!sourceJunctionColumn) {
+                console.warn(`Source column '${relation.through!.sourceColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                return;
+            }
+
+            if (!targetJunctionColumn) {
+                console.warn(`Target column '${relation.through!.targetColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                return;
+            }
+
+            // Parse the new entity ID to the correct type
+            const targetIdInfo = this.getIdFieldInfo(targetCollection);
+            const parsedNewEntityId = this.parseIdValue(newEntityId, targetIdInfo.type);
+
+            // Create the junction table entry linking parent to the new entity
+            const junctionData = {
+                [sourceJunctionColumn.name]: parentId,
+                [targetJunctionColumn.name]: parsedNewEntityId
+            };
+
+            await tx.insert(junctionTable).values(junctionData);
+
+            console.log(`Created junction table entry for many-to-many relation '${relationKey}': ${JSON.stringify(junctionData)}`);
+        } catch (error) {
+            console.error(`Failed to create junction table entry for relation '${relationKey}':`, error);
+            throw error;
+        }
     }
 
     private async updateJoinPathOneToOneRelations(
