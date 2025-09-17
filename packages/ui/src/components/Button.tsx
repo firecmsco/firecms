@@ -34,6 +34,8 @@ const ButtonInner = React.forwardRef<
     const baseClasses =
         "typography-button h-fit rounded-md whitespace-nowrap inline-flex items-center justify-center p-2 px-4 focus:outline-hidden transition ease-in-out duration-150 gap-2";
 
+    const pointerClasses = disabled ? "" : "cursor-pointer";
+
     const buttonClasses = cls({
         "w-full": fullWidth,
         "w-fit": !fullWidth,
@@ -81,7 +83,7 @@ const ButtonInner = React.forwardRef<
             <Component
                 ref={ref}
                 onClick={props.onClick}
-                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(startIcon ? "pl-3" : "", pointerClasses, baseClasses, buttonClasses, sizeClasses, className)}
                 {...props}>
                 {startIcon}
                 {children}
@@ -93,7 +95,7 @@ const ButtonInner = React.forwardRef<
         <button ref={ref as any}
                 type={props.type ?? "button"}
                 onClick={props.onClick}
-                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(startIcon ? "pl-3" : "", pointerClasses, baseClasses, buttonClasses, sizeClasses, className)}
                 disabled={disabled}
                 data-variant={variant}
                 data-size={size}

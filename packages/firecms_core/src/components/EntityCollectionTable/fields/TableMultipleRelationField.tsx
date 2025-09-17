@@ -1,14 +1,14 @@
 import React, { useCallback } from "react";
 import equal from "react-fast-compare";
 
+import { cls, EditIcon } from "@firecms/ui";
+import { getRelationFrom } from "@firecms/common";
+
 import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
-
 import { useEntitySelectionTable } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
-import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
-import { getRelationFrom } from "@firecms/common";
 
 type TableMultipleRelationFieldProps = {
     name: string;

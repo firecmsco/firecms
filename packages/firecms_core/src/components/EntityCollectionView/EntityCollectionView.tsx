@@ -393,8 +393,8 @@ export const EntityCollectionView = React.memo(
                     width: 200,
                     dependencies: [],
                     Builder: ({ entity }) => (
-                        <Button color={"primary"}
-                                variant={"outlined"}
+                        <Button color={"neutral"}
+                                variant={"filled"}
                                 className={"max-w-full truncate justify-start"}
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
                                 onClick={(event: any) => {
