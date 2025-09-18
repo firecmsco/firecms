@@ -1,4 +1,5 @@
 @import "@firecms/ui/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,6 +17,7 @@ body {
 a {
     @apply text-primary dark:text-primary
 }
+
 /*.typography-body1 {*/
 /*    @apply text-lg;*/
 /*}*/
