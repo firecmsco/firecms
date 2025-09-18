@@ -1752,103 +1752,61 @@ export class EntityService {
         }
     }
 
-    private resolveJoinPathWriteMapping(
-        parentCollection: EntityCollection,
-        relation: Relation
-    ): { targetFKColName: string; parentSourceColName: string } {
-        if (!relation.joinPath || relation.joinPath.length === 0) {
-            throw new Error("resolveJoinPathWriteMapping requires a joinPath relation");
-        }
-        const parentTableName = getTableName(parentCollection);
-        // Last step determines the target FK column
-        const lastStep = relation.joinPath[relation.joinPath.length - 1];
-        const targetFKColName = DrizzleConditionBuilder.getColumnNamesFromColumns(lastStep.on.to)[0];
-        let currentFrom = lastStep.on.from; // fully-qualified
-
-        // Walk back until we reach a column on the parent table
-        // Each iteration finds the previous step whose 'to' matches currentFrom
-        // and sets currentFrom to that step's 'from'
-        // Stop when currentFrom belongs to parent table
-        // Safety to avoid infinite loops
-        let safety = 0;
-        while (safety++ < 10) {
-            const currentFromTable = DrizzleConditionBuilder.getTableNamesFromColumns(currentFrom)[0];
-            if (currentFromTable === parentTableName) {
-                break;
-            }
-            const prevStep = relation.joinPath.find((s) => {
-                const to = Array.isArray(s.on.to) ? s.on.to[0] : s.on.to;
-                return to === currentFrom;
-            });
-            if (!prevStep) {
-                throw new Error(`Could not resolve parent source column for joinPath relation '${relation.relationName}'`);
-            }
-            currentFrom = prevStep.on.from;
-        }
-        const parentSourceColName = DrizzleConditionBuilder.getColumnNamesFromColumns(currentFrom)[0];
-        return {
-            targetFKColName,
-            parentSourceColName
-        };
-    }
-
     /**
-     * Handle junction table creation for many-to-many path-based saves
+     * Handle many-to-many inverse relation updates using junction tables
      */
-    private async handleJunctionTableCreation(
+    private async updateManyToManyInverseRelation(
         tx: NodePgDatabase<any>,
-        newEntityId: string | number,
-        junctionTableInfo: {
-            parentCollection: EntityCollection;
-            parentId: string | number;
-            relation: Relation;
-            relationKey: string;
-        }
+        sourceCollection: EntityCollection,
+        sourceEntityId: string | number,
+        targetCollection: EntityCollection,
+        relation: Relation,
+        newValue: any,
+        junctionInfo: { table: string; sourceColumn: string; targetColumn: string }
     ) {
-        const {
-            parentCollection,
-            parentId,
-            relation,
-            relationKey
-        } = junctionTableInfo;
-        const targetCollection = relation.target();
-
         try {
-            // Get the junction table from the relation configuration
-            const junctionTable = collectionRegistry.getTable(relation.through!.table);
+            const junctionTable = collectionRegistry.getTable(junctionInfo.table);
             if (!junctionTable) {
-                console.warn(`Junction table '${relation.through!.table}' not found for relation '${relationKey}' in collection '${parentCollection.slug || parentCollection.dbPath}'`);
+                console.warn(`Junction table '${junctionInfo.table}' not found for many-to-many inverse relation '${relation.relationName}'`);
                 return;
             }
 
-            const sourceJunctionColumn = junctionTable[relation.through!.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
-            const targetJunctionColumn = junctionTable[relation.through!.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+            const sourceJunctionColumn = junctionTable[junctionInfo.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+            const targetJunctionColumn = junctionTable[junctionInfo.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
 
             if (!sourceJunctionColumn) {
-                console.warn(`Source column '${relation.through!.sourceColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                console.warn(`Source column '${junctionInfo.sourceColumn}' not found in junction table '${junctionInfo.table}' for relation '${relation.relationName}'`);
                 return;
             }
 
             if (!targetJunctionColumn) {
-                console.warn(`Target column '${relation.through!.targetColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                console.warn(`Target column '${junctionInfo.targetColumn}' not found in junction table '${junctionInfo.table}' for relation '${relation.relationName}'`);
                 return;
             }
 
-            // Parse the new entity ID to the correct type
-            const targetIdInfo = this.getIdFieldInfo(targetCollection);
-            const parsedNewEntityId = this.parseIdValue(newEntityId, targetIdInfo.type);
+            const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
+            const parsedSourceId = this.parseIdValue(sourceEntityId, sourceIdInfo.type);
 
-            // Create the junction table entry linking parent to the new entity
-            const junctionData = {
-                [sourceJunctionColumn.name]: parentId,
-                [targetJunctionColumn.name]: parsedNewEntityId
-            };
+            // Clear existing entries for this source entity
+            await tx.delete(junctionTable).where(eq(sourceJunctionColumn, parsedSourceId));
 
-            await tx.insert(junctionTable).values(junctionData);
+            // Add new entries if newValue is provided
+            if (newValue && Array.isArray(newValue) && newValue.length > 0) {
+                const targetIdInfo = this.getIdFieldInfo(targetCollection);
+                const targetEntityIds = newValue.map((rel: any) => rel.id);
+                const parsedTargetIds = targetEntityIds.map(id => this.parseIdValue(id, targetIdInfo.type));
 
-            console.log(`Created junction table entry for many-to-many relation '${relationKey}': ${JSON.stringify(junctionData)}`);
+                const newLinks = parsedTargetIds.map(targetId => ({
+                    [sourceJunctionColumn.name]: parsedSourceId,
+                    [targetJunctionColumn.name]: targetId
+                }));
+
+                if (newLinks.length > 0) {
+                    await tx.insert(junctionTable).values(newLinks);
+                }
+            }
         } catch (error) {
-            console.error(`Failed to create junction table entry for relation '${relationKey}':`, error);
+            console.error(`Failed to update many-to-many inverse relation '${relation.relationName}':`, error);
             throw error;
         }
     }
@@ -1958,6 +1916,52 @@ export class EntityService {
                 const targetIdInfo = this.getIdFieldInfo(targetCollection);
                 const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
 
+                // Check if this is a many-to-many inverse relation that should use junction tables
+                if (relation.cardinality === "many" && relation.direction === "inverse") {
+                    // For many-to-many inverse relations, we need to find the corresponding owning relation
+                    // to get the junction table information
+                    const targetCollectionRelations = resolveCollectionRelations(targetCollection);
+                    let junctionInfo: { table: string; sourceColumn: string; targetColumn: string } | null = null;
+
+                    // Look for the corresponding owning relation
+                    for (const [relationKey, targetRelation] of Object.entries(targetCollectionRelations)) {
+                        if (targetRelation.cardinality === "many" &&
+                            targetRelation.direction === "owning" &&
+                            targetRelation.through &&
+                            (targetRelation.relationName === relation.inverseRelationName || relationKey === relation.inverseRelationName)) {
+
+                            // Found the corresponding owning relation with junction table info
+                            // For inverse relation, we need to swap source and target columns
+                            junctionInfo = {
+                                table: targetRelation.through.table,
+                                sourceColumn: targetRelation.through.targetColumn, // Swapped
+                                targetColumn: targetRelation.through.sourceColumn  // Swapped
+                            };
+                            break;
+                        }
+                    }
+
+                    if (junctionInfo) {
+                        // Handle many-to-many inverse relation using junction table
+                        await this.updateManyToManyInverseRelation(
+                            tx,
+                            sourceCollection,
+                            sourceEntityId,
+                            targetCollection,
+                            relation,
+                            newValue,
+                            junctionInfo
+                        );
+                        continue;
+                    }
+                }
+
+                // Handle simple inverse relations (one-to-one, one-to-many with direct foreign keys)
+                if (!relation.foreignKeyOnTarget) {
+                    console.warn(`Inverse relation '${relation.relationName}' is missing foreignKeyOnTarget property and could not be resolved as many-to-many. Skipping.`);
+                    continue;
+                }
+
                 const foreignKeyColumn = targetTable[relation.foreignKeyOnTarget! as keyof typeof targetTable] as AnyPgColumn;
                 if (!foreignKeyColumn) {
                     console.warn(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table for relation '${relation.relationName}'`);
@@ -2066,6 +2070,107 @@ export class EntityService {
             }
         } catch (e) {
             console.warn(`Failed to update inverse relation property '${relation.inverseRelationName}':`, e);
+        }
+    }
+
+    private resolveJoinPathWriteMapping(
+        parentCollection: EntityCollection,
+        relation: Relation
+    ): { targetFKColName: string; parentSourceColName: string } {
+        if (!relation.joinPath || relation.joinPath.length === 0) {
+            throw new Error("resolveJoinPathWriteMapping requires a joinPath relation");
+        }
+        const parentTableName = getTableName(parentCollection);
+        // Last step determines the target FK column
+        const lastStep = relation.joinPath[relation.joinPath.length - 1];
+        const targetFKColName = DrizzleConditionBuilder.getColumnNamesFromColumns(lastStep.on.to)[0];
+        let currentFrom = lastStep.on.from; // fully-qualified
+
+        // Walk back until we reach a column on the parent table
+        // Each iteration finds the previous step whose 'to' matches currentFrom
+        // and sets currentFrom to that step's 'from'
+        // Stop when currentFrom belongs to parent table
+        // Safety to avoid infinite loops
+        let safety = 0;
+        while (safety++ < 10) {
+            const currentFromTable = DrizzleConditionBuilder.getTableNamesFromColumns(currentFrom)[0];
+            if (currentFromTable === parentTableName) {
+                break;
+            }
+            const prevStep = relation.joinPath.find((s) => {
+                const to = Array.isArray(s.on.to) ? s.on.to[0] : s.on.to;
+                return to === currentFrom;
+            });
+            if (!prevStep) {
+                throw new Error(`Could not resolve parent source column for joinPath relation '${relation.relationName}'`);
+            }
+            currentFrom = prevStep.on.from;
+        }
+        const parentSourceColName = DrizzleConditionBuilder.getColumnNamesFromColumns(currentFrom)[0];
+        return {
+            targetFKColName,
+            parentSourceColName
+        };
+    }
+
+    /**
+     * Handle junction table creation for many-to-many path-based saves
+     */
+    private async handleJunctionTableCreation(
+        tx: NodePgDatabase<any>,
+        newEntityId: string | number,
+        junctionTableInfo: {
+            parentCollection: EntityCollection;
+            parentId: string | number;
+            relation: Relation;
+            relationKey: string;
+        }
+    ) {
+        const {
+            parentCollection,
+            parentId,
+            relation,
+            relationKey
+        } = junctionTableInfo;
+        const targetCollection = relation.target();
+
+        try {
+            // Get the junction table from the relation configuration
+            const junctionTable = collectionRegistry.getTable(relation.through!.table);
+            if (!junctionTable) {
+                console.warn(`Junction table '${relation.through!.table}' not found for relation '${relationKey}' in collection '${parentCollection.slug || parentCollection.dbPath}'`);
+                return;
+            }
+
+            const sourceJunctionColumn = junctionTable[relation.through!.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+            const targetJunctionColumn = junctionTable[relation.through!.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+
+            if (!sourceJunctionColumn) {
+                console.warn(`Source column '${relation.through!.sourceColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                return;
+            }
+
+            if (!targetJunctionColumn) {
+                console.warn(`Target column '${relation.through!.targetColumn}' not found in junction table '${relation.through!.table}' for relation '${relationKey}'`);
+                return;
+            }
+
+            // Parse the new entity ID to the correct type
+            const targetIdInfo = this.getIdFieldInfo(targetCollection);
+            const parsedNewEntityId = this.parseIdValue(newEntityId, targetIdInfo.type);
+
+            // Create the junction table entry linking parent to the new entity
+            const junctionData = {
+                [sourceJunctionColumn.name]: parentId,
+                [targetJunctionColumn.name]: parsedNewEntityId
+            };
+
+            await tx.insert(junctionTable).values(junctionData);
+
+            console.log(`Created junction table entry for many-to-many relation '${relationKey}': ${JSON.stringify(junctionData)}`);
+        } catch (error) {
+            console.error(`Failed to create junction table entry for relation '${relationKey}':`, error);
+            throw error;
         }
     }
 }

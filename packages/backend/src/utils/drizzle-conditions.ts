@@ -89,10 +89,21 @@ export class DrizzleConditionBuilder {
         joinConditions: { table: PgTable<any>; condition: SQL }[];
         whereConditions: SQL[];
     } {
+        console.log(`🔍 [buildRelationConditions] Building conditions for relation:`, {
+            relationName: relation.relationName,
+            cardinality: relation.cardinality,
+            direction: relation.direction,
+            hasThrough: !!relation.through,
+            hasForeignKeyOnTarget: !!relation.foreignKeyOnTarget,
+            inverseRelationName: relation.inverseRelationName,
+            parentEntityId: parentEntityId
+        });
+
         const joinConditions: { table: PgTable<any>; condition: SQL }[] = [];
         const whereConditions: SQL[] = [];
 
         if (relation.joinPath && relation.joinPath.length > 0) {
+            console.log(`🔍 [buildRelationConditions] Using joinPath logic`);
             // Handle join path relations
             const {
                 joins,
@@ -109,6 +120,7 @@ export class DrizzleConditionBuilder {
             whereConditions.push(finalCondition);
 
         } else if (relation.through && relation.cardinality === "many" && relation.direction === "owning") {
+            console.log(`🔍 [buildRelationConditions] Using owning many-to-many with explicit through`);
             // Handle many-to-many relations with junction table
             const junctionResult = this.buildJunctionTableConditions(
                 relation.through,
@@ -120,6 +132,7 @@ export class DrizzleConditionBuilder {
             whereConditions.push(junctionResult.condition);
 
         } else if (relation.through && relation.cardinality === "many" && relation.direction === "inverse") {
+            console.log(`🔍 [buildRelationConditions] Using inverse many-to-many with explicit through`);
             // Handle inverse many-to-many relations with junction table
             const junctionResult = this.buildInverseJunctionTableConditions(
                 relation.through,
@@ -130,11 +143,13 @@ export class DrizzleConditionBuilder {
             joinConditions.push(junctionResult.join);
             whereConditions.push(junctionResult.condition);
 
-        } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through && !relation.foreignKeyOnTarget) {
-            // Handle inverse many-to-many relations without explicit through property
-            // Find the corresponding owning relation to get junction table info
+        } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through) {
+            console.log(`🔍 [buildRelationConditions] Handling inverse many relationship without explicit through`);
+
+            // First, try to find a junction table (for many-to-many relationships)
             const junctionInfo = this.findCorrespondingJunctionTable(relation, registry);
             if (junctionInfo) {
+                console.log(`🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions`);
                 const junctionResult = this.buildInverseJunctionTableConditions(
                     junctionInfo,
                     targetIdColumn,
@@ -143,11 +158,22 @@ export class DrizzleConditionBuilder {
                 );
                 joinConditions.push(junctionResult.join);
                 whereConditions.push(junctionResult.condition);
+            } else if (relation.foreignKeyOnTarget) {
+                console.log(`🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target`);
+                // This is a true inverse one-to-many relationship
+                const simpleCondition = this.buildSimpleRelationCondition(
+                    relation,
+                    targetTable,
+                    parentTable,
+                    parentEntityId
+                );
+                whereConditions.push(simpleCondition);
             } else {
-                throw new Error(`Cannot resolve junction table for inverse many-to-many relation '${relation.relationName}'. Either specify 'through' property or ensure corresponding owning relation exists.`);
+                console.error(`🔍 [buildRelationConditions] Failed to find junction table info and no foreign key specified`);
+                throw new Error(`Cannot resolve inverse many relation '${relation.relationName}'. Either specify 'through' property, ensure corresponding owning relation exists with junction table configuration, or specify 'foreignKeyOnTarget' for one-to-many relationships.`);
             }
-
         } else {
+            console.log(`🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR`);
             // Handle simple relations
             const simpleCondition = this.buildSimpleRelationCondition(
                 relation,
@@ -157,6 +183,11 @@ export class DrizzleConditionBuilder {
             );
             whereConditions.push(simpleCondition);
         }
+
+        console.log(`🔍 [buildRelationConditions] Final result:`, {
+            joinConditionsCount: joinConditions.length,
+            whereConditionsCount: whereConditions.length
+        });
 
         return {
             joinConditions,
@@ -226,33 +257,33 @@ export class DrizzleConditionBuilder {
         // For junction tables, we might end up at the junction table instead of the parent table
         if (currentTable !== parentTable) {
             // Try to get table names from the Drizzle table objects
-            let currentTableName = 'unknown';
-            let parentTableName = 'unknown';
+            let currentTableName = "unknown";
+            let parentTableName = "unknown";
 
             // Try multiple ways to extract table names from Drizzle objects
-            if (currentTable && typeof currentTable === 'object') {
+            if (currentTable && typeof currentTable === "object") {
                 // Check common Drizzle table name properties
-                currentTableName = (currentTable as any)[Symbol.for('drizzle:Name')] ||
+                currentTableName = (currentTable as any)[Symbol.for("drizzle:Name")] ||
                                   (currentTable as any)._.name ||
                                   (currentTable as any).tableName ||
                                   (currentTable as any).name ||
-                                  'unknown';
+                                  "unknown";
             }
 
-            if (parentTable && typeof parentTable === 'object') {
-                parentTableName = (parentTable as any)[Symbol.for('drizzle:Name')] ||
+            if (parentTable && typeof parentTable === "object") {
+                parentTableName = (parentTable as any)[Symbol.for("drizzle:Name")] ||
                                  (parentTable as any)._.name ||
                                  (parentTable as any).tableName ||
                                  (parentTable as any).name ||
-                                 'unknown';
+                                 "unknown";
             }
 
             // For junction table scenarios, be more lenient with validation
             // If we can't determine table names reliably, or if this looks like a junction table scenario,
             // we'll allow it and let the SQL execution validate the correctness
-            const couldBeJunctionScenario = currentTableName.includes('_') ||
-                                          currentTableName === 'unknown' ||
-                                          parentTableName === 'unknown';
+            const couldBeJunctionScenario = currentTableName.includes("_") ||
+                                          currentTableName === "unknown" ||
+                                          parentTableName === "unknown";
 
             if (!couldBeJunctionScenario) {
                 throw new Error(`Join path did not result in connecting to parent table. Current: ${currentTableName}, Parent: ${parentTableName}`);
@@ -514,10 +545,10 @@ export class DrizzleConditionBuilder {
             // that should match the target table's primary key
             const targetIdCol = Object.values(targetTable).find((col: any) => col.primary) as AnyPgColumn;
             if (!targetIdCol) {
-                // Fallback to looking for an 'id' column by name
-                const idCol = Object.values(targetTable).find((col: any) => col.name === 'id') as AnyPgColumn;
+                // Fallback to looking for an "id" column by name
+                const idCol = Object.values(targetTable).find((col: any) => col.name === "id") as AnyPgColumn;
                 if (!idCol) {
-                    throw new Error(`No primary key or 'id' column found in target table`);
+                    throw new Error("No primary key or \"id\" column found in target table");
                 }
                 return Array.isArray(parentEntityId)
                     ? sql`${idCol} = ANY(${parentEntityId})`
@@ -531,14 +562,22 @@ export class DrizzleConditionBuilder {
             // Inverse relation: use foreign key on target table
             const foreignKeyCol = targetTable[relation.foreignKeyOnTarget as keyof typeof targetTable] as AnyPgColumn;
             if (!foreignKeyCol) {
-                throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table`);
+                // This could be a many-to-many relationship where foreignKeyOnTarget was set by sanitizeRelation
+                // but the column doesn't actually exist. In this case, we should suggest using junction tables.
+                throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table. This might be a many-to-many relationship that requires a junction table. Consider using 'through' property or ensure the corresponding owning relation exists with junction table configuration.`);
             }
             return Array.isArray(parentEntityId)
                 ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
                 : eq(foreignKeyCol, parentEntityId);
 
         } else if (relation.direction === "inverse" && relation.cardinality === "many" && relation.inverseRelationName) {
-            // Auto-infer foreign key column for inverse one-to-many relations
+            // For inverse many-to-many relations, this should not be called directly
+            // The buildRelationConditions method should handle finding the junction table
+            // If we reach here, it means the junction table lookup failed
+            throw new Error(`Inverse many-to-many relation '${relation.relationName}' requires a junction table. Either specify 'through' property or ensure the corresponding owning relation exists with junction table configuration.`);
+
+        } else if (relation.direction === "inverse" && relation.cardinality === "one" && relation.inverseRelationName) {
+            // Auto-infer foreign key column for inverse one-to-one relations
             // Pattern: {inverseRelationName}_id (e.g., "author" -> "author_id")
             const inferredForeignKeyName = `${relation.inverseRelationName}_id`;
             const foreignKeyCol = targetTable[inferredForeignKeyName as keyof typeof targetTable] as AnyPgColumn;
@@ -879,33 +918,64 @@ export class DrizzleConditionBuilder {
         registry: BackendCollectionRegistry
     ): { table: string; sourceColumn: string; targetColumn: string } | null {
         try {
+            console.log(`🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation '${relation.relationName}' with inverseRelationName '${relation.inverseRelationName}'`);
+
             // Get the target collection of the inverse relation
             const targetCollection = relation.target();
+            console.log(`🔍 [findCorrespondingJunctionTable] Target collection: ${targetCollection.slug || targetCollection.dbPath}`);
 
             // We need to find the corresponding owning relation on the target collection
             // that points back to the current collection
             const targetCollectionRelations = resolveCollectionRelations(targetCollection);
+            console.log(`🔍 [findCorrespondingJunctionTable] Target collection relations:`, Object.keys(targetCollectionRelations));
 
-            // Look for an owning many-to-many relation that has the inverse relation name
+            // Look for an owning many-to-many relation that matches the inverse relation name
             for (const [relationKey, targetRelation] of Object.entries(targetCollectionRelations)) {
-                if (targetRelation.cardinality === "many" &&
-                    targetRelation.direction === "owning" &&
-                    targetRelation.through &&
-                    (targetRelation.relationName === relation.inverseRelationName || relationKey === relation.inverseRelationName)) {
+                console.log(`🔍 [findCorrespondingJunctionTable] Checking relation '${relationKey}':`, {
+                    relationName: targetRelation.relationName,
+                    cardinality: targetRelation.cardinality,
+                    direction: targetRelation.direction,
+                    hasThrough: !!targetRelation.through,
+                    through: targetRelation.through
+                });
+
+                // Check if this is an owning many-to-many relation with junction table
+                const isOwningManyToMany = targetRelation.cardinality === "many" &&
+                                         targetRelation.direction === "owning" &&
+                                         targetRelation.through;
+
+                // Check if the relation name matches our inverse relation name
+                const nameMatches = targetRelation.relationName === relation.inverseRelationName ||
+                                  relationKey === relation.inverseRelationName;
+
+                console.log(`🔍 [findCorrespondingJunctionTable] - isOwningManyToMany: ${isOwningManyToMany}, nameMatches: ${nameMatches}`);
+
+                if (isOwningManyToMany && nameMatches) {
+                    console.log(`🔍 [findCorrespondingJunctionTable] Found matching owning relation!`);
 
                     // Found the corresponding owning relation with junction table info
                     // For inverse relation, we need to swap source and target columns
-                    return {
-                        table: targetRelation.through.table,
-                        sourceColumn: targetRelation.through.targetColumn, // Swapped
-                        targetColumn: targetRelation.through.sourceColumn  // Swapped
+                    const through = targetRelation.through!; // We know it exists because isOwningManyToMany checks it
+                    const result = {
+                        table: through.table,
+                        sourceColumn: through.targetColumn, // Swapped
+                        targetColumn: through.sourceColumn // Swapped
                     };
+
+                    console.log(`🔍 [findCorrespondingJunctionTable] Returning junction info:`, result);
+                    return result;
                 }
             }
 
+            console.log(`🔍 [findCorrespondingJunctionTable] No matching owning relation found for inverseRelationName '${relation.inverseRelationName}'`);
+            console.log(`🔍 [findCorrespondingJunctionTable] Available relations on target collection:`,
+                Object.entries(targetCollectionRelations).map(([key, rel]) =>
+                    `${key} (relationName: ${rel.relationName}, direction: ${rel.direction}, cardinality: ${rel.cardinality})`
+                )
+            );
             return null;
         } catch (error) {
-            console.warn(`Error finding corresponding junction table for relation '${relation.relationName}':`, error);
+            console.error(`🔍 [findCorrespondingJunctionTable] Error finding corresponding junction table for relation '${relation.relationName}':`, error);
             return null;
         }
     }

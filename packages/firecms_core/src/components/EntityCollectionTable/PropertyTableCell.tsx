@@ -397,18 +397,18 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                             title={property.name ?? propertyKey}
                                             forceFilter={property.forceFilter}
                         />;
-                    innerComponent = <RelationSelectorField name={propertyKey as string}
-                                                            internalValue={internalValue as EntityRelation}
-                                                            updateValue={updateValue}
-                                                            disabled={disabled}
-                                                            size={size}
-                                                            multiselect={false}
-                                                            relation={property.relation}
-                                                            previewProperties={property.previewProperties}
-                                                            includeId={property.includeId}
-                                                            includeEntityLink={property.includeEntityLink}
-                                                            title={property.name ?? propertyKey}
-                                                            forceFilter={property.forceFilter}/>
+                    // innerComponent = <RelationSelectorField name={propertyKey as string}
+                    //                                         internalValue={internalValue as EntityRelation}
+                    //                                         updateValue={updateValue}
+                    //                                         disabled={disabled}
+                    //                                         size={size}
+                    //                                         multiselect={false}
+                    //                                         relation={property.relation}
+                    //                                         previewProperties={property.previewProperties}
+                    //                                         includeId={property.includeId}
+                    //                                         includeEntityLink={property.includeEntityLink}
+                    //                                         title={property.name ?? propertyKey}
+                    //                                         forceFilter={property.forceFilter}/>
                     allowScroll = false;
                 }
             } else if (property.type === "array") {

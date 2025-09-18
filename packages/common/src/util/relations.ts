@@ -74,8 +74,33 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
                 }
             }
         } else if (newRelation.cardinality === "many" && newRelation.direction === "inverse") {
-            // Has-many / one-to-many
-            if (!newRelation.foreignKeyOnTarget) {
+            // This could be either one-to-many or many-to-many inverse relation
+            // We need to check if there's a corresponding owning many-to-many relation
+
+            let isManyToManyInverse = false;
+
+            // Try to determine if this is a many-to-many inverse relation
+            if (newRelation.inverseRelationName && !newRelation.foreignKeyOnTarget) {
+                try {
+                    // Look for a corresponding owning many-to-many relation on the target collection
+                    const targetRelations = targetCollection.relations || [];
+                    for (const targetRel of targetRelations) {
+                        if (targetRel.cardinality === "many" &&
+                            targetRel.direction === "owning" &&
+                            targetRel.through &&
+                            (targetRel.relationName === newRelation.inverseRelationName)) {
+                            // Found a corresponding owning many-to-many relation
+                            isManyToManyInverse = true;
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    // If we can't inspect the target collection, assume one-to-many
+                }
+            }
+
+            // Only add foreignKeyOnTarget for one-to-many inverse relations
+            if (!isManyToManyInverse && !newRelation.foreignKeyOnTarget) {
                 newRelation.foreignKeyOnTarget = generateForeignKeyName(sourceName);
             }
         } else if (newRelation.cardinality === "many" && newRelation.direction === "owning") {

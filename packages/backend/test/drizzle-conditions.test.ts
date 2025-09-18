@@ -612,5 +612,60 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             // This should no longer throw "Foreign key column 'tags_id' not found in target table"
             expect(() => result).not.toThrow();
         });
+
+        it('should handle inverse many-to-many without explicit through property (real user scenario)', () => {
+            // Create a more realistic mock that simulates the actual scenario
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: [
+                    {
+                        relationName: "tags",
+                        cardinality: "many",
+                        direction: "owning",
+                        through: {
+                            table: "posts_tags",
+                            sourceColumn: "post_id",
+                            targetColumn: "tag_id"
+                        },
+                        target: () => ({ slug: "tags" })
+                    }
+                ]
+            };
+
+            // This is the ACTUAL scenario: inverse relation without through property
+            // but with foreignKeyOnTarget incorrectly added by sanitizeRelation
+            const tagsToPostsRelation: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse",
+                inverseRelationName: "tags",
+                foreignKeyOnTarget: "tag_id" // This gets added by sanitizeRelation at runtime
+                // NO through property - this is the key difference
+            };
+
+            // The fix should handle this case correctly by ignoring the foreignKeyOnTarget
+            // and finding the junction table from the corresponding owning relation
+            const result = DrizzleConditionBuilder.buildRelationConditions(
+                tagsToPostsRelation,
+                23, // tag ID from URL: tags/23/posts (matching the user's log)
+                mockPostsTable, // we want to get posts
+                mockTagsTable, // from the tags collection
+                mockTagsTable.id, // tag ID column
+                mockPostsTable.id, // post ID column
+                mockRegistry
+            );
+
+            // Should successfully find junction table and build conditions
+            expect(result.joinConditions).toHaveLength(1);
+            expect(result.whereConditions).toHaveLength(1);
+
+            // Verify it used the junction table approach, not the simple relation approach
+            expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
+
+            // Should not throw the "Foreign key column 'tag_id' not found in target table" error
+            expect(() => result).not.toThrow();
+        });
     });
 });
