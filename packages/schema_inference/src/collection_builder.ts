@@ -16,7 +16,7 @@ export type InferenceTypeBuilder = (value: any) => DataType;
 export async function buildEntityPropertiesFromData(
     data: object[],
     getType: InferenceTypeBuilder
-): Promise<Properties> {
+): Promise<Properties<any>> {
     const typesCount: TypesCountRecord = {};
     const valuesCount: ValuesCountRecord = {};
     if (data) {
@@ -345,8 +345,8 @@ function buildPropertiesFromCount(
     totalDocsCount: number,
     typesCountRecord: TypesCountRecord,
     valuesCountRecord?: ValuesCountRecord
-): Properties {
-    const res: Properties = {};
+): Properties<any> {
+    const res: Properties<any> = {};
     Object.entries(typesCountRecord).forEach(([key, typesCount]) => {
         const mostProbableType = getMostProbableType(typesCount);
         res[key] = buildPropertyFromCount(

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "types": [],
     "incremental": true,
     "plugins": [
       {
@@ -19,23 +23,59 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@firecms/core": ["../../packages/firecms_core/src"],
-      "@firecms/firebase": ["../../packages/firebase_firecms/src"],
-      "@firecms/ui": ["../../packages/ui/src"],
-      "@firecms/editor": ["../../packages/editor/src"],
-      "@firecms/datatalk": ["../../packages/datatalk/src"],
-      "@firecms/mongodb": ["../../packages/mongodb/src"],
-      "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
-      "@firecms/collection_editor": ["../../packages/collection_editor/src"],
-      "@firecms/collection_editor_firebase": ["../../packages/collection_editor_firebase/src"],
-      "@firecms/data_import": ["../../packages/data_import/src"],
-      "@firecms/data_export": ["../../packages/data_export/src"],
-      "@firecms/user_management": ["../../packages/user_management/src"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@firecms/core": [
+        "../../packages/firecms_core/src"
+      ],
+      "@firecms/firebase": [
+        "../../packages/firebase_firecms/src"
+      ],
+      "@firecms/ui": [
+        "../../packages/ui/src"
+      ],
+      "@firecms/editor": [
+        "../../packages/editor/src"
+      ],
+      "@firecms/datatalk": [
+        "../../packages/datatalk/src"
+      ],
+      "@firecms/mongodb": [
+        "../../packages/mongodb/src"
+      ],
+      "@firecms/data_enhancement": [
+        "../../packages/data_enhancement/src"
+      ],
+      "@firecms/collection_editor": [
+        "../../packages/collection_editor/src"
+      ],
+      "@firecms/collection_editor_firebase": [
+        "../../packages/collection_editor_firebase/src"
+      ],
+      "@firecms/data_import": [
+        "../../packages/data_import/src"
+      ],
+      "@firecms/data_export": [
+        "../../packages/data_export/src"
+      ],
+      "@firecms/user_management": [
+        "../../packages/user_management/src"
+      ],
+      "@firecms/schema_inference": [
+        "../../packages/schema_inference/src"
+      ]
     },
-
     "baseUrl": ".",
+    "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

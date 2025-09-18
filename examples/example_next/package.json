@@ -25,7 +25,7 @@
     "@fontsource/playfair-display": "^5.2.8",
     "@fontsource/poppins": "^5.2.7",
     "@tailwindcss/typography": "^0.5.16",
-    "firebase": "^10.14.1",
+    "firebase": "^12.2.1",
     "next": "15.5.3",
     "nextjs-toploader": "^3.9.17",
     "react": "^18.3.1",

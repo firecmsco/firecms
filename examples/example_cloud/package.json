@@ -15,7 +15,7 @@
   "dependencies": {
     "@firecms/cloud": "^3.0.0-canary.265",
     "@fontsource/jetbrains-mono": "^5.2.8",
-    "firebase": "^10.14.1",
+    "firebase": "^12.2.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "typeface-rubik": "^1.1.13"

@@ -169,10 +169,6 @@ export const FireCMSEditor = ({
         Highlight.configure({
             multicolor: true
         }),
-        // CustomBlock.configure({
-        //     component: CustomComponent,
-        //     delimiter: "```custom"
-        // }),
         Heading,
         CustomKeymap,
         DragAndDrop,

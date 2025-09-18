@@ -321,14 +321,14 @@ const uploadFile = (storage: FirebaseStorage, {
 const deserializeAppCheckOptions = (appCheck: SerializedAppCheckOptions): AppCheckOptions => {
     if (appCheck.provider === "recaptcha_v3") {
         return {
-            provider: new ReCaptchaV3Provider(appCheck.siteKey),
+            provider: new ReCaptchaV3Provider(appCheck.siteKey) as unknown as AppCheckOptions['provider'],
             isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
             debugToken: appCheck.debugToken,
             forceRefresh: appCheck.forceRefresh
         }
     } else if (appCheck.provider === "recaptcha_enterprise") {
         return {
-            provider: new ReCaptchaEnterpriseProvider(appCheck.siteKey),
+            provider: new ReCaptchaEnterpriseProvider(appCheck.siteKey) as unknown as AppCheckOptions['provider'],
             isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
             debugToken: appCheck.debugToken,
             forceRefresh: appCheck.forceRefresh
