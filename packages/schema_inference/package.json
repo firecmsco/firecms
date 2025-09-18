@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@types/node": "^20.17.14",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "@types/node": "^20.19.17",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6"
   },
   "exports": {
     ".": {
@@ -29,5 +29,9 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "cd9502cbf136562a421afe87b4479039f2438da5"
+  "gitHead": "cd9502cbf136562a421afe87b4479039f2438da5",
+  "dependencies": {
+    "axios": "1.12.2",
+    "vite-plugin-static-copy": "3.1.2"
+  }
 }
