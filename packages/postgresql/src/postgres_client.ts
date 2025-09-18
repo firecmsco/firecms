@@ -52,6 +52,32 @@ export class PostgresDataSourceClient {
         onUpdate: (data: any) => void,
         onError?: (error: Error) => void
     }>();
+
+    // New: Subscription deduplication management
+    private collectionSubscriptions = new Map<string, {
+        backendSubscriptionId: string;
+        callbacks: Map<string, {
+            onUpdate: (entities: Entity[]) => void;
+            onError?: (error: Error) => void;
+        }>;
+        props: FetchCollectionProps;
+        latestData?: Entity[]; // Cache the latest data
+    }>();
+
+    private entitySubscriptions = new Map<string, {
+        backendSubscriptionId: string;
+        callbacks: Map<string, {
+            onUpdate: (entity: Entity | null) => void;
+            onError?: (error: Error) => void;
+        }>;
+        props: FetchEntityProps;
+        latestData?: Entity | null; // Cache the latest data
+    }>();
+
+    // Maps to quickly find subscription by backend subscription ID
+    private backendToCollectionKey = new Map<string, string>();
+    private backendToEntityKey = new Map<string, string>();
+
     private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
@@ -147,7 +173,88 @@ export class PostgresDataSourceClient {
             return;
         }
 
-        // Handle subscription updates
+        // Handle subscription updates for collection subscriptions
+        if (subscriptionId && type === "collection_update") {
+            const subscriptionKey = this.backendToCollectionKey.get(subscriptionId);
+            if (subscriptionKey) {
+                const collectionSub = this.collectionSubscriptions.get(subscriptionKey);
+                if (collectionSub) {
+                    const entities = message.entities || [];
+                    // Cache the latest data
+                    collectionSub.latestData = entities;
+                    // Notify all callbacks for this subscription
+                    collectionSub.callbacks.forEach(callback => {
+                        try {
+                            callback.onUpdate(entities);
+                        } catch (error) {
+                            console.error("Error in collection subscription callback:", error);
+                            if (callback.onError) {
+                                callback.onError(error instanceof Error ? error : new Error(String(error)));
+                            }
+                        }
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Handle subscription updates for entity subscriptions
+        if (subscriptionId && type === "entity_update") {
+            const subscriptionKey = this.backendToEntityKey.get(subscriptionId);
+            if (subscriptionKey) {
+                const entitySub = this.entitySubscriptions.get(subscriptionKey);
+                if (entitySub) {
+                    const entity = message.entity ?? null;
+                    // Cache the latest data
+                    entitySub.latestData = entity;
+                    // Notify all callbacks for this subscription
+                    entitySub.callbacks.forEach(callback => {
+                        try {
+                            callback.onUpdate(entity);
+                        } catch (error) {
+                            console.error("Error in entity subscription callback:", error);
+                            if (callback.onError) {
+                                callback.onError(error instanceof Error ? error : new Error(String(error)));
+                            }
+                        }
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Handle subscription errors
+        if (subscriptionId && (type === "ERROR" || message.error)) {
+            const collectionKey = this.backendToCollectionKey.get(subscriptionId);
+            if (collectionKey) {
+                const collectionSub = this.collectionSubscriptions.get(collectionKey);
+                if (collectionSub) {
+                    const error = new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code);
+                    collectionSub.callbacks.forEach(callback => {
+                        if (callback.onError) {
+                            callback.onError(error);
+                        }
+                    });
+                    return;
+                }
+            }
+
+            const entityKey = this.backendToEntityKey.get(subscriptionId);
+            if (entityKey) {
+                const entitySub = this.entitySubscriptions.get(entityKey);
+                if (entitySub) {
+                    const error = new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code);
+                    entitySub.callbacks.forEach(callback => {
+                        if (callback.onError) {
+                            callback.onError(error);
+                        }
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Legacy subscription handling (for backward compatibility)
         if (subscriptionId && this.subscriptions.has(subscriptionId)) {
             const callback = this.subscriptions.get(subscriptionId);
             if (!callback) {
@@ -261,34 +368,93 @@ export class PostgresDataSourceClient {
         onUpdate: (entities: Entity[]) => void,
         onError?: (error: Error) => void
     ): () => void {
-        const subscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const subscriptionKey = this.createCollectionSubscriptionKey(props);
+        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        this.subscriptions.set(subscriptionId, {
-            onUpdate: (message: CollectionUpdateMessage) => {
-                if (message.type === "collection_update") {
-                    onUpdate(message.entities);
+        // Check if we already have a subscription for these exact parameters
+        const existingSubscription = this.collectionSubscriptions.get(subscriptionKey);
+
+        if (existingSubscription) {
+            // Reuse existing subscription - just add the new callback
+            const callbackMap = existingSubscription.callbacks as Map<string, {
+                onUpdate: (entities: Entity[]) => void;
+                onError?: (error: Error) => void;
+            }>;
+            callbackMap.set(callbackId, { onUpdate, onError });
+
+            // Immediately fire the callback with cached data if available
+            if (existingSubscription.latestData !== undefined) {
+                try {
+                    onUpdate(existingSubscription.latestData);
+                } catch (error) {
+                    console.error("Error in collection subscription callback:", error);
+                    if (onError) {
+                        onError(error instanceof Error ? error : new Error(String(error)));
+                    }
                 }
-            },
-            onError
+            }
+
+            // Return unsubscribe function
+            return () => {
+                callbackMap.delete(callbackId);
+                if (callbackMap.size === 0) {
+                    // No more callbacks, unsubscribe from backend
+                    this.collectionSubscriptions.delete(subscriptionKey);
+                    this.backendToCollectionKey.delete(existingSubscription.backendSubscriptionId);
+                    if (this.isConnected && this.ws) {
+                        this.sendMessage({
+                            type: "unsubscribe",
+                            payload: { subscriptionId: existingSubscription.backendSubscriptionId }
+                        }).catch(console.error);
+                    }
+                }
+            };
+        }
+
+        // Create new subscription
+        const backendSubscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const callbackMap = new Map<string, {
+            onUpdate: (entities: Entity[]) => void;
+            onError?: (error: Error) => void;
+        }>();
+        callbackMap.set(callbackId, { onUpdate, onError });
+
+        this.collectionSubscriptions.set(subscriptionKey, {
+            backendSubscriptionId,
+            callbacks: callbackMap as any, // Type assertion to satisfy the interface
+            props
         });
 
+        // Add reverse lookup
+        this.backendToCollectionKey.set(backendSubscriptionId, subscriptionKey);
+
+        // Send subscription request to backend
         this.sendMessage({
             type: "subscribe_collection",
             payload: {
                 ...props,
-                subscriptionId
+                subscriptionId: backendSubscriptionId
             }
         }).catch(error => {
             if (onError) onError(error);
         });
 
+        // Return unsubscribe function
         return () => {
-            this.subscriptions.delete(subscriptionId);
-            if (this.isConnected && this.ws) {
-                this.sendMessage({
-                    type: "unsubscribe",
-                    payload: { subscriptionId }
-                }).catch(console.error);
+            const subscription = this.collectionSubscriptions.get(subscriptionKey);
+            if (subscription) {
+                const callbacks = subscription.callbacks as Map<string, any>;
+                callbacks.delete(callbackId);
+                if (callbacks.size === 0) {
+                    this.collectionSubscriptions.delete(subscriptionKey);
+                    this.backendToCollectionKey.delete(subscription.backendSubscriptionId);
+                    if (this.isConnected && this.ws) {
+                        this.sendMessage({
+                            type: "unsubscribe",
+                            payload: { subscriptionId: subscription.backendSubscriptionId }
+                        }).catch(console.error);
+                    }
+                }
             }
         };
     }
@@ -298,50 +464,113 @@ export class PostgresDataSourceClient {
         onUpdate: (entity: Entity | null) => void,
         onError?: (error: Error) => void
     ): () => void {
-        const subscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const subscriptionKey = this.createEntitySubscriptionKey(props);
+        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        this.subscriptions.set(subscriptionId, {
-            onUpdate: (message: EntityUpdateMessage) => {
-                if (message.type === "entity_update") {
-                    onUpdate(message.entity);
+        // Check if we already have a subscription for these exact parameters
+        const existingSubscription = this.entitySubscriptions.get(subscriptionKey);
+
+        if (existingSubscription) {
+            // Reuse existing subscription - just add the new callback
+            const callbackMap = existingSubscription.callbacks as Map<string, {
+                onUpdate: (entity: Entity | null) => void;
+                onError?: (error: Error) => void;
+            }>;
+            callbackMap.set(callbackId, { onUpdate, onError });
+
+            // Immediately fire the callback with cached data if available
+            if (existingSubscription.latestData !== undefined) {
+                try {
+                    onUpdate(existingSubscription.latestData);
+                } catch (error) {
+                    console.error("Error in entity subscription callback:", error);
+                    if (onError) {
+                        onError(error instanceof Error ? error : new Error(String(error)));
+                    }
                 }
-            },
-            onError
+            }
+
+            // Return unsubscribe function
+            return () => {
+                callbackMap.delete(callbackId);
+                if (callbackMap.size === 0) {
+                    // No more callbacks, unsubscribe from backend
+                    this.entitySubscriptions.delete(subscriptionKey);
+                    this.backendToEntityKey.delete(existingSubscription.backendSubscriptionId);
+                    if (this.isConnected && this.ws) {
+                        this.sendMessage({
+                            type: "unsubscribe",
+                            payload: { subscriptionId: existingSubscription.backendSubscriptionId }
+                        }).catch(console.error);
+                    }
+                }
+            };
+        }
+
+        // Create new subscription
+        const backendSubscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const callbackMap = new Map<string, {
+            onUpdate: (entity: Entity | null) => void;
+            onError?: (error: Error) => void;
+        }>();
+        callbackMap.set(callbackId, { onUpdate, onError });
+
+        this.entitySubscriptions.set(subscriptionKey, {
+            backendSubscriptionId,
+            callbacks: callbackMap as any, // Type assertion to satisfy the interface
+            props
         });
 
+        // Add reverse lookup
+        this.backendToEntityKey.set(backendSubscriptionId, subscriptionKey);
+
+        // Send subscription request to backend
         this.sendMessage({
             type: "subscribe_entity",
             payload: {
                 ...props,
-                subscriptionId
+                subscriptionId: backendSubscriptionId
             }
         }).catch(error => {
             if (onError) onError(error);
         });
 
+        // Return unsubscribe function
         return () => {
-            this.subscriptions.delete(subscriptionId);
-            if (this.isConnected && this.ws) {
-                this.sendMessage({
-                    type: "unsubscribe",
-                    payload: { subscriptionId }
-                }).catch(console.error);
+            const subscription = this.entitySubscriptions.get(subscriptionKey);
+            if (subscription) {
+                const callbacks = subscription.callbacks as Map<string, any>;
+                callbacks.delete(callbackId);
+                if (callbacks.size === 0) {
+                    this.entitySubscriptions.delete(subscriptionKey);
+                    this.backendToEntityKey.delete(subscription.backendSubscriptionId);
+                    if (this.isConnected && this.ws) {
+                        this.sendMessage({
+                            type: "unsubscribe",
+                            payload: { subscriptionId: subscription.backendSubscriptionId }
+                        }).catch(console.error);
+                    }
+                }
             }
         };
     }
 
-    // Connection management
-    isConnectedToBackend(): boolean {
-        return this.isConnected;
+    private createCollectionSubscriptionKey(props: FetchCollectionProps): string {
+        // Create a deterministic key based on subscription parameters
+        const key = {
+            path: props.path,
+            filter: props.filter,
+            limit: props.limit,
+            startAfter: props.startAfter,
+            orderBy: props.orderBy,
+            order: props.order,
+            searchString: props.searchString,
+            collection: props.collection?.name
+        };
+        return JSON.stringify(key, Object.keys(key).sort());
     }
 
-    disconnect() {
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-        this.subscriptions.clear();
-        this.pendingRequests.clear();
-        this.isConnected = false;
+    private createEntitySubscriptionKey(props: FetchEntityProps): string {
+        return `${props.path}|${props.entityId}`;
     }
 }
