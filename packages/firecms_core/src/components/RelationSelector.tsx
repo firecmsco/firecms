@@ -40,7 +40,7 @@ export interface RelationSelectorProps {
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>;
     onValueChange?: (updatedValue: RelationItem | RelationItem[] | undefined) => void;
     placeholder?: React.ReactNode;
-    size?: "smallest" | "small" | "medium" | "large";
+    size?: "small" | "medium";
     useChips?: boolean;
     label?: React.ReactNode | string;
     disabled?: boolean;
@@ -73,7 +73,7 @@ export const RelationSelector = React.forwardRef<
     (
         {
             value,
-            size = "large",
+            size = "medium",
             label,
             error,
             onValueChange,
@@ -249,7 +249,7 @@ export const RelationSelector = React.forwardRef<
 
         return (
             <>
-                {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
+                {/*{typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}*/}
 
                 <PopoverPrimitive.Root
                     open={isPopoverOpen}
@@ -262,19 +262,18 @@ export const RelationSelector = React.forwardRef<
                             onClick={handleTogglePopover}
                             disabled={disabled}
                             className={cls(
+                                "w-full",
                                 {
-                                    "min-h-[28px]": size === "smallest",
                                     "min-h-[32px]": size === "small",
                                     "min-h-[42px]": size === "medium",
-                                    "min-h-[64px]": size === "large",
                                 },
                                 {
-                                    "py-1": size === "small" || size === "smallest",
-                                    "py-2": size === "medium" || size === "large",
+                                    "py-1": size === "small" ,
+                                    "py-2": size === "medium"
                                 },
                                 {
-                                    "px-2": size === "small" || size === "smallest",
-                                    "px-4": size === "medium" || size === "large",
+                                    "px-2": size === "small" ,
+                                    "px-4": size === "medium",
                                 },
                                 "select-none rounded-md text-sm",
                                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,

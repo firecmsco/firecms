@@ -44,7 +44,7 @@ interface RelationSelectorFieldProps {
     /**
      * Collection size for display
      */
-    size?: CollectionSize;
+    size?: "small" | "medium",
     /**
      * Whether to include entity ID in display
      */
@@ -192,13 +192,6 @@ export function RelationSelectorField({
         return "Select a relation...";
     }, [disabled, multiselect]);
 
-    const sizeMap = {
-        "tiny": "smallest" as const,
-        "small": "small" as const,
-        "medium": "medium" as const,
-        "large": "large" as const
-    };
-
     if (error) {
         return (
             <div className="text-red-500 text-sm p-2">
@@ -213,7 +206,7 @@ export function RelationSelectorField({
             placeholder={placeholder}
             multiple={multiselect}
             disabled={disabled}
-            size={sizeMap[size] || "medium"}
+            size={size}
             value={relationValue}
             onValueChange={handleValueChange}
             onSearch={onSearch}
@@ -238,122 +231,6 @@ export function RelationSelectorField({
                     {includeId ? `${item.label} (${item.id})` : item.label}
                 </span>
             )}
-        />
-    );
-}
-
-/**
- * Simplified version that works like the original TableRelationField
- */
-export function SimpleRelationField({
-    name,
-    disabled = false,
-    internalValue,
-    updateValue,
-    multiselect = false,
-    title = "Select Relations",
-    relation,
-    forceFilter,
-    size = "medium",
-    ...props
-}: RelationSelectorFieldProps) {
-    const collection = relation.target();
-    const dataSource = useDataSource(collection);
-
-    const relationController = useRelationSelector({
-        path: collection.slug,
-        collection,
-        forceFilter,
-        labelProperty: "name"
-    });
-
-    // Convert current EntityRelation value to RelationItem format
-    const relationValue = React.useMemo(async () => {
-        if (!internalValue) return undefined;
-
-        const convert = async (rel: EntityRelation): Promise<RelationItem> => {
-            try {
-                // Fetch the actual entity using the data source
-                const entity = await dataSource.fetchEntity({
-                    path: rel.path,
-                    entityId: rel.id,
-                    collection
-                });
-
-                if (entity) {
-                    return relationController.entityToRelationItem(entity);
-                }
-            } catch (error) {
-                console.warn("Could not fetch entity:", error);
-            }
-
-            return {
-                id: rel.id,
-                label: String(rel.id),
-                data: rel
-            };
-        };
-
-        if (Array.isArray(internalValue)) {
-            return Promise.all(internalValue.map(convert));
-        } else {
-            return convert(internalValue);
-        }
-    }, [internalValue, relationController, dataSource, collection]);
-
-    const handleChange = React.useCallback((newValue: RelationItem | RelationItem[] | undefined) => {
-        if (!newValue) {
-            updateValue(null);
-            return;
-        }
-
-        const convert = (item: RelationItem): EntityRelation => {
-            if (item.data && item.data.isEntityRelation && item.data.isEntityRelation()) {
-                return item.data;
-            }
-
-            const entityRef = relationController.relationItemToEntityReference(item);
-            return getRelationFrom({
-                id: entityRef.id,
-                path: entityRef.path,
-                values: {}
-            });
-        };
-
-        const result = Array.isArray(newValue) ? newValue.map(convert) : convert(newValue);
-        updateValue(result);
-    }, [relationController, updateValue]);
-
-    const [resolvedValue, setResolvedValue] = React.useState<RelationItem | RelationItem[] | undefined>(undefined);
-
-    React.useEffect(() => {
-        let isMounted = true;
-
-        const resolveValue = async () => {
-            const resolved = await relationValue;
-            if (isMounted) {
-                setResolvedValue(resolved);
-            }
-        };
-
-        resolveValue();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [relationValue]);
-
-    return (
-        <RelationSelector
-            label={title}
-            placeholder={disabled ? "Disabled" : `Select ${multiselect ? "multiple " : ""}relations...`}
-            multiple={multiselect}
-            disabled={disabled}
-            value={resolvedValue}
-            onValueChange={handleChange}
-            onSearch={relationController.onSearch}
-            onLoadMore={relationController.onLoadMore}
-            initialItems={relationController.initialItems}
         />
     );
 }
