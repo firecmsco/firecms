@@ -475,8 +475,7 @@ export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, US
 };
 
 /**
- * Use this interface for adding additional fields to entity collection views.
- * If you need to do some async loading you can use {@link AsyncPreviewComponent}
+ * Use this interface for adding additional fields to entity collection views and forms.
  * @group Models
  */
 export interface AdditionalFieldDelegate<M extends Record<string, any> = any,

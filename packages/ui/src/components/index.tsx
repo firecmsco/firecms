@@ -1,3 +1,4 @@
+export * from "./common/SelectInputLabel";
 export * from "./Autocomplete";
 export * from "./Alert";
 export * from "./Avatar";
@@ -44,4 +45,3 @@ export * from "./Popover";
 export * from "./Badge";
 export * from "./DebouncedTextField";
 export * from "./Skeleton";
-

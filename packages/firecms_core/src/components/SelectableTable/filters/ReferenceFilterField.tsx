@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { ReferencePreview } from "../../../preview";
-import { useNavigationController, useEntitySelectionTable } from "../../../hooks";
+import { useNavigationController, useEntitySelectionDialog } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
 import { getReferenceFrom } from "@firecms/common";
 
@@ -109,7 +109,7 @@ export function ReferenceFilterField({
 
     const multiple = multipleSelectOperations.includes(operation);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect: multiple,
             path,
             collection,

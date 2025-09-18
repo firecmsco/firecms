@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, Property, StringProperty } from "@firecms/types";
-import { useEntitySelectionTable, useNavigationController } from "../../hooks";
+import { useEntitySelectionDialog, useNavigationController } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorView } from "../../components";
@@ -69,7 +69,7 @@ function ReferenceAsStringFieldBindingInternal({
         setValue(e ? String(e.id) : null); // TODO: the string casting might be wrong
     }, [setValue]);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect: false,
             path,
             collection,

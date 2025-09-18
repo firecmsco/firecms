@@ -83,7 +83,6 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     } = collection;
 
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-    const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;

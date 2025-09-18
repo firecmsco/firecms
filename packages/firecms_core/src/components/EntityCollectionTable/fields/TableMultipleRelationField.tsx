@@ -6,7 +6,7 @@ import { getRelationFrom } from "@firecms/common";
 
 import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
-import { useEntitySelectionTable } from "../../../hooks";
+import { useEntitySelectionDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { EntityPreviewContainer } from "../../EntityPreview";
 
@@ -54,7 +54,7 @@ export const TableMultipleRelationFieldInternal = React.memo(
 
         const selectedEntityIds = value.map((ref) => ref.id);
 
-        const relationDialogController = useEntitySelectionTable({
+        const relationDialogController = useEntitySelectionDialog({
                 multiselect: true,
                 path: collection.slug,
                 collection,

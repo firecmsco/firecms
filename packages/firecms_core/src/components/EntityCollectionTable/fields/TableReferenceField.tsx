@@ -5,7 +5,7 @@ import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useCustomizationController, useNavigationController, useEntitySelectionTable } from "../../../hooks";
+import { useCustomizationController, useNavigationController, useEntitySelectionDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
@@ -76,7 +76,7 @@ export const TableReferenceFieldInternal = React.memo(
                 : internalValue.id ? [internalValue.id] : [])
             : [];
 
-        const referenceDialogController = useEntitySelectionTable({
+        const referenceDialogController = useEntitySelectionDialog({
                 multiselect,
                 path,
                 collection,

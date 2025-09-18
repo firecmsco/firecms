@@ -102,12 +102,10 @@ export function EntitySelectionTable<M extends Record<string, any>>(
         maxSelection,
     }: EntitySelectionProps<M>) {
 
-    const authController = useAuthController();
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();
     const analyticsController = useAnalyticsController();
-    const customizationController = useCustomizationController();
 
     const path = navigation.resolveDatabasePathsFrom(pathInput);
 

@@ -4,3 +4,6 @@
   - `enumValues` has been renamed to `enum`.
   - `initalSort` has been renamed to `sort`.
   - `initialFilter` has been renamed to `filter`.
+
+- Hooks:
+  - `useReferenceDialog` is not called `useEntitySelectionDialog`

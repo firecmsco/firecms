@@ -13,7 +13,7 @@ import { useNavigationController } from "./useNavigationController";
  * This is the same hook used internally when a reference property is defined.
  * @group Hooks and utilities
  */
-export function useEntitySelectionTable<M extends Record<string, any>>(referenceDialogProps: Omit<EntitySelectionProps<M>, "path"> & {
+export function useEntitySelectionDialog<M extends Record<string, any>>(referenceDialogProps: Omit<EntitySelectionProps<M>, "path"> & {
     path?: string | false;
     onClose?: () => void;
 }): { open: () => void; close: () => void } {
@@ -27,7 +27,7 @@ export function useEntitySelectionTable<M extends Record<string, any>>(reference
             if (!usedCollection)
                 usedCollection = navigation.getCollection(referenceDialogProps.path);
             if (!usedCollection)
-                throw Error("Not able to resolve the collection in useReferenceDialog. Make sure a collection is registered in path " + referenceDialogProps.path);
+                throw Error("Not able to resolve the collection in useEntitySelectionDialog. Make sure a collection is registered in path " + referenceDialogProps.path);
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:

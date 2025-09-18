@@ -1,6 +1,7 @@
 export * from "./data/useDataSource";
 export * from "./data/useCollectionFetch";
 export * from "./data/useEntityFetch";
+export * from "./data/useRelationSelector";
 export * from "./data/save";
 export * from "./data/delete";
 
@@ -19,7 +20,7 @@ export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useLargeLayout";
 
-export * from "./useEntitySelectionTable";
+export * from "./useEntitySelectionDialog";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useCustomizationController";
 export * from "./useBuildNavigationController";

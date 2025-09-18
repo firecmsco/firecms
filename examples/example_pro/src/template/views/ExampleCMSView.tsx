@@ -7,7 +7,7 @@ import {
     EntityReference,
     ReferenceWidget,
     useAuthController,
-    useEntitySelectionTable,
+    useEntitySelectionDialog,
     useSelectionController,
     useSideEntityController,
     useSnackbarController
@@ -37,7 +37,7 @@ export function ExampleCMSView() {
     const authController = useAuthController();
 
     // hook to open a reference dialog
-    const referenceDialog = useEntitySelectionTable({
+    const referenceDialog = useEntitySelectionDialog({
         path: "products",
         onSingleEntitySelected(entity: Entity<Product> | null) {
             snackbarController.open({

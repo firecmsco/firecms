@@ -5,7 +5,7 @@ import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
 import { getRelationFrom, resolveRelationProperty } from "@firecms/common";
 
-import { useEntitySelectionTable } from "../../hooks";
+import { useEntitySelectionDialog } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { RelationPreview } from "../../preview";
 
@@ -53,7 +53,7 @@ export function MultipleRelationFieldBinding({
         setValue(entities.map(e => getRelationFrom(e)));
     }, [setValue]);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect: true,
             path: collection.slug,
             collection,

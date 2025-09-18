@@ -33,8 +33,9 @@ import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
 import { isReadOnly } from "@firecms/common";
 import { TableRelationField } from "./fields/TableRelationField";
+import { RelationSelectorField } from "../RelationSelectorField";
 
-export interface PropertyTableCellProps<T > {
+export interface PropertyTableCellProps<T> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
@@ -68,19 +69,19 @@ function isStorageProperty(property: Property) {
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
     function PropertyTableCell<T, M extends Record<string, any>>({
-                                                                                     propertyKey,
-                                                                                     customFieldValidator,
-                                                                                     value,
-                                                                                     property,
-                                                                                     align,
-                                                                                     width,
-                                                                                     height,
-                                                                                     path,
-                                                                                     entity,
-                                                                                     readonly,
-                                                                                     disabled: disabledProp,
-                                                                                     enablePopupIcon = true
-                                                                                 }: PropertyTableCellProps<T>) {
+                                                                     propertyKey,
+                                                                     customFieldValidator,
+                                                                     value,
+                                                                     property,
+                                                                     align,
+                                                                     width,
+                                                                     height,
+                                                                     path,
+                                                                     entity,
+                                                                     readonly,
+                                                                     disabled: disabledProp,
+                                                                     enablePopupIcon = true
+                                                                 }: PropertyTableCellProps<T>) {
 
         const {
             onValueChange,
@@ -396,6 +397,18 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                             title={property.name ?? propertyKey}
                                             forceFilter={property.forceFilter}
                         />;
+                    innerComponent = <RelationSelectorField name={propertyKey as string}
+                                                            internalValue={internalValue as EntityRelation}
+                                                            updateValue={updateValue}
+                                                            disabled={disabled}
+                                                            size={size}
+                                                            multiselect={false}
+                                                            relation={property.relation}
+                                                            previewProperties={property.previewProperties}
+                                                            includeId={property.includeId}
+                                                            includeEntityLink={property.includeEntityLink}
+                                                            title={property.name ?? propertyKey}
+                                                            forceFilter={property.forceFilter}/>
                     allowScroll = false;
                 }
             } else if (property.type === "array") {

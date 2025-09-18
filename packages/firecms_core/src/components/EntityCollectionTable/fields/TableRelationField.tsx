@@ -5,7 +5,7 @@ import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useEntitySelectionTable } from "../../../hooks";
+import { useEntitySelectionDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
@@ -86,7 +86,7 @@ export const TableRelationFieldInternal = React.memo(
                 : internalValue.id ? [internalValue.id] : [])
             : [];
 
-        const relationDialogController = useEntitySelectionTable({
+        const relationDialogController = useEntitySelectionDialog({
                 multiselect,
                 path: collection.slug,
                 collection,

@@ -130,7 +130,7 @@ export class DrizzleConditionBuilder {
             joinConditions.push(junctionResult.join);
             whereConditions.push(junctionResult.condition);
 
-        } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through) {
+        } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through && !relation.foreignKeyOnTarget) {
             // Handle inverse many-to-many relations without explicit through property
             // Find the corresponding owning relation to get junction table info
             const junctionInfo = this.findCorrespondingJunctionTable(relation, registry);
@@ -285,7 +285,7 @@ export class DrizzleConditionBuilder {
     ): { joinTable: PgTable<any>; condition: SQL; additionalJoins?: { table: PgTable<any>; condition: SQL }[] } {
         let joinTable: PgTable<any>;
         let condition: SQL;
-        let additionalJoins: { table: PgTable<any>; condition: SQL }[] = [];
+        const additionalJoins: { table: PgTable<any>; condition: SQL }[] = [];
 
         if (currentTable === toTable) {
             // current -> toTable, so join the fromTable
@@ -533,6 +533,22 @@ export class DrizzleConditionBuilder {
             if (!foreignKeyCol) {
                 throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table`);
             }
+            return Array.isArray(parentEntityId)
+                ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
+                : eq(foreignKeyCol, parentEntityId);
+
+        } else if (relation.direction === "inverse" && relation.cardinality === "many" && relation.inverseRelationName) {
+            // Auto-infer foreign key column for inverse one-to-many relations
+            // Pattern: {inverseRelationName}_id (e.g., "author" -> "author_id")
+            const inferredForeignKeyName = `${relation.inverseRelationName}_id`;
+            const foreignKeyCol = targetTable[inferredForeignKeyName as keyof typeof targetTable] as AnyPgColumn;
+
+            if (!foreignKeyCol) {
+                throw new Error(`Auto-inferred foreign key column '${inferredForeignKeyName}' not found in target table for inverse relation '${relation.relationName}'. Please specify 'foreignKeyOnTarget' explicitly.`);
+            }
+
+            console.log(`🔍 [DrizzleConditionBuilder] Auto-inferred foreign key '${inferredForeignKeyName}' for inverse relation '${relation.relationName}'`);
+
             return Array.isArray(parentEntityId)
                 ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
                 : eq(foreignKeyCol, parentEntityId);

@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FilterValues, PreviewSize } from "@firecms/types";
 import { getReferenceFrom } from "@firecms/common";
 import { ReferencePreview } from "../preview";
-import { useNavigationController, useEntitySelectionTable } from "../hooks";
+import { useNavigationController, useEntitySelectionDialog } from "../hooks";
 import { Button, cls } from "@firecms/ui";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
@@ -80,7 +80,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
         }
     }, [disabled, onReferenceSelected]);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect,
             path,
             collection,

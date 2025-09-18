@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, FieldProps, Property, ReferenceProperty } from "@firecms/types";
-import { useEntitySelectionTable, useNavigationController } from "../../hooks";
+import { useEntitySelectionDialog, useNavigationController } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer, ErrorView } from "../../components";
@@ -68,7 +68,7 @@ function ReferenceFieldBindingInternal({
         setValue(e ? getReferenceFrom(e) : null);
     }, [setValue]);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect: false,
             path: property.path,
             collection,

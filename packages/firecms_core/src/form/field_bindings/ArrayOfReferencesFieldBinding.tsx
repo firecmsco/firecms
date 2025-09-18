@@ -6,7 +6,7 @@ import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
 import { getReferenceFrom } from "@firecms/common";
 
-import { useEntitySelectionTable, useNavigationController } from "../../hooks";
+import { useEntitySelectionDialog, useNavigationController } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
@@ -62,7 +62,7 @@ export function ArrayOfReferencesFieldBinding({
         setValue(entities.map(e => getReferenceFrom(e)));
     }, [setValue]);
 
-    const referenceDialogController = useEntitySelectionTable({
+    const referenceDialogController = useEntitySelectionDialog({
             multiselect: true,
             path: ofProperty.path,
             collection,

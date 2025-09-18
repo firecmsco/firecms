@@ -20,8 +20,7 @@ import { useInjectStyles } from "../hooks";
 
 export type MultiSelectValue = string | number | boolean;
 
-// Make the context properly generic
-interface MultiSelectContextProps<T extends MultiSelectValue = string> {
+export interface MultiSelectContextProps<T extends MultiSelectValue = string> {
     fieldValue?: T[];
     onItemClick: (v: T) => void;
 }
