@@ -197,7 +197,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                         value: "next-pro"
                     },
                     {
-                        name: "FireCMS Community " + chalk.gray("(MIT licensed version with the base functionality)"),
+                        name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
                         value: "community"
                     }
                 ]
@@ -269,10 +269,12 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                         name: chalk.gray("Enter project id manually"),
                         value: "!_-manual"
                     },
-                    ...(cloudProjects ?? []).map(project => ({
-                        name: project.id,
-                        value: project.id
-                    })),
+                    ...(cloudProjects ?? [])
+                        .filter(project => project?.id)
+                        .map(project => ({
+                            name: project.id,
+                            value: project.id
+                        })),
                     ...(gcpProjects ?? []).map(project => ({
                         name: project.projectId,
                         value: project.projectId
@@ -558,7 +560,6 @@ async function getCloudProjects(env: "prod" | "dev", debug: boolean, onErr?: (e:
             return null;
         }
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
-        console.log("Getting projects from", server + "/projects");
         const response = await axios.get(server + "/projects", {
             headers: {
                 ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
