@@ -1,10 +1,10 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.266",
+  "version": "3.0.0-canary.267",
   "description": "A CLI to perform FireCMS operations",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "source": "src/index.ts",
   "bin": "bin/firecms.js",

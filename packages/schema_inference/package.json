@@ -1,11 +1,11 @@
 {
-  "version": "3.0.0-canary.266",
+  "version": "3.0.0-canary.267",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
     "@types/node": "^20.19.17",
@@ -14,9 +14,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.umd.cjs"
     },
     "./package.json": "./package.json"
   },

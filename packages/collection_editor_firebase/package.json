@@ -1,7 +1,7 @@
 {
   "name": "@firecms/collection_editor_firebase",
   "type": "module",
-  "version": "3.0.0-canary.266",
+  "version": "3.0.0-canary.267",
   "publishConfig": {
     "access": "public"
   },
@@ -26,12 +26,12 @@
   },
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-canary.266",
-    "@firecms/core": "^3.0.0-canary.266",
-    "@firecms/firebase": "^3.0.0-canary.266"
+    "@firecms/collection_editor": "^3.0.0-canary.267",
+    "@firecms/core": "^3.0.0-canary.267",
+    "@firecms/firebase": "^3.0.0-canary.267"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",
