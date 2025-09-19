@@ -9,7 +9,7 @@ import {
 } from "@firecms/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "@firecms/common";
-import { OnCellValueChange, OnColumnResizeParams } from "../common";
+import { DEFAULT_PAGE_SIZE, OnCellValueChange, OnColumnResizeParams } from "../common";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
@@ -140,7 +140,7 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
              setSortBy,
              itemCount,
              setItemCount,
-             pageSize = 50,
+             pageSize = DEFAULT_PAGE_SIZE,
              paginationEnabled,
              checkFilterCombination,
              setPopupCell

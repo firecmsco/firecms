@@ -16,7 +16,7 @@ import {
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
 
-const DEFAULT_PAGE_SIZE = 50;
+export const DEFAULT_PAGE_SIZE = 50;
 
 export type DataSourceTableControllerProps<M extends Record<string, any> = any> = {
     /**

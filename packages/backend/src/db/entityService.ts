@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, inArray, sql, SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, gt, inArray, lt, or, sql, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -662,6 +662,68 @@ export class EntityService {
 
         if (orderExpressions.length > 0) {
             query = query.orderBy(...orderExpressions);
+        }
+
+        // Apply startAfter pagination
+        if (options.startAfter) {
+            const startAfterConditions: SQL[] = [];
+
+            // Handle pagination based on ordering fields
+            if (options.orderBy) {
+                const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+                if (orderByField) {
+                    const startAfterOrderValue = options.startAfter.values?.[options.orderBy] ?? options.startAfter[options.orderBy];
+                    const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
+
+                    if (startAfterOrderValue !== undefined && startAfterId !== undefined) {
+                        const parsedStartAfterId = this.parseIdValue(startAfterId, idInfo.type);
+
+                        if (options.order === "asc") {
+                            // For ascending order: orderBy > startAfter OR (orderBy = startAfter AND id > startAfterId)
+                            startAfterConditions.push(
+                                or(
+                                    gt(orderByField, startAfterOrderValue),
+                                    and(
+                                        eq(orderByField, startAfterOrderValue),
+                                        gt(idField, parsedStartAfterId)
+                                    )
+                                )!
+                            );
+                        } else {
+                            // For descending order: orderBy < startAfter OR (orderBy = startAfter AND id < startAfterId)
+                            startAfterConditions.push(
+                                or(
+                                    lt(orderByField, startAfterOrderValue),
+                                    and(
+                                        eq(orderByField, startAfterOrderValue),
+                                        lt(idField, parsedStartAfterId)
+                                    )
+                                )!
+                            );
+                        }
+                    }
+                }
+            } else {
+                // If no orderBy field, just use ID for pagination
+                const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
+                if (startAfterId !== undefined) {
+                    const parsedStartAfterId = this.parseIdValue(startAfterId, idInfo.type);
+                    // Since default ordering is desc(idField), use lt for pagination
+                    startAfterConditions.push(lt(idField, parsedStartAfterId));
+                }
+            }
+
+            if (startAfterConditions.length > 0) {
+                const startAfterCondition = DrizzleConditionBuilder.combineConditionsWithAnd(startAfterConditions);
+                if (startAfterCondition) {
+                    allConditions.push(startAfterCondition);
+                    // Re-apply all conditions including startAfter
+                    const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+                    if (finalCondition) {
+                        query = query.where(finalCondition);
+                    }
+                }
+            }
         }
 
         // Apply limit (use search default of 50 if searching, otherwise use provided limit)
