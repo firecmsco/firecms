@@ -84,13 +84,13 @@ export function RelationSelectorField({
         isLoading,
         error,
         entityToRelationItem,
-        relationItemToEntityReference
+        relationItemToEntityRelation
     } = useRelationSelector({
         path: collection.slug,
         collection,
         pageSize: 20,
         forceFilter,
-        labelProperty: previewProperties?.[0] as any || "name"
+        labelProperty: previewProperties?.[0] || "name"
     });
 
     // Convert EntityRelation(s) to RelationItem(s) for the component
@@ -145,7 +145,7 @@ export function RelationSelectorField({
             }
 
             // Create a new EntityRelation from the reference
-            const entityRef = relationItemToEntityReference(item);
+            const entityRef = relationItemToEntityRelation(item);
             return getRelationFrom({
                 id: entityRef.id,
                 path: entityRef.path,
@@ -158,7 +158,7 @@ export function RelationSelectorField({
         } else {
             return convertSingle(items);
         }
-    }, [relationItemToEntityReference]);
+    }, [relationItemToEntityRelation]);
 
     // State for the converted relation items
     const [relationValue, setRelationValue] = React.useState<RelationItem | RelationItem[] | undefined>(undefined);
@@ -188,8 +188,8 @@ export function RelationSelectorField({
 
     const placeholder = React.useMemo(() => {
         if (disabled) return "Disabled";
-        if (multiselect) return "Select multiple relations...";
-        return "Select a relation...";
+        if (multiselect) return "Select multiple...";
+        return "Select...";
     }, [disabled, multiselect]);
 
     if (error) {

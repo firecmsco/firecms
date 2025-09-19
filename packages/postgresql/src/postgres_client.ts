@@ -389,7 +389,7 @@ export class PostgresDataSourceClient {
 
     // Subscription methods
     listenCollection<M extends Record<string, any>>(
-        props: FetchCollectionProps,
+        props: FetchCollectionProps<M>,
         onUpdate: (entities: Entity[]) => void,
         onError?: (error: Error) => void
     ): () => void {

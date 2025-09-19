@@ -334,7 +334,7 @@ export const RelationSelector = React.forwardRef<
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
                                         <KeyboardArrowDownIcon
-                                            size={size === "large" ? "medium" : "small"}
+                                            size={size === "medium" ? "medium" : "small"}
                                             className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
                                         />
                                     </div>
