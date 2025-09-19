@@ -1,6 +1,6 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState, useRef } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import {
     CheckIcon,
@@ -53,11 +53,12 @@ export interface RelationSelectorProps {
     padding?: boolean;
     invisible?: boolean;
 
-    // Data fetching props
-    onSearch?: (searchString: string) => Promise<RelationItem[]>;
-    onLoadMore?: (lastItem: RelationItem) => Promise<RelationItem[]>;
-    initialItems?: RelationItem[];
-    pageSize?: number;
+    // Data props - items and state come from parent/hook
+    items: RelationItem[];
+    isLoading?: boolean;
+    hasMore?: boolean;
+    onSearch?: (searchString: string) => void;
+    onLoadMore?: () => void;
     renderItem?: (item: RelationItem) => React.ReactNode;
     renderSelectedItem?: (item: RelationItem) => React.ReactNode;
     renderSelectedItems?: (items: RelationItem[]) => React.ReactNode;
@@ -87,14 +88,15 @@ export const RelationSelector = React.forwardRef<
             open,
             onOpenChange,
             multiple = false,
+            items,
+            isLoading = false,
+            hasMore = false,
             onSearch,
             onLoadMore,
-            initialItems = [],
-            pageSize = 20,
             renderItem,
             renderSelectedItem,
             renderSelectedItems,
-            searchPlaceholder = "Search relations...",
+            searchPlaceholder = "Search...",
             noResultsText = "No relations found.",
             loadingText = "Loading...",
         },
@@ -106,10 +108,11 @@ export const RelationSelector = React.forwardRef<
             return Array.isArray(value) ? value : [value];
         });
         const [searchString, setSearchString] = useState<string>("");
-        const [items, setItems] = useState<RelationItem[]>(initialItems);
-        const [isLoading, setIsLoading] = useState(false);
-        const [hasMore, setHasMore] = useState(true);
-        const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+
+        // Ref for the scrollable container and sentinel element
+        const scrollContainerRef = useRef<HTMLDivElement>(null);
+        const sentinelRef = useRef<HTMLDivElement>(null);
+        const observerRef = useRef<IntersectionObserver | null>(null);
 
         const onPopoverOpenChange = (open: boolean) => {
             setIsPopoverOpen(open);
@@ -129,72 +132,59 @@ export const RelationSelector = React.forwardRef<
             setSelectedValues(newValues);
         }, [value]);
 
-        // Handle search with debouncing
-        useEffect(() => {
-            if (!onSearch) return;
-
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
+        // Callback ref for sentinel element - this ensures the observer is set up after DOM update
+        const sentinelCallbackRef = useCallback((node: HTMLDivElement | null) => {
+            // Clean up existing observer
+            if (observerRef.current) {
+                observerRef.current.disconnect();
+                observerRef.current = null;
             }
 
-            const timeout = setTimeout(async () => {
-                if (searchString.trim()) {
-                    setIsLoading(true);
-                    try {
-                        const results = await onSearch(searchString.trim());
-                        setItems(results);
-                        setHasMore(results.length >= pageSize);
-                    } catch (error) {
-                        console.error("Error searching relations:", error);
-                        setItems([]);
-                    } finally {
-                        setIsLoading(false);
+            // Store the node reference (fix TS2540 error)
+            if (sentinelRef.current !== node) {
+                (sentinelRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+            }
+
+            if (!node) {
+                return;
+            }
+
+            if (!hasMore || isLoading || !onLoadMore) {
+                return;
+            }
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    const entry = entries[0];
+                    if (entry.isIntersecting && hasMore && !isLoading) {
+                        onLoadMore();
                     }
-                } else {
-                    setItems(initialItems);
-                    setHasMore(true);
+                },
+                {
+                    root: scrollContainerRef.current,
+                    rootMargin: '20px',
+                    threshold: 0
                 }
-            }, 300);
+            );
 
-            setSearchTimeout(timeout);
+            observer.observe(node);
+            observerRef.current = observer;
+        }, [hasMore, isLoading, onLoadMore]);
 
-            return () => {
-                if (timeout) clearTimeout(timeout);
-            };
-        }, [searchString, onSearch, initialItems, pageSize]);
-
-        // Load initial items
+        // Clean up observer on unmount
         useEffect(() => {
-            if (!searchString && initialItems.length === 0 && onSearch) {
-                setIsLoading(true);
-                onSearch("")
-                    .then((results) => {
-                        setItems(results);
-                        setHasMore(results.length >= pageSize);
-                    })
-                    .catch((error) => {
-                        console.error("Error loading initial relations:", error);
-                        setItems([]);
-                    })
-                    .finally(() => setIsLoading(false));
-            }
-        }, [onSearch, initialItems.length, pageSize, searchString]);
+            return () => {
+                if (observerRef.current) {
+                    observerRef.current.disconnect();
+                }
+            };
+        }, []);
 
-        const handleLoadMore = useCallback(async () => {
-            if (!onLoadMore || isLoading || !hasMore || items.length === 0) return;
-
-            setIsLoading(true);
-            try {
-                const lastItem = items[items.length - 1];
-                const moreItems = await onLoadMore(lastItem);
-                setItems(prev => [...prev, ...moreItems]);
-                setHasMore(moreItems.length >= pageSize);
-            } catch (error) {
-                console.error("Error loading more relations:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }, [onLoadMore, isLoading, hasMore, items, pageSize]);
+        // Handle search input changes
+        const handleSearchChange = useCallback((newSearchString: string) => {
+            setSearchString(newSearchString);
+            onSearch?.(newSearchString);
+        }, [onSearch]);
 
         const onItemClick = useCallback((item: RelationItem) => {
             let newSelectedValues: RelationItem[];
@@ -249,8 +239,6 @@ export const RelationSelector = React.forwardRef<
 
         return (
             <>
-                {/*{typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}*/}
-
                 <PopoverPrimitive.Root
                     open={isPopoverOpen}
                     onOpenChange={onPopoverOpenChange}
@@ -286,9 +274,13 @@ export const RelationSelector = React.forwardRef<
                                 <div className="flex justify-between items-center w-full">
                                     <div className="flex flex-wrap items-center gap-1.5 text-start">
                                         {renderSelectedItems && renderSelectedItems(selectedValues)}
-                                        {!renderSelectedItems && selectedValues.map((item) => {
+                                        {!renderSelectedItems && selectedValues.map((item, index) => {
                                             if (!useChips || !multiple) {
-                                                return renderSelectedItem ? renderSelectedItem(item) : item.label;
+                                                return (
+                                                    <span key={String(item.id)}>
+                                                        {renderSelectedItem ? renderSelectedItem(item) : item.label}
+                                                    </span>
+                                                );
                                             }
                                             return (
                                                 <Chip
@@ -309,22 +301,6 @@ export const RelationSelector = React.forwardRef<
                                         })}
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        {includeClear && (
-                                            <CloseIcon
-                                                className={"ml-4"}
-                                                size={"small"}
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                    handleClear();
-                                                }}
-                                            />
-                                        )}
-                                        <div className={cls("px-2 h-full flex items-center")}>
-                                            <KeyboardArrowDownIcon
-                                                size={size === "large" ? "medium" : "small"}
-                                                className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
-                                            />
-                                        </div>
                                     </div>
                                 </div>
                             ) : (
@@ -348,7 +324,7 @@ export const RelationSelector = React.forwardRef<
                         sideOffset={8}
                         onEscapeKeyDown={() => onPopoverOpenChange(false)}
                     >
-                        <CommandPrimitive>
+                        <CommandPrimitive shouldFilter={false}>
                             <div className={"flex flex-row items-center"}>
                                 <div className="relative flex-1">
                                     <SearchIcon
@@ -358,9 +334,15 @@ export const RelationSelector = React.forwardRef<
                                         className={cls(focusedDisabled, "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3")}
                                         placeholder={searchPlaceholder}
                                         value={searchString}
-                                        onValueChange={setSearchString}
+                                        onValueChange={handleSearchChange}
                                     />
                                 </div>
+                                {/* Loading indicator when loading more items */}
+                                {isLoading && (
+                                    <div className="flex items-center justify-center px-3">
+                                        <CircularProgress size="smallest"/>
+                                    </div>
+                                )}
                                 {selectedValues.length > 0 && (
                                     <div
                                         onClick={handleClear}
@@ -371,7 +353,10 @@ export const RelationSelector = React.forwardRef<
                                 )}
                             </div>
                             <Separator orientation={"horizontal"} className={"my-0"}/>
-                            <CommandPrimitive.List>
+                            <CommandPrimitive.List
+                                ref={scrollContainerRef}
+                                style={{ maxHeight: '45vh', overflowY: 'auto' }}
+                            >
                                 {isLoading && items.length === 0 && (
                                     <div className="flex items-center justify-center py-6">
                                         <CircularProgress size="small"/>
@@ -396,6 +381,7 @@ export const RelationSelector = React.forwardRef<
                                         return (
                                             <CommandPrimitive.Item
                                                 key={String(item.id)}
+                                                value={String(item.id)}
                                                 onMouseDown={(e) => {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -432,20 +418,22 @@ export const RelationSelector = React.forwardRef<
                                         );
                                     })}
 
-                                    {hasMore && onLoadMore && !isLoading && items.length > 0 && (
-                                        <div className="p-2">
-                                            <button
-                                                onClick={handleLoadMore}
-                                                className="w-full text-sm text-primary hover:text-primary-dark py-2 text-center"
-                                            >
-                                                Load more...
-                                            </button>
-                                        </div>
+                                    {/* Sentinel element for intersection observer - invisible trigger for infinite scroll */}
+                                    {items.length > 0 && hasMore && (
+                                        <div
+                                            ref={sentinelCallbackRef}
+                                            className="h-1 w-full"
+                                            style={{ visibility: 'hidden' }}
+                                        />
                                     )}
 
+                                    {/* Loading indicator when loading more items */}
                                     {isLoading && items.length > 0 && (
-                                        <div className="flex items-center justify-center py-2">
+                                        <div className="flex items-center justify-center py-4">
                                             <CircularProgress size="smallest"/>
+                                            <span className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">
+                                                Loading more...
+                                            </span>
                                         </div>
                                     )}
                                 </CommandPrimitive.Group>

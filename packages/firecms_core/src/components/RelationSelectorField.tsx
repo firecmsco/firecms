@@ -76,19 +76,19 @@ export function RelationSelectorField({
     const collection = relation.target();
     const dataSource = useDataSource(collection);
 
-    // Use the relation selector hook to handle data fetching
+    // Use the relation selector hook to handle ALL data fetching
     const {
-        onSearch,
-        onLoadMore,
-        initialItems,
+        items,
         isLoading,
         error,
+        search,
+        loadMore,
+        hasMore,
         entityToRelationItem,
         relationItemToEntityRelation
     } = useRelationSelector({
         path: collection.slug,
         collection,
-        pageSize: 20,
         forceFilter,
         labelProperty: previewProperties?.[0] || "name"
     });
@@ -209,10 +209,12 @@ export function RelationSelectorField({
             size={size}
             value={relationValue}
             onValueChange={handleValueChange}
-            onSearch={onSearch}
-            onLoadMore={onLoadMore}
-            initialItems={initialItems}
-            searchPlaceholder="Search relations..."
+            items={items}
+            isLoading={isLoading}
+            hasMore={hasMore}
+            onSearch={search}
+            onLoadMore={loadMore}
+            searchPlaceholder="Search..."
             noResultsText="No relations found"
             loadingText="Loading relations..."
             renderItem={(item) => (

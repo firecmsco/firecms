@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useDataSource } from "../../hooks";
-import { Entity, EntityCollection, EntityRelation, FilterValues, User } from "@firecms/types";
+import { Entity, EntityCollection, EntityRelation, FilterValues } from "@firecms/types";
 import { RelationItem } from "../../components/RelationSelector";
 
 export interface UseRelationSelectorProps<M extends Record<string, any> = any> {
@@ -39,16 +39,17 @@ export interface UseRelationSelectorProps<M extends Record<string, any> = any> {
 }
 
 export interface RelationSelectorController {
-    onSearch: (searchString: string) => Promise<RelationItem[]>;
-    onLoadMore: (lastItem: RelationItem) => Promise<RelationItem[]>;
-    initialItems: RelationItem[];
+    items: RelationItem[];
     isLoading: boolean;
     error: Error | undefined;
+    search: (searchString: string) => void;
+    loadMore: () => void;
+    hasMore: boolean;
     entityToRelationItem: (entity: Entity<any>) => RelationItem;
     relationItemToEntityRelation: (item: RelationItem) => EntityRelation;
 }
 
-const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE_SIZE = 10;
 
 /**
  * Hook to manage relation selection with data fetching from FireCMS data source
@@ -68,11 +69,15 @@ export function useRelationSelector<M extends Record<string, any> = any>(
 
     const dataSource = useDataSource(collection);
 
-    const [initialItems, setInitialItems] = useState<RelationItem[]>([]);
+    const [items, setItems] = useState<RelationItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | undefined>();
+    const [hasMore, setHasMore] = useState(true);
+    const [currentSearch, setCurrentSearch] = useState<string>("");
+    const [lastEntity, setLastEntity] = useState<Entity<M> | undefined>(undefined);
 
-    const initialUnsubscribeRef = useRef<(() => void) | null>(null);
+    const unsubscribeRef = useRef<(() => void) | null>(null);
+    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Function to convert entity to RelationItem
     const entityToRelationItem = useCallback((entity: Entity<M>): RelationItem => {
@@ -81,18 +86,28 @@ export function useRelationSelector<M extends Record<string, any> = any>(
 
         if (getLabelFromEntity) {
             label = getLabelFromEntity(entity);
-        } else if (labelProperty && entity.values[labelProperty]) {
+        } else if (labelProperty && entity.values && entity.values[labelProperty]) {
             label = String(entity.values[labelProperty]);
         } else {
             // Fallback: try common label properties
             const commonLabelProps = ["name", "title", "label", "displayName"];
-            const foundProp = commonLabelProps.find(prop => entity.values[prop]);
-            label = foundProp ? String(entity.values[foundProp]) : String(entity.id);
+            let foundProp: string | undefined;
+
+            if (entity.values) {
+                foundProp = commonLabelProps.find(prop => entity.values[prop] != null && entity.values[prop] !== "");
+            }
+
+            if (foundProp && entity.values[foundProp]) {
+                label = String(entity.values[foundProp]);
+            } else {
+                // Ultimate fallback: use entity ID
+                label = String(entity.id);
+            }
         }
 
         if (getDescriptionFromEntity) {
             description = getDescriptionFromEntity(entity);
-        } else if (descriptionProperty && entity.values[descriptionProperty]) {
+        } else if (descriptionProperty && entity.values && entity.values[descriptionProperty]) {
             description = String(entity.values[descriptionProperty]);
         }
 
@@ -104,123 +119,101 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         };
     }, [getLabelFromEntity, getDescriptionFromEntity, labelProperty, descriptionProperty]);
 
-    // Function to convert RelationItem back to EntityReference
-    const relationItemToEntityReference = useCallback((item: RelationItem): EntityRelation => {
+    // Function to convert RelationItem back to EntityRelation
+    const relationItemToEntityRelation = useCallback((item: RelationItem): EntityRelation => {
         return new EntityRelation(item.id, path);
     }, [path]);
 
-    // Search function - returns a Promise that resolves when data is received
-    const onSearch = useCallback(async (searchString: string): Promise<RelationItem[]> => {
-        return new Promise<RelationItem[]>((resolve, reject) => {
-            setError(undefined);
-
-            const unsubscribe = dataSource.listenCollection!<M>({
-                path,
-                collection,
-                onUpdate: (entities) => {
-                    const items = entities.map(entityToRelationItem);
-                    // Clean up subscription immediately after getting results
-                    unsubscribe();
-                    resolve(items);
-                },
-                onError: (fetchError) => {
-                    setError(fetchError);
-                    unsubscribe();
-                    reject(fetchError);
-                },
-                searchString,
-                filter: forceFilter,
-                limit: pageSize,
-                orderBy: labelProperty as string,
-                order: "asc"
-            });
-        });
-    }, [dataSource, path, collection, forceFilter, pageSize, labelProperty, entityToRelationItem]);
-
-    // Load more function - returns a Promise that resolves when more data is received
-    const onLoadMore = useCallback(async (lastItem: RelationItem): Promise<RelationItem[]> => {
-        return new Promise<RelationItem[]>((resolve, reject) => {
-            setError(undefined);
-
-            const lastEntity = lastItem.data as Entity<M>;
-
-            const unsubscribe = dataSource.listenCollection!<M>({
-                path,
-                collection,
-                onUpdate: (entities) => {
-                    const items = entities.map(entityToRelationItem);
-                    // Clean up subscription immediately after getting results
-                    unsubscribe();
-                    resolve(items);
-                },
-                onError: (fetchError) => {
-                    setError(fetchError);
-                    unsubscribe();
-                    reject(fetchError);
-                },
-                filter: forceFilter,
-                limit: pageSize,
-                startAfter: lastEntity,
-                orderBy: labelProperty as string,
-                order: "asc"
-            });
-        });
-    }, [dataSource, path, collection, forceFilter, pageSize, labelProperty, entityToRelationItem]);
-
-    // Load initial items and maintain subscription for real-time updates
-    useEffect(() => {
-        setIsLoading(true);
-        setError(undefined);
-
-        // Clean up previous subscription
-        if (initialUnsubscribeRef.current) {
-            initialUnsubscribeRef.current();
+    // Clean up any existing subscription
+    const cleanupSubscription = useCallback(() => {
+        if (unsubscribeRef.current) {
+            unsubscribeRef.current();
+            unsubscribeRef.current = null;
         }
+    }, []);
+
+    // Perform data fetch
+    const fetchData = useCallback((searchString: string, loadMore: boolean = false) => {
+        cleanupSubscription();
+        setError(undefined);
+        setIsLoading(true);
 
         const unsubscribe = dataSource.listenCollection!<M>({
             path,
             collection,
             onUpdate: (entities) => {
-                const items = entities.map(entityToRelationItem);
-                setInitialItems(items);
+                const newItems = entities.map(entityToRelationItem);
+
+                if (loadMore) {
+                    setItems(prev => [...prev, ...newItems]);
+                } else {
+                    setItems(newItems);
+                }
+
+                // Set hasMore based on whether we got a full page of results
+                setHasMore(entities.length === pageSize);
+                setLastEntity(entities[entities.length - 1]);
                 setIsLoading(false);
             },
             onError: (fetchError) => {
+                console.error("useRelationSelector: Error fetching data:", fetchError);
                 setError(fetchError);
                 setIsLoading(false);
-                console.error("Error loading initial relation items:", fetchError);
             },
+            searchString,
             filter: forceFilter,
             limit: pageSize,
+            startAfter: loadMore ? lastEntity : undefined,
             orderBy: labelProperty as string,
             order: "asc"
         });
 
-        initialUnsubscribeRef.current = unsubscribe;
+        unsubscribeRef.current = unsubscribe;
+    }, [dataSource, path, collection, forceFilter, pageSize, labelProperty, entityToRelationItem, cleanupSubscription, lastEntity]);
 
-        return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
-        };
-    }, [dataSource, path, collection, forceFilter, pageSize, labelProperty, entityToRelationItem]);
+    // Search function with debouncing
+    const search = useCallback((searchString: string) => {
+        setCurrentSearch(searchString);
 
-    // Cleanup subscriptions on unmount
+        // Clear existing timeout
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+
+        // Debounce search
+        searchTimeoutRef.current = setTimeout(() => {
+            setLastEntity(undefined);
+            fetchData(searchString, false);
+        }, searchString.trim() ? 300 : 0);
+    }, [fetchData]);
+
+    // Load more function
+    const loadMore = useCallback(() => {
+        if (!isLoading && hasMore && items.length > 0) {
+            fetchData(currentSearch, true);
+        }
+    }, [isLoading, hasMore, items.length, fetchData, currentSearch]);
+
+    // Load initial data
     useEffect(() => {
+        fetchData("", false);
+
         return () => {
-            if (initialUnsubscribeRef.current) {
-                initialUnsubscribeRef.current();
+            cleanupSubscription();
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current);
             }
         };
-    }, []);
+    }, [path, collection.slug, forceFilter, labelProperty]);
 
     return {
-        onSearch,
-        onLoadMore,
-        initialItems,
+        items,
         isLoading,
         error,
+        search,
+        loadMore,
+        hasMore,
         entityToRelationItem,
-        relationItemToEntityRelation: relationItemToEntityReference
+        relationItemToEntityRelation
     };
 }

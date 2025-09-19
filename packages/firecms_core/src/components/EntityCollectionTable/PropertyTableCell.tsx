@@ -33,7 +33,7 @@ import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
 import { isReadOnly } from "@firecms/common";
 import { TableRelationField } from "./fields/TableRelationField";
-import { RelationSelectorField, SimpleRelationField } from "../RelationSelectorField";
+import { RelationSelectorField } from "../RelationSelectorField";
 
 export interface PropertyTableCellProps<T> {
     propertyKey: string;
@@ -383,32 +383,36 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 allowScroll = false;
             } else if (property.type === "relation") {
                 if (property.relation) {
-                    innerComponent =
-                        <TableRelationField name={propertyKey as string}
-                                            internalValue={internalValue as EntityRelation}
-                                            updateValue={updateValue}
-                                            disabled={disabled}
-                                            size={size}
-                                            multiselect={false}
-                                            relation={property.relation}
-                                            previewProperties={property.previewProperties}
-                                            includeId={property.includeId}
-                                            includeEntityLink={property.includeEntityLink}
-                                            title={property.name ?? propertyKey}
-                                            forceFilter={property.forceFilter}
-                        />;
-                    innerComponent = <RelationSelectorField name={propertyKey as string}
-                                                            internalValue={internalValue as EntityRelation}
-                                                            updateValue={updateValue}
-                                                            disabled={disabled}
-                                                            size={"medium"}
-                                                            multiselect={false}
-                                                            relation={property.relation}
-                                                            previewProperties={property.previewProperties}
-                                                            includeId={property.includeId}
-                                                            includeEntityLink={property.includeEntityLink}
-                                                            title={property.name ?? propertyKey}
-                                                            forceFilter={property.forceFilter}/>
+                    // innerComponent =
+                    //     <TableRelationField name={propertyKey as string}
+                    //                         internalValue={internalValue as EntityRelation}
+                    //                         updateValue={updateValue}
+                    //                         disabled={disabled}
+                    //                         size={size}
+                    //                         multiselect={false}
+                    //                         relation={property.relation}
+                    //                         previewProperties={property.previewProperties}
+                    //                         includeId={property.includeId}
+                    //                         includeEntityLink={property.includeEntityLink}
+                    //                         title={property.name ?? propertyKey}
+                    //                         forceFilter={property.forceFilter}
+                    //     />;
+                    if (entity.id === "20") {
+                        innerComponent = <RelationSelectorField name={propertyKey as string}
+                                                                internalValue={internalValue as EntityRelation}
+                                                                updateValue={updateValue}
+                                                                disabled={disabled}
+                                                                size={"medium"}
+                                                                multiselect={false}
+                                                                relation={property.relation}
+                                                                previewProperties={property.previewProperties}
+                                                                includeId={property.includeId}
+                                                                includeEntityLink={property.includeEntityLink}
+                                                                title={property.name ?? propertyKey}
+                                                                forceFilter={property.forceFilter}/>
+                    } else {
+                        innerComponent = null;
+                    }
                     allowScroll = false;
                 }
             } else if (property.type === "array") {
