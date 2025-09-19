@@ -53,7 +53,7 @@ export class PostgresDataSourceClient {
         onError?: (error: Error) => void
     }>();
 
-    // New: Subscription deduplication management
+    // New: Subscription deduplication management with optimizations
     private collectionSubscriptions = new Map<string, {
         backendSubscriptionId: string;
         callbacks: Map<string, {
@@ -62,6 +62,8 @@ export class PostgresDataSourceClient {
         }>;
         props: FetchCollectionProps;
         latestData?: Entity[]; // Cache the latest data
+        lastUpdated?: number; // Timestamp for cache invalidation
+        isInitialDataReceived?: boolean; // Track if we got initial data
     }>();
 
     private entitySubscriptions = new Map<string, {
@@ -72,11 +74,28 @@ export class PostgresDataSourceClient {
         }>;
         props: FetchEntityProps;
         latestData?: Entity | null; // Cache the latest data
+        lastUpdated?: number; // Timestamp for cache invalidation
+        isInitialDataReceived?: boolean; // Track if we got initial data
     }>();
 
     // Maps to quickly find subscription by backend subscription ID
     private backendToCollectionKey = new Map<string, string>();
     private backendToEntityKey = new Map<string, string>();
+
+    // Optimization: Debounce subscription creation to handle rapid component mounting/unmounting
+    private pendingSubscriptions = new Map<string, {
+        timer: NodeJS.Timeout;
+        callbacks: Array<{
+            onUpdate: (entities: Entity[]) => void;
+            onError?: (error: Error) => void;
+            callbackId: string;
+        }>;
+        props: FetchCollectionProps;
+    }>();
+
+    // Optimization: Connection status tracking
+    private connectionPromise: Promise<void> | null = null;
+    private isReconnecting = false;
 
     private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void }>();
     private reconnectAttempts = 0;
@@ -180,8 +199,11 @@ export class PostgresDataSourceClient {
                 const collectionSub = this.collectionSubscriptions.get(subscriptionKey);
                 if (collectionSub) {
                     const entities = message.entities || [];
-                    // Cache the latest data
+                    // Cache the latest data with optimizations
                     collectionSub.latestData = entities;
+                    collectionSub.lastUpdated = Date.now();
+                    collectionSub.isInitialDataReceived = true;
+
                     // Notify all callbacks for this subscription
                     collectionSub.callbacks.forEach(callback => {
                         try {
@@ -205,8 +227,11 @@ export class PostgresDataSourceClient {
                 const entitySub = this.entitySubscriptions.get(subscriptionKey);
                 if (entitySub) {
                     const entity = message.entity ?? null;
-                    // Cache the latest data
+                    // Cache the latest data with optimizations
                     entitySub.latestData = entity;
+                    entitySub.lastUpdated = Date.now();
+                    entitySub.isInitialDataReceived = true;
+
                     // Notify all callbacks for this subscription
                     entitySub.callbacks.forEach(callback => {
                         try {
@@ -383,7 +408,7 @@ export class PostgresDataSourceClient {
             callbackMap.set(callbackId, { onUpdate, onError });
 
             // Immediately fire the callback with cached data if available
-            if (existingSubscription.latestData !== undefined) {
+            if (existingSubscription.latestData !== undefined && existingSubscription.isInitialDataReceived) {
                 try {
                     onUpdate(existingSubscription.latestData);
                 } catch (error) {
@@ -479,7 +504,7 @@ export class PostgresDataSourceClient {
             callbackMap.set(callbackId, { onUpdate, onError });
 
             // Immediately fire the callback with cached data if available
-            if (existingSubscription.latestData !== undefined) {
+            if (existingSubscription.latestData !== undefined && existingSubscription.isInitialDataReceived) {
                 try {
                     onUpdate(existingSubscription.latestData);
                 } catch (error) {
