@@ -1,8 +1,9 @@
 import React from "react";
-import { useRelationSelector, useDataSource } from "../hooks";
-import { EntityRelation, Relation, FilterValues, CollectionSize } from "@firecms/types";
+import { useDataSource, useRelationSelector } from "../hooks";
+import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { getRelationFrom } from "@firecms/common";
 import { RelationItem, RelationSelector } from "./RelationSelector";
+import { EntityPreview, EntityPreviewData } from "./EntityPreview";
 
 interface RelationSelectorFieldProps {
     /**
@@ -59,19 +60,19 @@ interface RelationSelectorFieldProps {
  * RelationSelector component that matches TableRelationField API
  */
 export function RelationSelectorField({
-    name,
-    disabled = false,
-    internalValue,
-    updateValue,
-    multiselect = false,
-    previewProperties,
-    title = "Select Relations",
-    relation,
-    forceFilter,
-    size = "medium",
-    includeId = false,
-    includeEntityLink = false
-}: RelationSelectorFieldProps) {
+                                          name,
+                                          disabled = false,
+                                          internalValue,
+                                          updateValue,
+                                          multiselect = false,
+                                          previewProperties,
+                                          title = "Select Relations",
+                                          relation,
+                                          forceFilter,
+                                          size = "medium",
+                                          includeId = false,
+                                          includeEntityLink = false
+                                      }: RelationSelectorFieldProps) {
 
     const collection = relation.target();
     const dataSource = useDataSource(collection);
@@ -117,7 +118,7 @@ export function RelationSelectorField({
             return {
                 id: rel.id,
                 label: String(rel.id),
-                data: rel
+                relation: rel
             };
         };
 
@@ -135,7 +136,7 @@ export function RelationSelectorField({
 
         const convertSingle = (item: RelationItem): EntityRelation => {
             // If the item data is already an EntityRelation, use it
-            if (item.data && item.data.isEntityRelation && item.data.isEntityRelation()) {
+            if (item.data && item.data instanceof EntityRelation) {
                 return item.data;
             }
 
@@ -218,20 +219,26 @@ export function RelationSelectorField({
             noResultsText="No relations found"
             loadingText="Loading relations..."
             renderItem={(item) => (
-                <div>
-                    <div className="font-medium">{item.label}</div>
-                    {item.description && (
-                        <div className="text-xs text-gray-500">{item.description}</div>
-                    )}
-                    {includeId && (
-                        <div className="text-xs text-gray-400">ID: {item.id}</div>
-                    )}
+                <div className="flex flex-row items-center gap-2">
+                    {item.data && <EntityPreviewData
+                        includeImage={false}
+                        entity={item.data}
+                        includeId={false}/>}
+                    {/*<div className="font-medium">{item.label}</div>*/}
+                    {/*{item.description && (*/}
+                    {/*    <div className="text-xs text-gray-500">{item.description}</div>*/}
+                    {/*)}*/}
+                    {/*{includeId && (*/}
+                    {/*    <div className="text-xs text-gray-400">ID: {item.id}</div>*/}
+                    {/*)}*/}
                 </div>
             )}
             renderSelectedItem={(item) => (
-                <span className="font-medium">
-                    {includeId ? `${item.label} (${item.id})` : item.label}
-                </span>
+                <div className="flex flex-row items-center gap-2">
+                    <EntityPreviewData entity={item.data as Entity}
+                                       includeEntityLink={false}
+                                       includeId={false}/>
+                </div>
             )}
         />
     );

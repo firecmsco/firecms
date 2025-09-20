@@ -1,6 +1,6 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
-import { ChangeEvent, useCallback, useEffect, useState, useRef } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import {
     CheckIcon,
@@ -16,16 +16,17 @@ import {
     focusedDisabled,
     KeyboardArrowDownIcon,
     SearchIcon,
-    SelectInputLabel,
     Separator,
     useInjectStyles
 } from "@firecms/ui";
+import { Entity, EntityRelation } from "@firecms/types";
 
 export interface RelationItem {
     id: string | number;
     label: string;
     description?: string;
-    data?: any;
+    data?: Entity;
+    relation: EntityRelation
 }
 
 export interface RelationSelectorProps {
@@ -162,7 +163,7 @@ export const RelationSelector = React.forwardRef<
                 },
                 {
                     root: scrollContainerRef.current,
-                    rootMargin: '20px',
+                    rootMargin: "20px",
                     threshold: 0
                 }
             );
@@ -242,7 +243,7 @@ export const RelationSelector = React.forwardRef<
                 <PopoverPrimitive.Root
                     open={isPopoverOpen}
                     onOpenChange={onPopoverOpenChange}
-                    modal={modalPopover}
+                    modal={false}
                 >
                     <PopoverPrimitive.Trigger asChild>
                         <button
@@ -256,11 +257,11 @@ export const RelationSelector = React.forwardRef<
                                     "min-h-[42px]": size === "medium",
                                 },
                                 {
-                                    "py-1": size === "small" ,
+                                    "py-1": size === "small",
                                     "py-2": size === "medium"
                                 },
                                 {
-                                    "px-2": size === "small" ,
+                                    "px-2": size === "small",
                                     "px-4": size === "medium",
                                 },
                                 "select-none rounded-md text-sm",
@@ -276,11 +277,7 @@ export const RelationSelector = React.forwardRef<
                                         {renderSelectedItems && renderSelectedItems(selectedValues)}
                                         {!renderSelectedItems && selectedValues.map((item, index) => {
                                             if (!useChips || !multiple) {
-                                                return (
-                                                    <span key={String(item.id)}>
-                                                        {renderSelectedItem ? renderSelectedItem(item) : item.label}
-                                                    </span>
-                                                );
+                                                return (renderSelectedItem ? renderSelectedItem(item) : item.label);
                                             }
                                             return (
                                                 <Chip
@@ -300,8 +297,10 @@ export const RelationSelector = React.forwardRef<
                                             );
                                         })}
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                    </div>
+                                    <KeyboardArrowDownIcon
+                                        size={size === "medium" ? "medium" : "small"}
+                                        className={cls("transition ml-2", isPopoverOpen ? "rotate-180" : "")}
+                                    />
                                 </div>
                             ) : (
                                 <div className="flex items-center justify-between w-full mx-auto">
@@ -318,128 +317,140 @@ export const RelationSelector = React.forwardRef<
                             )}
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Content
-                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
-                        align="start"
-                        sideOffset={8}
-                        onEscapeKeyDown={() => onPopoverOpenChange(false)}
-                    >
-                        <CommandPrimitive shouldFilter={false}>
-                            <div className={"flex flex-row items-center"}>
-                                <div className="relative flex-1">
-                                    <SearchIcon
-                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark"
-                                        size="small"/>
-                                    <CommandPrimitive.Input
-                                        className={cls(focusedDisabled, "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3")}
-                                        placeholder={searchPlaceholder}
-                                        value={searchString}
-                                        onValueChange={handleSearchChange}
-                                    />
-                                </div>
-                                {/* Loading indicator when loading more items */}
-                                {isLoading && (
-                                    <div className="flex items-center justify-center px-3">
-                                        <CircularProgress size="smallest"/>
-                                    </div>
-                                )}
-                                {selectedValues.length > 0 && (
-                                    <div
-                                        onClick={handleClear}
-                                        className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark"
-                                    >
-                                        Clear
-                                    </div>
-                                )}
-                            </div>
-                            <Separator orientation={"horizontal"} className={"my-0"}/>
-                            <CommandPrimitive.List
-                                ref={scrollContainerRef}
-                                style={{ maxHeight: '45vh', overflowY: 'auto' }}
-                            >
-                                {isLoading && items.length === 0 && (
-                                    <div className="flex items-center justify-center py-6">
-                                        <CircularProgress size="small"/>
-                                        <span
-                                            className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">
-                                            {loadingText}
-                                        </span>
-                                    </div>
-                                )}
-
-                                {!isLoading && items.length === 0 && (
-                                    <CommandPrimitive.Empty
-                                        className={"px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark"}>
-                                        {noResultsText}
-                                    </CommandPrimitive.Empty>
-                                )}
-
-                                <CommandPrimitive.Group>
-                                    {items.map((item) => {
-                                        const isSelected = selectedValues.some(v => String(v.id) === String(item.id));
-
-                                        return (
-                                            <CommandPrimitive.Item
-                                                key={String(item.id)}
-                                                value={String(item.id)}
-                                                onMouseDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                }}
-                                                onSelect={() => onItemClick(item)}
-                                                className={cls(
-                                                    "flex flex-row items-center gap-1.5",
-                                                    isSelected ? "bg-surface-accent-200 dark:bg-surface-accent-950" : "",
-                                                    "cursor-pointer",
-                                                    "m-1",
-                                                    "ring-offset-transparent",
-                                                    "p-1 rounded-xs aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2",
-                                                    "aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
-                                                    "cursor-pointer p-2 rounded-xs aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
-                                                )}
-                                            >
-                                                {multiple && (
-                                                    <InnerCheckBox checked={isSelected}/>
-                                                )}
-                                                <div className="flex-1">
-                                                    {renderItem ? renderItem(item) : (
-                                                        <div>
-                                                            <div className="text-sm font-medium">{item.label}</div>
-                                                            {item.description && (
-                                                                <div
-                                                                    className="text-xs text-text-secondary dark:text-text-secondary-dark">
-                                                                    {item.description}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </CommandPrimitive.Item>
-                                        );
-                                    })}
-
-                                    {/* Sentinel element for intersection observer - invisible trigger for infinite scroll */}
-                                    {items.length > 0 && hasMore && (
-                                        <div
-                                            ref={sentinelCallbackRef}
-                                            className="h-1 w-full"
-                                            style={{ visibility: 'hidden' }}
+                    <PopoverPrimitive.Portal container={typeof document !== 'undefined' ? document.body : undefined}>
+                        <PopoverPrimitive.Content
+                            className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg", defaultBorderMixin)}
+                            align="start"
+                            sideOffset={8}
+                            avoidCollisions={true}
+                            collisionPadding={16}
+                            onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                            style={{
+                                zIndex: 9999,
+                                width: "var(--radix-popover-trigger-width)"
+                            }}
+                        >
+                            <CommandPrimitive shouldFilter={false}>
+                                <div className={"flex flex-row items-center"}>
+                                    <div className="relative flex-1">
+                                        <SearchIcon
+                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark"
+                                            size="small"/>
+                                        <CommandPrimitive.Input
+                                            className={cls(focusedDisabled, "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3 text-text-primary dark:text-text-primary-dark placeholder:text-text-secondary dark:placeholder:text-text-secondary-dark")}
+                                            placeholder={searchPlaceholder}
+                                            value={searchString}
+                                            onValueChange={handleSearchChange}
                                         />
-                                    )}
-
+                                    </div>
                                     {/* Loading indicator when loading more items */}
-                                    {isLoading && items.length > 0 && (
-                                        <div className="flex items-center justify-center py-4">
+                                    {isLoading && (
+                                        <div className="flex items-center justify-center px-3">
                                             <CircularProgress size="smallest"/>
-                                            <span className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">
-                                                Loading more...
+                                        </div>
+                                    )}
+                                    {selectedValues.length > 0 && (
+                                        <div
+                                            onClick={handleClear}
+                                            className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark"
+                                        >
+                                            Clear
+                                        </div>
+                                    )}
+                                </div>
+                                <Separator orientation={"horizontal"} className={"my-0"}/>
+                                <CommandPrimitive.List
+                                    ref={scrollContainerRef}
+                                    style={{
+                                        maxHeight: "45vh",
+                                        overflowY: "auto"
+                                    }}
+                                >
+                                    {isLoading && items.length === 0 && (
+                                        <div className="flex items-center justify-center py-6">
+                                            <CircularProgress size="small"/>
+                                            <span
+                                                className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">
+                                                {loadingText}
                                             </span>
                                         </div>
                                     )}
-                                </CommandPrimitive.Group>
-                            </CommandPrimitive.List>
-                        </CommandPrimitive>
-                    </PopoverPrimitive.Content>
+
+                                    {!isLoading && items.length === 0 && (
+                                        <CommandPrimitive.Empty
+                                            className={"px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark"}>
+                                            {noResultsText}
+                                        </CommandPrimitive.Empty>
+                                    )}
+
+                                    <CommandPrimitive.Group>
+                                        {items.map((item) => {
+                                            const isSelected = selectedValues.some(v => String(v.id) === String(item.id));
+
+                                            return (
+                                                <CommandPrimitive.Item
+                                                    key={String(item.id)}
+                                                    value={String(item.id)}
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onSelect={() => onItemClick(item)}
+                                                    className={cls(
+                                                        "flex flex-row items-center gap-1.5",
+                                                        isSelected ? "bg-surface-accent-200 dark:bg-surface-accent-950" : "",
+                                                        "cursor-pointer",
+                                                        "m-1",
+                                                        "ring-offset-transparent",
+                                                        "p-1 rounded-xs aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2",
+                                                        "aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
+                                                        "cursor-pointer rounded-xs aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
+                                                    )}
+                                                >
+                                                    {multiple && (
+                                                        <InnerCheckBox checked={isSelected}/>
+                                                    )}
+                                                    <div className="flex-1">
+                                                        {renderItem ? renderItem(item) : (
+                                                            <div>
+                                                                <div className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
+                                                                {item.description && (
+                                                                    <div
+                                                                        className="text-xs text-text-secondary dark:text-text-secondary-dark">
+                                                                        {item.description}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </CommandPrimitive.Item>
+                                            );
+                                        })}
+
+                                        {/* Sentinel element for intersection observer - invisible trigger for infinite scroll */}
+                                        {items.length > 0 && hasMore && (
+                                            <div
+                                                ref={sentinelCallbackRef}
+                                                className="h-1 w-full"
+                                                style={{ visibility: "hidden" }}
+                                            />
+                                        )}
+
+                                        {/* Loading indicator when loading more items */}
+                                        {isLoading && items.length > 0 && (
+                                            <div className="flex items-center justify-center py-4">
+                                                <CircularProgress size="smallest"/>
+                                                <span
+                                                    className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">
+                                                    Loading...
+                                                </span>
+                                            </div>
+                                        )}
+                                    </CommandPrimitive.Group>
+                                </CommandPrimitive.List>
+                            </CommandPrimitive>
+                        </PopoverPrimitive.Content>
+                    </PopoverPrimitive.Portal>
                 </PopoverPrimitive.Root>
             </>
         );

@@ -277,10 +277,13 @@ export const MultiSelect = React.forwardRef<
                         </button>
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Content
-                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg", defaultBorderMixin)}
                         align="start"
                         sideOffset={8}
                         onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                        style={{
+                            width: "var(--radix-popover-trigger-width)"
+                        }}
                     >
                         <CommandPrimitive>
                             <div className={"flex flex-row items-center"}>
@@ -397,4 +400,3 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
         </div>
     </div>
 }
-
