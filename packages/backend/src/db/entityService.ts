@@ -1645,15 +1645,40 @@ export class EntityService {
         const resultMap = new Map<string | number, Entity<any>>();
 
         // Map results back to parent entities
-        // Note: This assumes the query builder can handle batching and returns parent ID info
+        // For one-to-one relations, we need to determine which parent each result belongs to
+        // based on the foreign key relationship
         results.forEach((row: any) => {
             const targetEntity = row[getTableName(targetCollection)] || row;
-            // We need to determine which parent this belongs to based on the relation type
-            // This will need to be enhanced based on the DrizzleConditionBuilder implementation
 
-            // For now, assume single result per parent (one-to-one relations)
-            if (parsedParentIds.length === 1) {
-                resultMap.set(parsedParentIds[0], {
+            // Determine the parent ID this result belongs to based on the relation type
+            let parentId: string | number | undefined;
+
+            if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
+                // For inverse relations, the foreign key is on the target table
+                parentId = targetEntity[relation.foreignKeyOnTarget];
+            } else if (relation.direction === "inverse" && relation.cardinality === "one" && relation.inverseRelationName) {
+                // For auto-inferred foreign keys, use the pattern: {inverseRelationName}_id
+                const inferredForeignKeyName = `${relation.inverseRelationName}_id`;
+                parentId = targetEntity[inferredForeignKeyName];
+            } else if (relation.direction === "owning" && relation.localKey) {
+                // For owning relations, we need to find which parent has this target entity ID
+                const targetId = targetEntity[targetIdInfo.fieldName];
+                // Find the parent that references this target entity
+                for (const parsedParentId of parsedParentIds) {
+                    // This is a simplification - in a real owning relation, we'd need to check
+                    // the parent entity's foreign key field to see if it matches this target ID
+                    // For now, we'll map the first available parent (this needs refinement)
+                    if (!resultMap.has(parsedParentId)) {
+                        parentId = parsedParentId;
+                        break;
+                    }
+                }
+            }
+
+            // Only add to result map if we successfully determined the parent ID
+            // and it's one of the requested parent IDs
+            if (parentId !== undefined && parsedParentIds.includes(parentId)) {
+                resultMap.set(parentId, {
                     id: targetEntity[targetIdInfo.fieldName].toString(),
                     path: targetCollection.slug ?? targetCollection.dbPath,
                     values: targetEntity

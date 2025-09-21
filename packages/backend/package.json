@@ -54,7 +54,11 @@
     "drizzle-orm": "^0.44.4",
     "pg": "^8.11.3",
     "ws": "^8.16.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "graphql": "^16.8.1",
+    "graphql-http": "^1.22.0"
   },
   "devDependencies": {
     "@firecms/common": "3.0.0-canary.258",
@@ -65,6 +69,8 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/ws": "^8.5.10",
+    "@types/express": "^5.0.3",
+    "@types/cors": "^2.8.5",
     "drizzle-kit": "^0.31.4",
     "jest": "^29.7.0",
     "ts-jest": "29.4.1",

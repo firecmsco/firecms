@@ -32,7 +32,10 @@ initializeFireCMSBackend({
     enums,
     relations,
     db,
-    server
+    server,
+    api: {
+        app
+    }
 });
 
 // Middleware
@@ -75,7 +78,12 @@ app.use((error: Error, _req: express.Request, res: express.Response, _next: expr
 const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`📋 API endpoints:`);
+    console.log(`   • REST API: http://localhost:${PORT}/api`);
+    console.log(`   • Swagger API Docs: http://localhost:${PORT}/api/swagger`);
+    console.log(`   • GraphQL API: http://localhost:${PORT}/api/graphql`);
+    console.log(`   • Health Check: http://localhost:${PORT}/health`);
     console.log("📡 WebSocket server ready for all operations");
     console.log("🗄️ PostgreSQL backend with Drizzle ORM initialized");
     console.log("🔄 Real-time sync enabled via WebSockets");

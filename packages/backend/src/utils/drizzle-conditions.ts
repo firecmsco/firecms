@@ -1,4 +1,4 @@
-import { and, eq, or, sql, SQL, ilike } from "drizzle-orm";
+import { and, eq, or, sql, SQL, ilike, inArray } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
 import { getColumnName, resolveCollectionRelations } from "@firecms/common";
@@ -62,7 +62,7 @@ export class DrizzleConditionBuilder {
                 return sql`${column} <= ${value}`;
             case "in":
                 if (Array.isArray(value) && value.length > 0) {
-                    return sql`${column} = ANY(${value})`;
+                    return inArray(column, value);
                 }
                 return null;
             case "array-contains":
@@ -292,7 +292,7 @@ export class DrizzleConditionBuilder {
 
         // Handle both single ID and array of IDs
         const finalCondition = Array.isArray(parentEntityId)
-            ? sql`${parentIdColumn} = ANY(${parentEntityId})`
+            ? inArray(parentIdColumn, parentEntityId)
             : eq(parentIdColumn, parentEntityId);
 
         return {
@@ -480,7 +480,7 @@ export class DrizzleConditionBuilder {
 
         // Handle both single ID and array of IDs
         const condition = Array.isArray(parentEntityId)
-            ? sql`${junctionSourceCol} = ANY(${parentEntityId})`
+            ? inArray(junctionSourceCol, parentEntityId)
             : eq(junctionSourceCol, parentEntityId);
 
         return {
@@ -519,7 +519,7 @@ export class DrizzleConditionBuilder {
         // For inverse relations, the parentEntityId (tag ID) should match the sourceColumn (tag_id)
         // and we want to find target entities (posts) through the targetColumn (post_id)
         const condition = Array.isArray(parentEntityId)
-            ? sql`${junctionSourceCol} = ANY(${parentEntityId})`
+            ? inArray(junctionSourceCol, parentEntityId)
             : eq(junctionSourceCol, parentEntityId);
 
         return {
@@ -551,11 +551,11 @@ export class DrizzleConditionBuilder {
                     throw new Error("No primary key or \"id\" column found in target table");
                 }
                 return Array.isArray(parentEntityId)
-                    ? sql`${idCol} = ANY(${parentEntityId})`
+                    ? inArray(idCol, parentEntityId)
                     : eq(idCol, parentEntityId);
             }
             return Array.isArray(parentEntityId)
-                ? sql`${targetIdCol} = ANY(${parentEntityId})`
+                ? inArray(targetIdCol, parentEntityId)
                 : eq(targetIdCol, parentEntityId);
 
         } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
@@ -567,7 +567,7 @@ export class DrizzleConditionBuilder {
                 throw new Error(`Foreign key column '${relation.foreignKeyOnTarget}' not found in target table. This might be a many-to-many relationship that requires a junction table. Consider using 'through' property or ensure the corresponding owning relation exists with junction table configuration.`);
             }
             return Array.isArray(parentEntityId)
-                ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
+                ? inArray(foreignKeyCol, parentEntityId)
                 : eq(foreignKeyCol, parentEntityId);
 
         } else if (relation.direction === "inverse" && relation.cardinality === "many" && relation.inverseRelationName) {
@@ -589,7 +589,7 @@ export class DrizzleConditionBuilder {
             console.log(`🔍 [DrizzleConditionBuilder] Auto-inferred foreign key '${inferredForeignKeyName}' for inverse relation '${relation.relationName}'`);
 
             return Array.isArray(parentEntityId)
-                ? sql`${foreignKeyCol} = ANY(${parentEntityId})`
+                ? inArray(foreignKeyCol, parentEntityId)
                 : eq(foreignKeyCol, parentEntityId);
 
         } else {

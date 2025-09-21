@@ -34,13 +34,7 @@ export interface DataSourceDelegate {
 
     countEntities?<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number>;
 
-    isFilterCombinationValid?(props: any): boolean;
 
-    currentTime?: () => any;
-
-    setDateToMidnight: (input?: any) => any;
-
-    initTextSearch?: (props: any) => Promise<boolean>;
 }
 
 export class PostgresDataSourceDelegate implements DataSourceDelegate {
@@ -303,79 +297,6 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             path,
             { filter }
         );
-    }
-
-    isFilterCombinationValid(): boolean {
-        // PostgreSQL with proper indexing supports most filter combinations
-        return true;
-    }
-
-    currentTime(): Date {
-        return new Date();
-    }
-
-    // Data transformation methods to maintain compatibility with FireCMS
-    delegateToCMSModel(data: any): any {
-        if (data === null || data === undefined) return data;
-
-        if (data instanceof Date) {
-            return data;
-        }
-
-        if (Array.isArray(data)) {
-            return data.map(item => this.delegateToCMSModel(item));
-        }
-
-        if (typeof data === "object") {
-            const result: Record<string, any> = {};
-            for (const [key, value] of Object.entries(data)) {
-                result[key] = this.delegateToCMSModel(value);
-            }
-            return result;
-        }
-
-        return data;
-    }
-
-    cmsToDelegateModel(data: any): any {
-        if (data === undefined) {
-            return null; // PostgreSQL doesn't support undefined
-        }
-
-        if (data === null) return data;
-
-        if (data instanceof Date) {
-            return data;
-        }
-
-        if (Array.isArray(data)) {
-            return data.map(item => this.cmsToDelegateModel(item));
-        }
-
-        if (typeof data === "object") {
-            const result: Record<string, any> = {};
-            for (const [key, value] of Object.entries(data)) {
-                const converted = this.cmsToDelegateModel(value);
-                if (converted !== null) {
-                    result[key] = converted;
-                }
-            }
-            return result;
-        }
-
-        return data;
-    }
-
-    setDateToMidnight(input?: Date): Date | undefined {
-        if (!input || !(input instanceof Date)) return input;
-        const date = new Date(input);
-        date.setHours(0, 0, 0, 0);
-        return date;
-    }
-
-    async initTextSearch(): Promise<boolean> {
-        // Text search is implemented in the searchEntities method
-        return true;
     }
 
     private generateSubscriptionId(): string {

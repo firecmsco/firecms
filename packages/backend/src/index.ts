@@ -20,9 +20,13 @@ export * from "./services/realtimeService";
 // Collections
 export * from "./collections/registry";
 
+// API Generation
+export * from "./api";
+
 // Types
 export * from "./types";
 export * from "./types/index";
 
 // Utilities
 export * from "./generate-drizzle-schema";
+export * from "./utils/logging";
