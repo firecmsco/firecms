@@ -379,6 +379,12 @@ export interface RelationProperty extends BaseProperty {
      * Should the reference include a link to the entity (open the entity details). Defaults to `true`
      */
     includeEntityLink?: boolean;
+
+    /**
+     * Choose the widget to use for selecting the relation.
+     * Defaults to `select`.
+     */
+    widget?: "select" | "dialog";
 }
 
 /**

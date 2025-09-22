@@ -33,7 +33,7 @@ import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 import { getRowHeight } from "../common/table_height";
 import { isReadOnly } from "@firecms/common";
 import { TableRelationField } from "./fields/TableRelationField";
-import { RelationSelectorField } from "../RelationSelectorField";
+import { TableRelationSelectorField } from "./fields/TableRelationSelectorField";
 
 export interface PropertyTableCellProps<T> {
     propertyKey: string;
@@ -383,32 +383,30 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 allowScroll = false;
             } else if (property.type === "relation") {
                 if (property.relation) {
-                    // innerComponent =
-                    //     <TableRelationField name={propertyKey as string}
-                    //                         internalValue={internalValue as EntityRelation}
-                    //                         updateValue={updateValue}
-                    //                         disabled={disabled}
-                    //                         size={size}
-                    //                         multiselect={false}
-                    //                         relation={property.relation}
-                    //                         previewProperties={property.previewProperties}
-                    //                         includeId={property.includeId}
-                    //                         includeEntityLink={property.includeEntityLink}
-                    //                         title={property.name ?? propertyKey}
-                    //                         forceFilter={property.forceFilter}
-                    //     />;
-                    innerComponent = <RelationSelectorField name={propertyKey as string}
-                                                            internalValue={internalValue as EntityRelation}
-                                                            updateValue={updateValue}
-                                                            disabled={disabled}
-                                                            size={"small"}
-                                                            multiselect={false}
-                                                            relation={property.relation}
-                                                            previewProperties={property.previewProperties}
-                                                            includeId={property.includeId}
-                                                            includeEntityLink={property.includeEntityLink}
-                                                            title={property.name ?? propertyKey}
-                                                            forceFilter={property.forceFilter}/>
+                    if (property.widget === "dialog") {
+                        innerComponent =
+                            <TableRelationField name={propertyKey as string}
+                                                internalValue={internalValue as EntityRelation}
+                                                updateValue={updateValue}
+                                                disabled={disabled}
+                                                size={size}
+                                                multiselect={false}
+                                                relation={property.relation}
+                                                previewProperties={property.previewProperties}
+                                                includeId={property.includeId}
+                                                includeEntityLink={property.includeEntityLink}
+                                                title={property.name ?? propertyKey}
+                                                forceFilter={property.forceFilter}
+                            />;
+                    } else {
+                        innerComponent = <TableRelationSelectorField name={propertyKey as string}
+                                                                     internalValue={internalValue as EntityRelation}
+                                                                     updateValue={updateValue}
+                                                                     disabled={disabled}
+                                                                     size={"small"}
+                                                                     relation={property.relation}
+                                                                     forceFilter={property.forceFilter}/>
+                    }
                     allowScroll = false;
                 }
             } else if (property.type === "array") {

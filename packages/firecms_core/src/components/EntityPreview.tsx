@@ -32,7 +32,7 @@ export type EntityPreviewProps = {
 };
 
 export type EntityPreviewDataProps = {
-    size?: "small" | "medium" | "large",
+    size?: "smallest" | "small" | "medium" | "large",
     actions?: React.ReactNode,
     collection?: EntityCollection,
     previewKeys?: string[],
@@ -91,7 +91,7 @@ export function EntityPreviewData({
     return (
         <>
             <div className={cls("flex  shrink-0", {
-                "w-6 h-6 ml-0 mr-0 my-0.5": size === "small",
+                "w-6 h-6 ml-0 mr-0 my-0.5": size === "small" || size === "smallest",
                 "w-8 h-8 ml-1 mr-2 m-2 self-start": size === "medium",
                 "w-10 h-10 ml-2 mr-2 m-2 self-start": size === "large"
             })}>
@@ -170,6 +170,7 @@ export function EntityPreviewData({
                             className={size !== "small" ? "self-start" : ""}
                             onClick={(e) => {
                                 e.stopPropagation();
+                                e.preventDefault();
                                 analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
                                     path: entity.path,
                                     entityId: entity.id

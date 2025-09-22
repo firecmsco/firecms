@@ -1,6 +1,6 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import {
     CheckIcon,
@@ -19,15 +19,16 @@ import {
     Separator,
     useInjectStyles
 } from "@firecms/ui";
-import { Entity, EntityRelation } from "@firecms/types";
+import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { EntityPreviewData } from "./EntityPreview";
+import { useDataSource, useRelationSelector } from "../hooks";
 
 export interface RelationItem {
     id: string | number;
     label: string;
     description?: string;
     data?: Entity;
-    relation: EntityRelation
+    relation: EntityRelation;
 }
 
 export interface RelationSelectorProps {
@@ -35,33 +36,31 @@ export interface RelationSelectorProps {
     open?: boolean;
     name?: string;
     id?: string;
-    onOpenChange?: (open: boolean) => void;
-    value?: RelationItem | RelationItem[];
-    inputClassName?: string;
-    onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>;
-    onValueChange?: (updatedValue: RelationItem | RelationItem[] | undefined) => void;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onOpenChange?: (_open: boolean) => void;
+    value?: EntityRelation | EntityRelation[] | null;
+    /** Callback returning selected EntityRelation(s) */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onValueChange?: (_updatedValue: EntityRelation | EntityRelation[] | undefined) => void;
     placeholder?: React.ReactNode;
     size?: "small" | "medium";
     useChips?: boolean;
     disabled?: boolean;
-    error?: boolean;
-    position?: "item-aligned" | "popper";
+    error?: boolean; // kept for backwards compatibility (could be used for styling later)
+    position?: "item-aligned" | "popper"; // legacy prop
     endAdornment?: React.ReactNode;
-    multiple?: boolean;
+    multiple?: boolean; // overrides relation.cardinality === "many"
     inputRef?: React.RefObject<HTMLButtonElement>;
-    padding?: boolean;
+    padding?: boolean; // legacy prop
     invisible?: boolean;
 
-    // Data props - items and state come from parent/hook
-    items: RelationItem[];
-    isLoading?: boolean;
-    hasMore?: boolean;
-    onSearch?: (searchString: string) => void;
-    onLoadMore?: () => void;
+    relation: Relation;
+    forceFilter?: FilterValues<string>;
+    pageSize?: number;
+    emptyPlaceholder?: string;
     searchPlaceholder?: string;
     noResultsText?: string;
     loadingText?: string;
-
 }
 
 export const RelationSelector = React.forwardRef<
@@ -72,7 +71,6 @@ export const RelationSelector = React.forwardRef<
         {
             value,
             size = "medium",
-            error,
             onValueChange,
             invisible,
             disabled,
@@ -81,75 +79,96 @@ export const RelationSelector = React.forwardRef<
             className,
             open,
             onOpenChange,
-            multiple = false,
-            items,
-            isLoading = false,
-            hasMore = false,
-            onSearch,
-            onLoadMore,
+            multiple: multipleProp,
+            relation,
+            forceFilter,
+            pageSize,
+            emptyPlaceholder,
             searchPlaceholder = "Search...",
             noResultsText = "No relations found.",
-            loadingText = "Loading...",
+            loadingText = "Loading..."
         },
         ref
     ) => {
+        const collection = relation.target();
+        const dataSource = useDataSource(collection);
+        const multiple = multipleProp !== undefined ? multipleProp : relation.cardinality === "many";
+
         const [isPopoverOpen, setIsPopoverOpen] = useState(open ?? false);
-        const [selectedValues, setSelectedValues] = useState<RelationItem[]>(() => {
-            if (!value) return [];
-            return Array.isArray(value) ? value : [value];
-        });
+        const [selectedItems, setSelectedItems] = useState<RelationItem[]>([]);
         const [searchString, setSearchString] = useState<string>("");
 
-        // Ref for the scrollable container and sentinel element
+        const {
+            items: availableItems,
+            isLoading,
+            hasMore,
+            search,
+            loadMore,
+            entityToRelationItem
+        } = useRelationSelector({
+            path: collection.slug,
+            collection,
+            forceFilter,
+            pageSize
+        });
+
         const scrollContainerRef = useRef<HTMLDivElement>(null);
         const sentinelRef = useRef<HTMLDivElement>(null);
         const observerRef = useRef<IntersectionObserver | null>(null);
 
-        const onPopoverOpenChange = (open: boolean) => {
-            setIsPopoverOpen(open);
-            onOpenChange?.(open);
+        const handlePopoverOpenChange = (nextOpen: boolean) => {
+            setIsPopoverOpen(nextOpen);
+            onOpenChange?.(nextOpen);
         };
 
         useEffect(() => {
             setIsPopoverOpen(open ?? false);
         }, [open]);
 
-        useEffect(() => {
-            if (!value) {
-                setSelectedValues([]);
-                return;
-            }
-            const newValues = Array.isArray(value) ? value : [value];
-            setSelectedValues(newValues);
-        }, [value]);
+        const computeSelectedItems = useCallback(async (val?: EntityRelation | EntityRelation[] | null) => {
+            if (!val) return [] as RelationItem[];
+            const relationsArray = Array.isArray(val) ? val : [val];
+            const promises = relationsArray.map(async (rel) => {
+                try {
+                    const entity = await dataSource.fetchEntity({
+                        path: rel.path,
+                        entityId: rel.id,
+                        collection
+                    });
+                    if (entity) return entityToRelationItem(entity, rel);
+                } catch (e) {
+                    console.warn("RelationSelector: could not fetch entity for relation", rel, e);
+                }
+                return {
+                    id: rel.id,
+                    label: String(rel.id),
+                    relation: rel
+                } as RelationItem;
+            });
+            return Promise.all(promises);
+        }, [dataSource, collection, entityToRelationItem]);
 
-        // Callback ref for sentinel element - this ensures the observer is set up after DOM update
+        useEffect(() => {
+            let active = true;
+            computeSelectedItems(value || undefined).then(resolved => {
+                if (active) setSelectedItems(resolved);
+            });
+            return () => { active = false; };
+        }, [value, computeSelectedItems]);
+
         const sentinelCallbackRef = useCallback((node: HTMLDivElement | null) => {
-            // Clean up existing observer
             if (observerRef.current) {
                 observerRef.current.disconnect();
                 observerRef.current = null;
             }
-
-            // Store the node reference (fix TS2540 error)
             if (sentinelRef.current !== node) {
                 (sentinelRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
             }
-
-            if (!node) {
-                return;
-            }
-
-            if (!hasMore || isLoading || !onLoadMore) {
-                return;
-            }
-
+            if (!node || !hasMore || isLoading || !loadMore) return;
             const observer = new IntersectionObserver(
                 (entries) => {
                     const entry = entries[0];
-                    if (entry.isIntersecting && hasMore && !isLoading) {
-                        onLoadMore();
-                    }
+                    if (entry.isIntersecting && hasMore && !isLoading) loadMore();
                 },
                 {
                     root: scrollContainerRef.current,
@@ -157,84 +176,61 @@ export const RelationSelector = React.forwardRef<
                     threshold: 0
                 }
             );
-
             observer.observe(node);
             observerRef.current = observer;
-        }, [hasMore, isLoading, onLoadMore]);
+        }, [hasMore, isLoading, loadMore]);
 
-        // Clean up observer on unmount
-        useEffect(() => {
-            return () => {
-                if (observerRef.current) {
-                    observerRef.current.disconnect();
-                }
-            };
-        }, []);
+        useEffect(() => () => { if (observerRef.current) observerRef.current.disconnect(); }, []);
 
-        // Handle search input changes
         const handleSearchChange = useCallback((newSearchString: string) => {
             setSearchString(newSearchString);
-            onSearch?.(newSearchString);
-        }, [onSearch]);
+            search(newSearchString);
+        }, [search]);
+
+        const emitValueChange = useCallback((selected: RelationItem[]) => {
+            if (multiple) onValueChange?.(selected.length ? selected.map(i => i.relation) : undefined);
+            else onValueChange?.(selected[0]?.relation);
+        }, [onValueChange, multiple]);
 
         const onItemClick = useCallback((item: RelationItem) => {
-            let newSelectedValues: RelationItem[];
-
+            let newSelected: RelationItem[];
             if (multiple) {
-                const isSelected = selectedValues.some(v => String(v.id) === String(item.id));
-                if (isSelected) {
-                    newSelectedValues = selectedValues.filter(v => String(v.id) !== String(item.id));
-                } else {
-                    newSelectedValues = [...selectedValues, item];
-                }
-                // Don't close popover for multiple selection
+                const isSelected = selectedItems.some(v => String(v.id) === String(item.id));
+                newSelected = isSelected
+                    ? selectedItems.filter(v => String(v.id) !== String(item.id))
+                    : [...selectedItems, item];
             } else {
-                newSelectedValues = [item];
-                // Only close popover for single selection
-                onPopoverOpenChange(false);
+                newSelected = [item];
+                handlePopoverOpenChange(false);
             }
-
-            setSelectedValues(newSelectedValues);
-
-            if (multiple) {
-                onValueChange?.(newSelectedValues.length > 0 ? newSelectedValues : undefined);
-            } else {
-                onValueChange?.(newSelectedValues.length > 0 ? newSelectedValues[0] : undefined);
-            }
-        }, [multiple, selectedValues, onValueChange, onPopoverOpenChange]);
+            setSelectedItems(newSelected);
+            emitValueChange(newSelected);
+        }, [multiple, selectedItems, emitValueChange]);
 
         const handleClear = useCallback(() => {
-            setSelectedValues([]);
+            setSelectedItems([]);
             onValueChange?.(undefined);
         }, [onValueChange]);
 
-        const handleTogglePopover = () => {
-            onPopoverOpenChange(!isPopoverOpen);
-        };
-
         const handleRemoveItem = useCallback((itemToRemove: RelationItem) => {
-            const newSelectedValues = selectedValues.filter(v => String(v.id) !== String(itemToRemove.id));
-            setSelectedValues(newSelectedValues);
+            const newSelected = selectedItems.filter(v => String(v.id) !== String(itemToRemove.id));
+            setSelectedItems(newSelected);
+            emitValueChange(newSelected);
+        }, [selectedItems, emitValueChange]);
 
-            if (multiple) {
-                onValueChange?.(newSelectedValues.length > 0 ? newSelectedValues : undefined);
-            } else {
-                onValueChange?.(undefined);
-            }
-        }, [selectedValues, multiple, onValueChange]);
+        const handleTogglePopover = () => handlePopoverOpenChange(!isPopoverOpen);
 
         useInjectStyles("RelationSelector", `
-            [cmdk-group] {
-                max-height: 45vh;
-                overflow-y: auto;
-            }
+            [cmdk-group] { max-height: 45vh; overflow-y: auto; }
         `);
+
+        const resolvedPlaceholder = placeholder || emptyPlaceholder || (multiple ? "Select multiple..." : "Select...");
 
         return (
             <>
                 <PopoverPrimitive.Root
                     open={isPopoverOpen}
-                    onOpenChange={onPopoverOpenChange}
+                    onOpenChange={handlePopoverOpenChange}
                     modal={false}
                 >
                     <PopoverPrimitive.Trigger asChild>
@@ -243,41 +239,22 @@ export const RelationSelector = React.forwardRef<
                             onClick={handleTogglePopover}
                             disabled={disabled}
                             className={cls(
-                                "w-full",
-                                {
-                                    "min-h-[32px]": size === "small",
-                                    "min-h-[42px]": size === "medium",
-                                },
-                                {
-                                    "py-1": size === "small",
-                                    "py-2": size === "medium"
-                                },
-                                {
-                                    "px-2": size === "small",
-                                    "px-4": size === "medium",
-                                },
-                                "select-none rounded-md text-sm",
+                                "w-full select-none rounded-md text-sm relative flex items-center",
+                                size === "small" ? "min-h-[32px] py-1 px-2" : "min-h-[42px] py-2 px-4",
                                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                                "relative flex items-center",
                                 className
                             )}
                         >
-                            {selectedValues.length > 0 ? (
+                            {selectedItems.length > 0 ? (
                                 <div className="flex justify-between items-center w-full">
                                     <div className="flex flex-wrap items-center gap-1.5 text-start flex-1 min-w-0 mr-2">
-                                        {selectedValues.map((item) => {
+                                        {selectedItems.map((item) => {
                                             if (!useChips || !multiple) {
                                                 return (
-                                                    <div key={String(item.id)}
-                                                         className="flex flex-row items-center gap-2 truncate">
+                                                    <div key={String(item.id)} className="flex flex-row items-center gap-1 truncate">
                                                         {item.data ? (
-                                                            <EntityPreviewData
-                                                                size={"medium"}
-                                                                entity={item.data}
-                                                                includeEntityLink={false}
-                                                                includeId={false}
-                                                            />
+                                                            <EntityPreviewData size={"medium"} entity={item.data} includeEntityLink={false} includeId={false} />
                                                         ) : (
                                                             <span className="text-sm truncate">{item.label}</span>
                                                         )}
@@ -288,24 +265,16 @@ export const RelationSelector = React.forwardRef<
                                                 <Chip
                                                     size={"medium"}
                                                     key={String(item.id)}
-                                                    className={cls("flex flex-row items-center p-1 max-w-full")}
+                                                    className={cls("flex flex-row items-center gap-1 truncate")}
                                                 >
                                                     {item.data ? (
-                                                        <EntityPreviewData
-                                                            size={"small"}
-                                                            entity={item.data}
-                                                            includeEntityLink={false}
-                                                            includeId={false}
-                                                        />
+                                                        <EntityPreviewData size={"smallest"} entity={item.data} includeEntityLink={false} includeId={false} />
                                                     ) : (
                                                         <span className="text-sm truncate">{item.label}</span>
                                                     )}
                                                     <CloseIcon
                                                         size={"smallest"}
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                            handleRemoveItem(item);
-                                                        }}
+                                                        onClick={(event) => { event.stopPropagation(); handleRemoveItem(item); }}
                                                     />
                                                 </Chip>
                                             );
@@ -321,9 +290,9 @@ export const RelationSelector = React.forwardRef<
                             ) : (
                                 <div className="flex items-center justify-between w-full mx-auto">
                                     <span className="text-sm text-text-secondary dark:text-text-secondary-dark">
-                                        {placeholder}
+                                        {resolvedPlaceholder}
                                     </span>
-                                    <div className={cls("px-2 h-full flex items-center")}>
+                                    <div className="px-2 h-full flex items-center">
                                         <KeyboardArrowDownIcon
                                             size={size === "medium" ? "medium" : "small"}
                                             className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
@@ -340,32 +309,32 @@ export const RelationSelector = React.forwardRef<
                             sideOffset={8}
                             avoidCollisions={true}
                             collisionPadding={16}
-                            onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                            onEscapeKeyDown={() => handlePopoverOpenChange(false)}
                             style={{
                                 zIndex: 9999,
                                 width: "var(--radix-popover-trigger-width)"
                             }}
                         >
                             <CommandPrimitive shouldFilter={false}>
-                                <div className={"flex flex-row items-center"}>
+                                <div className="flex flex-row items-center">
                                     <div className="relative flex-1">
-                                        <SearchIcon
-                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark"
-                                            size="small"/>
+                                        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark" size="small" />
                                         <CommandPrimitive.Input
-                                            className={cls(focusedDisabled, "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3 text-text-primary dark:text-text-primary-dark placeholder:text-text-secondary dark:placeholder:text-text-secondary-dark")}
+                                            className={cls(
+                                                focusedDisabled,
+                                                "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3 text-text-primary dark:text-text-primary-dark placeholder:text-text-secondary dark:placeholder:text-text-secondary-dark"
+                                            )}
                                             placeholder={searchPlaceholder}
                                             value={searchString}
                                             onValueChange={handleSearchChange}
                                         />
                                     </div>
-                                    {/* Loading indicator when loading more items */}
                                     {isLoading && (
                                         <div className="flex items-center justify-center px-3">
-                                            <CircularProgress size="smallest"/>
+                                            <CircularProgress size="smallest" />
                                         </div>
                                     )}
-                                    {selectedValues.length > 0 && (
+                                    {selectedItems.length > 0 && (
                                         <div
                                             onClick={handleClear}
                                             className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark"
@@ -374,7 +343,7 @@ export const RelationSelector = React.forwardRef<
                                         </div>
                                     )}
                                 </div>
-                                <Separator orientation={"horizontal"} className={"my-0"}/>
+                                <Separator orientation="horizontal" className="my-0" />
                                 <CommandPrimitive.List
                                     ref={scrollContainerRef}
                                     style={{
@@ -382,95 +351,60 @@ export const RelationSelector = React.forwardRef<
                                         overflowY: "auto"
                                     }}
                                 >
-                                    {isLoading && items.length === 0 && (
+                                    {isLoading && availableItems.length === 0 && (
                                         <div className="flex items-center justify-center py-6">
-                                            <CircularProgress size="small"/>
-                                            <span
-                                                className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">
-                                                {loadingText}
-                                            </span>
+                                            <CircularProgress size="small" />
+                                            <span className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">{loadingText}</span>
                                         </div>
                                     )}
-
-                                    {!isLoading && items.length === 0 && (
-                                        <CommandPrimitive.Empty
-                                            className={"px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark"}>
+                                    {!isLoading && availableItems.length === 0 && (
+                                        <CommandPrimitive.Empty className="px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark">
                                             {noResultsText}
                                         </CommandPrimitive.Empty>
                                     )}
-
                                     <CommandPrimitive.Group>
-                                        {items.map((item) => {
-                                            const isSelected = selectedValues.some(v => String(v.id) === String(item.id));
-
+                                        {availableItems.map((item) => {
+                                            const isSelected = selectedItems.some(v => String(v.id) === String(item.id));
                                             return (
                                                 <CommandPrimitive.Item
                                                     key={String(item.id)}
                                                     value={String(item.id)}
-                                                    onMouseDown={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                    }}
+                                                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                                                     onSelect={() => onItemClick(item)}
                                                     className={cls(
-                                                        "flex flex-row items-center gap-1.5",
-                                                        isSelected ? "bg-surface-accent-200 dark:bg-surface-accent-950" : "",
-                                                        "cursor-pointer",
-                                                        "m-1",
-                                                        "ring-offset-transparent",
-                                                        "p-1 rounded-xs aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2",
-                                                        "aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
-                                                        "cursor-pointer rounded-xs aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
+                                                        "flex flex-row items-center gap-1.5 m-1 p-1 rounded-xs cursor-pointer ring-offset-transparent",
+                                                        isSelected && "bg-surface-accent-200 dark:bg-surface-accent-950",
+                                                        "aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2 aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
                                                     )}
                                                 >
-                                                    {multiple && (
-                                                        <InnerCheckBox checked={isSelected}/>
+                                                    {multiple && (<InnerCheckBox checked={isSelected} />)}
+                                                    {item.data ? (
+                                                        <div className="flex flex-row items-center gap-2 min-w-0 w-full">
+                                                            <EntityPreviewData
+                                                                size={multiple ? "smallest" : "medium"}
+                                                                entity={item.data}
+                                                                includeId={false}
+                                                                includeEntityLink={true}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div>
+                                                            <div className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
+                                                            {item.description && (
+                                                                <div className="text-xs text-text-secondary dark:text-text-secondary-dark">{item.description}</div>
+                                                            )}
+                                                        </div>
                                                     )}
-                                                    <div className="flex-1 rounded">
-
-                                                        {item.data ? (
-                                                            <div className="flex flex-row items-center gap-2">
-                                                                <EntityPreviewData
-                                                                    size={multiple ? "medium" : "small"}
-                                                                    entity={item.data}
-                                                                    includeId={false}
-                                                                    includeEntityLink={true}
-                                                                />
-                                                            </div>
-                                                        ) : (
-                                                            <div>
-                                                                <div
-                                                                    className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
-                                                                {item.description && (
-                                                                    <div
-                                                                        className="text-xs text-text-secondary dark:text-text-secondary-dark">
-                                                                        {item.description}
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </div>
                                                 </CommandPrimitive.Item>
                                             );
                                         })}
-
-                                        {/* Sentinel element for intersection observer - invisible trigger for infinite scroll */}
-                                        {items.length > 0 && hasMore && (
-                                            <div
-                                                ref={sentinelCallbackRef}
-                                                className="h-1 w-full"
-                                                style={{ visibility: "hidden" }}
-                                            />
+                                        {availableItems.length > 0 && hasMore && (
+                                            <div ref={sentinelCallbackRef} className="h-1 w-full" style={{ visibility: "hidden" }} />
                                         )}
-
-                                        {/* Loading indicator when loading more items */}
-                                        {isLoading && items.length > 0 && (
+                                        {isLoading && availableItems.length > 0 && (
                                             <div className="flex items-center justify-center py-4">
-                                                <CircularProgress size="smallest"/>
-                                                <span
-                                                    className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">
-                                                    Loading...
-                                                </span>
+                                                <CircularProgress size="smallest" />
+                                                <span className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">Loading...</span>
                                             </div>
                                         )}
                                     </CommandPrimitive.Group>
@@ -489,19 +423,15 @@ RelationSelector.displayName = "RelationSelector";
 function InnerCheckBox({ checked }: { checked: boolean }) {
     return (
         <div className={cls(
-            "p-2",
-            "w-8 h-8",
-            "inline-flex items-center justify-center text-sm font-medium focus:outline-hidden transition-colors ease-in-out duration-150",
+            "p-2 w-8 h-8 inline-flex items-center justify-center text-sm font-medium focus:outline-hidden transition-colors ease-in-out duration-150"
         )}>
             <div
                 className={cls(
-                    "border-2 relative transition-colors ease-in-out duration-150",
-                    "w-4 h-4 rounded-xs flex items-center justify-center",
-                    (checked ? "bg-primary" : "bg-white dark:bg-surface-accent-900"),
-                    (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
-                    (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
-                )}>
-                {checked && <CheckIcon size={16} className={"absolute"}/>}
+                    "border-2 relative transition-colors ease-in-out duration-150 w-4 h-4 rounded-xs flex items-center justify-center",
+                    checked ? "bg-primary text-surface-accent-100 dark:text-surface-accent-900 border-transparent" : "bg-white dark:bg-surface-accent-900 border-surface-accent-800 dark:border-surface-accent-200"
+                )}
+            >
+                {checked && <CheckIcon size={16} className="absolute" />}
             </div>
         </div>
     );

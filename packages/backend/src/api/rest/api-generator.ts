@@ -144,7 +144,6 @@ export class RestApiGenerator {
 
                 // Use existing deleteEntity from DataSourceDelegate
                 await this.dataSource.deleteEntity({
-                    path: collection.dbPath || collection.slug,
                     entityId: id,
                     collection
                 });
