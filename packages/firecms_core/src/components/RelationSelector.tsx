@@ -33,11 +33,8 @@ export interface RelationItem {
 
 export interface RelationSelectorProps {
     className?: string;
-    open?: boolean;
     name?: string;
     id?: string;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onOpenChange?: (_open: boolean) => void;
     value?: EntityRelation | EntityRelation[] | null;
     /** Callback returning selected EntityRelation(s) */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,8 +74,6 @@ export const RelationSelector = React.forwardRef<
             placeholder,
             useChips = true,
             className,
-            open,
-            onOpenChange,
             multiple: multipleProp,
             relation,
             forceFilter,
@@ -94,7 +89,7 @@ export const RelationSelector = React.forwardRef<
         const dataSource = useDataSource(collection);
         const multiple = multipleProp !== undefined ? multipleProp : relation.cardinality === "many";
 
-        const [isPopoverOpen, setIsPopoverOpen] = useState(open ?? false);
+        const [isPopoverOpen, setIsPopoverOpen] = useState(false);
         const [selectedItems, setSelectedItems] = useState<RelationItem[]>([]);
         const [searchString, setSearchString] = useState<string>("");
 
@@ -115,15 +110,9 @@ export const RelationSelector = React.forwardRef<
         const scrollContainerRef = useRef<HTMLDivElement>(null);
         const sentinelRef = useRef<HTMLDivElement>(null);
         const observerRef = useRef<IntersectionObserver | null>(null);
-
-        const handlePopoverOpenChange = (nextOpen: boolean) => {
-            setIsPopoverOpen(nextOpen);
-            onOpenChange?.(nextOpen);
-        };
-
-        useEffect(() => {
-            setIsPopoverOpen(open ?? false);
-        }, [open]);
+        const triggerRef = (ref as React.RefObject<HTMLButtonElement>) || useRef<HTMLButtonElement>(null);
+        const contentRef = useRef<HTMLDivElement | null>(null);
+        const searchInputRef = useRef<HTMLInputElement | null>(null);
 
         const computeSelectedItems = useCallback(async (val?: EntityRelation | EntityRelation[] | null) => {
             if (!val) return [] as RelationItem[];
@@ -170,11 +159,7 @@ export const RelationSelector = React.forwardRef<
                     const entry = entries[0];
                     if (entry.isIntersecting && hasMore && !isLoading) loadMore();
                 },
-                {
-                    root: scrollContainerRef.current,
-                    rootMargin: "20px",
-                    threshold: 0
-                }
+                { root: scrollContainerRef.current, rootMargin: "20px", threshold: 0 }
             );
             observer.observe(node);
             observerRef.current = observer;
@@ -201,7 +186,7 @@ export const RelationSelector = React.forwardRef<
                     : [...selectedItems, item];
             } else {
                 newSelected = [item];
-                handlePopoverOpenChange(false);
+                setIsPopoverOpen(false);
             }
             setSelectedItems(newSelected);
             emitValueChange(newSelected);
@@ -218,26 +203,55 @@ export const RelationSelector = React.forwardRef<
             emitValueChange(newSelected);
         }, [selectedItems, emitValueChange]);
 
-        const handleTogglePopover = () => handlePopoverOpenChange(!isPopoverOpen);
+        const handleRootOpenChange = useCallback((next: boolean) => {
+            if (disabled) return;
+            // We control open manually; only allow opening attempts from Radix (e.g. trigger press)
+            if (next) setIsPopoverOpen(true);
+            // Ignore close attempts here; outside click/Escape handled manually; single select closes explicitly on selection.
+        }, [disabled]);
 
-        useInjectStyles("RelationSelector", `
-            [cmdk-group] { max-height: 45vh; overflow-y: auto; }
-        `);
+        // Outside click + Escape handling (simple and reliable)
+        useEffect(() => {
+            if (!isPopoverOpen) return;
+            function handlePointerDown(ev: MouseEvent) {
+                const target = ev.target as Node;
+                const triggerEl = triggerRef.current;
+                const contentEl = contentRef.current;
+                if (triggerEl?.contains(target)) return;
+                if (contentEl?.contains(target)) return;
+                // Outside
+                setIsPopoverOpen(false);
+            }
+            function handleKey(ev: KeyboardEvent) {
+                if (ev.key === "Escape") setIsPopoverOpen(false);
+            }
+            document.addEventListener("mousedown", handlePointerDown, true);
+            document.addEventListener("keydown", handleKey, true);
+            return () => {
+                document.removeEventListener("mousedown", handlePointerDown, true);
+                document.removeEventListener("keydown", handleKey, true);
+            };
+        }, [isPopoverOpen]);
+
+        useInjectStyles("RelationSelector", ` [cmdk-group] { max-height: 40vh; overflow-y: auto; } `);
 
         const resolvedPlaceholder = placeholder || emptyPlaceholder || (multiple ? "Select multiple..." : "Select...");
 
         return (
             <>
-                <PopoverPrimitive.Root
-                    open={isPopoverOpen}
-                    onOpenChange={handlePopoverOpenChange}
-                    modal={false}
-                >
+                <PopoverPrimitive.Root open={isPopoverOpen} onOpenChange={handleRootOpenChange} modal={false}>
                     <PopoverPrimitive.Trigger asChild>
                         <button
-                            ref={ref}
-                            onClick={handleTogglePopover}
+                            ref={triggerRef as any}
+                            type="button"
+                            aria-haspopup="listbox"
+                            aria-expanded={isPopoverOpen}
+                            data-relation-selector-trigger
                             disabled={disabled}
+                            onClick={() => {
+                                if (disabled) return;
+                                setIsPopoverOpen(o => !o);
+                            }}
                             className={cls(
                                 "w-full select-none rounded-md text-sm relative flex items-center",
                                 size === "small" ? "min-h-[32px] py-1 px-2" : "min-h-[42px] py-2 px-4",
@@ -304,22 +318,25 @@ export const RelationSelector = React.forwardRef<
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Portal container={typeof document !== "undefined" ? document.body : undefined}>
                         <PopoverPrimitive.Content
+                            ref={contentRef}
+                            data-relation-selector-content
                             className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg", defaultBorderMixin)}
                             align="start"
                             sideOffset={8}
+                            side="bottom"
                             avoidCollisions={true}
                             collisionPadding={16}
-                            onEscapeKeyDown={() => handlePopoverOpenChange(false)}
-                            style={{
-                                zIndex: 9999,
-                                width: "var(--radix-popover-trigger-width)"
-                            }}
+                            // Allow default auto focus (we manually refocus anyway)
+                            onOpenAutoFocus={(e) => { /* leave default or custom manual focus */ }}
+                            onCloseAutoFocus={(e) => { e.preventDefault(); }}
+                            style={{ width: "var(--radix-popover-trigger-width)" }}
                         >
                             <CommandPrimitive shouldFilter={false}>
                                 <div className="flex flex-row items-center">
                                     <div className="relative flex-1">
                                         <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark" size="small" />
                                         <CommandPrimitive.Input
+                                            ref={searchInputRef}
                                             className={cls(
                                                 focusedDisabled,
                                                 "bg-transparent outline-hidden flex-1 h-full w-full pl-10 pr-4 py-3 text-text-primary dark:text-text-primary-dark placeholder:text-text-secondary dark:placeholder:text-text-secondary-dark"
@@ -346,10 +363,7 @@ export const RelationSelector = React.forwardRef<
                                 <Separator orientation="horizontal" className="my-0" />
                                 <CommandPrimitive.List
                                     ref={scrollContainerRef}
-                                    style={{
-                                        maxHeight: "45vh",
-                                        overflowY: "auto"
-                                    }}
+                                    style={{ maxHeight: "40vh", overflowY: "auto" }}
                                 >
                                     {isLoading && availableItems.length === 0 && (
                                         <div className="flex items-center justify-center py-6">

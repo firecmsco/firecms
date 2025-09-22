@@ -8,6 +8,7 @@ import { getRelationFrom, resolveRelationProperty } from "@firecms/common";
 import { useEntitySelectionDialog } from "../../hooks";
 import { cls } from "@firecms/ui";
 import { RelationPreview } from "../../preview";
+import { RelationSelector } from "../../components/RelationSelector";
 import { MultipleRelationFieldBinding } from "./MultipleRelationFieldBinding";
 
 export function RelationFieldBinding({
@@ -36,6 +37,52 @@ export function RelationFieldBinding({
     const relation = resolvedProperty.relation;
 
     const manyRelation = relation?.cardinality === "many";
+
+    // Inline selector mode
+    const widget = property.widget ?? "select";
+
+    if (widget === "select" && relation) {
+        const singleValue = (!manyRelation && value && !Array.isArray(value) && value.isEntityRelation && value.isEntityRelation()) ? value : null;
+        const multipleValue = (manyRelation && Array.isArray(value)) ? value : [];
+
+        const placeholder = disabled ? "Disabled" : manyRelation ? "Select multiple..." : "Select...";
+        const selectorSize: "small" | "medium" | undefined = size === "large" ? "medium" : size;
+
+        return (
+            <div className="">
+                <LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name ?? propertyKey}
+                    className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+
+                <RelationSelector
+                    relation={relation}
+                    multiple={manyRelation}
+                    value={manyRelation ? multipleValue : singleValue}
+                    onValueChange={(newVal) => {
+                        if (manyRelation) {
+                            setValue(Array.isArray(newVal) ? newVal : []);
+                        } else {
+                            setValue(!Array.isArray(newVal) ? (newVal ?? null) : null);
+                        }
+                    }}
+                    disabled={disabled || isSubmitting}
+                    placeholder={placeholder}
+                    forceFilter={property.forceFilter}
+                    size={selectorSize}
+                />
+
+                <FieldHelperText includeDescription={includeDescription}
+                                 showError={showError}
+                                 error={error}
+                                 disabled={disabled}
+                                 property={property}/>
+            </div>
+        );
+    }
+
     if (manyRelation) {
         return <MultipleRelationFieldBinding
             propertyKey={propertyKey}
