@@ -20,6 +20,7 @@ import {
     useInjectStyles
 } from "@firecms/ui";
 import { Entity, EntityRelation } from "@firecms/types";
+import { EntityPreviewData } from "./EntityPreview";
 
 export interface RelationItem {
     id: string | number;
@@ -60,12 +61,13 @@ export interface RelationSelectorProps {
     hasMore?: boolean;
     onSearch?: (searchString: string) => void;
     onLoadMore?: () => void;
-    renderItem?: (item: RelationItem) => React.ReactNode;
-    renderSelectedItem?: (item: RelationItem) => React.ReactNode;
-    renderSelectedItems?: (items: RelationItem[]) => React.ReactNode;
     searchPlaceholder?: string;
     noResultsText?: string;
     loadingText?: string;
+
+    // Entity preview props
+    includeId?: boolean;
+    includeEntityLink?: boolean;
 }
 
 export const RelationSelector = React.forwardRef<
@@ -94,12 +96,11 @@ export const RelationSelector = React.forwardRef<
             hasMore = false,
             onSearch,
             onLoadMore,
-            renderItem,
-            renderSelectedItem,
-            renderSelectedItems,
             searchPlaceholder = "Search...",
             noResultsText = "No relations found.",
             loadingText = "Loading...",
+            includeId,
+            includeEntityLink,
         },
         ref
     ) => {
@@ -274,10 +275,23 @@ export const RelationSelector = React.forwardRef<
                             {selectedValues.length > 0 ? (
                                 <div className="flex justify-between items-center w-full">
                                     <div className="flex flex-wrap items-center gap-1.5 text-start">
-                                        {renderSelectedItems && renderSelectedItems(selectedValues)}
-                                        {!renderSelectedItems && selectedValues.map((item, index) => {
+                                        {selectedValues.map((item) => {
                                             if (!useChips || !multiple) {
-                                                return (renderSelectedItem ? renderSelectedItem(item) : item.label);
+                                                return (
+                                                    <div key={String(item.id)}
+                                                         className="flex flex-row items-center gap-2">
+                                                        {item.data ? (
+                                                            <EntityPreviewData
+                                                                size={"small"}
+                                                                entity={item.data}
+                                                                includeEntityLink={false}
+                                                                includeId={false}
+                                                            />
+                                                        ) : (
+                                                            <span className="text-sm">{item.label}</span>
+                                                        )}
+                                                    </div>
+                                                );
                                             }
                                             return (
                                                 <Chip
@@ -285,7 +299,16 @@ export const RelationSelector = React.forwardRef<
                                                     key={String(item.id)}
                                                     className={cls("flex flex-row items-center p-1")}
                                                 >
-                                                    {renderSelectedItem ? renderSelectedItem(item) : item.label}
+                                                    {item.data ? (
+                                                        <EntityPreviewData
+                                                            size={"small"}
+                                                            entity={item.data}
+                                                            includeEntityLink={false}
+                                                            includeId={false}
+                                                        />
+                                                    ) : (
+                                                        <span className="text-sm">{item.label}</span>
+                                                    )}
                                                     <CloseIcon
                                                         size={"smallest"}
                                                         onClick={(event) => {
@@ -317,7 +340,7 @@ export const RelationSelector = React.forwardRef<
                             )}
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Portal container={typeof document !== 'undefined' ? document.body : undefined}>
+                    <PopoverPrimitive.Portal container={typeof document !== "undefined" ? document.body : undefined}>
                         <PopoverPrimitive.Content
                             className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg", defaultBorderMixin)}
                             align="start"
@@ -410,10 +433,21 @@ export const RelationSelector = React.forwardRef<
                                                     {multiple && (
                                                         <InnerCheckBox checked={isSelected}/>
                                                     )}
-                                                    <div className="flex-1">
-                                                        {renderItem ? renderItem(item) : (
+                                                    <div className="flex-1 rounded">
+
+                                                        {item.data ? (
+                                                            <div className="flex flex-row items-center gap-2">
+                                                                <EntityPreviewData
+                                                                    size={"small"}
+                                                                    entity={item.data}
+                                                                    includeId={includeId}
+                                                                    includeEntityLink={includeEntityLink}
+                                                                />
+                                                            </div>
+                                                        ) : (
                                                             <div>
-                                                                <div className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
+                                                                <div
+                                                                    className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
                                                                 {item.description && (
                                                                     <div
                                                                         className="text-xs text-text-secondary dark:text-text-secondary-dark">

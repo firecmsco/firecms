@@ -218,28 +218,9 @@ export function RelationSelectorField({
             searchPlaceholder="Search..."
             noResultsText="No relations found"
             loadingText="Loading relations..."
-            renderItem={(item) => (
-                <div className="flex flex-row items-center gap-2">
-                    {item.data && <EntityPreviewData
-                        includeImage={false}
-                        entity={item.data}
-                        includeId={false}/>}
-                    {/*<div className="font-medium">{item.label}</div>*/}
-                    {/*{item.description && (*/}
-                    {/*    <div className="text-xs text-gray-500">{item.description}</div>*/}
-                    {/*)}*/}
-                    {/*{includeId && (*/}
-                    {/*    <div className="text-xs text-gray-400">ID: {item.id}</div>*/}
-                    {/*)}*/}
-                </div>
-            )}
-            renderSelectedItem={(item) => (
-                <div className="flex flex-row items-center gap-2">
-                    <EntityPreviewData entity={item.data as Entity}
-                                       includeEntityLink={false}
-                                       includeId={false}/>
-                </div>
-            )}
+            includeId={includeId}
+            includeEntityLink={includeEntityLink}
+            previewKeys={previewProperties}
         />
     );
 }

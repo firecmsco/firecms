@@ -47,7 +47,7 @@ const authorsCollection: EntityCollection = {
     singularName: "Author",
     slug: "authors",
     dbPath: "authors",
-    icon: "Edit",
+    icon: "Person",
     properties: {
         id: {
             type: "number",

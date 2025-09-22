@@ -72,7 +72,7 @@ export function EntityPreviewData({
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);
     }
 
-    const listProperties = useMemo(() => previewKeys ?? getEntityPreviewKeys(authController, collection, customizationController.propertyConfigs, previewKeys, size === "medium" || size === "large" ? 3 : 1),
+    const listProperties = useMemo(() => previewKeys ?? getEntityPreviewKeys(authController, collection, customizationController.propertyConfigs, previewKeys, size === "medium" || size === "large" ? 3 : 2),
         [previewKeys, collection, size]);
 
     const titleProperty = includeTitle ? getEntityTitlePropertyKey(collection, customizationController.propertyConfigs) : undefined;
