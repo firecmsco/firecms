@@ -78,7 +78,7 @@ function cmsToDelegateModel(data: any): any {
     });
 }
 
-export function usePostgresDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
+export function usePostgresClientDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
     const client = useMemo(() => new PostgresDataSourceClient(config), [config.websocketUrl]);
 
     return useMemo(() => ({

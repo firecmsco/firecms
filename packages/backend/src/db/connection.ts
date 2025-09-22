@@ -22,13 +22,13 @@ export function createPostgresDatabaseConnection(connectionString: string) {
 
         // Handle specific timeout errors
         if (err.message.includes("ETIMEDOUT")) {
-            console.log("Connection timeout detected, pool will automatically retry...");
+            console.warn("Connection timeout detected, pool will automatically retry...");
         }
     });
 
     // Handle successful connections
     pool.on("connect", (client) => {
-        console.log("Database client connected");
+        console.debug("Database client connected");
 
         // Set up client-level error handling
         client.on("error", (err) => {
@@ -38,7 +38,7 @@ export function createPostgresDatabaseConnection(connectionString: string) {
 
     // Handle client removal from pool
     pool.on("remove", (client) => {
-        console.log("Database client removed from pool");
+        console.debug("Database client removed from pool");
     });
 
     // Create drizzle instance with error handling wrapper
@@ -46,13 +46,13 @@ export function createPostgresDatabaseConnection(connectionString: string) {
 
     // Graceful shutdown handler
     process.on("SIGINT", async () => {
-        console.log("Closing database pool...");
+        console.log("SIGINT: Closing database pool...");
         await pool.end();
         process.exit(0);
     });
 
     process.on("SIGTERM", async () => {
-        console.log("Closing database pool...");
+        console.log("SIGTERM: Closing database pool...");
         await pool.end();
         process.exit(0);
     });

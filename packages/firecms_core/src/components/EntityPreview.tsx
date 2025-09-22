@@ -32,7 +32,7 @@ export type EntityPreviewProps = {
 };
 
 export type EntityPreviewDataProps = {
-    size?: PreviewSize,
+    size?: "small" | "medium" | "large",
     actions?: React.ReactNode,
     collection?: EntityCollection,
     previewKeys?: string[],
@@ -90,7 +90,11 @@ export function EntityPreviewData({
 
     return (
         <>
-            <div className={cls("flex w-10 h-10 ml-1 mr-2 shrink-0", size === "small" ? "my-0.5" : "m-2 self-start")}>
+            <div className={cls("flex  shrink-0", {
+                "w-6 h-6 ml-0 mr-0 my-0.5": size === "small",
+                "w-8 h-8 ml-1 mr-2 m-2 self-start": size === "medium",
+                "w-10 h-10 ml-2 mr-2 m-2 self-start": size === "large"
+            })}>
                 {usedImageProperty && usedImageValue && <PropertyPreview property={usedImageProperty}
                                                                          propertyKey={imagePropertyKey as string}
                                                                          size={"small"}
@@ -101,9 +105,10 @@ export function EntityPreviewData({
                                                                          className={"m-auto p-1"}/>}
             </div>
 
-            <div className={"flex flex-col grow w-full m-1 shrink min-w-0 text-text-primary dark:text-text-primary-dark"}>
+            <div
+                className={"flex flex-col grow w-full m-1 shrink min-w-0 text-text-primary dark:text-text-primary-dark flex-1 mr-2"}>
 
-                {size !== "small" && includeId && (
+                {includeId && (
                     entity
                         ? <div className={"block whitespace-nowrap overflow-hidden truncate"}>
                             <Typography variant={"caption"}
@@ -115,7 +120,8 @@ export function EntityPreviewData({
                         : <Skeleton/>)}
 
                 {titleProperty && (
-                    <div className={"truncate my-0.5 text-sm font-medium text-text-primary dark:text-text-primary-dark"}>
+                    <div
+                        className={"truncate my-0.5 text-sm font-medium text-text-primary dark:text-text-primary-dark"}>
                         {
                             entity
                                 ? <PropertyPreview
@@ -156,29 +162,31 @@ export function EntityPreviewData({
             </div>
 
             {entity && includeEntityLink &&
-                <Tooltip title={`See details for ${entity.id}`} className={"shrink-0"}>
-                    <IconButton
-                        color={"inherit"}
-                        size={"small"}
-                        className={size !== "small" ? "self-start" : ""}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
-                                path: entity.path,
-                                entityId: entity.id
-                            });
-                            sideEntityController.open({
-                                entityId: entity.id,
-                                path: entity.path,
-                                collection,
-                                updateUrl: true
-                            });
-                        }}>
-                        <KeyboardTabIcon size={"small"}/>
-                    </IconButton>
-                </Tooltip>}
+                <div className="flex-shrink-0">
+                    <Tooltip title={`See details for ${entity.id}`} className={"shrink-0"}>
+                        <IconButton
+                            color={"inherit"}
+                            size={"small"}
+                            className={size !== "small" ? "self-start" : ""}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
+                                    path: entity.path,
+                                    entityId: entity.id
+                                });
+                                sideEntityController.open({
+                                    entityId: entity.id,
+                                    path: entity.path,
+                                    collection,
+                                    updateUrl: true
+                                });
+                            }}>
+                            <KeyboardTabIcon size={"small"}/>
+                        </IconButton>
+                    </Tooltip>
+                </div>}
 
-            {actions}
+            {actions && <div className="flex-shrink-0">{actions}</div>}
         </>
     );
 }

@@ -62,18 +62,18 @@ export class RealtimeService extends EventEmitter {
             searchString?: string;
         };
     }) {
-        console.log("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId);
+        console.debug("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId);
         this._subscriptions.set(subscriptionId, subscription);
     }
 
     // Add callback management methods
     addSubscriptionCallback(subscriptionId: string, callback: (data: any) => void) {
-        console.log("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
+        console.debug("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.set(subscriptionId, callback);
     }
 
     removeSubscriptionCallback(subscriptionId: string) {
-        console.log("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
+        console.debug("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.delete(subscriptionId);
     }
 
@@ -192,7 +192,7 @@ export class RealtimeService extends EventEmitter {
 
     // Enhanced notification method that handles nested relation updates
     async notifyEntityUpdate(path: string, entityId: string, entity: Entity | null, databaseId?: string) {
-        console.log("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
+        console.debug("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
 
         // Get all paths that need to be notified - the direct path plus any parent paths
         const pathsToNotify = [path];
@@ -201,7 +201,7 @@ export class RealtimeService extends EventEmitter {
         if (path.includes("/") && path.split("/").length > 1) {
             const parentPaths = this.getParentPaths(path);
             pathsToNotify.push(...parentPaths);
-            console.log(`🔗 [RealtimeService] Nested path detected. Will notify paths: ${pathsToNotify.join(", ")}`);
+            console.debug(`🔗 [RealtimeService] Nested path detected. Will notify paths: ${pathsToNotify.join(", ")}`);
         }
 
         // Process each path that needs notification
@@ -209,14 +209,14 @@ export class RealtimeService extends EventEmitter {
             await this.notifyPathUpdate(notifyPath, path, entityId, entity, databaseId);
         }
 
-        console.log("🔔 [RealtimeService] notifyEntityUpdate completed for path:", path);
+        console.debug("🔔 [RealtimeService] notifyEntityUpdate completed for path:", path);
     }
 
     /**
      * Notify subscriptions for a specific path
      */
     private async notifyPathUpdate(notifyPath: string, originalPath: string, entityId: string, entity: Entity | null, _databaseId?: string) {
-        console.log(`📡 [RealtimeService] Notifying path: ${notifyPath} (original: ${originalPath})`);
+        console.debug(`📡 [RealtimeService] Notifying path: ${notifyPath} (original: ${originalPath})`);
 
         // Find all relevant subscriptions for this specific path
         const allSubscriptions = Array.from(this._subscriptions.entries()).filter(([, sub]) => {
@@ -233,7 +233,7 @@ export class RealtimeService extends EventEmitter {
             return false;
         });
 
-        console.log(`📡 [RealtimeService] Found ${allSubscriptions.length} subscriptions for path: ${notifyPath}`);
+        console.debug(`📡 [RealtimeService] Found ${allSubscriptions.length} subscriptions for path: ${notifyPath}`);
 
         // Separate WebSocket subscriptions from DataSource callback subscriptions
         const webSocketSubscriptions = allSubscriptions.filter(([, sub]) =>
@@ -247,17 +247,17 @@ export class RealtimeService extends EventEmitter {
         // Handle WebSocket subscriptions
         for (const [subscriptionId, subscription] of webSocketSubscriptions) {
             try {
-                console.log(`🔄 [RealtimeService] Processing WebSocket subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
+                console.debug(`🔄 [RealtimeService] Processing WebSocket subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
 
                 if (subscription.type === "entity" && notifyPath === originalPath) {
                     // Send entity update directly (only for exact path matches)
                     this.sendEntityUpdate(subscription.clientId, subscriptionId, entity);
-                    console.log(`📄 [RealtimeService] Sent entity_update to ${subscriptionId}`);
+                    console.debug(`📄 [RealtimeService] Sent entity_update to ${subscriptionId}`);
 
                 } else if (subscription.type === "collection" && subscription.collectionRequest) {
                     // Refetch the collection with its specific filters and send update
                     const collectionRequest = subscription.collectionRequest;
-                    console.log(`📋 [RealtimeService] Refetching collection for subscription: ${subscriptionId}, path: ${notifyPath}`);
+                    console.debug(`📋 [RealtimeService] Refetching collection for subscription: ${subscriptionId}, path: ${notifyPath}`);
 
                     let entities;
                     if (collectionRequest.searchString) {
@@ -283,7 +283,7 @@ export class RealtimeService extends EventEmitter {
                         });
                     }
 
-                    console.log(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId} (path: ${notifyPath})`);
+                    console.debug(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId} (path: ${notifyPath})`);
                     this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
                 }
             } catch (error) {
@@ -295,23 +295,23 @@ export class RealtimeService extends EventEmitter {
         // Handle DataSource callback subscriptions
         for (const [subscriptionId, subscription] of dataSourceSubscriptions) {
             try {
-                console.log(`🔄 [RealtimeService] Processing DataSource subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
+                console.debug(`🔄 [RealtimeService] Processing DataSource subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
 
                 const callback = this.subscriptionCallbacks.get(subscriptionId);
                 if (!callback) {
-                    console.log(`⚠️ [RealtimeService] No callback found for DataSource subscription: ${subscriptionId}`);
+                    console.debug(`⚠️ [RealtimeService] No callback found for DataSource subscription: ${subscriptionId}`);
                     continue;
                 }
 
                 if (subscription.type === "entity" && notifyPath === originalPath) {
                     // Call the callback directly with the entity (only for exact path matches)
                     callback(entity);
-                    console.log(`📄 [RealtimeService] Called DataSource callback for entity ${subscriptionId}`);
+                    console.debug(`📄 [RealtimeService] Called DataSource callback for entity ${subscriptionId}`);
 
                 } else if (subscription.type === "collection" && subscription.collectionRequest) {
                     // Refetch the collection and call the callback
                     const collectionRequest = subscription.collectionRequest;
-                    console.log(`📋 [RealtimeService] Refetching collection for DataSource subscription: ${subscriptionId}, path: ${notifyPath}`);
+                    console.debug(`📋 [RealtimeService] Refetching collection for DataSource subscription: ${subscriptionId}, path: ${notifyPath}`);
 
                     let entities;
                     if (collectionRequest.searchString) {
@@ -337,7 +337,7 @@ export class RealtimeService extends EventEmitter {
                         });
                     }
 
-                    console.log(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
+                    console.debug(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
                     callback(entities);
                 }
             } catch (error) {

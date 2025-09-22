@@ -1,9 +1,9 @@
 import React from "react";
 import { useDataSource, useRelationSelector } from "../hooks";
-import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
+import { EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { getRelationFrom } from "@firecms/common";
 import { RelationItem, RelationSelector } from "./RelationSelector";
-import { EntityPreview, EntityPreviewData } from "./EntityPreview";
+import { EntityPreview } from "./EntityPreview";
 
 interface RelationSelectorFieldProps {
     /**
@@ -22,18 +22,7 @@ interface RelationSelectorFieldProps {
      * Callback when value changes
      */
     updateValue: (newValue: EntityRelation | EntityRelation[] | null) => void;
-    /**
-     * Whether to allow multiple selection
-     */
-    multiselect?: boolean;
-    /**
-     * Properties to show in preview
-     */
-    previewProperties?: string[];
-    /**
-     * Title for the selector
-     */
-    title?: string;
+
     /**
      * The relation configuration
      */
@@ -46,36 +35,25 @@ interface RelationSelectorFieldProps {
      * Collection size for display
      */
     size?: "small" | "medium",
-    /**
-     * Whether to include entity ID in display
-     */
-    includeId?: boolean;
-    /**
-     * Whether to include entity link
-     */
-    includeEntityLink?: boolean;
+
 }
 
 /**
  * RelationSelector component that matches TableRelationField API
  */
 export function RelationSelectorField({
-                                          name,
                                           disabled = false,
                                           internalValue,
                                           updateValue,
-                                          multiselect = false,
-                                          previewProperties,
-                                          title = "Select Relations",
                                           relation,
                                           forceFilter,
                                           size = "medium",
-                                          includeId = false,
-                                          includeEntityLink = false
                                       }: RelationSelectorFieldProps) {
 
     const collection = relation.target();
     const dataSource = useDataSource(collection);
+
+    const multiple = relation.cardinality === "many";
 
     // Use the relation selector hook to handle ALL data fetching
     const {
@@ -86,12 +64,10 @@ export function RelationSelectorField({
         loadMore,
         hasMore,
         entityToRelationItem,
-        relationItemToEntityRelation
     } = useRelationSelector({
         path: collection.slug,
         collection,
         forceFilter,
-        labelProperty: previewProperties?.[0] || "name"
     });
 
     // Convert EntityRelation(s) to RelationItem(s) for the component
@@ -108,7 +84,7 @@ export function RelationSelectorField({
                 });
 
                 if (entity) {
-                    return entityToRelationItem(entity);
+                    return entityToRelationItem(entity, rel);
                 }
             } catch (error) {
                 console.warn("Could not fetch entity for relation:", error);
@@ -135,23 +111,18 @@ export function RelationSelectorField({
         if (!items) return null;
 
         const convertSingle = (item: RelationItem): EntityRelation => {
-            // If the item data is already an EntityRelation, use it
-            if (item.data && item.data instanceof EntityRelation) {
-                return item.data;
+            // Use the stored relation if available
+            if (item.relation) {
+                return item.relation;
             }
 
-            // If the item data is an Entity, convert it to EntityRelation
-            if (item.data && item.data.id !== undefined) {
+            // Create a new EntityRelation from the item data if available
+            if (item.data) {
                 return getRelationFrom(item.data);
             }
 
-            // Create a new EntityRelation from the reference
-            const entityRef = relationItemToEntityRelation(item);
-            return getRelationFrom({
-                id: entityRef.id,
-                path: entityRef.path,
-                values: {}
-            });
+            // Fallback to creating relation from basic info
+            return new EntityRelation(item.id, collection.slug);
         };
 
         if (Array.isArray(items)) {
@@ -159,7 +130,7 @@ export function RelationSelectorField({
         } else {
             return convertSingle(items);
         }
-    }, [relationItemToEntityRelation]);
+    }, [collection.slug]);
 
     // State for the converted relation items
     const [relationValue, setRelationValue] = React.useState<RelationItem | RelationItem[] | undefined>(undefined);
@@ -189,9 +160,9 @@ export function RelationSelectorField({
 
     const placeholder = React.useMemo(() => {
         if (disabled) return "Disabled";
-        if (multiselect) return "Select multiple...";
+        if (multiple) return "Select multiple...";
         return "Select...";
-    }, [disabled, multiselect]);
+    }, [disabled, multiple]);
 
     if (error) {
         return (
@@ -203,9 +174,8 @@ export function RelationSelectorField({
 
     return (
         <RelationSelector
-            label={title}
             placeholder={placeholder}
-            multiple={multiselect}
+            multiple={multiple}
             disabled={disabled}
             size={size}
             value={relationValue}
@@ -218,9 +188,6 @@ export function RelationSelectorField({
             searchPlaceholder="Search..."
             noResultsText="No relations found"
             loadingText="Loading relations..."
-            includeId={includeId}
-            includeEntityLink={includeEntityLink}
-            previewKeys={previewProperties}
         />
     );
 }

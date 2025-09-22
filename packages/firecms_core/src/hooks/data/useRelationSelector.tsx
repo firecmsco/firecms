@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDataSource } from "../../hooks";
 import { Entity, EntityCollection, EntityRelation, FilterValues } from "@firecms/types";
 import { RelationItem } from "../../components/RelationSelector";
@@ -29,10 +29,6 @@ export interface UseRelationSelectorProps<M extends Record<string, any> = any> {
      */
     getDescriptionFromEntity?: (entity: Entity<M>) => string | undefined;
     /**
-     * Property name to use as the primary display field
-     */
-    labelProperty?: keyof M;
-    /**
      * Property name to use as the secondary display field
      */
     descriptionProperty?: keyof M;
@@ -45,8 +41,7 @@ export interface RelationSelectorController {
     search: (searchString: string) => void;
     loadMore: () => void;
     hasMore: boolean;
-    entityToRelationItem: (entity: Entity<any>) => RelationItem;
-    relationItemToEntityRelation: (item: RelationItem) => EntityRelation;
+    entityToRelationItem: (entity: Entity<any>, relation: EntityRelation) => RelationItem;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -62,7 +57,6 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         pageSize = DEFAULT_PAGE_SIZE,
         getLabelFromEntity,
         getDescriptionFromEntity,
-        labelProperty,
         descriptionProperty
     }: UseRelationSelectorProps<M>
 ): RelationSelectorController {
@@ -80,14 +74,12 @@ export function useRelationSelector<M extends Record<string, any> = any>(
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Function to convert entity to RelationItem
-    const entityToRelationItem = useCallback((entity: Entity<M>): RelationItem => {
+    const entityToRelationItem = useCallback((entity: Entity<M>, relation?: EntityRelation): RelationItem => {
         let label: string;
         let description: string | undefined;
 
         if (getLabelFromEntity) {
             label = getLabelFromEntity(entity);
-        } else if (labelProperty && entity.values && entity.values[labelProperty]) {
-            label = String(entity.values[labelProperty]);
         } else {
             // Fallback: try common label properties
             const commonLabelProps = ["name", "title", "label", "displayName"];
@@ -115,14 +107,10 @@ export function useRelationSelector<M extends Record<string, any> = any>(
             id: entity.id,
             label,
             description,
-            data: entity
+            data: entity,
+            relation: relation ? relation : new EntityRelation(entity.id, path)
         };
-    }, [getLabelFromEntity, getDescriptionFromEntity, labelProperty, descriptionProperty]);
-
-    // Function to convert RelationItem back to EntityRelation
-    const relationItemToEntityRelation = useCallback((item: RelationItem): EntityRelation => {
-        return new EntityRelation(item.id, path);
-    }, [path]);
+    }, [getLabelFromEntity, getDescriptionFromEntity, descriptionProperty]);
 
     // Clean up any existing subscription
     const cleanupSubscription = useCallback(() => {
@@ -133,7 +121,7 @@ export function useRelationSelector<M extends Record<string, any> = any>(
     }, []);
 
     // Perform data fetch
-    const fetchData = useCallback((searchString: string, loadMore: boolean = false) => {
+    const fetchData = useCallback((searchString: string | undefined, loadMore: boolean = false) => {
         cleanupSubscription();
         setError(undefined);
         setIsLoading(true);
@@ -142,7 +130,7 @@ export function useRelationSelector<M extends Record<string, any> = any>(
             path,
             collection,
             onUpdate: (entities) => {
-                const newItems = entities.map(entityToRelationItem);
+                const newItems = entities.map((e) => entityToRelationItem(e));
 
                 if (loadMore) {
                     setItems(prev => [...prev, ...newItems]);
@@ -164,12 +152,11 @@ export function useRelationSelector<M extends Record<string, any> = any>(
             filter: forceFilter,
             limit: pageSize,
             startAfter: loadMore ? lastEntity : undefined,
-            orderBy: labelProperty as string,
             order: "asc"
         });
 
         unsubscribeRef.current = unsubscribe;
-    }, [dataSource, path, collection, forceFilter, pageSize, labelProperty, entityToRelationItem, cleanupSubscription, lastEntity]);
+    }, [dataSource, path, collection, forceFilter, pageSize, entityToRelationItem, cleanupSubscription, lastEntity]);
 
     // Search function with debouncing
     const search = useCallback((searchString: string) => {
@@ -196,7 +183,7 @@ export function useRelationSelector<M extends Record<string, any> = any>(
 
     // Load initial data
     useEffect(() => {
-        fetchData("", false);
+        fetchData(undefined, false);
 
         return () => {
             cleanupSubscription();
@@ -204,7 +191,7 @@ export function useRelationSelector<M extends Record<string, any> = any>(
                 clearTimeout(searchTimeoutRef.current);
             }
         };
-    }, [path, collection.slug, forceFilter, labelProperty]);
+    }, [path, collection.slug, forceFilter]);
 
     return {
         items,
@@ -214,6 +201,5 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         loadMore,
         hasMore,
         entityToRelationItem,
-        relationItemToEntityRelation
     };
 }

@@ -10,5 +10,5 @@
 export * from "./postgres_client";
 
 // React hooks and data source implementation
-export * from "./usePostgresDataSource";
+export * from "./usePostgresClientDataSource";
 

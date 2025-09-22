@@ -31,7 +31,6 @@ export interface RelationItem {
 }
 
 export interface RelationSelectorProps {
-    modalPopover?: boolean;
     className?: string;
     open?: boolean;
     name?: string;
@@ -44,13 +43,11 @@ export interface RelationSelectorProps {
     placeholder?: React.ReactNode;
     size?: "small" | "medium";
     useChips?: boolean;
-    label?: React.ReactNode | string;
     disabled?: boolean;
     error?: boolean;
     position?: "item-aligned" | "popper";
     endAdornment?: React.ReactNode;
     multiple?: boolean;
-    includeClear?: boolean;
     inputRef?: React.RefObject<HTMLButtonElement>;
     padding?: boolean;
     invisible?: boolean;
@@ -65,9 +62,6 @@ export interface RelationSelectorProps {
     noResultsText?: string;
     loadingText?: string;
 
-    // Entity preview props
-    includeId?: boolean;
-    includeEntityLink?: boolean;
 }
 
 export const RelationSelector = React.forwardRef<
@@ -78,14 +72,11 @@ export const RelationSelector = React.forwardRef<
         {
             value,
             size = "medium",
-            label,
             error,
             onValueChange,
             invisible,
             disabled,
             placeholder,
-            modalPopover = true,
-            includeClear = true,
             useChips = true,
             className,
             open,
@@ -99,8 +90,6 @@ export const RelationSelector = React.forwardRef<
             searchPlaceholder = "Search...",
             noResultsText = "No relations found.",
             loadingText = "Loading...",
-            includeId,
-            includeEntityLink,
         },
         ref
     ) => {
@@ -198,8 +187,10 @@ export const RelationSelector = React.forwardRef<
                 } else {
                     newSelectedValues = [...selectedValues, item];
                 }
+                // Don't close popover for multiple selection
             } else {
                 newSelectedValues = [item];
+                // Only close popover for single selection
                 onPopoverOpenChange(false);
             }
 
@@ -274,21 +265,21 @@ export const RelationSelector = React.forwardRef<
                         >
                             {selectedValues.length > 0 ? (
                                 <div className="flex justify-between items-center w-full">
-                                    <div className="flex flex-wrap items-center gap-1.5 text-start">
+                                    <div className="flex flex-wrap items-center gap-1.5 text-start flex-1 min-w-0 mr-2">
                                         {selectedValues.map((item) => {
                                             if (!useChips || !multiple) {
                                                 return (
                                                     <div key={String(item.id)}
-                                                         className="flex flex-row items-center gap-2">
+                                                         className="flex flex-row items-center gap-2 truncate">
                                                         {item.data ? (
                                                             <EntityPreviewData
-                                                                size={"small"}
+                                                                size={"medium"}
                                                                 entity={item.data}
                                                                 includeEntityLink={false}
                                                                 includeId={false}
                                                             />
                                                         ) : (
-                                                            <span className="text-sm">{item.label}</span>
+                                                            <span className="text-sm truncate">{item.label}</span>
                                                         )}
                                                     </div>
                                                 );
@@ -297,7 +288,7 @@ export const RelationSelector = React.forwardRef<
                                                 <Chip
                                                     size={"medium"}
                                                     key={String(item.id)}
-                                                    className={cls("flex flex-row items-center p-1")}
+                                                    className={cls("flex flex-row items-center p-1 max-w-full")}
                                                 >
                                                     {item.data ? (
                                                         <EntityPreviewData
@@ -307,7 +298,7 @@ export const RelationSelector = React.forwardRef<
                                                             includeId={false}
                                                         />
                                                     ) : (
-                                                        <span className="text-sm">{item.label}</span>
+                                                        <span className="text-sm truncate">{item.label}</span>
                                                     )}
                                                     <CloseIcon
                                                         size={"smallest"}
@@ -320,10 +311,12 @@ export const RelationSelector = React.forwardRef<
                                             );
                                         })}
                                     </div>
-                                    <KeyboardArrowDownIcon
-                                        size={size === "medium" ? "medium" : "small"}
-                                        className={cls("transition ml-2", isPopoverOpen ? "rotate-180" : "")}
-                                    />
+                                    <div className="flex-shrink-0">
+                                        <KeyboardArrowDownIcon
+                                            size={size === "medium" ? "medium" : "small"}
+                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
+                                        />
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="flex items-center justify-between w-full mx-auto">
@@ -438,10 +431,10 @@ export const RelationSelector = React.forwardRef<
                                                         {item.data ? (
                                                             <div className="flex flex-row items-center gap-2">
                                                                 <EntityPreviewData
-                                                                    size={"small"}
+                                                                    size={multiple ? "medium" : "small"}
                                                                     entity={item.data}
-                                                                    includeId={includeId}
-                                                                    includeEntityLink={includeEntityLink}
+                                                                    includeId={false}
+                                                                    includeEntityLink={true}
                                                                 />
                                                             </div>
                                                         ) : (

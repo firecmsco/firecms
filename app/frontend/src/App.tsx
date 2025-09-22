@@ -27,7 +27,7 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { usePostgresDataSource } from "@firecms/postgresql";
+import { usePostgresClientDataSource } from "@firecms/postgresql";
 import { collections } from "shared";
 
 export const firebaseConfig = {
@@ -60,7 +60,7 @@ export function App() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Replace Firestore delegate with PostgreSQL delegate
-    const postgresDelegate = usePostgresDataSource({
+    const postgresDelegate = usePostgresClientDataSource({
         websocketUrl: "ws://localhost:3001"
     });
 
