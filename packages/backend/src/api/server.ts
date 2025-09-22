@@ -153,8 +153,7 @@ export class FireCMSApiServer {
             `);
         });
 
-        // Mount all routes on the main app
-        this.app.use(this.router);
+        // Don't mount routes automatically - let the consumer mount the router
     }
 
     /**
@@ -319,17 +318,19 @@ export class FireCMSApiServer {
     }
 
     /**
-     * Get Express app instance (for standalone use or mounting)
-     */
-    getApp(): Express {
-        return this.app;
-    }
-
-    /**
-     * Get Router instance (for mounting on existing app)
+     * Get the Express router with all API routes
+     * Use this to mount the API on an existing Express app
      */
     getRouter(): Router {
         return this.router;
+    }
+
+    /**
+     * Get the standalone Express app
+     * Use this if you want to run the API as a standalone server
+     */
+    getApp(): Express {
+        return this.app;
     }
 
     /**

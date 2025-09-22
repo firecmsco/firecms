@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
-import { createPostgresDatabaseConnection, initializeFireCMSBackend } from "@firecms/backend";
+import { createPostgresDatabaseConnection, initializeFireCMSBackend, initializeFireCMSAPI } from "@firecms/backend";
 
 import { tables, enums, relations } from "./schema.generated";
 import { collections } from "shared";
@@ -26,21 +26,30 @@ if (!databaseUrl) {
 }
 const db = createPostgresDatabaseConnection(databaseUrl);
 
-initializeFireCMSBackend({
+// Initialize FireCMS Backend (without Express app dependency)
+const backend = initializeFireCMSBackend({
     collections,
     tables,
     enums,
     relations,
     db,
-    server,
-    api: {
-        app
-    }
+    server
 });
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
+
+// Initialize FireCMS API endpoints
+initializeFireCMSAPI(app, backend, {
+    basePath: "/api", // Optional: defaults to "/api"
+    enableGraphQL: true,
+    enableREST: true,
+    cors: {
+        origin: true,
+        credentials: true
+    }
+});
 
 // Serve static files from frontend build in production
 if (process.env.NODE_ENV === "production") {
@@ -79,7 +88,7 @@ const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log(`📋 API endpoints:`);
+    console.log("📋 API endpoints:");
     console.log(`   • REST API: http://localhost:${PORT}/api`);
     console.log(`   • Swagger API Docs: http://localhost:${PORT}/api/swagger`);
     console.log(`   • GraphQL API: http://localhost:${PORT}/api/graphql`);

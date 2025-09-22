@@ -1,5 +1,5 @@
 import { EntityCollection } from "@firecms/types";
-import { Request, Response } from "express";
+import { Request } from "express";
 
 /**
  * Configuration for API generation

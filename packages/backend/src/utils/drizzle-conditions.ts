@@ -89,7 +89,7 @@ export class DrizzleConditionBuilder {
         joinConditions: { table: PgTable<any>; condition: SQL }[];
         whereConditions: SQL[];
     } {
-        console.log(`🔍 [buildRelationConditions] Building conditions for relation:`, {
+        console.debug(`🔍 [buildRelationConditions] Building conditions for relation:`, {
             relationName: relation.relationName,
             cardinality: relation.cardinality,
             direction: relation.direction,
@@ -103,7 +103,7 @@ export class DrizzleConditionBuilder {
         const whereConditions: SQL[] = [];
 
         if (relation.joinPath && relation.joinPath.length > 0) {
-            console.log(`🔍 [buildRelationConditions] Using joinPath logic`);
+            console.debug(`🔍 [buildRelationConditions] Using joinPath logic`);
             // Handle join path relations
             const {
                 joins,
@@ -120,7 +120,7 @@ export class DrizzleConditionBuilder {
             whereConditions.push(finalCondition);
 
         } else if (relation.through && relation.cardinality === "many" && relation.direction === "owning") {
-            console.log(`🔍 [buildRelationConditions] Using owning many-to-many with explicit through`);
+            console.debug(`🔍 [buildRelationConditions] Using owning many-to-many with explicit through`);
             // Handle many-to-many relations with junction table
             const junctionResult = this.buildJunctionTableConditions(
                 relation.through,
@@ -132,7 +132,7 @@ export class DrizzleConditionBuilder {
             whereConditions.push(junctionResult.condition);
 
         } else if (relation.through && relation.cardinality === "many" && relation.direction === "inverse") {
-            console.log(`🔍 [buildRelationConditions] Using inverse many-to-many with explicit through`);
+            console.debug(`🔍 [buildRelationConditions] Using inverse many-to-many with explicit through`);
             // Handle inverse many-to-many relations with junction table
             const junctionResult = this.buildInverseJunctionTableConditions(
                 relation.through,
@@ -144,12 +144,12 @@ export class DrizzleConditionBuilder {
             whereConditions.push(junctionResult.condition);
 
         } else if (relation.cardinality === "many" && relation.direction === "inverse" && !relation.through) {
-            console.log(`🔍 [buildRelationConditions] Handling inverse many relationship without explicit through`);
+            console.debug(`🔍 [buildRelationConditions] Handling inverse many relationship without explicit through`);
 
             // First, try to find a junction table (for many-to-many relationships)
             const junctionInfo = this.findCorrespondingJunctionTable(relation, registry);
             if (junctionInfo) {
-                console.log(`🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions`);
+                console.debug(`🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions`);
                 const junctionResult = this.buildInverseJunctionTableConditions(
                     junctionInfo,
                     targetIdColumn,
@@ -159,7 +159,7 @@ export class DrizzleConditionBuilder {
                 joinConditions.push(junctionResult.join);
                 whereConditions.push(junctionResult.condition);
             } else if (relation.foreignKeyOnTarget) {
-                console.log(`🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target`);
+                console.debug(`🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target`);
                 // This is a true inverse one-to-many relationship
                 const simpleCondition = this.buildSimpleRelationCondition(
                     relation,
@@ -173,7 +173,7 @@ export class DrizzleConditionBuilder {
                 throw new Error(`Cannot resolve inverse many relation '${relation.relationName}'. Either specify 'through' property, ensure corresponding owning relation exists with junction table configuration, or specify 'foreignKeyOnTarget' for one-to-many relationships.`);
             }
         } else {
-            console.log(`🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR`);
+            console.debug(`🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR`);
             // Handle simple relations
             const simpleCondition = this.buildSimpleRelationCondition(
                 relation,
@@ -184,7 +184,7 @@ export class DrizzleConditionBuilder {
             whereConditions.push(simpleCondition);
         }
 
-        console.log(`🔍 [buildRelationConditions] Final result:`, {
+        console.debug(`🔍 [buildRelationConditions] Final result:`, {
             joinConditionsCount: joinConditions.length,
             whereConditionsCount: whereConditions.length
         });
@@ -586,7 +586,7 @@ export class DrizzleConditionBuilder {
                 throw new Error(`Auto-inferred foreign key column '${inferredForeignKeyName}' not found in target table for inverse relation '${relation.relationName}'. Please specify 'foreignKeyOnTarget' explicitly.`);
             }
 
-            console.log(`🔍 [DrizzleConditionBuilder] Auto-inferred foreign key '${inferredForeignKeyName}' for inverse relation '${relation.relationName}'`);
+            console.debug(`🔍 [DrizzleConditionBuilder] Auto-inferred foreign key '${inferredForeignKeyName}' for inverse relation '${relation.relationName}'`);
 
             return Array.isArray(parentEntityId)
                 ? inArray(foreignKeyCol, parentEntityId)
@@ -918,20 +918,20 @@ export class DrizzleConditionBuilder {
         registry: BackendCollectionRegistry
     ): { table: string; sourceColumn: string; targetColumn: string } | null {
         try {
-            console.log(`🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation '${relation.relationName}' with inverseRelationName '${relation.inverseRelationName}'`);
+            console.debug(`🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation '${relation.relationName}' with inverseRelationName '${relation.inverseRelationName}'`);
 
             // Get the target collection of the inverse relation
             const targetCollection = relation.target();
-            console.log(`🔍 [findCorrespondingJunctionTable] Target collection: ${targetCollection.slug || targetCollection.dbPath}`);
+            console.debug(`🔍 [findCorrespondingJunctionTable] Target collection: ${targetCollection.slug || targetCollection.dbPath}`);
 
             // We need to find the corresponding owning relation on the target collection
             // that points back to the current collection
             const targetCollectionRelations = resolveCollectionRelations(targetCollection);
-            console.log(`🔍 [findCorrespondingJunctionTable] Target collection relations:`, Object.keys(targetCollectionRelations));
+            console.debug(`🔍 [findCorrespondingJunctionTable] Target collection relations:`, Object.keys(targetCollectionRelations));
 
             // Look for an owning many-to-many relation that matches the inverse relation name
             for (const [relationKey, targetRelation] of Object.entries(targetCollectionRelations)) {
-                console.log(`🔍 [findCorrespondingJunctionTable] Checking relation '${relationKey}':`, {
+                console.debug(`🔍 [findCorrespondingJunctionTable] Checking relation '${relationKey}':`, {
                     relationName: targetRelation.relationName,
                     cardinality: targetRelation.cardinality,
                     direction: targetRelation.direction,
@@ -948,10 +948,10 @@ export class DrizzleConditionBuilder {
                 const nameMatches = targetRelation.relationName === relation.inverseRelationName ||
                                   relationKey === relation.inverseRelationName;
 
-                console.log(`🔍 [findCorrespondingJunctionTable] - isOwningManyToMany: ${isOwningManyToMany}, nameMatches: ${nameMatches}`);
+                console.debug(`🔍 [findCorrespondingJunctionTable] - isOwningManyToMany: ${isOwningManyToMany}, nameMatches: ${nameMatches}`);
 
                 if (isOwningManyToMany && nameMatches) {
-                    console.log(`🔍 [findCorrespondingJunctionTable] Found matching owning relation!`);
+                    console.debug(`🔍 [findCorrespondingJunctionTable] Found matching owning relation!`);
 
                     // Found the corresponding owning relation with junction table info
                     // For inverse relation, we need to swap source and target columns
@@ -962,13 +962,13 @@ export class DrizzleConditionBuilder {
                         targetColumn: through.sourceColumn // Swapped
                     };
 
-                    console.log(`🔍 [findCorrespondingJunctionTable] Returning junction info:`, result);
+                    console.debug(`🔍 [findCorrespondingJunctionTable] Returning junction info:`, result);
                     return result;
                 }
             }
 
-            console.log(`🔍 [findCorrespondingJunctionTable] No matching owning relation found for inverseRelationName '${relation.inverseRelationName}'`);
-            console.log(`🔍 [findCorrespondingJunctionTable] Available relations on target collection:`,
+            console.debug(`🔍 [findCorrespondingJunctionTable] No matching owning relation found for inverseRelationName '${relation.inverseRelationName}'`);
+            console.debug(`🔍 [findCorrespondingJunctionTable] Available relations on target collection:`,
                 Object.entries(targetCollectionRelations).map(([key, rel]) =>
                     `${key} (relationName: ${rel.relationName}, direction: ${rel.direction}, cardinality: ${rel.cardinality})`
                 )

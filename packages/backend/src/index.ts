@@ -20,6 +20,10 @@ export * from "./services/realtimeService";
 // Collections
 export * from "./collections/registry";
 
+// API Server
+export * from "./api/server";
+export * from "./api/types";
+
 // API Generation
 export * from "./api";
 
