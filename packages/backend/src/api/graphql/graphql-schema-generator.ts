@@ -9,9 +9,9 @@ import {
     GraphQLNonNull,
     GraphQLFieldConfig,
     GraphQLInputObjectType,
-} from 'graphql';
-import { EntityCollection, Property } from '@firecms/types';
-import { PostgresDataSourceDelegate } from '../../services/dataSourceDelegate';
+} from "graphql";
+import { EntityCollection, Property } from "@firecms/types";
+import { PostgresDataSourceDelegate } from "../../services/dataSourceDelegate";
 
 /**
  * Lightweight GraphQL schema generator that leverages existing PostgresDataSourceDelegate
@@ -62,12 +62,12 @@ export class GraphQLSchemaGenerator {
         // Add ID field
         fields.id = {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'Unique identifier'
+            description: "Unique identifier"
         };
 
         // Convert properties to GraphQL fields
         Object.entries(collection.properties).forEach(([key, property]) => {
-            if (property.type !== 'relation') {
+            if (property.type !== "relation") {
                 fields[key] = this.convertPropertyToField(property);
             }
         });
@@ -86,19 +86,19 @@ export class GraphQLSchemaGenerator {
         let type;
 
         switch (property.type) {
-            case 'string':
+            case "string":
                 type = GraphQLString;
                 break;
-            case 'number':
+            case "number":
                 type = GraphQLFloat;
                 break;
-            case 'boolean':
+            case "boolean":
                 type = GraphQLBoolean;
                 break;
-            case 'date':
+            case "date":
                 type = GraphQLString;
                 break;
-            case 'array':
+            case "array":
                 type = new GraphQLList(GraphQLString);
                 break;
             default:
@@ -121,7 +121,7 @@ export class GraphQLSchemaGenerator {
         const fields: Record<string, any> = {};
 
         Object.entries(collection.properties).forEach(([key, property]) => {
-            if (property.type !== 'relation') {
+            if (property.type !== "relation") {
                 fields[key] = {
                     type: this.convertPropertyToInputType(property)
                 };
@@ -140,15 +140,15 @@ export class GraphQLSchemaGenerator {
 
     private convertPropertyToInputType(property: Property) {
         switch (property.type) {
-            case 'string':
+            case "string":
                 return GraphQLString;
-            case 'number':
+            case "number":
                 return GraphQLFloat;
-            case 'boolean':
+            case "boolean":
                 return GraphQLBoolean;
-            case 'date':
+            case "date":
                 return GraphQLString;
-            case 'array':
+            case "array":
                 return new GraphQLList(GraphQLString);
             default:
                 return GraphQLString;
@@ -207,7 +207,7 @@ export class GraphQLSchemaGenerator {
         });
 
         return new GraphQLObjectType({
-            name: 'Query',
+            name: "Query",
             fields
         });
     }
@@ -237,7 +237,7 @@ export class GraphQLSchemaGenerator {
                         entityId: this.dataSource.generateEntityId(collection.dbPath || collection.slug, collection),
                         values: args.input,
                         collection,
-                        status: 'new'
+                        status: "new"
                     });
                     return entity;
                 }
@@ -256,7 +256,7 @@ export class GraphQLSchemaGenerator {
                         entityId: args.id,
                         values: args.input,
                         collection,
-                        status: 'existing'
+                        status: "existing"
                     });
                     return entity;
                 }
@@ -270,13 +270,18 @@ export class GraphQLSchemaGenerator {
                 },
                 resolve: async (_, args) => {
                     try {
-                        await this.dataSource.deleteEntity({
+                        const existingEntity = await this.dataSource.fetchEntity({
                             path: collection.dbPath || collection.slug,
                             entityId: args.id,
                             collection
                         });
+                        if (!existingEntity) return false;
+                        await this.dataSource.deleteEntity({
+                            entity: existingEntity,
+                            collection
+                        });
                         return true;
-                    } catch (error) {
+                    } catch {
                         return false;
                     }
                 }
@@ -284,15 +289,15 @@ export class GraphQLSchemaGenerator {
         });
 
         return new GraphQLObjectType({
-            name: 'Mutation',
+            name: "Mutation",
             fields
         });
     }
 
     // Helper methods
     private getTypeName(collection: EntityCollection): string {
-        return collection.singularName?.replace(/\s+/g, '') ||
-               collection.name.slice(0, -1).replace(/\s+/g, '');
+        return collection.singularName?.replace(/\s+/g, "") ||
+            collection.name.slice(0, -1).replace(/\s+/g, "");
     }
 
     private getSingleQueryName(collection: EntityCollection): string {

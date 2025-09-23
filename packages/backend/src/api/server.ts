@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, Router } from "express";
+import express, { Express, Request, Response, Router, RequestHandler } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
@@ -18,7 +18,7 @@ export class FireCMSApiServer {
 
     constructor(config: ApiConfig & { dataSource: PostgresDataSourceDelegate }) {
         this.config = {
-            basePath: '/api',
+            basePath: "/api",
             enableGraphQL: true,
             enableREST: true,
             pagination: {
@@ -45,20 +45,21 @@ export class FireCMSApiServer {
         }
 
         // Body parsing - only for our routes
-        this.router.use(express.json({ limit: '10mb' }));
+        this.router.use(express.json({ limit: "10mb" }));
         this.router.use(express.urlencoded({ extended: true }));
 
         // Auth middleware - only for our routes
         if (this.config.auth?.enabled) {
-            this.router.use(async (req: Request, res: Response, next) => {
+            this.router.use(async (req: Request, res: Response, next): Promise<void> => {
                 if (this.config.auth?.validator) {
                     try {
                         const authResult = await this.config.auth.validator(req);
                         if (authResult) {
-                            (req as any).user = typeof authResult === 'object' ? authResult : true;
+                            (req as any).user = typeof authResult === "object" ? authResult : true;
                         }
                     } catch (error) {
-                        return res.status(401).json({ error: { message: 'Unauthorized' } });
+                        res.status(401).json({ error: { message: "Unauthorized" } });
+                        return; // ensure exit without calling next
                     }
                 }
                 next();
@@ -75,7 +76,7 @@ export class FireCMSApiServer {
         // Health check
         this.router.get(`${basePath}/health`, (req: Request, res: Response) => {
             res.json({
-                status: 'healthy',
+                status: "healthy",
                 timestamp: new Date().toISOString(),
                 collections: this.config.collections.map(c => c.slug),
                 dataSource: this.dataSource.key
@@ -107,14 +108,43 @@ export class FireCMSApiServer {
             const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections, this.dataSource);
             const schema = schemaGenerator.generateSchema();
 
-            this.router.use(`${basePath}/graphql`, createHandler({
+            const graphQLHandler = createHandler({
                 schema,
-                graphiql: process.env.NODE_ENV !== 'production',
-                context: (req: Request) => ({
+                context: (req: any) => ({
                     user: (req as any).user,
                     dataSource: this.dataSource
                 })
-            }));
+            }) as unknown as RequestHandler;
+
+            this.router.use(`${basePath}/graphql`, graphQLHandler);
+
+            // Lightweight GraphiQL IDE (only in non-production envs)
+            if (process.env.NODE_ENV !== "production") {
+                this.router.get(`${basePath}/graphiql`, (_req: Request, res: Response) => {
+                    res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8/>
+  <title>FireCMS GraphiQL</title>
+  <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
+  <style>body,html,#graphiql{height:100%;margin:0;width:100%;}</style>
+</head>
+<body>
+<div id="graphiql">Loading...</div>
+<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/graphiql/graphiql.min.js"></script>
+<script>
+  const fetcher = GraphiQL.createFetcher({ url: '${basePath}/graphql' });
+  ReactDOM.render(
+    React.createElement(GraphiQL, { fetcher }),
+    document.getElementById('graphiql'),
+  );
+</script>
+</body>
+</html>`);
+                });
+            }
         }
 
         // REST API endpoints - uses existing DataSourceDelegate
@@ -161,16 +191,16 @@ export class FireCMSApiServer {
      */
     private generateOpenApiSpec(): any {
         const spec = {
-            openapi: '3.0.0',
+            openapi: "3.0.0",
             info: {
-                title: 'FireCMS Auto-Generated API',
-                version: '1.0.0',
-                description: 'Automatically generated REST API from FireCMS collections'
+                title: "FireCMS Auto-Generated API",
+                version: "1.0.0",
+                description: "Automatically generated REST API from FireCMS collections"
             },
             servers: [
                 {
                     url: this.config.basePath,
-                    description: 'API Server'
+                    description: "API Server"
                 }
             ],
             paths: {} as any,
@@ -181,11 +211,11 @@ export class FireCMSApiServer {
 
         this.config.collections.forEach(collection => {
             spec.components.schemas[collection.singularName || collection.name] = {
-                type: 'object',
+                type: "object",
                 properties: {
-                    id: { type: 'string' },
+                    id: { type: "string" },
                     ...Object.entries(collection.properties).reduce((props, [key, property]) => {
-                        if (property.type !== 'relation') {
+                        if (property.type !== "relation") {
                             props[key] = this.convertPropertyToOpenApiType(property);
                         }
                         return props;
@@ -199,21 +229,21 @@ export class FireCMSApiServer {
                 get: {
                     summary: `List ${collection.name}`,
                     parameters: [
-                        { name: 'limit', in: 'query', schema: { type: 'integer', default: 20 } },
-                        { name: 'offset', in: 'query', schema: { type: 'integer', default: 0 } },
-                        { name: 'where', in: 'query', schema: { type: 'string' } },
-                        { name: 'orderBy', in: 'query', schema: { type: 'string' } }
+                        { name: "limit", in: "query", schema: { type: "integer", default: 20 } },
+                        { name: "offset", in: "query", schema: { type: "integer", default: 0 } },
+                        { name: "where", in: "query", schema: { type: "string" } },
+                        { name: "orderBy", in: "query", schema: { type: "string" } }
                     ],
                     responses: {
                         200: {
-                            description: 'Success',
+                            description: "Success",
                             content: {
-                                'application/json': {
+                                "application/json": {
                                     schema: {
-                                        type: 'object',
+                                        type: "object",
                                         properties: {
                                             data: {
-                                                type: 'array',
+                                                type: "array",
                                                 items: { $ref: `#/components/schemas/${collection.singularName}` }
                                             }
                                         }
@@ -227,16 +257,16 @@ export class FireCMSApiServer {
                     summary: `Create ${collection.singularName}`,
                     requestBody: {
                         content: {
-                            'application/json': {
+                            "application/json": {
                                 schema: { $ref: `#/components/schemas/${collection.singularName}` }
                             }
                         }
                     },
                     responses: {
                         201: {
-                            description: 'Created',
+                            description: "Created",
                             content: {
-                                'application/json': {
+                                "application/json": {
                                     schema: { $ref: `#/components/schemas/${collection.singularName}` }
                                 }
                             }
@@ -249,13 +279,13 @@ export class FireCMSApiServer {
                 get: {
                     summary: `Get ${collection.singularName} by ID`,
                     parameters: [
-                        { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+                        { name: "id", in: "path", required: true, schema: { type: "string" } }
                     ],
                     responses: {
                         200: {
-                            description: 'Success',
+                            description: "Success",
                             content: {
-                                'application/json': {
+                                "application/json": {
                                     schema: { $ref: `#/components/schemas/${collection.singularName}` }
                                 }
                             }
@@ -265,20 +295,20 @@ export class FireCMSApiServer {
                 put: {
                     summary: `Update ${collection.singularName}`,
                     parameters: [
-                        { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+                        { name: "id", in: "path", required: true, schema: { type: "string" } }
                     ],
                     requestBody: {
                         content: {
-                            'application/json': {
+                            "application/json": {
                                 schema: { $ref: `#/components/schemas/${collection.singularName}` }
                             }
                         }
                     },
                     responses: {
                         200: {
-                            description: 'Updated',
+                            description: "Updated",
                             content: {
-                                'application/json': {
+                                "application/json": {
                                     schema: { $ref: `#/components/schemas/${collection.singularName}` }
                                 }
                             }
@@ -288,10 +318,10 @@ export class FireCMSApiServer {
                 delete: {
                     summary: `Delete ${collection.singularName}`,
                     parameters: [
-                        { name: 'id', in: 'path', required: true, schema: { type: 'string' } }
+                        { name: "id", in: "path", required: true, schema: { type: "string" } }
                     ],
                     responses: {
-                        204: { description: 'Deleted' }
+                        204: { description: "Deleted" }
                     }
                 }
             };
@@ -302,18 +332,18 @@ export class FireCMSApiServer {
 
     private convertPropertyToOpenApiType(property: any): any {
         switch (property.type) {
-            case 'string':
-                return { type: 'string' };
-            case 'number':
-                return { type: 'number' };
-            case 'boolean':
-                return { type: 'boolean' };
-            case 'date':
-                return { type: 'string', format: 'date-time' };
-            case 'array':
-                return { type: 'array', items: { type: 'string' } };
+            case "string":
+                return { type: "string" };
+            case "number":
+                return { type: "number" };
+            case "boolean":
+                return { type: "boolean" };
+            case "date":
+                return { type: "string", format: "date-time" };
+            case "array":
+                return { type: "array", items: { type: "string" } };
             default:
-                return { type: 'string' };
+                return { type: "string" };
         }
     }
 

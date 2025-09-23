@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';
-import { EntityCollection } from '@firecms/types';
-import { PostgresDataSourceDelegate } from '../../services/dataSourceDelegate';
-import { ApiContext, ApiResponse, QueryOptions } from '../types';
+import { Router, Request, Response } from "express";
+import { EntityCollection } from "@firecms/types";
+import { PostgresDataSourceDelegate } from "../../services/dataSourceDelegate";
+import { ApiResponse, QueryOptions } from "../types";
 
 /**
  * Lightweight REST API generator that leverages existing FireCMS DataSourceDelegate
@@ -35,7 +35,7 @@ export class RestApiGenerator {
         const basePath = `/${collection.slug}`;
 
         // GET /collection - List entities (fetch raw data without Entity wrapper)
-        this.router.get(basePath, async (req: Request, res: Response) => {
+        this.router.get(basePath, async (req: Request, res: Response): Promise<void> => {
             try {
                 const queryOptions = this.parseQueryOptions(req.query);
 
@@ -54,13 +54,14 @@ export class RestApiGenerator {
                         hasMore: (queryOptions.offset || 0) + entities.length < total
                     }
                 });
+                return;
             } catch (error) {
                 res.status(500).json(this.formatError(error));
             }
         });
 
         // GET /collection/:id - Get single entity (fetch raw data without Entity wrapper)
-        this.router.get(`${basePath}/:id`, async (req: Request, res: Response) => {
+        this.router.get(`${basePath}/:id`, async (req: Request, res: Response): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -68,17 +69,19 @@ export class RestApiGenerator {
                 const entity = await this.fetchRawEntity(collection, id);
 
                 if (!entity) {
-                    return res.status(404).json(this.formatError(new Error('Entity not found')));
+                    res.status(404).json(this.formatError(new Error("Entity not found")));
+                    return;
                 }
 
                 res.json(entity);
+                return;
             } catch (error) {
                 res.status(500).json(this.formatError(error));
             }
         });
 
         // POST /collection - Create entity (uses existing saveEntity)
-        this.router.post(basePath, async (req: Request, res: Response) => {
+        this.router.post(basePath, async (req: Request, res: Response): Promise<void> => {
             try {
                 // Use existing saveEntity from DataSourceDelegate
                 const entity = await this.dataSource.saveEntity({
@@ -86,17 +89,18 @@ export class RestApiGenerator {
                     entityId: this.dataSource.generateEntityId(collection.dbPath || collection.slug, collection),
                     values: req.body,
                     collection,
-                    status: 'new'
+                    status: "new"
                 });
 
                 res.status(201).json(this.formatResponse(entity));
+                return;
             } catch (error) {
                 res.status(400).json(this.formatError(error));
             }
         });
 
         // PUT /collection/:id - Update entity (uses existing saveEntity)
-        this.router.put(`${basePath}/:id`, async (req: Request, res: Response) => {
+        this.router.put(`${basePath}/:id`, async (req: Request, res: Response): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -108,7 +112,8 @@ export class RestApiGenerator {
                 });
 
                 if (!existingEntity) {
-                    return res.status(404).json(this.formatError(new Error('Entity not found')));
+                    res.status(404).json(this.formatError(new Error("Entity not found")));
+                    return;
                 }
 
                 // Use existing saveEntity from DataSourceDelegate
@@ -117,17 +122,18 @@ export class RestApiGenerator {
                     entityId: id,
                     values: req.body,
                     collection,
-                    status: 'existing'
+                    status: "existing"
                 });
 
                 res.json(this.formatResponse(entity));
+                return;
             } catch (error) {
                 res.status(400).json(this.formatError(error));
             }
         });
 
         // DELETE /collection/:id - Delete entity (uses existing deleteEntity)
-        this.router.delete(`${basePath}/:id`, async (req: Request, res: Response) => {
+        this.router.delete(`${basePath}/:id`, async (req: Request, res: Response): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -139,16 +145,18 @@ export class RestApiGenerator {
                 });
 
                 if (!existingEntity) {
-                    return res.status(404).json(this.formatError(new Error('Entity not found')));
+                    res.status(404).json(this.formatError(new Error("Entity not found")));
+                    return;
                 }
 
-                // Use existing deleteEntity from DataSourceDelegate
+                // Use existing deleteEntity from DataSourceDelegate (expects the full entity)
                 await this.dataSource.deleteEntity({
-                    entityId: id,
+                    entity: existingEntity,
                     collection
                 });
 
                 res.status(204).send();
+                return;
             } catch (error) {
                 res.status(500).json(this.formatError(error));
             }
@@ -173,10 +181,10 @@ export class RestApiGenerator {
         // Filtering
         if (query.where) {
             try {
-                options.where = typeof query.where === 'string'
+                options.where = typeof query.where === "string"
                     ? JSON.parse(query.where)
                     : query.where;
-            } catch (e) {
+            } catch {
                 // Invalid JSON, ignore
             }
         }
@@ -184,14 +192,20 @@ export class RestApiGenerator {
         // Sorting
         if (query.orderBy) {
             try {
-                options.orderBy = typeof query.orderBy === 'string'
+                options.orderBy = typeof query.orderBy === "string"
                     ? JSON.parse(query.orderBy)
                     : query.orderBy;
-            } catch (e) {
+            } catch {
                 // Try simple format: "field:direction"
-                if (typeof query.orderBy === 'string') {
-                    const [field, direction] = query.orderBy.split(':');
-                    options.orderBy = [{ field, direction: direction as 'asc' | 'desc' || 'asc' }];
+                if (typeof query.orderBy === "string") {
+                    const [field, direction] = query.orderBy.split(":");
+                    const dir = (direction === "desc" ? "desc" : "asc") as "asc" | "desc";
+                    options.orderBy = [
+                        {
+                            field,
+                            direction: dir
+                        }
+                    ];
                 }
             }
         }
@@ -206,28 +220,40 @@ export class RestApiGenerator {
         // If data is an array of entities, flatten each one
         if (Array.isArray(data)) {
             const flattenedData = data.map(entity => this.flattenEntity(entity));
-            return meta ? { data: flattenedData, meta } : flattenedData;
+            if (meta) {
+                return {
+                    data: flattenedData,
+                    meta
+                };
+            }
+            return flattenedData;
         }
 
         // If data is a single entity, flatten it
-        if (data && typeof data === 'object' && 'values' in data) {
+        if (data && typeof data === "object" && "values" in data) {
             return this.flattenEntity(data);
         }
 
         // Return as-is for other data types
-        return meta ? { data, meta } : data;
+        if (meta) {
+            return {
+                data,
+                meta
+            };
+        }
+        return data;
     }
 
     /**
      * Flatten FireCMS entity structure to traditional REST format
      */
     private flattenEntity(entity: any): any {
-        if (!entity || typeof entity !== 'object') {
+        if (!entity || typeof entity !== "object") {
             return entity;
         }
 
         // If it's a FireCMS entity with values, extract and flatten
-        if ('values' in entity && typeof entity.values === 'object') {
+        if ("values" in entity && typeof entity.values === "object") {
             return {
                 ...entity.values
             };
@@ -242,7 +268,7 @@ export class RestApiGenerator {
     private formatError(error: any): ApiResponse {
         return {
             error: {
-                message: error.message || 'An error occurred',
+                message: error.message || "An error occurred",
                 code: error.code,
                 details: error.details
             }
@@ -260,7 +286,7 @@ export class RestApiGenerator {
             filter: queryOptions.where,
             limit: queryOptions.limit,
             orderBy: queryOptions.orderBy?.[0]?.field,
-            order: queryOptions.orderBy?.[0]?.direction === 'desc' ? 'desc' : 'asc',
+            order: queryOptions.orderBy?.[0]?.direction === "desc" ? "desc" : "asc",
             startAfter: queryOptions.offset ? String(queryOptions.offset) : undefined
         });
 
