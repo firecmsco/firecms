@@ -492,6 +492,134 @@ export class EntityService {
             const [op, rawVal] = value as [WhereFilterOp, any];
             const relDef = resolvedRelations[key];
 
+            // Handle MANY cardinality relation specific operators (array-contains / array-contains-any)
+            if (relDef && relDef.cardinality === "many") {
+                if (op !== "array-contains" && op !== "array-contains-any") {
+                    console.warn(`Relation filter '${key}' with cardinality 'many' only supports 'array-contains' or 'array-contains-any'. Skipping op '${op}'.`);
+                    continue;
+                }
+                // Normalize value(s) to list of target IDs
+                const normalizeIds = (val: any): any[] => {
+                    if (val == null) return [];
+                    if (Array.isArray(val)) return val.flatMap(v => normalizeIds(v));
+                    if (typeof val === "object" && vHasId(val)) return [val.id];
+                    return [val];
+                };
+                const vHasId = (v: any) => v && typeof v === "object" && (v.id !== undefined);
+                const ids = op === "array-contains"
+                    ? normalizeIds(rawVal).slice(0, 1)
+                    : normalizeIds(rawVal);
+                if (!ids.length) {
+                    // No ids => condition can never match; add FALSE condition for deterministic behavior
+                    extraConditions.push(sql`FALSE`);
+                    continue;
+                }
+
+                // CASE 1: Many-to-many through junction (owning)
+                if (relDef.through && relDef.direction === "owning") {
+                    const junction = relDef.through;
+                    const junctionTable = collectionRegistry.getTable(junction.table);
+                    if (!junctionTable) {
+                        console.warn(`Junction table '${junction.table}' not found for relation '${key}'`);
+                        continue;
+                    }
+                    const sourceCol = junctionTable[junction.sourceColumn as keyof typeof junctionTable] as AnyPgColumn;
+                    const targetCol = junctionTable[junction.targetColumn as keyof typeof junctionTable] as AnyPgColumn;
+                    if (!sourceCol || !targetCol) {
+                        console.warn(`Junction columns not found for relation '${key}'`);
+                        continue;
+                    }
+                    if (ids.length === 1) {
+                        extraConditions.push(sql`EXISTS (SELECT 1 FROM ${junctionTable} jt WHERE jt.${sql.raw(sourceCol.name)} = ${parentIdCol} AND jt.${sql.raw(targetCol.name)} = ${ids[0]})`);
+                    } else {
+                        const joined = sql.join(ids.map(i => sql`${i}`));
+                        extraConditions.push(sql`EXISTS (SELECT 1 FROM ${junctionTable} jt WHERE jt.${sql.raw(sourceCol.name)} = ${parentIdCol} AND jt.${sql.raw(targetCol.name)} IN (${joined}))`);
+                    }
+                    continue;
+                }
+
+                // CASE 2: Many inverse with foreignKeyOnTarget (one-to-many)
+                if (relDef.direction === "inverse" && relDef.foreignKeyOnTarget) {
+                    try {
+                        const targetCollection = relDef.target();
+                        const targetTable = collectionRegistry.getTable(targetCollection.dbPath);
+                        if (!targetTable) {
+                            console.warn(`Target table not found for inverse many relation '${key}'`);
+                            continue;
+                        }
+                        const targetIdFieldName = targetCollection.idField || "id";
+                        const targetIdCol = (targetTable as any)[targetIdFieldName] as AnyPgColumn;
+                        const fkCol = (targetTable as any)[relDef.foreignKeyOnTarget] as AnyPgColumn;
+                        if (!targetIdCol || !fkCol) {
+                            console.warn(`Missing columns for inverse many relation '${key}'`);
+                            continue;
+                        }
+                        if (ids.length === 1) {
+                            extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} t WHERE t.${sql.raw(fkCol.name)} = ${parentIdCol} AND t.${sql.raw(targetIdCol.name)} = ${ids[0]})`);
+                        } else {
+                            const joined = sql.join(ids.map(i => sql`${i}`));
+                            extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} t WHERE t.${sql.raw(fkCol.name)} = ${parentIdCol} AND t.${sql.raw(targetIdCol.name)} IN (${joined}))`);
+                        }
+                        continue;
+                    } catch (e) {
+                        console.warn(`Failed building inverse many relation condition for '${key}'`, e);
+                        continue;
+                    }
+                }
+
+                // CASE 3: Many with joinPath (multi-hop)
+                if (relDef.joinPath && relDef.joinPath.length > 0) {
+                    try {
+                        const steps = relDef.joinPath;
+                        // Validate single-column joins only (skip composite for now)
+                        if (steps.some(s => Array.isArray(s.on.from) || Array.isArray(s.on.to))) {
+                            console.warn(`Composite key joinPath filtering not yet supported for relation '${key}'.`);
+                            continue;
+                        }
+                        const parentTableName = getTableName(collection!);
+                        const targetCollection = relDef.target();
+                        const targetIdFieldName = targetCollection.idField || "id";
+                        const finalTableName = steps[steps.length - 1].table;
+
+                        // Build JOIN clauses
+                        const prevAlias = parentTableName; // correlate to outer parent table
+                        const joinClauses: string[] = [];
+                        steps.forEach((step, index) => {
+                            const joinTableName = step.table;
+                            const fromCol = (step.on.from as string).split(".").pop();
+                            const toCol = (step.on.to as string).split(".").pop();
+                            if (!fromCol || !toCol) return;
+                            // Correlate first step with parent table (outer query)
+                            if (index === 0) {
+                                joinClauses.push(`JOIN ${joinTableName} ON ${prevAlias}.${fromCol} = ${joinTableName}.${toCol}`);
+                            } else {
+                                const prevStepTable = steps[index - 1].table;
+                                joinClauses.push(`JOIN ${joinTableName} ON ${prevStepTable}.${fromCol} = ${joinTableName}.${toCol}`);
+                            }
+                        });
+                        const idPredicate = ids.length === 1
+                            ? `${finalTableName}.${targetIdFieldName} = ${ids[0]}`
+                            : `${finalTableName}.${targetIdFieldName} IN (${ids.map(i => typeof i === "number" ? i : `'${i}'`).join(",")})`;
+                        const existsSQL = sql.raw(`EXISTS (SELECT 1 FROM ${parentTableName} ${joinClauses.join(" ")} WHERE ${parentTableName}.${parentIdFieldName} = ${parentTableName}.${parentIdFieldName} AND ${idPredicate})`);
+                        extraConditions.push(existsSQL as any);
+                        continue;
+                    } catch (e) {
+                        console.warn(`Failed building joinPath many relation condition for '${key}'`, e);
+                        continue;
+                    }
+                }
+
+                // CASE 4: Inverse many-to-many without explicit through (attempt auto-detect)
+                if (relDef.direction === "inverse" && !relDef.foreignKeyOnTarget && !relDef.through) {
+                    console.warn(`Auto-detection for inverse many-to-many filtering not implemented for relation '${key}'.`);
+                    continue;
+                }
+
+                // If we reached here, configuration not recognized
+                console.warn(`Unsupported many relation filtering configuration for '${key}'.`);
+                continue;
+            }
+
             // Inverse relation handling (foreign key on TARGET table)
             if (relDef && relDef.direction === "inverse" && relDef.foreignKeyOnTarget) {
                 if (!collection) continue;
@@ -2131,7 +2259,7 @@ export class EntityService {
                             junctionInfo = {
                                 table: targetRelation.through.table,
                                 sourceColumn: targetRelation.through.targetColumn, // Swapped
-                                targetColumn: targetRelation.through.sourceColumn  // Swapped
+                                targetColumn: targetRelation.through.sourceColumn // Swapped
                             };
                             break;
                         }

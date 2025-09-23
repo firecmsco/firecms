@@ -359,6 +359,10 @@ export interface RelationProperty extends BaseProperty {
      */
     relationName: string;
 
+    /**
+     * The resolved relation object.
+     * This is set by the framework
+     */
     relation?: Relation;
     /**
      * Allow selection of entities that pass the given filter only.

@@ -334,16 +334,3 @@ function createFilterField({
         <div>{`Currently the filter field ${resolvedProperty.type} is not supported`}</div>
     );
 }
-
-function filterableProperty(property: Property, partOfArray = false): boolean {
-    if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.type);
-    }
-    if (property.type === "array") {
-        if (property.of)
-            return filterableProperty(property.of, true);
-        else
-            return false;
-    }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.type);
-}

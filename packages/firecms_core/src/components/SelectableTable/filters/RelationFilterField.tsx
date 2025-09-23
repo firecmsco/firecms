@@ -40,14 +40,8 @@ export function RelationFilterField({
     const manyRelation = relation.cardinality === "many";
 
     const possibleOperations: (keyof typeof operationLabels) [] = manyRelation
-        ? ["array-contains"]
-        : ["==", "!=", ">", "<", ">=", "<="];
-
-    if (manyRelation) {
-        possibleOperations.push("array-contains-any");
-    } else {
-        possibleOperations.push("in", "not-in");
-    }
+        ? ["array-contains", "array-contains-any"]
+        : ["==", "!=", ">", "<", ">=", "<=", "in", "not-in"];
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
