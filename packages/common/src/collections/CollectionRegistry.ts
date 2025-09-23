@@ -7,7 +7,7 @@ import {
     RelationProperty,
     StringProperty
 } from "@firecms/types";
-import { enumToObjectEntries, resolveCollectionRelations } from "../util";
+import { enumToObjectEntries, getSubcollections, resolveCollectionRelations } from "../util";
 
 export class CollectionRegistry {
 
@@ -50,12 +50,10 @@ export class CollectionRegistry {
         if (normalizedCollection.slug)
             this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);
 
-        const subcollections = (typeof collection.subcollections === "function"
-            ? collection.subcollections()
-            : collection.subcollections) as EntityCollection[] | undefined;
+        const subcollections = getSubcollections(collection);
 
         if (subcollections) {
-            subcollections.forEach(subCollection => this._registerRecursively(subCollection));
+            subcollections.forEach(subCollection => this._registerRecursively(this.normalizeCollection(subCollection)));
         }
     }
 

@@ -532,7 +532,7 @@ export class EntityService {
                     if (ids.length === 1) {
                         extraConditions.push(sql`EXISTS (SELECT 1 FROM ${junctionTable} jt WHERE jt.${sql.raw(sourceCol.name)} = ${parentIdCol} AND jt.${sql.raw(targetCol.name)} = ${ids[0]})`);
                     } else {
-                        const joined = sql.join(ids.map(i => sql`${i}`));
+                        const joined = sql.join(ids.map(i => sql`${i}`), sql`, `);
                         extraConditions.push(sql`EXISTS (SELECT 1 FROM ${junctionTable} jt WHERE jt.${sql.raw(sourceCol.name)} = ${parentIdCol} AND jt.${sql.raw(targetCol.name)} IN (${joined}))`);
                     }
                     continue;
@@ -557,7 +557,7 @@ export class EntityService {
                         if (ids.length === 1) {
                             extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} t WHERE t.${sql.raw(fkCol.name)} = ${parentIdCol} AND t.${sql.raw(targetIdCol.name)} = ${ids[0]})`);
                         } else {
-                            const joined = sql.join(ids.map(i => sql`${i}`));
+                            const joined = sql.join(ids.map(i => sql`${i}`), sql`, `);
                             extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} t WHERE t.${sql.raw(fkCol.name)} = ${parentIdCol} AND t.${sql.raw(targetIdCol.name)} IN (${joined}))`);
                         }
                         continue;
@@ -1251,44 +1251,28 @@ export class EntityService {
                 currentTable = joinTable;
             }
 
-            // Add where condition for the parent entity
+            // Add where condition for ALL parent entities at once
             const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(eq(parentIdField, parsedParentId)) as any;
-
-            // Add filters
-            const additionalFilters: SQL[] = [];
-            if (options.filter) {
-                const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
-                additionalFilters.push(...filterConditions);
-            }
-            if (additionalFilters.length > 0) {
-                query = query.where(and(...additionalFilters)) as any;
-            }
-
-            // Ordering
-            if (options.orderBy) {
-                const orderField = targetTable[options.orderBy as keyof typeof targetTable] as AnyPgColumn;
-                if (orderField) {
-                    query = query.orderBy(options.order === "asc" ? asc(orderField) : desc(orderField)) as any;
-                }
-            }
-
-            if (options.limit) {
-                query = query.limit(options.limit) as any;
-            }
+            query = query.where(inArray(parentIdField, parsedParentIds)) as any;
 
             const results = await query;
             const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
+            const resultMap = new Map<string | number, Entity<any>>();
 
-            return results.map((row: any) => {
-                const entity = row[targetTableName] || row;
-                return {
-                    id: entity[idInfo.fieldName].toString(),
+            // Group results by parent ID
+            results.forEach((row: any) => {
+                const parentEntity = row[getTableName(parentCollection)] || row;
+                const targetEntity = row[targetTableName] || row;
+                const parentId = parentEntity[parentIdInfo.fieldName];
+
+                resultMap.set(parentId, {
+                    id: targetEntity[targetIdInfo.fieldName].toString(),
                     path: targetCollection.slug ?? targetCollection.dbPath,
-                    values: entity as M,
-                    databaseId: options.databaseId
-                };
+                    values: targetEntity
+                });
             });
+
+            return resultMap;
         }
 
         // For owning relations with localKey, we need to first get the foreign key value from the parent entity
