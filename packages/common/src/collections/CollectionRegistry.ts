@@ -59,11 +59,9 @@ export class CollectionRegistry {
 
     public normalizeCollection(collection: EntityCollection): EntityCollection {
         const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
-        return {
-            ...collection,
-            textSearchEnabled: collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled,
-            properties
-        };
+        collection.textSearchEnabled = collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled;
+        collection.properties = properties;
+        return collection;
     }
 
     private normalizeProperties(properties: Properties, relations: Relation[]): Properties {
