@@ -22,6 +22,7 @@ import {
 import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { EntityPreviewData } from "./EntityPreview";
 import { useDataSource, useRelationSelector } from "../hooks";
+import { EmptyValue } from "../preview";
 
 export interface RelationItem {
     id: string | number;
@@ -37,7 +38,7 @@ export interface RelationSelectorProps {
     id?: string;
     value?: EntityRelation | EntityRelation[] | null;
     /** Callback returning selected EntityRelation(s) */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     onValueChange?: (_updatedValue: EntityRelation | EntityRelation[] | undefined) => void;
     placeholder?: React.ReactNode;
     size?: "small" | "medium";
@@ -142,7 +143,9 @@ export const RelationSelector = React.forwardRef<
             computeSelectedItems(value || undefined).then(resolved => {
                 if (active) setSelectedItems(resolved);
             });
-            return () => { active = false; };
+            return () => {
+                active = false;
+            };
         }, [value, computeSelectedItems]);
 
         const sentinelCallbackRef = useCallback((node: HTMLDivElement | null) => {
@@ -159,13 +162,19 @@ export const RelationSelector = React.forwardRef<
                     const entry = entries[0];
                     if (entry.isIntersecting && hasMore && !isLoading) loadMore();
                 },
-                { root: scrollContainerRef.current, rootMargin: "20px", threshold: 0 }
+                {
+                    root: scrollContainerRef.current,
+                    rootMargin: "20px",
+                    threshold: 0
+                }
             );
             observer.observe(node);
             observerRef.current = observer;
         }, [hasMore, isLoading, loadMore]);
 
-        useEffect(() => () => { if (observerRef.current) observerRef.current.disconnect(); }, []);
+        useEffect(() => () => {
+            if (observerRef.current) observerRef.current.disconnect();
+        }, []);
 
         const handleSearchChange = useCallback((newSearchString: string) => {
             setSearchString(newSearchString);
@@ -213,6 +222,7 @@ export const RelationSelector = React.forwardRef<
         // Outside click + Escape handling (simple and reliable)
         useEffect(() => {
             if (!isPopoverOpen) return;
+
             function handlePointerDown(ev: MouseEvent) {
                 const target = ev.target as Node;
                 const triggerEl = triggerRef.current;
@@ -222,9 +232,11 @@ export const RelationSelector = React.forwardRef<
                 // Outside
                 setIsPopoverOpen(false);
             }
+
             function handleKey(ev: KeyboardEvent) {
                 if (ev.key === "Escape") setIsPopoverOpen(false);
             }
+
             document.addEventListener("mousedown", handlePointerDown, true);
             document.addEventListener("keydown", handleKey, true);
             return () => {
@@ -233,9 +245,13 @@ export const RelationSelector = React.forwardRef<
             };
         }, [isPopoverOpen]);
 
-        useInjectStyles("RelationSelector", ` [cmdk-group] { max-height: 40vh; overflow-y: auto; } `);
+        useInjectStyles("RelationSelector", " [cmdk-group] { max-height: 40vh; overflow-y: auto; } ");
 
-        const resolvedPlaceholder = placeholder || emptyPlaceholder || (multiple ? "Select multiple..." : "Select...");
+        const closePopover = useCallback(() => {
+            setIsPopoverOpen(false);
+        }, []);
+
+        const resolvedPlaceholder = placeholder || emptyPlaceholder || <EmptyValue className={"ml-2"}/>;
 
         return (
             <>
@@ -253,67 +269,78 @@ export const RelationSelector = React.forwardRef<
                                 setIsPopoverOpen(o => !o);
                             }}
                             className={cls(
+                                {
+                                    "min-h-[42px] py-1 px-2": size === "small",
+                                    "min-h-[56px] py-2 px-4": size === "medium"
+                                },
                                 "w-full select-none rounded-md text-sm relative flex items-center",
-                                size === "small" ? "min-h-[32px] py-1 px-2" : "min-h-[42px] py-2 px-4",
                                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                                 className
                             )}
                         >
-                            {selectedItems.length > 0 ? (
-                                <div className="flex justify-between items-center w-full">
-                                    <div className="flex flex-wrap items-center gap-1.5 text-start flex-1 min-w-0 mr-2">
-                                        {selectedItems.map((item) => {
-                                            if (!useChips || !multiple) {
+                            <div className="flex justify-between items-center w-full">
+                                {selectedItems.length > 0 ? (
+                                        <div
+                                            className="flex flex-wrap items-center gap-1.5 text-start flex-1 min-w-0 mr-2">
+                                            {selectedItems.map((item) => {
+                                                if (!useChips || !multiple) {
+
+                                                    return (
+                                                        <div key={String(item.id)}
+                                                             className="flex flex-row items-center gap-1 truncate">
+                                                            {item.data ? (
+                                                                <EntityPreviewData size={"medium"}
+                                                                                   entity={item.data}
+                                                                                   includeEntityLink={false}
+                                                                                   includeId={false}
+                                                                                   onSideEntityClick={closePopover}
+                                                                />
+                                                            ) : (
+                                                                <span className="text-sm truncate">{item.label}</span>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                }
                                                 return (
-                                                    <div key={String(item.id)} className="flex flex-row items-center gap-1 truncate">
+                                                    <Chip
+                                                        size={"medium"}
+                                                        key={String(item.id)}
+                                                        className={cls("flex flex-row items-center gap-1 truncate")}
+                                                    >
                                                         {item.data ? (
-                                                            <EntityPreviewData size={"medium"} entity={item.data} includeEntityLink={false} includeId={false} />
+                                                            <EntityPreviewData size={"smallest"} entity={item.data}
+                                                                               includeEntityLink={false}
+                                                                               includeId={false}/>
                                                         ) : (
                                                             <span className="text-sm truncate">{item.label}</span>
                                                         )}
-                                                    </div>
+                                                        <CloseIcon
+                                                            size={"smallest"}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                handleRemoveItem(item);
+                                                            }}
+                                                        />
+                                                    </Chip>
                                                 );
-                                            }
-                                            return (
-                                                <Chip
-                                                    size={"medium"}
-                                                    key={String(item.id)}
-                                                    className={cls("flex flex-row items-center gap-1 truncate")}
-                                                >
-                                                    {item.data ? (
-                                                        <EntityPreviewData size={"smallest"} entity={item.data} includeEntityLink={false} includeId={false} />
-                                                    ) : (
-                                                        <span className="text-sm truncate">{item.label}</span>
-                                                    )}
-                                                    <CloseIcon
-                                                        size={"smallest"}
-                                                        onClick={(event) => { event.stopPropagation(); handleRemoveItem(item); }}
-                                                    />
-                                                </Chip>
-                                            );
-                                        })}
-                                    </div>
-                                    <div className="flex-shrink-0">
-                                        <KeyboardArrowDownIcon
-                                            size={size === "medium" ? "medium" : "small"}
-                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
-                                        />
-                                    </div>
+                                            })}
+                                        </div>
+                                    ) :
+                                    (
+                                        <span className="text-sm text-text-secondary dark:text-text-secondary-dark">
+                                                {resolvedPlaceholder}
+                                            </span>
+                                    )}
+
+                                <div className="flex-shrink-0">
+                                    <KeyboardArrowDownIcon
+                                        size={size === "medium" ? "medium" : "small"}
+                                        className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
+                                    />
                                 </div>
-                            ) : (
-                                <div className="flex items-center justify-between w-full mx-auto">
-                                    <span className="text-sm text-text-secondary dark:text-text-secondary-dark">
-                                        {resolvedPlaceholder}
-                                    </span>
-                                    <div className="px-2 h-full flex items-center">
-                                        <KeyboardArrowDownIcon
-                                            size={size === "medium" ? "medium" : "small"}
-                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")}
-                                        />
-                                    </div>
-                                </div>
-                            )}
+                            </div>
+
                         </button>
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Portal container={typeof document !== "undefined" ? document.body : undefined}>
@@ -327,14 +354,19 @@ export const RelationSelector = React.forwardRef<
                             avoidCollisions={true}
                             collisionPadding={16}
                             // Allow default auto focus (we manually refocus anyway)
-                            onOpenAutoFocus={(e) => { /* leave default or custom manual focus */ }}
-                            onCloseAutoFocus={(e) => { e.preventDefault(); }}
+                            onOpenAutoFocus={(e) => { /* leave default or custom manual focus */
+                            }}
+                            onCloseAutoFocus={(e) => {
+                                e.preventDefault();
+                            }}
                             style={{ width: "var(--radix-popover-trigger-width)" }}
                         >
                             <CommandPrimitive shouldFilter={false}>
                                 <div className="flex flex-row items-center">
                                     <div className="relative flex-1">
-                                        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark" size="small" />
+                                        <SearchIcon
+                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary dark:text-text-secondary-dark"
+                                            size="small"/>
                                         <CommandPrimitive.Input
                                             ref={searchInputRef}
                                             className={cls(
@@ -348,7 +380,7 @@ export const RelationSelector = React.forwardRef<
                                     </div>
                                     {isLoading && (
                                         <div className="flex items-center justify-center px-3">
-                                            <CircularProgress size="smallest" />
+                                            <CircularProgress size="smallest"/>
                                         </div>
                                     )}
                                     {selectedItems.length > 0 && (
@@ -360,19 +392,24 @@ export const RelationSelector = React.forwardRef<
                                         </div>
                                     )}
                                 </div>
-                                <Separator orientation="horizontal" className="my-0" />
+                                <Separator orientation="horizontal" className="my-0"/>
                                 <CommandPrimitive.List
                                     ref={scrollContainerRef}
-                                    style={{ maxHeight: "40vh", overflowY: "auto" }}
+                                    style={{
+                                        maxHeight: "40vh",
+                                        overflowY: "auto"
+                                    }}
                                 >
                                     {isLoading && availableItems.length === 0 && (
                                         <div className="flex items-center justify-center py-6">
-                                            <CircularProgress size="small" />
-                                            <span className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">{loadingText}</span>
+                                            <CircularProgress size="small"/>
+                                            <span
+                                                className="ml-2 text-sm text-text-secondary dark:text-text-secondary-dark">{loadingText}</span>
                                         </div>
                                     )}
                                     {!isLoading && availableItems.length === 0 && (
-                                        <CommandPrimitive.Empty className="px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark">
+                                        <CommandPrimitive.Empty
+                                            className="px-4 py-6 text-center text-text-secondary dark:text-text-secondary-dark">
                                             {noResultsText}
                                         </CommandPrimitive.Empty>
                                     )}
@@ -383,7 +420,10 @@ export const RelationSelector = React.forwardRef<
                                                 <CommandPrimitive.Item
                                                     key={String(item.id)}
                                                     value={String(item.id)}
-                                                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                    }}
                                                     onSelect={() => onItemClick(item)}
                                                     className={cls(
                                                         "flex flex-row items-center gap-1.5 m-1 p-1 rounded-xs cursor-pointer ring-offset-transparent",
@@ -391,9 +431,10 @@ export const RelationSelector = React.forwardRef<
                                                         "aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2 aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
                                                     )}
                                                 >
-                                                    {multiple && (<InnerCheckBox checked={isSelected} />)}
+                                                    {multiple && (<InnerCheckBox checked={isSelected}/>)}
                                                     {item.data ? (
-                                                        <div className="flex flex-row items-center gap-2 min-w-0 w-full">
+                                                        <div
+                                                            className="flex flex-row items-center gap-2 min-w-0 w-full">
                                                             <EntityPreviewData
                                                                 size={multiple ? "smallest" : "medium"}
                                                                 entity={item.data}
@@ -403,9 +444,11 @@ export const RelationSelector = React.forwardRef<
                                                         </div>
                                                     ) : (
                                                         <div>
-                                                            <div className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
+                                                            <div
+                                                                className="text-sm font-medium text-text-primary dark:text-text-primary-dark">{item.label}</div>
                                                             {item.description && (
-                                                                <div className="text-xs text-text-secondary dark:text-text-secondary-dark">{item.description}</div>
+                                                                <div
+                                                                    className="text-xs text-text-secondary dark:text-text-secondary-dark">{item.description}</div>
                                                             )}
                                                         </div>
                                                     )}
@@ -413,12 +456,14 @@ export const RelationSelector = React.forwardRef<
                                             );
                                         })}
                                         {availableItems.length > 0 && hasMore && (
-                                            <div ref={sentinelCallbackRef} className="h-1 w-full" style={{ visibility: "hidden" }} />
+                                            <div ref={sentinelCallbackRef} className="h-1 w-full"
+                                                 style={{ visibility: "hidden" }}/>
                                         )}
                                         {isLoading && availableItems.length > 0 && (
                                             <div className="flex items-center justify-center py-4">
-                                                <CircularProgress size="smallest" />
-                                                <span className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">Loading...</span>
+                                                <CircularProgress size="smallest"/>
+                                                <span
+                                                    className="ml-2 text-xs text-text-secondary dark:text-text-secondary-dark">Loading...</span>
                                             </div>
                                         )}
                                     </CommandPrimitive.Group>
@@ -445,7 +490,7 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
                     checked ? "bg-primary text-surface-accent-100 dark:text-surface-accent-900 border-transparent" : "bg-white dark:bg-surface-accent-900 border-surface-accent-800 dark:border-surface-accent-200"
                 )}
             >
-                {checked && <CheckIcon size={16} className="absolute" />}
+                {checked && <CheckIcon size={16} className="absolute"/>}
             </div>
         </div>
     );

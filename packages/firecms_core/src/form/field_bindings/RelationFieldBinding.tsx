@@ -45,7 +45,6 @@ export function RelationFieldBinding({
         const singleValue = (!manyRelation && value && !Array.isArray(value) && value.isEntityRelation && value.isEntityRelation()) ? value : null;
         const multipleValue = (manyRelation && Array.isArray(value)) ? value : [];
 
-        const placeholder = disabled ? "Disabled" : manyRelation ? "Select multiple..." : "Select...";
         const selectorSize: "small" | "medium" | undefined = size === "large" ? "medium" : size;
 
         return (
@@ -69,7 +68,6 @@ export function RelationFieldBinding({
                         }
                     }}
                     disabled={disabled || isSubmitting}
-                    placeholder={placeholder}
                     forceFilter={property.forceFilter}
                     size={selectorSize}
                 />

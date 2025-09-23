@@ -29,6 +29,7 @@ export type EntityPreviewProps = {
     includeEntityLink?: boolean,
     includeImage?: boolean,
     onClick?: (e: React.SyntheticEvent) => void;
+    onSideEntityClick?: (entity: Entity) => void,
 };
 
 export type EntityPreviewDataProps = {
@@ -37,6 +38,7 @@ export type EntityPreviewDataProps = {
     collection?: EntityCollection,
     previewKeys?: string[],
     entity: Entity<any>,
+    onSideEntityClick?: (entity: Entity) => void,
     includeId?: boolean,
     includeTitle?: boolean,
     includeEntityLink?: boolean,
@@ -53,6 +55,7 @@ export function EntityPreviewData({
                                       previewKeys,
                                       size = "medium",
                                       includeId = true,
+                                      onSideEntityClick,
                                       includeTitle = true,
                                       includeEntityLink = true,
                                       includeImage = true,
@@ -171,6 +174,7 @@ export function EntityPreviewData({
                             onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
+                                onSideEntityClick?.(entity);
                                 analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
                                     path: entity.path,
                                     entityId: entity.id
@@ -208,6 +212,7 @@ export function EntityPreview({
                                   includeTitle = true,
                                   includeEntityLink = true,
                                   includeImage = true,
+                                  onSideEntityClick,
                                   entity
                               }: EntityPreviewProps) {
 
@@ -225,6 +230,7 @@ export function EntityPreview({
                 includeTitle={includeTitle}
                 includeEntityLink={includeEntityLink}
                 includeImage={includeImage}
+                onSideEntityClick={onSideEntityClick}
                 entity={entity}
             />
         </EntityPreviewContainer>

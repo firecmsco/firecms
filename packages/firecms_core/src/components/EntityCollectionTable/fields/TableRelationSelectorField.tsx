@@ -31,15 +31,8 @@ export function TableRelationSelectorField({
 
     const multiple = relation.cardinality === "many";
 
-    const placeholder = React.useMemo(() => {
-        if (disabled) return "Disabled";
-        if (multiple) return "Select multiple...";
-        return "Select...";
-    }, [disabled, multiple]);
-
     return (
         <RelationSelector
-            placeholder={placeholder}
             multiple={multiple}
             disabled={disabled}
             size={size}

@@ -9,7 +9,7 @@ import {
 } from "@firecms/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "@firecms/common";
-import { DEFAULT_PAGE_SIZE, OnCellValueChange, OnColumnResizeParams } from "../common";
+import { DEFAULT_PAGE_SIZE, EntityCollectionTableController, OnCellValueChange, OnColumnResizeParams } from "../common";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
@@ -18,6 +18,7 @@ import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { useOutsideAlerter } from "@firecms/ui";
 import { SelectableTableContext } from "./SelectableTableContext";
 import { getRowHeight } from "../common/table_height";
+import { RelationFilterField } from "./filters/RelationFilterField";
 
 export type SelectableTableProps<M extends Record<string, any>> = {
 
@@ -218,7 +219,7 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
         onValueChange,
         size: size ?? "m",
         selectedCell
-    }), [setPopupCell, select, onValueChange, size, selectedCell]);
+    } satisfies EntityCollectionTableController<any>), [setPopupCell, select, onValueChange, size, selectedCell]);
 
     return (
         <SelectableTableContext.Provider
@@ -295,6 +296,17 @@ function createFilterField({
                                      previewProperties={baseProperty?.previewProperties}
                                      hidden={hidden}
                                      setHidden={setHidden}/>;
+    } else if (baseProperty.type === "relation" && baseProperty.relation) {
+        return <RelationFilterField value={filterValue}
+                                    setValue={setFilterValue}
+                                    name={id as string}
+                                    isArray={isArray}
+                                    relation={baseProperty.relation}
+                                    title={resolvedProperty?.name}
+                                    includeId={baseProperty.includeId}
+                                    previewProperties={baseProperty?.previewProperties}
+                                    hidden={hidden}
+                                    setHidden={setHidden}/>;
     } else if (baseProperty.type === "number" || baseProperty.type === "string") {
         const name = baseProperty.name;
         const enumValues = baseProperty.enum ? enumToObjectEntries(baseProperty.enum) : undefined;
