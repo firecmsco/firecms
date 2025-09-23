@@ -47,7 +47,6 @@ export interface RelationSelectorProps {
     error?: boolean; // kept for backwards compatibility (could be used for styling later)
     position?: "item-aligned" | "popper"; // legacy prop
     endAdornment?: React.ReactNode;
-    multiple?: boolean; // overrides relation.cardinality === "many"
     inputRef?: React.RefObject<HTMLButtonElement>;
     padding?: boolean; // legacy prop
     invisible?: boolean;
@@ -75,7 +74,6 @@ export const RelationSelector = React.forwardRef<
             placeholder,
             useChips = true,
             className,
-            multiple: multipleProp,
             relation,
             forceFilter,
             pageSize,
@@ -86,9 +84,10 @@ export const RelationSelector = React.forwardRef<
         },
         ref
     ) => {
+
         const collection = relation.target();
         const dataSource = useDataSource(collection);
-        const multiple = multipleProp !== undefined ? multipleProp : relation.cardinality === "many";
+        const multiple = relation.cardinality === "many";
 
         const [isPopoverOpen, setIsPopoverOpen] = useState(false);
         const [selectedItems, setSelectedItems] = useState<RelationItem[]>([]);
@@ -304,7 +303,7 @@ export const RelationSelector = React.forwardRef<
                                                 }
                                                 return (
                                                     <Chip
-                                                        size={"medium"}
+                                                        size={"smallest"}
                                                         key={String(item.id)}
                                                         className={cls("flex flex-row items-center gap-1 truncate")}
                                                     >

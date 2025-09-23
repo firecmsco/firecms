@@ -1251,28 +1251,44 @@ export class EntityService {
                 currentTable = joinTable;
             }
 
-            // Add where condition for ALL parent entities at once
+            // Add where condition for the parent entity
             const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(inArray(parentIdField, parsedParentIds)) as any;
+            query = query.where(eq(parentIdField, parsedParentId)) as any;
+
+            // Add filters
+            const additionalFilters: SQL[] = [];
+            if (options.filter) {
+                const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
+                additionalFilters.push(...filterConditions);
+            }
+            if (additionalFilters.length > 0) {
+                query = query.where(and(...additionalFilters)) as any;
+            }
+
+            // Ordering
+            if (options.orderBy) {
+                const orderField = targetTable[options.orderBy as keyof typeof targetTable] as AnyPgColumn;
+                if (orderField) {
+                    query = query.orderBy(options.order === "asc" ? asc(orderField) : desc(orderField)) as any;
+                }
+            }
+
+            if (options.limit) {
+                query = query.limit(options.limit);
+            }
 
             const results = await query;
             const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
-            const resultMap = new Map<string | number, Entity<any>>();
 
-            // Group results by parent ID
-            results.forEach((row: any) => {
-                const parentEntity = row[getTableName(parentCollection)] || row;
-                const targetEntity = row[targetTableName] || row;
-                const parentId = parentEntity[parentIdInfo.fieldName];
-
-                resultMap.set(parentId, {
-                    id: targetEntity[targetIdInfo.fieldName].toString(),
+            return results.map((row: any) => {
+                const entity = row[targetTableName] || row;
+                return {
+                    id: entity[idInfo.fieldName].toString(),
                     path: targetCollection.slug ?? targetCollection.dbPath,
-                    values: targetEntity
-                });
+                    values: entity as M,
+                    databaseId: options.databaseId
+                };
             });
-
-            return resultMap;
         }
 
         // For owning relations with localKey, we need to first get the foreign key value from the parent entity
