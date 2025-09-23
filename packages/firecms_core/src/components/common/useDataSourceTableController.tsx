@@ -6,6 +6,7 @@ import {
     Entity,
     EntityCollection,
     EntityReference,
+    EntityRelation,
     EntityTableController,
     FilterValues,
     FireCMSContext,
@@ -13,7 +14,6 @@ import {
     User,
     WhereFilterOp
 } from "@firecms/types";
-import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
 
 export const DEFAULT_PAGE_SIZE = 50;
@@ -70,7 +70,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         collection,
         scrollRestoration,
         entitiesDisplayedFirst,
-        lastDeleteTimestamp,
+        lastDeleteTimestamp: _lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
         updateUrl
     }: DataSourceTableControllerProps<M>)
@@ -128,7 +128,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     const {
         filterValues: filterUrl,
-        sortBy: sortUrl,
+        sortBy: sortUrl
     } = parseFilterAndSort(window.location.search);
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? filterUrl : undefined) ?? filter ?? undefined);
@@ -192,8 +192,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
                                 entity,
                                 context
                             })));
-                } catch (e: any) {
-                    console.error(e);
+                } catch (_e: any) {
+                    console.error(_e);
                 }
             }
             setDataLoading(false);
@@ -238,11 +238,11 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             })
                 .then(onEntitiesUpdate)
                 .catch(onError);
-            return () => {
-            };
+            return () => undefined;
         }
     }, [path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const orderedData = useDataOrder({
         data: rawData,
         entitiesDisplayedFirst
@@ -318,14 +318,19 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
                         if (val instanceof Date) {
                             encodedValue = val.toISOString();
                         } else if (Array.isArray(val)) {
-                            encodedValue = JSON.stringify(val, (key, value) => {
-                                if (value instanceof EntityReference) {
-                                    return encodeRef(value);
+                            encodedValue = JSON.stringify(val, (k, v) => {
+                                if (v instanceof EntityRelation) {
+                                    return encodeRelation(v);
                                 }
-                                return value;
+                                if (v instanceof EntityReference) {
+                                    return encodeReference(v);
+                                }
+                                return v;
                             });
+                        } else if (val instanceof EntityRelation) {
+                            encodedValue = encodeRelation(val);
                         } else if (val instanceof EntityReference) {
-                            encodedValue = encodeRef(val);
+                            encodedValue = encodeReference(val);
                         }
                     }
                 } catch (e) {
@@ -384,36 +389,51 @@ function isDate(dateString: string): boolean {
     return date.toISOString() === dateString;
 }
 
-function encodeRef(val: EntityReference) {
+function encodeReference(val: EntityReference) {
     return `ref::${val.path}/${val.id}`;
 }
+function encodeRelation(val: EntityRelation) {
+    return `rel::${val.path}/${val.id}`;
+}
 
-function decodeString(val: string): EntityReference | Date | string {
+function decodeString(val: string): EntityReference | EntityRelation | Date | string {
     let parsedFilterVal: any = val;
     if (isDate(val)) {
         try {
             parsedFilterVal = new Date(val);
-        } catch (e) {
+        } catch (_e) {
             // ignore
         }
     }
     if (typeof parsedFilterVal === "string") {
         try {
             parsedFilterVal = JSON.parse(parsedFilterVal, (key, value) => {
-                if (typeof value === "string" && value.startsWith("ref::")) {
-                    const [path, id] = value.substring(5).split("/");
-                    return new EntityReference(id, path);
+                if (typeof value === "string") {
+                    if (value.startsWith("ref::")) {
+                        const [path, id] = value.substring(5).split("/");
+                        return new EntityReference(id, path);
+                    }
+                    if (value.startsWith("rel::")) {
+                        const [path, id] = value.substring(5).split("/");
+                        return new EntityRelation(id, path);
+                    }
                 }
                 return value;
             });
-        } catch (e) {
+        } catch (_e) {
             // ignore
         }
     }
 
-    if (typeof parsedFilterVal === "string" && parsedFilterVal.startsWith("ref::")) {
-        const [path, id] = parsedFilterVal.substring(5).split("/");
-        return new EntityReference(id, path);
+    if (typeof parsedFilterVal === "string") {
+        if (parsedFilterVal.startsWith("ref::")) {
+            const [path, id] = parsedFilterVal.substring(5).split("/");
+            return new EntityReference(id, path);
+        }
+        if (parsedFilterVal.startsWith("rel::")) {
+            const [path, id] = parsedFilterVal.substring(5).split("/");
+            return new EntityRelation(id, path);
+        }
     }
     return parsedFilterVal;
 }

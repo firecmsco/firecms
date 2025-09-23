@@ -2,7 +2,7 @@ import { and, asc, count, desc, eq, gt, inArray, lt, or, sql, SQL } from "drizzl
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, EntityCollection, FilterValues, Properties, Property, Relation } from "@firecms/types";
+import { Entity, EntityCollection, FilterValues, Properties, Property, Relation, WhereFilterOp } from "@firecms/types";
 import { getTableName, resolveCollectionRelations } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
@@ -456,7 +456,116 @@ export class EntityService {
         table: PgTable<any>,
         collectionPath: string
     ): SQL[] {
-        return DrizzleConditionBuilder.buildFilterConditions(filter, table, collectionPath);
+        if (!filter) return [];
+        let collection: EntityCollection | undefined;
+        try {
+            collection = this.getCollectionByPath(collectionPath);
+        } catch (e) {
+            console.warn("Could not load collection for path while building filters", collectionPath, e);
+        }
+        const resolvedRelations = collection ? resolveCollectionRelations(collection) : {} as Record<string, Relation>;
+
+        const normalized: FilterValues<any> = {};
+        const extraConditions: SQL[] = [];
+
+        const parentIdFieldName = collection?.idField || "id";
+        const parentIdCol = (table as any)[parentIdFieldName] as AnyPgColumn | undefined;
+
+        const transformValue = (val: any, column?: AnyPgColumn): any => {
+            if (val === null) return null;
+            if (val === undefined) return undefined;
+            if (val === "null") return null; // encoded null from URL
+            if (Array.isArray(val)) return val.map(v => transformValue(v, column));
+            if (typeof val === "object" && val.__type === "relation" && val.id !== undefined) {
+                let idValue: any = val.id;
+                if (typeof idValue === "string" && /^\d+$/.test(idValue)) {
+                    const parsed = parseInt(idValue, 10);
+                    if (!isNaN(parsed)) idValue = parsed;
+                }
+                return idValue;
+            }
+            return val;
+        };
+
+        for (const [key, value] of Object.entries(filter)) {
+            if (!value) continue;
+            const [op, rawVal] = value as [WhereFilterOp, any];
+            const relDef = resolvedRelations[key];
+
+            // Inverse relation handling (foreign key on TARGET table)
+            if (relDef && relDef.direction === "inverse" && relDef.foreignKeyOnTarget) {
+                if (!collection) continue;
+                if (!parentIdCol) continue;
+                try {
+                    const targetCollection = relDef.target();
+                    const targetTable = collectionRegistry.getTable(targetCollection.dbPath);
+                    if (!targetTable) {
+                        console.warn("Target table not found for inverse relation filter", key);
+                        continue;
+                    }
+                    const targetIdFieldName = targetCollection.idField || "id";
+                    const targetIdCol = (targetTable as any)[targetIdFieldName] as AnyPgColumn;
+                    const foreignKeyCol = (targetTable as any)[relDef.foreignKeyOnTarget] as AnyPgColumn;
+                    if (!targetIdCol || !foreignKeyCol) {
+                        console.warn("Missing target id or FK column for inverse relation", key);
+                        continue;
+                    }
+
+                    const transformed = transformValue(rawVal, targetIdCol);
+
+                    // Null filtering semantics: profile == null => NOT EXISTS (row linking parent). profile != null => EXISTS
+                    if (transformed === null) {
+                        if (op === "==") {
+                            extraConditions.push(sql`NOT EXISTS (SELECT 1 FROM ${targetTable} WHERE ${foreignKeyCol} = ${parentIdCol})`);
+                        } else if (op === "!=") {
+                            extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} WHERE ${foreignKeyCol} = ${parentIdCol})`);
+                        }
+                        continue;
+                    }
+
+                    // Supported ops for inverse relation id filters
+                    if (op === "==") {
+                        extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} WHERE ${foreignKeyCol} = ${parentIdCol} AND ${targetIdCol} = ${transformed})`);
+                        continue;
+                    } else if (op === "!=") {
+                        extraConditions.push(sql`NOT EXISTS (SELECT 1 FROM ${targetTable} WHERE ${foreignKeyCol} = ${parentIdCol} AND ${targetIdCol} = ${transformed})`);
+                        continue;
+                    } else if (op === "in") {
+                        const listVals = Array.isArray(transformed) ? transformed : [transformed];
+                        if (listVals.length > 0) {
+                            const joined = sql.join(listVals.map(v => sql`${v}`));
+                            extraConditions.push(sql`EXISTS (SELECT 1 FROM ${targetTable} WHERE ${foreignKeyCol} = ${parentIdCol} AND ${targetIdCol} IN (${joined}))`);
+                        }
+                        continue;
+                    } else if (op === "array-contains" || op === "array-contains-any" || op === "not-in") {
+                        // Future extension: implement semantics if needed
+                        console.warn(`Operator '${op}' not currently supported for inverse relation filters on '${key}'.`);
+                        continue;
+                    } else {
+                        console.warn(`Unsupported operator '${op}' for inverse relation filter on '${key}'.`);
+                        continue;
+                    }
+                } catch (e) {
+                    console.warn("Failed building inverse relation filter condition", key, e);
+                    continue;
+                }
+            }
+
+            // Owning relation with localKey mapping
+            if (relDef && relDef.direction === "owning" && relDef.localKey) {
+                const localKey = relDef.localKey;
+                const column = (table as any)[localKey] as AnyPgColumn | undefined;
+                const transformed = transformValue(rawVal, column);
+                normalized[localKey] = [op, transformed];
+            } else {
+                const column = (table as any)[key] as AnyPgColumn | undefined;
+                const transformed = transformValue(rawVal, column);
+                normalized[key] = [op, transformed];
+            }
+        }
+
+        const simpleConditions = DrizzleConditionBuilder.buildFilterConditions(normalized, table, collectionPath);
+        return [...simpleConditions, ...extraConditions];
     }
 
     private getCollectionByPath(collectionPath: string): EntityCollection {

@@ -300,11 +300,7 @@ function createFilterField({
         return <RelationFilterField value={filterValue}
                                     setValue={setFilterValue}
                                     name={id as string}
-                                    isArray={isArray}
                                     relation={baseProperty.relation}
-                                    title={resolvedProperty?.name}
-                                    includeId={baseProperty.includeId}
-                                    previewProperties={baseProperty?.previewProperties}
                                     hidden={hidden}
                                     setHidden={setHidden}/>;
     } else if (baseProperty.type === "number" || baseProperty.type === "string") {

@@ -8,11 +8,7 @@ interface RelationFilterFieldProps {
     name: string,
     value?: [VirtualTableWhereFilterOp, EntityRelation | EntityRelation[] | null];
     setValue: (value?: [VirtualTableWhereFilterOp, EntityRelation | EntityRelation[] | null]) => void;
-    isArray?: boolean; // whether the underlying property is an array
     relation: Relation; // relation config provided externally
-    title?: string;
-    includeId?: boolean;
-    previewProperties?: string[];
     hidden: boolean;
     setHidden: (value: boolean) => void;
 }
@@ -35,21 +31,19 @@ const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 export function RelationFilterField({
                                         value,
                                         setValue,
-                                        isArray,
                                         relation,
                                         name: _name,
                                         hidden: _hidden,
                                         setHidden: _setHidden,
-                                        title: _title,
-                                        includeId: _includeId,
-                                        previewProperties: _previewProperties
                                     }: RelationFilterFieldProps) {
 
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+    const manyRelation = relation.cardinality === "many";
+
+    const possibleOperations: (keyof typeof operationLabels) [] = manyRelation
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];
 
-    if (isArray) {
+    if (manyRelation) {
         possibleOperations.push("array-contains-any");
     } else {
         possibleOperations.push("in", "not-in");
@@ -102,8 +96,8 @@ export function RelationFilterField({
     };
 
     return (
-        <div className="flex w-[480px] flex-row">
-            <div className="w-[140px]">
+        <div className="flex flex-row">
+            <div className="">
                 <Select
                     value={operation}
                     size={"large"}
@@ -123,18 +117,15 @@ export function RelationFilterField({
 
             <div className="grow ml-2 h-full gap-2 flex flex-col w-[340px]">
                 <RelationSelector
-                    relation={{
-                        ...relation,
-                        cardinality: multiple ? "many" : relation.cardinality
-                    }}
-                    value={relationSelectorValue as any}
+                    relation={relation}
+                    value={relationSelectorValue}
                     multiple={multiple}
-                    onValueChange={handleRelationSelectorChange as any}
+                    onValueChange={handleRelationSelectorChange}
                     disabled={internalValue === null}
                     size={"medium"}
                 />
 
-                {!isArray && <Label
+                {!manyRelation && <Label
                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="null-filter"
                 >
