@@ -280,10 +280,35 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                         }
                     } else if (rel.cardinality === "many") {
                         if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
+                            // One-to-many inverse relation
                             tableRelations.push(`    ${relationKey}: many(${targetTableVar}, { relationName: \"${drizzleRelationName}\" })`);
                         } else if (rel.through) {
+                            // Many-to-many owning relation with explicit junction table
                             const junctionTableVar = getTableVarName(rel.through.table);
                             tableRelations.push(`    ${relationKey}: many(${junctionTableVar}, { relationName: \"${drizzleRelationName}\" })`);
+                        } else if (rel.direction === "inverse" && rel.inverseRelationName) {
+                            // Many-to-many inverse relation - find the corresponding owning relation's junction table
+                            try {
+                                const targetCollection = rel.target();
+                                const targetResolvedRelations = resolveCollectionRelations(targetCollection);
+
+                                // Find the corresponding owning many-to-many relation on the target
+                                const correspondingRelation = Object.values(targetResolvedRelations).find(targetRel =>
+                                    targetRel.direction === "owning" &&
+                                    targetRel.cardinality === "many" &&
+                                    targetRel.through &&
+                                    targetRel.relationName === rel.inverseRelationName
+                                );
+
+                                if (correspondingRelation && correspondingRelation.through) {
+                                    const junctionTableVar = getTableVarName(correspondingRelation.through.table);
+                                    tableRelations.push(`    ${relationKey}: many(${junctionTableVar}, { relationName: \"${drizzleRelationName}\" })`);
+                                } else {
+                                    console.warn(`Could not find corresponding owning many-to-many relation for inverse relation '${relationKey}' on '${collection.name}'`);
+                                }
+                            } catch (e) {
+                                console.warn(`Could not resolve inverse many-to-many relation '${relationKey}':`, e);
+                            }
                         }
                         // joinPath relations don't generate Drizzle relations - they use existing user tables
                     }

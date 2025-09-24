@@ -50,7 +50,7 @@ const createMockRegistry = () => {
     return registry;
 };
 
-describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
+describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
     let mockRegistry: BackendCollectionRegistry;
 
     beforeEach(() => {
@@ -58,8 +58,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         jest.clearAllMocks();
     });
 
-    describe('buildRelationConditions - Owning Many-to-Many', () => {
-        it('should build correct conditions for owning many-to-many relation', () => {
+    describe("buildRelationConditions - Owning Many-to-Many", () => {
+        it("should build correct conditions for owning many-to-many relation", () => {
             const relation: Relation = {
                 relationName: "tags",
                 target: () => ({ slug: "tags" } as any),
@@ -87,7 +87,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
         });
 
-        it('should handle array of parent entity IDs for owning relation', () => {
+        it("should handle array of parent entity IDs for owning relation", () => {
             const relation: Relation = {
                 relationName: "tags",
                 target: () => ({ slug: "tags" } as any),
@@ -115,8 +115,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('buildRelationConditions - Inverse Many-to-Many', () => {
-        it('should build correct conditions for inverse many-to-many relation', () => {
+    describe("buildRelationConditions - Inverse Many-to-Many", () => {
+        it("should build correct conditions for inverse many-to-many relation", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -144,7 +144,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
         });
 
-        it('should handle array of parent entity IDs for inverse relation', () => {
+        it("should handle array of parent entity IDs for inverse relation", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -172,8 +172,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('Join Path Relations with Junction Tables', () => {
-        it('should handle join paths that include many-to-many relationships', () => {
+    describe("Join Path Relations with Junction Tables", () => {
+        it("should handle join paths that include many-to-many relationships", () => {
             // Create a special mock registry that simulates missing direct foreign keys
             const mockRegistryForJunction = {
                 getTable: jest.fn()
@@ -237,7 +237,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(mockRegistryForJunction.getTable).toHaveBeenCalledWith("posts_tags");
         });
 
-        it('should fallback to error when no junction table is found for missing foreign keys', () => {
+        it("should fallback to error when no junction table is found for missing foreign keys", () => {
             const joinPathWithMissingRelation = [
                 {
                     table: "nonexistent_table",
@@ -269,7 +269,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             }).toThrow("Join tables not found");
         });
 
-        it('should handle complex multi-hop join paths with junction tables', () => {
+        it("should handle complex multi-hop join paths with junction tables", () => {
             // Simulate: Author -> Posts -> Tags (where Posts-Tags uses junction table)
             const complexJoinPath = [
                 {
@@ -311,8 +311,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('Junction Table Discovery', () => {
-        it('should try multiple naming patterns for junction tables', () => {
+    describe("Junction Table Discovery", () => {
+        it("should try multiple naming patterns for junction tables", () => {
             const relation: Relation = {
                 relationName: "test_junction",
                 target: () => ({ slug: "tags" } as any),
@@ -355,8 +355,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('Error handling', () => {
-        it('should throw error when junction table is not found', () => {
+    describe("Error handling", () => {
+        it("should throw error when junction table is not found", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -382,7 +382,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             }).toThrow("Junction table not found: nonexistent_table");
         });
 
-        it('should throw error when source column is not found in junction table', () => {
+        it("should throw error when source column is not found in junction table", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -408,7 +408,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             }).toThrow("Source column 'nonexistent_column' not found in junction table 'posts_tags'");
         });
 
-        it('should throw error when target column is not found in junction table', () => {
+        it("should throw error when target column is not found in junction table", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -435,8 +435,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('buildRelationCountQuery - Many-to-Many', () => {
-        it('should build correct count query for owning many-to-many relation', () => {
+    describe("buildRelationCountQuery - Many-to-Many", () => {
+        it("should build correct count query for owning many-to-many relation", () => {
             const relation: Relation = {
                 relationName: "tags",
                 target: () => ({ slug: "tags" } as any),
@@ -469,7 +469,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(mockBaseQuery.where).toHaveBeenCalled();
         });
 
-        it('should build correct count query for inverse many-to-many relation', () => {
+        it("should build correct count query for inverse many-to-many relation", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -503,8 +503,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('buildRelationQuery - Many-to-Many', () => {
-        it('should build correct query for owning many-to-many relation with additional filters', () => {
+    describe("buildRelationQuery - Many-to-Many", () => {
+        it("should build correct query for owning many-to-many relation with additional filters", () => {
             const relation: Relation = {
                 relationName: "tags",
                 target: () => ({ slug: "tags" } as any),
@@ -540,7 +540,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(mockBaseQuery.where).toHaveBeenCalled();
         });
 
-        it('should build correct query for inverse many-to-many relation with additional filters', () => {
+        it("should build correct query for inverse many-to-many relation with additional filters", () => {
             const relation: Relation = {
                 relationName: "posts",
                 target: () => ({ slug: "posts" } as any),
@@ -577,8 +577,8 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
         });
     });
 
-    describe('Real-world scenario: tags/20/posts', () => {
-        it('should correctly handle the tags/20/posts scenario that was failing', () => {
+    describe("Real-world scenario: tags/20/posts", () => {
+        it("should correctly handle the tags/20/posts scenario that was failing", () => {
             // This is the exact scenario from the user's error
             const tagsToPostsRelation: Relation = {
                 relationName: "posts",
@@ -613,7 +613,7 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
             expect(() => result).not.toThrow();
         });
 
-        it('should handle inverse many-to-many without explicit through property (real user scenario)', () => {
+        it("should handle inverse many-to-many without explicit through property (real user scenario)", () => {
             // Create a more realistic mock that simulates the actual scenario
             const mockPostsCollection = {
                 slug: "posts",
@@ -666,6 +666,226 @@ describe('DrizzleConditionBuilder - Many-to-Many Relations', () => {
 
             // Should not throw the "Foreign key column 'tag_id' not found in target table" error
             expect(() => result).not.toThrow();
+        });
+    });
+
+    // Test the specific fix for findCorrespondingJunctionTable method
+    describe("findCorrespondingJunctionTable - Junction Table Lookup Fix", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("should find corresponding junction table for inverse many-to-many relation", () => {
+            // Create real test collections with proper relation configurations
+            const mockTagsCollection = {
+                slug: "tags",
+                dbPath: "tags"
+            };
+
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: [
+                    {
+                        relationName: "tags",
+                        cardinality: "many" as const,
+                        direction: "owning" as const,
+                        through: {
+                            table: "posts_tags",
+                            sourceColumn: "post_id",
+                            targetColumn: "tag_id"
+                        },
+                        target: () => mockTagsCollection
+                    }
+                ]
+            };
+
+            // Create the inverse relation (tags -> posts)
+            const inverseRelation: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse",
+                inverseRelationName: "tags" // This should match the key in the target collection relations
+            };
+
+            // Test the buildRelationConditions with the inverse relation (without explicit through)
+            const result = DrizzleConditionBuilder.buildRelationConditions(
+                inverseRelation,
+                5, // tag ID
+                mockPostsTable, // targetTable (posts)
+                mockTagsTable, // parentTable (tags)
+                mockTagsTable.id, // parentIdColumn (tag.id)
+                mockPostsTable.id, // targetIdColumn (post.id)
+                mockRegistry
+            );
+
+            // Should successfully build conditions using the found junction table
+            expect(result.joinConditions).toHaveLength(1);
+            expect(result.whereConditions).toHaveLength(1);
+
+            // Should have looked up the junction table
+            expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
+        });
+
+        it("should handle the exact user scenario that was failing", () => {
+            // This is the exact scenario from the user's collection configuration
+            const mockTagsCollection = {
+                slug: "tags",
+                dbPath: "tags"
+            };
+
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: [
+                    {
+                        relationName: "tags",
+                        cardinality: "many" as const,
+                        direction: "owning" as const,
+                        through: {
+                            table: "posts_tags",
+                            sourceColumn: "post_id",
+                            targetColumn: "tag_id"
+                        },
+                        target: () => mockTagsCollection
+                    }
+                ]
+            };
+
+            // The inverse relation from tags collection (this was failing before the fix)
+            const tagsToPostsRelation: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse",
+                inverseRelationName: "tags" // This is the key that should match the owning relation
+            };
+
+            // This should NOT throw "Foreign key column 'tag_id' not found in target table"
+            const result = DrizzleConditionBuilder.buildRelationConditions(
+                tagsToPostsRelation,
+                42, // tag ID
+                mockPostsTable,
+                mockTagsTable,
+                mockTagsTable.id,
+                mockPostsTable.id,
+                mockRegistry
+            );
+
+            // Should successfully find the junction table and build conditions
+            expect(result.joinConditions).toHaveLength(1);
+            expect(result.whereConditions).toHaveLength(1);
+
+            // Verify it found the junction table correctly
+            expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
+        });
+
+        it("should return appropriate error when no corresponding junction table is found", () => {
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: [] // No relations - should fail to find junction table
+            };
+
+            const inverseRelation: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse",
+                inverseRelationName: "nonexistent"
+            };
+
+            // Should fall back to checking foreignKeyOnTarget or throw appropriate error
+            expect(() => {
+                DrizzleConditionBuilder.buildRelationConditions(
+                    inverseRelation,
+                    5,
+                    mockPostsTable,
+                    mockTagsTable,
+                    mockTagsTable.id,
+                    mockPostsTable.id,
+                    mockRegistry
+                );
+            }).toThrow(/Cannot resolve inverse many relation/);
+        });
+
+        it("should swap source and target columns correctly for inverse relations", () => {
+            const mockTagsCollection = {
+                slug: "tags",
+                dbPath: "tags"
+            };
+
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: [
+                    {
+                        relationName: "tags",
+                        cardinality: "many" as const,
+                        direction: "owning" as const,
+                        through: {
+                            table: "posts_tags",
+                            sourceColumn: "post_id", // From posts perspective
+                            targetColumn: "tag_id" // To tags perspective
+                        },
+                        target: () => mockTagsCollection
+                    }
+                ]
+            };
+
+            const inverseRelation: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse",
+                inverseRelationName: "tags"
+            };
+
+            const result = DrizzleConditionBuilder.buildRelationConditions(
+                inverseRelation,
+                7, // tag ID
+                mockPostsTable,
+                mockTagsTable,
+                mockTagsTable.id,
+                mockPostsTable.id,
+                mockRegistry
+            );
+
+            // The junction table lookup should swap the columns for inverse direction
+            // From tags perspective: sourceColumn becomes "tag_id", targetColumn becomes "post_id"
+            expect(result.joinConditions).toHaveLength(1);
+            expect(result.whereConditions).toHaveLength(1);
+            expect(mockRegistry.getTable).toHaveBeenCalledWith("posts_tags");
+        });
+
+        it("should handle missing inverseRelationName gracefully", () => {
+            const mockPostsCollection = {
+                slug: "posts",
+                dbPath: "posts",
+                relations: []
+            };
+
+            const inverseRelationWithoutInverseName: Relation = {
+                relationName: "posts",
+                target: () => mockPostsCollection as any,
+                cardinality: "many",
+                direction: "inverse"
+                // No inverseRelationName specified
+            };
+
+            // Should throw an appropriate error since it can't find the junction table
+            expect(() => {
+                DrizzleConditionBuilder.buildRelationConditions(
+                    inverseRelationWithoutInverseName,
+                    5,
+                    mockPostsTable,
+                    mockTagsTable,
+                    mockTagsTable.id,
+                    mockPostsTable.id,
+                    mockRegistry
+                );
+            }).toThrow(/Cannot resolve inverse many relation/);
         });
     });
 });

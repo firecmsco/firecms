@@ -920,60 +920,54 @@ export class DrizzleConditionBuilder {
         try {
             console.debug(`🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation '${relation.relationName}' with inverseRelationName '${relation.inverseRelationName}'`);
 
+            if (!relation.inverseRelationName) {
+                console.debug(`🔍 [findCorrespondingJunctionTable] No inverseRelationName specified`);
+                return null;
+            }
+
             // Get the target collection of the inverse relation
             const targetCollection = relation.target();
             console.debug(`🔍 [findCorrespondingJunctionTable] Target collection: ${targetCollection.slug || targetCollection.dbPath}`);
 
-            // We need to find the corresponding owning relation on the target collection
-            // that points back to the current collection
+            // Find the corresponding owning relation on the target collection
             const targetCollectionRelations = resolveCollectionRelations(targetCollection);
             console.debug(`🔍 [findCorrespondingJunctionTable] Target collection relations:`, Object.keys(targetCollectionRelations));
 
-            // Look for an owning many-to-many relation that matches the inverse relation name
-            for (const [relationKey, targetRelation] of Object.entries(targetCollectionRelations)) {
-                console.debug(`🔍 [findCorrespondingJunctionTable] Checking relation '${relationKey}':`, {
-                    relationName: targetRelation.relationName,
-                    cardinality: targetRelation.cardinality,
-                    direction: targetRelation.direction,
-                    hasThrough: !!targetRelation.through,
-                    through: targetRelation.through
-                });
+            // Look for the owning many-to-many relation that matches our inverseRelationName
+            const correspondingRelation = targetCollectionRelations[relation.inverseRelationName];
 
-                // Check if this is an owning many-to-many relation with junction table
-                const isOwningManyToMany = targetRelation.cardinality === "many" &&
-                                         targetRelation.direction === "owning" &&
-                                         targetRelation.through;
-
-                // Check if the relation name matches our inverse relation name
-                const nameMatches = targetRelation.relationName === relation.inverseRelationName ||
-                                  relationKey === relation.inverseRelationName;
-
-                console.debug(`🔍 [findCorrespondingJunctionTable] - isOwningManyToMany: ${isOwningManyToMany}, nameMatches: ${nameMatches}`);
-
-                if (isOwningManyToMany && nameMatches) {
-                    console.debug(`🔍 [findCorrespondingJunctionTable] Found matching owning relation!`);
-
-                    // Found the corresponding owning relation with junction table info
-                    // For inverse relation, we need to swap source and target columns
-                    const through = targetRelation.through!; // We know it exists because isOwningManyToMany checks it
-                    const result = {
-                        table: through.table,
-                        sourceColumn: through.targetColumn, // Swapped
-                        targetColumn: through.sourceColumn // Swapped
-                    };
-
-                    console.debug(`🔍 [findCorrespondingJunctionTable] Returning junction info:`, result);
-                    return result;
-                }
+            if (!correspondingRelation) {
+                console.debug(`🔍 [findCorrespondingJunctionTable] No relation found with key '${relation.inverseRelationName}' on target collection`);
+                return null;
             }
 
-            console.debug(`🔍 [findCorrespondingJunctionTable] No matching owning relation found for inverseRelationName '${relation.inverseRelationName}'`);
-            console.debug(`🔍 [findCorrespondingJunctionTable] Available relations on target collection:`,
-                Object.entries(targetCollectionRelations).map(([key, rel]) =>
-                    `${key} (relationName: ${rel.relationName}, direction: ${rel.direction}, cardinality: ${rel.cardinality})`
-                )
-            );
-            return null;
+            console.debug(`🔍 [findCorrespondingJunctionTable] Found relation:`, {
+                relationName: correspondingRelation.relationName,
+                cardinality: correspondingRelation.cardinality,
+                direction: correspondingRelation.direction,
+                hasThrough: !!correspondingRelation.through
+            });
+
+            // Verify it's an owning many-to-many relation with junction table
+            if (correspondingRelation.cardinality !== "many" ||
+                correspondingRelation.direction !== "owning" ||
+                !correspondingRelation.through) {
+                console.debug(`🔍 [findCorrespondingJunctionTable] Relation is not an owning many-to-many with junction table`);
+                return null;
+            }
+
+            console.debug(`🔍 [findCorrespondingJunctionTable] Found matching owning relation with junction table!`);
+
+            // For inverse relation, we need to swap source and target columns
+            const through = correspondingRelation.through;
+            const result = {
+                table: through.table,
+                sourceColumn: through.targetColumn, // Swapped for inverse relation
+                targetColumn: through.sourceColumn  // Swapped for inverse relation
+            };
+
+            console.debug(`🔍 [findCorrespondingJunctionTable] Returning junction info:`, result);
+            return result;
         } catch (error) {
             console.error(`🔍 [findCorrespondingJunctionTable] Error finding corresponding junction table for relation '${relation.relationName}':`, error);
             return null;
