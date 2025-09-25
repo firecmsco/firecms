@@ -1,5 +1,5 @@
 import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { Field, FieldProps as FormexFieldProps, getIn } from "@firecms/formex";
 

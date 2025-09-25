@@ -1,5 +1,5 @@
 import { EntityCallbacks } from "@firecms/core";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 export const entityHistoryCallbacks: EntityCallbacks = {
     onSaveSuccess: async (props) => {

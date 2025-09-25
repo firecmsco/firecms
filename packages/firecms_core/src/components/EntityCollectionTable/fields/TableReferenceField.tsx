@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useCustomizationController, useNavigationController, useEntitySelectionDialog } from "../../../hooks";
+import { useCustomizationController, useEntitySelectionDialog, useNavigationController } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";

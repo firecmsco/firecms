@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
 
@@ -19,13 +19,13 @@ export function useValidateAuthenticator<USER extends User = any>
      storageSource,
      dataSourceDelegate
  }:
-     {
-         disabled?: boolean,
-         authController: AuthController<USER>,
-         authenticator?: boolean | Authenticator<USER>,
-         dataSourceDelegate: DataSourceDelegate;
-         storageSource: StorageSource;
-     }): {
+ {
+     disabled?: boolean,
+     authController: AuthController<USER>,
+     authenticator?: boolean | Authenticator<USER>,
+     dataSourceDelegate: DataSourceDelegate;
+     storageSource: StorageSource;
+ }): {
     canAccessMainView: boolean,
     authLoading: boolean,
     notAllowedError: any,

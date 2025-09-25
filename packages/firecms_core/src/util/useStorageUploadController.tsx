@@ -1,5 +1,5 @@
 import Resizer from "react-image-file-resizer";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import {
     ArrayProperty,

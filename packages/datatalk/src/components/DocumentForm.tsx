@@ -15,7 +15,8 @@
 // import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 // import { PropertyFieldBinding } from "./PropertyFieldBinding";
 // import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-// import equal from "react-fast-compare"
+// import {deepEqual as equal } from "fast-equals"
+
 // import {
 //     canCreateEntity,
 //     canDeleteEntity,

@@ -1,5 +1,5 @@
 import React from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     FieldHelperText,
@@ -20,18 +20,18 @@ import { AdvancedTextField } from "./AdvancedTextField";
  * @group Form fields
  */
 export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBinding({
-                                                                                                                  propertyKey,
-                                                                                                                  value,
-                                                                                                                  setValue,
-                                                                                                                  error,
-                                                                                                                  showError,
-                                                                                                                  disabled,
-                                                                                                                  autoFocus,
-                                                                                                                  property,
-                                                                                                                  includeDescription,
-                                                                                                                  highlight,
-                                                                                                                  size
-                                                                                                              }: FieldProps<StringProperty | NumberProperty> & {
+                                                                                       propertyKey,
+                                                                                       value,
+                                                                                       setValue,
+                                                                                       error,
+                                                                                       showError,
+                                                                                       disabled,
+                                                                                       autoFocus,
+                                                                                       property,
+                                                                                       includeDescription,
+                                                                                       highlight,
+                                                                                       size
+                                                                                   }: FieldProps<StringProperty | NumberProperty> & {
     highlight?: string
 }) {
 
@@ -46,7 +46,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
         setValue
     });
 
-    const internalValue:string | number | null = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
+    const internalValue: string | number | null = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
 
     return (
         <>

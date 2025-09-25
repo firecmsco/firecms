@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
 import {
@@ -68,7 +68,10 @@ export function EnumForm({
         }
     });
 
-    const { values, errors } = formex;
+    const {
+        values,
+        errors
+    } = formex;
 
     useEffect(() => {
         if (onValuesChanged) {
@@ -125,7 +128,7 @@ function EnumFormFields({
     const buildEntry = ({
                             index,
                             internalId
-                        }:ArrayEntryParams) => {
+                        }: ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
         const entryError = errors?.enum && errors?.enum[index];
         return <EnumEntry index={index}
@@ -199,7 +202,10 @@ function EnumFormFields({
                                 onInternalIdAdded={setLastInternalIdAdded}
                                 canAddElements={true}
                                 onValueChange={(value) => setFieldValue(enumValuesPath, value)}
-                                newDefaultEntry={{ id: "", label: "" }}/>
+                                newDefaultEntry={{
+                                    id: "",
+                                    label: ""
+                                }}/>
 
                 <EnumEntryDialog index={editDialogIndex}
                                  open={editDialogIndex !== undefined}

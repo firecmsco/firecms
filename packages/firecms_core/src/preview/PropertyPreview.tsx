@@ -1,5 +1,5 @@
 import React, { createElement } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     ArrayProperty,
@@ -11,7 +11,6 @@ import {
     PropertyPreviewProps,
     StringProperty
 } from "@firecms/types";
-
 
 import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";

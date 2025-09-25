@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     FieldProps,
-    MarkdownEditorFieldBinding, NumberProperty,
+    MarkdownEditorFieldBinding,
+    NumberProperty,
     PluginFieldBuilderParams,
     Property,
     StringProperty,
@@ -27,7 +28,7 @@ import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_con
 import { countStringCharacters } from "../utils/strings_counter";
 import { EditorAIController } from "@firecms/editor";
 
-export function fieldBuilder<P extends Property= Property>
+export function fieldBuilder<P extends Property = Property>
 (params: PluginFieldBuilderParams<P>): React.ComponentType<FieldProps<P>> | null {
 
     const {

@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     AuthController,
     Authenticator,
     DataSourceDelegate,
     Entity,
-    NavigationController,
     PermissionsBuilder,
     removeUndefined,
     Role,

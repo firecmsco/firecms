@@ -1,5 +1,5 @@
 import React, { RefObject, useCallback, useEffect, useState } from "react";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";

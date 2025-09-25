@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import { cls, EditIcon } from "@firecms/ui";
 import { getRelationFrom } from "@firecms/common";

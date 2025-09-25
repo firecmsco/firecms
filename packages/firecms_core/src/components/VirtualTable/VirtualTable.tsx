@@ -1,6 +1,6 @@
 import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 // @ts-ignore
 import { FixedSizeList as List } from "react-window";

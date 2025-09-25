@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useContext } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { User } from "@firecms/core";
 
@@ -13,7 +13,6 @@ export type HistoryConfigController = {
 
 export const HistoryControllerContext = React.createContext<HistoryConfigController>({} as any);
 export const useHistoryController = (): HistoryConfigController => useContext(HistoryControllerContext);
-
 
 export interface HistoryControllerProviderProps {
 

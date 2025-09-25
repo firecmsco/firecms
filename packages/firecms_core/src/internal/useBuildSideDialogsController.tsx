@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "@firecms/types";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 export function useBuildSideDialogsController(): SideDialogsController {
 

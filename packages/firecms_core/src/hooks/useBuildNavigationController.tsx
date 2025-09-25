@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
+
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -25,7 +26,6 @@ import {
     getParentReferencesFromPath,
     getSubcollections,
     mergeDeep,
-    removeFunctions,
     removeInitialAndTrailingSlashes,
     resolveCollectionPathIds,
     resolvePermissions
@@ -270,7 +270,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
 
             let shouldUpdateTopLevelNav = false;
-            let collectionsChanged = collectionRegistryRef.current.registerMultiple(resolvedCollections);;
+            let collectionsChanged = collectionRegistryRef.current.registerMultiple(resolvedCollections);
+            ;
 
             if (collectionsChanged) {
                 console.debug("Collections have changed", resolvedCollections);

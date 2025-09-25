@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
 import {

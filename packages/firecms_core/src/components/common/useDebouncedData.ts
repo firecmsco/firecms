@@ -1,5 +1,5 @@
 import React from "react";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 /**
  * Hack to prevent data updates for incomplete callbacks from Firestore

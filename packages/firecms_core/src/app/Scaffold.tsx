@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
+
 import { useLargeLayout } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { AppContext } from "./useApp";

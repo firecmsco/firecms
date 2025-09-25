@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getIn, setIn } from "./utils";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import { FormexController, FormexResetProps } from "./types";
 

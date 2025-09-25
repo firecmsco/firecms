@@ -12,7 +12,7 @@ import {
     PropertyConfig,
     PropertyFieldBindingProps,
 } from "@firecms/types";
-import equal from "react-fast-compare";
+import { deepEqual as equal } from "fast-equals";
 
 import { ErrorBoundary, getFormFieldKeys } from "../components";
 import { getDefaultValuesFor, getValueInPath, isHidden, isReadOnly, mergeDeep, } from "@firecms/common";
@@ -273,7 +273,7 @@ export function EntityForm<M extends Record<string, any>>({
                             collection,
                             path
                         }: {
-        collection: EntityCollection<M> ,
+        collection: EntityCollection<M>,
         path: string,
         entityId: string | number | undefined,
         values: M,
@@ -506,7 +506,7 @@ export function EntityForm<M extends Record<string, any>>({
                         const hidden = isHidden(property);
                         if (hidden) return null;
                         const widthPercentage = property.widthPercentage ?? 100;
-                        const cmsFormFieldProps: PropertyFieldBindingProps< M> = {
+                        const cmsFormFieldProps: PropertyFieldBindingProps<M> = {
                             propertyKey: key,
                             disabled,
                             property,

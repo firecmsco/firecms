@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { VirtualTableRowProps } from "./types";
 import { cls } from "@firecms/ui";

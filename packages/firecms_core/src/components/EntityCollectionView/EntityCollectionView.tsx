@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     AdditionalFieldDelegate,
@@ -25,10 +25,12 @@ import { getPropertyInPath } from "../../util";
 import {
     canCreateEntity,
     canDeleteEntity,
-    canEditEntity, getSubcollections,
+    canEditEntity,
+    getSubcollections,
     mergeDeep,
     mergeEntityActions,
-    navigateToEntity, resolveEntityAction
+    navigateToEntity,
+    resolveEntityAction
 } from "@firecms/common";
 import { ReferencePreview } from "../../preview";
 import {

@@ -1,5 +1,5 @@
 import React from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property } from "@firecms/core";
 import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";

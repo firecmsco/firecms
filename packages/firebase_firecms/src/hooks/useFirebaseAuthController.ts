@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import equal from "react-fast-compare"
+import { deepEqual as equal } from "fast-equals"
 
 import {
     ApplicationVerifier,
