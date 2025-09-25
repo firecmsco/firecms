@@ -17,7 +17,8 @@ import {
     KeyboardArrowDownIcon,
     SearchIcon,
     Separator,
-    useInjectStyles
+    useInjectStyles,
+    useSheetPortalContainer
 } from "@firecms/ui";
 import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { EntityPreviewData } from "./EntityPreview";
@@ -39,15 +40,12 @@ export interface RelationSelectorProps {
     value?: EntityRelation | EntityRelation[] | null;
     /** Callback returning selected EntityRelation(s) */
 
-    onValueChange?: (_updatedValue: EntityRelation | EntityRelation[] | undefined) => void;
+    onValueChange?: (updatedValue: EntityRelation | EntityRelation[] | undefined) => void;
     placeholder?: React.ReactNode;
     size?: "small" | "medium";
     useChips?: boolean;
     disabled?: boolean;
     error?: boolean; // kept for backwards compatibility (could be used for styling later)
-    position?: "item-aligned" | "popper"; // legacy prop
-    endAdornment?: React.ReactNode;
-    inputRef?: React.RefObject<HTMLButtonElement>;
     padding?: boolean; // legacy prop
     invisible?: boolean;
 
@@ -175,6 +173,28 @@ export const RelationSelector = React.forwardRef<
             if (observerRef.current) observerRef.current.disconnect();
         }, []);
 
+        // Enhanced scroll event listener specifically for dialog contexts
+        useEffect(() => {
+            const scrollContainer = scrollContainerRef.current;
+            if (!scrollContainer || !hasMore || isLoading || !isPopoverOpen) return;
+
+            const handleScroll = () => {
+                const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+                const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
+
+                if (isNearBottom && hasMore && !isLoading) {
+                    loadMore();
+                }
+            };
+
+            // Add scroll listener directly to the container
+            scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+
+            return () => {
+                scrollContainer.removeEventListener("scroll", handleScroll);
+            };
+        }, [hasMore, isLoading, loadMore, isPopoverOpen]);
+
         const handleSearchChange = useCallback((newSearchString: string) => {
             setSearchString(newSearchString);
             search(newSearchString);
@@ -251,6 +271,10 @@ export const RelationSelector = React.forwardRef<
         }, []);
 
         const resolvedPlaceholder = placeholder || emptyPlaceholder || <EmptyValue className={"ml-2"}/>;
+
+        // Use Sheet portal container if available, otherwise document.body
+        const sheetPortalContainer = useSheetPortalContainer();
+        const portalContainer = sheetPortalContainer || (typeof document !== "undefined" ? document.body : undefined);
 
         return (
             <>
@@ -342,7 +366,7 @@ export const RelationSelector = React.forwardRef<
 
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Portal container={typeof document !== "undefined" ? document.body : undefined}>
+                    <PopoverPrimitive.Portal container={portalContainer}>
                         <PopoverPrimitive.Content
                             ref={contentRef}
                             data-relation-selector-content
@@ -353,7 +377,7 @@ export const RelationSelector = React.forwardRef<
                             avoidCollisions={true}
                             collisionPadding={16}
                             // Allow default auto focus (we manually refocus anyway)
-                            onOpenAutoFocus={(e) => { /* leave default or custom manual focus */
+                            onOpenAutoFocus={(_e) => { /* leave default or custom manual focus */
                             }}
                             onCloseAutoFocus={(e) => {
                                 e.preventDefault();

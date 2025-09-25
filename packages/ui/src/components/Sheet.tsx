@@ -1,8 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+
+// Context to provide portal container to child components
+const SheetPortalContext = createContext<HTMLElement | null>(null);
+
+export const useSheetPortalContainer = () => useContext(SheetPortalContext);
 
 interface SheetProps {
     children: React.ReactNode;
@@ -36,6 +41,7 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 ...props
                                             }) => {
     const [displayed, setDisplayed] = useState(false);
+    const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -102,7 +108,15 @@ export const Sheet: React.FC<SheetProps> = ({
                     )}
                     style={style}
                 >
-                    {children}
+                    <SheetPortalContext.Provider value={portalContainer}>
+                        {children}
+                    </SheetPortalContext.Provider>
+                    {/* Portal container for child components */}
+                    <div
+                        ref={setPortalContainer}
+                        className="fixed inset-0 pointer-events-none z-50"
+                        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+                    />
                 </DialogPrimitive.Content>
             </DialogPrimitive.Portal>
         </DialogPrimitive.Root>
