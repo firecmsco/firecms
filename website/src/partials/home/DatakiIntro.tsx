@@ -2,6 +2,7 @@ import React from "react";
 import { Panel } from "../general/Panel";
 import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import clsx from "clsx";
+import { LazyVideo } from "../LazyVideo";
 
 function DatakiIntro() {
     return (
@@ -33,17 +34,16 @@ function DatakiIntro() {
                         <CTACaret/>
                     </a>
                 </div>
-                <video autoPlay={true}
+                <LazyVideo autoPlay={true}
                        loop={true}
                        muted={true}
                        playsInline={true}
-                       data-aos="zoom-y-out"
                        className={"lg:w-1/2 m-8 rounded-2xl"}
                        src={"https://dataki.ai/img/videos/gen_chart.webm"}
                        style={{
                            borderRadius: "8px"
                        }}>
-                </video>
+                </LazyVideo>
             </div>
 
 

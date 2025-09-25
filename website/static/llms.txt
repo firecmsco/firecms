@@ -770,8 +770,8 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
     "deploy": "run-s build && firecms deploy --project=your-project-id"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-canary",
-    "firebase": "^10.12.2",
+    "@firecms/cloud": "^3.0.0",
+    "firebase": "^12.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -2133,6 +2133,239 @@ You can use the `useApp()` hook to access the `AppState` object from the context
 - `autoOpenDrawer`: Whether the drawer should open on hover.
 - `logo`: Logo to be displayed in the top bar and drawer.
 
+
+## Authentication and User Management
+
+## Authentication and User Management in Self-Hosted FireCMS
+
+### Recommended: FireCMS Pro and Cloud
+
+Before implementing custom authentication, we strongly recommend considering **FireCMS Pro** or **FireCMS Cloud**, which include:
+
+- ✅ Built-in user management system
+- ✅ Role-based permissions (Admin, Editor, Viewer)
+- ✅ Team management interface
+- ✅ User invitation system
+- ✅ Granular collection and field-level permissions
+- ✅ Audit logs and user activity tracking
+- ✅ Enterprise-grade security features
+
+These solutions provide a complete authentication and authorization system out of the box, saving you significant development time and ensuring security best practices.
+
+[Learn more about User Management in FireCMS Pro →](/docs/pro/user_management)
+
+[Try FireCMS Cloud →](https://app.firecms.co)
+
+:::note
+
+When you initialize a new FireCMS project using the CLI, you might find a boilerplate authenticator in your `App.tsx` file. It's a standard FireCMS interface and looks something like this (no need to hate Flanders!):
+
+```typescript
+const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
+                                                                                   user,
+                                                                                   authController
+                                                                               }) => {
+    if (user?.email?.includes("flanders")) {
+        // You can throw an error to prevent access
+        throw Error("Stupid Flanders!");
+    }
+    console.log("Allowing access to", user);
+    return true;
+}, []);
+```
+
+This is just a placeholder to show you where to implement your own authentication logic. You can replace it with one of the authenticators described below.
+
+:::
+
+### Part 1: Basic User Management
+
+This section covers how to create a `users` collection to manage users. This is the foundation for implementing permissions.
+
+#### Create a "Users" Collection
+
+This collection will store your users.
+
+```typescript
+
+export type User = {
+  name: string;
+  email: string;
+};
+
+export const usersCollection = buildCollection<User>({
+  name: "Users",
+  singularName: "User",
+  path: "users",
+  properties: {
+    name: buildProperty({
+      name: "Name",
+      validation: { required: true },
+      dataType: "string"
+    }),
+    email: buildProperty({
+      name: "Email",
+      validation: { required: true, email: true },
+      dataType: "string"
+    })
+  }
+});
+```
+
+:::tip
+Don't forget to set up the Firestore security rules for the `users` path to control who can read and write to the collection.
+:::
+
+### Part 2: Role-Based Permissions
+
+Now, let's add a `role` to our users and use it to control access.
+
+#### Step 1: Update the "Users" Collection with Roles
+
+Add a `role` property to your `User` type and collection.
+
+```typescript
+
+export enum UserRole {
+  admin = "admin",
+  editor = "editor",
+  viewer = "viewer",
+}
+
+export type User = {
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
+export const usersCollection = buildCollection<User>({
+  name: "Users",
+  singularName: "User",
+  path: "users",
+  properties: {
+    name: buildProperty({
+      name: "Name",
+      validation: { required: true },
+      dataType: "string"
+    }),
+    email: buildProperty({
+      name: "Email",
+      validation: { required: true, email: true },
+      dataType: "string"
+    }),
+    role: buildProperty({
+      name: "Role",
+      validation: { required: true },
+      dataType: "string",
+      enumValues: {
+        admin: "Admin",
+        editor: "Editor",
+        viewer: "Viewer"
+      }
+    })
+  }
+});
+```
+
+#### Step 2: Implement a Role-Based Authenticator
+
+First, create a new file named `src/custom_authenticator.ts`. This file will contain your authentication logic.
+
+**`src/custom_authenticator.ts`**
+```typescript
+
+export const postsCollection = buildCollection({
+  name: "Posts",
+  path: "posts",
+  permissions: ({ authController }) => {
+    const userRole = authController.extra?.role;
+    return {
+      read: true, // All roles can read
+      edit: userRole === UserRole.admin || userRole === UserRole.editor,
+      create: userRole === UserRole.admin || userRole === UserRole.editor,
+      delete: userRole === UserRole.admin
+    };
+  },
+  // ... properties
+});
+```
+
+### Part 3: Using Firebase Custom Claims for Permissions
+
+An alternative to storing roles in Firestore is to use Firebase Authentication's custom claims.
+
+#### Step 1: Set Custom Claims
+
+You need to set custom claims for a user from a backend environment using the Firebase Admin SDK. This is typically done in a Cloud Function.
+
+```typescript
+// Example Cloud Function to set a role claim
+
+admin.initializeApp();
+
+export const setUserRole = functions.https.onCall(async (data, context) => {
+  if (!context.auth?.token.admin) {
+    throw new functions.https.HttpsError("permission-denied", "Must be an admin to set roles.");
+  }
+
+  const { uid, role } = data;
+  await admin.auth().setCustomUserClaims(uid, { role });
+
+  return { message: `Success! User ${uid} has been given the role of ${role}.` };
+});
+```
+
+#### Step 2: Implement a Claims-Based Authenticator
+
+This authenticator reads the custom claims from the user's ID token.
+
+```typescript
+
+export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
+  user,
+  authController
+}) => {
+  if (!user) return false;
+
+  try {
+    const idTokenResult = await user.firebaseUser.getIdTokenResult(true); // Force refresh
+    const role = idTokenResult.claims.role || "viewer"; // Default to 'viewer' if no role claim
+    authController.setExtra({ role });
+    return true;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    return false;
+  }
+};
+```
+
+#### Step 3: Use Claims in Collections
+
+The `permissions` implementation is the same as with the role-based approach, as the role is extracted and placed in `authController.extra`.
+
+```typescript
+
+export const articlesCollection = buildCollection({
+  name: "Articles",
+  path: "articles",
+  permissions: ({ authController }) => {
+    const userRole = authController.extra?.role;
+    return {
+      read: true,
+      edit: userRole === "admin" || userRole === "editor",
+      create: userRole === "admin" || userRole === "editor",
+      delete: userRole === "admin"
+    };
+  },
+  // ... properties
+});
+```
+
+### Security Best Practices
+
+- **Firestore Security Rules**: Always enforce security rules on your backend. Client-side permissions are for UI/UX purposes and can be bypassed.
+- **Server-Side Validation**: For critical operations, validate permissions on a server.
+- **Principle of Least Privilege**: Grant users the minimum level of access they need.
 
 ## Styling FireCMS
 
@@ -4783,7 +5016,7 @@ This is a sample `package.json` with the new config:
   },
   "dependencies": {
     "@firecms/cloud": "^3.0.0-beta",
-    "firebase": "^10.12.2",
+    "firebase": "^12.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -8284,7 +8517,7 @@ By leveraging custom fields you can create rich authoring experiences closely al
 
 ## Custom previews
 
-Every property you define in the CMS as a preview component associated by
+Every property you define in the CMS has a preview component associated by
 default. In some cases you may want to build a custom preview component.
 
 Just as you can customize how your property field is rendered, you can change

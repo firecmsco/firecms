@@ -66,6 +66,7 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
+        require.resolve("./plugins/docusaurus-plugin-inline-css"),
         generateAPI ?
             [
                 "docusaurus-plugin-typedoc",
@@ -106,8 +107,8 @@ module.exports = {
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                                 "@firecms/collection_editor": path.resolve(__dirname, "../packages/collection_editor/src"),
                                 "@firecms/firebase": path.resolve(__dirname, "../packages/firebase_firecms/src"),
-                                "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
-                                "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
+                                "@firecms/data_import": path.resolve(__dirname, "../packages/data_import/src"),
+                                "@firecms/data_export": path.resolve(__dirname, "../packages/data_export/src"),
                                 "@firecms/schema_inference": path.resolve(__dirname, "../packages/schema_inference/src"),
                                 "@firecms/data_enhancement": path.resolve(__dirname, "../packages/data_enhancement/src"),
                                 "@firecms/formex": path.resolve(__dirname, "../packages/formex/src")
@@ -159,10 +160,6 @@ module.exports = {
                                     test: /\.[mc]?[jt]sx?$/i,
                                     exclude: /node_modules/,
                                     use: [
-                                        // babel-loader, swc-loader, esbuild-loader, or anything you like to transpile JSX should go here.
-                                        // If you are using rspack, the rspack's buiilt-in react transformation is sufficient.
-                                        // { loader: 'swc-loader' },
-                                        // Now add forgetti-loader
                                         {
                                             loader: reactCompilerLoader,
                                             options: defineReactCompilerLoaderOption({
