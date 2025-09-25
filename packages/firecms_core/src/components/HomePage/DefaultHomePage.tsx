@@ -232,26 +232,10 @@ export function DefaultHomePage({
             context.analyticsController?.onAnalyticsEvent?.("home_move_group", {
                 name: g
             }),
-        onCardMovedBetweenGroups: (card) => {
-            // Find which group the card was moved to and expand it if collapsed
-            // Check both regular groups and admin group
-            let targetGroup = items.find(group =>
-                group.entries.some(entry => entry.url === card.url)
-            );
-
-            // Also check admin group if not found in regular groups
-            if (!targetGroup && adminGroupData?.entries.some(entry => entry.url === card.url)) {
-                targetGroup = adminGroupData;
-            }
-
-            if (targetGroup && isGroupCollapsed(targetGroup.name)) {
-                toggleGroupCollapsed(targetGroup.name);
-            }
-
+        onCardMovedBetweenGroups: (card) =>
             context.analyticsController?.onAnalyticsEvent?.("home_move_card", {
                 id: card.id
-            });
-        },
+            }),
         onNewGroupDrop: () =>
             context.analyticsController?.onAnalyticsEvent?.(
                 "home_drop_new_group"
