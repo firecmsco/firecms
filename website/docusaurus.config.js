@@ -259,6 +259,11 @@ module.exports = {
                                 label: "The most powerful backend",
                                 to: "/f/backend_extension",
                                 customPosition: "right"
+                            },
+                            {
+                                to: "/security",
+                                label: "Security & Privacy",
+                                customPosition: "right"
                             }
                         ],
                         position: "left"
@@ -266,11 +271,6 @@ module.exports = {
                     {
                         to: "pricing",
                         label: "Pricing",
-                        position: "left"
-                    },
-                    {
-                        to: "security",
-                        label: "Security & Privacy",
                         position: "left"
                     },
                     // {
