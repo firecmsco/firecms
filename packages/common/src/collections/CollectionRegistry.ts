@@ -7,7 +7,9 @@ import {
     RelationProperty,
     StringProperty
 } from "@firecms/types";
-import { enumToObjectEntries, getSubcollections, resolveCollectionRelations } from "../util";
+import { deepEqual } from "fast-equals";
+
+import { enumToObjectEntries, getSubcollections, removeFunctions, resolveCollectionRelations } from "../util";
 
 export class CollectionRegistry {
 
@@ -27,15 +29,33 @@ export class CollectionRegistry {
         this.rootCollections = [];
     }
 
-    registerMultiple(collections: EntityCollection[]) {
-        collections.forEach(c => this.register(c));
+    /**
+     * Registers a collection and its subcollections recursively.
+     * Returns true if the collections have changed, false otherwise.
+     * @param collections
+     */
+    registerMultiple(collections: EntityCollection[]): boolean {
+        // Get current collections for comparison
+        const currentCollections = [...this.rootCollections];
+
+        // Normalize the new collections first
+        const normalizedCollections = collections.map(c => this.normalizeCollection({ ...c }));
+
+        // Check if collections have changed
+        const hasChanged = !areCollectionListsEqual(currentCollections, normalizedCollections);
+
+        if (hasChanged) {
+            // Clear existing collections
+            this.reset();
+
+            // Register the normalized collections
+            normalizedCollections.forEach(c => this.register(c));
+        }
+
+        return hasChanged;
     }
 
     register(collection: EntityCollection) {
-        // avoid adding duplicates
-        if (this.rootCollections.some(c => c.slug === collection.slug)) {
-            return;
-        }
         this.rootCollections.push(collection);
         this._registerRecursively(collection);
     }
@@ -155,7 +175,7 @@ export class CollectionRegistry {
         return currentCollection;
     }
 
-    getAllCollectionsRecursively(): EntityCollection[] {
+    getCollections(): EntityCollection[] {
         return Array.from(this.collectionsByDbPath.values());
     }
 
@@ -218,4 +238,32 @@ export class CollectionRegistry {
         };
     }
 
+}
+
+function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
+    // console.log("Comparing collection lists", a, b);
+    // return true;
+    if (a.length !== b.length) {
+        return false;
+    }
+    const aCopy = [...a];
+    const bCopy = [...b];
+    const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
+    const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
+    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
+}
+
+function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
+    const {
+        subcollections: subcollectionsA,
+        ...restA
+    } = a;
+    const {
+        subcollections: subcollectionsB,
+        ...restB
+    } = b;
+    if (!areCollectionListsEqual(subcollectionsA?.() ?? [], subcollectionsB?.() ?? [])) {
+        return false;
+    }
+    return deepEqual(removeFunctions(restA), removeFunctions(restB));
 }

@@ -123,8 +123,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const navigate = useNavigate();
 
     const collectionRegistryRef = useRef<CollectionRegistry>(new CollectionRegistry());
-
-    const resolvedCollectionsRef = useRef<EntityCollection[] | undefined>();
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
     const navigationEntriesOrderRef = useRef<string[] | undefined>();
@@ -208,52 +206,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 return acc;
             }, [] as NavigationEntry[]),
 
-            // ...(views ?? []).reduce((acc, view) => {
-            //     if (view.hideFromNavigation) return acc;
-            //
-            //     const pathKey = Array.isArray(view.slug) ? view.slug[0] : view.slug;
-            //     let groupName = getGroup(view); // Initial group
-            //
-            //     if (finalNavigationGroupMappings) {
-            //         for (const pluginGroupDef of finalNavigationGroupMappings) {
-            //             if (pluginGroupDef.entries.includes(pathKey)) {
-            //                 groupName = pluginGroupDef.name;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //
-            //     acc.push({
-            //         id: `view:${pathKey}`,
-            //         url: buildCMSUrlPath(pathKey),
-            //         name: view.name.trim(),
-            //         type: "view",
-            //         slug: view.slug,
-            //         view,
-            //         description: view.description?.trim(),
-            //         group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
-            //     });
-            //     return acc;
-            // }, [] as NavigationEntry[]),
-            //
-            // ...(adminViews ?? []).reduce((acc, view) => {
-            //     if (view.hideFromNavigation) return acc;
-            //
-            //     const pathKey = Array.isArray(view.slug) ? view.slug[0] : view.slug;
-            //     const groupName = NAVIGATION_ADMIN_GROUP_NAME;
-            //
-            //     acc.push({
-            //         id: `admin:${pathKey}`,
-            //         url: buildCMSUrlPath(pathKey),
-            //         name: view.name.trim(),
-            //         type: "admin",
-            //         slug: view.slug,
-            //         view,
-            //         description: view.description?.trim(),
-            //         group: groupName
-            //     });
-            //     return acc;
-            // }, [] as NavigationEntry[])
         ];
 
         const groupOrderValue = (groupName?: string): number => {
@@ -318,16 +270,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
 
             let shouldUpdateTopLevelNav = false;
-            let collectionsChanged = !areCollectionListsEqual(resolvedCollectionsRef.current ?? [], resolvedCollections);
-            if (resolvedCollectionsRef.current === undefined) {
-                collectionsChanged = true;
-            }
+            let collectionsChanged = collectionRegistryRef.current.registerMultiple(resolvedCollections);;
 
             if (collectionsChanged) {
-                resolvedCollectionsRef.current = resolvedCollections;
                 console.debug("Collections have changed", resolvedCollections);
-                collectionRegistryRef.current.reset();
-                collectionRegistryRef.current.registerMultiple(resolvedCollections);
                 shouldUpdateTopLevelNav = true;
             }
 
@@ -497,7 +443,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         if (!registry) {
             return resolveCollectionPathIds(path, []);
         }
-        return resolveCollectionPathIds(path, registry.getAllCollectionsRecursively());
+        return resolveCollectionPathIds(path, registry.getCollections());
     }, []);
 
     const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
@@ -507,7 +453,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         }
         return getParentReferencesFromPath({
             path,
-            collections: registry.getAllCollectionsRecursively()
+            collections: registry.getCollections()
         });
     }, []);
 
@@ -532,7 +478,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         if (!registry) {
             throw new Error("convertIdsToPaths: collectionRegistryRef not initialised");
         }
-        let currentCollections: EntityCollection[] = registry.getAllCollectionsRecursively();
+        let currentCollections: EntityCollection[] = registry.getCollections();
         const paths: string[] = [];
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
@@ -546,7 +492,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     }, []);
 
     return {
-        collections: resolvedCollectionsRef.current,
+        collections: collectionRegistryRef.current.getCollections(),
         views: viewsRef.current,
         adminViews: adminViewsRef.current,
         loading: !initialised || navigationLoading,
@@ -661,32 +607,6 @@ function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
         return NAVIGATION_DEFAULT_GROUP_NAME;
     }
     return trimmed ?? NAVIGATION_DEFAULT_GROUP_NAME;
-}
-
-function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
-    if (a.length !== b.length) {
-        return false;
-    }
-    const aCopy = [...a];
-    const bCopy = [...b];
-    const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
-    const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
-    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
-}
-
-function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
-    const {
-        subcollections: subcollectionsA,
-        ...restA
-    } = a;
-    const {
-        subcollections: subcollectionsB,
-        ...restB
-    } = b;
-    if (!areCollectionListsEqual(subcollectionsA?.() ?? [], subcollectionsB?.() ?? [])) {
-        return false;
-    }
-    return equal(removeFunctions(restA), removeFunctions(restB));
 }
 
 function computeNavigationGroups({

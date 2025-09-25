@@ -80,7 +80,7 @@ export function initializeFireCMSAPI(
     console.log("🚀 Initializing FireCMS API endpoints");
 
     // Get collections from the registry using the correct method
-    const collections = collectionRegistry.getAllCollectionsRecursively();
+    const collections = collectionRegistry.getCollections();
 
     const apiServer = new FireCMSApiServer({
         collections,

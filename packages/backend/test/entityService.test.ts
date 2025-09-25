@@ -120,7 +120,7 @@ describe("EntityService", () => {
             if (dbPath === "posts_tags") return mockPostsTagsTable as any;
             return undefined;
         });
-        jest.spyOn(collectionRegistry, "getAllCollectionsRecursively").mockReturnValue([authorsCollection, postsCollection, tagsCollection]);
+        jest.spyOn(collectionRegistry, "getCollections").mockReturnValue([authorsCollection, postsCollection, tagsCollection]);
 
         db = {
             select: jest.fn().mockReturnThis(),

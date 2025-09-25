@@ -50,7 +50,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/types": "3.0.0-canary.258"
+    "@firecms/types": "3.0.0-canary.258",
+    "fast-equals": "5.3.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
