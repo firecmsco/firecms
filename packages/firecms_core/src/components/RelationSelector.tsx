@@ -370,7 +370,7 @@ export const RelationSelector = React.forwardRef<
                         <PopoverPrimitive.Content
                             ref={contentRef}
                             data-relation-selector-content
-                            className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg", defaultBorderMixin)}
+                            className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg min-w-72", defaultBorderMixin)}
                             align="start"
                             sideOffset={8}
                             side="bottom"
