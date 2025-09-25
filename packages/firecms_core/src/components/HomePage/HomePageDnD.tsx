@@ -243,11 +243,38 @@ export function useHomePageDnd({
     const collisionDetection: CollisionDetection = useCallback(
         (args) => {
             if (disabled || !activeId) return [];
+
             if (activeIsGroup) {
                 const groups = args.droppableContainers.filter((c) =>
                     dndItems.some((g) => g.name === c.id)
                 );
                 if (!groups.length) return [];
+
+                // Special handling for dropping at the very beginning (first position)
+                if (groups.length > 0) {
+                    const firstGroup = groups[0];
+                    const firstGroupRect = firstGroup.rect.current;
+                    const { x, y } = args.pointerCoordinates || { x: 0, y: 0 };
+
+                    // If pointer is above the first group's top edge, treat it as dropping at position 0
+                    if (firstGroupRect && y < firstGroupRect.top + 20) {
+                        // Return the first group as target, but we'll handle this specially in onDragEnd
+                        return [{ id: firstGroup.id, data: { insertBefore: true } }];
+                    }
+                }
+
+                // Use closestCorners for better collision detection with collapsed groups
+                // This provides more precise drop zones between groups
+                const cornersResult = closestCorners({
+                    ...args,
+                    droppableContainers: groups
+                });
+
+                if (cornersResult.length) {
+                    return cornersResult;
+                }
+
+                // Fallback to closestCenter if corners detection fails
                 return closestCenter({
                     ...args,
                     droppableContainers: groups
@@ -380,7 +407,21 @@ export function useHomePageDnd({
 
         /* ─── group reorder ─── */
         if (activeIsGroup) {
-            if (
+            // Check if we're dropping above the first group (insertBefore flag)
+            const insertBefore = over.data?.current?.insertBefore;
+
+            if (insertBefore && activeIdNow !== overIdNow) {
+                // Move to first position (before the target group)
+                const from = dndItems.findIndex((g) => g.name === activeIdNow);
+                if (from !== -1 && from !== 0) {
+                    const newState = arrayMove(dndItems, from, 0);
+                    setDndItems(newState);
+                    onPersist?.(newState);
+                    onGroupMoved?.(activeIdNow as string, from, 0);
+                }
+            }
+            // Handle dropping on another group (normal case)
+            else if (
                 activeIdNow !== overIdNow &&
                 dndItems.some((g) => g.name === overIdNow)
             ) {
@@ -486,7 +527,9 @@ export function useHomePageDnd({
         recentlyMovedToNewContainer.current = false;
     };
 
-    const handleDragCancel = () => resetDragState();
+    const handleDragCancel = () => {
+        resetDragState();
+    };
 
     /* ---------------- group rename ---------------- */
     const handleRenameGroup = (oldName: string, newName: string) => {

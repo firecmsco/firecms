@@ -194,9 +194,16 @@ export function DefaultHomePage({
         onNavigationEntriesUpdate(all);
     };
 
-    /* ─────────────────────────────────────────────────────���─────────
-       Hook for DnD
-       ───�����────────────────────────────────────────────────────────── */
+    const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+    const isGroupCollapsed = useCallback((name: string) => {
+        return !!collapsedGroups[name];
+    }, [collapsedGroups]);
+
+    const toggleGroupCollapsed = useCallback((name: string) => {
+        setCollapsedGroups(prev => ({ ...prev, [name]: !prev[name] }));
+    }, []);
+
+
     const {
         sensors,
         collisionDetection,
@@ -225,10 +232,26 @@ export function DefaultHomePage({
             context.analyticsController?.onAnalyticsEvent?.("home_move_group", {
                 name: g
             }),
-        onCardMovedBetweenGroups: (card) =>
+        onCardMovedBetweenGroups: (card) => {
+            // Find which group the card was moved to and expand it if collapsed
+            // Check both regular groups and admin group
+            let targetGroup = items.find(group =>
+                group.entries.some(entry => entry.url === card.url)
+            );
+
+            // Also check admin group if not found in regular groups
+            if (!targetGroup && adminGroupData?.entries.some(entry => entry.url === card.url)) {
+                targetGroup = adminGroupData;
+            }
+
+            if (targetGroup && isGroupCollapsed(targetGroup.name)) {
+                toggleGroupCollapsed(targetGroup.name);
+            }
+
             context.analyticsController?.onAnalyticsEvent?.("home_move_card", {
                 id: card.id
-            }),
+            });
+        },
         onNewGroupDrop: () =>
             context.analyticsController?.onAnalyticsEvent?.(
                 "home_drop_new_group"
@@ -303,7 +326,7 @@ export function DefaultHomePage({
 
     /* ───────────────────────────────────────────────────────────────
        Render
-       ─────────���───────────────────────────────────────────────────── */
+       ─────────────────────────────────────────────────────────────── */
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
             <Container maxWidth="6xl">
@@ -400,6 +423,8 @@ export function DefaultHomePage({
                                             if (dndDisabled) return;
                                             setDialogOpenForGroup(groupKey);
                                         }}
+                                        collapsed={isGroupCollapsed(groupKey)}
+                                        onToggleCollapsed={() => toggleGroupCollapsed(groupKey)}
                                     >
                                         <NavigationGroupDroppable
                                             id={groupKey}
@@ -503,7 +528,11 @@ export function DefaultHomePage({
                 </DndContext>
 
                 {!performingSearch && adminGroupData && (
-                    <NavigationGroup group={adminGroupData.name}>
+                    <NavigationGroup
+                        group={adminGroupData.name}
+                        collapsed={isGroupCollapsed(adminGroupData.name)}
+                        onToggleCollapsed={() => toggleGroupCollapsed(adminGroupData.name)}
+                    >
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                             {adminGroupData.entries.map((entry) => (
                                 <NavigationCardBinding
