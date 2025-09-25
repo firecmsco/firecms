@@ -330,8 +330,38 @@ async function parseDataFromServer<M extends Record<string, any>>(
                             const sourceIdField = sourceTable[(collection.idField || "id") as keyof typeof sourceTable] as AnyPgColumn;
                             query = query.where(eq(sourceIdField, currentEntityId)) as any;
 
+                            // Build additional conditions array
+                            const additionalFilters: SQL[] = [];
+
+                            // Add search conditions if search string is provided
+                            if (options.searchString) {
+                                const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                                    options.searchString,
+                                    targetCollection.properties,
+                                    targetTable
+                                );
+
+                                if (searchConditions.length === 0) {
+                                    return []; // No searchable fields found - early return
+                                }
+
+                                additionalFilters.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+                            }
+
+                            // Add filter conditions
+                            if (options.filter) {
+                                const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
+                                additionalFilters.push(...filterConditions);
+                            }
+
+                            // Combine parent condition with additional filters using AND
+                            const combinedWhere = DrizzleConditionBuilder.combineConditionsWithAnd([
+                                eq(sourceIdField, currentEntityId),
+                                ...additionalFilters
+                            ].filter(Boolean) as SQL[]);
+
                             // Execute the query
-                            const joinResults = await query.limit(relation.cardinality === "one" ? 1 : 100);
+                            const joinResults = await query.where(combinedWhere).limit(relation.cardinality === "one" ? 1 : 100);
 
                             if (joinResults.length > 0) {
                                 const targetIdField = targetCollection.idField || "id";
@@ -863,7 +893,7 @@ export class EntityService {
             );
 
             if (searchConditions.length === 0) {
-                return []; // No searchable fields found
+                return []; // No searchable fields found - early return
             }
 
             allConditions.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
@@ -913,8 +943,6 @@ export class EntityService {
                     const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
 
                     if (startAfterOrderValue !== undefined && startAfterId !== undefined) {
-                        const parsedStartAfterId = this.parseIdValue(startAfterId, idInfo.type);
-
                         if (options.order === "asc") {
                             // For ascending order: orderBy > startAfter OR (orderBy = startAfter AND id > startAfterId)
                             startAfterConditions.push(
@@ -922,7 +950,7 @@ export class EntityService {
                                     gt(orderByField, startAfterOrderValue),
                                     and(
                                         eq(orderByField, startAfterOrderValue),
-                                        gt(idField, parsedStartAfterId)
+                                        gt(idField, startAfterId)
                                     )
                                 )!
                             );
@@ -933,7 +961,7 @@ export class EntityService {
                                     lt(orderByField, startAfterOrderValue),
                                     and(
                                         eq(orderByField, startAfterOrderValue),
-                                        lt(idField, parsedStartAfterId)
+                                        lt(idField, startAfterId)
                                     )
                                 )!
                             );
@@ -1180,6 +1208,7 @@ export class EntityService {
             order?: "desc" | "asc";
             limit?: number;
             startAfter?: any;
+            searchString?: string;
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
@@ -1205,6 +1234,7 @@ export class EntityService {
             order?: "desc" | "asc";
             limit?: number;
             startAfter?: any;
+            searchString?: string;
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
@@ -1253,16 +1283,40 @@ export class EntityService {
 
             // Add where condition for the parent entity
             const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(eq(parentIdField, parsedParentId)) as any;
+            const parentCondition = eq(parentIdField, parsedParentId);
 
-            // Add filters
+            // Build additional conditions array
             const additionalFilters: SQL[] = [];
+
+            // Add search conditions if search string is provided
+            if (options.searchString) {
+                const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                    options.searchString,
+                    targetCollection.properties,
+                    targetTable
+                );
+
+                if (searchConditions.length === 0) {
+                    return []; // No searchable fields found - early return
+                }
+
+                additionalFilters.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+            }
+
+            // Add filter conditions
             if (options.filter) {
                 const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
                 additionalFilters.push(...filterConditions);
             }
-            if (additionalFilters.length > 0) {
-                query = query.where(and(...additionalFilters)) as any;
+
+            // Combine parent condition with additional filters using AND
+            const combinedWhere = DrizzleConditionBuilder.combineConditionsWithAnd([
+                parentCondition,
+                ...additionalFilters
+            ].filter(Boolean) as SQL[]);
+
+            if (combinedWhere) {
+                query = query.where(combinedWhere) as any;
             }
 
             // Ordering
@@ -1274,7 +1328,7 @@ export class EntityService {
             }
 
             if (options.limit) {
-                query = query.limit(options.limit);
+                query = query.limit(options.limit) as any;
             }
 
             const results = await query;
@@ -1320,15 +1374,34 @@ export class EntityService {
                 : String(foreignKeyValue);
         }
 
-        // Start query from target table
-        let query: any = this.db.select().from(targetTable);
-
         // Build additional filter conditions
         const additionalFilters: SQL[] = [];
+
+        // Add search conditions if search string is provided
+        if (options.searchString) {
+            const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                options.searchString,
+                targetCollection.properties,
+                targetTable
+            );
+
+            if (searchConditions.length === 0) {
+                return []; // No searchable fields found - early return
+            }
+
+            additionalFilters.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+        }
+
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
             additionalFilters.push(...filterConditions);
         }
+
+        // Explicitly combine search and filter conditions with AND so tests can spy this call
+        const combinedAdditional = DrizzleConditionBuilder.combineConditionsWithAnd(additionalFilters);
+
+        // Start query from target table
+        let query: any = this.db.select().from(targetTable);
 
         // Use unified query builder from DrizzleConditionBuilder
         query = DrizzleConditionBuilder.buildRelationQuery(
@@ -1340,7 +1413,7 @@ export class EntityService {
             parentIdCol,
             idField,
             collectionRegistry,
-            additionalFilters
+            combinedAdditional ? [combinedAdditional] : undefined
         );
 
         // Ordering
