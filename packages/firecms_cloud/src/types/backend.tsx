@@ -15,6 +15,11 @@ export type FireCMSBackend = {
 
     googleLogin: (includeGoogleAdminScopes?: boolean) => Promise<FirebaseUser | null>;
 
+    emailPasswordLogin: (email: string, password: string) => Promise<void>;
+    sendPasswordResetEmail: (email: string) => Promise<void>;
+    createUserWithEmailAndPassword: (email: string, password: string) => Promise<void>;
+    fetchSignInMethods: (email: string) => Promise<string[]>;
+
     signOut: () => void;
 
     googleCredential?: OAuthCredential | null;

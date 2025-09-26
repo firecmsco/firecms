@@ -3,10 +3,14 @@ import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "@firebase/fire
 import { FireCMSBackend, FireCMSProject } from "../types";
 import { FirebaseApp } from "@firebase/app";
 import {
+    createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
+    fetchSignInMethodsForEmail,
     getAuth,
     GoogleAuthProvider,
     OAuthCredential,
     onAuthStateChanged,
+    sendPasswordResetEmail as sendPasswordResetEmailFirebase,
+    signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
     User as FirebaseUser
@@ -143,6 +147,42 @@ export function useBuildFireCMSBackend({
             });
     }, [backendFirebaseApp]);
 
+    const emailPasswordLogin = useCallback((email: string, password: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        setAuthLoading(true);
+        return signInWithEmailAndPassword(auth, email, password)
+            .catch(setAuthProviderError)
+            .then(() => setAuthLoading(false));
+    }, []);
+
+    const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        setAuthLoading(true);
+        return createUserWithEmailAndPasswordFirebase(auth, email, password)
+            .catch(setAuthProviderError)
+            .then(() => setAuthLoading(false));
+    }, []);
+
+    const sendPasswordResetEmail = useCallback((email: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        return sendPasswordResetEmailFirebase(auth, email)
+    }, []);
+
+    const fetchSignInMethods = useCallback((email: string): Promise<string[]> => {
+
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        setAuthLoading(true);
+        return fetchSignInMethodsForEmail(auth, email)
+            .then((res) => {
+                setAuthLoading(false);
+                return res;
+            });
+    }, []);
+
     const onSignOut = useCallback(() => {
         const auth = getAuth(backendFirebaseApp);
         clearDelegatedLoginTokensCache()
@@ -180,6 +220,10 @@ export function useBuildFireCMSBackend({
         user: loggedUser ?? null,
         signOut: onSignOut,
         googleLogin,
+        fetchSignInMethods,
+        emailPasswordLogin,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
         getBackendAuthToken,
         googleCredential,
         availableProjectIds,

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { BooleanSwitchWithLabel, Typography } from "@firecms/ui";
-import { ErrorView, FireCMSLogo } from "@firecms/core";
+import { BooleanSwitchWithLabel, MailIcon, Typography } from "@firecms/ui";
+import { ErrorView, FireCMSLogo, useModeController } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
+import { LoginButton } from "@firecms/firebase";
+import { CloudUserPasswordForm } from "./CloudUserPasswordForm";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;
@@ -31,6 +33,10 @@ export function FireCMSCloudLoginView({
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
     const [fadeIn, setFadeIn] = useState(false);
 
+    const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
+
+    const modeState = useModeController();
+
     useEffect(() => {
         // Trigger the fade-in effect on component mount
         const timer = setTimeout(() => {
@@ -54,7 +60,7 @@ export function FireCMSCloudLoginView({
 
     const fadeStyle = {
         opacity: fadeIn ? 1 : 0,
-        transition: 'opacity 0.6s ease-in-out'
+        transition: "opacity 0.6s ease-in-out"
     };
 
     return (
@@ -78,7 +84,7 @@ export function FireCMSCloudLoginView({
             {buildErrorView()}
 
             {includeTermsAndNewsLetter &&
-                <>
+                <div className={"mb-4"}>
                     <BooleanSwitchWithLabel size="small"
                                             invisible={true}
                                             value={subscribeToNewsletter}
@@ -107,9 +113,9 @@ export function FireCMSCloudLoginView({
                                                     Privacy policy</a>
                                                 </Typography>
                                             }/>
-                </>}
+                </div>}
 
-            <GoogleLoginButton
+            {!passwordLoginSelected && <GoogleLoginButton
                 disabled={!termsAccepted && includeTermsAndNewsLetter}
                 onClick={() => {
                     fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
@@ -117,12 +123,23 @@ export function FireCMSCloudLoginView({
                             subscribeNewsletter(user.email);
                         }
                     });
-                }}/>
+                }}/>}
+
+            {!passwordLoginSelected && <LoginButton
+                disabled={!termsAccepted && includeTermsAndNewsLetter}
+                text={"Email/password"}
+                icon={<MailIcon size={24}/>}
+                onClick={() => setPasswordLoginSelected(true)}/>}
 
             {includeGoogleAdminScopes &&
                 fireCMSBackend.permissionsNotGrantedError &&
                 <ErrorView
                     error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
+
+            {passwordLoginSelected && <CloudUserPasswordForm
+                fireCMSBackend={fireCMSBackend}
+                onClose={() => setPasswordLoginSelected(false)}
+            />}
 
             {includeGoogleDisclosure && <Typography variant={"caption"}>
                 FireCMS Cloud use and transfer to any other app of
