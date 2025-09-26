@@ -8,7 +8,7 @@ import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
 function ProTeaser() {
 
     return (
-        <div className={"w-full relative bg-gray-900 overflow-hidden"}>
+        <div className={"w-full relative bg-gray-900 overflow-hidden mt-16"}>
             <AnimatedGradientBackground translateY={-600}/>
             <Panel className={"relative"}>
 

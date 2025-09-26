@@ -14,7 +14,7 @@ export function HeroPro({
     return (
         <div className={"w-full relative -mt-20 bg-gray-900"}>
 
-            <AnimatedGradientBackground translateY={50}/>
+            <AnimatedGradientBackground translateY={150}/>
             <div>
                 <Panel includeMargin={false}
                        includePadding={false}

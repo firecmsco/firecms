@@ -28,4 +28,3 @@ export const CTACaret = () => <svg aria-hidden="true"
 export function easeInOut(t: number): number {
     return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
-

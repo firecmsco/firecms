@@ -21,7 +21,7 @@ export function Hero({
 
             <div className={"w-full relative bg-gray-950 -mt-20"}>
 
-                <AnimatedGradientBackground/>
+                <AnimatedGradientBackground translateY={280}/>
 
                 <Panel includeMargin={false}
                        includePadding={false}
