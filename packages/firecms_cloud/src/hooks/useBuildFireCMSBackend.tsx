@@ -38,6 +38,7 @@ export function useBuildFireCMSBackend({
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
 
     const [authLoading, setAuthLoading] = useState(true);
+    const [loginLoading, setLoginLoading] = useState(false);
     const [googleCredential, setGoogleCredential] = useState<OAuthCredential | null>(loadCredentialFromStorage());
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [permissionsNotGrantedError, setPermissionsNotGrantedError] = useState<boolean>(false);
@@ -150,19 +151,19 @@ export function useBuildFireCMSBackend({
     const emailPasswordLogin = useCallback((email: string, password: string) => {
         const auth = getAuth(backendFirebaseApp);
         if (!auth) throw Error("No auth");
-        setAuthLoading(true);
+        setLoginLoading(true);
         return signInWithEmailAndPassword(auth, email, password)
             .catch(setAuthProviderError)
-            .then(() => setAuthLoading(false));
+            .then(() => setLoginLoading(false));
     }, []);
 
     const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
         const auth = getAuth(backendFirebaseApp);
         if (!auth) throw Error("No auth");
-        setAuthLoading(true);
+        setLoginLoading(true);
         return createUserWithEmailAndPasswordFirebase(auth, email, password)
             .catch(setAuthProviderError)
-            .then(() => setAuthLoading(false));
+            .then(() => setLoginLoading(false));
     }, []);
 
     const sendPasswordResetEmail = useCallback((email: string) => {
@@ -172,13 +173,10 @@ export function useBuildFireCMSBackend({
     }, []);
 
     const fetchSignInMethods = useCallback((email: string): Promise<string[]> => {
-
         const auth = getAuth(backendFirebaseApp);
         if (!auth) throw Error("No auth");
-        setAuthLoading(true);
         return fetchSignInMethodsForEmail(auth, email)
             .then((res) => {
-                setAuthLoading(false);
                 return res;
             });
     }, []);
@@ -232,6 +230,7 @@ export function useBuildFireCMSBackend({
         availableProjectsError,
         permissionsNotGrantedError,
         authLoading,
+        loginLoading,
         authProviderError,
         backendFirebaseApp,
         backendUid: loggedUser?.uid,

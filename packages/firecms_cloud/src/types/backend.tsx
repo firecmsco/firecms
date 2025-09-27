@@ -35,6 +35,8 @@ export type FireCMSBackend = {
     authLoading: boolean;
     authProviderError?: any;
 
+    loginLoading: boolean;
+
     getProject: (projectId: string) => Promise<FireCMSProject | null>,
     projects: FireCMSProject[] | undefined;
 }
