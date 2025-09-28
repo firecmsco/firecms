@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert, BooleanSwitchWithLabel, Typography } from "@firecms/ui";
+import { Alert, Checkbox, Label, Typography } from "@firecms/ui";
 import { FirebaseLoginView, FirebaseLoginViewProps } from "@firecms/firebase";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
@@ -27,34 +27,41 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
             disabled={!termsAccepted}
             additionalComponent={
                 <>
-                    <BooleanSwitchWithLabel size="small"
-                                            invisible={true}
-                                            value={newsletterSubscribed}
-                                            onValueChange={setNewsletterSubscribed}
-                                            position={"start"}
-                                            label={
-                                                <Typography variant={"caption"}>
-                                                    Join our newsletter. No spam, only important
-                                                    updates!
-                                                </Typography>}/>
-                    <BooleanSwitchWithLabel size="small"
-                                            invisible={true}
-                                            value={termsAccepted}
-                                            onValueChange={setTermsAccepted}
-                                            position={"start"}
-                                            label={
-                                                <Typography variant={"caption"}>
-                                                    By signing in you agree to our <a
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={"https://firecms.co/policy/terms_conditions"}>
-                                                    Terms and Conditions</a> and our <a
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={"https://firecms.co/policy/privacy_policy"}>
-                                                    Privacy policy</a>
-                                                </Typography>
-                                            }/>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            id="newsletter-checkbox"
+                            checked={newsletterSubscribed}
+                            onCheckedChange={setNewsletterSubscribed}
+                            size="small"
+                        />
+                        <Label htmlFor="newsletter-checkbox">
+                            <Typography variant={"caption"}>
+                                Join our newsletter. No spam, only important
+                                updates!
+                            </Typography>
+                        </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            id="terms-checkbox"
+                            checked={termsAccepted}
+                            onCheckedChange={setTermsAccepted}
+                            size="small"
+                        />
+                        <Label htmlFor="terms-checkbox">
+                            <Typography variant={"caption"}>
+                                By signing in you agree to our <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={"https://firecms.co/policy/terms_conditions"}>
+                                Terms and Conditions</a> and our <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={"https://firecms.co/policy/privacy_policy"}>
+                                Privacy policy</a>
+                            </Typography>
+                        </Label>
+                    </div>
                 </>
             }
         />
