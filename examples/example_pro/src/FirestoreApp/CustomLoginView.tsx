@@ -26,7 +26,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
             </Alert>}
             disabled={!termsAccepted}
             additionalComponent={
-                <>
+                <div className={"mb-4"}>
                     <div className="flex items-center space-x-2">
                         <Checkbox
                             id="newsletter-checkbox"
@@ -35,7 +35,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                             size="small"
                         />
                         <Label htmlFor="newsletter-checkbox">
-                            <Typography variant={"caption"}>
+                            <Typography variant={"caption"} color={"primary"}>
                                 Join our newsletter. No spam, only important
                                 updates!
                             </Typography>
@@ -49,7 +49,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                             size="small"
                         />
                         <Label htmlFor="terms-checkbox">
-                            <Typography variant={"caption"}>
+                            <Typography variant={"caption"} color={"primary"}>
                                 By signing in you agree to our <a
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -62,8 +62,8 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                             </Typography>
                         </Label>
                     </div>
-                </>
-            }
+                </div>
+        }
         />
     );
 }
