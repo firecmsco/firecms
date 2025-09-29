@@ -132,7 +132,9 @@ export function FireCMSCloudApp({
                 includeLogo={true}
                 includeGoogleAdminScopes={false}
                 includeTermsAndNewsLetter={false}
-                includeGoogleDisclosure={false}/>
+                includeGoogleDisclosure={false}
+                onAnalyticsEvent={onAnalyticsEvent}
+            />
         </CenteredView>
     } else {
         component = <FireCMSClient

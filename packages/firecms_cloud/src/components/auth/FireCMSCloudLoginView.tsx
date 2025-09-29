@@ -13,6 +13,8 @@ export interface FireCMSCloudLoginViewProps {
     includeLogo: boolean;
     includeGoogleDisclosure: boolean;
     includeTermsAndNewsLetter: boolean;
+    onAnalyticsEvent?: (event: string, params?: object) => void;
+
 }
 
 /**
@@ -26,7 +28,8 @@ export function FireCMSCloudLoginView({
                                           includeGoogleAdminScopes,
                                           includeLogo,
                                           includeGoogleDisclosure,
-                                          includeTermsAndNewsLetter
+                                          includeTermsAndNewsLetter,
+                                          onAnalyticsEvent
                                       }: FireCMSCloudLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -38,8 +41,9 @@ export function FireCMSCloudLoginView({
         const timer = setTimeout(() => {
             setFadeIn(true);
         }, 10);
+        onAnalyticsEvent?.("view_displayed");
         return () => clearTimeout(timer);
-    }, []);
+    }, [onAnalyticsEvent]);
 
     function buildErrorView() {
         let errorView: any;
@@ -175,10 +179,14 @@ export function FireCMSCloudLoginView({
                     {!passwordLoginSelected && <GoogleLoginButton
                         disabled={!termsAccepted && includeTermsAndNewsLetter}
                         onClick={() => {
+                            onAnalyticsEvent?.("google_attempt");
                             fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
+                                onAnalyticsEvent?.("google_success");
                                 if (subscribeToNewsletter && user?.email) {
                                     subscribeNewsletter(user.email);
                                 }
+                            }).catch((error) => {
+                                onAnalyticsEvent?.("google_error", { error: error?.code });
                             });
                         }}/>}
 
@@ -186,7 +194,10 @@ export function FireCMSCloudLoginView({
                         disabled={!termsAccepted && includeTermsAndNewsLetter}
                         text={"Email/password"}
                         icon={<MailIcon size={24}/>}
-                        onClick={() => setPasswordLoginSelected(true)}/>}
+                        onClick={() => {
+                            onAnalyticsEvent?.("password_method_selected");
+                            setPasswordLoginSelected(true);
+                        }}/>}
 
 
                     {includeGoogleAdminScopes &&
@@ -197,6 +208,7 @@ export function FireCMSCloudLoginView({
                     {passwordLoginSelected && <CloudUserPasswordForm
                         fireCMSBackend={fireCMSBackend}
                         onClose={() => setPasswordLoginSelected(false)}
+                        onAnalyticsEvent={onAnalyticsEvent}
                     />}
 
 

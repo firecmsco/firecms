@@ -8,11 +8,12 @@ type LoginFormMode = "login" | "signup";
 export function CloudUserPasswordForm({
                                           onClose,
                                           fireCMSBackend,
+                                          onAnalyticsEvent
                                       }: {
     onClose: () => void,
     fireCMSBackend: FireCMSBackend,
+    onAnalyticsEvent?: (event: string, params?: Record<string, any>) => void;
 }) {
-
     const [mode, setMode] = useState<LoginFormMode>("login");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -45,8 +46,10 @@ export function CloudUserPasswordForm({
         }
 
         if (mode === "login") {
+            onAnalyticsEvent?.("password_attempt");
             fireCMSBackend.emailPasswordLogin(email, password);
         } else {
+            onAnalyticsEvent?.("signup_password_attempt");
             fireCMSBackend.createUserWithEmailAndPassword(email, password);
         }
     };
@@ -62,13 +65,16 @@ export function CloudUserPasswordForm({
         }
 
         setResettingPassword(true);
+        onAnalyticsEvent?.("password_reset_requested");
         try {
             await fireCMSBackend.sendPasswordResetEmail(email);
+            onAnalyticsEvent?.("password_reset_success");
             snackbarController.open({
                 message: "Password reset email sent",
                 type: "success"
             });
         } catch (e: any) {
+            onAnalyticsEvent?.("password_reset_error", { error: e.message });
             snackbarController.open({
                 message: e.message,
                 type: "error"
@@ -87,7 +93,10 @@ export function CloudUserPasswordForm({
                 <div className={"w-full flex flex-row items-center gap-4"}>
                     <IconButton
                         size={"small"}
-                        onClick={onClose}>
+                        onClick={() => {
+                            onAnalyticsEvent?.("form_back_clicked");
+                            onClose();
+                        }}>
                         <ArrowBackIcon size={"small"}/>
                     </IconButton>
 
@@ -137,7 +146,14 @@ export function CloudUserPasswordForm({
                     <div className="flex gap-2">
                         <Button
                             variant="text"
-                            onClick={() => setMode(mode === "login" ? "signup" : "login")}>
+                            onClick={() => {
+                                if (mode === "login") {
+                                    onAnalyticsEvent?.("new_user_clicked");
+                                } else {
+                                    onAnalyticsEvent?.("have_account_clicked");
+                                }
+                                setMode(mode === "login" ? "signup" : "login");
+                            }}>
                             {mode === "login" ? "New user?" : "Have an account?"}
                         </Button>
 
