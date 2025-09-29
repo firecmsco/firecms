@@ -145,7 +145,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                             ? "pt-8 pb-2"
                             : "pt-4 pb-2"
                         : "py-2",
-                    endAdornment ? "pr-10" : "pr-3",
+                    endAdornment ? "pr-12" : "pr-3",
                     disabled &&
                     "outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
                     inputClassName

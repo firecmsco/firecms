@@ -132,19 +132,20 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            basic: {
-                dataType: "string",
-                name: "Basic",
-                validation: {
-                    unique: true,
-                }
-            },
+
             basic_number: {
                 dataType: "number",
                 name: "Basic number",
                 validation: {
                     min: 0,
                     max: 100
+                }
+            },
+            basic: {
+                dataType: "string",
+                name: "Basic",
+                validation: {
+                    unique: true,
                 }
             },
             ref_as_string: {
