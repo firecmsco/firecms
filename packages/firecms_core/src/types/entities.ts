@@ -50,9 +50,15 @@ export class EntityReference {
      */
     readonly path: string;
 
-    constructor(id: string, path: string) {
+    /**
+     * Optional database ID where the entity is stored (if multiple databases are used)
+     */
+    readonly databaseId?: string;
+
+    constructor(id: string, path: string, databaseId?: string) {
         this.id = id;
         this.path = path;
+        this.databaseId = databaseId;
     }
 
     get pathWithId() {
