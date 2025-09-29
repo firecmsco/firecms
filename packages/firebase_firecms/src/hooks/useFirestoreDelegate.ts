@@ -664,8 +664,9 @@ export function firestoreToCMSModel(data: any): any {
         return new GeoPoint(data.latitude, data.longitude);
     }
     if (data instanceof DocumentReference) {
-        // data.firestore.app.options.databaseId
-        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path), data?.firestore?._databaseId?.database);
+        // @ts-ignore
+        const databaseId = data?.firestore?._databaseId?.database;
+        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path), databaseId);
     }
     if (Array.isArray(data)) {
         return data.map(firestoreToCMSModel).filter(v => v !== undefined);
