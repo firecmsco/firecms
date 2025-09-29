@@ -69,6 +69,8 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * https://fonts.google.com/icons
      * e.g. 'account_tree' or 'person'.
      * Find all the icons in https://firecms.co/docs/icons
+     * You can also pass a React node if you want to render a custom icon.
+     * If not specified, a default icon will be used.
      */
     icon?: string | React.ReactNode;
 

@@ -282,6 +282,7 @@ to `false` in the collection configuration.
 - **`icon`**: Icon key to use in this collection. You can use any of the icons in the Material
   specs: [Material Icons](https://fonts.google.com/icons). e.g., 'account_tree' or 'person'.
   Find all the icons in [Icons](https://firecms.co/docs/icons).
+  You can also pass your own icon component (`React.ReactNode`).
 - **`customId`**: If this prop is not set, the ID of the document will be created by the datasource. You can set the
   value to 'true' to force the users to choose the ID.
 - **`subcollections`**: Following the Firestore document and collection schema, you can add subcollections to your
