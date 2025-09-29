@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
+import { useCollapsedGroups } from "../../hooks/useCollapsedGroups";
 import {
     CMSAnalyticsEvent,
     NavigationEntry,
@@ -194,14 +195,13 @@ export function DefaultHomePage({
         onNavigationEntriesUpdate(all);
     };
 
-    const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
-    const isGroupCollapsed = useCallback((name: string) => {
-        return !!collapsedGroups[name];
-    }, [collapsedGroups]);
+    // Use custom hook for collapsed groups with localStorage persistence
+    const groupNames = useMemo(() => [
+        ...items.map(item => item.name),
+        ...(adminGroupData ? [adminGroupData.name] : [])
+    ], [items, adminGroupData]);
 
-    const toggleGroupCollapsed = useCallback((name: string) => {
-        setCollapsedGroups(prev => ({ ...prev, [name]: !prev[name] }));
-    }, []);
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames);
 
 
     const {

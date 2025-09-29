@@ -18,6 +18,7 @@ export * from "./useSnackbarController";
 export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useLargeLayout";
+export * from "./useCollapsedGroups";
 
 export * from "./useReferenceDialog";
 export * from "./useBrowserTitleAndIcon";
