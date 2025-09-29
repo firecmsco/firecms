@@ -86,7 +86,7 @@ export function RenameGroupDialog({ open, initialName, existingGroupNames, onClo
     if (!open) return null;
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open}>
             <DialogTitle>Rename Group</DialogTitle>
             <DialogContent>
                 <TextField

@@ -560,7 +560,6 @@ export function DefaultHomePage({
                     onClose={() => setDialogOpenForGroup(null)}
                     onRename={(newName) => {
                         handleRenameGroup(dialogOpenForGroup, newName);
-                        setDialogOpenForGroup(null);
                     }}
                 />
             )}
