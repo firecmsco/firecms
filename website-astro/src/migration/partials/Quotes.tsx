@@ -6,50 +6,35 @@ import { LinedSpace } from "./layout/LinedSpace";
 
 import { softwareApplicationSchema } from "../partials/markup";
 
-// @ts-ignore
-import viktor from "@site/static/img/avatars/viktor.jpeg";
-
-// @ts-ignore
-import fulei from "@site/static/img/avatars/fulei.avif";
-
-// @ts-ignore
-import muhammad from "@site/static/img/avatars/muhammad.avif";
-
-// @ts-ignore
-import john from "@site/static/img/avatars/john.avif";
-
-// @ts-ignore
-import manuel from "@site/static/img/avatars/manuel.avif";
-
 const quotes = [
     {
         quote: "I've tried many other CMS including Strapi, Sanity, contentful, Builder.io, none of them gave me better experience than FireCMS!",
         author: "Fulei Huang",
-        avatar: fulei,
+        avatar: "/img/avatars/fulei.avif",
         role: "Software Engineer, Microsoft"
     },
     {
         quote: "I think you have the best noSQL headless CMS on the market",
         author: "Viktor Vinnk",
-        avatar: viktor,
+        avatar: "/img/avatars/viktor.jpeg",
         role: "Country Digital Development Leader, Ikea"
     },
     {
         quote: "We are early adopters of FireCMS (and very proud of it) and it gives us a lot of flexibility and ease of integration of anything we develop.",
         author: "Manuel Pinilla",
-        avatar: manuel,
+        avatar: "/img/avatars/manuel.avif",
         role: "Founder, OikosBrain"
     },
     {
         quote: "So far, this has been the missing piece of the puzzle for running a Firebase back-end. I love how we can just throw some React in there and it all feels so seamless.",
         author: "John Coppa",
-        avatar: john,
+        avatar: "/img/avatars/john.avif",
         role: "CTO at EasyHome"
     },
     {
         quote: "It is a great initiative towards building a scalable and serverless CMS as Firebase is serverless. UI is very nice and working is very smooth.",
         author: "Muhammad Bilal",
-        avatar: muhammad,
+        avatar: "/img/avatars/muhammad.avif",
         role: "Engineering, CodeViz Technology"
     },
 ];

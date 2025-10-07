@@ -1,9 +1,6 @@
 import React from "react";
 
-import LightingIcon from "@site/static/img/icons/lighting.svg";
-
-// @ts-ignore
-import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
+// Removed LightingIcon and inline video imports from @site alias; using /img paths
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { ContainerSmallMixin } from "../styles";
@@ -21,7 +18,7 @@ function RealTime() {
 
                 <div
                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                    <LightingIcon height={12} width={12}/>
+                    <img src="/img/icons/lighting.svg" alt="lighting" className="w-6 h-6"/>
                 </div>
 
                 <h3 className="m-0">
@@ -68,8 +65,7 @@ function RealTime() {
                             pointerEvents: "none",
                         }}
                         width="100%" loop autoPlay muted>
-                        <source src={inlineEditingVideo}
-                                type="video/mp4"/>
+                        <source src="/img/inline_table_editing.mp4" type="video/mp4"/>
                     </video>
                 </BrowserFrame>
             </div>

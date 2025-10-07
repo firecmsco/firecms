@@ -2,17 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 
-// @ts-ignore
-import editorRectangleVideo from "@site/static/img/editor_rectangle.mp4";
-// @ts-ignore
-import editingDemoVideo from "@site/static/img/editing_demo.mp4";
-// @ts-ignore
-import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
-// @ts-ignore
-import exportDataVideo from "@site/static/img/export_data.mp4";
-// @ts-ignore
-import customPreviewVideo from "@site/static/img/custom_preview.mp4";
-
 import { useColorMode } from "@docusaurus/theme-common";
 import { defaultBorderMixin } from "../styles";
 
@@ -40,7 +29,8 @@ export function FeaturesCarousel() {
                         className={clsx("aspect-video pointer-events-none rounded-2xl border", defaultBorderMixin)}
                         width="100%" loop autoPlay muted>
                         <source
-                            src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}/>
+                            src={isDarkTheme ? "/img/editing_demo_dark.mp4" : "/img/editing_demo.mp4"}
+                            type="video/mp4"/>
 
                     </video>
                 </div>
@@ -62,7 +52,7 @@ export function FeaturesCarousel() {
                         className={clsx("aspect-video pointer-events-none rounded-2xl border", defaultBorderMixin)}
                         width="100%" loop autoPlay muted>
                         <source
-                            src={editorRectangleVideo}
+                            src="/img/editor_rectangle.mp4"
                             type="video/mp4"/>
                     </video>
                 </div>
@@ -84,7 +74,7 @@ export function FeaturesCarousel() {
                         className={clsx("aspect-video pointer-events-none rounded-2xl border", defaultBorderMixin)}
                         width="100%" loop autoPlay muted>
                         <source
-                            src={customPreviewVideo}
+                            src="/img/custom_preview.mp4"
                             type="video/mp4"/>
                     </video>
                 </div>
@@ -106,7 +96,7 @@ export function FeaturesCarousel() {
                         className={clsx("aspect-video pointer-events-none rounded-2xl border", defaultBorderMixin)}
                         width="100%" loop autoPlay muted>
                         <source
-                            src={exportDataVideo}
+                            src="/img/export_data.mp4"
                             type="video/mp4"/>
                     </video>
                 </div>
@@ -119,7 +109,7 @@ export function FeaturesCarousel() {
         // Start automatic rotation
         intervalRef.current = setInterval(() => {
             setSelectedItem(prevItem => (prevItem + 1) % features.length);
-        }, 6000); // Change slide every 5 seconds
+        }, 6000); // Change slide every 6 seconds
 
         // Cleanup on unmount
         return () => {

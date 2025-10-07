@@ -9,7 +9,6 @@ import { UITeaser } from "../partials/home/UITeaser";
 import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
 
 // @ts-ignore
-import pricePreview from "@site/static/img/price.png";
 import { StartHacking } from "../partials/home/StartHacking";
 import { defaultBorderMixin } from "../partials/styles";
 import { TechSplash } from "../partials/home/TechSplash";
@@ -74,7 +73,7 @@ function DevelopersPage() {
                                     className={"p-1 flex justify-center"}>
                                     <img loading="lazy"
                                          className=""
-                                         src={pricePreview}
+                                         src="/img/price.png"
                                          width="500"
                                          alt="Price textfield preview"
                                     />

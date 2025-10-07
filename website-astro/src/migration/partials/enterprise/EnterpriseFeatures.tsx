@@ -2,9 +2,6 @@ import React from "react";
 import { ContainerMixin } from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
-import AutoModeIcon from "@site/static/img/icons/auto_mode.svg";
-import SettingsIcon from "@site/static/img/icons/settings.svg";
-import CheckCircleIcon from "@site/static/img/icons/check_circle.svg";
 import { PhoneFrame } from "../PhoneFrame";
 import { BrowserFrame } from "../BrowserFrame";
 
@@ -69,77 +66,7 @@ export function EnterpriseFeatures() {
                     </div>
                 </div>
 
-                {/*<div*/}
-                {/*    className={ContainerSmallMixin + ""}>*/}
-                {/*    <div className="flex items-center justify-center">*/}
-                {/*        */}
-                {/*    </div>*/}
-
-                {/*</div>*/}
-
             </Panel>
-
-            {/*<Panel color={"white"}>*/}
-
-            {/*    <TwoColumns*/}
-            {/*        left={<>*/}
-
-            {/*            <div className={"flex items-center my-4 mb-3 "}>*/}
-
-            {/*                <h2 className={"m-0"}>Why Choose FireCMS?</h2>*/}
-
-            {/*            </div>*/}
-
-
-            {/*            <p className={"text-2xl "}>*/}
-            {/*                Every organization has unique content management*/}
-            {/*                requirements. We've designed FireCMS with flexibility*/}
-            {/*                and customization in mind to cater to these diverse*/}
-            {/*                needs.*/}
-            {/*            </p>*/}
-
-            {/*            <p className={"text-2xl "}>*/}
-            {/*                Firebase offers exceptional scalability, making it an*/}
-            {/*                ideal choice for companies aiming to build products that*/}
-            {/*                can accommodate millions of users. With Firebase/Firestore, you*/}
-            {/*                can focus on your product without concerns about*/}
-            {/*                infrastructure limitations.*/}
-            {/*            </p>*/}
-            {/*        </>}*/}
-            {/*        right={<>*/}
-            {/*            <div className={"m-4 text-3xl"}>*/}
-            {/*                <div className={"flex items-center gap-4"}>*/}
-            {/*                    <CheckCircleIcon/>SSO integration*/}
-            {/*                </div>*/}
-            {/*                <div className={"flex items-center gap-4"}>*/}
-            {/*                    <CheckCircleIcon/>Advanced data filtering*/}
-            {/*                </div>*/}
-            {/*                <div className={"flex items-center gap-4"}>*/}
-            {/*                    <CheckCircleIcon/>Text search*/}
-            {/*                </div>*/}
-            {/*                <div className={"flex items-center gap-4"}>*/}
-            {/*                    <CheckCircleIcon/>Support SLA*/}
-            {/*                </div>*/}
-            {/*                <div className={"flex items-center gap-4"}>*/}
-            {/*                    <CheckCircleIcon/>Custom integrations*/}
-            {/*                </div>*/}
-
-            {/*            </div>*/}
-            {/*        </>}/>*/}
-
-            {/*</Panel>*/}
-
-            {/*<section className={ContainerMixin + " my-8"}>*/}
-
-            {/*    <h2 className={"h2"}>Perfect for apps</h2>*/}
-            {/*    <p className={"text-2xl "}>*/}
-            {/*        Firebase is an excellent fit for apps. It provides a great*/}
-            {/*        developer experience and it is easy to integrate with*/}
-            {/*        different platforms.*/}
-            {/*    </p>*/}
-
-
-            {/*</section>*/}
 
         </>
     );

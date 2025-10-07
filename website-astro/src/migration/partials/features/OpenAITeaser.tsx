@@ -6,7 +6,6 @@ import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import MagicIcon from "@site/static/img/icons/magic.svg";
 import clsx from "clsx";
 
 function OpenAITeaser() {
@@ -27,9 +26,8 @@ function OpenAITeaser() {
 
 
                         <div className={"flex items-center mb-4"}>
-                            <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-4">
-                                <MagicIcon/>
+                            <div className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-4">
+                                <img src="/img/icons/magic.svg" alt="Magic" className="w-6 h-6"/>
                             </div>
 
                             <h2 className="m-0">

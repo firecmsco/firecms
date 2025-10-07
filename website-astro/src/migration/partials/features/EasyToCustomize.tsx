@@ -1,16 +1,5 @@
 import React from "react";
 
-// @ts-ignore
-import schemaEditorVideo from "@site/static/img/schema_editor.webm";
-// @ts-ignore
-import editingDemoVideo from "@site/static/img/editing_demo.mp4";
-// @ts-ignore
-import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
-// @ts-ignore
-import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
-// @ts-ignore
-import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
-
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
 import { defaultBorderMixin } from "../styles";
@@ -38,7 +27,7 @@ function EasyToCustomize() {
                                 }}
                                 width="100%" loop autoPlay muted>
                                 <source
-                                    src={customFieldDarkVideo}
+                                    src={"/img/custom_fields_dark.mp4"}
                                     type="video/mp4"/>
                             </video>
                         </div>

@@ -1,7 +1,4 @@
 import React from "react";
-
-import CloudIcon from "@site/static/img/icons/cloud.svg";
-import ServerIcon from "@site/static/img/icons/server.svg";
 import { Panel } from "../general/Panel";
 
 export function VersionsToggle({
@@ -14,13 +11,13 @@ export function VersionsToggle({
 
     return <Panel color={"white"} innerClassName={"flex flex-row gap-8 justify-center"}>
         <ToggleButton title={"Self-hosted"}
-                      icon={<ServerIcon/>}
+                      icon={<img src="/img/icons/server.svg" alt="Self hosted" className="w-8 h-8"/>}
                       subtitle={<><b>FREE</b> and open source</>}
                       selected={value === "self-hosted"}
                       onClick={() => onSelect("self-hosted")}
         />
         <ToggleButton title={"Cloud"}
-                      icon={<CloudIcon/>}
+                      icon={<img src="/img/icons/cloud.svg" alt="Cloud" className="w-8 h-8"/>}
                       subtitle={"No-code, full-service"}
                       selected={value === "cloud"}
                       onClick={() => onSelect("cloud")}

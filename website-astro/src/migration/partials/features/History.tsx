@@ -6,7 +6,6 @@ import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import MagicIcon from "@site/static/img/icons/magic.svg";
 import clsx from "clsx";
 
 function History() {
@@ -29,7 +28,7 @@ function History() {
                         <div className={"flex items-center mb-4"}>
                             <div
                                 className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-4">
-                                <MagicIcon/>
+                                <img src="/img/icons/magic.svg" alt="magic" className="w-6 h-6"/>
                             </div>
 
                             <h2 className="m-0">
@@ -50,15 +49,6 @@ function History() {
                             </p>
                         </div>
 
-                        {/*<div*/}
-                        {/*    className="mt-5 sm:mt-8">*/}
-                        {/*    <a href={useBaseUrl("openai/")}*/}
-                        {/*       className={CTAButtonMixin}>*/}
-                        {/*        About this integration*/}
-                        {/*        <CTACaret/>*/}
-                        {/*    </a>*/}
-
-                        {/*</div>*/}
                     </div>
                 }
                 right={<>
@@ -75,8 +65,8 @@ function History() {
                             key={isDarkTheme ? "dark" : "light"}
                             className={clsx("pointer-events-none rounded-2xl border", defaultBorderMixin)}
                             width="100%"
-                            src={"/img/history.png"}>
-                        </img>
+                            src={'/img/history.png'}
+                            alt="history"/>
                     </div>
 
 

@@ -2,18 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { easeInOut } from "./styles";
 
-// @ts-ignore
-import inlineEditing from "@site/static/img/inline_table_editing.mp4";
-// @ts-ignore
-import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
-
-// @ts-ignore
-import MMApp from "@site/static/img/mm_app.webp";
-// @ts-ignore
-import editorWhite from "@site/static/img/editor_white.png";
-// @ts-ignore
-import overlay from "@site/static/img/overlay.webp";
-
 import { BrowserFrame } from "./BrowserFrame";
 import { PhoneFrame } from "./PhoneFrame";
 import { LinedSpace } from "./layout/LinedSpace";
@@ -70,7 +58,7 @@ export function UsageExamples() {
                     width="100%"
                     loop autoPlay muted>
                     <source
-                        src={customFieldDarkVideo}
+                        src="/img/custom_fields_dark.mp4"
                         type="video/mp4"/>
                 </video>
             </BrowserFrame>
@@ -85,7 +73,7 @@ export function UsageExamples() {
                     "absolute z-10 md:w-[800px] bg-gray-900"
                 }>
 
-                <img loading="lazy" src={overlay}
+                <img loading="lazy" src="/img/overlay.webp"
                      className={"rounded-xl"}
                      alt="Overlay"/>
             </BrowserFrame>
@@ -98,7 +86,7 @@ export function UsageExamples() {
                  }}>
                 <PhoneFrame>
                     <img loading="lazy"
-                         src={MMApp}
+                         src="/img/mm_app.webp"
                          style={{
                              aspectRatio: 654 / 1336,
                          }}
@@ -118,7 +106,7 @@ export function UsageExamples() {
                     "absolute z-30 w-96 md:w-[720px] bg-gray-100"
                 }>
 
-                <img loading="lazy" src={editorWhite}
+                <img loading="lazy" src="/img/editor_white.png"
                      className={"rounded-xl"}
                      style={{
                          aspectRatio: 1280 / 700,
@@ -162,4 +150,3 @@ export function UsageExamples() {
         <div style={{ height: 300 }}></div>
     </Panel>;
 }
-

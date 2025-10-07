@@ -1,9 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 import { ContainerInnerPaddingMixin, CTAButtonMixin, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
-import CheckIcon from "@site/static/img/icons/check.svg";
-import RemoveIcon from "@site/static/img/icons/remove.svg";
-import ScheduleIcon from "@site/static/img/icons/schedule.svg";
 import { LinedSpace } from "../layout/LinedSpace";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
@@ -216,11 +213,11 @@ export function VersionsComparison() {
             return <a className="text-inherit"
                       href={useBaseUrl("enterprise/")}>Enterprise</a>
         if (value === "Yes")
-            return <CheckIcon className="m-auto" width={24}/>
+            return <img src="/img/icons/check.svg" alt="Yes" className="m-auto w-6 h-6"/>
         if (value === "No")
-            return <RemoveIcon className="m-auto" width={24}/>
+            return <img src="/img/icons/remove.svg" alt="No" className="m-auto w-6 h-6"/>
         if (value === "WIP")
-            return <ScheduleIcon className="m-auto" width={24}/>
+            return <img src="/img/icons/schedule.svg" alt="WIP" className="m-auto w-6 h-6"/>
         return value;
     }
 

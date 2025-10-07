@@ -1,17 +1,11 @@
 import React from "react";
 import { TwoColumns } from "../general/TwoColumns";
 import { useColorMode } from "@docusaurus/theme-common";
-
-// @ts-ignore
-import translationLight from "@site/static/img/data/translations_light.png";
-// @ts-ignore
-import translationDark from "@site/static/img/data/translations_dark.png";
 import clsx from "clsx";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 
 export function Translations() {
-
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
     return (
@@ -34,17 +28,14 @@ export function Translations() {
                 </>}
                 right={<>
                     <div
-                        style={{
-                            maxHeight: "692px",
-                        }}
+                        style={{ maxHeight: "692px" }}
                         data-aos="fade-up"
                         className={" flex content-center justify-center"}>
                         <img loading="lazy"
                              className={clsx("rounded-2xl border", defaultBorderMixin)}
-                             src={isDarkTheme ? translationDark : translationLight}
+                             src={isDarkTheme ? "/img/data/translations_dark.png" : "/img/data/translations_light.png"}
                              width="500"
-                             alt="Manage your translations with FireCMS"
-                        />
+                             alt="Manage your translations with FireCMS"/>
                     </div>
                 </>}/>
         </Panel>

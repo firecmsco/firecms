@@ -1,19 +1,11 @@
 import React from "react";
-import { useColorMode } from "@docusaurus/theme-common";
-
-// @ts-ignore
-import translationLight from "@site/static/img/data/translations_light.png";
-// @ts-ignore
-import translationDark from "@site/static/img/data/translations_dark.png";
+// Removed useColorMode and translation image imports since not used
 import { Panel } from "../general/Panel";
 import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function DataStructure() {
-
-    const { colorMode } = useColorMode();
     return (
-
         <Panel color={"primary"}>
             <h2 className="mb-4">
                 Harness AI for Your Structured Data

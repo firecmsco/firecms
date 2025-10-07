@@ -1,7 +1,5 @@
 import React from "react";
 import HeroButtons from "./HeroButtons";
-// @ts-ignore
-import FireCMSLogo from "@site/static/img/firecms_logo.svg";
 import { Panel } from "../general/Panel";
 
 function OpenSourceDetails() {

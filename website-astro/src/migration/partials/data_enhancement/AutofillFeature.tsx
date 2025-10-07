@@ -1,10 +1,5 @@
 import React from "react";
 import { TwoColumns } from "../general/TwoColumns";
-
-// @ts-ignore
-import demoDark from "@site/static/img/data/product_demo_dark.mp4";
-// @ts-ignore
-import demoLight from "@site/static/img/data/product_demo_light.mp4";
 import clsx from "clsx";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
@@ -30,7 +25,7 @@ export function AutofillFeature() {
                             width="100%"
                             loop autoPlay muted>
                             <source
-                                src={isDarkTheme ? demoDark : demoLight}
+                                src={isDarkTheme ? "/img/data/product_demo_dark.mp4" : "/img/data/product_demo_light.mp4"}
                                 type="video/mp4"/>
                         </video>
                     </div>

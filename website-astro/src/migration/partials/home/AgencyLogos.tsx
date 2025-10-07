@@ -1,107 +1,50 @@
 import React from "react";
-
-// @ts-ignore
-import SomnioLogoLight from "@site/static/img/logos/logo_somnio.webp";
-// @ts-ignore
-import ICodeLabsLogo from "@site/static/img/logos/icodelabs.png";
-// @ts-ignore
-import RiverstoneLogo from "@site/static/img/logos/riverstone.png";
-import ViscapLogo from "@site/static/img/logos/viscap.svg";
-import KodeCreatorsLogo from "@site/static/img/logos/kodecreators.svg";
-import BitForgeLogo from "@site/static/img/logos/bitforge.svg";
-import FycLogo from "@site/static/img/logos/fyc.svg";
-import NFQLogo from "@site/static/img/logos/nfq.svg";
-import AbacusLogo from "@site/static/img/logos/abacus.svg";
-
 import { Panel } from "../general/Panel";
 import Marquee from "react-fast-marquee";
 
+const logos = {
+    somnio: "/img/logos/logo_somnio.webp",
+    icodelabs: "/img/logos/icodelabs.png",
+    riverstone: "/img/logos/riverstone.png",
+    viscap: "/img/logos/viscap.svg",
+    kodecreators: "/img/logos/kodecreators.svg",
+    bitforge: "/img/logos/bitforge.svg",
+    fyc: "/img/logos/fyc.svg",
+    nfq: "/img/logos/nfq.svg",
+    abacus: "/img/logos/abacus.svg"
+};
+
 export function AgencyLogos() {
-
     return <Panel color={"light"} container={false}>
-
         <Marquee className={"grayscale rounded-xl space-x-4"} pauseOnHover={false} gradient={true}
                  gradientColor={"rgb(237 237 237)"}>
-
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="BitForge"
-                href={"https://bitforge.ch/"}>
-                <BitForgeLogo
-                    className="w-48 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="BitForge" href="https://bitforge.ch/">
+                <img src={logos.bitforge} alt="BitForge" className="w-48 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Somnio Software"
-                href={"https://www.somniosoftware.com/"}>
-
-                <img loading="lazy" src={SomnioLogoLight}
-                     alt="Somnio Logo"
-                     className="w-48 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="Somnio Software" href="https://www.somniosoftware.com/">
+                <img src={logos.somnio} alt="Somnio Logo" className="w-48 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Riverstone"
-                href={"https://www.riverstonetech.com/"}>
-
-                <img loading="lazy" src={RiverstoneLogo}
-                     alt="Riverstone Logo"
-                     className="w-48 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="Riverstone" href="https://www.riverstonetech.com/">
+                <img src={logos.riverstone} alt="Riverstone Logo" className="w-48 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="ICode Labs"
-                href={"https://icodelabs.co/"}>
-
-                <img loading="lazy" src={ICodeLabsLogo}
-                     alt="ICode Labs Logo"
-                     className="w-48 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="ICode Labs" href="https://icodelabs.co/">
+                <img src={logos.icodelabs} alt="ICode Labs Logo" className="w-48 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="NFQ"
-                href={"https://www.nfq.com/"}>
-                <NFQLogo
-                    className="w-44 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="NFQ" href="https://www.nfq.com/">
+                <img src={logos.nfq} alt="NFQ" className="w-44 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="FYC Labs"
-                href={"https://fyclabs.com/"}>
-                <FycLogo
-                    className="w-52 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="FYC Labs" href="https://fyclabs.com/">
+                <img src={logos.fyc} alt="FYC Labs" className="w-52 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Kode Creators"
-                href={"https://kodecreators.com/"}>
-                <KodeCreatorsLogo
-                    className="w-52 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="Kode Creators" href="https://kodecreators.com/">
+                <img src={logos.kodecreators} alt="Kode Creators" className="w-52 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Viscap"
-                href={"https://www.viscapmedia.com/"}>
-                <ViscapLogo
-                    className="w-52 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="Viscap" href="https://www.viscapmedia.com/">
+                <img src={logos.viscap} alt="Viscap" className="w-52 m-4" loading="lazy"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Abacus"
-                href={"https://abacusplus.ba/"}>
-                <AbacusLogo
-                    className="w-48 m-4"/>
+            <a target="_blank" rel="noopener noreferrer" aria-label="Abacus" href="https://abacusplus.ba/">
+                <img src={logos.abacus} alt="Abacus" className="w-48 m-4" loading="lazy"/>
             </a>
         </Marquee>
     </Panel>;
-
 }

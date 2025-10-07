@@ -1,6 +1,3 @@
-// @ts-ignore
-import schemaEditorVideo from "@site/static/img/schema_editor.webm";
-
 import { Panel } from "../general/Panel";
 import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 
@@ -23,7 +20,7 @@ export function AirTableLike() {
                         }}
                         className={"rounded-xl border " + defaultBorderMixin}
                         width="100%" loop autoPlay muted>
-                        <source src={schemaEditorVideo} type="video/mp4"/>
+                        <source src="/img/schema_editor.webm" type="video/mp4"/>
                     </video>
                 </div>
 

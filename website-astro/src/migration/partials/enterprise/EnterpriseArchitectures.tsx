@@ -1,8 +1,6 @@
 import React from "react";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
-import SimpleArchitecture from "@site/static/img/enterprise/simple_architecture.svg";
-import ComplexArchitecture from "@site/static/img/enterprise/complex_architecture.svg";
 
 export function EnterpriseArchitectures() {
     return (
@@ -39,10 +37,10 @@ export function EnterpriseArchitectures() {
 
                     </div>}
                     right={<div className={"p-8 flex flex-col"}>
-                        <SimpleArchitecture className={"w-full mt-8"}/>
+                        <img src="/img/enterprise/simple_architecture.svg" className={"w-full mt-8"} alt="Simple architecture"/>
                         <label className={"text-sm text-center m-4"}>Simple
                             architecture</label>
-                        <ComplexArchitecture className={"w-full mt-16"}/>
+                        <img src="/img/enterprise/complex_architecture.svg" className={"w-full mt-16"} alt="Complex architecture"/>
                         <label className={"text-sm text-center m-4"}>Architecture
                             using microservices</label>
                     </div>

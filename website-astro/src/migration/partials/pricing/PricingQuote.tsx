@@ -3,15 +3,12 @@ import { ContainerInnerPaddingMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 
-// @ts-ignore
-import viktor from "@site/static/img/avatars/viktor.jpeg";
-
 export function PricingQuote() {
 
     const ikeaQuote = {
         quote: "I think you have the best noSQL headless CMS on the market",
         author: "Viktor Vinnk",
-        avatar: viktor,
+        avatar: "/img/avatars/viktor.jpeg",
         role: "Country Digital Development Leader, Ikea"
     };
     const {
