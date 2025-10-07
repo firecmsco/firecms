@@ -1,0 +1,80 @@
+---
+id: features
+title: Features
+---
+
+<div style={{height: "350px"}}/>
+
+# Features
+
+## Inline editing
+
+FireCMS allows you to edit the data in the database in both an **inline** table,
+and in **dedicated forms**.
+
+Inline editing is very useful when you want to quickly edit a few fields of a
+document. For example, if you have a list of users, you can quickly edit the
+name of the user by clicking on the name and editing it.
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+       loop autoPlay muted>
+    <source src="/img/inline_table_editing.mp4" type="video/mp4"/>
+</video>
+
+
+## Dedicated form view
+
+You can also edit the data in a dedicated form. This is useful when you want to
+edit a lot of fields, or when you want to edit a field that is not shown in the
+table.
+
+FireCMS offers a lot of built-in property fields, from basic text fields to
+complex ones, like multiple file uploads, sortable arrays, references to
+other collections, etc.
+
+The form view opens by default in a convenient side dialog that allows you
+to maintain the context you are working on, when you are done.
+
+FireCMS is a React CMS, and it offers multiple extension points where you can
+define your custom views. Adding additional custom view to your form view
+can be really useful.
+
+You could add:
+- A dashboard for your client
+- A preview of the blog article you are writing
+- A representation of how the content is going to look like in your
+app or website.
+- And everything you can imagine.
+
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+       loop autoPlay muted>
+    <source src="/img/custom_entity_view.mp4" type="video/mp4"/>
+</video>
+
+
+## Real-time updates
+
+FireCMS uses Firestore as a backend, which is a **real time database**. This means
+that any change in the database is reflected in the CMS in real time.
+This is a very powerful feature that allows you to have a CMS that is always
+up-to-date with the data in the database.
+
+These updates will be reflected both in the table and in the edit form (as long
+as you have not modified the specific field that was updated).
+
+This allows you to move some of your logic to backend functions, or have
+completely dynamic data, and still have a CMS that is always up-to-date.
+
+There is a big benefit to using Firebase/Firestore as a backend for your CMS:
+you can leverage all the advanced features that Google Cloud Platform offers,
+such as **Cloud Functions**, **Cloud Storage**, **BigQuery**, etc.
+
+There are very **few CMSs** that show always up-to-date data, so if this a feature
+you need, FireCMS is your best bet!
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+       loop autoPlay muted>
+    <source src="/img/crypto_autoupdate.mp4" type="video/mp4"/>
+</video>
+

@@ -1,0 +1,84 @@
+---
+import { organizationSchema, softwareApplicationSchema } from "../migration/partials/markup";
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+import "../styles/global.css";
+
+const {
+  title = "FireCMS - Firestore/Firebase headless CMS",
+  description = "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source"
+} = Astro.props;
+
+const canonicalBase = 'https://dataki.ai';
+const path = Astro.url.pathname;
+const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{title}</title>
+
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="canonical" href={canonical}>
+  <meta name="description" content={description}>
+  <meta name="keywords" content="AI analytics, data visualization, interactive dashboards, business intelligence, data reporting, no-code analytics, SQL dashboard, natural language queries, data insights">
+  <meta name="robots" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "FireCMS",
+      "operatingSystem": "All",
+      "image": "https://firecms.co/img/firecms_logo.svg",
+      "applicationCategory": "WebApplication",
+      "description": "FireCMS is a powerful content management system, based on Firebase/MongoDB, React and tailwind",
+      "softwareVersion": "3.0",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "24"
+      }
+    }
+  </script>
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+</head>
+
+<body class="font-sans bg-black text-gray-300 antialiased">
+  <slot />
+</body>
+
+<style>
+  /* Fallback scrollbar hiding */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  video, iframe, img.feature-img { max-width: 100%; height: auto; }
+
+  .btn-glow:hover { box-shadow: 0 0 15px 3px rgba(0, 112, 244, 0.5); }
+
+  iframe { aspect-ratio: 16 / 9; }
+
+  .gradient-text { background: linear-gradient(135deg, #0070f4, #359aff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  .hero-gradient { background: radial-gradient(ellipse at center, rgba(0, 112, 244, 0.1) 0%, transparent 70%); }
+
+  :focus-visible { outline: none; box-shadow: 0 0 0 2px transparent, 0 0 0 4px rgba(0, 112, 244, 0.75), 0 0 0 6px transparent; }
+</style>
+</html>
