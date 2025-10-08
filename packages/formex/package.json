@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-canary.275",
+  "version": "3.0.0-canary.276",
   "publishConfig": {
     "access": "public"
   },
