@@ -1,9 +1,9 @@
 import React from "react";
 import { Panel } from "../general/Panel";
 // @ts-ignore
-import pixelGeniusLogin from "@site/static/img/pixel_genius_login.mp4";
+const pixelGeniusLogin = "/img/pixel_genius_login.mp4";
 // @ts-ignore
-import overlay from "@site/static/img/overlay.webp";
+const overlay = "/img/overlay.webp";
 import { BrowserFrame } from "../BrowserFrame";
 
 

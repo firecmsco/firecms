@@ -28,7 +28,7 @@ import {
 
 // Placeholder image - replace with a relevant one if available
 // @ts-ignore
-import AgencyCollaborationImage from "@site/static/img/users_table.png";
+const AgencyCollaborationImage = "/img/users_table.png";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import EasyToCustomize from "../partials/features/EasyToCustomize"; // Using existing image as placeholder
 

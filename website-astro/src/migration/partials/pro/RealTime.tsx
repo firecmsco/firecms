@@ -1,9 +1,9 @@
 import React from "react";
 
-import LightingIcon from "@site/static/img/icons/lighting.svg";
-
 // @ts-ignore
-import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
+const lightingIcon = "/img/icons/lighting.svg";
+// @ts-ignore
+const inlineEditingVideo = "/img/inline_table_editing.mp4";
 
 import { ContainerSmallMixin } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
@@ -17,7 +17,7 @@ function RealTime() {
 
                 <div
                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                    <LightingIcon height={12} width={12}/>
+                    <img src={lightingIcon} alt="lighting" width={12} height={12} />
                 </div>
 
                 <h3 className="m-0">

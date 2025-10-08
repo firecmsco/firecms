@@ -1,20 +1,26 @@
 import React from "react";
 
 // @ts-ignore
-import MMLogo from "@site/static/img/logos/mm_logo.webp";
+const MMLogo = "/img/logos/mm_logo.webp";
 // @ts-ignore
-import ProtonLogo from "@site/static/img/logos/proton_logo.webp";
+const ProtonLogo = "/img/logos/proton_logo.webp";
 // @ts-ignore
-import WithULogo from "@site/static/img/logos/withu.png";
+const WithULogo = "/img/logos/withu.png";
 // @ts-ignore
-import DearDocLogo from "@site/static/img/logos/deardoc.png";
+const DearDocLogo = "/img/logos/deardoc.png";
 
-import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
-import SocialIncomeLogo from "@site/static/img/logos/social_income_logo.svg";
-import MindSwitchLogo from "@site/static/img/logos/mindswitch_logo.svg";
-import OikosLogo from "@site/static/img/logos/oikos_logo.svg";
-import GearFocusLogo from "@site/static/img/logos/gearfocus_logo.svg";
-import ClarIoLogo from "@site/static/img/logos/clario.svg";
+// @ts-ignore
+const TPALogo = "/img/logos/the_planet_app_logo.svg";
+// @ts-ignore
+const SocialIncomeLogo = "/img/logos/social_income_logo.svg";
+// @ts-ignore
+const MindSwitchLogo = "/img/logos/mindswitch_logo.svg";
+// @ts-ignore
+const OikosLogo = "/img/logos/oikos_logo.svg";
+// @ts-ignore
+const GearFocusLogo = "/img/logos/gearfocus_logo.svg";
+// @ts-ignore
+const ClarIoLogo = "/img/logos/clario.svg";
 
 import { Panel } from "../general/Panel";
 import Marquee from "react-fast-marquee";
@@ -71,31 +77,27 @@ export function StartupLogos() {
                 aria-label="Social Income"
                 rel="noopener noreferrer"
                 href={"https://socialincome.org"}>
-                <SocialIncomeLogo className="w-48 h-auto m-4"/>
+                <img loading="lazy" src={SocialIncomeLogo} className="w-48 h-auto m-4" alt="Social Income"/>
             </a>
             <a
                 target="_blank"
                 aria-label="Clario"
                 rel="noopener noreferrer"
                 href={"https://clario.co/"}>
-                <ClarIoLogo
-                    className="w-52 m-4"/>
+                <img loading="lazy" src={ClarIoLogo} className="w-52 m-4" alt="Clario"/>
             </a>
             <a
                 target="_blank"
-                rel="noopener noreferrer"
                 aria-label="GearFocus"
                 href={"https://www.gearfocus.com/"}>
-                <GearFocusLogo
-                    className="w-52 m-4"/>
+                <img loading="lazy" src={GearFocusLogo} className="w-52 m-4" alt="GearFocus"/>
             </a>
             <a
                 target="_blank"
                 aria-label="Mindswitch"
                 rel="noopener noreferrer"
                 href={"https://www.mindswitch.me/"}>
-                <MindSwitchLogo
-                    className="w-48 m-4"/>
+                <img loading="lazy" src={MindSwitchLogo} className="w-48 m-4" alt="Mindswitch"/>
             </a>
         </Marquee>
     </Panel>;

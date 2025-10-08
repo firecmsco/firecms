@@ -1,7 +1,6 @@
 import React from "react";
 
-// @ts-ignore
-import pricePreview from "@site/static/img/price.png";
+const pricePreview = "/img/price.png";
 
 // @ts-ignore
 // import SyntaxHighlighter from "react-syntax-highlighter";
@@ -380,4 +379,3 @@ const proExampleCode = `<span class="token keyword">function</span> <span class=
 //     );
 //
 // }`;
-

@@ -1,7 +1,8 @@
 import React from "react";
 import HeroButtons from "./HeroButtons";
 
-import editingDemoDarkVideo from "@site/static/img/landing_1080.webm";
+// @ts-ignore
+const editingDemoDarkVideo = "/img/landing_1080.webm";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";

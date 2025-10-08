@@ -1,7 +1,7 @@
 import React from "react";
 
 // @ts-ignore
-import pricePreview from "@site/static/img/price.png";
+const pricePreview = "/img/price.png";
 
 import { useColorMode } from "@docusaurus/theme-common";
 
@@ -13,7 +13,7 @@ import Link from "@docusaurus/Link";
 import SimpleCodeBlock from "../../components/SimpleCodeBlock";
 
 // @ts-ignore
-import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
+const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
 
 export function DeveloperFeatures() {
     const { colorMode } = useColorMode();

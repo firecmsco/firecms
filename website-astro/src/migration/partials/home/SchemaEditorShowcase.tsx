@@ -1,7 +1,7 @@
 import React from "react";
 
 // @ts-ignore
-import schemaEditorVideo from "@site/static/img/schema_editor.webm";
+const schemaEditorVideo = "/img/schema_editor.webm";
 import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 

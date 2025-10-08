@@ -28,9 +28,9 @@ import {
 
 // Placeholder image paths - replace with actual security-related images
 // @ts-expect-error
-import DataSovereigntyImage from "@site/static/img/demo-botanic-plant-firestore.png";
+const DataSovereigntyImage = "/img/demo-botanic-plant-firestore.png";
 // @ts-expect-error
-import SecurityArchitectureImage from "@site/static/img/firecms-layers.png";
+const SecurityArchitectureImage = "/img/firecms-layers.png";
 
 function Security() {
     return (

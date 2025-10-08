@@ -1,7 +1,7 @@
 import React from "react"
 
 // @ts-ignore
-import collectionEditorVideo from "@site/static/img/colection_editor.webm";
+const collectionEditorVideo = "/img/colection_editor.webm";
 import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
@@ -50,8 +50,7 @@ export const SchemaEditorIntro = () => {
                 </div>
             </div>
 
-            <div
-                className={ContainerMixin + " px-4 sm:px-6 -translate-y-44"}>
+            <div className={ContainerMixin + " px-4 sm:px-6 -translate-y-44"}>
                 <video
                     style={{
                         pointerEvents: "none",

@@ -1,14 +1,14 @@
 import React from "react";
 
-
-import SettingsIcon from "@site/static/img/icons/settings.svg";
-
 // @ts-ignore
-import editingDemoVideo from "@site/static/img/editing_demo.mp4";
+const settingsIcon = "/img/icons/settings.svg";
 // @ts-ignore
-import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
+const editingDemoVideo = "/img/editing_demo.mp4";
 // @ts-ignore
-import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
+const editingDemoDarkVideo = "/img/editing_demo_dark.mp4";
+// @ts-ignore
+const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
+import { useColorMode } from "@docusaurus/theme-common";
 
 import { lightningIcon } from "../icons";
 import { TwoColumns } from "../general/TwoColumns";

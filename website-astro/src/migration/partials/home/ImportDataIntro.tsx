@@ -1,7 +1,7 @@
 import React from "react"
 
 // @ts-ignore
-import dataImportVideo from "@site/static/img/import.webm";
+const dataImportVideo = "/img/import.webm";
 import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 

@@ -3,18 +3,18 @@ import Marquee from "react-fast-marquee";
 import { Panel } from "../general/Panel";
 
 // @ts-ignore
-import MMApp from "@site/static/img/mm_app.webp";
+const MMApp = "/img/mm_app.webp";
 // @ts-ignore
-import editorWhite from "@site/static/img/editor_white.png";
+const editorWhite = "/img/editor_white.png";
 // @ts-ignore
-import overlay from "@site/static/img/overlay.webp";
+const overlay = "/img/overlay.webp";
 
 // @ts-ignore
-import primeUm from "@site/static/img/prime_um.png";
+const primeUm = "/img/prime_um.png";
 // @ts-ignore
-import mmDark from "@site/static/img/mm_dark.png";
+const mmDark = "/img/mm_dark.png";
 // @ts-ignore
-import oikosAviationDemo from "@site/static/img/oikos_aviation_demo.png";
+const oikosAviationDemo = "/img/oikos_aviation_demo.png";
 
 export function ProInfo() {
     return <Panel color={"white"} container={false}>

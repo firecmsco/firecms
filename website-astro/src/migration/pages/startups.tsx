@@ -3,9 +3,9 @@ import Layout from "../components/Layout.tsx";
 import Head from "@docusaurus/Head";
 
 // @ts-ignore
-import UsersImage from "@site/static/img/users_table.png";
+const UsersImage = "/img/users_table.png";
 // @ts-ignore
-import WidgetsImage from "@site/static/img/widgets.png";
+const WidgetsImage = "/img/widgets.png";
 
 import {
     AccountTreeIcon,
