@@ -1,16 +1,14 @@
 import React from "react";
-
-// @ts-ignore
-const pricePreview = "/img/price.png";
-
 import { useColorMode } from "@docusaurus/theme-common";
 
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { ContainerInnerPaddingMixin, CTAOutlinedButtonWhiteMixin, defaultBorderMixin } from "../styles";
-import Link from "@docusaurus/Link";
 import SimpleCodeBlock from "../../components/SimpleCodeBlock";
+
+// @ts-ignore
+const pricePreview = "/img/price.png";
 
 // @ts-ignore
 const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
@@ -54,7 +52,7 @@ export function DeveloperFeatures() {
                                         Define your data models in TypeScript for complete type safety. Your schemas
                                         become the single source of truth for both your admin panel and application.
                                     </p>
-                                    <SimpleCodeBlock code={schemaCode} language="typescript" />
+                                    <SimpleCodeBlock code={schemaCode} language="typescript"/>
                                 </div>
                             }
                             right={
@@ -89,11 +87,11 @@ export function DeveloperFeatures() {
                             without the frontend hassle. FireCMS works with every existing project
                             and doesn&#39;t enforce any data structure.
                         </p>
-                        <Link
-                            to="/developers"
+                        <a
+                            href="/developers"
                             className={CTAOutlinedButtonWhiteMixin + " w-full lg:w-auto "}>
                             Explore Developer Features
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </Panel>
