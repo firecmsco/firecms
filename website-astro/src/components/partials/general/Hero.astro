@@ -1,0 +1,92 @@
+---
+import Panel from "../../Panel.astro";
+import AnimatedGradientBackground from "../AnimatedGradientBackground.astro";
+
+interface Props {
+    height?: number | string;
+    subtitleColor?: "gray" | "dark_gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent";
+}
+
+const {
+    height = "100px",
+    subtitleColor = "lighter",
+} = Astro.props;
+---
+
+<div class="w-full relative bg-gray-950 -mt-20">
+    <AnimatedGradientBackground translateY={280}/>
+    <Panel
+        includeMargin={false}
+        includePadding={false}
+        color="transparent"
+        innerClassName="py-8 md:py-12 p-4 md:p-8"
+        className="border-t-0"
+    >
+        <div class="h-48"></div>
+        <div style={{ height }}></div>
+        <div class="mt-10 text-white">
+            <div class="lg:text-left">
+                <h1 class="tracking-tight font-medium text-6xl uppercase">
+                    <slot name="title" />
+                </h1>
+            </div>
+        </div>
+    </Panel>
+</div>
+
+<slot name="subtitle" />
+<slot name="cta" />
+
+<style>
+    :global([data-astro-cid-eeyx5lq4] .prose) {
+        max-width: 100%;
+    }
+</style>
+
+<script>
+    // This script is to handle the subtitle and cta slots,
+    // as they are conditionally rendered inside a Panel in the original component.
+    // This is a workaround to keep the structure similar.
+    document.addEventListener('astro:page-load', () => {
+        const subtitle = document.querySelector('[slot="subtitle"]');
+        const cta = document.querySelector('[slot="cta"]');
+        if (subtitle || cta) {
+            const subtitleColor = document.currentScript.parentElement.dataset.subtitleColor || 'lighter';
+            const panel = document.createElement('div');
+            panel.classList.add('py-8', 'md:py-12', 'p-4', 'md:p-8');
+            if (subtitle) {
+                const subtitleWrapper = document.createElement('div');
+                subtitleWrapper.classList.add('font-mono', 'uppercase', 'm-0', 'text-xl', 'md:text-2xl');
+                subtitleWrapper.appendChild(subtitle.cloneNode(true));
+                panel.appendChild(subtitleWrapper);
+            }
+            if (cta) {
+                const ctaWrapper = document.createElement('div');
+                ctaWrapper.classList.add('mt-5', 'sm:mt-8');
+                ctaWrapper.appendChild(cta.cloneNode(true));
+                panel.appendChild(ctaWrapper);
+            }
+
+            const parentPanel = document.createElement('div');
+            let colorClass = 'bg-gray-100 text-text-primary';
+            if (subtitleColor === 'gray') {
+                colorClass = 'bg-gray-800 text-white dark:text-white';
+            } else if (subtitleColor === 'dark_gray') {
+                colorClass = 'bg-gray-950 text-white dark:text-white';
+            }
+            parentPanel.className = `max-w-full relative flex flex-col items ${colorClass} border-0 border-t border-solid border-slate-200 dark:border-slate-800`;
+            parentPanel.appendChild(panel);
+
+            if (subtitle) subtitle.replaceWith(parentPanel);
+            else if (cta) cta.replaceWith(parentPanel);
+        }
+    });
+</script>
+<Panel color={subtitleColor} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+    <div class="font-mono uppercase m-0 text-xl md:text-2xl">
+        <slot name="subtitle" />
+    </div>
+    <div class="mt-5 sm:mt-8">
+        <slot name="cta" />
+    </div>
+</Panel>

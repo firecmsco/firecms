@@ -1,0 +1,39 @@
+---
+import Panel from "../../Panel.astro";
+import TwoColumns from "../general/TwoColumns.astro";
+import { defaultBorderMixin } from "../../../migration/partials/styles";
+
+const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaurus stub
+---
+
+<Panel color={"light_gray"}>
+    <TwoColumns>
+        <div slot="left">
+            <h2 class="h2">
+                Are you managing translations?
+            </h2>
+            <p class="text-xl">
+                Translate your content to any language with the click of a button.
+            </p>
+            <p class="text-xl">
+                Let FireCMS handle the translation for you. You can then
+                edit the generated content and save it to your database.
+            </p>
+            <p class="text-xl">
+                You can also manage translations for your custom fields.
+            </p>
+        </div>
+        <div slot="right">
+            <div
+                style={{ maxHeight: "692px" }}
+                data-aos="fade-up"
+                class="flex content-center justify-center">
+                <img loading="lazy"
+                     class:list={["rounded-2xl border", defaultBorderMixin]}
+                     src={isDarkTheme ? "/img/data/translations_dark.png" : "/img/data/translations_light.png"}
+                     width="500"
+                     alt="Manage your translations with FireCMS"/>
+            </div>
+        </div>
+    </TwoColumns>
+</Panel>

@@ -1,0 +1,10 @@
+---
+interface Props {
+    code: string;
+    language: string;
+}
+
+const { code, language } = Astro.props;
+---
+
+<pre><code class:list={[`language-${language}`]}>{code}</code></pre>

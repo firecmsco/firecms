@@ -8,7 +8,7 @@ import { EnterpriseArchitectures } from "../migration/partials/enterprise/Enterp
 import { StartHacking } from "../migration/partials/home/StartHacking";
 import { defaultBorderMixin } from "../migration/partials/styles";
 import { TechSplash } from "../migration/partials/home/TechSplash";
-import { CustomFields } from "../migration/partials/features/CustomFields";
+import CustomFields from "../components/partials/features/CustomFields.astro";
 import { DataTalkBatch } from "../migration/partials/home/DataTalkBatch";
 import { SimpleCodeBlock } from "../migration/components/SimpleCodeBlock";
 
@@ -315,7 +315,7 @@ const customLogicCode = `const productCallbacks = {
             </div>
         </Panel>
 
-        <CustomFields client:load />
+        <CustomFields />
         <EnterpriseArchitectures client:load />
 
         <Panel color={"dark_gray"} includePadding={true}>

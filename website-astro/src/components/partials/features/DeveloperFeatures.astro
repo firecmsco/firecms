@@ -1,0 +1,85 @@
+---
+import Panel from "../../Panel.astro";
+import TwoColumns from "../general/TwoColumns.astro";
+import SimpleCodeBlock from "../../SimpleCodeBlock.astro";
+import { ContainerInnerPaddingMixin, CTAOutlinedButtonWhiteMixin, defaultBorderMixin } from "../../../migration/partials/styles";
+
+const schemaCode = `const productCollection = buildCollection({
+  name: "Products",
+  path: "products",
+  properties: {
+    name: {
+      dataType: "string",
+      name: "Name",
+      validation: { required: true }
+    },
+    price: {
+      dataType: "number",
+      name: "Price",
+      validation: { required: true, min: 0 }
+    }
+  }
+});`;
+
+const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
+---
+
+<Panel color="dark_gray" includePadding={false}>
+    <p
+        slot="header"
+        class:list={["text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin]}>
+        For developers
+    </p>
+
+    <div class="lg:max-w-5xl mx-auto py-16 p-4 max-w-full">
+        <div class="mb-16 max-w-full">
+            <TwoColumns animation={false}>
+                <div slot="left" class="pb-8">
+                    <h3 class="text-2xl font-mono uppercase mb-3">Type-Safe Schema Definitions</h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        Define your data models in TypeScript for complete type safety. Your schemas
+                        become the single source of truth for both your admin panel and application.
+                    </p>
+                    <SimpleCodeBlock code={schemaCode} language="typescript" />
+                </div>
+                <div slot="right">
+                    <h3 class="text-2xl font-mono uppercase mb-3">Custom React Components</h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        Extend the CMS with your own React components. Create custom property fields,
+                        entity views, or navigation items that perfectly fit your project needs.
+                    </p>
+                    <div class="p-1 flex justify-center">
+                        <video
+                            class:list={["pointer-events-none rounded-2xl border", defaultBorderMixin]}
+                            style={{
+                                maxWidth: 540,
+                                aspectRatio: "540 / 515"
+                            }}
+                            width="100%"
+                            loop
+                            autoplay
+                            muted>
+                            <source
+                                src={customFieldDarkVideo}
+                                type="video/mp4"/>
+                        </video>
+                    </div>
+                </div>
+            </TwoColumns>
+        </div>
+
+        <div class="text-center">
+            <h3 class="text-2xl font-mono uppercase mb-4">Focus on Your Core Application Logic</h3>
+            <p class="text-lg mb-6">
+                Build powerful internal tools, CRUD interfaces, and back-offices
+                without the frontend hassle. FireCMS works with every existing project
+                and doesn&#39;t enforce any data structure.
+            </p>
+            <a
+                href="/developers"
+                class:list={[CTAOutlinedButtonWhiteMixin, "w-full lg:w-auto"]}>
+                Explore Developer Features
+            </a>
+        </div>
+    </div>
+</Panel>

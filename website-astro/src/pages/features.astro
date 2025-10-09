@@ -4,13 +4,13 @@ import { Hero } from "../migration/partials/general/Hero";
 import HeroButtons from "../migration/partials/home/HeroButtons";
 import { Panel } from "../migration/partials/general/Panel";
 import ProTeaser from "../migration/partials/home/ProTeaser";
-import { UnbeatableUX } from "../migration/partials/features/UnbeatableUX";
+import UnbeatableUX from "../components/partials/features/UnbeatableUX.astro";
 import { SchemaEditorIntro } from "../migration/partials/features/SchemaEditorIntro";
-import OpenAITeaser from "../migration/partials/features/OpenAITeaser";
-import History from "../migration/partials/features/History";
+import OpenAITeaser from "../components/partials/features/OpenAITeaser.astro";
+import History from "../components/partials/features/History.astro";
 import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
-import { FeaturesCarousel } from "../migration/partials/features/FeaturesCarousel";
-import { AirTableLike } from "../migration/partials/features/AirTableLike";
+import FeaturesCarousel from "../components/partials/features/FeaturesCarousel.astro";
+import AirTableLike from "../components/partials/features/AirTableLike.astro";
 ---
 
 <Layout
@@ -27,19 +27,19 @@ import { AirTableLike } from "../migration/partials/features/AirTableLike";
                 client:load
             />
 
-            <AirTableLike client:load />
+            <AirTableLike />
 
-            <FeaturesCarousel client:load />
+            <FeaturesCarousel />
 
-            <UnbeatableUX client:load />
+            <UnbeatableUX />
 
             <SchemaEditorIntro client:load />
 
-            <OpenAITeaser client:load />
+            <OpenAITeaser />
 
             <DataTalkIntro client:load />
 
-            <History client:load />
+            <History />
             <Panel color={"light"} includePadding={true}>
                 <HeroButtons analyticsLabel={"features"} client:load />
             </Panel>

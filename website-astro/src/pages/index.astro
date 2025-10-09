@@ -10,7 +10,7 @@ import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorSho
 import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
 import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
 import { TechSplash } from "../migration/partials/home/TechSplash";
-import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
+import DeveloperFeatures from "../components/partials/features/DeveloperFeatures.astro";
 import FirebaseTeaser from "../migration/partials/home/OpenSourceDetails";
 import DatakiIntro from "../migration/partials/home/DatakiIntro";
 ---
@@ -40,7 +40,7 @@ import DatakiIntro from "../migration/partials/home/DatakiIntro";
 
         <TechSplash client:load/>
 
-        <DeveloperFeatures client:load/>
+        <DeveloperFeatures />
 
         <FirebaseTeaser client:load/>
 

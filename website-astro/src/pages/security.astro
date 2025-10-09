@@ -9,13 +9,13 @@ import {
     SecurityIcon,
     VisibilityIcon
 } from "@firecms/ui";
-import { DataSovereigntySection } from "../migration/partials/security/DataSovereigntySection";
-import { SecurityArchitectureSection } from "../migration/partials/security/SecurityArchitectureSection";
-import { DeploymentModelsSection } from "../migration/partials/security/DeploymentModelsSection";
-import { PrivacyComplianceSection } from "../migration/partials/security/PrivacyComplianceSection";
-import { SharedResponsibilitySection } from "../migration/partials/security/SharedResponsibilitySection";
-import { TrustIndicatorsSection } from "../migration/partials/security/TrustIndicatorsSection";
-import { CallToActionSection } from "../migration/partials/security/CallToActionSection";
+import DataSovereigntySection from "../components/partials/security/DataSovereigntySection.astro";
+import SecurityArchitectureSection from "../components/partials/security/SecurityArchitectureSection.astro";
+import DeploymentModelsSection from "../components/partials/security/DeploymentModelsSection.astro";
+import PrivacyComplianceSection from "../components/partials/security/PrivacyComplianceSection.astro";
+import SharedResponsibilitySection from "../components/partials/security/SharedResponsibilitySection.astro";
+import TrustIndicatorsSection from "../components/partials/security/TrustIndicatorsSection.astro";
+import CallToActionSection from "../components/partials/security/CallToActionSection.astro";
 ---
 
 <Layout
@@ -83,12 +83,12 @@ import { CallToActionSection } from "../migration/partials/security/CallToAction
             </div>
         </Panel>
 
-        <DataSovereigntySection client:load />
-        <SecurityArchitectureSection client:load />
-        <DeploymentModelsSection client:load />
-        <PrivacyComplianceSection client:load />
-        <SharedResponsibilitySection client:load />
-        <TrustIndicatorsSection client:load />
-        <CallToActionSection client:load />
+        <DataSovereigntySection />
+        <SecurityArchitectureSection />
+        <DeploymentModelsSection />
+        <PrivacyComplianceSection />
+        <SharedResponsibilitySection />
+        <TrustIndicatorsSection />
+        <CallToActionSection />
     </main>
 </Layout>

@@ -1,0 +1,27 @@
+---
+import { defaultBorderMixin } from "../../../migration/partials/styles";
+
+interface Props {
+    position?: "top" | "bottom";
+    size?: "small" | "medium" | "large" | "larger" | "xlarge";
+}
+
+const {
+    position = "bottom",
+    size = "small"
+} = Astro.props;
+
+const heightClass = size === "small" ? "h-8"
+    : size === "medium" ? "h-16"
+        : size === "large" ? "h-24"
+            : size === "larger" ? "h-36"
+                : "h-56";
+---
+
+<div class:list={[
+    heightClass,
+    "w-full",
+    "border-0",
+    position === "top" ? "border-t" : "border-b",
+    defaultBorderMixin
+]}/>

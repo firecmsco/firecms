@@ -1,0 +1,69 @@
+---
+import Panel from "../../Panel.astro";
+import { defaultBorderMixin } from "../../../migration/partials/styles";
+---
+
+<Panel color={"white"} includePadding={true}>
+    <div class="max-w-6xl mx-auto py-12 md:py-16">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold mb-4 uppercase">Shared Responsibility Model</h2>
+            <p class="text-xl text-gray-600 font-mono uppercase">
+                Clear division of security responsibilities for maximum protection.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto mb-8">
+            <table class:list={["w-full border rounded-lg table-fixed", defaultBorderMixin]}>
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="p-4 text-left font-bold w-1/6">Security Domain</th>
+                    <th class="p-4 text-left font-bold text-blue-600 w-1/4">Your Responsibility</th>
+                    <th class="p-4 text-left font-bold text-green-600 w-1/4">FireCMS Provides</th>
+                    <th class="p-4 text-left font-bold text-purple-600 w-1/3">Infrastructure (Google/MongoDB)</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-500 divide-opacity-30 dark:divide-slate-500 dark:divide-opacity-30">
+                <tr>
+                    <td class="p-4 font-medium">Data Access Control</td>
+                    <td class="p-4 text-sm">Write &amp; maintain security rules</td>
+                    <td class="p-4 text-sm">RBAC system, permission builders</td>
+                    <td class="p-4 text-sm">Rule enforcement at database level</td>
+                </tr>
+                <tr class="bg-gray-50">
+                    <td class="p-4 font-medium">User Authentication</td>
+                    <td class="p-4 text-sm">Configure auth providers</td>
+                    <td class="p-4 text-sm">Firebase Auth integration, custom authenticators</td>
+                    <td class="p-4 text-sm">Secure, scalable authentication service</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-medium">Data Encryption</td>
+                    <td class="p-4 text-sm">Optional client-side encryption</td>
+                    <td class="p-4 text-sm">TLS/SSL connections</td>
+                    <td class="p-4 text-sm">Encryption at rest and in transit</td>
+                </tr>
+                <tr class="bg-gray-50">
+                    <td class="p-4 font-medium">Network Security</td>
+                    <td class="p-4 text-sm">Configure firewalls, VPC settings</td>
+                    <td class="p-4 text-sm">App Check integration</td>
+                    <td class="p-4 text-sm">VPCs, DDoS protection, secure networking</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-medium">Compliance</td>
+                    <td class="p-4 text-sm">Act as Data Controller</td>
+                    <td class="p-4 text-sm">Compliance-enabling tools</td>
+                    <td class="p-4 text-sm">Certified infrastructure (ISO, SOC, etc.)</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class:list={["p-6 rounded-xl border bg-green-50", defaultBorderMixin]}>
+            <h3 class="text-xl font-bold mb-4 text-green-900">Why This Model Works</h3>
+            <p class="text-green-800">
+                This shared responsibility approach gives you the flexibility to implement security controls
+                that match your specific requirements, while leveraging enterprise-grade infrastructure
+                security from day one. You get the best of both worlds: control and convenience.
+            </p>
+        </div>
+    </div>
+</Panel>

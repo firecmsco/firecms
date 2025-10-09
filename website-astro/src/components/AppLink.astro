@@ -1,0 +1,23 @@
+---
+interface Props extends astro.JSX.AnchorHTMLAttributes {
+    href: string;
+}
+
+const { href, ...props } = Astro.props;
+---
+
+<a href={href} {...props}>
+    <slot />
+</a>
+
+<script>
+    import { appendGclidToUrl, getCurrentGclid } from "../migration/utils/gclid";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+        const originalHref = link.getAttribute('href');
+        if (originalHref && !originalHref.startsWith('#')) {
+            const gclid = getCurrentGclid();
+            link.setAttribute('href', appendGclidToUrl(originalHref, gclid));
+        }
+    });
+</script>

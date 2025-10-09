@@ -1,0 +1,18 @@
+---
+interface Props {
+    translateY?: number;
+}
+
+const { translateY = 0 } = Astro.props;
+---
+
+<div class="gradient-background-container -z-10" aria-hidden="true"
+     style={{
+         transform: `translateY(${translateY}px)`,
+     }}
+>
+    <div class="blob blob-1"/>
+    <div class="blob blob-2"/>
+    <div class="blob blob-3"/>
+    <div class="blob blob-4"/>
+</div>

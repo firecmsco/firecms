@@ -1,19 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { AutofillFeature } from "../migration/partials/data_enhancement/AutofillFeature";
-import { DataEnhancementUseCases } from "../migration/partials/data_enhancement/DataEnhancementUseCases";
-import { DataEnhancementHero } from "../migration/partials/data_enhancement/DataEnhancementHero";
-import { Translations } from "../migration/partials/data_enhancement/Translations";
-import { DataStructure } from "../migration/partials/data_enhancement/DataStructure";
+import AutofillFeature from "../components/partials/data_enhancement/AutofillFeature.astro";
+import DataEnhancementUseCases from "../components/partials/data_enhancement/DataEnhancementUseCases.astro";
+import DataEnhancementHero from "../components/partials/data_enhancement/DataEnhancementHero.astro";
+import Translations from "../components/partials/data_enhancement/Translations.astro";
+import DataStructure from "../components/partials/data_enhancement/DataStructure.astro";
 ---
 
 <Layout
     title="CMS with ChatGPT Integration | Autofill Feature | Natural Language Processing | Customization Options">
 
-    <DataEnhancementHero client:load />
+    <DataEnhancementHero />
 
-    <DataEnhancementUseCases client:load />
-    <AutofillFeature client:load />
-    <DataStructure client:load />
-    <Translations client:load />
+    <DataEnhancementUseCases />
+    <AutofillFeature />
+    <DataStructure />
+    <Translations />
 </Layout>

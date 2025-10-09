@@ -22,9 +22,9 @@ import {
     VerifiedUserIcon,
     WebIcon
 } from "@firecms/ui";
-import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
-import EasyToCustomize from "../migration/partials/features/EasyToCustomize";
-import { AgencyClientShowcase } from "../migration/partials/agencies/AgencyClientShowcase";
+import DeveloperFeatures from "../components/partials/features/DeveloperFeatures.astro";
+import EasyToCustomize from "../components/partials/features/EasyToCustomize.astro";
+import AgencyClientShowcase from "../components/partials/agencies/AgencyClientShowcase.astro";
 
 const AgencyCollaborationImage = "/img/users_table.png";
 ---
@@ -110,9 +110,9 @@ const AgencyCollaborationImage = "/img/users_table.png";
             </div>
         </Panel>
 
-        <EasyToCustomize client:load />
+        <EasyToCustomize />
 
-        <AgencyClientShowcase client:load />
+        <AgencyClientShowcase />
 
         <Panel color={"gray"}>
             <div class="max-w-5xl mx-auto py-16 px-4">
@@ -186,7 +186,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
             </div>
         </Panel>
 
-        <DeveloperFeatures client:load />
+        <DeveloperFeatures />
 
         <Panel color={"light"} includePadding={true}>
             <HeroButtons analyticsLabel={"agencies"} client:load />

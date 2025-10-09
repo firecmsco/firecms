@@ -1,10 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Hero } from "../migration/partials/general/Hero";
-import { VersionsComparison } from "../migration/partials/pricing/VersionsComparison";
-import { CLIInstructions } from "../migration/partials/pricing/CLIInstructions";
+import VersionsComparison from "../components/partials/pricing/VersionsComparison.astro";
+import CLIInstructions from "../components/partials/pricing/CLIInstructions.astro";
 import { FireCMSCloudVersions } from "../migration/partials/pricing/FireCMSCloudVersions";
-import { PricingQuote } from "../migration/partials/pricing/PricingQuote";
+import PricingQuote from "../components/partials/pricing/PricingQuote.astro";
 ---
 
 <Layout
@@ -24,8 +24,8 @@ import { PricingQuote } from "../migration/partials/pricing/PricingQuote";
 
     <FireCMSCloudVersions client:load />
 
-    <CLIInstructions analyticsLabel={"pricing"} client:load />
-    <PricingQuote client:load />
-    <VersionsComparison client:load />
+    <CLIInstructions analyticsLabel={"pricing"} />
+    <PricingQuote />
+    <VersionsComparison />
 
 </Layout>

@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Panel } from "../migration/partials/general/Panel";
-import { ProInfo } from "../migration/partials/pro/ProInfo";
-import { ProDeveloperFeatures } from "../migration/partials/pro/ProDeveloperFeatures";
-import { HeroPro } from "../migration/partials/pro/HeroPro";
-import { PublicFacingApps } from "../migration/partials/pro/PublicFacingApps";
-import ProFeaturesPanels from "../migration/partials/pro/ProFeaturesPanels";
-import HeroProButtons from "../migration/partials/home/HeroProButtons";
+import ProInfo from "../components/partials/pro/ProInfo.astro";
+import ProDeveloperFeatures from "../components/partials/pro/ProDeveloperFeatures.astro";
+import HeroPro from "../components/partials/pro/HeroPro.astro";
+import PublicFacingApps from "../components/partials/pro/PublicFacingApps.astro";
+import ProFeaturesPanels from "../components/partials/pro/ProFeaturesPanels.astro";
+import HeroProButtons from "../components/partials/home/HeroProButtons.astro";
 import { UITeaser } from "../migration/partials/home/UITeaser";
 import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
 ---
@@ -17,12 +17,11 @@ import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
     <main class="flex-grow">
         <HeroPro
             height={"300px"}
-            client:load
         />
 
-        <ProInfo client:load />
+        <ProInfo />
 
-        <ProFeaturesPanels client:load />
+        <ProFeaturesPanels />
 
         <Panel color={"light_gray"} includeMargin={false}>
             <div
@@ -36,19 +35,19 @@ import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
             </div>
         </Panel>
 
-        <PublicFacingApps client:load />
+        <PublicFacingApps />
 
         <ImportDataIntro client:load />
 
         <UITeaser client:load />
 
-        <ProDeveloperFeatures client:load />
+        <ProDeveloperFeatures />
 
         <Panel color={"gray"} includePadding={true} innerClassName={"flex flex-col items-center"}>
             <h2 class="mb-3 uppercase font-mono text-center mx-auto">
                 LEARN MORE ABOUT FIRECMS PRO
             </h2>
-            <HeroProButtons client:load />
+            <HeroProButtons />
             <div class="text-sm text-center text-gray-300 mb-4">
                 Try out FireCMS PRO completely for <b>FREE</b>!
             </div>

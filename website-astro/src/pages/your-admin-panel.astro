@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EnterpriseHero from "../components/partials/enterprise/EnterpriseHero.astro";
+import EnterpriseFeatures from "../components/partials/enterprise/EnterpriseFeatures.astro";
+import EnterpriseArchitectures from "../components/partials/enterprise/EnterpriseArchitectures.astro";
+import Panel from "../components/Panel.astro";
+import { CTAOutlinedButtonWhiteMixin } from "../migration/partials/styles";
+---
+
+<Layout title="Your admin panel" description="Customize FireCMS to exactly met the needs of your business">
+    <div class="flex flex-col min-h-screen">
+        <main class="flex-grow">
+            <EnterpriseHero/>
+            <EnterpriseFeatures/>
+            <EnterpriseArchitectures/>
+            <Panel color={"primary"} centered={true}>
+                <h2 class="h3 text-center mb-4">
+                    Happy to help you build your next product
+                </h2>
+                <a href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
+                   rel="noopener noreferrer"
+                   target="_blank"
+                   class:list={[CTAOutlinedButtonWhiteMixin, "mb-8"]}>
+                    Get in touch
+                </a>
+            </Panel>
+        </main>
+    </div>
+</Layout>
