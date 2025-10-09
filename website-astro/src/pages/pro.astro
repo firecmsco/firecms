@@ -1,0 +1,69 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Panel } from "../migration/partials/general/Panel";
+import { ProInfo } from "../migration/partials/pro/ProInfo";
+import { ProDeveloperFeatures } from "../migration/partials/pro/ProDeveloperFeatures";
+import { HeroPro } from "../migration/partials/pro/HeroPro";
+import { PublicFacingApps } from "../migration/partials/pro/PublicFacingApps";
+import ProFeaturesPanels from "../migration/partials/pro/ProFeaturesPanels";
+import HeroProButtons from "../migration/partials/home/HeroProButtons";
+import { UITeaser } from "../migration/partials/home/UITeaser";
+import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
+---
+
+<Layout
+    title="PRO - FireCMS"
+    description="FireCMS PRO is the CMS aimed at companies and agencies that need a high degree of customization and support.">
+    <main class="flex-grow">
+        <HeroPro
+            height={"300px"}
+            client:load
+        />
+
+        <ProInfo client:load />
+
+        <ProFeaturesPanels client:load />
+
+        <Panel color={"light_gray"} includeMargin={false}>
+            <div
+                class="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight uppercase font-mono">
+                <p>
+                    FireCMS PRO was crafted through collaboration with various <strong>companies</strong>,
+                    out of the
+                    need to have a CMS that could be used in <strong>different scenarios</strong> and that
+                    could be easily customized to fit different needs.
+                </p>
+            </div>
+        </Panel>
+
+        <PublicFacingApps client:load />
+
+        <ImportDataIntro client:load />
+
+        <UITeaser client:load />
+
+        <ProDeveloperFeatures client:load />
+
+        <Panel color={"gray"} includePadding={true} innerClassName={"flex flex-col items-center"}>
+            <h2 class="mb-3 uppercase font-mono text-center mx-auto">
+                LEARN MORE ABOUT FIRECMS PRO
+            </h2>
+            <HeroProButtons client:load />
+            <div class="text-sm text-center text-gray-300 mb-4">
+                Try out FireCMS PRO completely for <b>FREE</b>!
+            </div>
+            <div class="flex flex-row items-center justify-center gap-4">
+                <div
+                    class="items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md">
+                    yarn create firecms-app --pro
+                </div>
+                or
+                <div
+                    class="items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md">
+                    npx create-firecms-app --pro
+                </div>
+            </div>
+        </Panel>
+
+    </main>
+</Layout>

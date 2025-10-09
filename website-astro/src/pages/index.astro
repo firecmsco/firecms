@@ -1,48 +1,51 @@
 ---
-import "../styles/global.css";
-import Home from "../migration/pages/index";
 import Layout from "../layouts/Layout.astro";
 import HeroHome from "../migration/partials/home/HeroHome";
 import FireCMSIntro from "../migration/partials/home/FireCMSIntro";
 import LaunchInSteps from "../migration/partials/home/LaunchInSteps";
-import ClientLogos from "../migration/partials/ClientLogos";
-import QuotesSection from "../migration/partials/Quotes";
+import { QuotesSection } from "../migration/partials/Quotes";
+import { ClientLogos } from "../migration/partials/ClientLogos";
 import { BuiltFor } from "../migration/partials/home/BuiltFor";
 import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorShowcase";
+import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
+import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
 import { TechSplash } from "../migration/partials/home/TechSplash";
+import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
 import FirebaseTeaser from "../migration/partials/home/OpenSourceDetails";
 import DatakiIntro from "../migration/partials/home/DatakiIntro";
-import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
-import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
-import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
 ---
-<Layout>
+
+<Layout
+    title="FireCMS - Firestore/Firebase headless CMS"
+    description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
+
     <main class="max-w-[100vw] bg-gray-950 relative">
 
-        <HeroHome/>
+        <HeroHome client:load/>
 
-        <FireCMSIntro/>
+        <FireCMSIntro client:load/>
 
-        <LaunchInSteps/>
+        <LaunchInSteps client:load/>
 
-        <QuotesSection/>
-        <ClientLogos/>
+        <QuotesSection client:load/>
+        <ClientLogos client:load/>
 
-        <!--<BuiltFor/>-->
+        <BuiltFor client:load/>
 
-        <!--<SchemaEditorShowcase/>-->
+        <SchemaEditorShowcase client:load/>
 
-        <!--<DataTalkIntro/>-->
+        <DataTalkIntro client:load/>
 
-        <!--<ImportDataIntro/>-->
+        <ImportDataIntro client:load/>
 
-        <!--<TechSplash/>-->
+        <TechSplash client:load/>
 
-        <!--<DeveloperFeatures/>-->
+        <DeveloperFeatures client:load/>
 
-        <!--<FirebaseTeaser/>-->
+        <FirebaseTeaser client:load/>
 
-        <!--<DatakiIntro/>-->
+        <DatakiIntro client:load/>
 
     </main>
+
 </Layout>

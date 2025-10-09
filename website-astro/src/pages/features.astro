@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Hero } from "../migration/partials/general/Hero";
+import HeroButtons from "../migration/partials/home/HeroButtons";
+import { Panel } from "../migration/partials/general/Panel";
+import ProTeaser from "../migration/partials/home/ProTeaser";
+import { UnbeatableUX } from "../migration/partials/features/UnbeatableUX";
+import { SchemaEditorIntro } from "../migration/partials/features/SchemaEditorIntro";
+import OpenAITeaser from "../migration/partials/features/OpenAITeaser";
+import History from "../migration/partials/features/History";
+import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
+import { FeaturesCarousel } from "../migration/partials/features/FeaturesCarousel";
+import { AirTableLike } from "../migration/partials/features/AirTableLike";
+---
+
+<Layout
+    title="Features - FireCMS"
+    description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need.">
+
+    <div class="flex flex-col min-h-screen">
+
+        <main class="flex-grow">
+            <Hero
+                title={<>
+                    <span class="block lg:inline">Unmatched Editing Experience </span>
+                </>}
+                client:load
+            />
+
+            <AirTableLike client:load />
+
+            <FeaturesCarousel client:load />
+
+            <UnbeatableUX client:load />
+
+            <SchemaEditorIntro client:load />
+
+            <OpenAITeaser client:load />
+
+            <DataTalkIntro client:load />
+
+            <History client:load />
+            <Panel color={"light"} includePadding={true}>
+                <HeroButtons analyticsLabel={"features"} client:load />
+            </Panel>
+
+            <ProTeaser client:load />
+        </main>
+    </div>
+
+</Layout>

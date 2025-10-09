@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Hero } from "../migration/partials/general/Hero";
+import { VersionsComparison } from "../migration/partials/pricing/VersionsComparison";
+import { CLIInstructions } from "../migration/partials/pricing/CLIInstructions";
+import { FireCMSCloudVersions } from "../migration/partials/pricing/FireCMSCloudVersions";
+import { PricingQuote } from "../migration/partials/pricing/PricingQuote";
+---
+
+<Layout
+    title="Pricing - FireCMS"
+    description="Self-hosted version and free Cloud tier, adaptive pricing for everyone">
+
+    <Hero
+        title={<>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="uppercase font-mono">
+                    Full no-code/low-code solution
+                </h2>
+            </div>
+        </>}
+        client:load
+    />
+
+    <FireCMSCloudVersions client:load />
+
+    <CLIInstructions analyticsLabel={"pricing"} client:load />
+    <PricingQuote client:load />
+    <VersionsComparison client:load />
+
+</Layout>

@@ -7,6 +7,7 @@ import path from "node:path";
 
 // https://astro.build/config
 export default defineConfig({
+    site: "https://firecms.co",
     integrations: [
         starlight({
             title: "FireCMS Docs",
@@ -43,7 +44,8 @@ export default defineConfig({
                 "@docusaurus/theme-common": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/theme-common.ts"),
                 "@docusaurus/BrowserOnly": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/BrowserOnly.tsx"),
                 "@docusaurus/ExecutionEnvironment": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/ExecutionEnvironment.ts"),
-                "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui")
+                "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui"),
+                "@theme/CodeBlock": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/CodeBlock.tsx")
             }
         },
         server: {
