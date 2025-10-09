@@ -1,9 +1,8 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 
 export function StartHacking() {
 
-    const docs = useBaseUrl("docs/");
+    const docs = "/docs";
 
     return (
         <>

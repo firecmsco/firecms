@@ -1,12 +1,11 @@
 import React from "react";
+import { ContainerSmallMixin } from "../styles";
+import { BrowserFrame } from "../BrowserFrame";
 
 // @ts-ignore
 const lightingIcon = "/img/icons/lighting.svg";
 // @ts-ignore
 const inlineEditingVideo = "/img/inline_table_editing.mp4";
-
-import { ContainerSmallMixin } from "../styles";
-import { BrowserFrame } from "../BrowserFrame";
 
 function RealTime() {
 

@@ -1,7 +1,6 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
-import { gridIcon, lightningIcon } from "../icons";
+import { CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import { gridIcon } from "../icons";
 
 import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
@@ -115,7 +114,7 @@ function FeaturesPanels() {
                 className="max-w-3xl mx-auto text-center py-8 md:py-12">
                 <a
                     className={CTAOutlinedButtonMixin + " mx-auto"}
-                    href={useBaseUrl("features/")}
+                    href={"/features"}
                 >
                     See all features
                     <CTACaret/>

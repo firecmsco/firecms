@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Layout from "../components/Layout.tsx";
-import Head from "@docusaurus/Head";
 
 function TermsAndConditions() {
     const divRef = useRef<HTMLSpanElement>(null);
@@ -14,9 +13,9 @@ function TermsAndConditions() {
         <Layout
             title={"Terms and conditions - FireCMS"}
             description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
-            <Head>
+            <head>
                 <title>Terms and conditions - FireCMS</title>
-            </Head>
+            </head>
             <main className="flex-grow container mx-auto px-4 py-8" ref={divRef}>
             </main>
 

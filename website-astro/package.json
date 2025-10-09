@@ -19,6 +19,7 @@
     "@firecms/firebase": "file:../packages/firebase_firecms",
     "@firecms/neat": "^0.4.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",

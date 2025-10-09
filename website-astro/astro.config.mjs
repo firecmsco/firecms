@@ -37,13 +37,7 @@ export default defineConfig({
         resolve: {
             alias: {
                 "@site/static/img": path.resolve(new URL(".", import.meta.url).pathname, "./public/img"),
-                "@docusaurus/Head": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/Head.tsx"),
                 "@theme/Layout": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/Layout.tsx"),
-                "@docusaurus/Link": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/Link.tsx"),
-                "@docusaurus/useBaseUrl": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/useBaseUrl.ts"),
-                "@docusaurus/theme-common": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/theme-common.ts"),
-                "@docusaurus/BrowserOnly": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/BrowserOnly.tsx"),
-                "@docusaurus/ExecutionEnvironment": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/ExecutionEnvironment.ts"),
                 "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui"),
                 "@theme/CodeBlock": path.resolve(new URL(".", import.meta.url).pathname, "./src/migration/stubs/CodeBlock.tsx")
             }

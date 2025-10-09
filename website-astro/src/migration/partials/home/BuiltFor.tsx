@@ -20,8 +20,8 @@ export function BuiltFor() {
                     </div>
                 </a>
 
-                <Link
-                    to="/startups"
+                <a
+                    href="/startups"
                     className="no-underline hover:no-underline hover:transform hover:scale-105 transition-transform duration-300">
                     <div className={"p-6 rounded-xl border " + defaultBorderMixin}>
                         <h3 className="text-lg font-semibold mb-1 text-primary">Startups</h3>
@@ -29,28 +29,29 @@ export function BuiltFor() {
                             CMS
                             running in minutes, not weeks. Iterate quickly and manage your data efficiently.</p>
                     </div>
-                </Link>
+                </a>
 
-                <Link
-                    to="/agencies"
+                <a
+                    href="/agencies"
                     className="no-underline hover:no-underline hover:transform hover:scale-105 transition-transform duration-300">
                     <div className={"p-6 rounded-xl border " + defaultBorderMixin}>
                         <h3 className="text-lg font-semibold mb-1 text-primary">Agencies</h3>
                         <p className="text-sm text-white leading-relaxed">Deliver custom back-office solutions for
                             clients faster and more reliably on top of the scalable Google Cloud infrastructure.</p>
                     </div>
-                </Link>
-               <Link
-                    to="/features"
+                </a>
+                <a
+                    href="/features"
                     className="no-underline hover:no-underline hover:transform hover:scale-105 transition-transform duration-300">
                     <div className={"p-6 rounded-xl border " + defaultBorderMixin}>
                         <h3 className="text-lg font-semibold mb-1 text-primary">Content Managers</h3>
                         <p className="text-sm text-white leading-relaxed">
-                            Best-in-class user experience for managing your data. FireCMS is designed to be intuitive and
+                            Best-in-class user experience for managing your data. FireCMS is designed to be intuitive
+                            and
                             easy to use.
                         </p>
                     </div>
-                </Link>
+                </a>
             </div>
         </div>
     </Panel>;

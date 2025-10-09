@@ -1,13 +1,13 @@
 import React from "react";
 import HeroButtons from "./HeroButtons";
-
-// @ts-ignore
-const editingDemoDarkVideo = "/img/landing_1080.webm";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
 import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
+
+// @ts-ignore
+const editingDemoDarkVideo = "/img/landing_1080.webm";
 
 function HeroHome({}) {
 

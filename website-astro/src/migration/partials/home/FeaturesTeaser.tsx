@@ -1,4 +1,8 @@
 import React from "react";
+import { TwoColumns } from "../general/TwoColumns";
+import { CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import clsx from "clsx";
+import { Panel } from "../general/Panel";
 
 // @ts-ignore
 const settingsIcon = "/img/icons/settings.svg";
@@ -8,18 +12,11 @@ const editingDemoVideo = "/img/editing_demo.mp4";
 const editingDemoDarkVideo = "/img/editing_demo_dark.mp4";
 // @ts-ignore
 const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
-import { useColorMode } from "@docusaurus/theme-common";
-
-import { lightningIcon } from "../icons";
-import { TwoColumns } from "../general/TwoColumns";
-import { CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
-import clsx from "clsx";
-import { Panel } from "../general/Panel";
 
 function FeaturesTeaser() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+
+    const isDarkTheme = true;
 
     return (<>
             <Panel color={"light"}>

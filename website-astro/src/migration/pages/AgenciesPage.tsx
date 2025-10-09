@@ -22,10 +22,10 @@ import {
     VerifiedUserIcon,
     WebIcon
 } from "@firecms/ui";
-
-const AgencyCollaborationImage = "/img/users_table.png";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import EasyToCustomize from "../partials/features/EasyToCustomize"; // Using existing image as placeholder
+
+const AgencyCollaborationImage = "/img/users_table.png";
 
 export default function AgenciesPage() {
     return (

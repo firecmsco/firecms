@@ -1,9 +1,9 @@
 import React from "react"
+import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
+import clsx from "clsx";
 
 // @ts-ignore
 const collectionEditorVideo = "/img/colection_editor.webm";
-import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
-import clsx from "clsx";
 
 export const SchemaEditorIntro = () => {
 

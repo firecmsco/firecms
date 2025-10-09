@@ -8,7 +8,6 @@ import DatakiIntro from "../partials/home/DatakiIntro";
 import FireCMSIntro from "../partials/home/FireCMSIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import { QuotesSection } from "../partials/Quotes";
-import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 // import { clarityScript } from "../partials/clarity_head";
 import { LaunchInSteps } from "../partials/home/LaunchInSteps";
