@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-    CTAButtonMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin,
-    defaultBorderMixin
-} from "../styles";
+import { CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
 import clsx from "clsx";
 import { Panel } from "../general/Panel";

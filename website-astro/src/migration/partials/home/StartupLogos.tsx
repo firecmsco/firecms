@@ -1,4 +1,6 @@
 import React from "react";
+import { Panel } from "../general/Panel";
+import Marquee from "react-fast-marquee";
 
 // @ts-ignore
 const MMLogo = "/img/logos/mm_logo.webp";
@@ -21,9 +23,6 @@ const OikosLogo = "/img/logos/oikos_logo.svg";
 const GearFocusLogo = "/img/logos/gearfocus_logo.svg";
 // @ts-ignore
 const ClarIoLogo = "/img/logos/clario.svg";
-
-import { Panel } from "../general/Panel";
-import Marquee from "react-fast-marquee";
 
 export function StartupLogos() {
 

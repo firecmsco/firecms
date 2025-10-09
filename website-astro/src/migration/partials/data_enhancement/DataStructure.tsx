@@ -1,8 +1,6 @@
 import React from "react";
 // Removed useColorMode and translation image imports since not used
 import { Panel } from "../general/Panel";
-import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function DataStructure() {
     return (

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 
-import { useColorMode } from "@docusaurus/theme-common";
 import { defaultBorderMixin } from "../styles";
 
 export function FeaturesCarousel() {
@@ -10,8 +9,8 @@ export function FeaturesCarousel() {
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+    
+    const isDarkTheme = true;
     const features = [
         {
             id: 0,

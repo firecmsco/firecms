@@ -1,17 +1,15 @@
 import React from "react";
-import { useColorMode } from "@docusaurus/theme-common";
 
-import { CTAButtonMixin, CTACaret, defaultBorderMixin } from "../styles";
+import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 
 import clsx from "clsx";
 
 function History() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+
+    const isDarkTheme = true;
 
     return (
         <Panel color={"light"}>

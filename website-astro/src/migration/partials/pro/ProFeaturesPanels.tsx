@@ -1,6 +1,5 @@
 import React from "react";
 import { ContainerPaddingMixin } from "../styles";
-import { gridIcon } from "../icons";
 import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
 import clsx from "clsx";

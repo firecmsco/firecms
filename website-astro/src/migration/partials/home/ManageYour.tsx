@@ -1,9 +1,7 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
-import { ContainerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
+import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Panel } from "../general/Panel";
-import clsx from "clsx";
 import { LazyTypeAnimation } from "../ui/LazyTypeAnimation";
 
 export function ManageYour() {
@@ -34,7 +32,7 @@ export function ManageYour() {
             <div className={"mt-6 mb-8"}>
                 <a
                     className={CTAOutlinedButtonWhiteMixin}
-                    href={useBaseUrl("features/")}
+                    href={"/features"}
                 >
                     See all features
                     <CTACaret/>

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Layout from "../components/Layout.tsx";
-import Head from "@docusaurus/Head";
 
 function PrivacyPolicy() {
     const divRef = useRef<HTMLSpanElement>(null);
@@ -14,9 +13,9 @@ function PrivacyPolicy() {
         <Layout
             title={"Privacy policy - FireCMS"}
             description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
-            <Head>
+            <head>
                 <title>Privacy policy - FireCMS</title>
-            </Head>
+            </head>
             <main className="flex-grow container mx-auto px-4 py-8"
                   ref={divRef}>
 

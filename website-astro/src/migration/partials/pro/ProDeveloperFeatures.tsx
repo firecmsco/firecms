@@ -1,7 +1,4 @@
 import React from "react";
-
-const pricePreview = "/img/price.png";
-
 // @ts-ignore
 // import SyntaxHighlighter from "react-syntax-highlighter";
 // @ts-ignore
@@ -15,6 +12,8 @@ import {
     CTAOutlinedButtonWhiteMixin,
     defaultBorderMixin
 } from "../styles";
+
+const pricePreview = "/img/price.png";
 
 // developer features:
 // - use all the internal hooks

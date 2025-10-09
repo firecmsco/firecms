@@ -1,9 +1,9 @@
 import React from "react"
+import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
+import clsx from "clsx";
 
 // @ts-ignore
 const dataImportVideo = "/img/import.webm";
-import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
-import clsx from "clsx";
 
 export const ImportDataIntro = () => {
 

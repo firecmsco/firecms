@@ -1,17 +1,15 @@
 import React from "react";
-import { useColorMode } from "@docusaurus/theme-common";
 
 import { CTAButtonMixin, CTACaret, defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 
 import clsx from "clsx";
 
 function OpenAITeaser() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+
+    const isDarkTheme = true;
 
     return (
         <Panel color={"light"}>
@@ -57,7 +55,7 @@ function OpenAITeaser() {
 
                         <div
                             className="mt-5 sm:mt-8">
-                            <a href={useBaseUrl("openai/")}
+                            <a href={"/openai"}
                                className={CTAButtonMixin}>
                                 About this integration
                                 <CTACaret/>

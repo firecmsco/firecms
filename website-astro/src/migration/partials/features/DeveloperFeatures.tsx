@@ -1,5 +1,4 @@
 import React from "react";
-import { useColorMode } from "@docusaurus/theme-common";
 
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
@@ -14,8 +13,6 @@ const pricePreview = "/img/price.png";
 const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
 
 export function DeveloperFeatures() {
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
 
     const schemaCode = `const productCollection = buildCollection({
   name: "Products",

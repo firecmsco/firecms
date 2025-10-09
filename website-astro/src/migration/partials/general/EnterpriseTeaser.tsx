@@ -1,6 +1,5 @@
 import React from "react";
 
-import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function EnterpriseTeaser() {
     return (
@@ -20,7 +19,7 @@ export function EnterpriseTeaser() {
                             Learn how to get the most out of your
                             project with the help of our consulting team.
                         </div>
-                        <a href={useBaseUrl("enterprise")}
+                        <a href={"/enterprise"}
                            className={"btn mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
                             About the enterprise plan
                         </a>

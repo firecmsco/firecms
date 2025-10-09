@@ -12,7 +12,6 @@ import {
     CircularProgressCenter,
     Drawer,
     FireCMS,
-    FireCMSRouter,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,

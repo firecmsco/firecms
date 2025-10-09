@@ -2,7 +2,6 @@ import React from "react";
 
 import { Panel } from "../general/Panel";
 import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
 
 function ProTeaser() {
@@ -26,7 +25,7 @@ function ProTeaser() {
                 </p>
                 <a
                     className={CTAOutlinedButtonWhiteMixin}
-                    href={useBaseUrl("pro/")}
+                    href={"/pro"}
                 >
                     More details
                     <CTACaret/>

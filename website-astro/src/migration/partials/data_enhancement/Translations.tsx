@@ -1,13 +1,11 @@
 import React from "react";
 import { TwoColumns } from "../general/TwoColumns";
-import { useColorMode } from "@docusaurus/theme-common";
 import clsx from "clsx";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 
 export function Translations() {
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+    const isDarkTheme = true;
     return (
         <Panel color={"light_gray"}>
             <TwoColumns

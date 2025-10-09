@@ -1,4 +1,3 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 import { ContainerInnerPaddingMixin, CTAButtonMixin, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import { LinedSpace } from "../layout/LinedSpace";
@@ -211,7 +210,7 @@ export function VersionsComparison() {
     function getFeatureComponent(value: string) {
         if (value === "Enterprise")
             return <a className="text-inherit"
-                      href={useBaseUrl("enterprise/")}>Enterprise</a>
+                      href={"/enterprise"}>Enterprise</a>
         if (value === "Yes")
             return <img src="/img/icons/check.svg" alt="Yes" className="m-auto w-6 h-6"/>
         if (value === "No")

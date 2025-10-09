@@ -1,13 +1,7 @@
 import React from "react";
 import { Panel } from "../general/Panel";
 import { defaultBorderMixin } from "../styles";
-import {
-    AppSettingsAltIcon,
-    CheckCircleIcon,
-    HandymanIcon,
-    StorefrontIcon,
-    WebIcon
-} from "@firecms/ui";
+import { AppSettingsAltIcon, CheckCircleIcon, HandymanIcon, StorefrontIcon, WebIcon } from "@firecms/ui";
 
 const showcaseData = [
     {

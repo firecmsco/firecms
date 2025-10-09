@@ -1,11 +1,10 @@
 import React from "react";
 import { Panel } from "../general/Panel";
+import { BrowserFrame } from "../BrowserFrame";
 // @ts-ignore
 const pixelGeniusLogin = "/img/pixel_genius_login.mp4";
 // @ts-ignore
 const overlay = "/img/overlay.webp";
-import { BrowserFrame } from "../BrowserFrame";
-
 
 export function PublicFacingApps() {
     return <Panel color={"light"} className={"overflow-hidden"}>

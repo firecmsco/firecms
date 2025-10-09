@@ -1,15 +1,13 @@
 import React from "react";
 
 // Removed LightingIcon and inline video imports from @site alias; using /img paths
-
-import { useColorMode } from "@docusaurus/theme-common";
 import { ContainerSmallMixin } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
 
 function RealTime() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+
+    const isDarkTheme = true;
 
     return (
         <section className={ContainerSmallMixin + " my-16"}>

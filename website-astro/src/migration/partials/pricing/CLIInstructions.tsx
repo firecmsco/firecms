@@ -1,7 +1,6 @@
 import React from "react";
 import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { Panel } from "../general/Panel";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import { AppLink } from "../../AppLink";
 
 export function CLIInstructions({analyticsLabel}:{analyticsLabel: string}): JSX.Element {

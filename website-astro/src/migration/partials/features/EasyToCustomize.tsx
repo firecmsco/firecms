@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
 import { defaultBorderMixin } from "../styles";
 import clsx from "clsx";
@@ -8,8 +7,8 @@ import { Panel } from "../general/Panel";
 
 function EasyToCustomize() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+    
+    const isDarkTheme = true;
 
     return (
         <>
