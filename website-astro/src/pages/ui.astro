@@ -1,52 +1,40 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Hero } from "../migration/partials/general/Hero";
-import { Panel } from "../migration/partials/general/Panel";
-import { CTACaret, CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../migration/partials/styles";
-import { DocsIconsView } from "../migration/partials/DocsIconsView";
-import { UIComponentsShowcase } from "../migration/partials/ui/UIComponentsShowcase";
-
-const ctaButtonClasses = `${CTAOutlinedButtonWhiteMixin} w-full lg:w-auto`;
-const ctaButtonDocsClasses = `${CTAOutlinedButtonMixin} w-full lg:w-auto`;
+import Hero from "../components/partials/general/Hero.astro";
+import Panel from "../components/Panel.astro";
+import CTACaret from "../components/CTACaret.astro";
+import DocsIconsView from "../components/DocsIconsView.astro";
+import UIComponentsShowcase from "../components/UIComponentsShowcase.astro";
 ---
 
-<Layout title="FireCMS UI, batteries included"
-        description="A complete UI kit to develop apps in no time">
-    <Hero
-        title={
-            <>
-                <span class="block lg:inline">FireCMS UI</span>
-            </>
-        }
-        subtitle={
-            <>
-                <p>
-                    A battle-tested set of components based on <b>tailwind</b> and <b>RadixUI</b> that can be
-                    used in any React project.
-                </p>
-            </>
-        }
-        subtitleColor={"dark_gray"}
-        cta={
-            <a
-                class={ctaButtonClasses}
-                href={"/docs/components"}
-                rel="noopener noreferrer"
-            >
-                Check the docs
-                <CTACaret/>
-            </a>
-        }
-        client:load
-    />
+<Layout
+    title="FireCMS UI, batteries included"
+    description="A complete UI kit to develop apps in no time">
+    <Hero subtitleColor="dark_gray">
+        <span slot="title" class="block lg:inline">FireCMS UI</span>
+        <div slot="subtitle">
+            <p>
+                A battle-tested set of components based on <b>tailwind</b> and <b>RadixUI</b> that can be
+                used in any React project.
+            </p>
+        </div>
+        <a slot="cta"
+            class="cta-button-outlined-white"
+            href="/docs/components"
+            rel="noopener noreferrer"
+        >
+            Check the docs
+            <CTACaret/>
+        </a>
+    </Hero>
 
-    <Panel color={"transparent"}>
-        <UIComponentsShowcase client:load />
+    <Panel color="transparent">
+        <UIComponentsShowcase />
     </Panel>
 
-    <Panel color={"light"} container={true} className={"dark:bg-gray-800 dark:text-white text-lg"}>
+    <Panel color="light" container={true} className="dark:bg-gray-800 dark:text-white text-lg">
 
-        <h2 class="text-3xl md:text-4xl font-bold my-2">
+        <h2 class="typography-h2 text-3xl md:text-4xl font-bold my-2">
             A solid foundation
         </h2>
         <p>
@@ -70,24 +58,25 @@ const ctaButtonDocsClasses = `${CTAOutlinedButtonMixin} w-full lg:w-auto`;
         </p>
         <div class="mt-5 sm:mt-8">
             <a
-                class={ctaButtonDocsClasses}
-                href={"/docs/components"}
+                class="cta-button-outlined"
+                href="/docs/components"
                 rel="noopener noreferrer"
             >
                 Check the docs
-                <CTACaret client:load />
+                <CTACaret />
             </a>
         </div>
     </Panel>
-    <Panel container={true} color={"lighter"} className={"dark:bg-gray-800 dark:text-white text-lg"}>
 
-        <h2 class="text-3xl md:text-4xl font-bold my-2">
+    <Panel container={true} color="lighter" className="dark:bg-gray-800 dark:text-white text-lg">
+
+        <h2 class="typography-h2 text-3xl md:text-4xl font-bold my-2">
             Do you need icons?
         </h2>
         <p>
             FireCMS UI bundles all <b>Material icons</b>, conveniently exported as individual components
         </p>
-        <DocsIconsView client:load />
+        <DocsIconsView />
     </Panel>
 
 </Layout>

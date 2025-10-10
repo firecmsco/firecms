@@ -1,10 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Hero } from "../migration/partials/general/Hero";
-import { Panel } from "../migration/partials/general/Panel";
-import HeroButtons from "../migration/partials/home/HeroButtons";
+import Hero from "../components/partials/general/Hero.astro";
+import Panel from "../components/Panel.astro";
+import HeroButtons from "../components/partials/home/HeroButtons.astro";
 import AgencyLogos from "../components/partials/home/AgencyLogos.astro";
-import ProTeaser from "../migration/partials/home/ProTeaser";
+import ProTeaser from "../components/partials/home/ProTeaser.astro";
 import { defaultBorderMixin } from "../migration/partials/styles";
 import {
     AppSettingsAltIcon,
@@ -33,19 +33,15 @@ const AgencyCollaborationImage = "/img/users_table.png";
     title="FireCMS for Agencies: Deliver Faster, Impress Clients"
     description="Build custom admin panels & CMS for your clients efficiently with FireCMS. Reduce development time, enhance client satisfaction, and scale your agency's offerings.">
     <main class="flex-grow">
-        <Hero
-            title={<>
-                    <span class="block lg:inline">Deliver Exceptional Client Projects, Faster</span>
-                </>}
-            subtitleColor={"gray"}
-            subtitle={<>
-                    <p class="text-xl md:text-2xl mb-4">
-                        Empower your agency to build robust, custom admin panels and CMS solutions
-                        <b> efficiently</b>. Delight clients, streamline workflows, and boost profitability.
-                    </p>
-                </>}
-            client:load
-        />
+        <Hero subtitleColor="gray">
+            <span slot="title" class="block lg:inline">Deliver Exceptional Client Projects, Faster</span>
+            <div slot="subtitle">
+                <p class="text-xl md:text-2xl mb-4">
+                    Empower your agency to build robust, custom admin panels and CMS solutions
+                    <b> efficiently</b>. Delight clients, streamline workflows, and boost profitability.
+                </p>
+            </div>
+        </Hero>
 
         <AgencyLogos />
 
@@ -53,7 +49,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
             <div class="p-4">
                 <div class="flex items-center mb-4">
                     <HandshakeIcon className="mr-3 text-blue-600"/>
-                    <h3 class="m-0 text-3xl font-bold">
+                    <h3 class="typography-h3 m-0 text-3xl font-bold">
                         Your Agency's Secret Weapon
                     </h3>
                 </div>
@@ -79,13 +75,13 @@ const AgencyCollaborationImage = "/img/users_table.png";
 
         <Panel color={"light"} includePadding={true}>
             <div class="max-w-5xl mx-auto text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4">Accelerate Delivery, Enhance Value</h2>
+                <h2 class="typography-h2 text-3xl font-bold mb-4">Accelerate Delivery, Enhance Value</h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-24">
                 <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
                     <SpeedIcon className="w-10 h-10 mb-3 text-green-600"/>
-                    <h3 class="text-xl font-bold mb-2">Rapid Development</h3>
+                    <h3 class="typography-h3 text-xl font-bold mb-2">Rapid Development</h3>
                     <p class="text-gray-700">
                         Launch client admin panels significantly faster using pre-built components and
                         schema inference. Reduce boilerplate code.
@@ -93,7 +89,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
                 </div>
                 <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
                     <DashboardCustomizeIcon className="w-10 h-10 mb-3 text-indigo-600"/>
-                    <h3 class="text-xl font-bold mb-2">Deep Customization</h3>
+                    <h3 class="typography-h3 text-xl font-bold mb-2">Deep Customization</h3>
                     <p class="text-gray-700">
                         Tailor every aspect to client requirements – custom fields, views, logic, branding.
                         Deliver truly bespoke solutions.
@@ -101,7 +97,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
                 </div>
                 <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
                     <GroupsIcon className="w-10 h-10 mb-3 text-purple-600"/>
-                    <h3 class="text-xl font-bold mb-2">Client Empowerment</h3>
+                    <h3 class="typography-h3 text-xl font-bold mb-2">Client Empowerment</h3>
                     <p class="text-gray-700">
                         Provide clients with intuitive, easy-to-use interfaces they can manage themselves,
                         reducing your support load.
@@ -189,7 +185,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
         <DeveloperFeatures />
 
         <Panel color={"light"} includePadding={true}>
-            <HeroButtons analyticsLabel={"agencies"} client:load />
+            <HeroButtons analyticsLabel="agencies" />
         </Panel>
 
         <ProTeaser client:load />

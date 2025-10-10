@@ -9,7 +9,7 @@ export function EnterpriseTeaser() {
                 className={"mx-auto px-4 sm:px-6 bg-primary text-white "}>
                 <div
                     className="relative flex flex-col items-center px-6 py-12">
-                    <h4 className="my-4 text-white uppercase font-mono">
+                    <h4 className="typography-h4 my-4 text-white uppercase font-mono">
                         Enterprise or start-up?
                     </h4>
 
@@ -20,7 +20,7 @@ export function EnterpriseTeaser() {
                             project with the help of our consulting team.
                         </div>
                         <a href={"/enterprise"}
-                           className={"btn mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
+                           className={"typography-button mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
                             About the enterprise plan
                         </a>
                     </div>

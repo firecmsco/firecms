@@ -24,7 +24,7 @@ export const SchemaEditorIntro = () => {
                         " flex flex-col py-20")}>
 
                     <div className={"relative max-w-6xl mx-auto mt-16"}>
-                        <h3 className="mb-4 uppercase">
+                        <h3 className="typography-h3 mb-4 uppercase">
                             Simple <b>Data Schema</b>, from file to CMS
                         </h3>
 

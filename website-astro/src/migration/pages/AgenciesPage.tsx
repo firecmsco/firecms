@@ -55,7 +55,7 @@ export default function AgenciesPage() {
                 <div className="p-4">
                     <div className="flex items-center mb-4">
                         <HandshakeIcon className="mr-3 text-blue-600"/>
-                        <h3 className="m-0 text-3xl font-bold">
+                        <h3 className="typography-h3 m-0 text-3xl font-bold">
                             Your Agency's Secret Weapon
                         </h3>
                     </div>
@@ -82,14 +82,14 @@ export default function AgenciesPage() {
             {/* Section 3: Benefits for Agencies */}
             <Panel color={"light"} includePadding={true}>
                 <div className="max-w-5xl mx-auto text-center mb-12">
-                    <h2 className="text-3xl font-bold mb-4">Accelerate Delivery, Enhance Value</h2>
+                    <h2 className="typography-h2 text-3xl font-bold mb-4">Accelerate Delivery, Enhance Value</h2>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-24">
                     {/* Card 1: Speed */}
                     <div className={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
                         <SpeedIcon className="w-10 h-10 mb-3 text-green-600"/>
-                        <h3 className="text-xl font-bold mb-2">Rapid Development</h3>
+                        <h3 className="typography-h3 text-xl font-bold mb-2">Rapid Development</h3>
                         <p className="text-gray-700">
                             Launch client admin panels significantly faster using pre-built components and
                             schema inference. Reduce boilerplate code.
@@ -98,7 +98,7 @@ export default function AgenciesPage() {
                     {/* Card 2: Customization */}
                     <div className={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
                         <DashboardCustomizeIcon className="w-10 h-10 mb-3 text-indigo-600"/>
-                        <h3 className="text-xl font-bold mb-2">Deep Customization</h3>
+                        <h3 className="typography-h3 text-xl font-bold mb-2">Deep Customization</h3>
                         <p className="text-gray-700">
                             Tailor every aspect to client requirements – custom fields, views, logic, branding.
                             Deliver truly bespoke solutions.

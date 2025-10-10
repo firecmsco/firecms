@@ -1,7 +1,7 @@
 ---
 import Panel from "../../Panel.astro";
 import LinedSpace from "../layout/LinedSpace.astro";
-import AnimatedGradientBackground from "../AnimatedGradientBackground.astro";
+import AnimatedGradientBackground from "../../AnimatedGradientBackground.astro";
 import HeroButtons from "./HeroButtons.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
 
@@ -19,7 +19,7 @@ const editingDemoDarkVideo = "/img/landing_1080.webm";
         <div class="flex flex-col w-full">
             <div>
                 <LinedSpace/>
-                <h1 class:list={["m-0 mt-20 md:mt-24 text-center block text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase text-white", "px-8 md:px-16 py-4 md:py-8"]}>
+                <h1 class:list={["typography-h1 m-0 mt-20 md:mt-24 text-center block text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase text-white", "px-8 md:px-16 py-4 md:py-8"]}>
                     <span class="block">Your CMS</span>
                     <span class="block md:inline">based on </span>
                     <span class="relative">
@@ -30,10 +30,10 @@ const editingDemoDarkVideo = "/img/landing_1080.webm";
                         </span>
                     </span>
                 </h1>
-                <h2 class:list={["font-mono text-center uppercase m-0 text-2xl px-8 md:px-16 pb-16 border-0 border-b text-white", defaultBorderMixin]}>
+                <h2 class:list={["typography-h2 font-mono text-center uppercase m-0 text-lg md:text-xl px-8 md:px-16 pb-16 border-0 border-b text-white", defaultBorderMixin]}>
                     Instantly create a flexible admin panel on top of your data
                 </h2>
-                <HeroButtons analyticsLabel={"home"}/>
+                <HeroButtons analyticsLabel="home" />
             </div>
             <div class="w-full px-8 md:px-24 lg:px-48 my-16 flex items-center justify-center">
                 <div class={"flex flex-col items-center content-center justify-center -m-px"}>

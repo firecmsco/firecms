@@ -24,7 +24,7 @@ function HeroButtons({ analyticsLabel }: { analyticsLabel: string }) {
         <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4 px-4"}>
             <a
                 aria-label="Join our Discord"
-                className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
+                className={"typography-button shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
                 href={"https://discord.gg/fxy7xsQm3m"}
                 rel="noopener noreferrer"
                 target="_blank"

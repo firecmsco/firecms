@@ -19,7 +19,7 @@ function RealTime() {
                     <img src="/img/icons/lighting.svg" alt="lighting" className="w-6 h-6"/>
                 </div>
 
-                <h3 className="m-0">
+                <h3 className="typography-h3 m-0">
                     Real-time updates
                 </h3>
 

@@ -1,8 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Hero } from "../migration/partials/general/Hero";
-import HeroButtons from "../migration/partials/home/HeroButtons";
-import { Panel } from "../migration/partials/general/Panel";
+import Hero from "../components/partials/general/Hero.astro";
+import HeroButtons from "../components/partials/home/HeroButtons.astro";
+import Panel from "../components/Panel.astro";
 import ProTeaser from "../components/partials/home/ProTeaser.astro";
 import UnbeatableUX from "../components/partials/features/UnbeatableUX.astro";
 import { SchemaEditorIntro } from "../migration/partials/features/SchemaEditorIntro";
@@ -20,12 +20,9 @@ import AirTableLike from "../components/partials/features/AirTableLike.astro";
     <div class="flex flex-col min-h-screen">
 
         <main class="flex-grow">
-            <Hero
-                title={<>
-                    <span class="block lg:inline">Unmatched Editing Experience </span>
-                </>}
-                client:load
-            />
+            <Hero>
+                <span slot="title" class="block lg:inline">Unmatched Editing Experience</span>
+            </Hero>
 
             <AirTableLike />
 
@@ -37,14 +34,16 @@ import AirTableLike from "../components/partials/features/AirTableLike.astro";
 
             <OpenAITeaser />
 
-            <DataTalkIntro client:load />
+            <Panel color="primary" includePadding={false}>
+                <DataTalkIntro client:load />
+            </Panel>
 
             <History />
             <Panel color={"light"} includePadding={true}>
                 <HeroButtons analyticsLabel={"features"} client:load />
             </Panel>
 
-            <ProTeaser />
+                <HeroButtons analyticsLabel="features" />
         </main>
     </div>
 

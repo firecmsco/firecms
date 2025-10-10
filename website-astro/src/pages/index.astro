@@ -3,16 +3,16 @@ import Layout from "../layouts/Layout.astro";
 import HeroHome from "../components/partials/home/HeroHome.astro";
 import FireCMSIntro from "../components/partials/home/FireCMSIntro.astro";
 import LaunchInSteps from "../components/partials/home/LaunchInSteps.astro";
-import { QuotesSection } from "../migration/partials/Quotes";
-import { ClientLogos } from "../migration/partials/ClientLogos";
+import QuotesSection from "../components/partials/home/QuotesSection.astro";
+import ClientLogos from "../components/partials/home/ClientLogos.astro";
+import Panel from "../components/Panel.astro";
 import BuiltFor from "../components/partials/home/BuiltFor.astro";
-import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorShowcase";
+import SchemaEditorShowcase from "../components/partials/home/SchemaEditorShowcase.astro";
 import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
-import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
+import ImportDataIntro from "../components/partials/home/ImportDataIntro.astro";
 import TechSplash from "../components/partials/home/TechSplash.astro";
 import DeveloperFeatures from "../components/partials/features/DeveloperFeatures.astro";
 import OpenSourceDetails from "../components/partials/home/OpenSourceDetails.astro";
-import DatakiIntro from "../migration/partials/home/DatakiIntro";
 ---
 
 <Layout
@@ -26,25 +26,27 @@ import DatakiIntro from "../migration/partials/home/DatakiIntro";
         <FireCMSIntro />
 
         <LaunchInSteps />
+        <QuotesSection />
 
-        <QuotesSection client:load/>
-        <ClientLogos client:load/>
+        <Panel color="light" container={false}>
+            <ClientLogos />
+        </Panel>
 
         <BuiltFor />
 
-        <SchemaEditorShowcase client:load/>
+        <SchemaEditorShowcase />
 
-        <DataTalkIntro client:load/>
+        <Panel color="primary" includePadding={false}>
+            <DataTalkIntro client:load/>
+        </Panel>
 
-        <ImportDataIntro client:load/>
+        <ImportDataIntro />
 
         <TechSplash />
 
         <DeveloperFeatures />
 
         <OpenSourceDetails />
-
-        <DatakiIntro client:load/>
 
     </main>
 

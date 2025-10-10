@@ -50,14 +50,14 @@ const showcaseData = [
 
 <Panel color={"dark_gray"}>
     <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
-        <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white">How Agencies Leverage
+        <h2 class="typography-h2 text-3xl md:text-4xl font-bold mb-12 text-center text-white">How Agencies Leverage
             FireCMS</h2>
         <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
             {showcaseData.map(item => (
                 <div class:list={[`p-6 rounded-lg border ${defaultBorderMixin} flex flex-col`]}>
                     <div class="flex items-center mb-4">
                         <item.Icon className={`w-6 h-6 mr-3 ${item.color}`}/>
-                        <h3 class="text-xl font-semibold text-white">{item.clientType}</h3>
+                        <h3 class="typography-h3 text-xl font-semibold text-white">{item.clientType}</h3>
                     </div>
                     <div class="flex-grow mb-4">
                         <p class="text-sm text-gray-100 mb-2"><b>Challenge:</b> {item.challenge}

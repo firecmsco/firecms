@@ -21,7 +21,7 @@ export const SchemaEditorShowcase = () => {
                         "flex flex-col py-20")}>
 
                     <div className={"relative max-w-6xl mx-auto pb-16 my-16"}>
-                        <h3 className="mb-4 uppercase">
+                        <h3 className="typography-h3 mb-4 uppercase">
                             Automatic schema detection
                         </h3>
 

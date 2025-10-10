@@ -19,7 +19,7 @@ function RealTime() {
                     <img src={lightingIcon} alt="lighting" width={12} height={12} />
                 </div>
 
-                <h3 className="m-0">
+                <h3 className="typography-h3 m-0">
                     Real-time updates
                 </h3>
 

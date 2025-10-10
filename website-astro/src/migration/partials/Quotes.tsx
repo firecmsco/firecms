@@ -1,7 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 import { defaultBorderMixin } from "./styles";
-import { Panel } from "./general/Panel";
 import { LinedSpace } from "./layout/LinedSpace";
 
 import { softwareApplicationSchema } from "../partials/markup";
@@ -58,7 +57,7 @@ const reviewSchema = quotes.map((quote, index) => ({
 export const QuotesSection: React.FC = () => {
     return (
         <Panel color={"lighter"} includePadding={false} container={false}>
-            {/*<Head>*/}
+        <>
             {/*    <script type="application/ld+json">*/}
             {/*        {JSON.stringify(reviewSchema)}*/}
             {/*    </script>*/}
@@ -107,7 +106,7 @@ export const QuotesSection: React.FC = () => {
             </div>
             <LinedSpace position={"top"} size={"large"}/>
         </Panel>
-    );
+        </>
 }
 
 export default QuotesSection;
