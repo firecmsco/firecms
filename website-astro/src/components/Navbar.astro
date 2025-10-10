@@ -1,0 +1,218 @@
+---
+// Navbar component for FireCMS website
+---
+
+<nav aria-label="Main" class="fixed top-0 left-0 right-0 z-50 h-20 flex justify-center items-center border-y border-x-0 border-solid border-slate-500 border-opacity-30 bg-gray-950">
+    <div class="w-[84rem] h-20 max-w-full flex justify-center items-center flex-col mx-auto border-x border-y-0 border-solid border-slate-500 border-opacity-30">
+        <div class="w-full h-full flex items-center justify-between px-4">
+            <!-- Left side items -->
+            <div class="flex items-center gap-4">
+                <!-- Mobile menu toggle button -->
+                <button
+                    aria-label="Toggle navigation bar"
+                    aria-expanded="false"
+                    class="lg:hidden p-2 hover:bg-slate-800 rounded transition-colors"
+                    type="button"
+                    id="mobile-menu-toggle">
+                    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path>
+                    </svg>
+                </button>
+
+                <!-- Logo -->
+                <a href="/" class="flex items-center">
+                    <img class="w-8 h-8 mr-4" src="/img/logo_small.png" alt="FireCMS Logo">
+                </a>
+
+                <!-- Desktop navigation items -->
+                <div class="hidden lg:flex items-center gap-2">
+                    <!-- Why FireCMS dropdown -->
+                    <div class="relative group">
+                        <a class="px-3 py-2 text-gray-300 hover:text-white transition-colors" role="button" href="/features">
+                            Why FireCMS
+                        </a>
+                    </div>
+
+                    <!-- Pricing -->
+                    <a class="px-3 py-2 text-gray-300 hover:text-white transition-colors" href="/pricing">
+                        Pricing
+                    </a>
+
+                    <!-- Docs - commented out as not yet available -->
+                    <!-- <a class="px-3 py-2 text-gray-300 hover:text-white transition-colors" href="/docs">
+                        Docs
+                    </a> -->
+
+                    <!-- PRO -->
+                    <div class="bg-gray-800 rounded-lg">
+                        <a class="gradient-text px-3 py-2 block font-semibold" href="/pro">
+                            PRO
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side items -->
+            <div class="flex items-center gap-2">
+                <!-- Version dropdown - commented out as docs not available -->
+                <!-- <div class="relative group hidden lg:block">
+                    <a class="px-3 py-2 text-gray-300 hover:text-white transition-colors" aria-haspopup="true" aria-expanded="false" role="button" href="/docs">
+                        3.0.0-beta
+                    </a>
+                    <ul class="absolute right-0 mt-2 w-40 bg-gray-900 border border-slate-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                        <li>
+                            <a class="block px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white" href="/docs">
+                                3.0.0-beta
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white" href="/docs/2.0.0">
+                                2.0.0
+                            </a>
+                        </li>
+                    </ul>
+                </div> -->
+
+                <!-- GitHub link -->
+                <a
+                    href="https://github.com/FireCMSco/firecms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="p-2 text-gray-300 hover:text-white transition-colors hidden lg:block"
+                    aria-label="GitHub repository">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+
+                <!-- Theme toggle -->
+                <div class="px-2 hidden lg:block">
+                    <div class="inline-flex">
+                        <button
+                            class="p-2 hover:bg-slate-800 rounded transition-colors"
+                            type="button"
+                            title="dark mode"
+                            aria-label="Switch between dark and light mode (currently dark mode)"
+                            id="theme-toggle">
+                            <!-- Light icon -->
+                            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="hidden" id="light-icon">
+                                <path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path>
+                            </svg>
+                            <!-- Dark icon -->
+                            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="block" id="dark-icon">
+                                <path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path>
+                            </svg>
+                            <!-- System icon -->
+                            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="hidden" id="system-icon">
+                                <path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Demo button -->
+                <a
+                    href="https://demo.firecms.co/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hidden md:block px-2 md:px-6 py-2 border border-slate-600 uppercase rounded text-white hover:text-slate-100 hover:bg-slate-800 text-center transition-colors text-sm"
+                    aria-label="Open the demo project">
+                    Demo
+                </a>
+
+                <!-- Sign in button -->
+                <a
+                    href="https://app.firecms.co/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-4 md:px-6 py-2 text-white uppercase bg-blue-600 hover:bg-blue-700 rounded transition-colors text-sm"
+                    aria-label="Go to FireCMS Cloud"
+                    id="sign-in-btn">
+                    Sign in
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile menu sidebar -->
+<div
+    id="mobile-menu"
+    class="fixed inset-0 z-40 transform -translate-x-full transition-transform duration-300 lg:hidden">
+    <div
+        id="mobile-menu-backdrop"
+        class="absolute inset-0 bg-black bg-opacity-50"
+        role="presentation">
+    </div>
+    <div class="relative w-64 h-full bg-gray-900 border-r border-slate-700 overflow-y-auto">
+        <div class="p-4 space-y-2">
+            <a class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors" href="/features">
+                Why FireCMS
+            </a>
+            <a class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors" href="/pricing">
+                Pricing
+            </a>
+            <!-- <a class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors" href="/docs">
+                Docs
+            </a> -->
+            <a class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors" href="/pro">
+                PRO
+            </a>
+            <hr class="border-slate-700 my-4">
+            <a
+                href="https://demo.firecms.co/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                Demo
+            </a>
+            <a
+                href="https://github.com/FireCMSco/firecms"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                GitHub
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+
+    function toggleMobileMenu() {
+        const isOpen = mobileMenu?.classList.contains('translate-x-0');
+        if (isOpen) {
+            mobileMenu?.classList.remove('translate-x-0');
+            mobileMenu?.classList.add('-translate-x-full');
+            mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+        } else {
+            mobileMenu?.classList.remove('-translate-x-full');
+            mobileMenu?.classList.add('translate-x-0');
+            mobileMenuToggle?.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    mobileMenuToggle?.addEventListener('click', toggleMobileMenu);
+    mobileMenuBackdrop?.addEventListener('click', toggleMobileMenu);
+
+    // Theme toggle (placeholder - you can implement full theme switching if needed)
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+        // Add theme switching logic here if needed
+        console.log('Theme toggle clicked');
+    });
+</script>
+
+<style>
+    .gradient-text {
+        background: linear-gradient(135deg, #0070f4, #359aff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+

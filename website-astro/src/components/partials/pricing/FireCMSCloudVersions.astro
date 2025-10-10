@@ -1,0 +1,361 @@
+---
+import LinedSpace from "../layout/LinedSpace.astro";
+import Tip from "./Tip.astro";
+import CTACaret from "../../CTACaret.astro";
+---
+
+<section class="flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-gray-100 z-10 border-solid border-surface-500/30">
+    <div class="relative max-w-full w-[84rem] mx-auto py-12 md:py-16 p-4 md:p-8 flex flex-col gap-8 border-r border-l border-t-0 border-b-0 border-solid border-surface-500/30">
+        <!-- Description -->
+        <div class="max-w-4xl mx-auto w-full">
+            <p class="max-w-6xl mx-auto mt-0 mb-0">
+                <strong>FireCMS Cloud</strong> offers a complete, end-to-end
+                solution for businesses that require the highest level of
+                support and security. With dedicated hosting, advanced features, and
+                expert support, you'll have everything you need to take your project
+                to the next level.
+            </p>
+        </div>
+
+        <!-- Currency Toggle -->
+        <div class="mt-2 mb-2 flex justify-center w-full">
+            <div class="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+                <div class="inline-flex items-center gap-1">
+                    <button
+                        id="currency-eur"
+                        data-currency="eur"
+                        aria-pressed="true"
+                        class="currency-toggle px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300"
+                    >EUR €
+                    </button>
+                    <span class="text-gray-400">/</span>
+                    <button
+                        id="currency-usd"
+                        data-currency="usd"
+                        aria-pressed="false"
+                        class="currency-toggle px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700"
+                    >USD $
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing cards -->
+        <div class="flex flex-col items-center md:grid md:grid-cols-3 gap-4 w-full mx-auto">
+            <!-- Community Tier -->
+            <div class="bg-white w-full max-w-xl lg:max-w-none h-full p-6 border rounded-lg flex flex-col border-solid border-surface-500/30">
+                <h3 class="typography-h3 text-3xl md:text-4xl font-bold text-gray-500 uppercase my-2">
+                    Community
+                </h3>
+
+                <p class="text-lg mb-4 font-bold h-16">
+                    MIT licensed first-class CMS/admin panel
+                </p>
+
+                <div class="my-4 text-gray-700 w-full">
+                    <span class="price-display text-3xl font-bold inline-block transition-all duration-200 ease-out" data-eur="0" data-usd="0">
+                        €0 user/month
+                    </span>
+                </div>
+
+                <div class="grow mt-4">
+                    <ul class="pl-4">
+                        <li class="list-disc ml-2">
+                            <Tip tip="Easily connect to your Firebase and MongoDB Atlas databases.">
+                                Seamless integration with Firebase and MongoDB Atlas
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Plus too many to count validation options">
+                                Access to a 40+ first class components library
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Customize your forms with React components">
+                                Custom form fields and custom views
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Enjoy a robust, lightweight editor">
+                                Notion-style Markdown editor
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Change your logo, theme, colors, fonts, home page, form fields, custom views...">
+                                Full CMS customization
+                            </Tip>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cloud Tier -->
+            <div class="bg-white w-full max-w-xl lg:max-w-none h-full p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary/75 ring-offset-2 ring-offset-transparent">
+                <h3 class="typography-h3 text-3xl md:text-4xl font-bold my-2">
+                    FireCMS Cloud
+                </h3>
+                <p class="text-lg mb-4 font-bold h-16">
+                    Perfect for projects that just need a working solution
+                </p>
+
+                <div class="mt-4 w-full">
+                    <span class="price-display text-3xl font-bold text-primary inline-block transition-all duration-200 ease-out" data-eur="9.99" data-usd="11.99">
+                        €9.99 user/month
+                    </span>
+                </div>
+
+                <div class="flex flex-row gap-4 my-6">
+                    <a
+                        class="h-fit text-sm typography-button typography-button-sm py-2 px-3 text-white bg-primary hover:bg-blue-700 hover:text-white uppercase border-solid rounded inline-flex items-center"
+                        href="https://app.firecms.co"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        One month free trial
+                        <CTACaret />
+                    </a>
+                </div>
+
+                <div class="grow">
+                    <ul class="pl-4">
+                        <li class="list-disc ml-2">
+                            <Tip tip="Always up to date, including your own custom code">
+                                Fully managed service
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">Everything in the community version</li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Customise your views, form fields, navigation routes, custom views and more, using module federation">
+                                Custom code
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Instantly search through your data with powerful query capabilities.">
+                                Local text search
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Create as many data collections as you need.">
+                                Unlimited collections
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Easily migrate or backup your data.">
+                                Data import and export
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Personalize the appearance of your CMS to match your brand.">
+                                Theme and logo customization
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Leverage the latest AI models to generate smart content.">
+                                AI content generation
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Utilize additional databases for extended functionality.">
+                                Secondary databases
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Ensure application security with AppCheck integration.">
+                                AppCheck
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Fine-tune user permissions and roles for your team.">
+                                User and role management
+                            </Tip>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pro Tier -->
+            <div class:list={["bg-white w-full max-w-xl lg:max-w-none h-full p-6 border rounded-lg flex flex-col border-solid border-surface-500/30 dark:border-surface-500/30", ]}>
+                <h3 class="typography-h3 text-3xl md:text-4xl font-bold text-gray-700 uppercase my-2">
+                    Pro
+                </h3>
+                <p class="text-lg mb-4 font-bold h-16">
+                    Perfect for startups, enterprise or agencies.
+                </p>
+                <div class="mt-4 text-gray-800 w-full">
+                    <span class="price-display text-3xl font-bold inline-block transition-all duration-200 ease-out" data-eur="149.99" data-usd="199.99">
+                        €149.99 project/month
+                    </span>
+                </div>
+                <div class="w-fit my-6 flex flex-row gap-2">
+                    <div
+                        class="rounded-lg w-fit h-fit font-regular m-auto gap-1 text-ellipsis px-4 py-1.5 text-sm font-semibold"
+                        style="background-color: rgb(255, 214, 110); color: rgb(59, 37, 1);"
+                    >
+                        TRY OUT FOR FREE
+                    </div>
+                    <a class="typography-button px-4 py-2 uppercase rounded border-solid text-base hover:text-gray-100 hover:bg-gray-100 hover:border-gray-800" href="/pro">
+                        More info
+                    </a>
+                </div>
+
+                <div class="grow">
+                    <ul class="pl-4">
+                        <li class="list-disc ml-2">
+                            <Tip tip="Easily design and infer data schemas for your project.">
+                                Self-hosted
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Easily design and infer data schemas for your project.">
+                                Schema editor and data inference
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Manage complex data migrations with advanced tools.">
+                                Advanced data import and export
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Edit content seamlessly with an intuitive Notion-like interface.">
+                                Notion-style editor
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Instantly search through your data with powerful query capabilities.">
+                                Local text search
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Fine-tune user permissions and roles for your team.">
+                                User and role management
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Implement tailored authentication methods and precise access controls.">
+                                Custom authentication and access control
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Extend functionality with our full range of plugins.">
+                                Access to all FireCMS plugins
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Fully customize your CMS components to suit your needs.">
+                                Full CMS components customization
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Get faster assistance with our priority support.">
+                                Priority support
+                            </Tip>
+                        </li>
+                        <li class="list-disc ml-2">
+                            <Tip tip="Influence the development of future features through roadmap prioritization.">
+                                Roadmap prioritization
+                            </Tip>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <LinedSpace position="top" size="medium" />
+</section>
+
+<script>
+    // Currency toggle functionality
+    const priceMap = {
+        cloud: { eur: 9.99, usd: 11.99 },
+        pro: { eur: 149.99, usd: 199.99 },
+        free: { eur: 0, usd: 0 }
+    };
+
+    let currentCurrency: 'eur' | 'usd' = 'eur';
+    let isFading = false;
+
+    function updatePrices(currency: 'eur' | 'usd') {
+        const symbol = currency === 'eur' ? '€' : '$';
+        const priceDisplays = document.querySelectorAll<HTMLElement>('.price-display');
+
+        priceDisplays.forEach(display => {
+            const eurPrice = parseFloat(display.dataset.eur || '0');
+            const usdPrice = parseFloat(display.dataset.usd || '0');
+            const price = currency === 'eur' ? eurPrice : usdPrice;
+            const formatted = price === 0 ? `${symbol}0` : `${symbol}${price.toFixed(2)}`;
+
+            // Check if this is for a specific tier based on context
+            let suffix = ' user/month';
+            if (display.closest('.flex')?.textContent?.includes('Pro')) {
+                suffix = ' project/month';
+            } else if (price === 0) {
+                suffix = ' user/month';
+            }
+
+            // Add fade effect
+            display.classList.add('opacity-0', '-translate-y-1', 'scale-95', 'blur-[1px]');
+
+            setTimeout(() => {
+                display.textContent = formatted + suffix;
+                display.classList.remove('opacity-0', '-translate-y-1', 'scale-95', 'blur-[1px]');
+            }, 140);
+        });
+    }
+
+    function setupCurrencyToggle() {
+        const eurButton = document.getElementById('currency-eur');
+        const usdButton = document.getElementById('currency-usd');
+
+        if (!eurButton || !usdButton) return;
+
+        const toggleButtons = [eurButton, usdButton];
+
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currency = button.dataset.currency as 'eur' | 'usd';
+
+                if (currency === currentCurrency || isFading) return;
+
+                isFading = true;
+                currentCurrency = currency;
+
+                // Update button states
+                toggleButtons.forEach(btn => {
+                    const isActive = btn.dataset.currency === currency;
+                    btn.setAttribute('aria-pressed', isActive.toString());
+                    if (isActive) {
+                        btn.classList.remove('text-gray-500', 'hover:text-gray-700');
+                        btn.classList.add('text-gray-800', 'bg-gray-200', 'border', 'border-gray-300');
+                    } else {
+                        btn.classList.remove('text-gray-800', 'bg-gray-200', 'border', 'border-gray-300');
+                        btn.classList.add('text-gray-500', 'hover:text-gray-700');
+                    }
+                });
+
+                // Update prices with animation
+                updatePrices(currency);
+
+                // Track analytics
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'currency_change', {
+                        event_category: 'pricing',
+                        event_label: currency
+                    });
+                }
+
+                setTimeout(() => {
+                    isFading = false;
+                }, 200);
+            });
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('astro:page-load', setupCurrencyToggle);
+</script>
+
+<style>
+    .price-display {
+        will-change: transform, opacity;
+    }
+</style>

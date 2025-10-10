@@ -1,5 +1,6 @@
 ---
 import { organizationSchema, softwareApplicationSchema } from "../migration/partials/markup";
+import Navbar from "../components/Navbar.astro";
 export interface Props {
     title?: string;
     description?: string;
@@ -43,7 +44,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 </head>
 
 <body class="font-sans bg-gray-950 dark:bg-gray-950 text-gray-300 antialiased">
-<slot/>
+<Navbar />
+<div class="pt-20">
+    <slot/>
+</div>
 </body>
 
 <style>
