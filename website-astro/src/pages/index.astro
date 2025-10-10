@@ -1,17 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HeroHome from "../migration/partials/home/HeroHome";
-import FireCMSIntro from "../migration/partials/home/FireCMSIntro";
-import LaunchInSteps from "../migration/partials/home/LaunchInSteps";
+import HeroHome from "../components/partials/home/HeroHome.astro";
+import FireCMSIntro from "../components/partials/home/FireCMSIntro.astro";
+import LaunchInSteps from "../components/partials/home/LaunchInSteps.astro";
 import { QuotesSection } from "../migration/partials/Quotes";
 import { ClientLogos } from "../migration/partials/ClientLogos";
-import { BuiltFor } from "../migration/partials/home/BuiltFor";
+import BuiltFor from "../components/partials/home/BuiltFor.astro";
 import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorShowcase";
 import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
 import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
-import { TechSplash } from "../migration/partials/home/TechSplash";
+import TechSplash from "../components/partials/home/TechSplash.astro";
 import DeveloperFeatures from "../components/partials/features/DeveloperFeatures.astro";
-import FirebaseTeaser from "../migration/partials/home/OpenSourceDetails";
+import OpenSourceDetails from "../components/partials/home/OpenSourceDetails.astro";
 import DatakiIntro from "../migration/partials/home/DatakiIntro";
 ---
 
@@ -21,16 +21,16 @@ import DatakiIntro from "../migration/partials/home/DatakiIntro";
 
     <main class="max-w-[100vw] bg-gray-950 relative">
 
-        <HeroHome client:load/>
+        <HeroHome />
 
-        <FireCMSIntro client:load/>
+        <FireCMSIntro />
 
-        <LaunchInSteps client:load/>
+        <LaunchInSteps />
 
         <QuotesSection client:load/>
         <ClientLogos client:load/>
 
-        <BuiltFor client:load/>
+        <BuiltFor />
 
         <SchemaEditorShowcase client:load/>
 
@@ -38,11 +38,11 @@ import DatakiIntro from "../migration/partials/home/DatakiIntro";
 
         <ImportDataIntro client:load/>
 
-        <TechSplash client:load/>
+        <TechSplash />
 
         <DeveloperFeatures />
 
-        <FirebaseTeaser client:load/>
+        <OpenSourceDetails />
 
         <DatakiIntro client:load/>
 

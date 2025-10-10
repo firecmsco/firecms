@@ -1,0 +1,30 @@
+---
+import { ContainerMixin } from "../../../migration/partials/styles";
+
+interface Props {
+    reverseSmall?: boolean;
+    animation?: boolean;
+}
+
+const {
+    reverseSmall,
+    animation = true
+} = Astro.props;
+
+const flexDirection = reverseSmall ? "flex-col-reverse" : "flex-col";
+---
+
+<div class:list={[ContainerMixin, "relative mx-auto my-8"]}>
+    <div class:list={["max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-8", flexDirection]}>
+        <div class="max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-8 lg:my-0 lg:col-span-4">
+            <slot name="left" />
+        </div>
+
+        <div class="max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-8 lg:my-0 lg:col-span-4">
+            <slot name="center" />
+        </div>
+        <div class="max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-8 lg:my-0 lg:col-span-4">
+            <slot name="right" />
+        </div>
+    </div>
+</div>

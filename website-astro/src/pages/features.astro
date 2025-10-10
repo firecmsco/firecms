@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Hero } from "../migration/partials/general/Hero";
 import HeroButtons from "../migration/partials/home/HeroButtons";
 import { Panel } from "../migration/partials/general/Panel";
-import ProTeaser from "../migration/partials/home/ProTeaser";
+import ProTeaser from "../components/partials/home/ProTeaser.astro";
 import UnbeatableUX from "../components/partials/features/UnbeatableUX.astro";
 import { SchemaEditorIntro } from "../migration/partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../components/partials/features/OpenAITeaser.astro";
@@ -44,7 +44,7 @@ import AirTableLike from "../components/partials/features/AirTableLike.astro";
                 <HeroButtons analyticsLabel={"features"} client:load />
             </Panel>
 
-            <ProTeaser client:load />
+            <ProTeaser />
         </main>
     </div>
 

@@ -6,8 +6,6 @@ import {
     CTACaret,
     defaultBorderMixin
 } from "../../../migration/partials/styles";
-
-const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaurus stub
 ---
 
 <Panel color={"white"} className={"border-none"}>
@@ -52,17 +50,40 @@ const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaur
                 data-aos="fade-up"
                 class="flex content-center justify-center">
                 <video
-                    key={isDarkTheme ? "dark" : "light"}
                     class:list={["pointer-events-none rounded-2xl border border-solid", defaultBorderMixin]}
                     width="100%"
                     loop
                     autoplay
                     muted>
                     <source
-                        src={isDarkTheme ? "/img/data/books_dark.mp4" : "/img/data/books_light.mp4"}
+                        id="data-enhancement-hero-video-source"
+                        src="/img/data/books_light.mp4"
                         type="video/mp4"/>
                 </video>
             </div>
         </div>
     </TwoColumns>
 </Panel>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const videoSource = document.getElementById('data-enhancement-hero-video-source');
+        const video = videoSource.parentElement;
+        const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const newSrc = isDark ? '/img/data/books_dark.mp4' : '/img/data/books_light.mp4';
+            if (videoSource.src !== newSrc) {
+                videoSource.src = newSrc;
+                video.load();
+            }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        // Initial check
+        const isDark = document.documentElement.classList.contains('dark');
+        const newSrc = isDark ? '/img/data/books_dark.mp4' : '/img/data/books_light.mp4';
+        if (videoSource.src !== newSrc) {
+            videoSource.src = newSrc;
+            video.load();
+        }
+    });
+</script>

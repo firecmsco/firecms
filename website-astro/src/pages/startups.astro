@@ -5,7 +5,7 @@ import { Panel } from "../migration/partials/general/Panel";
 import { TwoColumns } from "../migration/partials/general/TwoColumns";
 import { defaultBorderMixin } from "../migration/partials/styles";
 import HeroButtons from "../migration/partials/home/HeroButtons";
-import { StartupLogos } from "../migration/partials/home/StartupLogos";
+import StartupLogos from "../components/partials/home/StartupLogos.astro";
 import { QuotesSection } from "../migration/partials/Quotes";
 import ProTeaser from "../migration/partials/home/ProTeaser";
 import { ManageYour } from "../migration/partials/home/ManageYour";
@@ -63,7 +63,7 @@ const WidgetsImage = "/img/widgets.png";
             client:load
         />
 
-        <StartupLogos client:load />
+        <StartupLogos />
 
         <ManageYour client:load />
 
