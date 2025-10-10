@@ -1,8 +1,10 @@
 import React, { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState } from "react"
-import { Editor, mergeAttributes, Node, Range, ReactRenderer, useCurrentEditor } from "@tiptap/react";
+import { Editor, mergeAttributes, Node, Range } from "@tiptap/core";
+import { ReactRenderer, useCurrentEditor } from "@tiptap/react";
 import { DOMOutputSpec, Node as ProseMirrorNode } from "@tiptap/pm/model"
 import { PluginKey } from "@tiptap/pm/state"
 import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
+import { computePosition, offset, flip, shift, autoUpdate } from "@floating-ui/dom";
 
 import {
     AutoFixHighIcon,
@@ -19,7 +21,6 @@ import {
     LooksTwoIcon,
     TextFieldsIcon
 } from "@firecms/ui"
-import tippy from "tippy.js"
 import { onFileRead, UploadFn } from "./Image";
 import { EditorAIController } from "../types";
 
@@ -153,9 +154,7 @@ export const SlashCommand = Node.create<CommandOptions>({
                         }) => {
                     const $from = state.doc.resolve(range.from)
                     const type = state.schema.nodes[this.name]
-                    const allow = !!$from.parent.type.contentMatch.matchType(type)
-
-                    return allow
+                    return !!$from.parent.type.contentMatch.matchType(type)
                 }
             }
         }
@@ -321,18 +320,18 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                     .filter(item => {
                         const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
                         if (inTitle) return inTitle;
-                        const inSearchTerms = item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
-                        return inSearchTerms;
+                        return item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
                     })
             },
 
             render: () => {
                 let component: any;
-                let popup: any;
+                let containerEl: HTMLDivElement | null = null;
+                let cleanupAutoUpdate: (() => void) | null = null;
+                let reference: { getBoundingClientRect: () => DOMRect } | null = null;
 
                 return {
                     onStart: (props) => {
-
                         component = new ReactRenderer(CommandList, {
                             props: {
                                 ...props,
@@ -345,33 +344,63 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                         if (!props.clientRect) {
                             return
                         }
-                        // @ts-ignore
-                        popup = tippy("body", {
-                            getReferenceClientRect: props.clientRect,
-                            appendTo: ref?.current,
-                            content: component.element,
-                            showOnCreate: true,
-                            interactive: true,
-                            trigger: "manual",
-                            placement: "bottom-start"
+
+                        // Create floating container
+                        containerEl = document.createElement("div");
+                        containerEl.style.position = "fixed";
+                        containerEl.style.left = "0px";
+                        containerEl.style.top = "0px";
+                        containerEl.style.zIndex = "9999";
+                        (ref?.current || document.body).appendChild(containerEl);
+                        containerEl.appendChild(component.element);
+
+                        // Virtual reference element using provided clientRect
+                        reference = {
+                            getBoundingClientRect: props.clientRect as () => DOMRect
+                        }
+
+                        // Auto-update position
+                        cleanupAutoUpdate = autoUpdate(reference as any, containerEl, () => {
+                            if (!reference) return;
+                            computePosition(reference as any, containerEl!, {
+                                placement: "bottom-start",
+                                middleware: [offset(4), flip(), shift()],
+                                strategy: "fixed"
+                            }).then(({ x, y }) => {
+                                Object.assign(containerEl!.style, {
+                                    left: `${x}px`,
+                                    top: `${y}px`,
+                                    visibility: "visible",
+                                });
+                            });
                         });
                     },
 
                     onUpdate(props) {
                         component.updateProps(props)
 
-                        if (!props.clientRect) {
+                        if (!props.clientRect || !containerEl || !reference) {
                             return
                         }
 
-                        popup[0].setProps({
-                            getReferenceClientRect: props.clientRect
-                        })
+                        // Update reference rect and reposition
+                        reference.getBoundingClientRect = props.clientRect as () => DOMRect;
+
+                        computePosition(reference as any, containerEl!, {
+                            placement: "bottom-start",
+                            middleware: [offset(4), flip(), shift()],
+                            strategy: "fixed"
+                        }).then(({ x, y }) => {
+                            Object.assign(containerEl!.style, {
+                                left: `${x}px`,
+                                top: `${y}px`,
+                                visibility: "visible",
+                            });
+                        });
                     },
 
                     onKeyDown(props) {
                         if (props.event.key === "Escape") {
-                            popup[0].hide()
                             props.event.preventDefault();
                             return true
                         }
@@ -380,8 +409,12 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                     },
 
                     onExit() {
-                        if (popup && popup[0])
-                            popup[0].destroy()
+                        if (cleanupAutoUpdate) cleanupAutoUpdate();
+                        if (containerEl && containerEl.parentNode) {
+                            containerEl.parentNode.removeChild(containerEl);
+                        }
+                        containerEl = null;
+                        reference = null;
                         component?.destroy()
                     }
                 }
@@ -731,4 +764,3 @@ const suggestionItems: SuggestionItem[] = [
         }
     }
 ];
-

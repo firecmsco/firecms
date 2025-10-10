@@ -84,7 +84,7 @@ code blocks
 
 ## Learn more
 
-This editor is in development and your **feedback** is very **valuable**. The content of this editor is only stored locally in this demo.
+The content of this editor is only stored locally in this demo.
 
 - [x] Star us on [GitHub](https://github.com/firecmsco/firecms)
 

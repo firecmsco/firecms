@@ -10,7 +10,6 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "moduleResolution": "node",
     "jsx": "react-jsx",
-
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
