@@ -2,8 +2,6 @@
 import Panel from "../../Panel.astro";
 import TwoColumns from "../general/TwoColumns.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-
-const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaurus stub
 ---
 
 <Panel color={"light_gray"}>
@@ -29,11 +27,26 @@ const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaur
                 data-aos="fade-up"
                 class="flex content-center justify-center">
                 <img loading="lazy"
+                     id="translations-image"
                      class:list={["rounded-2xl border", defaultBorderMixin]}
-                     src={isDarkTheme ? "/img/data/translations_dark.png" : "/img/data/translations_light.png"}
+                     src="/img/data/translations_light.png"
                      width="500"
                      alt="Manage your translations with FireCMS"/>
             </div>
         </div>
     </TwoColumns>
 </Panel>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const image = document.getElementById('translations-image');
+        const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.classList.contains('dark');
+            image.src = isDark ? '/img/data/translations_dark.png' : '/img/data/translations_light.png';
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        // Initial check
+        const isDark = document.documentElement.classList.contains('dark');
+        image.src = isDark ? '/img/data/translations_dark.png' : '/img/data/translations_light.png';
+    });
+</script>

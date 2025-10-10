@@ -7,7 +7,7 @@ import HeroPro from "../components/partials/pro/HeroPro.astro";
 import PublicFacingApps from "../components/partials/pro/PublicFacingApps.astro";
 import ProFeaturesPanels from "../components/partials/pro/ProFeaturesPanels.astro";
 import HeroProButtons from "../components/partials/home/HeroProButtons.astro";
-import { UITeaser } from "../migration/partials/home/UITeaser";
+import UITeaser from "../components/partials/home/UITeaser.astro";
 import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
 ---
 
@@ -39,7 +39,7 @@ import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
 
         <ImportDataIntro client:load />
 
-        <UITeaser client:load />
+        <UITeaser />
 
         <ProDeveloperFeatures />
 

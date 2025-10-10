@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Hero } from "../migration/partials/general/Hero";
 import { Panel } from "../migration/partials/general/Panel";
 import HeroButtons from "../migration/partials/home/HeroButtons";
-import { AgencyLogos } from "../migration/partials/home/AgencyLogos";
+import AgencyLogos from "../components/partials/home/AgencyLogos.astro";
 import ProTeaser from "../migration/partials/home/ProTeaser";
 import { defaultBorderMixin } from "../migration/partials/styles";
 import {
@@ -47,7 +47,7 @@ const AgencyCollaborationImage = "/img/users_table.png";
             client:load
         />
 
-        <AgencyLogos client:load />
+        <AgencyLogos />
 
         <Panel color={"lighter"}>
             <div class="p-4">

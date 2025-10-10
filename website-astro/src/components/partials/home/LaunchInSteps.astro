@@ -1,0 +1,106 @@
+---
+import Panel from "../../Panel.astro";
+import { defaultBorderMixin } from "../../../migration/partials/styles";
+import StartHacking from "./StartHacking.astro";
+---
+
+<Panel color={"dark_gray"}>
+    <div class="w-full px-6 lg:px-12 py-16">
+        <div class="flex justify-center w-full mb-8">
+            <div role="tablist" class="tab-container inline-flex space-x-1 rounded bg-black p-1 border"
+                 class:list={[defaultBorderMixin]}>
+                <button role="tab"
+                        data-tab="cloud"
+                        class="tab-button rounded px-3 py-1 text-sm font-medium outline-none text-white bg-gray-700 shadow-sm">
+                    Cloud
+                </button>
+                <button role="tab"
+                        data-tab="self_hosted"
+                        class="tab-button rounded px-3 py-1 text-sm font-medium outline-none text-gray-text-dark hover:bg-gray-700/30">
+                    Self-hosted
+                </button>
+            </div>
+        </div>
+
+        <div id="cloud-content"
+             class="tab-content w-full min-h-[450px] flex-col items-center justify-center">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <h2 class="text-4xl font-bold mb-4">Launch Your Admin Panel in 3 Simple Steps</h2>
+            </div>
+            <div
+                role="list"
+                aria-label="Steps"
+                class="flex flex-nowrap lg:flex-nowrap overflow-x-auto lg:overflow-visible gap-6 md:gap-8 lg:gap-10 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory w-full items-stretch no-scrollbar"
+            >
+                <div
+                    role="listitem"
+                    class:list={["snap-start min-w-[260px] sm:min-w-[280px] md:min-w-0 md:flex-1 flex-shrink-0 md:flex-shrink text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 rounded-2xl p-8 mb-4 md:mb-0 border", defaultBorderMixin]}>
+                    <div class="mb-4 text-6xl font-bold text-primary">1</div>
+                    <h3 class="text-xl font-semibold mb-2">Connect Your Project</h3>
+                    <p class="text-sm text-gray-text-dark leading-relaxed">
+                        We will setup a <b>Service Account</b> for you and connect it to your project.
+                    </p>
+                </div>
+                <div
+                    role="listitem"
+                    class:list={["snap-start min-w-[260px] sm:min-w-[280px] md:min-w-0 md:flex-1 flex-shrink-0 md:flex-shrink text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 rounded-2xl p-8 mb-4 md:mb-0 border", defaultBorderMixin]}>
+                    <div class="mb-4 text-6xl font-bold text-primary">2</div>
+                    <h3 class="text-xl font-semibold mb-2">Define Your Data Models</h3>
+                    <p class="text-sm text-gray-text-dark leading-relaxed">
+                        Let FireCMS <b>infer your data structure</b> automatically or define it manually.
+                    </p>
+                </div>
+                <div
+                    role="listitem"
+                    class:list={["snap-start min-w-[260px] sm:min-w-[280px] md:min-w-0 md:flex-1 flex-shrink-0 md:flex-shrink text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 rounded-2xl p-8 mb-4 md:mb-0 border", defaultBorderMixin]}>
+                    <div class="mb-4 text-6xl font-bold text-primary">3</div>
+                    <h3 class="text-xl font-semibold mb-2">Go Live Instantly</h3>
+                    <p class="text-sm text-gray-text-dark leading-relaxed">
+                        Access your fully functional, <b>production-ready</b> admin panel or CMS.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="self_hosted-content"
+             class="tab-content w-full min-h-[450px] flex-col items-center justify-center gap-4 md:flex-row hidden">
+            <StartHacking/>
+        </div>
+    </div>
+</Panel>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const tabContainer = document.querySelector('.tab-container');
+        if (tabContainer) {
+            const tabButtons = tabContainer.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.getAttribute('data-tab');
+
+                    tabButtons.forEach(btn => {
+                        if (btn.getAttribute('data-tab') === tab) {
+                            btn.classList.add('text-white', 'bg-gray-700', 'shadow-sm');
+                            btn.classList.remove('text-gray-text-dark', 'hover:bg-gray-700/30');
+                        } else {
+                            btn.classList.remove('text-white', 'bg-gray-700', 'shadow-sm');
+                            btn.classList.add('text-gray-text-dark', 'hover:bg-gray-700/30');
+                        }
+                    });
+
+                    tabContents.forEach(content => {
+                        if (content.id === `${tab}-content`) {
+                            content.classList.remove('hidden');
+                            content.classList.add('flex');
+                        } else {
+                            content.classList.add('hidden');
+                            content.classList.remove('flex');
+                        }
+                    });
+                });
+            });
+        }
+    });
+</script>

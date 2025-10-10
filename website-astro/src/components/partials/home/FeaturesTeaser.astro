@@ -1,0 +1,102 @@
+---
+import Panel from "../../Panel.astro";
+import TwoColumns from "../general/TwoColumns.astro";
+import { CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../../../migration/partials/styles";
+
+const isDarkTheme = true;
+const editingDemoDarkVideo = "/img/editing_demo_dark.mp4";
+const editingDemoVideo = "/img/editing_demo.mp4";
+const customFieldDarkVideo = "/img/custom_fields_dark.mp4";
+---
+
+<Panel color={"light"}>
+    <TwoColumns
+        includeBorder={false}
+        left={
+            <div class={""}>
+                <div class={"text-xl"}>
+                    <div class={"flex items-center mb-3"}>
+                        <h3 class="m-0 uppercase">
+                            Unmatched Editing Experience
+                        </h3>
+                    </div>
+                    <p class="text-xl md:text-2xl">
+                        FireCMS offers both flexibility and an excellent
+                        user experience. Edit your collections and
+                        entities
+                        using a user-friendly <b>spreadsheet view and
+                        effective
+                        forms</b>.
+                    </p>
+                </div>
+                <a
+                    class:list={[CTAOutlinedButtonMixin, "w-fit"]}
+                    href="https://demo.firecms.co"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    Try the demo
+                    <Fragment set:html={CTACaret} />
+                </a>
+            </div>
+        }
+        right={
+            <div>
+                <video
+                    key={`demo_video_${isDarkTheme}`}
+                    style={{
+                        pointerEvents: "none",
+                        maxWidth: 540,
+                        aspectRatio: "508 / 589"
+                    }}
+                    class:list={["rounded-2xl border", defaultBorderMixin]}
+                    width="100%"
+                    loop
+                    autoplay
+                    muted>
+                    <source
+                        src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
+                        type="video/mp4"/>
+                </video>
+            </div>
+        }
+    />
+</Panel>
+<Panel color={"light"}>
+    <TwoColumns
+        reverseSmall={true}
+        left={
+            <div class={"flex justify-center"}>
+                <video
+                    class:list={["rounded-2xl border", defaultBorderMixin]}
+                    style={{
+                        pointerEvents: "none",
+                        maxWidth: 540,
+                        aspectRatio: "538 / 513"
+                    }}
+                    width="100%"
+                    loop
+                    autoplay
+                    muted>
+                    <source
+                        src={customFieldDarkVideo}
+                        type="video/mp4"/>
+                </video>
+            </div>
+        }
+        right={
+            <div>
+                <div class={"flex items-center mb-3"}>
+                    <h3 class="m-0 uppercase">
+                        Flexible Customization
+                    </h3>
+                </div>
+                <p class="text-xl md:text-2xl">
+                    FireCMS offers an easy way to adapt the
+                    platform to their specific needs while keeping the <b>initial setup simple</b>. Our
+                    practical defaults can be conveniently <b>overridden or expanded</b>.
+                </p>
+            </div>
+        }
+    />
+</Panel>

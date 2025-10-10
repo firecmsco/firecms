@@ -2,8 +2,6 @@
 import Panel from "../../Panel.astro";
 import TwoColumns from "../general/TwoColumns.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-
-const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaurus stub
 ---
 
 <Panel color={"lighter"}>
@@ -18,14 +16,14 @@ const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaur
                 data-aos="fade-up"
                 class="flex content-center justify-center items-center">
                 <video
-                    key={isDarkTheme ? "dark" : "light"}
                     class:list={["pointer-events-none rounded-2xl border border-solid", defaultBorderMixin]}
                     width="100%"
                     loop
                     autoplay
                     muted>
                     <source
-                        src={isDarkTheme ? "/img/data/product_demo_dark.mp4" : "/img/data/product_demo_light.mp4"}
+                        id="autofill-video-source"
+                        src="/img/data/product_demo_light.mp4"
                         type="video/mp4"/>
                 </video>
             </div>
@@ -58,3 +56,26 @@ const isDarkTheme = true; // Hardcoded to replicate the behavior of the docusaur
         </div>
     </TwoColumns>
 </Panel>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const videoSource = document.getElementById('autofill-video-source');
+        const video = videoSource.parentElement;
+        const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const newSrc = isDark ? '/img/data/product_demo_dark.mp4' : '/img/data/product_demo_light.mp4';
+            if (videoSource.src !== newSrc) {
+                videoSource.src = newSrc;
+                video.load();
+            }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        // Initial check
+        const isDark = document.documentElement.classList.contains('dark');
+        const newSrc = isDark ? '/img/data/product_demo_dark.mp4' : '/img/data/product_demo_light.mp4';
+        if (videoSource.src !== newSrc) {
+            videoSource.src = newSrc;
+            video.load();
+        }
+    });
+</script>
