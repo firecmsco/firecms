@@ -1,7 +1,6 @@
 ---
 import Panel from "../../Panel.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-import { CheckCircleIcon, CloudUploadIcon, MonitorIcon } from "@firecms/ui";
 ---
 
 <Panel color={"lighter"} includePadding={true}>
@@ -18,7 +17,7 @@ import { CheckCircleIcon, CloudUploadIcon, MonitorIcon } from "@firecms/ui";
             <div class:list={["p-8 rounded-xl border bg-white", defaultBorderMixin]}>
                 <div class="flex items-center mb-4">
                     <MonitorIcon class="w-8 h-8 mr-2 mt-2 text-green-600 flex-shrink-0"/>
-                    <h3 class="text-2xl font-bold m-0">Self-Hosted</h3>
+                    <span class="material-icons w-8 h-8 mr-2 mt-2 text-green-600 flex-shrink-0">monitor</span>
                 </div>
 
                 <p class="text-gray-700 mb-4">
@@ -28,20 +27,20 @@ import { CheckCircleIcon, CloudUploadIcon, MonitorIcon } from "@firecms/ui";
                 <div class="space-y-4 mb-8">
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-green-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">Open-source MIT license available</span>
+                        <span class="material-icons w-5 h-5 text-green-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-green-600 flex-shrink-0"/>
-                        <span
+                        <span class="material-icons w-5 h-5 text-green-600 flex-shrink-0 text-[20px]">check_circle</span>
                             class="text-sm text-gray-700 mt-0.5">Deploy on any static hosting provider</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-green-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">No external dependencies or proprietary servers</span>
+                        <span class="material-icons w-5 h-5 text-green-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-green-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">Full code auditability</span>
+                        <span class="material-icons w-5 h-5 text-green-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                 </div>
 
@@ -58,7 +57,7 @@ import { CheckCircleIcon, CloudUploadIcon, MonitorIcon } from "@firecms/ui";
             <div class:list={["p-8 rounded-xl border bg-white", defaultBorderMixin]}>
                 <div class="flex items-center mb-4">
                     <CloudUploadIcon class="w-8 h-8 mr-2 mt-2 text-blue-600 flex-shrink-0"/>
-                    <h3 class="text-2xl font-bold m-0">FireCMS Cloud</h3>
+                    <span class="material-icons w-8 h-8 mr-2 mt-2 text-blue-600 flex-shrink-0">cloud_upload</span>
                 </div>
 
                 <p class="text-gray-700 mb-4">
@@ -69,15 +68,15 @@ import { CheckCircleIcon, CloudUploadIcon, MonitorIcon } from "@firecms/ui";
                 <div class="space-y-4 mb-8">
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-blue-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">Service account credentials encrypted with Google Cloud KMS</span>
+                        <span class="material-icons w-5 h-5 text-blue-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-blue-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">Transparent connection mechanism</span>
+                        <span class="material-icons w-5 h-5 text-blue-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-blue-600 flex-shrink-0"/>
-                        <span class="text-sm text-gray-700 mt-0.5">Custom React components supported</span>
+                        <span class="material-icons w-5 h-5 text-blue-600 flex-shrink-0 text-[20px]">check_circle</span>
                     </div>
                     <div class="flex items-start space-x-3">
                         <CheckCircleIcon class="w-5 h-5 text-blue-600 flex-shrink-0"/>

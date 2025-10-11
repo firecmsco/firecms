@@ -1,16 +1,6 @@
 ---
 import Panel from "../../Panel.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-import {
-    AccountTreeIcon,
-    AppsIcon,
-    CheckCircleIcon,
-    DataObjectIcon,
-    GroupsIcon,
-    MonitorIcon,
-    SecurityIcon,
-    VerifiedUserIcon
-} from "@firecms/ui";
 ---
 
 <Panel color={"lighter"} includePadding={true}>
@@ -24,25 +14,25 @@ import {
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class:list={["p-6 rounded-xl border bg-white text-center", defaultBorderMixin]}>
-                <GroupsIcon class="w-8 h-8 mx-auto mb-3 text-blue-600"/>
+                <span class="material-icons w-8 h-8 mx-auto mb-3 text-blue-600 block">groups</span>
                 <h3 class="text-2xl font-bold mb-2">10000+</h3>
                 <p class="my-1 text-gray-700 text-sm">Active Projects</p>
             </div>
 
             <div class:list={["p-6 rounded-xl border bg-white text-center", defaultBorderMixin]}>
-                <SecurityIcon class="w-8 h-8 mx-auto mb-3 text-green-600"/>
+                <span class="material-icons w-8 h-8 mx-auto mb-3 text-green-600 block">security</span>
                 <h3 class="text-2xl font-bold mb-2">100%</h3>
                 <p class="my-1 text-gray-700 text-sm">Data Sovereignty</p>
             </div>
 
             <div class:list={["p-6 rounded-xl border bg-white text-center", defaultBorderMixin]}>
-                <MonitorIcon class="w-8 h-8 mx-auto mb-3 text-purple-600"/>
+                <span class="material-icons w-8 h-8 mx-auto mb-3 text-purple-600 block">monitor</span>
                 <h3 class="text-2xl font-bold mb-2">99.9%</h3>
                 <p class="my-1 text-gray-700 text-sm">Infrastructure Uptime</p>
             </div>
 
             <div class:list={["p-6 rounded-xl border bg-white text-center", defaultBorderMixin]}>
-                <VerifiedUserIcon class="w-8 h-8 mx-auto mb-3 text-orange-600"/>
+                <span class="material-icons w-8 h-8 mx-auto mb-3 text-orange-600 block">verified_user</span>
                 <h3 class="text-2xl font-bold mb-2">24/7</h3>
                 <p class="my-1 text-gray-700 text-sm">Security Monitoring</p>
             </div>
@@ -50,31 +40,27 @@ import {
 
         <div class="grid md:grid-cols-3 gap-8">
             <div class:list={["p-6 rounded-xl border bg-white", defaultBorderMixin]}>
-                <AccountTreeIcon class="w-8 h-8 mb-4 text-blue-600"/>
+                <span class="material-icons w-8 h-8 mb-4 text-blue-600">account_tree</span>
                 <h3 class="text-xl font-bold mb-3">Open Source Transparency</h3>
                 <p class="my-1 text-gray-700 text-sm mb-4">
                     Full source code available on GitHub. Audit every line, contribute improvements,
                     or fork for custom needs.
                 </p>
                 <div class="flex items-start text-blue-600 text-sm font-medium">
-                    <CheckCircleIcon
-
-                        class="mr-2 mt-0.5 flex-shrink-0"/>
+                    <span class="material-icons mr-2 mt-0.5 flex-shrink-0 text-[20px]">check_circle</span>
                     <span>MIT Licensed</span>
                 </div>
             </div>
 
             <div class:list={["p-6 rounded-xl border bg-white", defaultBorderMixin]}>
-                <DataObjectIcon class="w-8 h-8 mb-4 text-green-600"/>
+                <span class="material-icons w-8 h-8 mb-4 text-green-600">data_object</span>
                 <h3 class="text-xl font-bold mb-3">Battle-Tested Architecture</h3>
                 <p class="my-1 text-gray-700 text-sm mb-4">
                     Built on the same infrastructure that powers Gmail, YouTube, and millions
                     of mission-critical applications worldwide.
                 </p>
                 <div class="flex items-start text-green-600 text-sm font-medium">
-                    <CheckCircleIcon
-
-                        class="mr-2 mt-0.5 flex-shrink-0"/>
+                    <span class="material-icons mr-2 mt-0.5 flex-shrink-0 text-[20px]">check_circle</span>
                     <span>Google Cloud Powered</span>
                 </div>
             </div>

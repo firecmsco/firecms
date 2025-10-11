@@ -1,6 +1,4 @@
 ---
-import { InfoOutlineIcon } from "@firecms/ui";
-
 interface Props {
     tip: string;
 }
@@ -9,5 +7,5 @@ const { tip } = Astro.props;
 ---
 
 <span title={tip}>
-    <slot /> <InfoOutlineIcon className={"inline align-middle"} size={"smallest"}/>
+    <slot /> <span class="material-icons inline align-middle text-[18px]">info_outline</span>
 </span>

@@ -1,7 +1,6 @@
 ---
 import Panel from "../../Panel.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-import { IntegrationInstructionsIcon, PolicyIcon, StorageIcon, VerifiedUserIcon } from "@firecms/ui";
 ---
 
 <Panel color={"gray"}>
@@ -9,7 +8,7 @@ import { IntegrationInstructionsIcon, PolicyIcon, StorageIcon, VerifiedUserIcon 
         <div class="max-w-4xl mx-auto">
             <div class="flex items-center mb-4 justify-center">
                 <PolicyIcon class="w-8 h-8 mr-2 mt-2 text-green-400 flex-shrink-0"/>
-                <h2 class="text-3xl font-bold text-white m-0">Privacy &amp; Compliance Ready</h2>
+                <span class="material-icons w-8 h-8 mr-2 mt-2 text-green-400 flex-shrink-0">policy</span>
             </div>
 
             <p class="text-xl text-gray-100 mb-8 text-center">
@@ -21,7 +20,7 @@ import { IntegrationInstructionsIcon, PolicyIcon, StorageIcon, VerifiedUserIcon 
                 <div class:list={["p-5 rounded-lg border bg-gray-800", defaultBorderMixin]}>
                     <div class="flex items-center">
                         <VerifiedUserIcon class="w-6 h-6 mr-3 text-green-400 flex-shrink-0"/>
-                        <h5 class="font-bold text-white m-0">You Are the Data Controller</h5>
+                        <span class="material-icons w-6 h-6 mr-3 text-green-400 flex-shrink-0">verified_user</span>
                     </div>
                     <p class="text-gray-200 text-sm my-1">
                         Under GDPR and CCPA, you maintain direct control and legal responsibility
@@ -32,7 +31,7 @@ import { IntegrationInstructionsIcon, PolicyIcon, StorageIcon, VerifiedUserIcon 
                 <div class:list={["p-5 rounded-lg border bg-gray-800", defaultBorderMixin]}>
                     <div class="flex items-center">
                         <IntegrationInstructionsIcon class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0"/>
-                        <h5 class="font-bold text-white m-0">Simplified Data Subject Requests</h5>
+                        <span class="material-icons w-6 h-6 mr-3 text-blue-400 flex-shrink-0">integration_instructions</span>
                     </div>
                     <p class="text-gray-200 text-sm my-1">
                         Fulfill access, correction, and deletion requests directly in your database
@@ -43,7 +42,7 @@ import { IntegrationInstructionsIcon, PolicyIcon, StorageIcon, VerifiedUserIcon 
                 <div class:list={["p-5 rounded-lg border bg-gray-800", defaultBorderMixin]}>
                     <div class="flex items-center">
                         <StorageIcon class="w-6 h-6 mr-3 text-purple-400 flex-shrink-0"/>
-                        <h5 class="font-bold text-white m-0">Data Residency Control</h5>
+                        <span class="material-icons w-6 h-6 mr-3 text-purple-400 flex-shrink-0">storage</span>
                     </div>
                     <p class="text-gray-200 text-sm my-1">
                         Choose your Firebase or MongoDB Atlas region to meet specific

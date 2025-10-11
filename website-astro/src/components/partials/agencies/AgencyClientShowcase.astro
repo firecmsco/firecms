@@ -1,13 +1,6 @@
 ---
 import Panel from "../../Panel.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-import {
-    AppSettingsAltIcon,
-    CheckCircleIcon,
-    HandymanIcon,
-    StorefrontIcon,
-    WebIcon
-} from "@firecms/ui";
 
 const showcaseData = [
     {
@@ -15,7 +8,7 @@ const showcaseData = [
         challenge: "Needed a custom admin panel to manage products, orders, and customer data integrated with their existing Shopify backend.",
         solution: "Used FireCMS with custom actions and views to create a tailored interface, pulling data via APIs.",
         benefit: "Faster order processing and inventory management.",
-        Icon: StorefrontIcon,
+        icon: "storefront",
         color: "text-blue-600",
         bgColor: "bg-blue-50"
     },
@@ -24,7 +17,7 @@ const showcaseData = [
         challenge: "Required an internal tool for the support team to manage user accounts, subscriptions, and feature flags.",
         solution: "Deployed FireCMS connected to their Firestore database, using role-based access for different support tiers.",
         benefit: "Reduced support resolution time by 30%.",
-        Icon: AppSettingsAltIcon,
+        icon: "app_settings_alt",
         color: "text-purple-600",
         bgColor: "bg-purple-50"
     },
@@ -33,7 +26,7 @@ const showcaseData = [
         challenge: "Client needed an easy way for non-technical marketers to update blog posts, case studies, and landing pages.",
         solution: "Set up FireCMS with predefined content schemas and markdown editors, enabling easy content updates.",
         benefit: "Empowered marketing team, freeing up dev resources.",
-        Icon: WebIcon,
+        icon: "web",
         color: "text-green-600",
         bgColor: "bg-green-50"
     },
@@ -42,7 +35,7 @@ const showcaseData = [
         challenge: "Needed a simple CRM to track client projects, communication logs, and assigned tasks.",
         solution: "Built a custom CRM interface using FireCMS collections for clients, projects, and logs with relations.",
         benefit: "Improved project tracking and client communication.",
-        Icon: HandymanIcon,
+        icon: "handyman",
         color: "text-orange-600",
     },
 ];
@@ -56,7 +49,7 @@ const showcaseData = [
             {showcaseData.map(item => (
                 <div class:list={[`p-6 rounded-lg border ${defaultBorderMixin} flex flex-col`]}>
                     <div class="flex items-center mb-4">
-                        <item.Icon className={`w-6 h-6 mr-3 ${item.color}`}/>
+                        <span class={`material-icons w-6 h-6 mr-3 ${item.color}`}>{item.icon}</span>
                         <h3 class="typography-h3 text-xl font-semibold text-white">{item.clientType}</h3>
                     </div>
                     <div class="flex-grow mb-4">
@@ -66,8 +59,7 @@ const showcaseData = [
                         </p>
                     </div>
                     <div class:list={["mt-auto pt-4 border-t flex items-start", defaultBorderMixin]}>
-                        <CheckCircleIcon
-                            class="w-4 h-4 mr-2 text-green-600 flex-shrink-0 mt-0.5"/>
+                        <span class="material-icons w-4 h-4 mr-2 text-green-600 flex-shrink-0 mt-0.5 text-[16px]">check_circle</span>
                         <span class="text-sm font-medium text-white">
                             <b>Result:</b> {item.benefit}
                         </span>

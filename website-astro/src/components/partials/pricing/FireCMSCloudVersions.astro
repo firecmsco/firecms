@@ -264,13 +264,6 @@ import CTACaret from "../../CTACaret.astro";
 </section>
 
 <script>
-    // Currency toggle functionality
-    const priceMap = {
-        cloud: { eur: 9.99, usd: 11.99 },
-        pro: { eur: 149.99, usd: 199.99 },
-        free: { eur: 0, usd: 0 }
-    };
-
     let currentCurrency: 'eur' | 'usd' = 'eur';
     let isFading = false;
 
@@ -350,7 +343,14 @@ import CTACaret from "../../CTACaret.astro";
         });
     }
 
-    // Initialize on page load
+    // Initialize on initial page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupCurrencyToggle);
+    } else {
+        setupCurrencyToggle();
+    }
+
+    // Re-initialize on Astro page navigation
     document.addEventListener('astro:page-load', setupCurrencyToggle);
 </script>
 

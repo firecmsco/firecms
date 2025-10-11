@@ -3,18 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import { Hero } from "../migration/partials/general/Hero";
 import { Panel } from "../migration/partials/general/Panel";
 import { defaultBorderMixin } from "../migration/partials/styles";
-import {
-    CheckCircleIcon,
-    StorageIcon,
-    SecurityIcon,
-    VisibilityIcon
-} from "@firecms/ui";
-import DataSovereigntySection from "../components/partials/security/DataSovereigntySection.astro";
-import SecurityArchitectureSection from "../components/partials/security/SecurityArchitectureSection.astro";
-import DeploymentModelsSection from "../components/partials/security/DeploymentModelsSection.astro";
-import PrivacyComplianceSection from "../components/partials/security/PrivacyComplianceSection.astro";
-import SharedResponsibilitySection from "../components/partials/security/SharedResponsibilitySection.astro";
-import TrustIndicatorsSection from "../components/partials/security/TrustIndicatorsSection.astro";
 import CallToActionSection from "../components/partials/security/CallToActionSection.astro";
 ---
 
@@ -53,7 +41,7 @@ import CallToActionSection from "../components/partials/security/CallToActionSec
 
                 <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-24">
                     <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
-                        <StorageIcon className="w-8 h-8 mb-4 text-blue-600"/>
+                        <span class="material-icons w-8 h-8 mb-4 text-blue-600 text-[32px]">storage</span>
                         <h3 class="typography-h3 text-xl font-bold mb-3">Absolute Data Ownership</h3>
                         <p class="text-gray-700">
                             Your data lives exclusively in your own Firebase or MongoDB project.
@@ -68,7 +56,7 @@ import CallToActionSection from "../components/partials/security/CallToActionSec
                             Enterprise-grade security through shared responsibility: robust application
                             controls,
                             world-class infrastructure, and your custom security rules.
-                        </p>
+                        <span class="material-icons w-8 h-8 mb-4 text-green-600 text-[32px]">security</span>
                     </div>
 
                     <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
@@ -84,7 +72,7 @@ import CallToActionSection from "../components/partials/security/CallToActionSec
         </Panel>
 
         <DataSovereigntySection />
-        <SecurityArchitectureSection />
+                        <span class="material-icons w-8 h-8 mb-4 text-purple-600 text-[32px]">visibility</span>
         <DeploymentModelsSection />
         <PrivacyComplianceSection />
         <SharedResponsibilitySection />

@@ -1,15 +1,15 @@
 ---
 import Panel from "../../Panel.astro";
 import LinedSpace from "../layout/LinedSpace.astro";
-import ClientUIComponentsTeaser from "./ClientUIComponentsTeaser";
+import { ClientUIComponentsTeaser } from "../../../migration/partials/home/ClientUIComponentsTeaser";
 ---
 
 <Panel
-    color={"lighter"}
-    className={"dark:bg-gray-900 text-gray-900 dark:text-white"}
+    color="lighter"
+    className="dark:bg-gray-900 text-gray-900 dark:text-white"
     includePadding={false}
     container={false}>
-    <LinedSpace size={"large"} position={"bottom"} slot="header"/>
+    <LinedSpace size="large" position="bottom" slot="header"/>
     <h2 class="max-w-6xl mx-auto h2 uppercase font-mono mb-4 mt-8 px-10">
         Modern UI components based on tailwindcss
     </h2>
@@ -18,6 +18,10 @@ import ClientUIComponentsTeaser from "./ClientUIComponentsTeaser";
         If you need to create custom views or components, you can use our
         battle-tested <b> FireCMS UI components</b>.
     </p>
-    <ClientUIComponentsTeaser client:visible/>
-    <LinedSpace size={"medium"} position={"top"} slot="footer"/>
+    <ClientUIComponentsTeaser client:only="react"/>
+    <LinedSpace size="medium" position="top" slot="footer"/>
 </Panel>
+
+
+
+

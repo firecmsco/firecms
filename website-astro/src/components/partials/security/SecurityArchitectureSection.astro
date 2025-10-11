@@ -1,7 +1,6 @@
 ---
 import Panel from "../../Panel.astro";
 import { defaultBorderMixin } from "../../../migration/partials/styles";
-import { AdminPanelSettingsIcon, CloudUploadIcon, VpnKeyIcon } from "@firecms/ui";
 
 const SecurityArchitectureImage = "/img/firecms-layers.png";
 ---
@@ -28,7 +27,7 @@ const SecurityArchitectureImage = "/img/firecms-layers.png";
                 <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
                     <div class="flex items-center mb-3">
                         <AdminPanelSettingsIcon class="w-6 h-6 mr-3 text-blue-600 flex-shrink-0"/>
-                        <h3 class="text-lg font-bold m-0">Application Layer</h3>
+                        <span class="material-icons w-6 h-6 mr-3 text-blue-600 flex-shrink-0">admin_panel_settings</span>
                     </div>
                     <p class="text-gray-700 text-sm">
                         Granular role-based access control, dynamic permissions,
@@ -39,7 +38,7 @@ const SecurityArchitectureImage = "/img/firecms-layers.png";
                 <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
                     <div class="flex items-center mb-3">
                         <CloudUploadIcon class="w-6 h-6 mr-3 text-green-600 flex-shrink-0"/>
-                        <h3 class="text-lg font-bold m-0">Infrastructure Layer</h3>
+                        <span class="material-icons w-6 h-6 mr-3 text-green-600 flex-shrink-0">cloud_upload</span>
                     </div>
                     <p class="text-gray-700 text-sm">
                         Enterprise-grade security from Google Cloud and MongoDB Atlas:
@@ -50,7 +49,7 @@ const SecurityArchitectureImage = "/img/firecms-layers.png";
                 <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
                     <div class="flex items-center mb-3">
                         <VpnKeyIcon class="w-6 h-6 mr-3 text-purple-600 flex-shrink-0"/>
-                        <h3 class="text-lg font-bold m-0">Database Security</h3>
+                        <span class="material-icons w-6 h-6 mr-3 text-purple-600 flex-shrink-0">vpn_key</span>
                     </div>
                     <p class="text-gray-700 text-sm">
                         Your custom Firestore/MongoDB security rules enforce access at the data layer.

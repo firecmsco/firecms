@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@material-design-icons/font": "^0.14.15",
     "@astrojs/react": "^4.4.0",
     "@astrojs/starlight": "^0.36.0",
     "@firebase/analytics": "^0.10.18",

@@ -2,6 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/partials/general/Hero.astro";
 import FireCMSCloudVersions from "../components/partials/pricing/FireCMSCloudVersions.astro";
+import CLIInstructions from "../components/partials/pricing/CLIInstructions.astro";
+import PricingQuote from "../components/partials/pricing/PricingQuote.astro";
+import VersionsComparison from "../components/partials/pricing/VersionsComparison.astro";
 ---
 
 <Layout
@@ -18,8 +21,8 @@ import FireCMSCloudVersions from "../components/partials/pricing/FireCMSCloudVer
 
     <FireCMSCloudVersions />
 
-    <!--<CLIInstructions analyticsLabel={"pricing"} />-->
-    <!--<PricingQuote />-->
-    <!--<VersionsComparison />-->
+    <CLIInstructions analyticsLabel={"pricing"} />
+    <PricingQuote />
+    <VersionsComparison />
 
 </Layout>
