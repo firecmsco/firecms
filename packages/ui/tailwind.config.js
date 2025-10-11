@@ -51,20 +51,9 @@ export default {
                     "secondary-dark": "rgba(255, 255, 255, 0.60)",
                     "disabled-dark": "rgba(255, 255, 255, 0.48)"
                 },
-                "surface": {
-                    "50": "#f8f8fc",
-                    "100": "#E7E7EB",
-                    "200": "#CFCFD6",
-                    "300": "#B7B7BF",
-                    "400": "#A0A0A9",
-                    "500": "#87878F",
-                    "600": "#6B6B74",
-                    "700": "#454552",
-                    "800": "#292934",
-                    "900": "#18181C",
-                    "950": "#101013"
-                },
-                "surface-accent": {
+                "surface": "hsl(var(--surface))",
+                "surface-dark": "hsl(var(--surface-dark))",
+                "slate": {
                     "50": "#f8fafc",
                     "100": "#f1f5f9",
                     "200": "#e2e8f0",
