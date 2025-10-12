@@ -1,3 +1,61 @@
+@theme {
+    /* Font Families */
+    --font-sans: 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-headers: 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', 'Lucida Console', monospace;
+
+    /* Colors */
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+
+    /* Field Colors */
+    --color-field-disabled: rgb(224 224 226);
+    --color-field-disabled-dark: rgb(35 35 37);
+
+    /* Text Colors */
+    --color-text-primary: rgba(0, 0, 0, 0.87);
+    --color-text-secondary: rgba(0, 0, 0, 0.52);
+    --color-text-disabled: rgba(0, 0, 0, 0.38);
+    --color-text-primary-dark: #ffffff;
+    --color-text-secondary-dark: rgba(255, 255, 255, 0.6);
+    --color-text-disabled-dark: rgba(255, 255, 255, 0.48);
+
+    /* Surface Colors */
+    --color-surface-50: #f8f8fc;
+    --color-surface-100: #e7e7eb;
+    --color-surface-200: #cfcfd6;
+    --color-surface-300: #b7b7bf;
+    --color-surface-400: #a0a0a9;
+    --color-surface-500: #87878f;
+    --color-surface-600: #6b6b74;
+    --color-surface-700: #454552;
+    --color-surface-800: #292934;
+    --color-surface-900: #18181c;
+    --color-surface-950: #101013;
+
+    /* Surface Accent Colors */
+    --color-surface-accent-50: #f8fafc;
+    --color-surface-accent-100: #f1f5f9;
+    --color-surface-accent-200: #e2e8f0;
+    --color-surface-accent-300: #cbd5e1;
+    --color-surface-accent-400: #94a3b8;
+    --color-surface-accent-500: #64748b;
+    --color-surface-accent-600: #475569;
+    --color-surface-accent-700: #334155;
+    --color-surface-accent-800: #1e293b;
+    --color-surface-accent-900: #0f172a;
+    --color-surface-accent-950: #020617;
+}
+
+
+body {
+    @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+}
+
+a {
+    @apply text-primary dark:text-primary
+}
+
 /* Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
