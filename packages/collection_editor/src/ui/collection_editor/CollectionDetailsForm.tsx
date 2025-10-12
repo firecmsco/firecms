@@ -241,7 +241,7 @@ export function CollectionDetailsForm({
                             expanded={advancedPanelExpanded}
                             onExpandedChange={setAdvancedPanelExpanded}
                             title={
-                                <div className="flex flex-row text-surface-500">
+                                <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
                                     <SettingsIcon/>
                                     <Typography variant={"subtitle2"}
                                                 className="ml-2">

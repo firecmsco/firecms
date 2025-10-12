@@ -21,7 +21,7 @@ export function Tabs({
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={className}>
         <TabsPrimitive.List className={cls(
             "w-max",
-            "flex text-sm font-medium text-center text-text-primary dark:text-text-primary-dark max-w-full overflow-auto no-scrollbar items-end",
+            "flex text-sm font-medium text-center text-surface-accent-800 dark:text-white max-w-full overflow-auto no-scrollbar items-end",
             innerClassName)
         }>
             {children}
@@ -50,14 +50,14 @@ export function Tab({
                                       "border-b-2 border-transparent",
                                       "data-[state=active]:border-secondary",
                                       disabled
-                                          ? "text-text-disabled dark:text-text-disabled-dark"
-                                          : cls("text-text-secondary dark:text-text-secondary-dark",
-                                              "data-[state=active]:text-text-primary data-[state=active]:dark:text-text-primary-dark",
-                                              "hover:text-text-primary dark:hover:text-text-primary-dark"),
+                                          ? "text-surface-accent-400 dark:text-surface-accent-500"
+                                          : cls("text-surface-accent-700 dark:text-surface-accent-300",
+                                              "data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white",
+                                              "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
                                       className)}>
         <div className={cls("line-clamp-1",
             "uppercase inline-block p-2 px-4 rounded",
-            "hover:bg-slate-200/75 dark:hover:bg-slate-800",
+            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
             innerClassName)}>
             {children}
         </div>

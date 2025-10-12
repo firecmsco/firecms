@@ -72,7 +72,7 @@ export function Popover({
                 avoidCollisions={avoidCollisions}>
 
                 {children}
-                <PopoverPrimitive.Arrow className="fill-white dark:fill-surface-accent-950 fill-white dark:fill-surface-accent-950"/>
+                <PopoverPrimitive.Arrow className="fill-white dark:fill-surface-accent-950"/>
             </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>;
