@@ -49,7 +49,7 @@ export interface ConfigControllerProviderProps {
         icon: React.ReactNode
     };
 
-    getUser?: (uid: string) => User | null
+    getUser?: (uid: string) => User | null;
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 

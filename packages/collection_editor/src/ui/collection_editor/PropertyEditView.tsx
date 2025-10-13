@@ -150,7 +150,6 @@ export const PropertyForm = React.memo(
             validateOnChange: true,
             validateOnInitialRender: true,
             onSubmit: (newPropertyWithId, controller) => {
-                console.debug("onSubmit", newPropertyWithId);
                 const {
                     id,
                     ...property
@@ -401,6 +400,7 @@ function PropertyEditFormFields({
     let childComponent;
     if (selectedFieldConfigId === "text_field" ||
         selectedFieldConfigId === "multiline" ||
+        selectedFieldConfigId === "user_select" ||
         selectedFieldConfigId === "email") {
         childComponent =
             <StringPropertyField widgetId={selectedFieldConfigId}
@@ -607,6 +607,7 @@ const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
     switch: "Boolean",
     select: "Select",
     multi_select: "Select",
+    user_select: "Select",
     number_input: "Number",
     number_select: "Select",
     multi_number_select: "Select",

@@ -341,6 +341,7 @@ export function App() {
     const plugins = [
         userManagementPlugin,
         dataEnhancementPlugin,
+        // importPlugin,
         exportPlugin,
         entityHistoryPlugin,
         demoPlugin,

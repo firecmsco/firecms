@@ -27,7 +27,24 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: undefined
+                enumValues: undefined,
+                userSelect: undefined
+            } satisfies StringProperty
+        );
+    } else if (selectedWidgetId === "user_select") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            {
+                dataType: "string",
+                propertyConfig: "text_field",
+                editable: propertyData.editable !== undefined ? propertyData.editable : true,
+                storage: undefined,
+                multiline: undefined,
+                markdown: undefined,
+                email: undefined,
+                url: undefined,
+                enumValues: undefined,
+                userSelect: true
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multiline") {
@@ -42,7 +59,8 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: undefined
+                enumValues: undefined,
+                userSelect: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "markdown") {
@@ -56,7 +74,8 @@ export function updatePropertyFromWidget(propertyData: any,
                 multiline: undefined,
                 markdown: true,
                 email: undefined,
-                url: undefined
+                url: undefined,
+                userSelect: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "url") {
@@ -71,7 +90,8 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: true,
-                enumValues: undefined
+                enumValues: undefined,
+                userSelect: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "email") {
@@ -86,7 +106,8 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: true,
                 url: undefined,
-                enumValues: undefined
+                enumValues: undefined,
+                userSelect: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "select") {
@@ -101,7 +122,8 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: propertyData.enumValues ?? []
+                enumValues: propertyData.enumValues ?? [],
+                userSelect: undefined
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multi_select") {

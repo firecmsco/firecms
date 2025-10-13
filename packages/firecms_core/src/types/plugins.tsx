@@ -8,6 +8,7 @@ import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
 import { NavigationGroupMapping } from "./navigation";
+import { InternalUserManagement } from "./internal_user_management";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -42,6 +43,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         }>>;
         props?: PROPS;
     };
+
+    userManagement?: InternalUserManagement
 
     homePage?: {
 

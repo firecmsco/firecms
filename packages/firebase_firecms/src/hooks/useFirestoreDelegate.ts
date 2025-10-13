@@ -473,7 +473,6 @@ export function useFirestoreDelegate({
 
             let documentReference: DocumentReference;
             if (entityId) {
-                console.log("Saving entity with id", entityId);
                 documentReference = doc(collectionReference, entityId);
             } else {
                 documentReference = doc(collectionReference);

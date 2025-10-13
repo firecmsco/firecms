@@ -13,6 +13,7 @@ import { UserConfigurationPersistence } from "./local_config_persistence";
 import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
 import { EntityAction } from "./entity_actions";
+import { InternalUserManagement } from "./internal_user_management";
 
 /**
  * Use this callback to build entity collections dynamically.
@@ -139,6 +140,7 @@ export type FireCMSProps<USER extends User> = {
      * Use plugins to modify the behaviour of the CMS.
      * DEPRECATED: use the `plugins` prop in the `useBuildNavigationController` instead.
      * This prop will work as a fallback for the `plugins` prop in the `useBuildNavigationController`.
+     * @deprecated
      */
     plugins?: FireCMSPlugin<any, any, any>[];
 
@@ -152,6 +154,20 @@ export type FireCMSProps<USER extends User> = {
      * The function must return a URL that gets opened when the button is clicked
      */
     entityLinkBuilder?: EntityLinkBuilder;
+
+    /**
+     * You can use this props to provide your own user management implementation.
+     * Note that this will not affect the UI, but it will be used to show user information
+     * in various places of the CMS, for example, to show who created or modified an entity,
+     * or to assign ownership of an entity.
+     *
+     * You can also use this data to be retrieved in your custom properties,
+     * for example, to show a list of users in a dropdown.
+     *
+     * If you are using the FireCMS user management plugin, this
+     * prop will be implemented automatically.
+     */
+    userManagement?: InternalUserManagement
 
     components?: {
 

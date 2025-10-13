@@ -17,6 +17,7 @@ import { VirtualTableSelect } from "../VirtualTable/fields/VirtualTableSelect";
 import { VirtualTableNumberInput } from "../VirtualTable/fields/VirtualTableNumberInput";
 import { VirtualTableSwitch } from "../VirtualTable/fields/VirtualTableSwitch";
 import { VirtualTableDateField } from "../VirtualTable/fields/VirtualTableDateField";
+import { VirtualTableUserSelect } from "../VirtualTable/fields/VirtualTableUserSelect";
 
 import { TableStorageUpload } from "./fields/TableStorageUpload";
 import { TableReferenceField } from "./fields/TableReferenceField";
@@ -330,6 +331,17 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                          error={validationError ?? error}
                                                          internalValue={internalValue as string | number}
                                                          updateValue={updateValue}
+                    />;
+                    fullHeight = true;
+                } else if (stringProperty.userSelect) {
+                    innerComponent = <VirtualTableUserSelect name={propertyKey as string}
+                                                             multiple={false}
+                                                             focused={selected}
+                                                             disabled={disabled}
+                                                             small={getPreviewSizeFrom(size) !== "medium"}
+                                                             error={validationError ?? error}
+                                                             internalValue={internalValue as string}
+                                                             updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else if (stringProperty.markdown || !stringProperty.storage || !stringProperty.reference) {

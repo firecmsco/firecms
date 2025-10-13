@@ -389,6 +389,16 @@ export interface StringProperty extends BaseProperty<string> {
     storage?: StorageConfig;
 
     /**
+     * This property is used to indicate that the string is a user ID, and
+     * it will be rendered as a user picker.
+     * Note that the user ID needs to be the one used in your authentication
+     * provider, e.g. Firebase Auth.
+     * You can also use a property builder to specify the user path dynamically
+     * based on other values of the entity.
+     */
+    userSelect?: boolean;
+
+    /**
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
      */

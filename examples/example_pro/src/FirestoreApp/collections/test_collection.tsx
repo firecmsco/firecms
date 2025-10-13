@@ -132,7 +132,11 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-
+            user_select: {
+                dataType: "string",
+                name: "User select",
+                userSelect: true,
+            },
             basic_number: {
                 dataType: "number",
                 name: "Basic number",

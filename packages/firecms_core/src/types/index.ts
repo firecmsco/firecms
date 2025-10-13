@@ -13,6 +13,7 @@ export * from "./fields";
 export * from "./property_config";
 export * from "./datasource";
 export * from "./entity_link_builder";
+export * from "./internal_user_management";
 export * from "./side_entity_controller";
 export * from "./side_dialogs_controller";
 export * from "./firecms_context";

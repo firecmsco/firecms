@@ -13,6 +13,7 @@ import {
     slugify,
     useAuthController,
     useCustomizationController,
+    useNavigationController,
     User,
     useSelectionController,
     useSnackbarController
@@ -398,8 +399,18 @@ export function ImportDataPreview<M extends Record<string, any>>({
     propertiesOrder: Extract<keyof M, string>[],
 }) {
     const authController = useAuthController();
+    const navigation = useNavigationController();
     useEffect(() => {
-        const mappedData = importConfig.importData.map(d => convertDataToEntity(authController, d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
+        const mappedData = importConfig.importData.map(d => convertDataToEntity(
+            authController,
+            navigation,
+            d,
+            importConfig.idColumn,
+            importConfig.headersMapping,
+            properties,
+            "TEMP_PATH",
+            importConfig.defaultValues
+        ));
         importConfig.setEntities(mappedData);
     }, []);
 

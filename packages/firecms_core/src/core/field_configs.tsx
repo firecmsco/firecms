@@ -32,14 +32,16 @@ import {
     ListAltIcon,
     ListIcon,
     MailIcon,
-    NumbersIcon,
+    NumbersIcon, PersonIcon,
     RepeatIcon,
     ScheduleIcon,
     ShortTextIcon,
     SubjectIcon,
     UploadFileIcon,
+    VerifiedUserIcon,
     ViewStreamIcon
 } from "@firecms/ui";
+import { UserSelectFieldBinding } from "../form/field_bindings/UserSelectFieldBinding";
 
 export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
@@ -141,6 +143,16 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
                 enumValues: [],
             },
             Field: MultiSelectFieldBinding
+        }
+    },
+    user_select: {
+        key: "user_select",
+        name: "User select",
+        description: "Select a user from the user management system. Store the user ID.",
+        Icon: PersonIcon,
+        property: {
+            dataType: "string",
+            Field: UserSelectFieldBinding
         }
     },
     number_input: {
@@ -360,6 +372,8 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "email";
         } else if (property.enumValues) {
             return "select";
+        } else if (property.userSelect) {
+            return "user_select";
         } else if (property.reference) {
             return "reference_as_string";
         } else {

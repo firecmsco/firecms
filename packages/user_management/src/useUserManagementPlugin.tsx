@@ -14,7 +14,9 @@ export function useUserManagementPlugin<USER extends User = any>({ userManagemen
     return {
         key: "user_management",
         loading: userManagement.loading,
-
+        userManagement:{
+            ...userManagement,
+        },
         homePage: {
             additionalChildrenStart: noUsers || noRoles
                 ? <IntroWidget

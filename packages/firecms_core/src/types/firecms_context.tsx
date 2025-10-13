@@ -10,6 +10,7 @@ import { SideDialogsController } from "./side_dialogs_controller";
 import { DialogsController } from "./dialogs_controller";
 import { CustomizationController } from "./customization_controller";
 import { AnalyticsController } from "./analytics_controller";
+import { InternalUserManagement } from "./internal_user_management";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -79,5 +80,31 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * Callback to send analytics events
      */
     analyticsController?: AnalyticsController;
+
+    /**
+     * This section is used to manage users in the CMS.
+     * It is used to show user information in various places of the CMS,
+     * for example, to show who created or modified an entity,
+     * or to assign ownership of an entity.
+     *
+     * In the base CMS, this information is not used for access control.
+     * You can pass your own implementation of this section, to populate
+     * the dropdown of users when assigning ownership of an entity,
+     * or to show more information about the user.
+     *
+     * If you are using the FireCMS user management plugin, this
+     * section will be implemented automatically.
+     */
+    userManagement: InternalUserManagement<USER>
+
+    /**
+     * Retrieve a user by its uid. Note that this function is not implemented by
+     * default. You can pass your own implementation in the main `FireCMS` component.
+     * Alternatively, if you are using the FireCMS user management system, it will
+     * be implemented automatically.
+     *
+     * @param uid
+     */
+    getUser: (uid: string) => USER | null;
 
 };

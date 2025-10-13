@@ -20,6 +20,7 @@ import { CustomizationControllerContext } from "../contexts/CustomizationControl
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
+import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
 
 /**
  * If you are using independent components of the CMS
@@ -30,7 +31,6 @@ import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
  *
  * You only need to use this component if you are building a custom app.
  *
-
  * @group Core
  */
 export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
@@ -44,21 +44,28 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController,
         storageSource,
         dataSourceDelegate,
-        plugins: pluginsProp,
+        plugins: _pluginsProp,
         onAnalyticsEvent,
         propertyConfigs,
         entityViews,
         entityActions,
         components,
         navigationController,
-        apiKey
+        apiKey,
+        userManagement: _userManagement
     } = props;
 
-    if (pluginsProp) {
+    if (_pluginsProp) {
         console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
     }
 
-    const plugins = navigationController.plugins ?? pluginsProp;
+    const plugins = navigationController.plugins ?? _pluginsProp;
+    const userManagement = plugins?.find(p => p.userManagement)?.userManagement
+        ?? _userManagement
+        ?? {
+            users: [],
+            getUser: (uid: string) => null
+        };
 
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController, authController);
@@ -156,14 +163,16 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                                         value={sideEntityController}>
                                         <NavigationContext.Provider
                                             value={navigationController}>
-                                            <DialogsProvider>
-                                                <BreadcrumbsProvider>
-                                                    <FireCMSInternal
-                                                        loading={loading}>
-                                                        {children}
-                                                    </FireCMSInternal>
-                                                </BreadcrumbsProvider>
-                                            </DialogsProvider>
+                                            <InternalUserManagementContext.Provider value={userManagement}>
+                                                <DialogsProvider>
+                                                    <BreadcrumbsProvider>
+                                                        <FireCMSInternal
+                                                            loading={loading}>
+                                                            {children}
+                                                        </FireCMSInternal>
+                                                    </BreadcrumbsProvider>
+                                                </DialogsProvider>
+                                            </InternalUserManagementContext.Provider>
                                         </NavigationContext.Provider>
                                     </SideEntityControllerContext.Provider>
                                 </SideDialogsControllerContext.Provider>

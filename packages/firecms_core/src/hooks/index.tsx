@@ -20,6 +20,8 @@ export * from "./useClipboard";
 export * from "./useLargeLayout";
 export * from "./useCollapsedGroups";
 
+export * from "./useInternalUserManagementController";
+
 export * from "./useReferenceDialog";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useCustomizationController";
