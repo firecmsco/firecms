@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/core": "^3.0.0-rc",
-    "@firecms/firebase": "^3.0.0-rc",
-    "@firecms/ui": "^3.0.0-rc",
+    "@firecms/core": "^3.0.0",
+    "@firecms/firebase": "^3.0.0",
+    "@firecms/ui": "^3.0.0",
     "firebase": "^12.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
