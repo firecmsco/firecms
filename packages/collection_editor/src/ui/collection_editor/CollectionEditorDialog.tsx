@@ -329,7 +329,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
-        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPaths ?? []);
+        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPaths ?? [], collection.databaseId);
     } : undefined;
 
     const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {

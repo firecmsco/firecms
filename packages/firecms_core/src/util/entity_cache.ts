@@ -24,7 +24,7 @@ function customReplacer(key: string): any {
     // Handle EntityReference
     // @ts-ignore
     if (value instanceof EntityReference) {
-        return { __type: "EntityReference", id: value.id, path: value.path };
+        return { __type: "EntityReference", id: value.id, path: value.path, databaseId: value.databaseId };
     }
 
     // Handle GeoPoint
@@ -49,7 +49,7 @@ function customReviver(key: string, value: any): any {
             case "Date":
                 return new Date(value.value);
             case "EntityReference":
-                return new EntityReference(value.id, value.path);
+                return new EntityReference(value.id, value.path, value.databaseId);
             case "GeoPoint":
                 return new GeoPoint(value.latitude, value.longitude);
             case "Vector":

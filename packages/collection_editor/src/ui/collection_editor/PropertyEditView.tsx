@@ -150,7 +150,6 @@ export const PropertyForm = React.memo(
             validateOnChange: true,
             validateOnInitialRender: true,
             onSubmit: (newPropertyWithId, controller) => {
-                console.debug("onSubmit", newPropertyWithId);
                 const {
                     id,
                     ...property

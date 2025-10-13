@@ -1,10 +1,12 @@
 import {
     AuthController,
     Entity,
+    EntityCollection,
     EntityReference,
     getPropertyInPath,
     isPropertyBuilder,
     mergeDeep,
+    NavigationController,
     Properties,
     Property,
     PropertyOrBuilder,
@@ -16,6 +18,7 @@ import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
 
 export function convertDataToEntity(authController: AuthController,
+                                    navigation: NavigationController,
                                     data: Record<any, any>,
                                     idColumn: string | undefined,
                                     headersMapping: Record<string, string | null>,
@@ -33,7 +36,7 @@ export function convertDataToEntity(authController: AuthController,
             if (!mappedProperty) {
                 return {};
             }
-            const processedValue = processValueMapping(authController, value, mappedProperty);
+            const processedValue = processValueMapping(authController, value, navigation, mappedProperty);
             return ({
                 [mappedKey]: processedValue
             });
@@ -76,7 +79,7 @@ export function flattenEntry(obj: any, parent = ""): any {
     }, {});
 }
 
-export function processValueMapping(authController: AuthController, value: any, property?: PropertyOrBuilder): any {
+export function processValueMapping(authController: AuthController, value: any, navigation: NavigationController, property?: PropertyOrBuilder): any {
     if (value === null) return null;
 
     if (property === undefined) return value;
@@ -89,7 +92,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     const to = usedProperty.dataType;
 
     if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
-        return value.map(v => processValueMapping(authController, v, usedProperty.of as Property));
+        return value.map(v => processValueMapping(authController, v, navigation, usedProperty.of as Property));
     } else if (from === "string" && to === "number" && typeof value === "string") {
         return Number(value);
     } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
@@ -124,7 +127,8 @@ export function processValueMapping(authController: AuthController, value: any, 
         // split value into path and entityId (entityId is the last part of the path, after the last /)
         const path = value.split("/").slice(0, -1).join("/");
         const entityId = value.split("/").slice(-1)[0];
-        return new EntityReference(entityId, path);
+        const targetCollection: EntityCollection<any> | undefined = navigation.getCollectionById(path);
+        return new EntityReference(entityId, path, targetCollection?.databaseId);
 
     } else if (from === to) {
         return value;
