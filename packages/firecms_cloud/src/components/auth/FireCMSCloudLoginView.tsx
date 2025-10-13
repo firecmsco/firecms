@@ -77,6 +77,55 @@ export function FireCMSCloudLoginView({
         transition: "opacity 0.6s ease-in-out"
     };
 
+    // Permissions required mode - simple centered dialog
+    if (includeGoogleAdminScopes) {
+        return (
+            <div className="inset-0 flex items-center justify-center p-8 m-0" style={fadeStyle}>
+                <div className="w-full max-w-md flex flex-col items-center">
+                    {includeLogo && (
+                        <div className="m-4" style={{
+                            width: "160px",
+                            height: "160px"
+                        }}>
+                            <FireCMSLogo/>
+                        </div>
+                    )}
+
+                    {includeLogo && (
+                        <Typography variant={"h4"}
+                                    color={"primary"}
+                                    className="mb-4">
+                            FireCMS <Typography variant={"h4"}
+                                                component={"span"}
+                                                className={"text-primary"}>CLOUD</Typography>
+                        </Typography>
+                    )}
+
+                    <div className="w-full space-y-4">
+
+                        <GoogleLoginButton
+                            onClick={() => {
+                                onAnalyticsEvent?.("google_attempt");
+                                fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
+                                    onAnalyticsEvent?.("google_success");
+                                }).catch((error) => {
+                                    onAnalyticsEvent?.("google_error", { error: error?.code });
+                                });
+                            }}/>
+
+                        {fireCMSBackend.permissionsNotGrantedError &&
+                            <ErrorView
+                                error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
+
+                        {buildErrorView()}
+
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Normal login mode - full view with marketing section
     return (
         <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto" style={fadeStyle}>
             {/* Marketing Section - Left Side (Desktop only) */}
@@ -190,7 +239,7 @@ export function FireCMSCloudLoginView({
                             });
                         }}/>}
 
-                    {!includeGoogleAdminScopes && !passwordLoginSelected && <LoginButton
+                    {!passwordLoginSelected && <LoginButton
                         disabled={!termsAccepted && includeTermsAndNewsLetter}
                         text={"Email/password"}
                         icon={<MailIcon size={24}/>}
@@ -198,12 +247,6 @@ export function FireCMSCloudLoginView({
                             onAnalyticsEvent?.("password_method_selected");
                             setPasswordLoginSelected(true);
                         }}/>}
-
-
-                    {includeGoogleAdminScopes &&
-                        fireCMSBackend.permissionsNotGrantedError &&
-                        <ErrorView
-                            error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
 
                     {passwordLoginSelected && <CloudUserPasswordForm
                         fireCMSBackend={fireCMSBackend}
