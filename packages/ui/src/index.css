@@ -121,9 +121,8 @@ a {
     @apply text-sm font-semibold uppercase;
 }
 
-
 :focus-visible {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
 }
 
 a {

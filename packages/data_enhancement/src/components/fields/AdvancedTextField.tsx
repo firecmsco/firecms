@@ -146,7 +146,7 @@ export function AdvancedTextField<T extends string | number>({
                 {addLineBreaks(originalValue, !endsWithHighlight && multiline)}
 
                 {endsWithHighlight &&
-                    <span className="dark:bg-slate-700 bg-slate-300 p-px -m-px rounded-sm">
+                    <span className="dark:bg-surface-700 bg-surface-300 p-px -m-px rounded-sm">
                     {addLineBreaks(highlight, multiline)}
                 </span>}
 

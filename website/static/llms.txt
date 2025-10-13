@@ -2,7 +2,7 @@
 
 > This is the documentation for FireCMS, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
 > with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will 
+> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will
 > adapt to any database structure you have, as well as for new ones.
 
 ## Getting started
@@ -481,7 +481,7 @@ firecms deploy --project=your-project-id
 
 ### Deployment
 
-FireCMS Cloud projects can only be deployed to FireCMS Cloud. 
+FireCMS Cloud projects can only be deployed to FireCMS Cloud.
 
 If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
 Since the APIs are the same for all versions, you can easily switch between them.
@@ -2108,7 +2108,7 @@ return <NavigationRoutes homePage={<>My custom home page</>}>
 </NavigationRoutes>
 ```
 
-Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
+Note that you can also define custom views by defining them in `useBuildNavigationController`, with the
 added benefit that they will be automatically included in the default drawer.
 
 #### SideDialogs
@@ -2116,7 +2116,7 @@ added benefit that they will be automatically included in the default drawer.
 The `SideDialogs` component is a container for side dialogs. Side dialogs are typically used to display forms or
 additional information in a side panel.
 
-You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your 
+You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your
 custom components.
 
 ### Utilities
@@ -2617,8 +2617,8 @@ If you need to customize any other aspect of FireCMS, please [let us know](https
 
 ## Self-Hosted Deployment
 
-FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
-to any static hosting provider. It does not require any server-side code. 
+FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed
+to any static hosting provider. It does not require any server-side code.
 
 We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
 pick up the Firebase config from the environment.
@@ -2838,7 +2838,7 @@ service cloud.firestore {
       allow read: if false;
       allow write: if false;
     }
-    
+
     // allow every read to products collection but write only to authenticated users
     match /databases/{database}/documents {
         match /products/{id=**} {
@@ -2846,7 +2846,7 @@ service cloud.firestore {
           allow write: if request.auth != null;
         }
     }
-    
+
     // allow users to modify only their own user document
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -3378,7 +3378,7 @@ Firestore collections. The Collection Editor UI Plugin provides an interface for
 collections, with support for customizable permissions and configuration options.
 
 Typically, collections in FireCMS are defined in code, and passed as a prop to the `NavigationController` on
-initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
+initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing
 a more user-friendly and flexible way to organize and configure your Firestore collections.
 
 In this document, we will cover how to set up and use this plugin in your FireCMS application.
@@ -3550,7 +3550,7 @@ function App() {
         collectionEditorPlugin,
         userManagementPlugin
     ];
-    
+
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder(),
         views: customViews,
@@ -4014,7 +4014,7 @@ The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's
 ```jsx
 
 function App() {
-    
+
     const exportPlugin = useExportPlugin({
         exportAllowed: ({
                             collectionEntitiesCount,
@@ -4036,7 +4036,7 @@ function App() {
         // ... rest of your config
         plugins
     });
-    
+
     return (
             <FireCMS
                 navigationController={navigationController}
@@ -4218,10 +4218,10 @@ export type ImportPluginProps = {
 Provides context for determining import permissions.
 
 ```typescript
-export type ImportAllowedParams = { 
-    collectionEntitiesCount: number; 
-    path: string; 
-    collection: EntityCollection; 
+export type ImportAllowedParams = {
+    collectionEntitiesCount: number;
+    path: string;
+    collection: EntityCollection;
 };
 ```
 
@@ -6070,7 +6070,7 @@ account and manage the indexing of your documents.
 
 You can achieve this by implementing a Google Cloud Function that listens to
 Firestore changes and updates the Algolia index.
-There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search) 
+There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search)
 for the very same purpose.
 
 The examples below show how to use Algolia as an external search provider, using the `algoliasearch` library version 5.
@@ -6518,7 +6518,7 @@ match /{path=**}/locales/{document=**} {
 ```
 
 When doing a collection group query, the path will be something like
-`/products/{productId}/locales/{localeId}`. But the query will go to all 
+`/products/{productId}/locales/{localeId}`. But the query will go to all
 the collections called `locales` in your database. That is why you might need
 to add a rule like the one above.
 :::
@@ -6751,7 +6751,7 @@ export const productsCollection = buildCollection<Product>({
 ## Properties
 
 Properties define each **field** in a form or column in a collection included in an
-entity collection. 
+entity collection.
 
 You can build properties by creating the object directly or by
 using the helper method `buildProperty` (just the identity function that uses
@@ -7229,8 +7229,8 @@ is [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBi
 
 Use the date/time fields to allow users to set dates, saved as Firestore timestamps.
 
-You can choose between using dates or date/time fields. 
-Also you can create read-only fields that get updated automatically when 
+You can choose between using dates or date/time fields.
+Also you can create read-only fields that get updated automatically when
 entities are created or updated
 
 The data type is [`date`](https://firecms.co/docs/config/date).
@@ -7289,11 +7289,11 @@ buildProperty({
 ## References
 
 Use reference fields when you need to establish relations between collections.
-For example, you may have a product that is related to one category, or one 
+For example, you may have a product that is related to one category, or one
 that has multiple purchases.
 
 When you set up a FireCMS app, you define collections under paths (or path
-aliases), and those are the paths that you use to configure reference 
+aliases), and those are the paths that you use to configure reference
 properties.
 
 #### Single reference field
@@ -7331,7 +7331,7 @@ buildProperty({
 ```
 
 The data type is [`array`](https://firecms.co/docs/config/array) with a reference
-property as the `of` prop. 
+property as the `of` prop.
 
 Internally the component used
 is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/../api/functions/ArrayOfReferencesFieldBinding).
@@ -7537,7 +7537,7 @@ Each property in the CMS has its own API, but they all share some **common props
 * `defaultValue`
   This value will be set by default for new entities.
 
-  
+
 
 
 ## String
@@ -8184,7 +8184,7 @@ Links:
 
 When defining the properties of a collection, you can choose to use a builder
 [`PropertyBuilder`](https://firecms.co/docs/api/type-aliases/PermissionsBuilder), instead of assigning the
-property configuration directly. 
+property configuration directly.
 
 This is useful for changing property configurations like available values on the
 fly, based on other values.
@@ -9211,7 +9211,7 @@ export function ExampleCMSView() {
 
 ## useReferenceDialog
 
-:::note 
+:::note
 Please note that in order to use this hook you **must** be in a
 component (you can't use them directly from a callback function).
 :::
@@ -12246,7 +12246,7 @@ export default function ExpandablePanelInvisibleDemo() {
 
 ## File Upload
 
-File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions. 
+File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions.
 
 ### Usage
 
@@ -13974,21 +13974,21 @@ import { Table, TableBody, TableHeader, TableRow, TableCell } from "@firecms/ui"
 
 export default function TableCustomHeadingDemo() {
     return (
-        <Table className="bg-slate-50 dark:bg-slate-900">
-            <TableHeader className="bg-slate-50 dark:bg-slate-800">
+        <Table className="bg-surface-50 dark:bg-surface-900">
+            <TableHeader className="bg-surface-50 dark:bg-surface-800">
                 <TableCell header scope="col" className="custom-header-cell">Product</TableCell>
                 <TableCell header scope="col" className="custom-header-cell">Price</TableCell>
                 <TableCell header scope="col" className="custom-header-cell">Stock</TableCell>
             </TableHeader>
-            <TableBody className="bg-slate-100 dark:bg-slate-900">
-                <TableRow className="hover:bg-slate-200 hover:dark:bg-slate-800" onClick={() => console.log("Clicked")}>
+            <TableBody className="bg-surface-100 dark:bg-surface-900">
+                <TableRow className="hover:bg-surface-200 hover:dark:bg-surface-800" onClick={() => console.log("Clicked")}>
                     <TableCell>Apple</TableCell>
-                    <TableCell className="bg-slate-200 dark:bg-slate-700">$1.00</TableCell>
+                    <TableCell className="bg-surface-200 dark:bg-surface-700">$1.00</TableCell>
                     <TableCell>In Stock</TableCell>
                 </TableRow>
-                <TableRow className="hover:bg-slate-200 hover:dark:bg-slate-800" onClick={() => console.log("Clicked")}>
+                <TableRow className="hover:bg-surface-200 hover:dark:bg-surface-800" onClick={() => console.log("Clicked")}>
                     <TableCell>Banana</TableCell>
-                    <TableCell className="bg-slate-200 dark:bg-slate-700">$0.50</TableCell>
+                    <TableCell className="bg-surface-200 dark:bg-surface-700">$0.50</TableCell>
                     <TableCell>Out of Stock</TableCell>
                 </TableRow>
             </TableBody>
@@ -14195,7 +14195,7 @@ import { TextareaAutosize } from '@firecms/ui';
 
 export default function TextareaAutosizeBasicDemo() {
     return (
-        <TextareaAutosize 
+        <TextareaAutosize
             placeholder="Type your text here..."
         />
     );
@@ -14218,7 +14218,7 @@ export default function TextareaAutosizeControlledDemo() {
     };
 
     return (
-        <TextareaAutosize 
+        <TextareaAutosize
             value={value}
             onChange={handleChange}
             placeholder="Type your text here..."
@@ -14237,7 +14237,7 @@ import { TextareaAutosize } from "@firecms/ui";
 
 export default function TextareaAutosizeRowsDemo() {
     return (
-        <TextareaAutosize 
+        <TextareaAutosize
             placeholder="Type your text here..."
             minRows={3}
             maxRows={6}

@@ -62,7 +62,7 @@ export function DataTable({
     return (
         <Paper>
             <div
-                className="rounded bg-slate-50 dark:bg-slate-900 flex flex-row justify-between items-center px-4 py-2 h-14">
+                className="rounded bg-surface-50 dark:bg-surface-900 flex flex-row justify-between items-center px-4 py-2 h-14">
                 <Typography variant="label" className="flex-1">Data</Typography>
                 <IconButton
                     disabled={!data}

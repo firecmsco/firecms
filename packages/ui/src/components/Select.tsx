@@ -142,6 +142,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             "px-3": size === "medium",
                             "px-2": size === "small" || size === "smallest",
                         } : "",
+                        "outline-hidden focus:outline-hidden",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",

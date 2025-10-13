@@ -135,7 +135,7 @@ export const ColorSelector = ({
 
 
             <div className="flex flex-col">
-                <div className="my-1 px-2 text-sm font-semibold text-slate-400 dark:text-slate-400">
+                <div className="my-1 px-2 text-sm font-semibold text-surface-400 dark:text-surface-400">
                     Color
                 </div>
                 {TEXT_COLORS.map(({
@@ -153,7 +153,7 @@ export const ColorSelector = ({
                                 .setColor(color || "")
                                 .run();
                         }}
-                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-slate-100 hover:dark:bg-slate-700"
+                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-surface-100 hover:dark:bg-surface-700"
                     >
                         <div className="flex items-center gap-2">
                             <div
@@ -168,7 +168,7 @@ export const ColorSelector = ({
                 ))}
             </div>
             <div>
-                <div className="my-1 px-2 text-sm font-semibold text-slate-400 dark:text-slate-400">
+                <div className="my-1 px-2 text-sm font-semibold text-surface-400 dark:text-surface-400">
                     Background
                 </div>
                 {HIGHLIGHT_COLORS.map(({
@@ -181,7 +181,7 @@ export const ColorSelector = ({
                             editor.commands.unsetHighlight();
                             name !== "Default" && editor.commands.setHighlight({ color });
                         }}
-                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-slate-100 hover:dark:bg-slate-700"
+                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-surface-100 hover:dark:bg-surface-700"
                     >
                         <div className="flex items-center gap-2">
                             <div

@@ -349,7 +349,7 @@ export function LoginButton({
     return (
         <div className="my-1 w-full">
             <Button
-                className={cls("w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100", disabled ? "" : "hover:text-slate-800 hover:dark:text-white")}
+                className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
                 style={{
                     height: "40px",
                     borderRadius: "4px",

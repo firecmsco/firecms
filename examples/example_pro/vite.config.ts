@@ -1,6 +1,8 @@
 // @ts-ignore
 import path from "path";
-import { defineConfig } from "vite"
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr";
 
@@ -17,6 +19,7 @@ export default defineConfig({
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         svgr(),
+        tailwindcss(),
         react({})
     ],
     resolve: {

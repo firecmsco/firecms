@@ -167,10 +167,10 @@ export const DataTableCell = React.memo<DataTableCellProps>(
                     "select-text cursor-text",
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md p-${p} border-4  border-opacity-75`,
-                    onHover && !disabled ? "bg-slate-50 dark:bg-slate-900" : "",
-                    saved ? "bg-slate-100/75 dark:bg-slate-800/75" : "",
+                    onHover && !disabled ? "bg-surface-50 dark:bg-surface-900" : "",
+                    saved ? "bg-surface-100/75 dark:bg-surface-800/75" : "",
                     hideOverflow ? "overflow-hidden" : "",
-                    isSelected ? "bg-slate-50 dark:bg-slate-900" : "",
+                    isSelected ? "bg-surface-50 dark:bg-surface-900" : "",
                     borderClass
                 )}
                 ref={ref}

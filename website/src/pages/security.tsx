@@ -468,7 +468,7 @@ function SharedResponsibilitySection() {
                             <th className="p-4 text-left font-bold text-purple-600 w-1/3">Infrastructure (Google/MongoDB)</th>
                         </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-500 divide-opacity-30 dark:divide-slate-500 dark:divide-opacity-30">
+                        <tbody className="divide-y divide-surface-500 divide-opacity-30 dark:divide-surface-500 dark:divide-opacity-30">
                         <tr>
                             <td className="p-4 font-medium">Data Access Control</td>
                             <td className="p-4 text-sm">Write &amp; maintain security rules</td>

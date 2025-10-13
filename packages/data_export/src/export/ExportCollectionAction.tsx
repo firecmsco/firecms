@@ -219,17 +219,17 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                             <input id="radio-csv" type="radio" value="csv" name="exportType"
                                    checked={exportType === "csv"}
                                    onChange={() => setExportType("csv")}
-                                   className={cls("w-4 bg-slate-100 border-slate-300 dark:bg-slate-700 dark:border-slate-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-slate-900 dark:text-slate-300">CSV</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">CSV</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
                                    checked={exportType === "json"}
                                    onChange={() => setExportType("json")}
-                                   className={cls("w-4 bg-slate-100 border-slate-300 dark:bg-slate-700 dark:border-slate-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-slate-900 dark:text-slate-300">JSON</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">JSON</label>
                         </div>
                     </div>
 
@@ -238,9 +238,9 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                             <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
                                    checked={dateExportType === "timestamp"}
                                    onChange={() => setDateExportType("timestamp")}
-                                   className={cls("w-4 bg-slate-100 border-slate-300 dark:bg-slate-700 dark:border-slate-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-slate-900 dark:text-slate-300">Dates
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
@@ -248,9 +248,9 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
                                    checked={dateExportType === "string"}
                                    onChange={() => setDateExportType("string")}
-                                   className={cls("w-4 bg-slate-100 border-slate-300 dark:bg-slate-700 dark:border-slate-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-slate-900 dark:text-slate-300">Dates
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>

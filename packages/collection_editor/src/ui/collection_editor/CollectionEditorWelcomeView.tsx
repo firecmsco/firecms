@@ -186,7 +186,7 @@ export function TemplateButton({
                     "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-text-secondary dark:text-text-secondary-dark",
                     "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
-                    "border-slate-400 dark:border-slate-600 "
+                    "border-surface-400 dark:border-surface-600 "
                 )}
             >
                 {icon}
