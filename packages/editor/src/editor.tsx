@@ -66,20 +66,16 @@ export type CustomEditorComponent = {
     component: React.FC
 };
 
-// custom components need to be able to display and update the editor content
-// export type CustomEditorComponentProps = {
-//
-// };
-
-const CustomDocument = Document.extend({
-    // content: 'heading block*',
-});
-
 const proseClasses = {
     "sm": "prose-sm",
     "base": "prose-base",
     "lg": "prose-lg"
 }
+
+const canUseDOM = Boolean(
+    typeof window !== "undefined" &&
+    window.document && window.document.createElement
+);
 
 export const FireCMSEditor = ({
                                   content,
@@ -158,7 +154,7 @@ export const FireCMSEditor = ({
 
     const extensions: Extensions = useMemo(() => ([
         starterKit as any,
-        CustomDocument,
+        Document.extend({}),
         HighlightDecorationExtension(highlight),
         TextLoadingDecorationExtension,
         Underline,
@@ -207,6 +203,7 @@ export const FireCMSEditor = ({
             <EditorProvider
                 content={content ?? ""}
                 extensions={extensions}
+                immediatelyRender={canUseDOM}
                 editorProps={{
                     editable: () => !disabled,
                     attributes: {
