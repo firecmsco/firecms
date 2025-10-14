@@ -1,27 +1,25 @@
 import { User } from "../types";
-import { AccountCircleIcon, cls } from "@firecms/ui";
+import { AccountCircleIcon, cls, defaultBorderMixin } from "@firecms/ui";
 
 /**
  * Component to render a single user with name and email
  */
 export function UserDisplay({
                                 user,
-                                size = "medium"
-                            }: { user: User | null; size?: "small" | "medium" | "large" }) {
+                            }: { user: User | null }) {
     if (!user) {
         return <span className="text-text-secondary dark:text-text-secondary-dark">Select a user</span>;
     }
 
-    const sizeClasses = {
-        small: "text-xs",
-        medium: "text-sm",
-        large: "text-sm"
-    };
-
-    const avatarSizeClass = size === "small" ? "w-4 h-4" : size === "large" ? "w-6 h-6" : "w-4 h-4";
+    const avatarSizeClass = "w-6 h-6";
 
     return (
-        <div className="flex items-center gap-4">
+        <div className={cls(
+            "inline-flex items-center gap-4 px-2 py-1 rounded-xl",
+            "bg-surface-accent-100 dark:bg-surface-accent-800",
+            "border",
+            defaultBorderMixin
+        )}>
             {user.photoURL ? (
                 <img
                     src={user.photoURL}
@@ -40,12 +38,12 @@ export function UserDisplay({
                 />
             )}
             <div className="flex flex-col min-w-0">
-                <span className={cls("font-semibold truncate", sizeClasses[size])}>
-                    {user.displayName || user.email || "Unknown User"}
+                <span className={cls("font-regular truncate", "text-sm")}>
+                    {user.displayName || user.email || "-"}
                 </span>
                 {user.displayName && user.email && (
                     <span className={cls("text-text-secondary dark:text-text-secondary-dark truncate",
-                        size === "small" ? "text-[10px]" : size === "large" ? "text-xs" : "text-[11px]"
+                        "text-xs"
                     )}>
                         {user.email}
                     </span>

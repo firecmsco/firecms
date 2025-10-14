@@ -25,3 +25,4 @@ export * from "./components/EnumValuesChip";
 export * from "./components/EmptyValue";
 export * from "./components/ImagePreview";
 export * from "./components/ReferencePreview";
+export * from "./components/UserPreview";

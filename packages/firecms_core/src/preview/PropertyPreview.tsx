@@ -31,6 +31,7 @@ import { DatePreview } from "./components/DatePreview";
 import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 import { ErrorView } from "../components";
+import { UserPreview } from "./components/UserPreview";
 
 /**
  * @group Preview components
@@ -97,6 +98,13 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
+            } else if (stringProperty.userSelect) {
+                content = <UserPreview
+                    value={value}
+                    property={stringProperty}
+                    propertyKey={propertyKey}
+                    size={props.size}
+                />;
             } else if (stringProperty.reference) {
                 if (typeof stringProperty.reference.path === "string") {
                     content = <ReferencePreview

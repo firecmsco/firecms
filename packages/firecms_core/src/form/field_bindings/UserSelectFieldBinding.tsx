@@ -71,14 +71,14 @@ export function UserSelectFieldBinding({
                 }}
                 renderValue={(userId: string) => {
                     const user = getUser(userId);
-                    return <UserDisplay user={user} size={size} />;
+                    return <UserDisplay user={user} />;
                 }}
             >
                 {users && users.map((user) => {
                     return <SelectItem
                         key={user.uid}
                         value={user.uid}>
-                        <UserDisplay user={user} size={size} />
+                        <UserDisplay user={user}  />
                     </SelectItem>
                 })}
             </Select>

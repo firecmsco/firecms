@@ -46,7 +46,7 @@ export function VirtualTableUserSelect(props: {
 
     const renderValue = (userId: string) => {
         const user = getUser(userId);
-        return <UserDisplay user={user} size={small ? "small" : "medium"} />;
+        return <UserDisplay user={user}  />;
     };
 
     return (
@@ -67,8 +67,7 @@ export function VirtualTableUserSelect(props: {
                         key={user.uid}
                         value={user.uid}>
                         <UserDisplay
-                            user={user}
-                            size={small ? "small" : "medium"} />
+                            user={user} />
                     </MultiSelectItem>
                 ))}
             </MultiSelect>
@@ -90,8 +89,7 @@ export function VirtualTableUserSelect(props: {
                         key={user.uid}
                         value={user.uid}>
                         <UserDisplay
-                            user={user}
-                            size={small ? "small" : "medium"} />
+                            user={user}/>
                     </SelectItem>
                 ))}
             </Select>

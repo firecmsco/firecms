@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { InternalUserManagement, NavigationController } from "../types";
+import { InternalUserManagement, NavigationController, User } from "../types";
 import { NavigationContext } from "../contexts/NavigationContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
 
@@ -13,4 +13,4 @@ import { InternalUserManagementContext } from "../contexts/InternalUserManagemen
  *
  * @group Hooks and utilities
  */
-export const useInternalUserManagementController = (): InternalUserManagement => useContext(InternalUserManagementContext);
+export const useInternalUserManagementController = <USER extends User = User>(): InternalUserManagement<USER> => useContext(InternalUserManagementContext);

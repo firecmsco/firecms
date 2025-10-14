@@ -97,14 +97,4 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      */
     userManagement: InternalUserManagement<USER>
 
-    /**
-     * Retrieve a user by its uid. Note that this function is not implemented by
-     * default. You can pass your own implementation in the main `FireCMS` component.
-     * Alternatively, if you are using the FireCMS user management system, it will
-     * be implemented automatically.
-     *
-     * @param uid
-     */
-    getUser: (uid: string) => USER | null;
-
 };
