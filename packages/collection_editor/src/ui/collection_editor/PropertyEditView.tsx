@@ -605,9 +605,9 @@ const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
     url: "Text",
     email: "Text",
     switch: "Boolean",
+    user_select: "Users",
     select: "Select",
     multi_select: "Select",
-    user_select: "Select",
     number_input: "Number",
     number_select: "Select",
     multi_number_select: "Select",
@@ -787,6 +787,7 @@ export function WidgetSelectViewItem({
                         <WarningIcon size="smallest" className={"w-4"}/>
                     </Tooltip>}
                     <Typography
+                        variant={"label"}
                         color={shouldWarnChangingDataType ? "secondary" : undefined}>{propertyConfig.name}</Typography>
                 </div>
 

@@ -69,7 +69,7 @@ export function PropertyFieldPreview({
 
                     {includeName &&
                         <ErrorBoundary>
-                            <Typography variant="body1"
+                            <Typography variant="label"
                                         component="span"
                                         className="flex-grow pr-2">
                                 {property.name
@@ -131,8 +131,8 @@ export function NonEditablePropertyPreview({
             <div className={"relative m-4"}>
                 {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig}/>}
                 {!propertyConfig && <div
-                    className={"h-8 w-8 p-1 rounded-full shadow text-white bg-surface-500"}>
-                    <FunctionsIcon color={"inherit"} size={"medium"}/>
+                    className={"h-8 w-8 flex items-center justify-center rounded-full shadow text-white bg-surface-500"}>
+                    <FunctionsIcon color={"inherit"} size={"small"}/>
                 </div>}
                 <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
             </div>

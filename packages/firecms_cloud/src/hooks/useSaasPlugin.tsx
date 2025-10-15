@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, useNavigationController, useSnackbarController } from "@firecms/core";
+import {
+    EntityCollection,
+    FireCMSPlugin,
+    InternalUserManagement,
+    useNavigationController,
+    useSnackbarController
+} from "@firecms/core";
 import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
 import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
@@ -15,6 +21,7 @@ export function useSaasPlugin({
                                   collectionConfigController,
                                   appConfig,
                                   dataTalkSuggestions,
+                                  userManagement,
                                   introMode,
                                   fireCMSBackend,
                                   onAnalyticsEvent,
@@ -22,6 +29,7 @@ export function useSaasPlugin({
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
+    userManagement: InternalUserManagement;
     collectionConfigController: CollectionsConfigController;
     dataTalkSuggestions?: string[];
     introMode?: "new_project" | "existing_project";
@@ -82,6 +90,7 @@ export function useSaasPlugin({
             additionalChildrenStart,
             additionalChildrenEnd,
         },
+        userManagement,
         collection: {
             injectCollections: projectConfig.isTrialOver ? undefined : injectCollections,
             modifyCollection

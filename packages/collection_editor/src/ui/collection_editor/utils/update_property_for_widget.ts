@@ -36,7 +36,7 @@ export function updatePropertyFromWidget(propertyData: any,
             propertyData,
             {
                 dataType: "string",
-                propertyConfig: "text_field",
+                propertyConfig: "user_select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,

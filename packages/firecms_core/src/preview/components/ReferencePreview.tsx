@@ -4,7 +4,7 @@ import { Entity, EntityCollection, EntityReference } from "../../types";
 import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Skeleton } from "@firecms/ui";
-import { ErrorView } from "../../components";
+import { ErrorBoundary, ErrorView } from "../../components";
 import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
 
 export type ReferencePreviewProps = {
@@ -32,7 +32,9 @@ export const ReferencePreview = function ReferencePreview(props: ReferencePrevie
                        tooltip={JSON.stringify(reference)}/>
         </EntityPreviewContainer>;
     }
-    return <ReferencePreviewInternal {...props} />;
+    return <ErrorBoundary>
+        <ReferencePreviewInternal {...props} />
+    </ErrorBoundary>;
 };
 
 function ReferencePreviewInternal({

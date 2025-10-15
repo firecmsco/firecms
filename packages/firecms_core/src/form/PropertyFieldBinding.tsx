@@ -93,6 +93,10 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
+    if(propertyKey === "created_by"){
+        console.log("Rendering field for created_by", {propertyKey, property, context});
+    }
+
     return (
         <Field
             key={propertyKey}

@@ -1,5 +1,6 @@
 import { User } from "../types";
 import { AccountCircleIcon, cls, defaultBorderMixin } from "@firecms/ui";
+import { EmptyValue } from "../preview";
 
 /**
  * Component to render a single user with name and email
@@ -8,7 +9,7 @@ export function UserDisplay({
                                 user,
                             }: { user: User | null }) {
     if (!user) {
-        return <span className="text-text-secondary dark:text-text-secondary-dark">Select a user</span>;
+        return <EmptyValue/>;
     }
 
     const avatarSizeClass = "w-6 h-6";

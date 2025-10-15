@@ -574,6 +574,7 @@ function FireCMSAppAuthenticated({
         collectionConfigController,
         appConfig,
         fireCMSBackend,
+        userManagement,
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
@@ -629,7 +630,6 @@ function FireCMSAppAuthenticated({
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={plugins}
                             components={{
                                 missingReference: MissingReferenceWidget
                             }}
