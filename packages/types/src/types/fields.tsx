@@ -12,6 +12,7 @@ export type DefaultFieldConfig =
     | "switch"
     | "select"
     | "multi_select"
+    | "user_select"
     | "number_input"
     | "number_select"
     | "multi_number_select"

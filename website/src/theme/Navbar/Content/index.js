@@ -9,7 +9,6 @@ import NavbarSearch from "@theme/Navbar/Search";
 import NavigationDropdown from "../../../NavigationDropdown";
 
 function useNavbarItems() {
-    // TODO temporary casting until ThemeConfig type is improved
     return useThemeConfig().navbar.items;
 }
 
@@ -92,7 +91,7 @@ export default function NavbarContent() {
                                 trigger={<div className="navbar__item dropdown dropdown--hoverable">
                                     <a className="navbar__link"
                                        role="button"
-                                       href="/features">{item.label}</a>
+                                       href={"/features"}>{item.label}</a>
                                 </div>}>
                                 <div className={"flex flex-row gap-16 py-8"}>
                                     {innerLeftItems && <div className={"flex flex-col"}>
@@ -109,8 +108,6 @@ export default function NavbarContent() {
                 </>
             }
             right={
-                // TODO stop hardcoding items?
-                // Ask the user to add the respective navbar items => more flexible
                 <>
                     <NavbarItems items={rightItems}/>
                     {!searchBarItem && (

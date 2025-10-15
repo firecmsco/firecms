@@ -3,7 +3,7 @@ import {
     getInferenceType,
     ImportConfig,
     ImportNewPropertyFieldPreview
-} from "@firecms/data_import_export";
+} from "@firecms/data_import";
 import { getIn, useFormex } from "@firecms/formex";
 
 import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@firecms/core";

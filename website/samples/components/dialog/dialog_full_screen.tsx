@@ -27,8 +27,10 @@ export default function DialogFullScreenDemo() {
                     </CenteredView>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Done
                     </Button>
                 </DialogActions>

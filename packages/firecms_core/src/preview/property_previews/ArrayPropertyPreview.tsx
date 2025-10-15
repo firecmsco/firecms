@@ -40,7 +40,7 @@ export function ArrayPropertyPreview({
     const childSize: PreviewSize = size === "medium" ? "medium" : "small";
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2">
             {values &&
                 values.map((value, index) => {
                         if (!resolvedProperties) {

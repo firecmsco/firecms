@@ -54,6 +54,8 @@ export type ProjectConfig = {
 
     historyDefaultEnabled: boolean;
     updateHistoryDefaultEnabled: (enabled: boolean) => Promise<void>;
+
+    updateSurveyData: (surveyData: Record<string, any>) => Promise<void>;
 };
 
 interface ProjectConfigParams {
@@ -163,6 +165,13 @@ export function useBuildProjectConfig({
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         return setDoc(doc(firestore, configPath), { history_default_enabled: enabled }, { merge: true });
+    }, [configPath]);
+
+    const updateSurveyData = useCallback(async (surveyData: Record<string, string>): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { survey_data: surveyData }, { merge: true });
     }, [configPath]);
 
     useEffect(() => {
@@ -283,6 +292,7 @@ export function useBuildProjectConfig({
         updateLocalTextSearchEnabled,
         historyDefaultEnabled,
         updateHistoryDefaultEnabled,
+        updateSurveyData,
         primaryColor,
         secondaryColor,
         updatePrimaryColor,
@@ -309,14 +319,14 @@ const uploadFile = (storage: FirebaseStorage, {
 const deserializeAppCheckOptions = (appCheck: SerializedAppCheckOptions): AppCheckOptions => {
     if (appCheck.provider === "recaptcha_v3") {
         return {
-            provider: new ReCaptchaV3Provider(appCheck.siteKey),
+            provider: new ReCaptchaV3Provider(appCheck.siteKey) as unknown as AppCheckOptions['provider'],
             isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
             debugToken: appCheck.debugToken,
             forceRefresh: appCheck.forceRefresh
         }
     } else if (appCheck.provider === "recaptcha_enterprise") {
         return {
-            provider: new ReCaptchaEnterpriseProvider(appCheck.siteKey),
+            provider: new ReCaptchaEnterpriseProvider(appCheck.siteKey) as unknown as AppCheckOptions['provider'],
             isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
             debugToken: appCheck.debugToken,
             forceRefresh: appCheck.forceRefresh

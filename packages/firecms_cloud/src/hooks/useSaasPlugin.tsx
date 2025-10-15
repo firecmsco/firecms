@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, useNavigationController, useSnackbarController } from "@firecms/core";
+import {
+    EntityCollection,
+    FireCMSPlugin,
+    InternalUserManagement,
+    useNavigationController,
+    useSnackbarController
+} from "@firecms/core";
 import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
 import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
@@ -15,6 +21,7 @@ export function useSaasPlugin({
                                   collectionConfigController,
                                   appConfig,
                                   dataTalkSuggestions,
+                                  userManagement,
                                   introMode,
                                   fireCMSBackend,
                                   onAnalyticsEvent,
@@ -22,6 +29,7 @@ export function useSaasPlugin({
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
+    userManagement: InternalUserManagement;
     collectionConfigController: CollectionsConfigController;
     dataTalkSuggestions?: string[];
     introMode?: "new_project" | "existing_project";
@@ -30,39 +38,9 @@ export function useSaasPlugin({
     historyDefaultEnabled?: boolean;
 }): FireCMSPlugin {
 
-    const snackbarController = useSnackbarController();
-    const [alertDismissed, setAlertDismissed] = React.useState(isHistoryAlertDismissed());
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
-    const showHistoryAlert = !alertDismissed && !projectConfig.historyDefaultEnabled;
     const additionalChildrenStart = <>
-        {showHistoryAlert && <Alert action={<>
-            <Button size={"small"} variant={"text"} color={"text"}
-                    onClick={() => {
-                        setAlertDismissed(true);
-                        saveHistoryAlertDismissed();
-                        onAnalyticsEvent?.("saas_history_alert_dismissed");
-                    }}>Dismiss</Button>
-            <Button size={"small"} variant={"outlined"} color={"text"}
-                    onClick={() => {
-                        setAlertDismissed(true);
-                        onAnalyticsEvent?.("saas_history_alert_enabled");
-                        projectConfig.updateHistoryDefaultEnabled(true).then(() => {
-                            snackbarController.open({
-                                type: "success",
-                                message: "Document history enabled globally",
-                            })
-                        });
-                    }}>Enable globally</Button>
-        </>}><>🕒 You can now enable
-            document history to keep track of your document
-            changes.
-            <Typography variant={"caption"}>
-                You can enable this feature for all your collections or just for specific ones. Data will be stored
-                in your Firestore database as a sub-collection of each document.
-            </Typography>
-        </>
-        </Alert>}
         <IntroWidget
             fireCMSBackend={fireCMSBackend}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -98,20 +76,23 @@ export function useSaasPlugin({
         return collection;
     }, []);
 
+    const injectCollections = useCallback(
+        (collections: EntityCollection[]) => mergeCollections(
+            collections,
+            (collectionConfigController.collections ?? []).map(modifyCollection),
+            appConfig?.modifyCollection
+        ),
+        [collectionConfigController.collections]);
+
     return {
         key: "saas",
         homePage: {
             additionalChildrenStart,
             additionalChildrenEnd,
         },
+        userManagement,
         collection: {
-            injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
-                (collections: EntityCollection[]) => mergeCollections(
-                    collections,
-                    (collectionConfigController.collections ?? []).map(modifyCollection),
-                    appConfig?.modifyCollection
-                ),
-                [collectionConfigController.collections]),
+            injectCollections: projectConfig.isTrialOver ? undefined : injectCollections,
             modifyCollection
         },
         collectionView: {
@@ -213,17 +194,21 @@ export function IntroWidget({
             <Typography paragraph={true} className={"mt-4"}>
                 FireCMS can be used as a standalone admin panel but it shines when you add your own custom
                 functionality. Including your own custom components, fields, actions, views, and more.
+                More info in the <a
+                href={"https://firecms.co/docs/cloud/quickstart"}
+                rel="noopener noreferrer"
+                target="_blank">docs</a>
             </Typography>
             <div className={"mb-8"}>
                 <Typography className={"inline"}>Start customizing with:</Typography>
                 <div
-                    className={"ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    className={"text-sm ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                     yarn create firecms-app
+                </div> or
+                <div
+                    className={"text-sm  ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    npx create-firecms-app
                 </div>
-                <Typography>More info in the <a
-                    href={"https://firecms.co/docs/cloud/quickstart"}
-                    rel="noopener noreferrer"
-                    target="_blank">docs</a></Typography>
             </div>
 
         </div>

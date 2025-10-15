@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
@@ -30,14 +30,20 @@ export function RootCollectionSuggestions({
     const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
     const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
 
+    const requested = useRef(false);
+
     useEffect(() => {
+        if (requested.current)
+            return;
         const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
-        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken).then((paths) => {
-            setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
-        });
+        requested.current = true;
+        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken)
+            .then((paths) => {
+                setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
+            });
     }, []);
 
-    if (!rootPathSuggestions || !navigationController.initialised) {
+    if ((filteredRootPathSuggestions ?? []).length === 0 || !navigationController.initialised) {
         return null;
     }
 

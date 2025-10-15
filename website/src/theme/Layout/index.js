@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import clsx from "clsx";
 
 import Layout from "@theme-original/Layout";
-import docsearch from "@docsearch/js";
+// import docsearch from "@docsearch/js";
 import siteConfig from "@generated/docusaurus.config";
 
 import "@docsearch/css";
@@ -16,6 +16,7 @@ import "../../css/custom.css";
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { defaultBorderMixin } from "../../partials/styles";
+import { getGclidFromUrl, setStoredGclid } from "../../utils/gclid";
 
 export default function LayoutWrapper(props) {
 
@@ -57,21 +58,29 @@ export default function LayoutWrapper(props) {
         };
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
+    useEffect(() => {
+        if (ExecutionEnvironment.canUseDOM) {
+            const gclid = getGclidFromUrl();
+            console.log("GCLID from URL:", gclid);
+            if (gclid) setStoredGclid(gclid);
+        }
+    }, []);
+
     function isDocs() {
         return pathname.startsWith("/docs/");
     }
 
-// should show algolia docsearch
-    useEffect(() => {
-        if (isDocs()) {
-            docsearch({
-                container: "#docsearch",
-                appId: siteConfig.customFields.docSearchAppId,
-                apiKey: siteConfig.customFields.docSearchApiKey,
-                indexName: "firecms",
-            });
-        }
-    }, [pathname]);
+// // should show algolia docsearch
+//     useEffect(() => {
+//         if (isDocs()) {
+//             docsearch({
+//                 container: "#docsearch",
+//                 appId: siteConfig.customFields.docSearchAppId,
+//                 apiKey: siteConfig.customFields.docSearchApiKey,
+//                 indexName: "firecms",
+//             });
+//         }
+//     }, [pathname]);
 
     return (
         <>

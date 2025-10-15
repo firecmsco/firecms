@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@firecms/ui";
 
 interface RenameGroupDialogProps {
@@ -9,7 +9,13 @@ interface RenameGroupDialogProps {
     onRename: (newName: string) => void;
 }
 
-export function RenameGroupDialog({ open, initialName, existingGroupNames, onClose, onRename }: RenameGroupDialogProps) {
+export function RenameGroupDialog({
+                                      open,
+                                      initialName,
+                                      existingGroupNames,
+                                      onClose,
+                                      onRename
+                                  }: RenameGroupDialogProps) {
     const [name, setName] = useState(initialName);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null); // Create a ref for the input
@@ -86,7 +92,7 @@ export function RenameGroupDialog({ open, initialName, existingGroupNames, onClo
     if (!open) return null;
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open}>
             <DialogTitle>Rename Group</DialogTitle>
             <DialogContent>
                 <TextField
@@ -101,10 +107,14 @@ export function RenameGroupDialog({ open, initialName, existingGroupNames, onClo
                 {error && <p id="group-name-error" style={{ display: "none" }}>{error}</p>}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} variant="text">
+                <Button onClick={onClose}
+                        color={"primary"}
+                        variant="text">
                     Cancel
                 </Button>
-                <Button onClick={handleSave} disabled={!!error || !name.trim()}>
+                <Button onClick={handleSave}
+                        color={"primary"}
+                        disabled={!!error || !name.trim()}>
                     Save
                 </Button>
             </DialogActions>

@@ -5,7 +5,8 @@ import {
     ConfirmationDialog,
     Entity,
     EntityCollection,
-    ErrorView, getSubcollections,
+    ErrorView,
+    getSubcollections,
     isPropertyBuilder,
     MapProperty,
     mergeDeep,
@@ -47,7 +48,7 @@ import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
-import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import_export";
+import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
@@ -327,7 +328,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
-        return collectionInference?.(collection.dbPath, collection.collectionGroup ?? false, parentPaths ?? []);
+        return collectionInference?.(collection.dbPath, collection.collectionGroup ?? false, parentPaths ?? [], collection.databaseId);
     } : undefined;
 
     const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
@@ -506,7 +507,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     function onImportDataSet(data: object[], propertiesOrder?: string[]) {
         importConfig.setInUse(true);
         buildEntityPropertiesFromData(data, getInferenceType)
-            .then((properties) => {
+            .then((properties: Properties) => {
                 const res = cleanPropertiesFromImport(properties);
 
                 importConfig.setIdColumn(res.idColumn);
@@ -693,6 +694,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
                             <Button variant={"text"}
                                     type="button"
+                                    color={"primary"}
                                     onClick={() => {
                                         importConfig.setInUse(false);
                                         return setCurrentView("welcome");
@@ -704,6 +706,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
                             <Button variant={"text"}
                                     type="button"
+                                    color={"primary"}
                                     onClick={() => {
                                         setCurrentView("import_data_mapping");
                                     }}>
@@ -713,6 +716,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && includeTemplates && currentView === "details" &&
                             <Button variant={"text"}
+                                    color={"primary"}
                                     type="button"
                                     onClick={() => setCurrentView("welcome")}>
                                 <ArrowBackIcon/>
@@ -721,12 +725,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
                                                                                     type="button"
+                                                                                    color={"primary"}
                                                                                     onClick={() => setCurrentView("details")}>
                             <ArrowBackIcon/>
                             Back
                         </Button>}
 
                         <Button variant={"text"}
+                                color={"primary"}
                                 onClick={() => {
                                     handleCancel();
                                 }}>

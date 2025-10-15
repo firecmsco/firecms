@@ -49,6 +49,7 @@ module.exports = {
                     className: "pro-sidebar-item"
                 },
                 "self/main_components",
+                "self/auth_self_hosted",
                 "self/styling_firecms",
                 "self/deployment",
                 "pro/app_check",

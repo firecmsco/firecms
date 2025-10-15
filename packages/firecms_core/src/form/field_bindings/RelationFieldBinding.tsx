@@ -58,7 +58,6 @@ export function RelationFieldBinding({
 
                 <RelationSelector
                     relation={relation}
-                    multiple={manyRelation}
                     value={manyRelation ? multipleValue : singleValue}
                     onValueChange={(newVal) => {
                         if (manyRelation) {

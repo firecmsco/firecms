@@ -1,7 +1,7 @@
 import React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cls } from "../util";
-import { defaultBorderMixin } from "../styles.ts";
+import { defaultBorderMixin } from "../styles";
 
 export type TabsProps = {
     value: string,

@@ -27,7 +27,7 @@ const ButtonInner = React.forwardRef<
        startIcon = null,
        fullWidth = false,
        component: Component,
-       color = "primary",
+       color = "neutral",
        ...props
    }: ButtonProps<any>, ref) => {
 
@@ -45,7 +45,7 @@ const ButtonInner = React.forwardRef<
         "border border-secondary bg-secondary focus:ring-secondary shadow-2xs hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
         "border border-red-500 bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow-2xs hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
         "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow-2xs hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark dark:hover:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
+        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
 
         // Text Variants
         "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "text" && color === "primary" && !disabled,
@@ -59,7 +59,7 @@ const ButtonInner = React.forwardRef<
         "border border-secondary text-secondary hover:text-secondary hover:bg-secondary-bg": variant === "outlined" && color === "secondary" && !disabled,
         "border border-red-500 text-red-500 hover:text-red-500 hover:bg-red-500 hover:text-white": variant === "outlined" && color === "error" && !disabled,
         "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:bg-surface-accent-200": variant === "outlined" && color === "text" && !disabled,
-        "border border-surface-400 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
+        "border border-surface-300 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
 
         // Disabled states for all variants
         "text-text-disabled dark:text-text-disabled-dark": disabled,

@@ -8,7 +8,13 @@ const rootCollectionsCache: { [key: string]: string[] } = {};
 
 export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
 
-    async function createNewFireCMSProject(projectId: string, googleAccessToken: string | undefined, serviceAccount: object | undefined, creationType: "new" | "existing" | "existing_sa") {
+    async function createNewFireCMSProject(
+        projectId: string,
+        googleAccessToken: string | undefined,
+        serviceAccount: object | undefined,
+        creationType: "new" | "existing" | "existing_sa",
+        campaignParams?: Record<string, string>
+    ) {
 
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects",
@@ -22,7 +28,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 body: JSON.stringify({
                     projectId,
                     creationType,
-                    serviceAccount: serviceAccount ?? null
+                    serviceAccount: serviceAccount ?? null,
+                    campaignParams: campaignParams ?? null
                 })
             })
             .then(async (res) => {
@@ -203,7 +210,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function getStripePortalLink(): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}`,
+
+        return fetch(`${host}/customer/stripe_portal_link?return_url=${window.location.href}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -262,7 +270,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         type: SubscriptionType
     }): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/create-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
+        return fetch(`${host}/customer/create-checkout-session?return_url=${window.location.href}`,
             {
                 method: "POST",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -282,6 +290,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         currency: string
     }): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
+
         return fetch(`${host}/customer/cloud-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
             {
                 method: "POST",
@@ -293,6 +302,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 if (!res.ok) {
                     throw new Error(data?.error ?? "Error creating checkout session");
                 }
+                console.debug("createCloudStripeNewSubscriptionLink response", data);
                 return data.url as string;
             });
     }

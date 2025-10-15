@@ -37,7 +37,7 @@ export type User = {
     readonly isAnonymous: boolean;
 
     /**
-     *
+     * Custom roles assigned to the user.
      */
     roles?: Role[];
 

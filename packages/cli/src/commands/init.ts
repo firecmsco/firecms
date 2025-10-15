@@ -197,7 +197,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                         value: "next-pro"
                     },
                     {
-                        name: "FireCMS Community " + chalk.gray("(MIT licensed version with the base functionality)"),
+                        name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
                         value: "community"
                     }
                 ]
@@ -269,10 +269,12 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                         name: chalk.gray("Enter project id manually"),
                         value: "!_-manual"
                     },
-                    ...(cloudProjects ?? []).map(project => ({
-                        name: project.id,
-                        value: project.id
-                    })),
+                    ...(cloudProjects ?? [])
+                        .filter(project => project?.id)
+                        .map(project => ({
+                            name: project.id,
+                            value: project.id
+                        })),
                     ...(gcpProjects ?? []).map(project => ({
                         name: project.projectId,
                         value: project.projectId
@@ -402,8 +404,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Then run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
-        console.log(chalk.cyan.bold("yarn"));
-        console.log(chalk.cyan.bold("yarn dev"));
+        console.log(chalk.cyan.bold("yarn") + " or " + chalk.cyan.bold("npm install"));
+        console.log(chalk.cyan.bold("yarn dev") + " or " + chalk.cyan.bold("npm run dev"));
         console.log("");
     } else if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
@@ -415,8 +417,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
     } else if (options.template === "next-pro") {
         console.log("Make sure you have a valid Firebase config in ");
@@ -426,17 +428,17 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
     } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn install"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
         console.log("If you want to deploy your project, run:");
-        console.log(chalk.bgYellow.black.bold("yarn deploy"));
+        console.log(chalk.bgYellow.black.bold("yarn deploy") + " or " + chalk.bgYellow.black.bold("npm run deploy"));
         console.log("and see it running in https://app.firecms.co");
         console.log("");
     } else {
@@ -558,7 +560,6 @@ async function getCloudProjects(env: "prod" | "dev", debug: boolean, onErr?: (e:
             return null;
         }
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
-        console.log("Getting projects from", server + "/projects");
         const response = await axios.get(server + "/projects", {
             headers: {
                 ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`

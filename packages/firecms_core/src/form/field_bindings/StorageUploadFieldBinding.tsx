@@ -99,7 +99,7 @@ export function StorageUploadFieldBinding({
                     icon={getIconForProperty(property, "small")}
                     required={property.validation?.required}
                     title={property.name ?? propertyKey}
-                    className={"h-8text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                    className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             <StorageUpload
                 value={internalValue}

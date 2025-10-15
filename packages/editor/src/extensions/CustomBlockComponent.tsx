@@ -1,13 +1,12 @@
+import React from "react";
 import { CommandProps, mergeAttributes, Node, NodeViewProps, RawCommands, textblockTypeInputRule } from "@tiptap/core";
-import { ReactNodeViewRenderer } from "@tiptap/react";
-import { Node as ProseMirrorNode } from "prosemirror-model";
+import { ReactNodeViewProps, ReactNodeViewRenderer } from "@tiptap/react";
+import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
-// Define the interface for the user-defined component props
-export type CustomBlockComponentProps = NodeViewProps;
 
 export interface CustomBlockOptions {
     // The React component provided by the user
-    component: React.ComponentType<CustomBlockComponentProps> | null;
+    component: React.ComponentType<ReactNodeViewProps> | null;
     // Delimiter used to identify the custom block in markdown
     delimiter?: string;
 }

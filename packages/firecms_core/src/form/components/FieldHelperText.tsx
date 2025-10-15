@@ -20,7 +20,7 @@ export function FieldHelperText<T>({
                                 }
 ) {
 
-    const hasDescription = property.description || property.longDescription;
+    const hasDescription = property.description !== undefined && property.description.trim().length > 0;
 
     if (!(showError && error) && (!includeDescription || !hasDescription))
         return null;
@@ -40,19 +40,6 @@ export function FieldHelperText<T>({
                     className={"grow"}>
             {disabledTooltip || property.description}
         </Typography>
-
-        {property.longDescription &&
-            <Tooltip title={property.longDescription}
-                     side="bottom"
-                     asChild={true}>
-                <IconButton
-                    size={"small"}
-                    className="self-start">
-
-                    <InfoIcon color={"disabled"}
-                              size={"small"}/>
-                </IconButton>
-            </Tooltip>}
 
     </div>
 }

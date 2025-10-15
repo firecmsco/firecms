@@ -3,10 +3,14 @@ import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "@firebase/fire
 import { FireCMSBackend, FireCMSProject } from "@firecms/types";
 import { FirebaseApp } from "@firebase/app";
 import {
+    createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
+    fetchSignInMethodsForEmail,
     getAuth,
     GoogleAuthProvider,
     OAuthCredential,
     onAuthStateChanged,
+    sendPasswordResetEmail as sendPasswordResetEmailFirebase,
+    signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
     User as FirebaseUser
@@ -34,6 +38,7 @@ export function useBuildFireCMSBackend({
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
 
     const [authLoading, setAuthLoading] = useState(true);
+    const [loginLoading, setLoginLoading] = useState(false);
     const [googleCredential, setGoogleCredential] = useState<OAuthCredential | null>(loadCredentialFromStorage());
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [permissionsNotGrantedError, setPermissionsNotGrantedError] = useState<boolean>(false);
@@ -143,6 +148,39 @@ export function useBuildFireCMSBackend({
             });
     }, [backendFirebaseApp]);
 
+    const emailPasswordLogin = useCallback((email: string, password: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        setLoginLoading(true);
+        return signInWithEmailAndPassword(auth, email, password)
+            .catch(setAuthProviderError)
+            .then(() => setLoginLoading(false));
+    }, []);
+
+    const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        setLoginLoading(true);
+        return createUserWithEmailAndPasswordFirebase(auth, email, password)
+            .catch(setAuthProviderError)
+            .then(() => setLoginLoading(false));
+    }, []);
+
+    const sendPasswordResetEmail = useCallback((email: string) => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        return sendPasswordResetEmailFirebase(auth, email)
+    }, []);
+
+    const fetchSignInMethods = useCallback((email: string): Promise<string[]> => {
+        const auth = getAuth(backendFirebaseApp);
+        if (!auth) throw Error("No auth");
+        return fetchSignInMethodsForEmail(auth, email)
+            .then((res) => {
+                return res;
+            });
+    }, []);
+
     const onSignOut = useCallback(() => {
         const auth = getAuth(backendFirebaseApp);
         clearDelegatedLoginTokensCache()
@@ -180,6 +218,10 @@ export function useBuildFireCMSBackend({
         user: loggedUser ?? null,
         signOut: onSignOut,
         googleLogin,
+        fetchSignInMethods,
+        emailPasswordLogin,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
         getBackendAuthToken,
         googleCredential,
         availableProjectIds,
@@ -188,6 +230,7 @@ export function useBuildFireCMSBackend({
         availableProjectsError,
         permissionsNotGrantedError,
         authLoading,
+        loginLoading,
         authProviderError,
         backendFirebaseApp,
         backendUid: loggedUser?.uid,

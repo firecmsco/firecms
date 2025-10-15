@@ -19,8 +19,10 @@ export default function DialogCustomWidthDemo() {
                     Dialog with Custom Width
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Close
                     </Button>
                 </DialogActions>

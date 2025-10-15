@@ -214,7 +214,7 @@ function Agencies() {
 
                     {/* HeroButtons */}
                     <Panel color={"light"} includePadding={true}>
-                        <HeroButtons/>
+                        <HeroButtons analyticsLabel={"agencies"}/>
                     </Panel>
 
                     {/* ProTeaser */}

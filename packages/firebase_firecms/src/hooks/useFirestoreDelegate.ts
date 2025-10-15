@@ -492,7 +492,7 @@ export function useFirestoreDelegate({
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
             const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
 
-            const collectionReference: CollectionReference = collectionClause(firestore, resolvedPath);
+            const collectionReference: CollectionReference = collectionClause(firestore, path);
             console.debug("Saving entity", {
                 path,
                 entityId,
@@ -502,7 +502,6 @@ export function useFirestoreDelegate({
 
             let documentReference: DocumentReference;
             if (entityId) {
-                console.log("Saving entity with id", entityId);
                 documentReference = doc(collectionReference, String(entityId));
             } else {
                 documentReference = doc(collectionReference);
@@ -700,7 +699,9 @@ export function firestoreToCMSModel(data: any): any {
         return new GeoPoint(data.latitude, data.longitude);
     }
     if (data instanceof DocumentReference) {
-        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
+        // @ts-ignore
+        const databaseId = data?.firestore?._databaseId?.database;
+        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path), databaseId);
     }
     if (Array.isArray(data)) {
         return data.map(firestoreToCMSModel).filter(v => v !== undefined);
@@ -743,7 +744,8 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = f
     } else if (Array.isArray(data)) {
         return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore, true));
     } else if (data.isEntityReference && data.isEntityReference()) {
-        return doc(firestore, data.path, data.id);
+        const targetFirestore = data.databaseId ? getFirestore(firestore.app, data.databaseId) : firestore;
+        return doc(targetFirestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
     } else if (data instanceof Date) {

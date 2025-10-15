@@ -12,8 +12,8 @@
     "logout": "firecms logout"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-beta",
-    "firebase": "^10.14.0",
+    "@firecms/cloud": "^3.0.0",
+    "firebase": "^12.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -123,7 +123,7 @@ export function StringNumberFilterField({
                             : evt.target.value;
                         updateFilter(operation, val);
                     }}
-                    endAdornment={internalValue && <IconButton
+                    endAdornment={internalValue !== undefined && internalValue != null && <IconButton
                         onClick={(e) => updateFilter(operation, undefined)}>
                         <CloseIcon/>
                     </IconButton>}

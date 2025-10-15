@@ -62,13 +62,6 @@ export function StartupLogos() {
                      alt="WithU"
                      className="w-48 m-4"/>
             </a>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="The Planet App"
-                href={"https://theplanetapp.com"}>
-                <TPALogo className="w-56 m-4"/>
-            </a>
 
             <a className="flex h-min transition-colors text-gray-700 !no-underline rounded-button-md px-1 m-4 font-serif text-2xl font-extrabold !hover:no-underline hover:text-gray-900 dark:text-gray-900 dark:hover:text-gray-900"
                href="https://claimgem.com/">ClaimGem</a>
@@ -79,13 +72,6 @@ export function StartupLogos() {
                 rel="noopener noreferrer"
                 href={"https://socialincome.org"}>
                 <SocialIncomeLogo className="w-48 h-auto m-4"/>
-            </a>
-            <a
-                target="_blank"
-                aria-label="Oikosbrain"
-                rel="noopener noreferrer"
-                href={"https://oikosbrain.com"}>
-                <OikosLogo className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"

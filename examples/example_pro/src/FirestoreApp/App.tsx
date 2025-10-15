@@ -111,8 +111,12 @@ export function App() {
         // getAnalytics(app);
 
         // This is an example of connecting to a local emulator (move import to top)
+
         // import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
+        // import { getAuth, connectAuthEmulator } from "firebase/auth";
+
         // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
+        // connectAuthEmulator(getAuth(app), "http://127.0.0.1:9099");
     };
 
     const {
@@ -341,6 +345,7 @@ export function App() {
     const plugins = [
         userManagementPlugin,
         dataEnhancementPlugin,
+        // importPlugin,
         exportPlugin,
         entityHistoryPlugin,
         demoPlugin,

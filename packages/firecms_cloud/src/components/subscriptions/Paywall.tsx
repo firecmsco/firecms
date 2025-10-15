@@ -100,7 +100,6 @@ function UpgradeButton() {
 
     const {
         products,
-        subscribeCloud
     } = useSubscriptionsForUserController();
 
     const plusProduct = products?.find(p => p.metadata?.type === "cloud_plus");
@@ -108,6 +107,7 @@ function UpgradeButton() {
     if (!plusProduct) {
         return <LoadingButton
             variant={"filled"}
+            color={"primary"}
             loading={true}
             startIcon={<RocketLaunchIcon/>}>
             Create a subscription
@@ -118,6 +118,5 @@ function UpgradeButton() {
         includePriceSelect={true}
         largePriceLabel={true}
         product={plusProduct}
-        projectId={projectId}
-        subscribeCloud={subscribeCloud}/>
+        projectId={projectId}/>
 }

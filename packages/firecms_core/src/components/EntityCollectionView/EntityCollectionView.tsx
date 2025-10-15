@@ -8,7 +8,6 @@ import {
     Entity,
     EntityAction,
     EntityCollection,
-    EntityReference,
     EntityTableController,
     FilterValues,
     PartialEntityCollection,
@@ -80,6 +79,7 @@ import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "../common/useScrollRestoration";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { OnColumnResizeParams } from "../common/types";
+import { EntityPreviewWithId } from "../EntityPreview";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 
@@ -859,22 +859,23 @@ function EntityIdHeaderWidget({
                     </form>
                     {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
                         {recentIds.map(id => (
-                            <ReferencePreview reference={new EntityReference(id, path)}
-                                              key={id}
-                                              hover={true}
-                                              onClick={() => {
-                                                  setOpenPopup(false);
-                                                  navigateToEntity({
-                                                      openEntityMode,
-                                                      collection,
-                                                      entityId: id,
-                                                      path,
-                                                      sideEntityController,
-                                                      navigation
-                                                  })
-                                              }}
-                                              includeEntityLink={false}
-                                              size={"small"}/>
+                            <EntityPreviewWithId entityId={id}
+                                                 path={path}
+                                                 key={id}
+                                                 hover={true}
+                                                 onClick={() => {
+                                                     setOpenPopup(false);
+                                                     navigateToEntity({
+                                                         openEntityMode,
+                                                         collection,
+                                                         entityId: id,
+                                                         path,
+                                                         sideEntityController,
+                                                         navigation
+                                                     })
+                                                 }}
+                                                 includeEntityLink={false}
+                                                 size={"small"}/>
                         ))}
                     </div>}
                 </div>

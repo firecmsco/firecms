@@ -1,4 +1,4 @@
-import { DOMSerializer, Slice } from "prosemirror-model"
+import { DOMSerializer, Slice } from "@tiptap/pm/model"
 import { EditorView } from "@tiptap/pm/view";
 
 export function serializeForClipboard(view: EditorView, slice: Slice) {

@@ -65,7 +65,7 @@ function FeaturesPage() {
 
                     <History/>
                     <Panel color={"light"} includePadding={true}>
-                        <HeroButtons/>
+                        <HeroButtons analyticsLabel={"features"}/>
                     </Panel>
 
                     <ProTeaser/>

@@ -132,7 +132,9 @@ export function FireCMSCloudApp({
                 includeLogo={true}
                 includeGoogleAdminScopes={false}
                 includeTermsAndNewsLetter={false}
-                includeGoogleDisclosure={false}/>
+                includeGoogleDisclosure={false}
+                onAnalyticsEvent={onAnalyticsEvent}
+            />
         </CenteredView>
     } else {
         component = <FireCMSClient
@@ -563,7 +565,8 @@ function FireCMSAppAuthenticated({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
         getAuthToken: fireCMSBackend.getBackendAuthToken,
-        apiEndpoint: dataTalkEndpoint
+        apiEndpoint: dataTalkEndpoint,
+        loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0
     });
 
     const saasPlugin = useSaasPlugin({
@@ -571,6 +574,7 @@ function FireCMSAppAuthenticated({
         collectionConfigController,
         appConfig,
         fireCMSBackend,
+        userManagement,
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
@@ -601,7 +605,7 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        collections: appConfig?.collections,
         views: appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
@@ -626,7 +630,6 @@ function FireCMSAppAuthenticated({
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={plugins}
                             components={{
                                 missingReference: MissingReferenceWidget
                             }}

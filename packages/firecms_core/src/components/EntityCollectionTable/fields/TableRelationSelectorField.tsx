@@ -29,11 +29,8 @@ export function TableRelationSelectorField({
    size = "medium",
 }: RelationSelectorFieldProps) {
 
-    const multiple = relation.cardinality === "many";
-
     return (
         <RelationSelector
-            multiple={multiple}
             disabled={disabled}
             size={size}
             value={internalValue || null}

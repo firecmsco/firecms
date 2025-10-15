@@ -95,7 +95,7 @@ function FeaturesPage() {
 
             <FireCMSCloudVersions/>
 
-            <CLIInstructions/>
+            <CLIInstructions analyticsLabel={"pricing"}/>
             <PricingQuote/>
             <VersionsComparison/>
 

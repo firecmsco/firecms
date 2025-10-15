@@ -30,11 +30,15 @@ export default function DialogBasicDemo() {
                     <TextField size={"small"}/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)} variant={"text"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)} variant={"text"}>
                         Close
                     </Button>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Got it!
                     </Button>
                 </DialogActions>

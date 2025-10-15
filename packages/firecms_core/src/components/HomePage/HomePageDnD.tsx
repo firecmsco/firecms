@@ -504,6 +504,7 @@ export function useHomePageDnd({
             onPersist?.(updated); // <- ensure rename is saved
             return updated;
         });
+        setDialogOpenForGroup(null);
     };
 
     /* ---------------- public API ---------------- */

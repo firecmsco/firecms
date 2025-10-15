@@ -1,0 +1,28 @@
+{
+  "name": "website-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.0",
+    "@astrojs/starlight": "^0.36.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "astro": "^5.6.1",
+    "prism-react-renderer": "^2.3.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-fast-marquee": "^1.6.5",
+    "react-responsive-masonry": "^2.7.1",
+    "react-type-animation": "^3.2.0",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.14"
+  }
+}

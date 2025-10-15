@@ -34,7 +34,6 @@ export function EditorCollectionActionStart({
                 asChild={true}
                 title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
                 <Button
-                    color={"primary"}
                     size={"small"}
                     variant={"outlined"}
                     onClick={() => configController

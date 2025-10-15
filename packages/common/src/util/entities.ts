@@ -18,7 +18,7 @@ export function isReadOnly(property: Property): boolean {
             return true;
     }
     if (property.type === "reference") {
-        return !property.path;
+        return !property.path && !property.Field;
     }
     return false;
 }
@@ -137,7 +137,9 @@ export function sanitizeData<M extends Record<string, any>>
 }
 
 export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M>): EntityReference {
-    return new EntityReference(entity.id, entity.path);
+    if (typeof entity.id !== "string")
+        throw new Error("Only string IDs are supported in references");
+    return new EntityReference(entity.id, entity.path, entity.databaseId);
 }
 
 export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>): EntityRelation {

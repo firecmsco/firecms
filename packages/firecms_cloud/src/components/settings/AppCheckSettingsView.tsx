@@ -75,7 +75,7 @@ export function AppCheckSettingsView() {
 
         <Paper className={"p-4 flex flex-col gap-4"}>
 
-            <div className={"flex flex-row gap-4"}>
+            <div className={"flex flex-row gap-4 relative overflow-hidden"}>
                 <RadioGroup
                     disabled={!enabled}
                     className={"grow shrink-0"}

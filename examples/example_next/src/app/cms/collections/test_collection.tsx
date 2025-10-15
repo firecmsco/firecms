@@ -6,7 +6,6 @@ import {
     resolveNavigationFrom
 } from "@firecms/core";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
-import { conditionProperty } from "../custom_field/RecursiveField";
 import { locales } from "./enums";
 
 export const testCallbacks: EntityCallbacks = {

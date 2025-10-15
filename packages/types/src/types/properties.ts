@@ -86,11 +86,6 @@ export interface BaseProperty<CustomProps = any> {
     description?: string;
 
     /**
-     * Longer description of a field, displayed under a popover
-     */
-    longDescription?: string;
-
-    /**
      * You can use this prop to reuse a property that has been defined
      * in the top level of the CMS in the prop `fields`.
      * All the configuration will be taken from the inherited config, and
@@ -214,6 +209,17 @@ export interface StringProperty extends BaseProperty {
      * indicate that this string refers to a path in your storage provider.
      */
     storage?: StorageConfig;
+
+    /**
+     * This property is used to indicate that the string is a user ID, and
+     * it will be rendered as a user picker.
+     * Note that the user ID needs to be the one used in your authentication
+     * provider, e.g. Firebase Auth.
+     * You can also use a property builder to specify the user path dynamically
+     * based on other values of the entity.
+     */
+    userSelect?: boolean;
+
     /**
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
@@ -231,6 +237,7 @@ export interface StringProperty extends BaseProperty {
      * Add an icon to clear the value and set it to `null`. Defaults to `false`
      */
     clearable?: boolean;
+
     /**
      * You can use this property (a string) to behave as a reference to another
      * collection. The stored value is the ID of the entity in the

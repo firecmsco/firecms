@@ -29,6 +29,7 @@ interface DataTalkConfigParams {
     userSessionsPath?: string;
     getAuthToken: () => Promise<string>;
     apiEndpoint: string;
+    loadSamplePrompts?: boolean;
 }
 
 const DataTalkConfigContext = React.createContext<DataTalkConfig>({} as any);
@@ -38,7 +39,8 @@ export function useBuildDataTalkConfig({
                                            firebaseApp,
                                            userSessionsPath,
                                            getAuthToken,
-                                           apiEndpoint
+                                           apiEndpoint,
+                                           loadSamplePrompts = true
                                        }: DataTalkConfigParams): DataTalkConfig {
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -49,12 +51,13 @@ export function useBuildDataTalkConfig({
 
     useEffect(() => {
         if (!enabled) return;
+        if (!loadSamplePrompts) return; // Skip loading sample prompts if not requested
         if (samplePromptsRequested.current) return; // Prevent multiple requests
         samplePromptsRequested.current = true;
         getAuthToken().then((firebaseToken) => {
             getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
         });
-    }, []);
+    }, [enabled, loadSamplePrompts]);
 
     const createSessionId = useCallback(async (): Promise<string> => {
         if (!firebaseApp) throw Error("useBuildDataTalkConfig Firebase not initialised");

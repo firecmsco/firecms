@@ -251,7 +251,7 @@ export function FirebaseLoginView({
 
     const fadeStyle = {
         opacity: fadeIn ? 1 : 0,
-        transition: 'opacity 0.6s ease-in-out'
+        transition: "opacity 0.6s ease-in-out"
     };
 
     return (
@@ -349,15 +349,19 @@ export function LoginButton({
     return (
         <div className="my-1 w-full">
             <Button
-                className="w-full"
+                className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
+                style={{
+                    height: "40px",
+                    borderRadius: "4px",
+                    fontSize: "14px"
+                }}
                 variant="outlined"
-                color={"primary"}
                 disabled={disabled}
                 onClick={onClick}>
                 <div
                     className="p-1 flex h-8 items-center justify-items-center">
                     <div
-                        className="flex flex-col w-8 items-center justify-items-center">
+                        className="flex flex-col w-8 items-center justify-items-center mr-4">
                         {icon}
                     </div>
                     <div className="grow pl-2 text-center">{text}</div>

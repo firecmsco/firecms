@@ -113,7 +113,6 @@ export function RelationFilterField({
                 <RelationSelector
                     relation={relation}
                     value={relationSelectorValue}
-                    multiple={multiple}
                     onValueChange={handleRelationSelectorChange}
                     disabled={internalValue === null}
                     size={"medium"}

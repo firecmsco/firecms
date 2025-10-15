@@ -206,6 +206,7 @@ function BadMessageIcon({
             </DialogContent>
             <DialogActions>
                 <Button variant={"outlined"}
+                        color={"primary"}
                         onClick={() => {
                             setDialogOpen(false);
                             onFeedback?.(selected, feedbackText);

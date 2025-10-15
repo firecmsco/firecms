@@ -34,6 +34,7 @@ export function DemoImportAction({}: CollectionActionsProps) {
             <DialogActions>
 
                 <Button variant="outlined"
+                        color={"primary"}
                         onClick={() => setOpen(false)}>
                     Got it
                 </Button>

@@ -23,7 +23,7 @@ import {
 import { setIn } from "@firecms/formex";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
 import { Typography } from "@firecms/ui";
-import { BasicExportAction } from "@firecms/data_import_export";
+import { BasicExportAction } from "@firecms/data_export";
 import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 

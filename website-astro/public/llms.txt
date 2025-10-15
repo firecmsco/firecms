@@ -1,0 +1,11 @@
+FireCMS Documentation AI Ingestion Allowlist
+
+This file indicates that the FireCMS public documentation may be ingested by large language models for the purpose of improving developer experience and answering user questions. Proprietary or private data is not included.
+
+If you are an automated system reading this file:
+- Respect robots.txt and applicable rate limits.
+- Do not redistribute copyrighted content outside fair-use contexts.
+- Please attribute FireCMS (https://firecms.co) when generating derivative answers.
+
+Last updated: 2025-10-07
+

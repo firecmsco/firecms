@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { BooleanSwitchWithLabel, Typography } from "@firecms/ui";
+import { Checkbox, Label, MailIcon, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "@firecms/types";
+import { LoginButton } from "@firecms/firebase";
+import { CloudUserPasswordForm } from "./CloudUserPasswordForm";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;
@@ -11,6 +13,8 @@ export interface FireCMSCloudLoginViewProps {
     includeLogo: boolean;
     includeGoogleDisclosure: boolean;
     includeTermsAndNewsLetter: boolean;
+    onAnalyticsEvent?: (event: string, params?: object) => void;
+
 }
 
 /**
@@ -24,118 +28,248 @@ export function FireCMSCloudLoginView({
                                           includeGoogleAdminScopes,
                                           includeLogo,
                                           includeGoogleDisclosure,
-                                          includeTermsAndNewsLetter
+                                          includeTermsAndNewsLetter,
+                                          onAnalyticsEvent
                                       }: FireCMSCloudLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
     const [fadeIn, setFadeIn] = useState(false);
+    const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
 
     useEffect(() => {
-        // Trigger the fade-in effect on component mount
         const timer = setTimeout(() => {
             setFadeIn(true);
-        }, 50); // Small delay to ensure transition works properly
-
+        }, 10);
+        onAnalyticsEvent?.("view_displayed");
         return () => clearTimeout(timer);
-    }, []);
+    }, [onAnalyticsEvent]);
 
     function buildErrorView() {
         let errorView: any;
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (fireCMSBackend.authProviderError && !ignoredCodes.includes(fireCMSBackend.authProviderError.code)) {
-            errorView =
-                <div className={"p-4"}>
-                    <ErrorView error={fireCMSBackend.authProviderError}/>
-                </div>;
+
+            if (fireCMSBackend.authProviderError.code === "auth/user-not-found")
+                errorView =
+                    <ErrorView error={"User not found"}/>;
+            else if (fireCMSBackend.authProviderError.code === "auth/wrong-password")
+                errorView =
+                    <ErrorView error={"Wrong password. Please try again."}/>;
+            else if (fireCMSBackend.authProviderError.code === "auth/user-disabled")
+                errorView =
+                    <ErrorView error={"User disabled. Please contact support."}/>;
+            else if (fireCMSBackend.authProviderError.code === "auth/account-exists-with-different-credential")
+                errorView =
+                    <ErrorView error={"Account exists with different sign in method"}/>;
+            else if (fireCMSBackend.authProviderError.code === "auth/email-already-in-use")
+                errorView =
+                    <ErrorView error={"The email is already in use"}/>;
+            else
+                errorView =
+                    <ErrorView error={fireCMSBackend.authProviderError}/>;
         }
         return errorView;
     }
 
     const fadeStyle = {
         opacity: fadeIn ? 1 : 0,
-        transition: 'opacity 0.6s ease-in-out'
+        transition: "opacity 0.6s ease-in-out"
     };
 
+    // Permissions required mode - simple centered dialog
+    if (includeGoogleAdminScopes) {
+        return (
+            <div className="inset-0 flex items-center justify-center p-8 m-0" style={fadeStyle}>
+                <div className="w-full max-w-md flex flex-col items-center">
+                    {includeLogo && (
+                        <div className="m-4" style={{
+                            width: "160px",
+                            height: "160px"
+                        }}>
+                            <FireCMSLogo/>
+                        </div>
+                    )}
+
+                    {includeLogo && (
+                        <Typography variant={"h4"}
+                                    color={"primary"}
+                                    className="mb-4">
+                            FireCMS <Typography variant={"h4"}
+                                                component={"span"}
+                                                className={"text-primary"}>CLOUD</Typography>
+                        </Typography>
+                    )}
+
+                    <div className="w-full space-y-4">
+
+                        <GoogleLoginButton
+                            onClick={() => {
+                                onAnalyticsEvent?.("google_attempt");
+                                fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
+                                    onAnalyticsEvent?.("google_success");
+                                }).catch((error) => {
+                                    onAnalyticsEvent?.("google_error", { error: error?.code });
+                                });
+                            }}/>
+
+                        {fireCMSBackend.permissionsNotGrantedError &&
+                            <ErrorView
+                                error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
+
+                        {buildErrorView()}
+
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Normal login mode - full view with marketing section
     return (
+        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto" style={fadeStyle}>
+            {/* Marketing Section - Left Side (Desktop only) */}
+            <div className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
+                <div className="max-w-md">
+                    <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
+                        The most powerful headless CMS for Firebase projects
+                    </Typography>
+                    <ul className="space-y-3 text-left list-disc list-inside marker:text-white">
+                        <li>
+                            <Typography variant="body1" className="text-blue-50 inline">
+                                Build admin panels in <b>minutes</b>, not weeks
+                            </Typography>
+                        </li>
+                        <li>
+                            <Typography variant="body1" className="text-blue-50 inline">
+                                Automatic collection mapping
+                            </Typography>
+                        </li>
+                        <li>
+                            <Typography variant="body1" className="text-blue-50 inline">
+                                <b>Real-time</b> data management with Firebase integration
+                            </Typography>
+                        </li>
+                        <li>
+                            <Typography variant="body1" className="text-blue-50 inline">
+                                Advanced <b>user roles</b> and permissions
+                            </Typography>
+                        </li>
+                        <li>
+                            <Typography variant="body1" className="text-blue-50 inline">
+                                <b>Customizable</b> components and workflows
+                            </Typography>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-        <div className="flex flex-col items-center justify-center min-w-full p-2" style={fadeStyle}>
-            {includeLogo && <div className={"m-4"} style={{
-                width: "260px",
-                height: "260px"
-            }}>
-                <FireCMSLogo/>
-            </div>}
+            {/* Login Content - Right Side */}
+            <div className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0">
+                {includeLogo && (
+                    <div className="m-4" style={{
+                        width: "160px",
+                        height: "160px"
+                    }}>
+                        <FireCMSLogo/>
+                    </div>
+                )}
 
-            {includeLogo && <Typography variant={"h4"}
-                                        color={"primary"}
-                                        className="mb-4">
-                FireCMS <Typography variant={"h4"}
-                                    component={"span"}
-                                    className={"text-blue-500"}>CLOUD</Typography>
-            </Typography>}
+                {includeLogo && (
+                    <Typography variant={"h4"}
+                                color={"primary"}
+                                className="mb-4">
+                        FireCMS <Typography variant={"h4"}
+                                            component={"span"}
+                                            className={"text-primary"}>CLOUD</Typography>
+                    </Typography>
+                )}
 
-            {buildErrorView()}
+                <div className={"w-full max-w-md"}>
+                    {includeTermsAndNewsLetter &&
+                        <div className={"mb-4"}>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="newsletter-checkbox"
+                                    checked={subscribeToNewsletter}
+                                    onCheckedChange={setSubscribeToNewsletter}
+                                    size="small"
+                                />
+                                <Label htmlFor="newsletter-checkbox">
+                                    <Typography variant={"caption"} color={"primary"}>
+                                        Join our newsletter. No spam, only important
+                                        updates!
+                                    </Typography>
+                                </Label>
+                            </div>
+                            {!passwordLoginSelected && <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="terms-checkbox"
+                                    checked={termsAccepted}
+                                    onCheckedChange={setTermsAccepted}
+                                    size="small"
+                                />
+                                <Label htmlFor="terms-checkbox">
+                                    <Typography variant={"caption"} color={"primary"}>
+                                        By signing in you agree to our <a
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href={"https://firecms.co/policy/terms_conditions"}>
+                                        Terms and Conditions</a> and our <a
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href={"https://firecms.co/policy/privacy_policy"}>
+                                        Privacy policy</a>
+                                    </Typography>
+                                </Label>
+                            </div>}
+                        </div>}
 
-            {includeTermsAndNewsLetter &&
-                <>
-                    <BooleanSwitchWithLabel size="small"
-                                            invisible={true}
-                                            value={subscribeToNewsletter}
-                                            onValueChange={setSubscribeToNewsletter}
-                                            position={"start"}
-                                            label={
-                                                <Typography variant={"caption"} color={"primary"}>
-                                                    Join our newsletter. No spam, only important
-                                                    updates!
-                                                </Typography>}/>
-                    <BooleanSwitchWithLabel size="small"
-                                            invisible={true}
-                                            value={termsAccepted}
-                                            onValueChange={setTermsAccepted}
-                                            position={"start"}
-                                            label={
-                                                <Typography variant={"caption"} color={"primary"}>
-                                                    By signing in you agree to our <a
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={"https://firecms.co/policy/terms_conditions"}>
-                                                    Terms and Conditions</a> and our <a
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={"https://firecms.co/policy/privacy_policy"}>
-                                                    Privacy policy</a>
-                                                </Typography>
-                                            }/>
-                </>}
+                    {!passwordLoginSelected && <GoogleLoginButton
+                        disabled={!termsAccepted && includeTermsAndNewsLetter}
+                        onClick={() => {
+                            onAnalyticsEvent?.("google_attempt");
+                            fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
+                                onAnalyticsEvent?.("google_success");
+                                if (subscribeToNewsletter && user?.email) {
+                                    subscribeNewsletter(user.email);
+                                }
+                            }).catch((error) => {
+                                onAnalyticsEvent?.("google_error", { error: error?.code });
+                            });
+                        }}/>}
 
-            <GoogleLoginButton
-                disabled={!termsAccepted && includeTermsAndNewsLetter}
-                onClick={() => {
-                    fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
-                        if (subscribeToNewsletter && user?.email) {
-                            subscribeNewsletter(user.email);
-                        }
-                    });
-                }}/>
+                    {!passwordLoginSelected && <LoginButton
+                        disabled={!termsAccepted && includeTermsAndNewsLetter}
+                        text={"Email/password"}
+                        icon={<MailIcon size={24}/>}
+                        onClick={() => {
+                            onAnalyticsEvent?.("password_method_selected");
+                            setPasswordLoginSelected(true);
+                        }}/>}
 
-            {includeGoogleAdminScopes &&
-                fireCMSBackend.permissionsNotGrantedError &&
-                <ErrorView
-                    error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
+                    {passwordLoginSelected && <CloudUserPasswordForm
+                        fireCMSBackend={fireCMSBackend}
+                        onClose={() => setPasswordLoginSelected(false)}
+                        onAnalyticsEvent={onAnalyticsEvent}
+                    />}
 
-            {includeGoogleDisclosure && <Typography variant={"caption"}>
-                FireCMS Cloud use and transfer to any other app of
-                information
-                received from Google APIs will adhere to <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={"https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"}>Google
-                API Services
-                User Data Policy</a>, including the Limited Use
-                requirements.
-            </Typography>}
 
+                    {buildErrorView()}
+
+                    {includeGoogleDisclosure && <Typography variant={"caption"} className={"mt-4"}>
+                        FireCMS Cloud use and transfer to any other app of
+                        information
+                        received from Google APIs will adhere to <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={"https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"}>Google
+                        API Services
+                        User Data Policy</a>, including the Limited Use
+                        requirements.
+                    </Typography>}
+                </div>
+            </div>
         </div>
     );
 

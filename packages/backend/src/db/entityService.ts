@@ -333,27 +333,6 @@ async function parseDataFromServer<M extends Record<string, any>>(
                             // Build additional conditions array
                             const additionalFilters: SQL[] = [];
 
-                            // Add search conditions if search string is provided
-                            if (options.searchString) {
-                                const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
-                                    options.searchString,
-                                    targetCollection.properties,
-                                    targetTable
-                                );
-
-                                if (searchConditions.length === 0) {
-                                    return []; // No searchable fields found - early return
-                                }
-
-                                additionalFilters.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
-                            }
-
-                            // Add filter conditions
-                            if (options.filter) {
-                                const filterConditions = this.buildFilterConditions(options.filter, targetTable, targetCollection.slug ?? targetCollection.dbPath);
-                                additionalFilters.push(...filterConditions);
-                            }
-
                             // Combine parent condition with additional filters using AND
                             const combinedWhere = DrizzleConditionBuilder.combineConditionsWithAnd([
                                 eq(sourceIdField, currentEntityId),

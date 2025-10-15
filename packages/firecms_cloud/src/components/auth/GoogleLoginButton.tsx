@@ -11,14 +11,13 @@ export function GoogleLoginButton({
     disabled?: boolean
 }) {
     return (
-        <div className={"m-4 w-full"}>
-            <Button className={cls("w-full bg-white text-surface-900 dark:text-surface-900", disabled ? "" : "hover:text-white dark:hover:text-white")}
+        <Button className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-white dark:hover:text-white")}
                     style={{
                         height: "40px",
                         borderRadius: "4px",
                         fontSize: "14px"
                     }}
-                    variant="filled"
+                    variant="outlined"
                     disabled={disabled}
                     onClick={onClick}>
                 <div
@@ -28,11 +27,10 @@ export function GoogleLoginButton({
                     </div>
                     <div
                         className={cls("grow pl-6 text-left")}>
-                        {"Sign in with Google"}
-                    </div>
+                    {"Sign in with Google"}
                 </div>
-            </Button>
+            </div>
+        </Button>
 
-        </div>
     )
 }

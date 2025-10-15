@@ -30,7 +30,8 @@ function customReplacer(key: string): any {
         return {
             __type: "EntityReference",
             id: value.id,
-            path: value.path
+            path: value.path,
+            databaseId: value.databaseId
         };
     }
 
@@ -71,7 +72,7 @@ function customReviver(key: string, value: any): any {
             case "Date":
                 return new Date(value.value);
             case "EntityReference":
-                return new EntityReference(value.id, value.path);
+                return new EntityReference(value.id, value.path, value.databaseId);
             case "EntityRelation":
                 return new EntityRelation(value.id, value.path);
             case "GeoPoint":

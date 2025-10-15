@@ -45,16 +45,22 @@ export class EntityReference {
     /**
      * ID of the entity
      */
-    readonly id: string | number;
+    readonly id: string;
     /**
      * A string representing the path of the referenced document (relative
      * to the root of the database).
      */
     readonly path: string;
 
-    constructor(id: string | number, path: string) {
+    /**
+     * Optional database ID where the entity is stored (if multiple databases are used)
+     */
+    readonly databaseId?: string;
+
+    constructor(id: string, path: string, databaseId?: string) {
         this.id = id;
         this.path = path;
+        this.databaseId = databaseId;
     }
 
     get pathWithId() {
@@ -63,10 +69,6 @@ export class EntityReference {
 
     isEntityReference() {
         return true;
-    }
-
-    isEntityRelation() {
-        return false;
     }
 }
 

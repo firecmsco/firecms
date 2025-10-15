@@ -14,7 +14,9 @@ export function useUserManagementPlugin<USER extends User = any>({ userManagemen
     return {
         key: "user_management",
         loading: userManagement.loading,
-
+        userManagement:{
+            ...userManagement,
+        },
         homePage: {
             additionalChildrenStart: noUsers || noRoles
                 ? <IntroWidget
@@ -58,7 +60,9 @@ export function IntroWidget({
             <Typography>
                 You have no users or roles defined. You can create default roles and add the current user as admin.
             </Typography>
-            <Button onClick={() => {
+            <Button
+                variant={"outlined"}
+                onClick={() => {
                 if (!authController.user?.uid) {
                     throw Error("UsersTable, authController misconfiguration");
                 }

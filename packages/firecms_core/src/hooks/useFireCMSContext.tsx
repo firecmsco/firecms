@@ -11,6 +11,7 @@ import { useDialogsController } from "./useDialogsController";
 import { useCustomizationController } from "./useCustomizationController";
 import { useAnalyticsController } from "./useAnalyticsController";
 import React, { useEffect } from "react";
+import { useInternalUserManagementController } from "./useInternalUserManagementController";
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.
@@ -34,6 +35,7 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
     const dialogsController = useDialogsController();
     const customizationController = useCustomizationController();
     const analyticsController = useAnalyticsController();
+    const userManagement = useInternalUserManagementController<USER>();
 
     const fireCMSContextRef = React.useRef<FireCMSContext<USER, AuthControllerType>>({
         authController,
@@ -46,7 +48,8 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
         userConfigPersistence,
         dialogsController,
         customizationController,
-        analyticsController
+        analyticsController,
+        userManagement
     });
 
     useEffect(() => {
@@ -61,7 +64,8 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
             userConfigPersistence,
             dialogsController,
             customizationController,
-            analyticsController
+            analyticsController,
+            userManagement
         };
     }, [authController, dialogsController, navigation, sideDialogsController]);
 

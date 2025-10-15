@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
+import { useCollapsedGroups } from "../../hooks/useCollapsedGroups";
 import {
     CMSAnalyticsEvent,
     NavigationEntry,
@@ -103,6 +104,9 @@ export function DefaultHomePage({
             (entriesByGroup[g] ??= []).push(e);
         });
 
+        // Check if there are custom actions from plugins that should show in the default group
+        const hasPluginAdditionalCards = customizationController.plugins?.some(p => p.homePage?.AdditionalCards);
+
         let allProcessed: { name: string; entries: NavigationEntry[] }[];
 
         if (performingSearch) {
@@ -127,10 +131,20 @@ export function DefaultHomePage({
                         entries: entriesByGroup[g]
                     });
             });
+
+            // Ensure default group exists if there are plugin additional cards but no collections
+            if (hasPluginAdditionalCards && !allProcessed.some(g => g.name === DEFAULT_GROUP_NAME)) {
+                allProcessed.push({
+                    name: DEFAULT_GROUP_NAME,
+                    entries: []
+                });
+            }
+
             allProcessed = allProcessed.filter(
                 (g) =>
                     g.entries.length ||
-                    groupOrderFromNavController.includes(g.name)
+                    groupOrderFromNavController.includes(g.name) ||
+                    (g.name === DEFAULT_GROUP_NAME && hasPluginAdditionalCards)
             );
         }
 
@@ -139,7 +153,7 @@ export function DefaultHomePage({
             adminGroupData: admin || null,
             items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME)
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins]);
 
     // Update state only when processedGroups actually changes
     useEffect(() => {
@@ -181,9 +195,15 @@ export function DefaultHomePage({
         onNavigationEntriesUpdate(all);
     };
 
-    /* ─────────────────────────────────────────────────────���─────────
-       Hook for DnD
-       ─────────────────────────────────────────────────────────────── */
+    // Use custom hook for collapsed groups with localStorage persistence
+    const groupNames = useMemo(() => [
+        ...items.map(item => item.name),
+        ...(adminGroupData ? [adminGroupData.name] : [])
+    ], [items, adminGroupData]);
+
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames);
+
+
     const {
         sensors,
         collisionDetection,
@@ -290,7 +310,7 @@ export function DefaultHomePage({
 
     /* ───────────────────────────────────────────────────────────────
        Render
-       ─────────���───────────────────────────────────────────────────── */
+       ─────────────────────────────────────────────────────────────── */
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
             <Container maxWidth="6xl">
@@ -387,6 +407,8 @@ export function DefaultHomePage({
                                             if (dndDisabled) return;
                                             setDialogOpenForGroup(groupKey);
                                         }}
+                                        collapsed={isGroupCollapsed(groupKey)}
+                                        onToggleCollapsed={() => toggleGroupCollapsed(groupKey)}
                                     >
                                         <NavigationGroupDroppable
                                             id={groupKey}
@@ -490,7 +512,11 @@ export function DefaultHomePage({
                 </DndContext>
 
                 {!performingSearch && adminGroupData && (
-                    <NavigationGroup group={adminGroupData.name}>
+                    <NavigationGroup
+                        group={adminGroupData.name}
+                        collapsed={isGroupCollapsed(adminGroupData.name)}
+                        onToggleCollapsed={() => toggleGroupCollapsed(adminGroupData.name)}
+                    >
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
                             {adminGroupData.entries.map((entry) => (
                                 <NavigationCardBinding
@@ -534,7 +560,6 @@ export function DefaultHomePage({
                     onClose={() => setDialogOpenForGroup(null)}
                     onRename={(newName) => {
                         handleRenameGroup(dialogOpenForGroup, newName);
-                        setDialogOpenForGroup(null);
                     }}
                 />
             )}

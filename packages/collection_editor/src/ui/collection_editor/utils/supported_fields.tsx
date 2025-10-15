@@ -6,6 +6,7 @@ export const supportedFieldsIds: PropertyConfigId[] = [
     "markdown",
     "url",
     "email",
+    "user_select",
     "select",
     "multi_select",
     "number_input",

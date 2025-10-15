@@ -19,6 +19,9 @@ export * from "./useSnackbarController";
 export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useLargeLayout";
+export * from "./useCollapsedGroups";
+
+export * from "./useInternalUserManagementController";
 
 export * from "./useEntitySelectionDialog";
 export * from "./useBrowserTitleAndIcon";

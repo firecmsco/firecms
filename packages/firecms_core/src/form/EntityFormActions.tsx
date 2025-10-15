@@ -127,10 +127,14 @@ function buildBottomActions<M extends object>({
             ))}
         </div>}
         {pluginActions}
-        <Button variant="text" disabled={disabled || isSubmitting} type="reset">
+        <Button variant="text" disabled={disabled || isSubmitting}
+                color={"primary"}
+                type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
-        <Button variant={"filled"} color="primary" type="submit"
+        <Button variant={"filled"}
+                color="primary"
+                type="submit"
                 disabled={disabled || isSubmitting}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}

@@ -132,12 +132,10 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            basic: {
+            user_select: {
                 type: "string",
-                name: "Basic",
-                validation: {
-                    unique: true,
-                }
+                name: "User select",
+                userSelect: true,
             },
             basic_number: {
                 type: "number",
@@ -145,6 +143,13 @@ export const testCollection = buildCollection<any>({
                 validation: {
                     min: 0,
                     max: 100
+                }
+            },
+            basic: {
+                dataType: "string",
+                name: "Basic",
+                validation: {
+                    unique: true,
                 }
             },
             ref_as_string: {

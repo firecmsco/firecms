@@ -17,7 +17,7 @@ module.exports = {
     baseUrl: "/",
     onBrokenLinks: "warn",
     onBrokenMarkdownLinks: "warn",
-    favicon: "img/favicon.ico",
+    favicon: "img/firecms_logo.svg",
     organizationName: "FireCMS S.L.",
     projectName: "FireCMS",
     trailingSlash: false,
@@ -66,6 +66,7 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
+        require.resolve("./plugins/docusaurus-plugin-inline-css"),
         generateAPI ?
             [
                 "docusaurus-plugin-typedoc",
@@ -107,8 +108,8 @@ module.exports = {
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                                 "@firecms/collection_editor": path.resolve(__dirname, "../packages/collection_editor/src"),
                                 "@firecms/firebase": path.resolve(__dirname, "../packages/firebase_firecms/src"),
-                                "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
-                                "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
+                                "@firecms/data_import": path.resolve(__dirname, "../packages/data_import/src"),
+                                "@firecms/data_export": path.resolve(__dirname, "../packages/data_export/src"),
                                 "@firecms/schema_inference": path.resolve(__dirname, "../packages/schema_inference/src"),
                                 "@firecms/data_enhancement": path.resolve(__dirname, "../packages/data_enhancement/src"),
                                 "@firecms/formex": path.resolve(__dirname, "../packages/formex/src")
@@ -160,10 +161,6 @@ module.exports = {
                                     test: /\.[mc]?[jt]sx?$/i,
                                     exclude: /node_modules/,
                                     use: [
-                                        // babel-loader, swc-loader, esbuild-loader, or anything you like to transpile JSX should go here.
-                                        // If you are using rspack, the rspack's buiilt-in react transformation is sufficient.
-                                        // { loader: 'swc-loader' },
-                                        // Now add forgetti-loader
                                         {
                                             loader: reactCompilerLoader,
                                             options: defineReactCompilerLoaderOption({
@@ -179,6 +176,9 @@ module.exports = {
             };
         }
     ].filter(Boolean),
+    // clientModules: [
+    //     require.resolve("./src/clientModules/analytics.js")
+    // ],
     themeConfig:
         {
             image: "img/logo_small.png",
@@ -213,13 +213,11 @@ module.exports = {
             ,
             navbar: {
                 title: "FireCMS",
-                logo:
-                    {
-                        alt: "FireCMS Logo",
-                        src:
-                            "img/firecms_logo.svg"
-                    }
-                ,
+                logo: {
+                    alt: "FireCMS Logo",
+                    src:
+                        "img/firecms_logo.svg"
+                },
                 items: [
                     {
                         label: "Why FireCMS",
@@ -259,6 +257,11 @@ module.exports = {
                                 label: "The most powerful backend",
                                 to: "/f/backend_extension",
                                 customPosition: "right"
+                            },
+                            {
+                                to: "/security",
+                                label: "Security & Privacy",
+                                customPosition: "right"
                             }
                         ],
                         position: "left"
@@ -284,11 +287,11 @@ module.exports = {
                         position: "left",
                         value: "<div class='bg-gray-100 rounded-lg'><a class='gradient-text navbar__item navbar__link' href='/pro'>PRO</a></div>"
                     },
-                    {
-                        type: "html",
-                        position: "right",
-                        value: "<div id=\"docsearch\"></div>"
-                    },
+                    // {
+                    //     type: "html",
+                    //     position: "right",
+                    //     value: "<div id=\"docsearch\"></div>"
+                    // },
                     // {
                     //     type: "html",
                     //     position: "right",
@@ -311,7 +314,10 @@ module.exports = {
                         href: "https://github.com/FireCMSco/firecms",
                         className: "header-github-link",
                         "aria-label": "GitHub repository",
-                        position: "right"
+                        position: "right",
+                        customProps: {
+                            eventName: "go_to_github"
+                        },
                     },
                     {
                         href: "*",
@@ -321,15 +327,22 @@ module.exports = {
                     {
                         to: "https://demo.firecms.co",
                         label: "Demo",
-                        className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-6 py-2",
+                        className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-2 md:px-6 py-2",
                         "aria-label": "Open the demo project",
+                        customProps: {
+                            eventName: "go_to_demo"
+                        },
                         position: "right"
                     },
                     {
                         to: "https://app.firecms.co",
                         label: "Sign in",
-                        className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
+                        className: "btn mr-3 px-4 md:px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
                         "aria-label": "Go to FireCMS Cloud",
+                        "id": "sign-in-btn",
+                        customProps: {
+                            eventName: "go_to_app"
+                        },
                         position: "right"
                     }
                 ]
@@ -341,8 +354,8 @@ module.exports = {
                         title: "Get in touch",
                         items: [
                             {
-                                label: "Contact",
-                                href: "mailto: hello@firecms.co"
+                                label: "hello@firecms.co",
+                                href: "mailto:hello@firecms.co"
                             },
                             {
                                 label: "Book a meeting",
@@ -471,9 +484,6 @@ module.exports = {
                     feedOptions: {
                         type: "all"
                     }
-                },
-                googleTagManager: {
-                    containerId: "GTM-P4JRQ5R6",
                 },
                 gtag: {
                     trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"

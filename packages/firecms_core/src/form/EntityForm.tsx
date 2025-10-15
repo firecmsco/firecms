@@ -510,7 +510,7 @@ export function EntityForm<M extends Record<string, any>>({
                             propertyKey: key,
                             disabled,
                             property,
-                            includeDescription: Boolean(property.description || property.longDescription),
+                            includeDescription: Boolean(property.description),
                             underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
                             context: formContext,
                             partOfArray: false,

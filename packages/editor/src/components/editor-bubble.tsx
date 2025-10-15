@@ -1,62 +1,58 @@
-import { BubbleMenu, type BubbleMenuProps, isNodeSelection, useCurrentEditor } from "@tiptap/react";
-import { type ReactNode, useMemo, useRef, useEffect, forwardRef } from "react";
-import type { Instance, Props } from "tippy.js";
+import { useCurrentEditor } from "@tiptap/react";
+import { forwardRef, type ReactNode, useMemo } from "react";
+// @ts-ignore
+import { BubbleMenu, type BubbleMenuProps } from "@tiptap/react/menus";
+import { NodeSelection } from "@tiptap/pm/state";
 
 export interface EditorBubbleProps extends Omit<BubbleMenuProps, "editor"> {
-  children: ReactNode;
+    children: ReactNode;
+    // Temporary backward-compat: map v2 tippyOptions.placement -> v3 options.placement
+    tippyOptions?: { placement?: any };
 }
 
 export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
-  ({ children, tippyOptions, ...rest }, ref) => {
-    const { editor } = useCurrentEditor();
-    const instanceRef = useRef<Instance<Props> | null>(null);
+    ({ children, tippyOptions, options, ...rest }, ref) => {
+        const { editor } = useCurrentEditor();
 
-    useEffect(() => {
-      if (!instanceRef.current || !tippyOptions?.placement) return;
+        const bubbleMenuProps: Omit<BubbleMenuProps, "editor" | "children"> = useMemo(() => {
+            const shouldShow: BubbleMenuProps["shouldShow"] = ({ editor, state }:any) => {
+                const { selection } = state;
+                const { empty } = selection as any;
 
-      instanceRef.current.setProps({ placement: tippyOptions.placement });
-      instanceRef.current.popperInstance?.update();
-    }, [tippyOptions?.placement]);
+                // don't show bubble menu if:
+                // - the selected node is an image
+                // - the selection is empty
+                // - the selection is a node selection (for drag handles)
+                if (editor.isActive("image") || empty || selection instanceof NodeSelection) {
+                    return false;
+                }
+                return true;
+            };
 
-    const bubbleMenuProps: Omit<BubbleMenuProps, "editor" | "children"> = useMemo(() => {
-      const shouldShow: BubbleMenuProps["shouldShow"] = ({ editor, state }) => {
-        const { selection } = state;
-        const { empty } = selection;
+            const mergedOptions = {
+                ...options,
+                // map deprecated tippy placement if provided
+                placement: tippyOptions?.placement ?? options?.placement,
+            } as BubbleMenuProps["options"];
 
-        // don't show bubble menu if:
-        // - the selected node is an image
-        // - the selection is empty
-        // - the selection is a node selection (for drag handles)
-        if (editor.isActive("image") || empty || isNodeSelection(selection)) {
-          return false;
-        }
-        return true;
-      };
+            return {
+                shouldShow,
+                options: mergedOptions,
+                ...rest,
+            };
+        }, [rest, options, tippyOptions?.placement]);
 
-      return {
-        shouldShow,
-        tippyOptions: {
-          onCreate: (val) => {
-            instanceRef.current = val;
-          },
-          moveTransition: "transform 0.15s ease-out",
-          ...tippyOptions,
-        },
-        ...rest,
-      };
-    }, [rest, tippyOptions]);
+        if (!editor) return null;
 
-    if (!editor) return null;
-
-    return (
-      //We need to add this because of https://github.com/ueberdosis/tiptap/issues/2658
-      <div ref={ref}>
-        <BubbleMenu editor={editor} {...bubbleMenuProps}>
-          {children}
-        </BubbleMenu>
-      </div>
-    );
-  }
+        return (
+            // We need to add this because of https://github.com/ueberdosis/tiptap/issues/2658
+            <div ref={ref}>
+                <BubbleMenu editor={editor} {...bubbleMenuProps}>
+                    {children}
+                </BubbleMenu>
+            </div>
+        );
+    }
 );
 
 export default EditorBubble;

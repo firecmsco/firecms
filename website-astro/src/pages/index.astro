@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+import Home from "../migration/pages/index";
+import Layout from "../layouts/Layout.astro";
+import HeroHome from "../migration/partials/home/HeroHome";
+import FireCMSIntro from "../migration/partials/home/FireCMSIntro";
+import LaunchInSteps from "../migration/partials/home/LaunchInSteps";
+import ClientLogos from "../migration/partials/ClientLogos";
+import QuotesSection from "../migration/partials/Quotes";
+import { BuiltFor } from "../migration/partials/home/BuiltFor";
+import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorShowcase";
+import { TechSplash } from "../migration/partials/home/TechSplash";
+import FirebaseTeaser from "../migration/partials/home/OpenSourceDetails";
+import DatakiIntro from "../migration/partials/home/DatakiIntro";
+import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
+import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
+import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
+---
+<Layout>
+    <main class="max-w-[100vw] bg-gray-950 relative">
+
+        <HeroHome/>
+
+        <FireCMSIntro/>
+
+        <LaunchInSteps/>
+
+        <QuotesSection/>
+        <ClientLogos/>
+
+        <!--<BuiltFor/>-->
+
+        <!--<SchemaEditorShowcase/>-->
+
+        <!--<DataTalkIntro/>-->
+
+        <!--<ImportDataIntro/>-->
+
+        <!--<TechSplash/>-->
+
+        <!--<DeveloperFeatures/>-->
+
+        <!--<FirebaseTeaser/>-->
+
+        <!--<DatakiIntro/>-->
+
+    </main>
+</Layout>

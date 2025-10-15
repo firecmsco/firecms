@@ -5,7 +5,7 @@ import { Button, Card, Chip, CircularProgress, cls, Container, Icon, Tooltip, Ty
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
-import { ImportFileUpload } from "@firecms/data_import_export";
+import { ImportFileUpload } from "@firecms/data_import";
 import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@firecms/formex";
 
@@ -89,6 +89,11 @@ export function CollectionEditorWelcomeView({
                                 {suggestion}
                             </Chip>
                         ))}
+                        {(filteredPathSuggestions ?? []).length === 0 && !loadingPathSuggestions && <Typography
+                            variant={"caption"}
+                            color={"secondary"}>
+                            No existing paths found
+                        </Typography>}
 
                     </div>
 

@@ -5,8 +5,10 @@ import { getFirestore } from "@firebase/firestore";
 
 export const buildCollectionInference = (dataFirebaseApp?: FirebaseApp): CollectionInference | undefined => {
     if (!dataFirebaseApp) return undefined;
-    return (path: string, collectionGroup: boolean, parentPathSegments: string[]) => {
-        const firestore = getFirestore(dataFirebaseApp);
+    return (path: string, collectionGroup: boolean, parentPathSegments: string[], databaseId?: string) => {
+        const firestore = databaseId
+            ? getFirestore(dataFirebaseApp, databaseId)
+            : getFirestore(dataFirebaseApp);
         return getInferredEntityCollection(firestore, path, collectionGroup, parentPathSegments)
     };
 }

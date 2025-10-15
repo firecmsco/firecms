@@ -9,6 +9,7 @@ export * from "./locales";
 export * from "./fields";
 export * from "./property_config";
 export * from "./entity_link_builder";
+export * from "./internal_user_management";
 export * from "./entity_callbacks";
 export * from "./entity_overrides";
 export * from "./plugins";

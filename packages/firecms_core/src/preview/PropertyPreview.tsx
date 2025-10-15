@@ -12,6 +12,7 @@ import {
     StringProperty
 } from "@firecms/types";
 
+import { resolveProperty } from "@firecms/common";
 import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
@@ -31,7 +32,7 @@ import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 import { ErrorView } from "../components";
 import { RelationPreview } from "./components/RelationPreview";
-import { resolveProperty } from "@firecms/common";
+import { UserPreview } from "./components/UserPreview";
 
 /**
  * @group Preview components
@@ -98,6 +99,13 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
+            } else if (stringProperty.userSelect) {
+                content = <UserPreview
+                    value={value}
+                    property={stringProperty}
+                    propertyKey={propertyKey}
+                    size={props.size}
+                />;
             } else if (stringProperty.reference) {
                 if (typeof stringProperty.reference.path === "string") {
                     content = <ReferencePreview

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { Entity, EntityCollection, PreviewSize, Property } from "@firecms/types";
 
@@ -9,6 +9,7 @@ import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
     useAuthController,
     useCustomizationController,
+    useDataSource,
     useNavigationController,
     useSideEntityController
 } from "../hooks";
@@ -194,6 +195,83 @@ export function EntityPreviewData({
             {actions && <div className="flex-shrink-0">{actions}</div>}
         </>
     );
+}
+
+export function EntityPreviewWithId({
+                                        entityId,
+                                        path,
+                                        ...props
+                                    }: Omit<EntityPreviewProps, "entity"> & {
+    entityId: string | number;
+    path: string;
+    databaseId?: string;
+}) {
+
+    const [entity, setEntity] = React.useState<Entity | undefined>();
+    const [dataLoading, setDataLoading] = React.useState(false);
+    const dataSource = useDataSource();
+
+    useEffect(() => {
+        let isMounted = true;
+        if (!entityId || !path) {
+            setEntity(undefined);
+            return;
+        }
+        const fetchEntity = async () => {
+            setDataLoading(true);
+            try {
+                const fetchedEntity = await dataSource.fetchEntity({
+                    path,
+                    entityId,
+                    databaseId: props.databaseId
+                });
+                if (isMounted) {
+                    setEntity(fetchedEntity);
+                }
+            } catch (error) {
+                console.error("Error fetching entity:", error);
+                if (isMounted) {
+                    setEntity(undefined);
+                }
+            } finally {
+                if (isMounted) {
+                    setDataLoading(false);
+                }
+            }
+        }
+
+        fetchEntity();
+
+        return () => {
+            isMounted = false;
+        }
+    }, [entityId, path]);
+
+    if (dataLoading && !entity) {
+        return (
+            <EntityPreviewContainer
+                hover={props.hover}
+                size={props.size}>
+                <Skeleton/>
+            </EntityPreviewContainer>
+        );
+    }
+
+    if (!entity) {
+        return (
+            <EntityPreviewContainer
+                hover={props.hover}
+                size={props.size}>
+                <div className={"text-text-secondary dark:text-text-secondary-dark"}>
+                    Entity not found
+                </div>
+            </EntityPreviewContainer>
+        );
+    }
+
+    return <EntityPreviewData
+        {...props}
+        entity={entity}/>;
 }
 
 /**

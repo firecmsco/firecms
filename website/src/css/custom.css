@@ -29,15 +29,15 @@ body {
 }
 
 h1 {
-    @apply text-6xl font-headers font-semibold
+    @apply text-6xl font-headers font-semibold tracking-tight
 }
 
 h2 {
-    @apply text-5xl font-headers font-semibold
+    @apply text-5xl font-headers font-semibold tracking-tight
 }
 
 h3 {
-    @apply text-4xl font-headers font-bold
+    @apply text-4xl font-headers font-bold tracking-tight
 }
 
 h4 {
@@ -758,19 +758,19 @@ code.language-sass .token.property, code.language-scss .token.property {
 /* Container for the gradient effect - positioned absolutely within the parent */
 .gradient-background-container {
     position: absolute;
+    pointer-events: none;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Clip the child blobs */
+    min-height: 1400px; /* Ensure it covers the entire viewport */
+    overflow: visible;
     z-index: 0; /* Place behind content (which should have z-10 or higher) */
 }
 
 .blob {
     content: '';
     position: absolute;
-    width: 90vmin;
-    height: 90vmin;
     border-radius: 50%;
     filter: blur(60px); /* Adjust blur */
     opacity: 0.5; /* Base opacity */
@@ -778,122 +778,113 @@ code.language-sass .token.property, code.language-scss .token.property {
     z-index: -1; /* Ensure they are behind the container div itself */
 }
 
-
-/* Blob 1 (Bluish) */
+/* Blob 1 (Bright Pink) */
 .blob-1 {
-    background: radial-gradient(circle, #1A4876, transparent 70%);
-    top: -10%;
-    left: -10%;
-    animation: moveBlob1 20s infinite alternate ease-in-out;
+    width: 45vw;
+    height: 45vw;
+    background: radial-gradient(circle at 40% 40%, rgba(255, 46, 138, 0.8), rgba(255, 46, 138, 0) 65%);
+    top: -2%;
+    left: 8%;
+    animation: moveBlob1 12s infinite alternate ease-in-out;
+    animation-delay: -2s;
+}
+
+/* Blob 2 (Bright Cyan) */
+.blob-2 {
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle at 60% 60%, rgb(0, 112, 244), rgba(39, 212, 255, 0) 65%);
+    top: 5%;
+    left: 42%;
+    animation: moveBlob2 14s infinite alternate ease-in-out;
     animation-delay: -1s;
 }
 
-/* Blob 2 (Warm) */
-.blob-2 {
-    background: radial-gradient(circle, #2c1d08, transparent 70%);
-    bottom: -15%;
-    right: -15%;
-    animation: moveBlob2 24s infinite alternate ease-in-out;
-    animation-delay: -5s;
-}
-
-/* --- NEW: Blob 3 (Darker Blue/Greenish) --- */
+/* Blob 3 (Orange) */
 .blob-3 {
-    /* Using another color from the original config */
-    background: radial-gradient(circle, #013030, transparent 70%);
-    top: 30%;
-    right: -20%;
-    animation: moveBlob3 24s infinite alternate ease-in-out;
-    animation-delay: -3s;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle at 55% 45%, rgba(255, 138, 61, 0.78), rgba(255, 138, 61, 0) 67%);
+    top: 50%;
+    left: 50%;
+    animation: moveBlob3 16s infinite alternate ease-in-out;
+    animation-delay: -4s;
 }
 
-/* --- NEW: Blob 4 (Darker Reddish) --- */
 .blob-4 {
-    /* Using another color from the original config */
-    background: radial-gradient(circle, #251515, transparent 70%);
-    bottom: 25%;
-    left: -15%;
-    animation: moveBlob4 28s infinite alternate ease-in-out;
-    animation-delay: -5s;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle at 55% 45%, rgba(112, 15, 236, 0.78), rgba(255, 138, 61, 0) 67%);
+    top: 30%;
+    left: 15%;
+    animation: moveBlob4 10s infinite alternate ease-in-out;
+    animation-delay: -2s;
 }
-
-
-/* --- UPDATED: Keyframes for each blob --- */
 
 @keyframes moveBlob1 {
     0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.5;
+        transform: translate(10vmin, 10vmin) scale(1);
+        opacity: 0.55;
     }
-    33% {
-        transform: translate(15vmin, -10vmin) scale(1.1);
-        opacity: 0.6;
-    }
-    66% {
-        transform: translate(-10vmin, 15vmin) scale(0.9);
-        opacity: 0.45;
+    50% {
+        transform: translate(16vmin, 6vmin) scale(1.15);
+        opacity: 0.7;
     }
     100% {
-        transform: translate(5vmin, 5vmin) scale(1);
-        opacity: 0.55;
+        transform: translate(14vmin, 12vmin) scale(1.0);
+        opacity: 0.6;
     }
 }
 
 @keyframes moveBlob2 {
     0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.6;
+        transform: translate(2vmin, 8vmin) scale(1.05);
+        opacity: 0.55;
     }
-    33% {
-        transform: translate(-20vmin, 10vmin) scale(0.85);
-        opacity: 0.7;
-    }
-    66% {
-        transform: translate(10vmin, -15vmin) scale(1.15);
-        opacity: 0.5;
+    50% {
+        transform: translate(-12vmin, -2vmin) scale(0.9);
+        opacity: 0.65;
     }
     100% {
-        transform: translate(-5vmin, -5vmin) scale(1);
-        opacity: 0.65;
+        transform: translate(-6vmin, -2vmin) scale(1.05);
+        opacity: 0.6;
     }
 }
 
-/* --- NEW: Keyframes for Blob 3 --- */
 @keyframes moveBlob3 {
     0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.4;
+        transform: translate(0, 0) scale(1.0);
+        opacity: 0.5;
     }
-    33% {
-        transform: translate(-15vmin, -15vmin) scale(1.1);
+    40% {
+        transform: translate(10vmin, -6vmin) scale(1.12);
+        opacity: 0.65;
+    }
+    80% {
+        transform: translate(-8vmin, 9vmin) scale(0.9);
         opacity: 0.55;
     }
-    66% {
-        transform: translate(10vmin, 20vmin) scale(0.8);
-        opacity: 0.35;
-    }
     100% {
-        transform: translate(5vmin, -10vmin) scale(1);
-        opacity: 0.45;
+        transform: translate(4vmin, 2vmin) scale(1.0);
+        opacity: 0.58;
     }
 }
 
-/* --- NEW: Keyframes for Blob 4 --- */
 @keyframes moveBlob4 {
     0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.55;
-    }
-    33% {
-        transform: translate(20vmin, 20vmin) scale(0.9);
-        opacity: 0.65;
-    }
-    66% {
-        transform: translate(-10vmin, -15vmin) scale(1.1);
+        transform: translate(0, 0) scale(1.0);
         opacity: 0.5;
     }
+    40% {
+        transform: translate(10vmin, -6vmin) scale(1.12);
+        opacity: 0.65;
+    }
+    80% {
+        transform: translate(-8vmin, 9vmin) scale(0.9);
+        opacity: 0.55;
+    }
     100% {
-        transform: translate(0vmin, 10vmin) scale(1);
-        opacity: 0.6;
+        transform: translate(4vmin, 2vmin) scale(1.0);
+        opacity: 0.58;
     }
 }
