@@ -353,8 +353,8 @@ module.exports = {
                         title: "Get in touch",
                         items: [
                             {
-                                label: "Contact",
-                                href: "mailto: hello@firecms.co"
+                                label: "hello@firecms.co",
+                                href: "mailto:hello@firecms.co"
                             },
                             {
                                 label: "Book a meeting",
