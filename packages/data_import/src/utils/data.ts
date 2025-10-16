@@ -5,7 +5,6 @@ import {
     EntityReference,
     getPropertyInPath,
     isPropertyBuilder,
-    mergeDeep,
     NavigationController,
     Properties,
     Property,
@@ -91,7 +90,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     } else if (from === "string" && to === "number" && typeof value === "string") {
         return Number(value);
     } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of)) {
-        return value.split(",").map((v: string) => processValueMapping(authController, v, usedProperty.of));
+        return value.split(",").map((v: string) => processValueMapping(authController, v, navigation, usedProperty.of));
     } else if (from === "string" && to === "boolean") {
         return value === "true";
     } else if (from === "number" && to === "boolean") {
