@@ -160,7 +160,10 @@ export function useMongoDBDelegate({
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
-        const mongoValues = values;
+
+        // Transform CMS values to MongoDB format before saving
+        const mongoValues = valuesToMongoValues(values);
+
         if (status === "existing") {
             await mongoCollection
                 .updateOne({
@@ -171,7 +174,7 @@ export function useMongoDBDelegate({
             return {
                 id: entityId as string,
                 path: path,
-                values: convertFromMongoValues(values) as M
+                values: values as M
             };
         }
         const res = await mongoCollection
@@ -347,7 +350,7 @@ export function useMongoDBDelegate({
     }): Promise<number> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(database).collection(props.slug);
+        const mongoCollection = mdb.db(database).collection(props.path);
         return mongoCollection.count();
     }, [app.currentUser, cluster, database]);
 
@@ -362,12 +365,6 @@ export function useMongoDBDelegate({
 
     return {
         key: "mongodb",
-        cmsToDelegateModel(data: any): any {
-            return valuesToMongoValues(data);
-        },
-        delegateToCMSModel(data: any): any {
-            return convertFromMongoValue(data);
-        },
         setDateToMidnight(input: any): any {
             if (!input) return input;
             if (!(input instanceof Date)) return input;
@@ -378,97 +375,14 @@ export function useMongoDBDelegate({
         currentTime(): any {
             return new Date();
         },
-
-        /**
-         * Check if the given property is unique in the given collection
-         * @param path Collection path
-         * @param name of the property
-         * @param value
-         * @param property
-         * @param entityId
-         * @return `true` if there are no other fields besides the given entity
-         *
-         */
         checkUniqueField: checkUniqueField,
-
         countEntities: countEntities,
-
-        /**
-         * Delete an entity
-         * @param entity
-         * @param collection
-         *
-         */
         deleteEntity: deleteEntity,
-
-        /**
-         * Fetch entities in a Firestore path
-         * @param path
-         * @param collection
-         * @param filter
-         * @param limit
-         * @param startAfter
-         * @param searchString
-         * @param orderBy
-         * @param order
-         * @return Function to cancel subscription
-         * @see useCollectionFetch if you need this functionality implemented as a hook
-         *
-         */
         fetchCollection: fetchCollection,
-
-        /**
-         * Retrieve an entity given a path and a collection
-         * @param path
-         * @param entityId
-         * @param collection
-         *
-         */
         fetchEntity: fetchEntity,
-
         generateEntityId: generateEntityId,
-
-        /**
-         * Listen to a entities in a given path
-         * @param path
-         * @param collection
-         * @param onError
-         * @param filter
-         * @param limit
-         * @param startAfter
-         * @param searchString
-         * @param orderBy
-         * @param order
-         * @param onUpdate
-         * @return Function to cancel subscription
-         * @see useCollectionFetch if you need this functionality implemented as a hook
-         *
-         */
         listenCollection: listenCollection,
-
-        /**
-         *
-         * @param path
-         * @param entityId
-         * @param collection
-         * @param onUpdate
-         * @param onError
-         * @return Function to cancel subscription
-         *
-         */
         listenEntity: listenEntity,
-
-        /**
-         * Save entity to the specified path. Note that Firestore does not allow
-         * undefined values.
-         * @param path
-         * @param entityId
-         * @param values
-         * @param schemaId
-         * @param collection
-         * @param status
-         *
-         */
         saveEntity: saveEntity
 
     };
@@ -503,8 +417,8 @@ function convertFromMongoValue(value: unknown): any {
         if (value instanceof Date) {
             return value;
         }
-        if ("path" in value && "id" in value && typeof value.slug === "string") {
-            return new EntityReference((value.id as any).toString(), value.slug);
+        if ("path" in value && "id" in value && typeof value.path === "string") {
+            return new EntityReference((value.id as any).toString(), value.path);
         }
         return convertFromMongoValues(value);
     }
@@ -523,7 +437,7 @@ function valueToMongoValue(value: any): any {
     if (value.isEntityReference && value.isEntityReference()) {
         return {
             id: new BSON.ObjectId(value.id),
-            path: value.slug
+            path: value.path
         };
     }
     if (typeof value !== "object") return value;

@@ -1,7 +1,7 @@
 {
   "name": "@firecms/postgresql",
   "type": "module",
-  "version": "3.0.0-canary.258",
+  "version": "4.0.0-alpha.1",
   "description": "PostgreSQL data source client for FireCMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -48,8 +48,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/types": "3.0.0-canary.258",
-    "@firecms/core": "3.0.0-canary.258"
+    "@firecms/types": "4.0.0-alpha.1",
+    "@firecms/core": "4.0.0-alpha.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0",

@@ -36,7 +36,7 @@ export function removeValueAtIndex<T>(arr: T[], idx: number): T[] {
 }
 
 export interface EntityType {
-    id: Realm.BSON.ObjectId | string;
+    id: Realm.BSON.ObjectId | string | number;
 }
 
 export const createObjectId = (): Realm.BSON.ObjectId => {

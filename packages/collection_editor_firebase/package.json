@@ -1,7 +1,7 @@
 {
   "name": "@firecms/collection_editor_firebase",
   "type": "module",
-  "version": "3.0.0-canary.258",
+  "version": "4.0.0-alpha.1",
   "publishConfig": {
     "access": "public"
   },
@@ -30,10 +30,11 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "3.0.0-canary.258",
-    "@firecms/core": "3.0.0-canary.258",
-    "@firecms/types": "3.0.0-canary.258",
-    "@firecms/firebase": "3.0.0-canary.258"
+    "@firecms/schema_inference": "4.0.0-alpha.1",
+    "@firecms/collection_editor": "4.0.0-alpha.1",
+    "@firecms/core": "4.0.0-alpha.1",
+    "@firecms/types": "4.0.0-alpha.1",
+    "@firecms/firebase": "4.0.0-alpha.1"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0",

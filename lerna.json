@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-canary.282",
+  "version": "4.0.0-alpha.1",
   "packages": [
     "packages/firecms",
     "packages/firecms_cloud",
@@ -35,5 +35,5 @@
     "examples/example_next",
     "examples/example_pro"
   ],
-  "npmClient": "npm"
+  "npmClient": "pnpm"
 }

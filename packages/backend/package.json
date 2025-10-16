@@ -1,7 +1,7 @@
 {
   "name": "@firecms/backend",
   "type": "module",
-  "version": "3.0.0-canary.258",
+  "version": "4.0.0-alpha.1",
   "description": "PostgreSQL and Drizzle ORM backend for FireCMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -49,8 +49,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/common": "3.0.0-canary.258",
-    "@firecms/types": "3.0.0-canary.258",
+    "@firecms/common": "4.0.0-alpha.1",
+    "@firecms/types": "4.0.0-alpha.1",
     "drizzle-orm": "^0.44.4",
     "pg": "^8.11.3",
     "ws": "^8.16.0",
@@ -61,8 +61,8 @@
     "graphql-http": "^1.22.0"
   },
   "devDependencies": {
-    "@firecms/common": "3.0.0-canary.258",
-    "@firecms/types": "3.0.0-canary.258",
+    "@firecms/common": "4.0.0-alpha.1",
+    "@firecms/types": "4.0.0-alpha.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.10.5",
     "@types/pg": "^8.6.5",

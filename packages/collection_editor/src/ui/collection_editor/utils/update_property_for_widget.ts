@@ -43,7 +43,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: undefined,
+                enum: undefined,
                 userSelect: true
             } satisfies StringProperty
         );

@@ -12,7 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@firecms/types": "3.0.0-canary.258"
+    "@firecms/types": "4.0.0-alpha.1"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

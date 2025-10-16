@@ -43,7 +43,7 @@
     "examples/example_pro"
   ],
   "scripts": {
-    "dev": "cd examples/example && run-s dev",
+    "dev": "cd app && run-s dev",
     "pro": "cd examples/example_pro && run-s dev",
     "next": "cd examples/example_next && run-s dev",
     "cloud": "cd examples/example_cloud && run-s dev",

@@ -57,7 +57,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
             return Object.entries(snapshot.val()).map(([id, values]) => ({
                 id,
                 path: path,
-                values: values as M,
+                values: delegateToCMSModel(values) as M,
             }));
         }
         return [];
@@ -79,7 +79,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
                 const result: Entity<M>[] = Object.entries(snapshot.val()).map(([id, values]) => ({
                     id,
                     path: path,
-                    values: values as M,
+                    values: delegateToCMSModel(values) as M,
                 }));
                 onUpdate(result);
             } else {
@@ -104,7 +104,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
             return {
                 id: entityId,
                 path: path,
-                values: snapshot.val() as M
+                values: delegateToCMSModel(snapshot.val()) as M
             };
         }
         return undefined;
@@ -127,7 +127,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
                 onUpdate({
                     id: entityId,
                     path,
-                    values: snapshot.val() as M
+                    values: delegateToCMSModel(snapshot.val()) as M
                 });
             } else {
                 onError?.(new Error("Entity does not exist"));
@@ -152,7 +152,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         if (!finalId) {
             throw new Error("Could not generate a new id");
         }
-        await set(ref(database, `${path}/${finalId}`), values);
+
+        // Transform the data to RTDB format before saving
+        const transformedValues = cmsToRTDBModel(values, database);
+        await set(ref(database, `${path}/${finalId}`), transformedValues);
+
         return {
             id: finalId,
             path: path,
@@ -223,15 +227,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         checkUniqueField,
         generateEntityId,
         isFilterCombinationValid,
-        cmsToDelegateModel: (data: any) => {
-            if (!firebaseApp) {
-                throw new Error("Firebase app not provided");
-            }
-            const database = getDatabase(firebaseApp);
-            return cmsToRTDBModel(data, database);
-        },
         currentTime: () => new Date(),
-        delegateToCMSModel,
         setDateToMidnight
     };
 }
@@ -242,6 +238,10 @@ function setDateToMidnight(date: Date): Date {
     return newDate;
 }
 
+/**
+ * Transform data from RTDB format back to CMS format
+ * This is used internally when fetching/listening to data
+ */
 function delegateToCMSModel(data: any): any {
     if (data === null || data === undefined) return null;
 
@@ -262,7 +262,11 @@ function delegateToCMSModel(data: any): any {
     return data;
 }
 
-export function cmsToRTDBModel(data: any, database: Database): any {
+/**
+ * Transform data from CMS format to RTDB format
+ * This is used internally when saving data
+ */
+function cmsToRTDBModel(data: any, database: Database): any {
     if (data === undefined) {
         return null;
     } else if (data === null) {
@@ -279,7 +283,7 @@ export function cmsToRTDBModel(data: any, database: Database): any {
             .map(([key, v]) => {
                 const rtdbModel = cmsToRTDBModel(v, database);
                 if (rtdbModel !== undefined)
-                    return ({ [key]: rtdbModel });
+                    return { [key]: rtdbModel };
                 else
                     return {};
             })
