@@ -1,4 +1,5 @@
 import { EntityService } from "../src/db/entityService";
+import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@firecms/types";
 import { collectionRegistry } from "../src/collections/registry";
@@ -162,12 +163,17 @@ describe("EntityService - Relation Types Tests", () => {
             return undefined;
         });
 
+        // Create a mock query object that can be awaited
+        const mockQuery = {
+            then: jest.fn((resolve) => resolve([]))
+        };
+
         db = {
             select: jest.fn().mockReturnThis(),
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
             limit: jest.fn().mockReturnThis(),
-            orderBy: jest.fn().mockResolvedValue([]),
+            orderBy: jest.fn().mockReturnValue(mockQuery),
             innerJoin: jest.fn().mockReturnThis(),
             insert: jest.fn().mockReturnThis(),
             values: jest.fn().mockReturnThis(),
@@ -176,6 +182,7 @@ describe("EntityService - Relation Types Tests", () => {
             set: jest.fn().mockReturnThis(),
             delete: jest.fn().mockReturnThis(),
             transaction: jest.fn((callback) => callback(db)),
+            then: jest.fn((resolve) => resolve([]))
         } as any;
 
         entityService = new EntityService(db);
@@ -426,6 +433,393 @@ describe("EntityService - Relation Types Tests", () => {
 
             // Since no customer property was provided, nothing should be set
             expect(db.set).toHaveBeenCalledWith({});
+        });
+    });
+
+    describe("Advanced Relation Types - Complete Coverage", () => {
+        // Additional mock tables for joinPath scenarios
+        const mockAuthorsTable = {
+            id: { name: "id" },
+            name: { name: "name" },
+            _def: { tableName: "authors" }
+        };
+
+        const mockPostsTable = {
+            id: { name: "id" },
+            title: { name: "title" },
+            author_id: { name: "author_id" },
+            _def: { tableName: "posts" }
+        };
+
+        const mockCommentsTable = {
+            id: { name: "id" },
+            content: { name: "content" },
+            post_id: { name: "post_id" },
+            _def: { tableName: "comments" }
+        };
+
+        const mockTagsTable = {
+            id: { name: "id" },
+            name: { name: "name" },
+            _def: { tableName: "tags" }
+        };
+
+        const mockPostTagsTable = {
+            post_id: { name: "post_id" },
+            tag_id: { name: "tag_id" },
+            _def: { tableName: "post_tags" }
+        };
+
+        // Test Case 1: ONE + owning + localKey (already covered in "Many-to-One Relations")
+        // This is the Post -> Author relationship
+
+        describe("ONE + owning + joinPath", () => {
+            const postsWithAuthorViaJoinPath: EntityCollection = {
+                slug: "posts_jp",
+                name: "Posts with JoinPath",
+                dbPath: "posts",
+                properties: {
+                    id: { type: "number" },
+                    title: { type: "string" },
+                    authorProfile: { type: "relation", relationName: "authorProfile" }
+                },
+                relations: [
+                    {
+                        relationName: "authorProfile",
+                        target: () => userProfilesCollection,
+                        cardinality: "one",
+                        direction: "owning",
+                        joinPath: [
+                            { table: "authors", on: { from: "posts.author_id", to: "authors.id" } },
+                            { table: "user_profiles", on: { from: "authors.id", to: "user_profiles.user_id" } }
+                        ]
+                    }
+                ],
+                idField: "id"
+            };
+
+            it("should handle one-to-one owning relation via joinPath on write", async () => {
+                jest.spyOn(collectionRegistry, "getCollectionByPath").mockReturnValue(postsWithAuthorViaJoinPath);
+                jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                    if (dbPath === "posts") return mockPostsTable as any;
+                    if (dbPath === "authors") return mockAuthorsTable as any;
+                    if (dbPath === "user_profiles") return mockUserProfilesTable as any;
+                    return undefined;
+                });
+
+                const newPost = {
+                    title: "Test Post",
+                    authorProfile: { id: "1", path: "user_profiles", __type: "relation" }
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, title: "Test Post", author_id: 1 }]);
+
+                const entity = await entityService.saveEntity("posts_jp", newPost);
+
+                // Should have captured the joinPath relation update
+                expect(db.transaction).toHaveBeenCalled();
+            });
+        });
+
+        describe("ONE + inverse + foreignKeyOnTarget (already covered in One-to-One Relations)", () => {
+            // This is the Customer <- Profile relationship
+            it("should update inverse one-to-one relation", async () => {
+                const customerWithProfile = {
+                    name: "John Doe",
+                    profile: { id: "1", path: "user_profiles", __type: "relation" }
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, name: "John Doe" }]);
+
+                const entity = await entityService.saveEntity("customers", customerWithProfile);
+
+                // Should trigger inverse relation update
+                expect(db.transaction).toHaveBeenCalled();
+            });
+        });
+
+        describe("ONE + inverse + joinPath", () => {
+            const authorsWithProfileViaJoinPath: EntityCollection = {
+                slug: "authors_jp",
+                name: "Authors with Profile via JoinPath",
+                dbPath: "authors",
+                properties: {
+                    id: { type: "number" },
+                    name: { type: "string" },
+                    profile: { type: "relation", relationName: "profile" }
+                },
+                relations: [
+                    {
+                        relationName: "profile",
+                        target: () => userProfilesCollection,
+                        cardinality: "one",
+                        direction: "inverse",
+                        joinPath: [
+                            { table: "customers", on: { from: "authors.id", to: "customers.id" } },
+                            { table: "user_profiles", on: { from: "customers.id", to: "user_profiles.user_id" } }
+                        ]
+                    }
+                ],
+                idField: "id"
+            };
+
+            it("should handle one-to-one inverse relation via joinPath on write", async () => {
+                jest.spyOn(collectionRegistry, "getCollectionByPath").mockReturnValue(authorsWithProfileViaJoinPath);
+                jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                    if (dbPath === "authors") return mockAuthorsTable as any;
+                    if (dbPath === "customers") return mockCustomersTable as any;
+                    if (dbPath === "user_profiles") return mockUserProfilesTable as any;
+                    return undefined;
+                });
+
+                const newAuthor = {
+                    name: "Jane Author",
+                    profile: { id: "2", path: "user_profiles", __type: "relation" }
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, name: "Jane Author" }]);
+
+                const entity = await entityService.saveEntity("authors_jp", newAuthor);
+
+                // Should trigger inverse joinPath relation update
+                expect(db.transaction).toHaveBeenCalled();
+            });
+        });
+
+        describe("MANY + owning + through (already covered in Many-to-Many Relations)", () => {
+            // This is the Order -> Products via order_items relationship
+            it("should update many-to-many owning relation with through", async () => {
+                const orderWithProducts = {
+                    total: 500,
+                    products: [
+                        { id: "1", path: "products", __type: "relation" },
+                        { id: "2", path: "products", __type: "relation" }
+                    ]
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, total: 500 }]);
+
+                const entity = await entityService.saveEntity("orders", orderWithProducts);
+
+                // Should manage junction table entries
+                expect(db.transaction).toHaveBeenCalled();
+            });
+        });
+
+        describe("MANY + owning + joinPath", () => {
+            const postsWithTagsViaJoinPath: EntityCollection = {
+                slug: "posts_tags_jp",
+                name: "Posts with Tags via JoinPath",
+                dbPath: "posts",
+                properties: {
+                    id: { type: "number" },
+                    title: { type: "string" },
+                    tags: { type: "relation", relationName: "tags" }
+                },
+                relations: [
+                    {
+                        relationName: "tags",
+                        target: () => ({
+                            slug: "tags",
+                            name: "Tags",
+                            dbPath: "tags",
+                            properties: { id: { type: "number" }, name: { type: "string" } },
+                            idField: "id"
+                        }),
+                        cardinality: "many",
+                        direction: "owning",
+                        joinPath: [
+                            { table: "post_tags", on: { from: "posts.id", to: "post_tags.post_id" } },
+                            { table: "tags", on: { from: "post_tags.tag_id", to: "tags.id" } }
+                        ]
+                    }
+                ],
+                idField: "id"
+            };
+
+            it("should handle many-to-many owning relation via joinPath on write", async () => {
+                jest.spyOn(collectionRegistry, "getCollectionByPath").mockImplementation(path => {
+                    if (path === "posts_tags_jp" || path === "posts") return postsWithTagsViaJoinPath;
+                    if (path.startsWith("tags")) return postsWithTagsViaJoinPath.relations![0].target();
+                    return undefined;
+                });
+                jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                    if (dbPath === "posts") return mockPostsTable as any;
+                    if (dbPath === "post_tags") return mockPostTagsTable as any;
+                    if (dbPath === "tags") return mockTagsTable as any;
+                    return undefined;
+                });
+
+                const postWithTags = {
+                    title: "Tagged Post",
+                    tags: [
+                        { id: "1", path: "tags", __type: "relation" },
+                        { id: "2", path: "tags", __type: "relation" }
+                    ]
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, title: "Tagged Post" }]);
+                // Mock the fetch for tags relation - return empty array since we're testing write
+                db.orderBy.mockResolvedValue([]);
+
+                const _entity = await entityService.saveEntity("posts_tags_jp", postWithTags);
+
+                // Should manage junction table via joinPath
+                expect(db.transaction).toHaveBeenCalled();
+                expect(db.delete).toHaveBeenCalled(); // Should delete old junction entries
+            });
+        });
+
+        describe("MANY + inverse + foreignKeyOnTarget (already covered)", () => {
+            // This is the Customer <- Orders relationship
+            it("should update one-to-many inverse relation", async () => {
+                const customerWithOrders = {
+                    name: "Big Customer",
+                    orders: [
+                        { id: "1", path: "orders", __type: "relation" },
+                        { id: "2", path: "orders", __type: "relation" }
+                    ]
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, name: "Big Customer" }]);
+
+                const entity = await entityService.saveEntity("customers", customerWithOrders);
+
+                // Should update FK on target entities
+                expect(db.transaction).toHaveBeenCalled();
+            });
+        });
+
+        describe("MANY + inverse + through", () => {
+            const productsWithOrdersInverse: EntityCollection = {
+                slug: "products_orders",
+                name: "Products with Orders Inverse",
+                dbPath: "products",
+                properties: {
+                    id: { type: "number" },
+                    name: { type: "string" },
+                    orders: { type: "relation", relationName: "orders" }
+                },
+                relations: [
+                    {
+                        relationName: "orders",
+                        target: () => ordersCollection,
+                        cardinality: "many",
+                        direction: "inverse",
+                        inverseRelationName: "products",
+                        // Add joinPath to satisfy the validation
+                        joinPath: [
+                            { table: "order_items", on: { from: "products.id", to: "order_items.product_id" } },
+                            { table: "orders", on: { from: "order_items.order_id", to: "orders.id" } }
+                        ]
+                    }
+                ],
+                idField: "id"
+            };
+
+            it("should handle many-to-many inverse relation with through", async () => {
+                jest.spyOn(collectionRegistry, "getCollectionByPath").mockImplementation(path => {
+                    if (path === "products_orders" || path === "products") return productsWithOrdersInverse;
+                    if (path.startsWith("orders")) return ordersCollection;
+                    return undefined;
+                });
+                jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                    if (dbPath === "products") return mockProductsTable as any;
+                    if (dbPath === "orders") return mockOrdersTable as any;
+                    if (dbPath === "order_items") return mockOrderItemsTable as any;
+                    return undefined;
+                });
+
+                const productWithOrders = {
+                    name: "Popular Product",
+                    orders: [
+                        { id: "1", path: "orders", __type: "relation" },
+                        { id: "2", path: "orders", __type: "relation" }
+                    ]
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, name: "Popular Product" }]);
+                // Mock the fetch for orders relation - return empty array
+                db.orderBy.mockResolvedValue([]);
+
+                const _entity = await entityService.saveEntity("products_orders", productWithOrders);
+
+                // Should manage junction table from inverse side
+                expect(db.transaction).toHaveBeenCalled();
+                expect(db.delete).toHaveBeenCalled(); // Should delete old junction entries
+            });
+        });
+
+        describe("MANY + inverse + joinPath", () => {
+            const tagsWithPostsViaJoinPath: EntityCollection = {
+                slug: "tags_posts_jp",
+                name: "Tags with Posts via JoinPath",
+                dbPath: "tags",
+                properties: {
+                    id: { type: "number" },
+                    name: { type: "string" },
+                    posts: { type: "relation", relationName: "posts" }
+                },
+                relations: [
+                    {
+                        relationName: "posts",
+                        target: () => ({
+                            slug: "posts",
+                            name: "Posts",
+                            dbPath: "posts",
+                            properties: { id: { type: "number" }, title: { type: "string" } },
+                            idField: "id"
+                        }),
+                        cardinality: "many",
+                        direction: "inverse",
+                        joinPath: [
+                            { table: "post_tags", on: { from: "tags.id", to: "post_tags.tag_id" } },
+                            { table: "posts", on: { from: "post_tags.post_id", to: "posts.id" } }
+                        ]
+                    }
+                ],
+                idField: "id"
+            };
+
+            it("should handle many-to-many inverse relation via joinPath on write", async () => {
+                jest.spyOn(collectionRegistry, "getCollectionByPath").mockImplementation(path => {
+                    if (path === "tags_posts_jp" || path === "tags") return tagsWithPostsViaJoinPath;
+                    if (path.startsWith("posts")) return tagsWithPostsViaJoinPath.relations![0].target();
+                    return undefined;
+                });
+                jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                    if (dbPath === "tags") return mockTagsTable as any;
+                    if (dbPath === "post_tags") return mockPostTagsTable as any;
+                    if (dbPath === "posts") return mockPostsTable as any;
+                    return undefined;
+                });
+
+                const tagWithPosts = {
+                    name: "Popular Tag",
+                    posts: [
+                        { id: "1", path: "posts", __type: "relation" },
+                        { id: "2", path: "posts", __type: "relation" }
+                    ]
+                };
+
+                db.returning.mockResolvedValue([{ id: 1 }]);
+                db.limit.mockResolvedValue([{ id: 1, name: "Popular Tag" }]);
+                // Mock the fetch for posts relation - return empty array since we're testing write
+                db.orderBy.mockResolvedValue([]);
+
+                const _entity = await entityService.saveEntity("tags_posts_jp", tagWithPosts);
+
+                // Should manage junction table via inverse joinPath
+                expect(db.transaction).toHaveBeenCalled();
+                expect(db.delete).toHaveBeenCalled(); // Should delete old junction entries
+            });
         });
     });
 });

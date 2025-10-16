@@ -107,8 +107,19 @@ function serializeDataToServer<M extends Record<string, any>>(entity: M, propert
                     });
                     // Don't add the original relation property to the result
                     continue;
-                } else if (relation.cardinality === "one" && relation.joinPath && relation.joinPath.length > 0) {
-                    // Computed one-to-one via joinPath: capture as a write intent
+                } else if (relation.direction === "inverse" && relation.joinPath && relation.joinPath.length > 0) {
+                    // Inverse relation via joinPath: capture as inverse relation update
+                    const serializedValue = serializePropertyToServer(value, property);
+                    inverseRelationUpdates.push({
+                        relationKey: key,
+                        relation,
+                        newValue: serializedValue,
+                        currentEntityId: entity.id || entity[collection.idField || "id"]
+                    });
+                    // Don't add the original relation property to the result
+                    continue;
+                } else if (relation.cardinality === "one" && relation.direction === "owning" && relation.joinPath && relation.joinPath.length > 0) {
+                    // Owning one-to-one via joinPath: capture as a write intent
                     const serializedValue = serializePropertyToServer(value, property);
                     joinPathRelationUpdates.push({
                         relationKey: key,
@@ -457,6 +468,7 @@ function parsePropertyFromServer(value: any, property: Property, collection: Ent
 }
 
 export class EntityService {
+    // eslint-disable-next-line no-unused-vars
     constructor(private db: NodePgDatabase<any>) {
     }
 
@@ -1047,9 +1059,9 @@ export class EntityService {
 
         // Handle many relations (these still need individual queries for now)
         const manyRelationPromises = entitiesWithValues.map(async (item) => {
-            const manyRelationPromises = Object.entries(resolvedRelations)
+            const manyRelationQueries = Object.entries(resolvedRelations)
                 .filter(([key, relation]) => propertyKeys.has(key) && relation.cardinality === "many")
-                .map(async ([key, relation]) => {
+                .map(async ([key]) => {
                     try {
                         const relatedEntities = await this.fetchRelatedEntities(
                             collectionPath,
@@ -1066,7 +1078,7 @@ export class EntityService {
                         console.warn(`Could not resolve many relation property: ${key}`, e);
                     }
                 });
-            await Promise.all(manyRelationPromises);
+            await Promise.all(manyRelationQueries);
         });
 
         await Promise.all(manyRelationPromises);
@@ -1416,8 +1428,8 @@ export class EntityService {
             const propertyKeys = new Set(Object.keys(targetCollection.properties));
             const relationPromises = Object.entries(resolvedRelations)
                 .filter(([key]) => propertyKeys.has(key))
-                .map(async ([key, relation]) => {
-                    if (relation.cardinality === "one") {
+                .map(async ([key, rel]) => {
+                    if (rel.cardinality === "one") {
                         // Populate any missing one-to-one relation
                         if ((values as any)[key] == null) {
                             try {
@@ -1839,7 +1851,7 @@ export class EntityService {
     private async batchFetchRelatedEntities(
         parentCollectionPath: string,
         parentEntityIds: (string | number)[],
-        relationKey: string,
+        _relationKey: string,
         relation: Relation
     ): Promise<Map<string | number, Entity<any>>> {
         if (parentEntityIds.length === 0) return new Map();
@@ -1951,7 +1963,6 @@ export class EntityService {
                 parentId = targetEntity[inferredForeignKeyName];
             } else if (relation.direction === "owning" && relation.localKey) {
                 // For owning relations, we need to find which parent has this target entity ID
-                const targetId = targetEntity[targetIdInfo.fieldName];
                 // Find the parent that references this target entity
                 for (const parsedParentId of parsedParentIds) {
                     // This is a simplification - in a real owning relation, we'd need to check
@@ -1999,26 +2010,46 @@ export class EntityService {
                 const parentTableName = getTableName(collection);
                 const targetTableName = getTableName(targetCollection);
 
-                let junctionTable: PgTable<any> | null = null;
+                let junctionTable: PgTable | undefined = undefined;
                 let sourceJunctionColumn: AnyPgColumn | null = null;
                 let targetJunctionColumn: AnyPgColumn | null = null;
 
-                for (const joinStep of relation.joinPath) {
-                    const joinTableObj = collectionRegistry.getTable(joinStep.table);
-                    if (!joinTableObj) continue;
+                // First, identify which table is the junction table
+                const junctionTableName = relation.joinPath.find(step =>
+                    step.table !== parentTableName && step.table !== targetTableName
+                )?.table;
 
-                    // Check if this is the junction table (not parent or target table)
-                    if (joinStep.table !== parentTableName && joinStep.table !== targetTableName) {
-                        junctionTable = joinTableObj;
+                if (junctionTableName) {
+                    junctionTable = collectionRegistry.getTable(junctionTableName);
 
-                        const sourceColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.from);
-                        const targetColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.to);
-                        const sourceColumnName = sourceColumnNames[0]; // Use first column for simple FK cases
-                        const targetColumnName = targetColumnNames[0]; // Use first column for simple FK cases
+                    if (junctionTable) {
+                        // Find the column in junction that references the source (parent)
+                        for (const joinStep of relation.joinPath) {
+                            const fromTable = DrizzleConditionBuilder.getTableNamesFromColumns(joinStep.on.from)[0];
+                            const toTable = DrizzleConditionBuilder.getTableNamesFromColumns(joinStep.on.to)[0];
 
-                        sourceJunctionColumn = junctionTable[sourceColumnName as keyof typeof junctionTable] as AnyPgColumn;
-                        targetJunctionColumn = junctionTable[targetColumnName as keyof typeof junctionTable] as AnyPgColumn;
-                        break;
+                            // Step connecting parent to junction
+                            if (fromTable === parentTableName && toTable === junctionTableName) {
+                                const columnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.to);
+                                sourceJunctionColumn = junctionTable[columnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            }
+                            // Step connecting junction to parent (reverse)
+                            else if (fromTable === junctionTableName && toTable === parentTableName) {
+                                const columnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.from);
+                                sourceJunctionColumn = junctionTable[columnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            }
+
+                            // Step connecting junction to target
+                            if (fromTable === junctionTableName && toTable === targetTableName) {
+                                const columnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.from);
+                                targetJunctionColumn = junctionTable[columnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            }
+                            // Step connecting target to junction (reverse)
+                            else if (fromTable === targetTableName && toTable === junctionTableName) {
+                                const columnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(joinStep.on.to);
+                                targetJunctionColumn = junctionTable[columnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            }
+                        }
                     }
                 }
 
@@ -2125,6 +2156,207 @@ export class EntityService {
                 // Skip many-to-many relations that don't have joinPath or through defined
                 console.warn(`Many relation '${key}' in collection '${collection.slug || collection.dbPath}' lacks write configuration (no joinPath with junction, no through, or no foreignKeyOnTarget) and will be skipped during save.`);
             }
+        }
+    }
+
+    /**
+     * Handle inverse relations with joinPath
+     * This supports both one-to-one and many-to-many inverse relations that use joinPath
+     */
+    private async updateInverseJoinPathRelation(
+        tx: NodePgDatabase<any>,
+        sourceCollection: EntityCollection,
+        sourceEntityId: string | number,
+        targetCollection: EntityCollection,
+        relation: Relation,
+        newValue: any
+    ) {
+        try {
+            if (!relation.joinPath || relation.joinPath.length === 0) {
+                console.warn(`Inverse relation '${relation.relationName}' missing joinPath`);
+                return;
+            }
+
+            // For inverse joinPath relations, we need to determine if there's a junction table involved
+            // or if it's a direct multi-hop relation
+            const sourceTableName = getTableName(sourceCollection);
+            const targetTableName = getTableName(targetCollection);
+
+            // Find intermediate tables that are neither source nor target
+            const intermediateTables = relation.joinPath
+                .map(step => step.table)
+                .filter(table => table !== sourceTableName && table !== targetTableName);
+
+            // If there's exactly one intermediate table, it's likely a junction table for many-to-many
+            if (intermediateTables.length === 1 && relation.cardinality === "many") {
+                // Handle as many-to-many inverse via junction table
+                const junctionTableName = intermediateTables[0];
+                const junctionTable = collectionRegistry.getTable(junctionTableName);
+
+                if (!junctionTable) {
+                    console.warn(`Junction table '${junctionTableName}' not found for inverse joinPath relation '${relation.relationName}'`);
+                    return;
+                }
+
+                // Determine source and target columns in the junction table
+                // For inverse relations, we need to find:
+                // - sourceColumn: the column in junction that references the source entity
+                // - targetColumn: the column in junction that references the target entities
+
+                let sourceJunctionColumn: AnyPgColumn | null = null;
+                let targetJunctionColumn: AnyPgColumn | null = null;
+
+                for (const step of relation.joinPath) {
+                    if (step.table === junctionTableName) {
+                        const fromTable = DrizzleConditionBuilder.getTableNamesFromColumns(step.on.from)[0];
+                        const toColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(step.on.to);
+                        const fromColumnNames = DrizzleConditionBuilder.getColumnNamesFromColumns(step.on.from);
+
+                        if (fromTable === sourceTableName) {
+                            // This join connects source to junction
+                            sourceJunctionColumn = junctionTable[toColumnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                        } else if (fromTable === targetTableName) {
+                            // This join connects target to junction
+                            targetJunctionColumn = junctionTable[toColumnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                        } else {
+                            // fromTable is junction itself
+                            const toTable = DrizzleConditionBuilder.getTableNamesFromColumns(step.on.to)[0];
+                            if (toTable === sourceTableName) {
+                                sourceJunctionColumn = junctionTable[fromColumnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            } else if (toTable === targetTableName) {
+                                targetJunctionColumn = junctionTable[fromColumnNames[0] as keyof typeof junctionTable] as AnyPgColumn;
+                            }
+                        }
+                    }
+                }
+
+                if (!sourceJunctionColumn || !targetJunctionColumn) {
+                    console.warn(`Could not determine junction columns for inverse joinPath relation '${relation.relationName}'`);
+                    return;
+                }
+
+                // Now perform the junction table update
+                const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
+                const parsedSourceId = this.parseIdValue(sourceEntityId, sourceIdInfo.type);
+
+                // Clear existing entries for this source entity
+                await tx.delete(junctionTable).where(eq(sourceJunctionColumn, parsedSourceId));
+
+                // Add new entries if newValue is provided
+                if (newValue && Array.isArray(newValue) && newValue.length > 0) {
+                    const targetIdInfo = this.getIdFieldInfo(targetCollection);
+                    const targetEntityIds = newValue.map((rel: any) => rel.id || rel);
+                    const parsedTargetIds = targetEntityIds.map(id => this.parseIdValue(id, targetIdInfo.type));
+
+                    const newLinks = parsedTargetIds.map(targetId => ({
+                        [sourceJunctionColumn!.name]: parsedSourceId,
+                        [targetJunctionColumn!.name]: targetId
+                    }));
+
+                    if (newLinks.length > 0) {
+                        await tx.insert(junctionTable).values(newLinks);
+                    }
+                } else if (newValue && !Array.isArray(newValue)) {
+                    // Single value for one-to-one
+                    const targetIdInfo = this.getIdFieldInfo(targetCollection);
+                    const targetId = typeof newValue === 'object' ? newValue.id : newValue;
+                    const parsedTargetId = this.parseIdValue(targetId, targetIdInfo.type);
+
+                    const newLink = {
+                        [sourceJunctionColumn.name]: parsedSourceId,
+                        [targetJunctionColumn.name]: parsedTargetId
+                    };
+
+                    await tx.insert(junctionTable).values(newLink);
+                }
+            } else if (relation.cardinality === "one") {
+                // Handle one-to-one inverse via multi-hop joins
+                // This is similar to updateJoinPathOneToOneRelations but works in reverse
+
+                // For one-to-one inverse joinPath, we need to find the FK column on the target table
+                // that ultimately links back to the source entity
+
+                // Find the step that involves the target table
+                const targetStep = relation.joinPath.find(step =>
+                    step.table === targetTableName ||
+                    DrizzleConditionBuilder.getTableNamesFromColumns(step.on.from)[0] === targetTableName ||
+                    DrizzleConditionBuilder.getTableNamesFromColumns(step.on.to)[0] === targetTableName
+                );
+
+                if (!targetStep) {
+                    console.warn(`Could not find target table step for inverse one-to-one joinPath relation '${relation.relationName}'`);
+                    return;
+                }
+
+                // Determine which column on the target table is the FK
+                const targetTable = this.getTableForCollection(targetCollection);
+                const targetIdInfo = this.getIdFieldInfo(targetCollection);
+                const targetIdCol = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
+
+                let targetFKColumnName: string | null = null;
+
+                // Check if target is the 'from' or 'to' side
+                const fromTable = DrizzleConditionBuilder.getTableNamesFromColumns(targetStep.on.from)[0];
+                const toTable = DrizzleConditionBuilder.getTableNamesFromColumns(targetStep.on.to)[0];
+
+                if (fromTable === targetTableName) {
+                    targetFKColumnName = DrizzleConditionBuilder.getColumnNamesFromColumns(targetStep.on.from)[0];
+                } else if (toTable === targetTableName) {
+                    targetFKColumnName = DrizzleConditionBuilder.getColumnNamesFromColumns(targetStep.on.to)[0];
+                }
+
+                if (!targetFKColumnName) {
+                    console.warn(`Could not determine FK column on target table for inverse one-to-one joinPath relation '${relation.relationName}'`);
+                    return;
+                }
+
+                const targetFKCol = targetTable[targetFKColumnName as keyof typeof targetTable] as AnyPgColumn;
+                if (!targetFKCol) {
+                    console.warn(`FK column '${targetFKColumnName}' not found on target table for relation '${relation.relationName}'`);
+                    return;
+                }
+
+                // Now we need to find what value should be set in the target FK
+                // This requires traversing the join path to find the intermediate value
+                const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
+                const parsedSourceId = this.parseIdValue(sourceEntityId, sourceIdInfo.type);
+
+                // For simplicity, we'll trace through the joins to find the linking value
+                // This is complex and depends on the specific join path structure
+                // For now, we'll handle the simple case where there's one intermediate table
+
+                if (relation.joinPath.length === 2) {
+                    // Simple case: source -> intermediate -> target
+                    const intermediateTableName = relation.joinPath.find(step =>
+                        step.table !== sourceTableName && step.table !== targetTableName
+                    )?.table;
+
+                    if (intermediateTableName) {
+                        const intermediateTable = collectionRegistry.getTable(intermediateTableName);
+                        if (intermediateTable) {
+                            // Find the column in intermediate that links to source
+                            const sourceToIntermediateStep = relation.joinPath.find(step => {
+                                const tables = [
+                                    DrizzleConditionBuilder.getTableNamesFromColumns(step.on.from)[0],
+                                    DrizzleConditionBuilder.getTableNamesFromColumns(step.on.to)[0]
+                                ];
+                                return tables.includes(sourceTableName) && tables.includes(intermediateTableName);
+                            });
+
+                            if (sourceToIntermediateStep) {
+                                // Determine the ID of the intermediate entity
+                                // This is complex - we'd need to query or have it available
+                                console.warn(`Multi-hop one-to-one inverse joinPath relations require complex join resolution - not fully implemented for relation '${relation.relationName}'`);
+                            }
+                        }
+                    }
+                } else {
+                    console.warn(`Complex joinPath structures (${relation.joinPath.length} steps) for one-to-one inverse relations not yet fully supported for relation '${relation.relationName}'`);
+                }
+            }
+        } catch (error) {
+            console.error(`Failed to update inverse joinPath relation '${relation.relationName}':`, error);
+            throw error;
         }
     }
 
@@ -2292,6 +2524,19 @@ export class EntityService {
                 const targetIdInfo = this.getIdFieldInfo(targetCollection);
                 const sourceIdInfo = this.getIdFieldInfo(sourceCollection);
 
+                // Handle inverse relations with joinPath (both one and many cardinality)
+                if (relation.direction === "inverse" && relation.joinPath && relation.joinPath.length > 0) {
+                    await this.updateInverseJoinPathRelation(
+                        tx,
+                        sourceCollection,
+                        sourceEntityId,
+                        targetCollection,
+                        relation,
+                        newValue
+                    );
+                    continue;
+                }
+
                 // Check if this is a many-to-many inverse relation that should use junction tables
                 if (relation.cardinality === "many" && relation.direction === "inverse") {
                     // For many-to-many inverse relations, we need to find the corresponding owning relation
@@ -2406,7 +2651,7 @@ export class EntityService {
     private async updateInverseRelationProperty(
         tx: NodePgDatabase<any>,
         targetCollection: EntityCollection,
-        sourceCollection: EntityCollection,
+        _sourceCollection: EntityCollection,
         relation: Relation,
         sourceEntityId: string | number,
         newValue: any,
