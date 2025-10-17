@@ -11,7 +11,7 @@
 <br />
 
 
-[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT) [![npm downloads](https://img.shields.io/npm/dw/@firecms/core)](https://www.npmjs.com/package/@firecms/core)
 
 FireCMS is a headless CMS and admin panel
 that seamlessly integrates with **Firebase and Firestore** by default, but is
