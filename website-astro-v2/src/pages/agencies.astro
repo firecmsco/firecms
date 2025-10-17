@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FireCMSHeader from '../components/FireCMSHeader.astro';
+import FireCMSFooter from '../components/FireCMSFooter.astro';
+
+const title = "FireCMS for Agencies - The Flexible Framework for Bespoke Client Solutions";
+const description = "Stop wrestling with rigid admin panels. FireCMS is an open-source, self-hostable framework that gives you the power of React and TypeScript to build exactly what your clients need.";
+---
+
+<Layout title={title} description={description}>
+  <FireCMSHeader />
+
+  <main>
+    <!-- Hero Section -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-900 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+      <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+        <div class="blob-shape relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-2/3 rotate-30 bg-linear-to-tr from-primary to-blue-900 opacity-15 sm:left-[calc(50%-30rem)] sm:w-288.75"></div>
+      </div>
+
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary/20 mb-8">
+          For Agencies
+        </div>
+        <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          The Flexible Framework for Bespoke Client Solutions.
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+          Stop wrestling with rigid admin panels. FireCMS is an <b>open-source, self-hostable framework</b> that gives you the power of React and TypeScript to build exactly what your clients need.
+        </p>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="/developers"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+            Explore the Docs
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+          </a>
+          <a href="https://github.com/firecmsco/firecms"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out">
+            Clone on GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+        <div class="blob-shape relative left-[calc(50%+3rem)] aspect-1155/678 w-144.5 -translate-x-1/2 bg-linear-to-tr from-primary to-blue-900 opacity-10 sm:left-[calc(50%+36rem)] sm:w-288.75"></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Deliver Excellence, Without Compromise.</h2>
+        </div>
+        <div class="mx-auto mt-16 max-w-7xl">
+          <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <!-- Feature 1 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">Total Customization</h3>
+              <p class="text-gray-400">Use your own React components to create custom form fields, build entirely new top-level views, or add a bespoke analytics dashboard.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">Self-Hosted Control</h3>
+              <p class="text-gray-400">Deploy within your client's own cloud infrastructure for complete data privacy, control, and a clean project handoff.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">White-Label Ready</h3>
+              <p class="text-gray-400">Easily customize the theme, colors, and logo to deliver a seamless, branded back-office experience for every client.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code Showcase Section -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4">Your Code, Your Rules.</h2>
+          <p class="text-lg text-gray-400">Here's how easily you can create a custom top-level view. If you can build it in React, you can build it in FireCMS.</p>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden ring-1 ring-gray-800 bg-gray-900">
+          <div class="p-8">
+            <pre class="text-sm text-gray-300 overflow-x-auto"><code>{`import { useCollectionFetch } from "@firecms/core";
+
+export function CustomDashboard() {
+  const { data, loading } = useCollectionFetch({
+    path: "products",
+    collection: productsCollection
+  });
+
+  return (
+    <div>
+      <h1>Custom Analytics Dashboard</h1>
+      {/* Your custom React components */}
+    </div>
+  );
+}`}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-8">Ready to build something amazing?</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="/developers"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+            View Documentation
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+          </a>
+          <a href="/pricing"
+             class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            View Pricing
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <FireCMSFooter />
+</Layout>

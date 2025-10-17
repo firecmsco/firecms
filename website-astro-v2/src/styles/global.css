@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0070f4; /* #0070f4 */
+  --color-primary-light: #359aff; /* #359aff */
+  --color-primary-dark: #0061c2; /* #0061c2 */
+
+  --font-family-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* Subtle accent kicker utility */
+.accent-kicker { @apply text-teal-400 font-semibold tracking-wide; }
+
+/* Minimal custom global styles (Tailwind handles utility classes) */
+
+/* Scrollbar hiding */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Media elements */
+video, iframe, img.feature-img { max-width: 100%; height: auto; }
+
+/* Button glow */
+.btn-glow:hover { box-shadow: 0 0 15px 3px rgba(0,112,244,0.5); }
+
+/* Aspect ratio helper */
+iframe { aspect-ratio: 16 / 9; }
+
+/* Gradient text (used in some marketing copy) */
+.gradient-text {
+  background: linear-gradient(135deg,#0070f4,#359aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Focus style matching app */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px transparent, 0 0 0 4px rgba(0,112,244,0.75), 0 0 0 6px transparent;
+}
+
+/* Shared blob clip-path shape so we don't duplicate inline styles */
+.blob-shape {
+  clip-path: polygon(50% 0%, 78% 10%, 98% 40%, 90% 75%, 62% 100%, 32% 92%, 6% 62%, 10% 22%);
+  -webkit-clip-path: polygon(50% 0%, 78% 10%, 98% 40%, 90% 75%, 62% 100%, 32% 92%, 6% 62%, 10% 22%);
+}

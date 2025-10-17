@@ -1,0 +1,100 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+import "../styles/global.css";
+
+const {
+  title = "DATAKI - AI Analytics, Data Visualization & Business Intelligence Platform",
+  description = "Discover DATAKI – an AI-powered analytics platform that transforms raw data into interactive dashboards, advanced data visualizations, and actionable business insights. Build no-code reports using natural language queries, SQL integrations, and cutting-edge AI technology."
+} = Astro.props;
+
+const canonicalBase = 'https://dataki.ai';
+const path = Astro.url.pathname;
+const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{title}</title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="canonical" href={canonical}>
+  <meta name="description" content={description}>
+  <meta name="keywords" content="AI analytics, data visualization, interactive dashboards, business intelligence, data reporting, no-code analytics, SQL dashboard, natural language queries, data insights">
+  <meta name="robots" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content="https://dataki.ai/img/teaser.png">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@firecmsco">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image:type" content="image/png">
+  <meta name="twitter:image:width" content="1200">
+  <meta name="twitter:image:height" content="630">
+  <meta name="twitter:image" content="https://dataki.ai/img/twitter_teaser.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "DATAKI",
+      "url": "https://dataki.ai"
+    }
+  </script>
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GFH7K538SW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-GFH7K538SW");
+  </script>
+
+  <!-- Page-specific head slot -->
+  <slot name="head" />
+</head>
+
+<body class="font-sans bg-black text-gray-300 antialiased">
+  <slot />
+</body>
+
+<style>
+  /* Fallback scrollbar hiding */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  video, iframe, img.feature-img { max-width: 100%; height: auto; }
+
+  .btn-glow:hover { box-shadow: 0 0 15px 3px rgba(0, 112, 244, 0.5); }
+
+  iframe { aspect-ratio: 16 / 9; }
+
+  .gradient-text { background: linear-gradient(135deg, #0070f4, #359aff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  .hero-gradient { background: radial-gradient(ellipse at center, rgba(0, 112, 244, 0.1) 0%, transparent 70%); }
+
+  :focus-visible { outline: none; box-shadow: 0 0 0 2px transparent, 0 0 0 4px rgba(0, 112, 244, 0.75), 0 0 0 6px transparent; }
+</style>
+</html>

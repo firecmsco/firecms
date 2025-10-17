@@ -1,0 +1,25 @@
+{
+    "hosting": {
+        "public": "dist",
+        "site": "dataki-landing",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [
+            {
+                "source": "/privacy_policy",
+                "destination": "/privacy_policy.html"
+            },
+            {
+                "source": "/terms_and_conditions",
+                "destination": "/terms_and_conditions.html"
+            },
+            {
+                "source": "/cookies_policy",
+                "destination": "/cookies_policy.html"
+            }
+        ]
+    }
+}

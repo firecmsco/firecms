@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FireCMSHeader from '../components/FireCMSHeader.astro';
+import FireCMSFooter from '../components/FireCMSFooter.astro';
+
+const title = "FireCMS for Startups - Launch Your MVP's Admin Panel in Minutes";
+const description = "For startups, speed is everything. FireCMS Cloud gives you a production-ready back-office out-of-the-box, so you can focus on building your product, not your tools.";
+---
+
+<Layout title={title} description={description}>
+  <FireCMSHeader />
+
+  <main>
+    <!-- Hero Section -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-900 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+      <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+        <div class="blob-shape relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-2/3 rotate-30 bg-linear-to-tr from-primary to-blue-900 opacity-15 sm:left-[calc(50%-30rem)] sm:w-288.75"></div>
+      </div>
+
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary/20 mb-8">
+          For Startups
+        </div>
+        <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          Launch Your MVP's Admin Panel in Minutes, Not Weeks.
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+          For startups, <b>speed is everything</b>. FireCMS Cloud gives you a production-ready back-office out-of-the-box, so you can focus on building your product, not your tools.
+        </p>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="https://app.firecms.co"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Start Building for Free
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+          </a>
+        </div>
+      </div>
+
+      <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+        <div class="blob-shape relative left-[calc(50%+3rem)] aspect-1155/678 w-144.5 -translate-x-1/2 bg-linear-to-tr from-primary to-blue-900 opacity-10 sm:left-[calc(50%+36rem)] sm:w-288.75"></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Go from Idea to Internal Tool, Instantly.</h2>
+        </div>
+        <div class="mx-auto mt-16 max-w-7xl">
+          <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <!-- Feature 1 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">Instant Setup</h3>
+              <p class="text-gray-400">Connect your Firebase project and get a full admin panel in under 5 minutes. No complex configuration, no deployment pipelines to manage.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">Automatic Schema Inference</h3>
+              <p class="text-gray-400">Point FireCMS at your existing Firestore data, and it will automatically infer your schema and build your collections for you.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-white mb-3">Cost-Effective Scaling</h3>
+              <p class="text-gray-400">Start with a generous free tier that includes unlimited projects. Scale affordably as your startup grows.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <figure class="rounded-2xl bg-gray-900/50 p-8 md:p-12 ring-1 ring-gray-800">
+            <blockquote class="text-xl font-semibold leading-8 text-white md:text-2xl md:leading-9">
+              <p>"So far, this has been the missing piece of the puzzle for running a Firebase back-end. I love how we can just throw some React in there and it all feels so seamless."</p>
+            </blockquote>
+            <figcaption class="mt-8 flex items-center gap-x-4">
+              <div class="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center">
+                <span class="text-primary font-bold text-lg">JC</span>
+              </div>
+              <div>
+                <div class="font-semibold text-white">John Coppa</div>
+                <div class="text-gray-400">CTO at EasyHome</div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-8">Ready to launch your MVP?</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="https://app.firecms.co"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Start Building for Free
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+          </a>
+          <a href="/pricing"
+             class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            View Pricing
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <FireCMSFooter />
+</Layout>
+
