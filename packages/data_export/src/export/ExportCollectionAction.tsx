@@ -221,7 +221,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setExportType("csv")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">CSV</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">CSV</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
@@ -229,7 +229,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setExportType("json")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">JSON</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">JSON</label>
                         </div>
                     </div>
 
@@ -240,7 +240,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setDateExportType("timestamp")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
@@ -250,7 +250,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setDateExportType("string")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>

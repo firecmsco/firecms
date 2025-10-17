@@ -326,7 +326,7 @@ module.exports = {
                     {
                         to: "https://demo.firecms.co",
                         label: "Demo",
-                        className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-2 md:px-6 py-2",
+                        className: "border-1 border-surface-600 border-surface-700 uppercase rounded border-solid text-white hover:text-surface-100 hover:bg-surface-100 text-center btn mr-3 px-2 md:px-6 py-2",
                         "aria-label": "Open the demo project",
                         customProps: {
                             eventName: "go_to_demo"
