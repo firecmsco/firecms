@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import FireCMSHeader from '../components/FireCMSHeader.astro';
-import FireCMSFooter from '../components/FireCMSFooter.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 const title = "Contact FireCMS - Get in Touch";
 const description = "We're here to help. Whether you have a question about features, pricing, or anything else, our team is ready to answer all your questions.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
 
   <main>
     <!-- Hero Section -->
@@ -166,19 +166,19 @@ const description = "We're here to help. Whether you have a question about featu
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>
 ---
 import Layout from '../../layouts/Layout.astro';
-import FireCMSHeader from '../../components/firecms/FireCMSHeader.astro';
-import FireCMSFooter from '../../components/firecms/FireCMSFooter.astro';
+import Header from '../../components/firecms/Header.astro';
+import Footer from '../../components/firecms/Footer.astro';
 
 const title = "Why FireCMS - More Than a Headless CMS, More Flexible Than an Internal Tool Builder";
 const description = "FireCMS hits the sweet spot, giving you the best admin panel experience for Firebase and MongoDB projects, with the deep customization of a true developer framework.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
 
   <main>
     <!-- Hero Section -->
@@ -405,6 +405,6 @@ const description = "FireCMS hits the sweet spot, giving you the best admin pane
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>
 

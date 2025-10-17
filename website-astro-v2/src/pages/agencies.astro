@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import FireCMSHeader from '../components/FireCMSHeader.astro';
-import FireCMSFooter from '../components/FireCMSFooter.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 const title = "FireCMS for Agencies - The Flexible Framework for Bespoke Client Solutions";
 const description = "Stop wrestling with rigid admin panels. FireCMS is an open-source, self-hostable framework that gives you the power of React and TypeScript to build exactly what your clients need.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
 
   <main>
     <!-- Hero Section -->
@@ -145,5 +145,5 @@ export function CustomDashboard() {
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>

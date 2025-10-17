@@ -1,14 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import FireCMSHeader from '../../components/FireCMSHeader.astro';
-import FireCMSFooter from '../../components/FireCMSFooter.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
 
 const title = "FireCMS Terms of Service";
 const description = "Terms and conditions for using FireCMS services.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
 
   <main>
     <!-- Hero Section -->
@@ -185,19 +185,19 @@ const description = "Terms and conditions for using FireCMS services.";
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>
 ---
 import Layout from '../../../layouts/Layout.astro';
-import FireCMSHeader from '../../../components/firecms/FireCMSHeader.astro';
-import FireCMSFooter from '../../../components/firecms/FireCMSFooter.astro';
+import Header from '../../../components/firecms/Header.astro';
+import Footer from '../../../components/firecms/Footer.astro';
 
 const title = "FireCMS Privacy Policy";
 const description = "Learn how FireCMS handles your data and protects your privacy.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
 
   <main>
     <!-- Hero Section -->
@@ -355,6 +355,6 @@ const description = "Learn how FireCMS handles your data and protects your priva
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>
 

@@ -1,0 +1,359 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'FireCMS – Headless CMS Framework for Firebase & MongoDB | Open‑source, Cloud & Self‑hosted';
+const description = 'Launch a production‑ready admin panel in minutes. Use our managed Cloud, or self‑host the open‑source framework for full control.';
+---
+
+<Layout title={title} description={description}>
+  <!-- Local sticky header tailored for this v2 homepage -->
+  <header class="sticky top-0 z-40 backdrop-blur-subtle bg-black/60 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 group" aria-label="FireCMS Home">
+        <img src="/favicon.ico" alt="FireCMS" class="h-6 w-6" />
+        <span class="text-white font-semibold tracking-tight group-hover:opacity-90">FireCMS</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
+        <a href="/features" class="hover:text-white">Product</a>
+        <a href="/startups" class="hover:text-white">Solutions</a>
+        <a href="/developers" class="hover:text-white">Developers</a>
+        <a href="/pricing" class="hover:text-white">Pricing</a>
+        <a href="/why-firecms" class="hover:text-white">Why FireCMS?</a>
+      </nav>
+      <div class="hidden md:flex items-center gap-3">
+        <a href="/developers" data-analytics="docs_click_header"
+           class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out">Explore the Docs</a>
+        <a href="https://app.firecms.co" data-analytics="hero_primary_click_header"
+           class="inline-flex items-center gap-x-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">Start Building for Free</a>
+      </div>
+      <button class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10" aria-label="Open menu">
+        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/menu.svg" alt="Menu" class="h-6 w-6 filter invert" />
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="relative overflow-hidden bg-black border-b border-gray-800">
+      <div class="absolute inset-0 -z-10">
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-transparent"></div>
+        <div class="pointer-events-none absolute inset-0 hero-grid"></div>
+        <div class="pointer-events-none absolute -top-40 right-0 w-[36rem] h-[36rem] rounded-full bg-primary/20 blur-3xl opacity-30"></div>
+      </div>
+      <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-36 text-center">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
+          The Headless CMS Framework for Firebase & MongoDB
+        </h1>
+        <p class="mt-6 text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+          Launch a production‑ready admin panel in minutes. Use our managed Cloud, or self‑host the open‑source framework for full control.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="https://app.firecms.co" data-analytics="hero_primary_click"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">Start Building for Free</a>
+          <a href="/developers" data-analytics="docs_click"
+             class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out">Explore the Docs</a>
+        </div>
+        <p class="mt-6 text-sm text-gray-400">MIT‑licensed • Open‑source • TypeScript • React</p>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-12 lg:py-16">
+        <p class="text-center text-gray-400 text-sm uppercase tracking-widest mb-8">Trusted by teams building back‑offices, CMSs, and internal tools</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center">
+          <div class="text-white/60 text-xl font-semibold">Microsoft</div>
+          <div class="text-white/60 text-xl font-semibold">IKEA</div>
+          <div class="text-white/60 text-xl font-semibold">EasyHome</div>
+          <div class="text-white/60 text-xl font-semibold">MongoDB</div>
+          <div class="text-white/60 text-xl font-semibold">Firebase</div>
+          <div class="text-white/60 text-xl font-semibold">Google</div>
+        </div>
+        <div class="mt-10 max-w-3xl mx-auto text-center text-white/80">
+          <blockquote class="border-l-4 border-primary pl-4 italic text-white/80 text-base sm:text-lg">“FireCMS let our team ship a compliant admin panel in days instead of weeks. The spreadsheet UI is a game‑changer.”</blockquote>
+          <p class="mt-2 text-gray-400 text-sm">Product Lead, Enterprise customer</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What can you build? -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">One Framework, Endless Back‑Office Solutions</h2>
+          <p class="mt-4 text-gray-300 max-w-2xl mx-auto">Pick your path and get a production‑ready admin fast.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <article class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+            <div class="aspect-video rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 mb-5 flex items-center justify-center">
+              <div class="text-white/40 text-sm">UI preview</div>
+            </div>
+            <h3 class="text-xl font-semibold text-white">Content Management</h3>
+            <ul class="mt-3 text-gray-300 list-disc list-inside space-y-1">
+              <li>Notion‑style editor your team will love</li>
+              <li>References, media, and role‑aware views</li>
+            </ul>
+          </article>
+          <!-- Card 2 -->
+          <article class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+            <div class="aspect-video rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 mb-5 flex items-center justify-center">
+              <div class="text-white/40 text-sm">UI preview</div>
+            </div>
+            <h3 class="text-xl font-semibold text-white">Internal Tools & Back‑offices</h3>
+            <ul class="mt-3 text-gray-300 list-disc list-inside space-y-1">
+              <li>Spreadsheet‑like editing saves hours weekly</li>
+              <li>Audit history and imports built‑in</li>
+            </ul>
+          </article>
+          <!-- Card 3 -->
+          <article class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+            <div class="aspect-video rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 mb-5 flex items-center justify-center">
+              <div class="text-white/40 text-sm">UI preview</div>
+            </div>
+            <h3 class="text-xl font-semibold text-white">Custom Admin Panels</h3>
+            <ul class="mt-3 text-gray-300 list-disc list-inside space-y-1">
+              <li>React components for custom views & fields</li>
+              <li>Themeable, extensible, and type‑safe</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature showcase: Spreadsheet UI -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Edit data like a spreadsheet. Save hours every week.</h2>
+          <p class="mt-4 text-gray-300">Inline edits, filters, and bulk updates make operations fast and error‑resistant—no custom scripts required.</p>
+        </div>
+        <div class="mt-10 relative rounded-2xl overflow-hidden ring-1 ring-gray-800">
+          <div class="aspect-video bg-gray-900 flex items-center justify-center">
+            <div class="text-gray-500">[Replace with 10–15s silent loop of inline edit, filters, bulk actions]</div>
+          </div>
+        </div>
+        <ul class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-white/80">
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-primary"></span> Inline edits, filters, bulk updates</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-primary"></span> Role‑aware views for non‑technical users</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-primary"></span> Full audit history</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Schema Builder -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Go from existing data to a full admin in seconds</h2>
+          <p class="mt-4 text-gray-300">Point FireCMS at your Firestore or MongoDB collections, and it infers your structure automatically. Adjust with a visual editor, 20+ field types, and strong validation.</p>
+        </div>
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div class="relative rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <pre class="mt-0"><code>{`// schema.ts (TypeScript)
+import { buildCollection } from 'firecms';
+
+export const posts = buildCollection({
+  name: 'Posts',
+  path: 'posts',
+  schema: {
+    name: 'Post',
+    properties: {
+      title: { dataType: 'string', validation: { required: true } },
+      published: { dataType: 'boolean' },
+      author: { dataType: 'reference', path: 'users' },
+      tags: { dataType: 'array', of: { dataType: 'string' } }
+    }
+  }
+});`}</code></pre>
+          </div>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-300">
+            <li class="relative pl-6"><span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-primary"></span> Auto‑inference from Firestore/Atlas</li>
+            <li class="relative pl-6"><span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-primary"></span> Visual editor with 20+ field types</li>
+            <li class="relative pl-6"><span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-primary"></span> Type‑safe schemas & validators</li>
+            <li class="relative pl-6"><span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-primary"></span> References and nested objects supported</li>
+          </ul>
+        </div>
+        <div class="mt-8 flex items-center justify-center gap-6">
+          <a href="/developers" class="text-primary hover:text-primary-light font-semibold" data-analytics="docs_click_schema">Explore schema docs →</a>
+          <a href="https://app.firecms.co" class="text-gray-300 hover:text-white font-semibold" data-analytics="hero_primary_click_schema">Generate from your data →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations & AI -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Integrations & AI</h2>
+          <p class="mt-4 text-gray-300">Firebase and MongoDB Atlas first‑class support. Roles, auth, and storage ready from day one. Enterprise SSO/SAML available.</p>
+        </div>
+        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">Firebase</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Firestore</li>
+              <li>Auth & Roles</li>
+              <li>Storage</li>
+            </ul>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">MongoDB Atlas</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Collections & Aggregations</li>
+              <li>Atlas App Services</li>
+              <li>Flexible schemas</li>
+            </ul>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">Auth & Enterprise</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>SSO/SAML (Enterprise)</li>
+              <li>Granular permissions</li>
+              <li>Audit trails</li>
+            </ul>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">AI Helpers</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Content suggestions</li>
+              <li>LLM‑assisted queries</li>
+              <li>Bulk edits with guardrails</li>
+            </ul>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">Imports & Exports</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>CSV/Excel import</li>
+              <li>Type mapping</li>
+              <li>Bulk operations</li>
+            </ul>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-lg font-semibold text-white">Customization</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Custom React fields</li>
+              <li>Custom views & theming</li>
+              <li>Hooks & workflows</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 text-center">
+          <a href="/features" class="text-primary hover:text-primary-light font-semibold" data-analytics="docs_click_integrations">View integration guides →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why FireCMS? comparisons -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Why teams choose FireCMS</h2>
+          <p class="mt-4 text-gray-300">Deep customization with React/TS, NoSQL‑native, and fully open‑source—without vendor lock‑in.</p>
+        </div>
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white">FireCMS vs Retool/Appsmith</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>React components for full UX control</li>
+              <li>NoSQL‑native structure (Firestore/Mongo)</li>
+              <li>Open‑source, no vendor lock‑in</li>
+            </ul>
+            <a href="/why-firecms" class="mt-4 inline-block text-primary hover:text-primary-light font-semibold">Read comparisons →</a>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white">FireCMS vs Strapi/Sanity</h3>
+            <ul class="mt-3 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Powerful admin UI built‑in</li>
+              <li>Firebase/Mongo native</li>
+              <li>Custom workflows with React</li>
+            </ul>
+            <a href="/why-firecms" class="mt-4 inline-block text-primary hover:text-primary-light font-semibold">Read comparisons →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Proven in production</h2>
+          <p class="mt-4 text-gray-300">Teams ship faster and operate smoother with FireCMS.</p>
+        </div>
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <article class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white">Enterprise Retailer</h3>
+            <p class="mt-2 text-gray-300">Launched a compliant admin in under a week.</p>
+            <ul class="mt-4 text-gray-300 space-y-1 list-disc list-inside">
+              <li>−60% time spent on data ops</li>
+              <li>Audit history enabled across teams</li>
+            </ul>
+          </article>
+          <article class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white">SaaS Startup</h3>
+            <p class="mt-2 text-gray-300">Shipped MVP back‑office in days with Cloud.</p>
+            <ul class="mt-4 text-gray-300 space-y-1 list-disc list-inside">
+              <li>Zero infra management</li>
+              <li>Seamless path to self‑host</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing teaser -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Choose your path</h2>
+          <p class="mt-4 text-gray-300">Cloud for fastest setup. Self‑host for maximum control. Switch anytime.</p>
+        </div>
+        <div class="mt-8 flex items-center justify-center gap-4">
+          <a href="/pricing" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out" data-analytics="pricing_toggle_cloud">See Pricing</a>
+          <a href="/developers" class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out" data-analytics="docs_click_pricing">Self‑host guide</a>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Community & GitHub CTA -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white">Join the community</h2>
+        <p class="mt-4 text-gray-300">Get help, share ideas, and see what others are building with FireCMS.</p>
+        <div class="mt-8 flex items-center justify-center gap-4">
+          <a href="https://discord.gg/5vfftHK355" target="_blank" rel="noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out" data-analytics="community_click">Join Discord</a>
+          <a href="https://github.com/Camberi/firecms" target="_blank" rel="noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out" data-analytics="github_click_footer">Star on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-black border-t border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">Ready to get started?</h2>
+        <div class="flex items-center justify-center gap-4">
+          <a href="https://app.firecms.co" data-analytics="hero_primary_click_footer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">Start Building for Free</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Lightweight, page‑scoped enhancements for the hero */
+  .hero-grid {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.06), transparent 15%),
+      radial-gradient(circle at 20% -10%, rgba(0,112,244,0.25), transparent 55%),
+      radial-gradient(circle at 80% -10%, rgba(53,154,255,0.15), transparent 55%);
+    mask-image: radial-gradient(ellipse at center, black 55%, transparent 85%);
+  }
+</style>

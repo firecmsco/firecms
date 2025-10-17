@@ -1,17 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import FireCMSHeader from '../components/FireCMSHeader.astro';
-import FireCMSFooter from '../components/FireCMSFooter.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ScrollSyncShowcase from '../components/ScrollSyncShowcase.astro';
 
-const title = "FireCMS - The Headless CMS Framework for Firebase & MongoDB";
+const title = "FireCMS - The Headless CMS Framework for Firebase";
 const description = "Build powerful back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework for full control.";
 ---
 
 <Layout title={title} description={description}>
-  <FireCMSHeader />
+  <Header />
+
+  <div class="stars1"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
 
   <main>
-    <!-- Hero Section -->
+    <!-- Hero Section with decorative shapes and animated flow lines (no copy changes) -->
     <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-900 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-48 lg:pb-32 border-b border-gray-800">
       <!-- Background gradient top shape -->
       <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
@@ -20,22 +25,64 @@ const description = "Build powerful back-office apps in minutes. Go live instant
 
       <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
         <h1 class="mb-8 text-6xl font-extrabold tracking-tight leading-none md:text-6xl lg:text-6xl text-white font-sans">
-          The Headless CMS Framework for Firebase & MongoDB
+          The Headless CMS<br/> Framework for Firebase
         </h1>
         <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
           Build powerful back-office apps in minutes. Go live instantly with our <b>managed Cloud</b>, or self-host our <b>open-source framework</b> for full control.
         </p>
         <div class="flex items-center justify-center gap-x-6">
           <a href="https://app.firecms.co"
-             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
             Start Building for Free
             <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
           </a>
           <a href="/developers"
-             class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out">
+             class="inline-flex items-center gap-x-2 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-all duration-200 ease-in-out">
             Explore Self-Hosted
           </a>
         </div>
+      </div>
+
+      <!-- Mid-floating accent blob -->
+      <div class="pointer-events-none absolute top-36 right-12 -z-10 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
+        <div class="blob-shape relative aspect-1155/678 w-144 rotate-6 bg-linear-to-tr from-fuchsia-500/30 via-indigo-600/25 to-cyan-500/25 opacity-30 mix-blend-screen"></div>
+      </div>
+
+      <!-- Subtle animated data flow lines behind CTA -->
+      <div class="pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="heroFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#0070f4" stop-opacity="0"></stop>
+              <stop offset="50%" stop-color="#0070f4" stop-opacity="0.8"></stop>
+              <stop offset="100%" stop-color="#0070f4" stop-opacity="0"></stop>
+            </linearGradient>
+          </defs>
+          <!-- Static curves -->
+          <path d="M 80,140 Q 300,200 520,260" stroke="url(#heroFlow)" stroke-width="1.2" fill="none" opacity="0.35" />
+          <path d="M 80,260 Q 300,280 520,280" stroke="url(#heroFlow)" stroke-width="1.2" fill="none" opacity="0.35" />
+          <path d="M 80,360 Q 300,320 520,300" stroke="url(#heroFlow)" stroke-width="1.2" fill="none" opacity="0.35" />
+          <path d="M 680,260 Q 900,200 1120,140" stroke="url(#heroFlow)" stroke-width="1.2" fill="none" opacity="0.35" />
+          <path d="M 680,280 Q 900,300 1120,320" stroke="url(#heroFlow)" stroke-width="1.2" fill="none" opacity="0.35" />
+          <!-- Animated particles -->
+          <g>
+            <circle r="2.5" fill="#60a5fa">
+              <animateMotion dur="3s" repeatCount="indefinite" path="M 80,140 Q 300,200 520,260" />
+            </circle>
+            <circle r="2.5" fill="#60a5fa">
+              <animateMotion dur="3s" begin="0.6s" repeatCount="indefinite" path="M 80,260 Q 300,280 520,280" />
+            </circle>
+            <circle r="2.5" fill="#60a5fa">
+              <animateMotion dur="3s" begin="1.2s" repeatCount="indefinite" path="M 80,360 Q 300,320 520,300" />
+            </circle>
+            <circle r="2.5" fill="#22c55e">
+              <animateMotion dur="2.2s" repeatCount="indefinite" path="M 680,260 Q 900,200 1120,140" />
+            </circle>
+            <circle r="2.5" fill="#22c55e">
+              <animateMotion dur="2.2s" begin="0.8s" repeatCount="indefinite" path="M 680,280 Q 900,300 1120,320" />
+            </circle>
+          </g>
+        </svg>
       </div>
 
       <!-- Bottom gradient shape -->
@@ -44,28 +91,35 @@ const description = "Build powerful back-office apps in minutes. Go live instant
       </div>
     </section>
 
-    <!-- Social Proof Section -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <!-- Social Proof Section with gradient divider -->
+    <section class="relative isolate bg-black py-16 sm:py-24 border-b border-gray-800 overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-primary/5 blur-3xl"></div>
+      </div>
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <h2 class="text-center text-lg font-semibold leading-8 text-gray-400 mb-10">
           Trusted by developers at leading companies
         </h2>
         <div class="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           <div class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 flex items-center justify-center">
-            <div class="text-white text-2xl font-bold opacity-50">Microsoft</div>
+            <div class="text-white text-2xl font-bold opacity-50 hover:opacity-80 transition-opacity">Microsoft</div>
           </div>
           <div class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 flex items-center justify-center">
-            <div class="text-white text-2xl font-bold opacity-50">IKEA</div>
+            <div class="text-white text-2xl font-bold opacity-50 hover:opacity-80 transition-opacity">IKEA</div>
           </div>
           <div class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 flex items-center justify-center">
-            <div class="text-white text-2xl font-bold opacity-50">EasyHome</div>
+            <div class="text-white text-2xl font-bold opacity-50 hover:opacity-80 transition-opacity">EasyHome</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- What Can You Build Section -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <!-- What Can You Build Section with icon accents -->
+    <section class="relative isolate bg-black py-16 sm:py-24 border-b border-gray-800 overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+      </div>
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">One Framework, Endless Back-Office Solutions</h2>
@@ -74,56 +128,86 @@ const description = "Build powerful back-office apps in minutes. Go live instant
           <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <!-- Tab 1: Content Management Systems -->
             <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+              <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg" alt="" class="h-5 w-5 filter invert" />
+              </div>
               <h3 class="text-xl font-semibold text-white mb-4">Content Management Systems</h3>
               <p class="text-gray-400">Power your blogs and marketing sites with an intuitive, Notion-style editor your content team will love.</p>
+              <div class="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl"></div>
             </div>
             <!-- Tab 2: Internal Tools -->
             <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+              <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg" alt="" class="h-5 w-5 filter invert" />
+              </div>
               <h3 class="text-xl font-semibold text-white mb-4">Internal Tools</h3>
               <p class="text-gray-400">Build robust internal dashboards for customer support, inventory management, or logistics tracking, without the frontend hassle.</p>
+              <div class="pointer-events-none absolute -left-16 -top-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl"></div>
             </div>
             <!-- Tab 3: Custom Admin Panels -->
             <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary/50 transition-all duration-300">
+              <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cog.svg" alt="" class="h-5 w-5 filter invert" />
+              </div>
               <h3 class="text-xl font-semibold text-white mb-4">Custom Admin Panels</h3>
               <p class="text-gray-400">Create bespoke, data-intensive admin panels for any application, with full control to add custom views and business logic.</p>
+              <div class="pointer-events-none absolute -right-12 -top-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl"></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Hero Feature Showcase: Spreadsheet View -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <!-- Scroll-sync showcase (sticky index on the right) -->
+    <ScrollSyncShowcase />
+
+    <!-- Hero Feature Showcase: Spreadsheet View with gradient frame -->
+    <section class="relative isolate bg-black py-16 sm:py-24 border-b border-gray-800 overflow-hidden">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-16">
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Edit Data as Easily as a Spreadsheet</h2>
           <p class="mt-6 text-lg leading-8 text-gray-400">Our AirTable-like UI with powerful inline editing, sorting, and filtering is a game-changer for developers and content managers alike.</p>
         </div>
-        <div class="relative rounded-2xl overflow-hidden ring-1 ring-gray-800">
-          <div class="aspect-video bg-gray-900 flex items-center justify-center">
-            <div class="text-gray-500 text-lg">[Spreadsheet View Demo GIF]</div>
+        <div class="relative rounded-3xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
+          <div class="relative rounded-3xl overflow-hidden ring-1 ring-gray-800 bg-gray-950">
+            <div class="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl"></div>
+            <div class="absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+            <div class="aspect-video bg-gray-900 flex items-center justify-center relative">
+              <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_60%)]"></div>
+              <div class="text-gray-500 text-lg">[Spreadsheet View Demo GIF]</div>
+              <div class="absolute bottom-4 right-4 text-xs text-white/60 bg-black/40 rounded-full px-3 py-1 ring-1 ring-white/10">Preview</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- DataTalk Showcase Section -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <!-- DataTalk Showcase Section with gradient frame -->
+    <section class="relative isolate bg-black py-16 sm:py-24 border-b border-gray-800 overflow-hidden">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-16">
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Talk to Your Data.</h2>
           <p class="mt-6 text-lg leading-8 text-gray-400">Query, update, and manage your Firestore collections using simple, natural language. No need to write one-off scripts for batch updates.</p>
         </div>
-        <div class="relative rounded-2xl overflow-hidden ring-1 ring-gray-800">
-          <div class="aspect-video bg-gray-900 flex items-center justify-center">
-            <div class="text-gray-500 text-lg">[DataTalk Demo GIF]</div>
+        <div class="relative rounded-3xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
+          <div class="relative rounded-3xl overflow-hidden ring-1 ring-gray-800 bg-gray-950">
+            <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+            <div class="aspect-video bg-gray-900 flex items-center justify-center relative">
+              <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(99,102,241,0.10),transparent_60%)]"></div>
+              <div class="text-gray-500 text-lg">[DataTalk Demo GIF]</div>
+              <div class="absolute bottom-4 right-4 text-xs text-white/60 bg-black/40 rounded-full px-3 py-1 ring-1 ring-white/10">Preview</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Persona Routing Section -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <!-- Persona Routing Section with subtle accents -->
+    <section class="relative isolate bg-black py-16 sm:py-24 border-b border-gray-800 overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-3xl"></div>
+      </div>
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-16">
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Built for Your Workflow</h2>
@@ -131,42 +215,85 @@ const description = "Build powerful back-office apps in minutes. Go live instant
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <!-- Card 1: For Startups -->
           <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary transition-all duration-300">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/30">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg" alt="" class="h-5 w-5 filter invert" />
+            </div>
             <h3 class="text-2xl font-semibold text-white mb-4">For Startups</h3>
             <p class="text-gray-400 mb-6">Launch your MVP's back-office in minutes and iterate at lightning speed.</p>
             <a href="/startups" class="inline-flex items-center gap-x-2 text-primary hover:text-primary-light font-semibold transition-colors">
               Learn More
               <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter brightness-0 invert" style="filter: invert(40%) sepia(100%) saturate(2000%) hue-rotate(195deg) brightness(100%);" />
             </a>
+            <div class="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl"></div>
           </div>
           <!-- Card 2: For Agencies -->
           <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary transition-all duration-300">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/30">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg" alt="" class="h-5 w-5 filter invert" />
+            </div>
             <h3 class="text-2xl font-semibold text-white mb-4">For Agencies</h3>
             <p class="text-gray-400 mb-6">Deliver deeply customized, self-hosted solutions for your clients.</p>
             <a href="/agencies" class="inline-flex items-center gap-x-2 text-primary hover:text-primary-light font-semibold transition-colors">
               Learn More
               <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter brightness-0 invert" style="filter: invert(40%) sepia(100%) saturate(2000%) hue-rotate(195deg) brightness(100%);" />
             </a>
+            <div class="pointer-events-none absolute -left-16 -top-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl"></div>
           </div>
           <!-- Card 3: For Internal Tools -->
           <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 hover:ring-primary transition-all duration-300">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/30">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg" alt="" class="h-5 w-5 filter invert" />
+            </div>
             <h3 class="text-2xl font-semibold text-white mb-4">For Internal Tools</h3>
             <p class="text-gray-400 mb-6">Build secure, scalable, and reliable tools for your enterprise.</p>
             <a href="/internal-tools" class="inline-flex items-center gap-x-2 text-primary hover:text-primary-light font-semibold transition-colors">
               Learn More
               <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter brightness-0 invert" style="filter: invert(40%) sepia(100%) saturate(2000%) hue-rotate(195deg) brightness(100%);" />
             </a>
+            <div class="pointer-events-none absolute -right-12 -top-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Final CTA -->
-    <section class="bg-black py-16 sm:py-24">
+    <!-- FAQ -->
+    <section class="bg-black border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">FAQ</h2>
+        </div>
+        <div class="mt-10 max-w-3xl mx-auto space-y-4">
+          <details class="group rounded-xl bg-gray-900/50 ring-1 ring-inset ring-gray-800 p-4">
+            <summary class="cursor-pointer text-white font-semibold">Cloud vs Self‑hosted — which should I choose?</summary>
+            <p class="mt-2 text-gray-300">Choose Cloud for the fastest setup and zero maintenance. Choose Self‑hosted if you need full control, custom workflows, or client delivery. You can start on Cloud and move to self‑host anytime.</p>
+          </details>
+          <details class="group rounded-xl bg-gray-900/50 ring-1 ring-inset ring-gray-800 p-4">
+            <summary class="cursor-pointer text-white font-semibold">Can I infer a schema from my existing data?</summary>
+            <p class="mt-2 text-gray-300">Yes. FireCMS analyzes your Firestore/Atlas collections and generates a starting schema you can refine in a visual editor.</p>
+          </details>
+          <details class="group rounded-xl bg-gray-900/50 ring-1 ring-inset ring-gray-800 p-4">
+            <summary class="cursor-pointer text-white font-semibold">Do you support SSO/SAML?</summary>
+            <p class="mt-2 text-gray-300">SSO/SAML and advanced enterprise features are available on Enterprise plans. Contact us for details.</p>
+          </details>
+          <details class="group rounded-xl bg-gray-900/50 ring-1 ring-inset ring-gray-800 p-4">
+            <summary class="cursor-pointer text-white font-semibold">Is FireCMS open‑source?</summary>
+            <p class="mt-2 text-gray-300">Yes. The core framework is MIT‑licensed and open‑source. A PRO license adds advanced components, theming, and priority support.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA with background accents -->
+    <section class="relative isolate bg-black py-16 sm:py-24 overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl"></div>
+      </div>
       <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-8">Ready to get started?</h2>
         <div class="flex items-center justify-center gap-x-6">
           <a href="https://app.firecms.co"
-             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
             Try FireCMS Cloud
             <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
           </a>
@@ -180,6 +307,5 @@ const description = "Build powerful back-office apps in minutes. Go live instant
     </section>
   </main>
 
-  <FireCMSFooter />
+  <Footer />
 </Layout>
-
