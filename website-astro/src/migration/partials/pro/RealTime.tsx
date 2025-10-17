@@ -1,12 +1,11 @@
 import React from "react";
+import { ContainerSmallMixin } from "../styles";
+import { BrowserFrame } from "../BrowserFrame";
 
 // @ts-ignore
 const lightingIcon = "/img/icons/lighting.svg";
 // @ts-ignore
 const inlineEditingVideo = "/img/inline_table_editing.mp4";
-
-import { ContainerSmallMixin } from "../styles";
-import { BrowserFrame } from "../BrowserFrame";
 
 function RealTime() {
 
@@ -20,7 +19,7 @@ function RealTime() {
                     <img src={lightingIcon} alt="lighting" width={12} height={12} />
                 </div>
 
-                <h3 className="m-0">
+                <h3 className="typography-h3 m-0">
                     Real-time updates
                 </h3>
 

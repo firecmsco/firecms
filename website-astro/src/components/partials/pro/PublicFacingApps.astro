@@ -1,0 +1,67 @@
+---
+import Panel from "../../Panel.astro";
+import BrowserFrame from "../BrowserFrame.astro";
+
+const pixelGeniusLogin = "/img/pixel_genius_login.mp4";
+const overlay = "/img/overlay.webp";
+---
+
+<Panel color={"light"} className={"overflow-hidden"}>
+
+    <!-- Two column layout-->
+    <div class="my-16">
+
+        <div class="max-w-6xl mx-auto">
+            <h3 class="mb-3 uppercase font-mono">
+                Public Facing Applications
+            </h3>
+            <p class="text-xl md:text-2xl">
+                If you are building a CRUD public facing application based on Firebase or MongoDB, FireCMS PRO is the perfect
+                solution for you. Define exactly what each user can do and customize the experience for each role.
+            </p>
+            <p class="text-xl md:text-2xl">
+                Use all the internal components of FireCMS, including the <b>schema editor</b>, <b>data
+                inference</b>, <b>advanced
+                data import and export</b>, default roles and more.
+            </p>
+        </div>
+        <div class="relative p-16 ">
+            <BrowserFrame
+                style={{
+                    marginBottom: "20%"
+                }}
+                className={
+                    "md:w-[800px] bg-gray-900"
+                }>
+
+                <img loading="lazy"
+                     src={overlay}
+                     class="rounded-xl"
+                     alt="Overlay"/>
+            </BrowserFrame>
+            <video
+                class="absolute z-10 rounded-xl"
+                style={{
+                    pointerEvents: "none",
+                    bottom: 0,
+                    right: "5%",
+                    maxWidth: "900px",
+                    aspectRatio: 631 / 337.828
+                }}
+                width="100%"
+                loop
+                autoplay
+                muted>
+                <source
+                    src={pixelGeniusLogin}
+                    type="video/mp4"/>
+            </video>
+        </div>
+
+        <div class="text-sm text-center p-8 text-gray-700">
+            Pixel Genius is a public facing application that allows users to manage their augmented reality
+            experiences. It is built on top of Firebase and uses FireCMS PRO, and it integrated the three.js
+            editor.
+        </div>
+    </div>
+</Panel>

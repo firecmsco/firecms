@@ -1,48 +1,53 @@
 ---
-import "../styles/global.css";
-import Home from "../migration/pages/index";
 import Layout from "../layouts/Layout.astro";
-import HeroHome from "../migration/partials/home/HeroHome";
-import FireCMSIntro from "../migration/partials/home/FireCMSIntro";
-import LaunchInSteps from "../migration/partials/home/LaunchInSteps";
-import ClientLogos from "../migration/partials/ClientLogos";
-import QuotesSection from "../migration/partials/Quotes";
-import { BuiltFor } from "../migration/partials/home/BuiltFor";
-import { SchemaEditorShowcase } from "../migration/partials/home/SchemaEditorShowcase";
-import { TechSplash } from "../migration/partials/home/TechSplash";
-import FirebaseTeaser from "../migration/partials/home/OpenSourceDetails";
-import DatakiIntro from "../migration/partials/home/DatakiIntro";
-import { DeveloperFeatures } from "../migration/partials/features/DeveloperFeatures";
-import { ImportDataIntro } from "../migration/partials/home/ImportDataIntro";
+import HeroHome from "../components/partials/home/HeroHome.astro";
+import FireCMSIntro from "../components/partials/home/FireCMSIntro.astro";
+import LaunchInSteps from "../components/partials/home/LaunchInSteps.astro";
+import QuotesSection from "../components/partials/home/QuotesSection.astro";
+import ClientLogos from "../components/partials/home/ClientLogos.astro";
+import Panel from "../components/Panel.astro";
+import BuiltFor from "../components/partials/home/BuiltFor.astro";
+import SchemaEditorShowcase from "../components/partials/home/SchemaEditorShowcase.astro";
 import { DataTalkIntro } from "../migration/partials/home/DataTalkIntro";
+import ImportDataIntro from "../components/partials/home/ImportDataIntro.astro";
+import TechSplash from "../components/partials/home/TechSplash.astro";
+import DeveloperFeatures from "../components/partials/features/DeveloperFeatures.astro";
+import OpenSourceDetails from "../components/partials/home/OpenSourceDetails.astro";
 ---
-<Layout>
+
+<Layout
+    title="FireCMS - Firestore/Firebase headless CMS"
+    description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
+
     <main class="max-w-[100vw] bg-gray-950 relative">
 
-        <HeroHome/>
+        <HeroHome />
 
-        <FireCMSIntro/>
+        <FireCMSIntro />
 
-        <LaunchInSteps/>
+        <LaunchInSteps />
+        <QuotesSection />
 
-        <QuotesSection/>
-        <ClientLogos/>
+        <Panel color="light" container={false}>
+            <ClientLogos />
+        </Panel>
 
-        <!--<BuiltFor/>-->
+        <BuiltFor />
 
-        <!--<SchemaEditorShowcase/>-->
+        <SchemaEditorShowcase />
 
-        <!--<DataTalkIntro/>-->
+        <Panel color="primary" includePadding={false}>
+            <DataTalkIntro client:load/>
+        </Panel>
 
-        <!--<ImportDataIntro/>-->
+        <ImportDataIntro />
 
-        <!--<TechSplash/>-->
+        <TechSplash />
 
-        <!--<DeveloperFeatures/>-->
+        <DeveloperFeatures />
 
-        <!--<FirebaseTeaser/>-->
-
-        <!--<DatakiIntro/>-->
+        <OpenSourceDetails />
 
     </main>
+
 </Layout>

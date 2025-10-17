@@ -1,0 +1,56 @@
+---
+import { ContainerMixin, defaultBorderMixin } from "../../../migration/partials/styles";
+
+interface Props {
+    includeBorder?: boolean;
+    distribution?: "bigLeft" | "bigRight";
+    reverseSmall?: boolean;
+    animation?: boolean;
+    className?: string;
+}
+
+const {
+    includeBorder,
+    distribution,
+    reverseSmall,
+    animation = true,
+    className
+} = Astro.props;
+
+const leftColumn = distribution === "bigLeft" ? "lg:col-span-7" : (distribution === "bigRight" ? "lg:col-span-5" : "lg:col-span-6");
+const rightColumn = distribution === "bigLeft" ? "lg:col-span-5" : (distribution === "bigRight" ? "lg:col-span-7" : "lg:col-span-6");
+const flexDirection = reverseSmall ? "flex-col-reverse" : "flex-col";
+---
+
+<div
+    class:list={[
+        ContainerMixin,
+        "relative mx-auto",
+        includeBorder ? defaultBorderMixin : "",
+        includeBorder ? "border-x border-y-0 border-solid" : "",
+        className
+    ]}>
+    <div
+        class:list={[
+            "max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10",
+            flexDirection
+        ]}>
+        <div
+            class:list={[
+                "lg:max-w-7xl max-w-full lg:w-full mx-auto flex justify-center flex-col h-full py-6",
+                leftColumn
+            ]}
+        >
+            <slot name="left" />
+        </div>
+
+        <div
+            class:list={[
+                "lg:max-w-7xl max-w-full lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full py-6",
+                rightColumn
+            ]}
+        >
+            <slot name="right" />
+        </div>
+    </div>
+</div>

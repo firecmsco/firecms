@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import {
     AddIcon,
     BooleanSwitch,
@@ -34,10 +34,7 @@ import {
 } from "@firecms/ui";
 import { CTAButtonDarkMixin } from "../styles";
 
-// @ts-ignore
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-
-export default function ClientUIComponentsTeaser() {
+export function ClientUIComponentsTeaser() {
 
     const [tabValue, setTabValue] = useState("tab1");
     const [isDialogOpen, setDialogOpen] = useState(false);
@@ -48,15 +45,9 @@ export default function ClientUIComponentsTeaser() {
     const [multiSelectedValue, setMultiSelectedValue] = useState<string[]>();
 
     return (
-        <div className="max-w-6xl mx-auto px-8 my-8">
-            <ResponsiveMasonry
-                columnsCountBreakPoints={{
-                    350: 1,
-                    750: 2,
-                    900: 3
-                }}
-            >
-                <Masonry>
+        <Fragment>
+            <div className="max-w-6xl mx-auto px-8 my-8">
+                <div className="masonry-container">
 
                     <div className={"relative p-2 flex flex-row gap-2 break-inside-avoid"}>
                         <Button>Buttons</Button>
@@ -167,7 +158,7 @@ export default function ClientUIComponentsTeaser() {
 
                     <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
                         <DateTimeField value={selectedDate}
-                                       onChange={setSelectedDate}
+                                       onChange={(date) => setSelectedDate(date ?? undefined)}
                                        label="Select a date"
                                        mode="date"/>
                     </div>
@@ -201,14 +192,40 @@ export default function ClientUIComponentsTeaser() {
                         <Chip colorScheme={"yellowLight"}><FaceIcon size={"small"}/>John Peterson</Chip>
                     </div>
 
-                </Masonry>
-            </ResponsiveMasonry>
-            <a
-                className={CTAButtonDarkMixin + " w-full lg:w-auto mt-8"}
-                href={"/ui"}
-            >
-                See all components
-            </a>
-        </div>
+                </div>
+                <a
+                    className={CTAButtonDarkMixin + " w-full lg:w-auto mt-8"}
+                    href={"/ui"}
+                >
+                    See all components
+                </a>
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                .masonry-container {
+                    column-count: 1;
+                    column-gap: 0.5rem;
+                }
+                
+                @media (min-width: 750px) {
+                    .masonry-container {
+                        column-count: 2;
+                    }
+                }
+                
+                @media (min-width: 900px) {
+                    .masonry-container {
+                        column-count: 3;
+                    }
+                }
+                
+                .masonry-container > div {
+                    break-inside: avoid;
+                    page-break-inside: avoid;
+                }
+            `
+                }}/>
+            </div>
+        </Fragment>
     );
 };
+

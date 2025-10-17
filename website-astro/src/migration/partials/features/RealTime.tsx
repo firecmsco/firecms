@@ -1,15 +1,13 @@
 import React from "react";
 
 // Removed LightingIcon and inline video imports from @site alias; using /img paths
-
-import { useColorMode } from "@docusaurus/theme-common";
 import { ContainerSmallMixin } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
 
 function RealTime() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+
+    const isDarkTheme = true;
 
     return (
         <section className={ContainerSmallMixin + " my-16"}>
@@ -21,7 +19,7 @@ function RealTime() {
                     <img src="/img/icons/lighting.svg" alt="lighting" className="w-6 h-6"/>
                 </div>
 
-                <h3 className="m-0">
+                <h3 className="typography-h3 m-0">
                     Real-time updates
                 </h3>
 

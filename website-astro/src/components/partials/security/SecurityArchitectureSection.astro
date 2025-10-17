@@ -1,0 +1,72 @@
+---
+import Panel from "../../Panel.astro";
+import { defaultBorderMixin } from "../../../migration/partials/styles";
+
+const SecurityArchitectureImage = "/img/firecms-layers.png";
+---
+
+<Panel color={"white"} includePadding={true}>
+    <div class="py-12 md:py-16 max-w-6xl mx-auto">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold mb-4 uppercase">Multi-Layered Security Architecture</h2>
+            <p class="text-xl text-gray-600 font-mono uppercase">
+                Security through shared responsibility and defense in depth.
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div class="rounded-xl overflow-hidden p-6 bg-white">
+                <img
+                    src={SecurityArchitectureImage}
+                    alt="Security architecture diagram showing application layer, infrastructure layer, and database security layers"
+                    class="h-full w-full object-cover"
+                />
+            </div>
+
+            <div class="space-y-6">
+                <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
+                    <div class="flex items-center mb-3">
+                        <AdminPanelSettingsIcon class="w-6 h-6 mr-3 text-blue-600 flex-shrink-0"/>
+                        <span class="material-icons w-6 h-6 mr-3 text-blue-600 flex-shrink-0">admin_panel_settings</span>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        Granular role-based access control, dynamic permissions,
+                        custom authentication integrations, and App Check protection.
+                    </p>
+                </div>
+
+                <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
+                    <div class="flex items-center mb-3">
+                        <CloudUploadIcon class="w-6 h-6 mr-3 text-green-600 flex-shrink-0"/>
+                        <span class="material-icons w-6 h-6 mr-3 text-green-600 flex-shrink-0">cloud_upload</span>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        Enterprise-grade security from Google Cloud and MongoDB Atlas:
+                        encryption, network security, compliance certifications.
+                    </p>
+                </div>
+
+                <div class:list={["p-5 rounded-lg border", defaultBorderMixin]}>
+                    <div class="flex items-center mb-3">
+                        <VpnKeyIcon class="w-6 h-6 mr-3 text-purple-600 flex-shrink-0"/>
+                        <span class="material-icons w-6 h-6 mr-3 text-purple-600 flex-shrink-0">vpn_key</span>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        Your custom Firestore/MongoDB security rules enforce access at the data layer.
+                        Ultimate control in your hands.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class:list={["p-6 rounded-xl border bg-blue-50", defaultBorderMixin]}>
+            <h3 class="text-xl font-bold mb-4 text-blue-900">Why This Architecture Matters</h3>
+            <p class="text-blue-800">
+                Unlike proprietary CMS platforms that create their own security abstractions,
+                FireCMS leverages and enhances the battle-tested security models of leading cloud providers.
+                This provides better security, easier compliance, and skills that transfer to your core
+                application development.
+            </p>
+        </div>
+    </div>
+</Panel>

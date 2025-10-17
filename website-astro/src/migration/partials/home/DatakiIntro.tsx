@@ -1,20 +1,18 @@
 import React from "react";
-import { Panel } from "../general/Panel";
 import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import clsx from "clsx";
 import { LazyVideo } from "../LazyVideo";
 
 function DatakiIntro() {
     return (
-        <Panel color={"dark_gray"}>
-            <div className={"flex flex-col lg:flex-row items-center justify-center"}>
+        <div className={"flex flex-col lg:flex-row items-center justify-center"}>
                 <div
                     className="lg:w-1/2 text-center m-8">
                     <p
                         className={clsx("text-center text-secondary uppercase font-mono font-bold")}>
                         Beyond content management
                     </p>
-                    <h2 className="text-3xl md:text-5xl mb-4  mx-auto uppercase"
+                    <h2 className="typography-h2 text-3xl md:text-5xl mb-4  mx-auto uppercase"
                         data-aos="zoom-y-out">
                         Advanced analytics and reporting
                     </h2>
@@ -45,9 +43,6 @@ function DatakiIntro() {
                        }}>
                 </LazyVideo>
             </div>
-
-
-        </Panel>
     );
 }
 

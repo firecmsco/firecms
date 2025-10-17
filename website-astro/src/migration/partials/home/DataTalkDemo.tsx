@@ -147,7 +147,7 @@ export function DataTalkDemo({ exchanges }: {
             >
                 {/* User Query */}
                 <div
-                    className="flex flex-col gap-2 bg-surface-800 bg-opacity-20 rounded-lg p-4 shadow-sm">
+                    className="flex flex-col gap-2 bg-surface-800/20 rounded-lg p-4 shadow-sm">
                     <div className="flex items-start gap-3">
                         <div
                             className="rounded-full flex items-center justify-center overflow-hidden p-1 w-12 h-12">

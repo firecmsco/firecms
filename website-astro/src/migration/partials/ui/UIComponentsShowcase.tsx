@@ -1,10 +1,5 @@
-import React, { Suspense } from "react";
-
-const LazyClientUIComponentsShowcase = React.lazy(() => import("./ClientUIComponentsShowcase"));
+import ClientUIComponentsShowcase from "./ClientUIComponentsShowcase";
 
 export function UIComponentsShowcase() {
-
-    return <Suspense fallback={<div style={{ height: 1600 }}/>}>
-        <LazyClientUIComponentsShowcase/>
-    </Suspense>;
+    return <ClientUIComponentsShowcase/>;
 }

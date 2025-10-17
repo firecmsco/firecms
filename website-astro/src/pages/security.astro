@@ -1,0 +1,82 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Hero } from "../migration/partials/general/Hero";
+import { Panel } from "../migration/partials/general/Panel";
+import { defaultBorderMixin } from "../migration/partials/styles";
+import CallToActionSection from "../components/partials/security/CallToActionSection.astro";
+---
+
+<Layout
+    title={"Security & Privacy - FireCMS"}
+    description="Discover how FireCMS ensures data ownership, privacy, and security through transparent architecture, multi-layered protection, and compliance-ready design."
+>
+    <main class="flex-grow">
+        <Hero
+            title={<>
+                    <span class="block lg:inline">Trust Through Transparency</span>
+                </>}
+            subtitleColor={"gray"}
+            subtitle={<>
+                    <p class="text-xl md:text-2xl mb-4 font-mono uppercase">
+                        Your data is <b>yours</b>. FireCMS is engineered from the ground up to guarantee
+                        absolute data sovereignty, privacy, and security through transparent architecture.
+                    </p>
+                    <p class="text-base font-mono uppercase">
+                        Trusted by developers at <b>Microsoft</b>, <b>Ikea</b>, and tens of thousands of
+                        startups worldwide.
+                    </p>
+                </>}
+            client:load
+        />
+
+        <Panel color={"light"} includePadding={true}>
+            <div class={"py-12 md:py-16"}>
+                <div class="max-w-5xl mx-auto text-center mb-8">
+                    <h2 class="typography-h2 text-3xl font-bold mb-4 uppercase">Our Core Security Principles</h2>
+                    <p class="text-xl text-gray-600 font-mono uppercase">
+                        FireCMS is built on three foundational pillars that ensure your data remains secure
+                        and under your control.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-24">
+                    <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
+                        <span class="material-icons w-8 h-8 mb-4 text-blue-600 text-[32px]">storage</span>
+                        <h3 class="typography-h3 text-xl font-bold mb-3">Absolute Data Ownership</h3>
+                        <p class="text-gray-700">
+                            Your data lives exclusively in your own Firebase or MongoDB project.
+                            FireCMS never stores, accesses, or controls your content data.
+                        </p>
+                    </div>
+
+                    <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
+                        <SecurityIcon className="w-8 h-8 mb-4 text-green-600"/>
+                        <h3 class="typography-h3 text-xl font-bold mb-3">Multi-Layered Security</h3>
+                        <p class="text-gray-700">
+                            Enterprise-grade security through shared responsibility: robust application
+                            controls,
+                            world-class infrastructure, and your custom security rules.
+                        <span class="material-icons w-8 h-8 mb-4 text-green-600 text-[32px]">security</span>
+                    </div>
+
+                    <div class:list={"p-6 rounded-xl border bg-white " + defaultBorderMixin}>
+                        <VisibilityIcon className="w-8 h-8 mb-4 text-purple-600"/>
+                        <h3 class="typography-h3 text-xl font-bold mb-3">Transparency by Design</h3>
+                        <p class="text-gray-700">
+                            Open-source core, clear privacy policies, and transparent architecture.
+                            You can audit every aspect of how FireCMS works.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </Panel>
+
+        <DataSovereigntySection />
+                        <span class="material-icons w-8 h-8 mb-4 text-purple-600 text-[32px]">visibility</span>
+        <DeploymentModelsSection />
+        <PrivacyComplianceSection />
+        <SharedResponsibilitySection />
+        <TrustIndicatorsSection />
+        <CallToActionSection />
+    </main>
+</Layout>

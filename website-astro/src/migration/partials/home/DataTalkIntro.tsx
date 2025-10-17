@@ -1,12 +1,10 @@
 import clsx from "clsx";
-import { Panel } from "../general/Panel";
 import { ContainerInnerPaddingMixin } from "../styles";
 import { DataTalkDemo } from "./DataTalkDemo";
 
 export function DataTalkIntro(): JSX.Element {
-    return <Panel color={"primary"} includePadding={false}>
-        <div className={clsx(ContainerInnerPaddingMixin, "text-white my-24")}>
-            <h2 className="relative items-center uppercase mt-8">
+    return <div className={clsx(ContainerInnerPaddingMixin, "text-white my-24")}>
+            <h2 className="typography-h2 relative items-center uppercase mt-8">
                 <span>Talk to Your Data</span>
             </h2>
 
@@ -45,7 +43,6 @@ export function DataTalkIntro(): JSX.Element {
                 },
             ]}/>
         </div>
-    </Panel>;
 }
 
 const productsData = [
@@ -69,16 +66,16 @@ function NicerTable() {
 
     return (
         <div
-            className="h-full w-full flex flex-col bg-surface-950 text-text-primary-dark rounded-lg shadow-sm overflow-hidden border border-surface-800 border-opacity-40">
+            className="h-full w-full flex flex-col bg-surface-950 text-text-primary-dark rounded-lg shadow-sm overflow-hidden border border-surface-800/40">
             {/* Header Toolbar Section */}
             <div
-                className="border-surface-700 border-opacity-40 no-scrollbar min-h-[56px] overflow-x-auto px-2 md:px-4 bg-surface-900 border-b flex flex-row justify-between w-full flex-shrink-0">
+                className="border-surface-700/40 no-scrollbar min-h-[56px] overflow-x-auto px-2 md:px-4 bg-surface-900 border-b flex flex-row justify-between w-full flex-shrink-0">
                 {/* Left Side: Title */}
                 <div
                     className="flex gap-2 md:mr-4 mr-2 self-stretch items-center">
                     <div className="hidden lg:block">
                         <div className="flex flex-col items-start justify-center">
-                            <h4 className="text-base font-medium leading-none truncate max-w-[160px] lg:max-w-[240px]">Products</h4>
+                            <h4 className="typography-h4 text-base font-medium leading-none truncate max-w-[160px] lg:max-w-[240px]">Products</h4>
                             <div
                                 className="text-xs text-text-secondary-dark w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left">{productsData.length} entities
                             </div>
@@ -88,7 +85,7 @@ function NicerTable() {
                 {/* Right Side: Search and Action Buttons */}
                 <div className="flex items-center gap-2">
                     <div
-                        className="relative h-[42px] bg-surface-800 border border-surface-700 border-opacity-40 rounded-lg flex items-center">
+                        className="relative h-[42px] bg-surface-800 border border-surface-700/40 rounded-lg flex items-center">
                         <div
                             className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0 left-0">
                                        <span
@@ -109,10 +106,10 @@ function NicerTable() {
             <div className="flex-grow overflow-auto">
                 {/* Sticky Header Row */}
                 <div
-                    className="sticky top-0 z-10 flex flex-row w-fit min-w-full border-b border-surface-700 border-opacity-40 bg-surface-900 h-12">
+                    className="sticky top-0 z-10 flex flex-row w-fit min-w-full border-b border-surface-700/40 bg-surface-900 h-12">
                     {/* Header Cell: ID */}
                     <div
-                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800 hover:bg-opacity-50 relative"
+                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800/50 relative"
                         style={{
                             minWidth: "130px",
                             maxWidth: "130px"
@@ -125,7 +122,7 @@ function NicerTable() {
                     </div>
                     {/* Header Cell: Name */}
                     <div
-                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800 hover:bg-opacity-50 relative"
+                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800/50 relative"
                         style={{
                             minWidth: "200px",
                             maxWidth: "200px"
@@ -140,7 +137,7 @@ function NicerTable() {
                     </div>
                     {/* Header Cell: Category */}
                     <div
-                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800 hover:bg-opacity-50 relative"
+                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800/50 relative"
                         style={{
                             minWidth: "200px",
                             maxWidth: "200px"
@@ -155,7 +152,7 @@ function NicerTable() {
                     </div>
                     {/* Header Cell: Price */}
                     <div
-                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800 hover:bg-opacity-50 relative"
+                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800/50 relative"
                         style={{
                             minWidth: "140px",
                             maxWidth: "140px"
@@ -169,7 +166,7 @@ function NicerTable() {
                     </div>
                     {/* Header Cell: Currency */}
                     <div
-                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800 hover:bg-opacity-50 relative"
+                        className="flex py-0 px-3 h-full text-xs uppercase font-semibold select-none items-center text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-800/50 relative"
                         style={{
                             minWidth: "131px",
                             maxWidth: "131px"
@@ -184,7 +181,7 @@ function NicerTable() {
                     </div>
                     {/* Add Column Button Placeholder */}
                     <div
-                        className="p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-950 bg-opacity-40 hover:bg-surface-950 flex-shrink-0">
+                        className="p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-950/40 hover:bg-surface-950 flex-shrink-0">
                                    <span className="material-icons block select-none text-xl"
                                          style={{ fontSize: "20px" }}>add</span>
                     </div>
@@ -194,10 +191,10 @@ function NicerTable() {
                 <div className="w-fit min-w-full">
                     {productsData.map((row, index) => (
                         <div key={row[0]}
-                             className="flex items-center text-sm border-b border-surface-800 border-opacity-40 bg-surface-transparent hover:bg-surface-800/60 py-3">
+                             className="flex items-center text-sm border-b border-surface-800/40 bg-surface-transparent hover:bg-surface-800/60 py-3">
                             {/* Cell: ID */}
                             <div
-                                className="flex items-center justify-center flex-col px-2 h-full border-r border-surface-800 border-opacity-40 bg-surface-900 bg-opacity-90 flex-shrink-0"
+                                className="flex items-center justify-center flex-col px-2 h-full border-r border-surface-800/40 bg-surface-900/90 flex-shrink-0"
                                 style={{ width: "130px" }}>
                                 <div
                                     className="w-full overflow-hidden truncate font-mono text-xs text-text-secondary-dark text-center px-1">
@@ -206,7 +203,7 @@ function NicerTable() {
                             </div>
                             {/* Cell: Name */}
                             <div
-                                className="flex items-center p-2 h-full border-r border-surface-800 border-opacity-40 flex-shrink-0"
+                                className="flex items-center p-2 h-full border-r border-surface-800/40 flex-shrink-0"
                                 style={{
                                     width: "200px",
                                     textAlign: "left"
@@ -215,7 +212,7 @@ function NicerTable() {
                             </div>
                             {/* Cell: Category */}
                             <div
-                                className="flex items-center p-2 h-full border-r border-surface-800 border-opacity-40 flex-shrink-0"
+                                className="flex items-center p-2 h-full border-r border-surface-800/40 flex-shrink-0"
                                 style={{
                                     width: "200px",
                                     textAlign: "left"

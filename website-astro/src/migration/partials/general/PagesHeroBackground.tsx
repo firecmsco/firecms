@@ -1,14 +1,5 @@
-import React, { Suspense } from "react";
-
-const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HomeHeroNeatGradient"));
-
-// const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));
+import HomeHeroNeatGradient from "../../shape/HomeHeroNeatGradient";
 
 export function PagesHeroBackground() {
-
-    return <>
-        <Suspense fallback={<div/>}>
-            <LazyHomeHeroNeatGradient/>
-        </Suspense>
-    </>
+    return <HomeHeroNeatGradient/>;
 }

@@ -1,0 +1,27 @@
+---
+interface Props extends astro.JSX.AnchorHTMLAttributes {
+    href: string;
+}
+
+const { href, ...props } = Astro.props;
+const uniqueId = `app-link-${Math.random().toString(36).substring(2, 9)}`;
+---
+
+<a href={href} id={uniqueId} {...props}>
+    <slot />
+</a>
+
+<script define:vars={{ uniqueId, href }}>
+    import { appendGclidToUrl, getCurrentGclid } from "../migration/utils/gclid";
+
+    document.addEventListener('astro:page-load', () => {
+        const link = document.getElementById(uniqueId);
+        if (link) {
+            const originalHref = link.getAttribute('href');
+            if (originalHref && !originalHref.startsWith('#')) {
+                const gclid = getCurrentGclid();
+                link.setAttribute('href', appendGclidToUrl(originalHref, gclid));
+            }
+        }
+    });
+</script>

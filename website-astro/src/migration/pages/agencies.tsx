@@ -2,7 +2,6 @@ import React from "react";
 // import Layout from "@theme/Layout";
 import Layout from "../components/Layout.tsx";
 // import Head from "@docusaurus/Head";
-
 import { Hero } from "../partials/general/Hero";
 import { Panel } from "../partials/general/Panel";
 import HeroButtons from "../partials/home/HeroButtons";
@@ -25,12 +24,12 @@ import {
     VerifiedUserIcon,
     WebIcon
 } from "@firecms/ui";
+import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
+import EasyToCustomize from "../partials/features/EasyToCustomize"; // Using existing image as placeholder
 
 // Placeholder image - replace with a relevant one if available
 // @ts-ignore
 const AgencyCollaborationImage = "/img/users_table.png";
-import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
-import EasyToCustomize from "../partials/features/EasyToCustomize"; // Using existing image as placeholder
 
 function Agencies() {
     return (

@@ -1,9 +1,9 @@
 import React from "react"
+import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
+import clsx from "clsx";
 
 // @ts-ignore
 const collectionEditorVideo = "/img/colection_editor.webm";
-import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
-import clsx from "clsx";
 
 export const SchemaEditorIntro = () => {
 
@@ -24,7 +24,7 @@ export const SchemaEditorIntro = () => {
                         " flex flex-col py-20")}>
 
                     <div className={"relative max-w-6xl mx-auto mt-16"}>
-                        <h3 className="mb-4 uppercase">
+                        <h3 className="typography-h3 mb-4 uppercase">
                             Simple <b>Data Schema</b>, from file to CMS
                         </h3>
 
