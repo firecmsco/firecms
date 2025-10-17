@@ -62,7 +62,6 @@
 - **Documentation**: Corrected typo in custom_previews.md
 - **Import/Export**: Cleaned up imports
 - **Roles Management**: Added ability to set roles programmatically in code
-- **SaaS**: Removed history alert from SaaS view
 
 ## [3.0.0-beta.15] - 2025-08-18
 
