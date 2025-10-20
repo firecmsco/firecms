@@ -1,0 +1,40 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  link?: {
+    href: string;
+    text: string;
+  };
+}
+
+const { icon, title, description, link } = Astro.props;
+const Component = link ? 'a' : 'div';
+---
+
+<Component
+  href={link?.href}
+  class="group relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 transition-all duration-300 hover:ring-primary/30 block"
+  data-spotlight-card>
+  <!-- Mouse spotlight effect -->
+  <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" data-spotlight></div>
+  <!-- Gradient border effect -->
+  <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="background: linear-gradient(135deg, transparent 0%, rgba(56, 189, 248, 0.1) 50%, transparent 100%); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; padding: 1px;"></div>
+
+  <div class="relative z-10">
+    <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+      <img src={icon} alt="" class="h-5 w-5 filter invert" />
+    </div>
+    <h3 class="text-xl font-semibold text-white mb-4">{title}</h3>
+    <p class="text-gray-400 mb-6">{description}</p>
+    {link && (
+      <span class="inline-flex items-center gap-x-2 text-primary group-hover:text-primary-light font-semibold transition-colors">
+        {link.text}
+        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter brightness-0 invert" style="filter: invert(40%) sepia(100%) saturate(2000%) hue-rotate(195deg) brightness(100%);" />
+      </span>
+    )}
+  </div>
+  <!--<div class="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl"></div>-->
+</Component>
+

@@ -4,14 +4,15 @@ export interface Props {
   description?: string;
 }
 
+import "@material-design-icons/font/filled.css";
 import "../styles/global.css";
 
 const {
-  title = "DATAKI - AI Analytics, Data Visualization & Business Intelligence Platform",
-  description = "Discover DATAKI – an AI-powered analytics platform that transforms raw data into interactive dashboards, advanced data visualizations, and actionable business insights. Build no-code reports using natural language queries, SQL integrations, and cutting-edge AI technology."
+  title = "FireCMS - The Headless CMS for Firebase and MongoDB",
+  description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface."
 } = Astro.props;
 
-const canonicalBase = 'https://dataki.ai';
+const canonicalBase = 'https://firecms.co';
 const path = Astro.url.pathname;
 const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
 ---
@@ -21,7 +22,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
 <head>
   <meta charset="UTF-8">
   <title>{title}</title>
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon">
   <link rel="canonical" href={canonical}>
   <meta name="description" content={description}>
   <meta name="keywords" content="AI analytics, data visualization, interactive dashboards, business intelligence, data reporting, no-code analytics, SQL dashboard, natural language queries, data insights">
@@ -30,14 +31,13 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
   <meta property="og:type" content="website">
   <meta property="og:url" content={canonical}>
-  <meta property="og:image" content="https://dataki.ai/img/teaser.png">
+  <meta property="og:image" content="https://firecms.co/img/teaser.png">
 
   <!-- Twitter Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
@@ -47,15 +47,15 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <meta name="twitter:image:type" content="image/png">
   <meta name="twitter:image:width" content="1200">
   <meta name="twitter:image:height" content="630">
-  <meta name="twitter:image" content="https://dataki.ai/img/twitter_teaser.png">
+  <meta name="twitter:image" content="https://firecms.co/img/twitter_teaser.png">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "WebSite",
-      "name": "DATAKI",
-      "url": "https://dataki.ai"
+      "name": "FireCMS",
+      "url": "https://firecms.co"
     }
   </script>
 

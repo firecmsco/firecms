@@ -1,0 +1,141 @@
+---
+// src/pages/compare.astro
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+// Helper function or component for checkmark/dash (optional, but cleaner)
+// Or use inline SVGs directly as shown below
+const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-green-400 mx-auto"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"></path></svg>`;
+const dashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-gray-500 mx-auto"><path d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"></path></svg>`;
+
+const features = [
+    // Core & Deployment
+    { feature: "Self-hosted deployment", community: checkIcon, pro: checkIcon, cloud: dashIcon },
+    { feature: "Managed Cloud service", community: dashIcon, pro: dashIcon, cloud: checkIcon },
+    { feature: "Open Source (MIT License)", community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Pro builds on Community
+    { feature: "Unlimited projects", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Unlimited collections", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+
+    // Core Features
+    { feature: "20+ Core Form Fields", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Spreadsheet/Table View", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Inline Editing", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Subcollection Support", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Reference Fields", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Enum Support", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Array Fields (Basic)", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Map/Object Fields", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Markdown Editor (Basic)", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Basic Data Export", community: checkIcon, pro: dashIcon, cloud: dashIcon }, // Assuming basic export is OSS
+
+    // PRO & Cloud Features
+    { feature: "Visual Schema Editor UI", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Data Schema Inference", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Notion-Style Rich Text Editor", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Advanced Data Import (CSV, JSON, Excel)", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Advanced Data Export", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Local Text Search", community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Marked as included in original Community list
+    { feature: "Full Text Search Integration", community: "Dev Managed", pro: "Dev Managed", cloud: "Dev Managed" },
+    { feature: "Data History & Authoring", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "User & Role Management UI", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Advanced PRO Fields/Plugins", community: dashIcon, pro: checkIcon, cloud: checkIcon }, // Cloud includes PRO features equivalent
+    { feature: "AI Content Generation", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "DataTalk (Natural Language Query)", community: dashIcon, pro: dashIcon, cloud: checkIcon }, // Cloud only currently
+    { feature: "Secondary Database Support", community: dashIcon, pro: checkIcon, cloud: checkIcon },
+
+    // Customization & Extensibility
+    { feature: "Custom Form Fields (React)", community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: "Custom Entity Views (React)", community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: "Custom Top-Level Views (React)", community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: "Dynamic Properties/Fields", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Custom Logic/Callbacks", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Logo Customization", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Full Theme Customization", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "Custom CMS Component Overrides", community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Core components can be overridden
+    { feature: "Custom Authentication", community: "Dev Managed", pro: checkIcon, cloud: "Enterprise Only" }, // UI/Config vs Code
+    { feature: "Custom Login Screen", community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Self-hosted advantage
+
+    // Security & Support
+    { feature: "Firebase App Check", community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: "SSO/SAML", community: dashIcon, pro: "Enterprise Only", cloud: "Enterprise Only" },
+    { feature: "Support", community: "Community", pro: "Priority", cloud: "Standard/Priority" }, // Cloud Plus gets Standard
+    { feature: "Roadmap Prioritization", community: dashIcon, pro: checkIcon, cloud: "Enterprise Only" },
+
+];
+---
+
+<Layout
+        title="FireCMS Feature Comparison"
+        description="Compare features across FireCMS Community (Free Self-Hosted), PRO (Self-Hosted), and Cloud plans."
+>
+    <Header />
+    <main>
+        {/* Hero Section */}
+        <section class="relative isolate overflow-hidden bg-black pt-24 pb-16 sm:pt-32 sm:pb-24">
+            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+                <h1 class="text-4xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl font-sans">
+                    Feature Comparison
+                </h1>
+                <p class="mt-6 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+                    Find the perfect FireCMS plan by comparing features side-by-side.
+                </p>
+            </div>
+            {/* Subtle background elements */}
+            <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+                <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary/30 to-blue-900/30 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
+            </div>
+        </section>
+
+        {/* Comparison Table Section */}
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="relative rounded-xl ring-1 ring-inset ring-gray-800">
+                    <table class="w-full table-auto divide-y divide-gray-800">
+                        <thead class="bg-gray-900/60 backdrop-blur supports-[backdrop-filter]:bg-gray-900/40 sticky top-20 sm:top-24 z-10">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-white w-2/5 lg:w-1/3">Feature</th>
+                            <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6">Community <span class="block text-xs font-normal text-gray-400">(Self-Hosted)</span></th>
+                            <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6">PRO <span class="block text-xs font-normal text-gray-400">(Self-Hosted)</span></th>
+                            <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6">Cloud Plus <span class="block text-xs font-normal text-gray-400">(Managed)</span></th>
+                            {/* Optional: Add Enterprise Column if needed */}
+                            {/* <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6">Enterprise <span class="block text-xs font-normal text-gray-400">(Cloud)</span></th> */}
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 bg-gray-950/30">
+                        {features.map(item => (
+                                <tr class="hover:bg-gray-800/20 transition-colors">
+                                    <td class="whitespace-normal py-4 pl-6 pr-3 text-sm font-medium text-white">{item.feature}</td>
+                                    <td class="px-3 py-4 text-sm text-gray-400 text-center"><Fragment set:html={item.community} /></td>
+                                    <td class="px-3 py-4 text-sm text-gray-400 text-center"><Fragment set:html={item.pro} /></td>
+                                    <td class="px-3 py-4 text-sm text-gray-400 text-center"><Fragment set:html={item.cloud} /></td>
+                                    {/* Optional: Add Enterprise Data Cell */}
+                                    {/* <td class="px-3 py-4 text-sm text-gray-400 text-center">...</td> */}
+                                </tr>
+                        ))}
+                        </tbody>
+                        {/* Footer with CTAs */}
+                        <tfoot class="bg-gray-900/60 backdrop-blur supports-[backdrop-filter]:bg-gray-900/40 border-t border-gray-800">
+                        <tr>
+                            <th scope="row" class="py-7 pl-6 pr-3 text-left text-base font-semibold text-white">Get Started</th>
+                            <td class="px-3 py-7 text-center">
+                                <a href="/developers" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">View Docs</a>
+                            </td>
+                            <td class="px-3 py-7 text-center">
+                                <a href="/pricing" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">Buy License</a>
+                            </td>
+                            <td class="px-3 py-7 text-center">
+                                <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark transition-colors">Start Free Trial</a>
+                            </td>
+                             {/* Optional: Add Enterprise CTA Cell */}
+                             {/* <td class="px-3 py-5 text-center">...</td> */}
+                         </tr>
+                         </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <Footer />
+</Layout>

@@ -1,7 +1,10 @@
 @import "tailwindcss";
+@import "@firecms/ui/index.css" layer(base);
+
 /* Content sources (scan paths) - paths are relative to this file (src/styles/global.css) */
 @source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
-@source "../pages/**/*.{astro,md,mdx}";
+@source "../pages/**/*.{astro,md,mdx,ts,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
 
 
 @theme {
@@ -81,370 +84,35 @@
     font-weight: 300;
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/rubik/v31/iJWKBXyIfDnIV7nBrXw.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+body {
+    overflow-x: hidden;
+}
 
-/* H1 styles matching Framer design */
 h1 {
-    @apply font-sans font-semibold text-center text-white;
+    @apply font-sans font-semibold text-center;
 }
 
-/* H2 styles matching Framer design */
 h2 {
-    @apply font-sans font-medium  text-white;
+    @apply font-sans font-medium ;
 }
 
-
-/* H3 styles */
 h3 {
-    @apply font-sans font-medium text-white;
-
+    @apply font-sans font-medium;
 }
 
-/* H4 styles */
 h4 {
-    @apply font-sans font-medium text-white;
+    @apply font-sans font-medium;
 }
 
-/* H5 styles */
 h5 {
-    @apply font-sans font-medium text-white;
-    font-size: 20px;
-    line-height: 28px;
+    @apply font-sans font-medium text-xl leading-7;
 }
 
-/* H6 styles */
 h6 {
-    @apply font-sans font-medium text-white;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-/* Paragraph styles */
-p {
-    @apply font-sans text-white/80;
-    font-size: 18px;
-    line-height: 28px;
-    margin-bottom: 1rem;
-}
-
-
-/* Subtle accent kicker utility */
-.accent-kicker {
-    @apply text-teal-400 font-semibold tracking-wide;
-}
-
-/* Button styles */
-.btn {
-    @apply font-sans font-medium transition-all duration-200;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    line-height: 24px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
-.btn-primary {
-    @apply bg-primary text-white;
-}
-
-.btn-primary:hover {
-    @apply bg-primary-light;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 112, 244, 0.3);
-}
-
-.btn-secondary {
-    @apply bg-white/10 text-white backdrop-blur-sm;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.btn-secondary:hover {
-    @apply bg-white/20;
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.btn-lg {
-    padding: 16px 32px;
-    font-size: 18px;
-    line-height: 28px;
-}
-
-.btn-sm {
-    padding: 8px 16px;
-    font-size: 14px;
-    line-height: 20px;
-}
-
-/* Card styles */
-.card {
-    @apply bg-white/5 backdrop-blur-md rounded-2xl;
-    padding: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    @apply bg-white/10;
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 768px) {
-    .card {
-        padding: 24px;
-    }
-}
-
-/* Section spacing */
-.section {
-    padding: 80px 0;
-}
-
-@media (max-width: 768px) {
-    .section {
-        padding: 60px 0;
-    }
-}
-
-@media (max-width: 640px) {
-    .section {
-        padding: 40px 0;
-    }
-}
-
-.section-lg {
-    padding: 120px 0;
-}
-
-@media (max-width: 768px) {
-    .section-lg {
-        padding: 80px 0;
-    }
-}
-
-@media (max-width: 640px) {
-    .section-lg {
-        padding: 60px 0;
-    }
-}
-
-/* Container */
-.container {
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-@media (max-width: 640px) {
-    .container {
-        padding: 0 16px;
-    }
-}
-
-/* Glass morphism effect */
-.glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Code blocks */
-code {
-    @apply font-mono bg-white/10 rounded px-2 py-1;
-    font-size: 0.9em;
-}
-
-pre {
-    @apply font-mono bg-white/5 rounded-lg p-4 overflow-x-auto;
-    font-size: 14px;
-    line-height: 20px;
-}
-
-pre code {
-    @apply bg-transparent p-0;
-}
-
-/* Minimal custom global styles (Tailwind handles utility classes) */
-
-/* Input and form styles */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-textarea,
-select {
-    @apply font-sans bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white;
-    font-size: 16px;
-    line-height: 24px;
-    transition: all 0.2s ease;
-}
-
-input::placeholder,
-textarea::placeholder {
-    @apply text-white/40;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    @apply bg-white/15 border-primary outline-none;
-    box-shadow: 0 0 0 3px rgba(0, 112, 244, 0.2);
-}
-
-/* Badge styles */
-.badge {
-    @apply font-sans font-medium inline-flex items-center rounded-full px-3 py-1;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.badge-primary {
-    @apply bg-primary/20 text-primary-light;
-    border: 1px solid rgba(0, 112, 244, 0.3);
-}
-
-.badge-success {
-    @apply bg-green-500/20 text-green-300;
-    border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.badge-warning {
-    @apply bg-yellow-500/20 text-yellow-300;
-    border: 1px solid rgba(234, 179, 8, 0.3);
-}
-
-.badge-info {
-    @apply bg-blue-500/20 text-blue-300;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-/* Divider */
-hr {
-    @apply border-white/10 my-8;
-}
-
-/* Blockquote */
-blockquote {
-    @apply border-l-4 border-primary pl-4 italic text-white/80;
-    font-size: 18px;
-    line-height: 28px;
-    margin: 24px 0;
-}
-
-@media (max-width: 768px) {
-    blockquote {
-        font-size: 16px;
-        line-height: 26px;
-    }
-}
-
-/* Table styles */
-table {
-    @apply w-full text-white/80;
-    font-size: 16px;
-    line-height: 24px;
-    border-collapse: collapse;
-}
-
-th {
-    @apply font-semibold text-white  border-b border-white/20 pb-2;
-}
-
-td {
-    @apply border-b border-white/10 py-3;
-}
-
-tr:last-child td {
-    border-bottom: none;
-}
-
-/* Image styles */
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-.img-rounded {
-    border-radius: 12px;
-}
-
-.img-circle {
-    border-radius: 50%;
-}
-
-/* Utility classes */
-.text-balance {
-    text-wrap: balance;
-}
-
-.text-gradient {
-    background: linear-gradient(135deg, #0070f4, #359aff, #00d4ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.backdrop-blur-subtle {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-
-.backdrop-blur-strong {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-}
-
-/* Scrollbar hiding */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* Media elements */
-video, iframe, img.feature-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Button glow */
-.btn-glow:hover {
-    box-shadow: 0 0 15px 3px rgba(0, 112, 244, 0.5);
-}
-
-/* Aspect ratio helper */
-iframe {
-    aspect-ratio: 16 / 9;
-}
-
-/* Gradient text (used in some marketing copy) */
-.gradient-text {
-    background: linear-gradient(135deg, #0070f4, #359aff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    @apply font-sans font-medium text-base leading-6;
 }
 
 /* Focus style matching app */
@@ -456,74 +124,4 @@ iframe {
 /* Shared blob clip-path shape so we don't duplicate inline styles */
 .blob-shape {
     clip-path: polygon(50% 0%, 78% 10%, 98% 40%, 90% 75%, 62% 100%, 32% 92%, 6% 62%, 10% 22%);
-}
-
-/* Animated Stars Background */
-.stars1 {
-    width: 1px;
-    height: 1px;
-    background: transparent;
-    box-shadow: 2090px 8505px #FFF, 1281px 19460px #FFF, 1494px 1025px #FFF, 2212px 77px #FFF, 964px 3761px #FFF, 447px 4209px #FFF, 792px 8322px #FFF, 275px 17477px #FFF, 1021px 10277px #FFF, 1170px 2992px #FFF, 1957px 18515px #FFF, 1721px 18458px #FFF, 1085px 13114px #FFF, 36px 4675px #FFF, 810px 11193px #FFF, 278px 4214px #FFF, 2292px 3954px #FFF, 262px 17269px #FFF, 1674px 18733px #FFF, 2079px 2511px #FFF, 1602px 9648px #FFF, 1127px 15589px #FFF, 853px 9464px #FFF, 52px 1085px #FFF, 2103px 5003px #FFF, 699px 19592px #FFF, 1124px 9478px #FFF, 262px 11695px #FFF, 1942px 8616px #FFF, 1391px 8317px #FFF, 822px 19159px #FFF, 1848px 3578px #FFF, 1854px 5693px #FFF, 1720px 476px #FFF, 1388px 11027px #FFF, 2032px 17508px #FFF, 2160px 3927px #FFF, 2462px 17040px #FFF, 701px 1575px #FFF, 1548px 5050px #FFF, 2146px 15358px #FFF, 2223px 11400px #FFF, 1191px 2926px #FFF, 2123px 13035px #FFF, 1201px 8289px #FFF, 984px 8359px #FFF, 1565px 14072px #FFF, 2352px 13950px #FFF, 9px 10496px #FFF, 350px 16315px #FFF;
-    animation: animStar 50s linear infinite;
-}
-
-.stars1:after {
-    content: " ";
-    position: absolute;
-    top: 2000px;
-    width: 1px;
-    height: 1px;
-    background: transparent;
-    box-shadow: 2090px 8505px #FFF, 1281px 19460px #FFF, 1494px 1025px #FFF, 2212px 77px #FFF, 964px 3761px #FFF, 447px 4209px #FFF, 792px 8322px #FFF, 275px 17477px #FFF, 1021px 10277px #FFF, 1170px 2992px #FFF, 1957px 18515px #FFF, 1721px 18458px #FFF, 1085px 13114px #FFF, 36px 4675px #FFF, 810px 11193px #FFF, 278px 4214px #FFF, 2292px 3954px #FFF, 262px 17269px #FFF, 1674px 18733px #FFF, 2079px 2511px #FFF, 1602px 9648px #FFF, 1127px 15589px #FFF, 853px 9464px #FFF, 52px 1085px #FFF, 2103px 5003px #FFF, 699px 19592px #FFF, 1124px 9478px #FFF, 262px 11695px #FFF, 1942px 8616px #FFF, 1391px 8317px #FFF, 822px 19159px #FFF, 1848px 3578px #FFF, 1854px 5693px #FFF, 1720px 476px #FFF, 1388px 11027px #FFF, 2032px 17508px #FFF, 2160px 3927px #FFF, 2462px 17040px #FFF, 701px 1575px #FFF, 1548px 5050px #FFF, 2146px 15358px #FFF, 2223px 11400px #FFF, 1191px 2926px #FFF, 2123px 13035px #FFF, 1201px 8289px #FFF, 984px 8359px #FFF, 1565px 14072px #FFF, 2352px 13950px #FFF, 9px 10496px #FFF, 350px 16315px #FFF;
-}
-
-.stars2 {
-    width: 2px;
-    height: 2px;
-    background: transparent;
-    box-shadow: 1232px 8441px #FFF, 1599px 4686px #FFF, 1598px 19065px #FFF, 1297px 1301px #FFF, 2175px 4825px #FFF, 1060px 19902px #FFF, 1349px 3067px #FFF, 1759px 10951px #FFF, 2255px 13614px #FFF, 529px 721px #FFF, 1048px 896px #FFF, 1845px 7041px #FFF, 995px 677px #FFF, 966px 3823px #FFF, 2450px 12191px #FFF, 259px 9355px #FFF, 1432px 458px #FFF, 2246px 17267px #FFF, 1971px 3511px #FFF, 1130px 14608px #FFF, 1884px 8877px #FFF, 178px 5608px #FFF, 1775px 17759px #FFF, 158px 11227px #FFF, 735px 12802px #FFF;
-    animation: animStar 100s linear infinite;
-}
-
-.stars2:after {
-    content: " ";
-    position: absolute;
-    top: 2000px;
-    width: 2px;
-    height: 2px;
-    background: transparent;
-    box-shadow: 1232px 8441px #FFF, 1599px 4686px #FFF, 1598px 19065px #FFF, 1297px 1301px #FFF, 2175px 4825px #FFF, 1060px 19902px #FFF, 1349px 3067px #FFF, 1759px 10951px #FFF, 2255px 13614px #FFF, 529px 721px #FFF, 1048px 896px #FFF, 1845px 7041px #FFF, 995px 677px #FFF, 966px 3823px #FFF, 2450px 12191px #FFF, 259px 9355px #FFF, 1432px 458px #FFF, 2246px 17267px #FFF, 1971px 3511px #FFF, 1130px 14608px #FFF, 1884px 8877px #FFF, 178px 5608px #FFF, 1775px 17759px #FFF, 158px 11227px #FFF, 735px 12802px #FFF;
-}
-
-.stars3 {
-    width: 3px;
-    height: 3px;
-    background: transparent;
-    box-shadow: 1093px 562px #FFF, 921px 893px #FFF, 1563px 13652px #FFF, 1907px 10752px #FFF, 2063px 4524px #FFF, 2108px 19472px #FFF, 1574px 17815px #FFF, 1979px 7525px #FFF, 1747px 3658px #FFF, 78px 7062px #FFF, 2136px 6242px #FFF, 823px 1302px #FFF, 2243px 15058px #FFF, 1384px 253px #FFF, 1288px 4701px #FFF, 559px 16453px #FFF, 2284px 5518px #FFF, 2492px 10983px #FFF, 20px 17363px #FFF, 1509px 14922px #FFF;
-    animation: animStar 150s linear infinite;
-}
-
-.stars3:after {
-    content: " ";
-    position: absolute;
-    top: 2000px;
-    width: 3px;
-    height: 3px;
-    background: transparent;
-    box-shadow: 1093px 562px #FFF, 921px 893px #FFF, 1563px 13652px #FFF, 1907px 10752px #FFF, 2063px 4524px #FFF, 2108px 19472px #FFF, 1574px 17815px #FFF, 1979px 7525px #FFF, 1747px 3658px #FFF, 78px 7062px #FFF, 2136px 6242px #FFF, 823px 1302px #FFF, 2243px 15058px #FFF, 1384px 253px #FFF, 1288px 4701px #FFF, 559px 16453px #FFF, 2284px 5518px #FFF, 2492px 10983px #FFF, 20px 17363px #FFF, 1509px 14922px #FFF;
-}
-
-@keyframes animStar {
-    from {
-        transform: translateY(0px);
-    }
-    to {
-        transform: translateY(-2000px);
-    }
-}
-
-@media screen and (max-width: 810px) {
-    .stars1, .stars2, .stars3 {
-        animation-duration: 0s;
-    }
 }

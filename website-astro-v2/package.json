@@ -1,24 +1,44 @@
 {
-  "name": "landing-astro",
+  "name": "website-astro-v2",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "deploy": "astro build && firebase deploy --only hosting --project datatalk-443fb"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",
     "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/starlight": "^0.36.1",
+    "@firebase/analytics": "^0.10.18",
+    "@firebase/app-check": "^0.11.0",
+    "@firecms/core": "file:../packages/firecms_core",
+    "@firecms/data_enhancement": "file:../packages/data_enhancement",
+    "@firecms/firebase": "file:../packages/firebase_firecms",
+    "@firecms/ui": "file:../packages/ui",
+    "@firecms/neat": "^0.4.0",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@material-design-icons/font": "^0.14.15",
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "typeface-rubik": "^1.1.13",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@types/react-router-dom": "^5.3.3",
     "astro": "^5.14.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.14"
+    "react-responsive-masonry": "^2.7.1",
+    "react-router-dom": "^5.3.4",
+    "react-syntax-highlighter": "^15.6.6",
+    "react-type-animation": "^3.2.0",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.14",
+    "typeface-rubik": "^1.1.13"
+  },
+  "devDependencies": {
+    "@types/react-syntax-highlighter": "^15.5.13"
   }
 }
