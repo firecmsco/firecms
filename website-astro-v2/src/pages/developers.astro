@@ -19,16 +19,15 @@ const description = "Build powerful internal tools, CRUD interfaces, and custom 
                  aria-hidden="true">
                 <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary/20 to-blue-900/20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
             </div>
-
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
                 <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
                     Build Back-Offices <b>Without the Frontend Hassle</b>
                 </h1>
                 <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
-                    FireCMS is the developer-first framework you'll love to use. Build powerful, fast, and flexible internal tools, CRUD interfaces, and admin panels with React and TypeScript.
+                    FireCMS is the developer-first framework you'll love to use. Build powerful, fast, and flexible
+                    internal tools, CRUD interfaces, and admin panels with React and TypeScript.
                 </p>
             </div>
-
             <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
                  aria-hidden="true">
                 <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary/20 to-blue-900/20 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
@@ -60,37 +59,81 @@ const description = "Build powerful internal tools, CRUD interfaces, and custom 
             </div>
         </section>
 
-
         <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center mb-16">
                     <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Choose Your Path</h2>
-                    <p class="mt-4 text-lg leading-8 text-gray-400">Get started instantly with our managed cloud or self-host the open-source framework for full control.</p>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">Get started instantly with our managed cloud or
+                        self-host the open-source framework for full control.</p>
                 </div>
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                    {/* FireCMS Cloud */}
                     <div class="relative flex flex-col rounded-2xl bg-gradient-to-br from-primary/10 to-blue-900/10 p-8 ring-2 ring-inset ring-primary/30">
                         <h3 class="text-2xl font-medium text-white mb-2">FireCMS Cloud</h3>
                         <p class="text-primary text-lg font-semibold mb-4">Best for Startups & MVPs</p>
-                        <p class="text-gray-300 text-lg mb-6">For maximum speed and zero maintenance. Launch your admin panel in minutes.</p>
+                        <p class="text-gray-300 text-lg mb-6">For maximum speed and zero maintenance. Launch your admin
+                            panel in minutes.</p>
                         <ul class="space-y-3 mb-8 flex-grow">
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Instant setup - no deployment needed</span></li>
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Automatic updates and maintenance</span></li>
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Generous free tier to get started</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Instant setup - no deployment needed</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Automatic updates and maintenance</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Generous free tier to get started</span></li>
                         </ul>
-                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">Get Started with Cloud <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert"/></a>
+                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">Get
+                            Started with Cloud <img
+                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                                    class="h-5 w-5 text-white filter invert"/></a>
                     </div>
-                    {/* Self-Hosted */}
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
                         <h3 class="text-2xl font-medium text-white mb-2">Self-Hosted</h3>
                         <p class="text-primary text-lg font-semibold mb-4">Best for Agencies & Custom Builds</p>
-                        <p class="text-gray-300 text-lg mb-6">For maximum control and deep customization. Deploy anywhere.</p>
+                        <p class="text-gray-300 text-lg mb-6">For maximum control and deep customization. Deploy
+                            anywhere.</p>
                         <ul class="space-y-3 mb-8 flex-grow">
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Full source code access (MIT license)</span></li>
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Deploy in your own infrastructure</span></li>
-                            <li class="flex items-start gap-3"><svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-gray-300">Extend with your own React components</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Full source code access (MIT license)</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Deploy in your own infrastructure</span></li>
+                            <li class="flex items-start gap-3">
+                                <svg class="h-6 w-6 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-gray-300">Extend with your own React components</span></li>
                         </ul>
-                        <a href="/docs" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-x-2 rounded-md border border-gray-700 bg-gray-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-700 transition-all duration-200 ease-in-out">View Self-Hosted Docs <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert"/></a>
+                        <a href="/docs" rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-gray-700 bg-gray-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-700 transition-all duration-200 ease-in-out">View
+                            Self-Hosted Docs <img
+                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                                    class="h-5 w-5 text-white filter invert"/></a>
                     </div>
                 </div>
             </div>
@@ -99,58 +142,145 @@ const description = "Build powerful internal tools, CRUD interfaces, and custom 
         <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl lg:text-center">
-                    <h2 class="text-base font-semibold leading-7 text-primary">Developer-First</h2>
-                    <p class="mt-2 text-3xl font-medium tracking-tight text-white sm:text-4xl">Designed for a Modern Workflow</p>
-                    <p class="mt-6 text-lg leading-8 text-gray-400">FireCMS provides the building blocks you need without getting in your way. Our code-first approach ensures extensibility, type-safety, and a seamless git-based workflow.</p>
+                    <h2 class="text-base font-semibold leading-7 text-primary">A Toolkit That Just Works</h2>
+                    <p class="mt-2 text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything you need.
+                        Nothing you don't.</p>
+                    <p class="mt-6 text-lg leading-8 text-gray-400">
+                        Stop reinventing the wheel. FireCMS provides a production-ready toolkit of components and logic,
+                        so you can focus on the features that make your app unique.
+                    </p>
                 </div>
-                <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-                    <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-                        <div class="flex flex-col">
-                            <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                                <svg class="h-5 w-5 flex-none text-primary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046a2.5 2.5 0 014.504 2.077a4.5 4.5 0 01-1.44 8.765c-1.298 1.037-2.936 1.66-4.665 1.66-1.73 0-3.368-.623-4.665-1.66z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M10 18a.75.75 0 00.75-.75V13.62l1.375 1.155a.75.75 0 001.25- .8l-2.5-3a.75.75 0 00-1.25 0l-2.5 3a.75.75 0 101.25.8l1.375-1.155V17.25A.75.75 0 0010 18z" clip-rule="evenodd" /></svg>
-                                Schema as Code
-                            </dt>
-                            <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-300">
-                                <p class="flex-auto">Define your collections and fields in TypeScript. Your code is the single source of truth, enabling version control, code reviews, and complete type-safety across your entire application.</p>
-                            </dd>
-                        </div>
-                        <div class="flex flex-col">
-                            <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                                <svg class="h-5 w-5 flex-none text-primary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
-                                Radical Extensibility with React
-                            </dt>
-                            <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-300">
-                                <p class="flex-auto">If you can build it in React, you can build it in FireCMS. Create custom form fields, entirely new top-level views, or replace any part of the UI with your own components. No black boxes.</p>
-                            </dd>
-                        </div>
-                        <div class="flex flex-col">
-                            <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                                <svg class="h-5 w-5 flex-none text-primary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201-4.42 5.5 5.5 0 0110.89 2.166l.334 2.252a.75.75 0 01-1.492.22l-.334-2.252a4 4 0 00-7.92-1.575 4 4 0 005.106 5.106l2.252.334a.75.75 0 01-.22 1.492l-2.252-.334a5.5 5.5 0 01-2.166-10.89 5.5 5.5 0 014.42 9.201l-1.424 1.424a.75.75 0 01-1.06-1.06l1.424-1.424zM11 10a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5A.75.75 0 0111 10z" clip-rule="evenodd" /></svg>
-                                Powerful Data Hooks
-                            </dt>
-                            <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-300">
-                                <p class="flex-auto">A comprehensive set of hooks like <code>useCollectionFetch</code> and <code>useSnackbarController</code> gives you programmatic access to all core CMS functionalities, making it easy to build custom logic and integrate with third-party services.</p>
-                            </dd>
-                        </div>
-                        <div class="flex flex-col">
-                            <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                                <svg class="h-5 w-5 flex-none text-primary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zM13.25 11a2.25 2.25 0 00-2.25 2.25v2.5a2.25 2.25 0 002.25 2.25h2.5a2.25 2.25 0 002.25-2.25v-2.5a2.25 2.25 0 00-2.25-2.25h-2.5z" clip-rule="evenodd" /></svg>
-                                Headless + Integrated UI
-                            </dt>
-                            <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-300">
-                                <p class="flex-auto">Get the best of both worlds. Use FireCMS as a headless backend with its powerful generated APIs, or use the beautiful and highly-performant integrated admin panel. Or both.</p>
-                            </dd>
-                        </div>
-                    </dl>
+
+                <div classd="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative w-full rounded-2xl overflow-hidden ring-1 ring-gray-800">
+                        <img src="httpsStorage://firecms-public-assets.appspot.com/sites/firecms/images/schema_to_ui.webp"
+                             alt="Schema as Code demo"
+                             class="w-full h-auto bg-gray-900"
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Schema as Code, with Validation</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            Define your data models in TypeScript. Your code is the single source of truth, giving you
+                            version control and type-safety. FireCMS automatically generates all CRUD views and forms,
+                            with <strong>built-in validation</strong> (required, min/max, regex) that works out of the box.
+                        </p>
+                    </div>
                 </div>
+
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-last relative w-full rounded-2xl overflow-hidden ring-1 ring-gray-800">
+                        <img src="httpsStorage://firecms-public-assets.appspot.com/sites/firecms/images/notion_style_editor.webp"
+                             alt="Advanced data fields"
+                             class="w-full h-auto bg-gray-900"
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Over 20+ Powerful Data Fields</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            We've built all the complex fields you don't want to. Get a <strong>Notion-style rich text
+                            editor</strong>, file uploads to Firebase Storage, <strong>relational data (references)</strong>, enums, arrays,
+                            maps, and more, all as pre-built components.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative w-full rounded-2xl overflow-hidden ring-1 ring-gray-800">
+                        <img src="httpsStorage://firecms-public-assets.appspot.com/sites/firecms/images/custom_top_level_view.webp"
+                             alt="Custom React component demo"
+                             class="w-full h-auto bg-gray-900"
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Radical React Extensibility</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            If you can build it in React, you can build it in FireCMS. Create your own custom form
+                            fields or build <strong>entirely new top-level views</strong> (like a custom dashboard) and add them to
+                            the main navigation. No black boxes.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-last relative w-full rounded-2xl overflow-hidden">
+                        <CodeBlock
+                                language="typescript"
+                                code={`import { buildCollection } from "@firecms/core";
+
+export const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    callbacks: {
+        onSave: async ({ values }) => {
+            // e.g., send a notification
+            await sendSlackMessage("Product updated: \${values.name}");
+            
+            // e.g., modify data before saving
+            values.updatedAt = new Date();
+            return values;
+        }
+    }
+    // ...properties
+});`}
+                                client:load
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Built-in Business Logic</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            Run your custom code during the data lifecycle. Use <strong><code>onSave</code></strong>, <strong><code>onDelete</code></strong>, and other
+                            callbacks to trigger cloud functions, send notifications, clean data, or integrate with
+                            third-party APIs right from your CMS configuration.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative w-full rounded-2xl overflow-hidden ring-1 ring-gray-800">
+                        <img src="httpsStorage://firecms-public-assets.appspot.com/sites/firecms/images/roles.webp"
+                             alt="Roles and permissions setup"
+                             class="w-full h-auto bg-gray-900"
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Auth & Permissions, Solved</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            Integrates with Firebase Authentication by default. Define <strong>granular, path-based
+                            permissions</strong> to control exactly who can read, write, or delete data. Need enterprise auth?
+                            We support <strong>SAML and SSO</strong> in our PRO plans.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-last relative w-full rounded-2xl overflow-hidden ring-1 ring-gray-800">
+                        <img src="httpsStorage://firecms-public-assets.appspot.com/sites/firecms/images/inline_editing.webp"
+                             alt="Airtable-like UI demo"
+                             class="w-full h-auto bg-gray-900"
+                        />
+                    </div>
+                    <div class="mt-8 lg:mt-0">
+                        <h3 class="text-xl font-semibold text-white">Production-Ready UI Out of the Box</h3>
+                        <p class="mt-4 text-lg text-gray-400">
+                            Every collection you define automatically gets its own intuitive CRUD interface, including
+                            a beautiful, <strong>Airtable-like spreadsheet view</strong> with inline editing, powerful filtering,
+                            sorting, and searching. No frontend work required.
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-3xl text-center mb-16">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">From Code to CRUD in Minutes</h2>
-                    <p class="mt-6 text-lg leading-8 text-gray-400">Define your data collections as simple TypeScript objects. FireCMS takes your configuration and instantly generates a full-featured, production-ready CRUD interface with no extra work.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Example 1: From Code to
+                        CRUD</h2>
+                    <p class="mt-6 text-lg leading-8 text-gray-400">This simple collection definition is all it takes
+                        for FireCMS to generate a full-featured, production-ready CRUD interface.
+                    </p>
                 </div>
 
                 <div class="mx-auto max-w-4xl">
@@ -193,8 +323,11 @@ export const productsCollection = buildCollection({
         <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center mb-16">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Build a Back-Office That's Uniquely Yours</h2>
-                    <p class="mt-6 text-lg leading-8 text-gray-400">Don't be limited by a pre-built interface. Extend the dashboard with your own React components. Build a custom analytics dashboard, a bespoke order processing view, or a third-party API integration—all seamlessly integrated.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Example 2: Build a Custom
+                        View</h2>
+                    <p class="mt-6 text-lg leading-8 text-gray-400">Use the built-in data hooks (like
+                        <code>useCollectionFetch</code>) to create your own React components and add them directly to the main
+                        navigation.</p>
                 </div>
                 <div class="relative max-w-2xl mx-auto rounded-2xl overflow-hidden">
                     <CodeBlock
@@ -233,12 +366,12 @@ export function CustomAnalyticsDashboard() {
                 <div class="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-8 items-center">
                     <div class="relative rounded-2xl overflow-hidden">
                         <DataTalkDemo
-                            client:load
-                            exchanges={[
-                                {
-                                    query: "Update status to 'active' for all users who signed up last month",
-                                    responseText: "I'll help you update the status for users who signed up last month. Here's the code to do that:",
-                                    code: `const lastMonth = new Date();
+                                client:load
+                                exchanges={[
+                                    {
+                                        query: "Update status to 'active' for all users who signed up last month",
+                                        responseText: "I'll help you update the status for users who signed up last month. Here's the code to do that:",
+                                        code: `const lastMonth = new Date();
 lastMonth.setMonth(lastMonth.getMonth() - 1);
 
 const users = await db.collection('users')
@@ -251,17 +384,21 @@ users.docs.forEach(doc => {
 });
 
 await batch.commit();
-console.log(\`Updated \${users.size} users\`);`,
-                                    showUsersTable: true
-                                }
-                            ]}
+console.log("Updated \${users.size} users");`,
+                                        showUsersTable: true
+                                    }
+                                ]}
                         />
                     </div>
                     <div>
-                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Save Hours on Data-Ops</h2>
-                        <p class="text-lg text-gray-400 mb-8">Stop writing one-off scripts for batch updates or complex queries. DataTalk lets you operate directly on your data in natural language, turning hours of tedious dev work into seconds of typing.</p>
+                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Save Hours on
+                            Data-Ops</h2>
+                        <p class="text-lg text-gray-400 mb-8">Stop writing one-off scripts for batch updates or complex
+                            queries. DataTalk lets you operate directly on your data in natural language, turning hours
+                            of tedious dev work into seconds of typing.</p>
                         <div class="bg-gray-900/50 rounded-lg p-6 ring-1 ring-gray-800">
-                            <p class="text-gray-300 font-mono text-sm">"Update status to 'active' for all users who signed up last month"</p>
+                            <p class="text-gray-300 font-mono text-sm">"Update status to 'active' for all users who
+                                signed up last month"</p>
                         </div>
                     </div>
                 </div>
@@ -271,14 +408,24 @@ console.log(\`Updated \${users.size} users\`);`,
         <section class="bg-black pt-16 pb-12 sm:pt-24 sm:pb-16 border-b border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-3xl text-center mb-12">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Start Your Self-Hosted Project</h2>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Start Your Self-Hosted
+                        Project</h2>
                 </div>
                 <div class="max-w-3xl mx-auto">
                     <div id="cli-tabs" class="w-full max-w-md mx-auto">
                         <div class="mb-2 flex space-x-1 rounded-t-lg bg-gray-900/50 p-1" role="tablist">
-                            <button type="button" class="tab-btn active w-full rounded-md p-2 text-center text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-primary/50" role="tab" aria-selected="true" data-target="npx-panel">npx</button>
-                            <button type="button" class="tab-btn w-full rounded-md p-2 text-center text-sm font-semibold text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50" role="tab" aria-selected="false" data-target="yarn-panel">yarn</button>
-                            <button type="button" class="tab-btn w-full rounded-md p-2 text-center text-sm font-semibold text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50" role="tab" aria-selected="false" data-target="pnpm-panel">pnpm</button>
+                            <button type="button"
+                                    class="tab-btn active w-full rounded-md p-2 text-center text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    role="tab" aria-selected="true" data-target="npx-panel">npx
+                            </button>
+                            <button type="button"
+                                    class="tab-btn w-full rounded-md p-2 text-center text-sm font-semibold text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    role="tab" aria-selected="false" data-target="yarn-panel">yarn
+                            </button>
+                            <button type="button"
+                                    class="tab-btn w-full rounded-md p-2 text-center text-sm font-semibold text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    role="tab" aria-selected="false" data-target="pnpm-panel">pnpm
+                            </button>
                         </div>
                         <div class="relative rounded-b-xl overflow-hidden ring-1 ring-gray-800 bg-gray-900">
                             <div id="npx-panel" role="tabpanel" class="tab-panel p-6">
@@ -297,8 +444,9 @@ console.log(\`Updated \${users.size} users\`);`,
                         <a href="/docs/getting-started"
                            class="inline-flex items-center gap-x-2 text-primary hover:text-primary-light transition-colors font-semibold">
                             View Full Documentation
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
                         </a>
                     </div>
@@ -310,20 +458,28 @@ console.log(\`Updated \${users.size} users\`);`,
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center mb-16">
                     <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Ready to Build?</h2>
-                    <p class="mt-4 text-lg leading-8 text-gray-400">Start building in seconds with our free cloud tier or dive into the open-source docs.</p>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">Start building in seconds with our free cloud tier
+                        or dive into the open-source docs.</p>
                 </div>
                 <div class="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
-                    {/* Cloud CTA */}
                     <div class="flex flex-col items-center text-center rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
                         <h3 class="text-2xl font-medium text-white mb-4">Try FireCMS Cloud</h3>
-                        <p class="text-gray-300 text-lg mb-6 flex-grow">The fastest way to get started. Perfect for MVPs, startups, and anyone who wants zero-hassle setup.</p>
-                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow w-full sm:w-auto">Start Building for Free <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert"/></a>
+                        <p class="text-gray-300 text-lg mb-6 flex-grow">The fastest way to get started. Perfect for
+                            MVPs, startups, and anyone who wants zero-hassle setup.</p>
+                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow w-full sm:w-auto">Start
+                            Building for Free <img
+                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                                    class="h-5 w-5 text-white filter invert"/></a>
                     </div>
-                    {/* Self-Hosted CTA */}
                     <div class="flex flex-col items-center text-center rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
                         <h3 class="text-2xl font-medium text-white mb-4">Explore the Docs</h3>
-                        <p class="text-gray-300 text-lg mb-6 flex-grow">Dive into the open-source framework. Perfect for agencies, custom builds, and full control.</p>
-                        <a href="/docs" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-x-2 rounded-md border border-gray-700 bg-gray-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-700 transition-all duration-200 ease-in-out w-full sm:w-auto">Read the Docs <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert"/></a>
+                        <p class="text-gray-300 text-lg mb-6 flex-grow">Dive into the open-source framework. Perfect for
+                            agencies, custom builds, and full control.</p>
+                        <a href="/docs" rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-gray-700 bg-gray-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-700 transition-all duration-200 ease-in-out w-full sm:w-auto">Read
+                            the Docs <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
+                                          alt="" class="h-5 w-5 text-white filter invert"/></a>
                     </div>
                 </div>
             </div>
@@ -333,27 +489,27 @@ console.log(\`Updated \${users.size} users\`);`,
     {/* The Layout component should include your Footer */}
 
     <script>
-        const tabs = document.querySelectorAll('#cli-tabs .tab-btn');
-        const panels = document.querySelectorAll('#cli-tabs .tab-panel');
+        const tabs = document.querySelectorAll("#cli-tabs .tab-btn");
+        const panels = document.querySelectorAll("#cli-tabs .tab-panel");
 
         tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
+            tab.addEventListener("click", () => {
                 const target = document.getElementById(tab.dataset.target);
 
                 // Deactivate all
                 tabs.forEach(t => {
-                    t.setAttribute('aria-selected', 'false');
-                    t.classList.remove('bg-gray-700', 'text-white');
-                    t.classList.add('text-gray-400');
+                    t.setAttribute("aria-selected", "false");
+                    t.classList.remove("bg-gray-700", "text-white");
+                    t.classList.add("text-gray-400");
                 });
-                panels.forEach(p => p.classList.add('hidden'));
+                panels.forEach(p => p.classList.add("hidden"));
 
                 // Activate clicked
-                tab.setAttribute('aria-selected', 'true');
-                tab.classList.add('bg-gray-700', 'text-white');
-                tab.classList.remove('text-gray-400');
+                tab.setAttribute("aria-selected", "true");
+                tab.classList.add("bg-gray-700", "text-white");
+                tab.classList.remove("text-gray-400");
                 if (target) {
-                    target.classList.remove('hidden');
+                    target.classList.remove("hidden");
                 }
             });
         });

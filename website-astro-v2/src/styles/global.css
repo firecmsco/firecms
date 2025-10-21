@@ -1,11 +1,40 @@
 @import "tailwindcss";
 @import "@firecms/ui/index.css" layer(base);
 
+@import "@material-design-icons/font/filled.css";
+
+/* Override font-display for Material Design Icons to ensure text is visible during font load */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
 /* Content sources (scan paths) - paths are relative to this file (src/styles/global.css) */
 @source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @source "../pages/**/*.{astro,md,mdx,ts,tsx}";
 @source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
 
+
+.material-icons {
+    font-family: "Material Icons";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "liga";
+}
 
 @theme {
     --color-primary: #0070f4; /* #0070f4 */
@@ -125,3 +154,94 @@ h6 {
 .blob-shape {
     clip-path: polygon(50% 0%, 78% 10%, 98% 40%, 90% 75%, 62% 100%, 32% 92%, 6% 62%, 10% 22%);
 }
+
+/* Subtle scroll-based animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animation utility classes */
+.animate-on-scroll {
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-play-state: paused;
+}
+
+.animate-on-scroll.fade-in-up {
+    animation-name: fadeInUp;
+    animation-duration: 0.7s;
+}
+
+.animate-on-scroll.fade-in {
+    animation-name: fadeIn;
+    animation-duration: 0.9s;
+}
+
+.animate-on-scroll.scale-in {
+    animation-name: scaleIn;
+    animation-duration: 0.6s;
+}
+
+/* Staggered animation delays */
+.animate-on-scroll.delay-100 {
+    animation-delay: 0.1s;
+}
+
+.animate-on-scroll.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.animate-on-scroll.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.animate-on-scroll.delay-400 {
+    animation-delay: 0.4s;
+}
+
+.animate-on-scroll.delay-500 {
+    animation-delay: 0.5s;
+}
+
+/* When element is in view */
+.animate-on-scroll.in-view {
+    animation-play-state: running;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+

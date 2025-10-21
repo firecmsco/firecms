@@ -214,7 +214,7 @@ export function ProductsDemoTable() {
                 <div className="flex gap-4 md:mr-8 mr-4 self-stretch items-center">
                     <div className="hidden lg:block">
                         <div className="flex flex-col items-start justify-center">
-                            <h4 className="text-sm font-medium leading-none truncate max-w-[160px] lg:max-w-[240px] text-white">Products</h4>
+                            <div className="text-sm font-medium leading-none truncate max-w-[160px] lg:max-w-[240px] text-white">Products</div>
                             <div className="text-xs text-surface-400 w-full text-ellipsis overflow-hidden whitespace-nowrap max-w-xs text-left">{productsData.length} entities</div>
                         </div>
                     </div>
@@ -337,7 +337,7 @@ export function UsersDemoTable() {
                 <div className="flex gap-4 md:mr-8 mr-4 self-stretch items-center">
                     <div className="hidden lg:block">
                         <div className="flex flex-col items-start justify-center">
-                            <h4 className="text-sm font-medium leading-none truncate max-w-[160px] lg:max-w-[240px] text-white">Users</h4>
+                            <div className="text-sm font-medium leading-none truncate max-w-[160px] lg:max-w-[240px] text-white">Users</div>
                             <div className="text-xs text-surface-400 w-full text-ellipsis overflow-hidden whitespace-nowrap max-w-xs text-left">{usersData.length} entities</div>
                         </div>
                     </div>
