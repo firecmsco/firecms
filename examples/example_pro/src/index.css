@@ -17,7 +17,7 @@ body {
 }
 
 a {
-    @apply text-primary dark:text-primary
+    /*@apply text-primary dark:text-primary*/
 }
 
 /*.typography-body1 {*/

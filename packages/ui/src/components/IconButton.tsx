@@ -50,6 +50,7 @@ const IconButtonInner = <C extends React.ElementType = "button">({
             className={cls(
                 disabled ? "opacity-50 pointer-events-none" : "cursor-pointer",
                 toggled ? "outline outline-2 outline-primary" : "",
+                "text-inherit dark:text-inherit",
                 colorClasses,
                 bgClasses,
                 baseClasses,

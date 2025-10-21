@@ -146,7 +146,7 @@ collection("users")
                     <section id="screen-3" data-screen class="scroll-mt-32 will-change-transform">
                         <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
                             <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
-                                <div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+                                <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
                                 <video
                                         class="w-full h-auto"
                                         style="pointer-events: none;"
@@ -154,7 +154,7 @@ collection("users")
                                         autoplay
                                         muted
                                         playsinline>
-                                    <source src="/img/schema_editor.webm" type="video/webm"/>
+                                    <source src="/img/editor_demo_dark.webm" type="video/webm"/>
                                 </video>
                             </div>
                         </div>
@@ -163,10 +163,14 @@ collection("users")
                     <!-- Screen 4: Easy Integration -->
                     <section id="screen-4" data-screen class="scroll-mt-32 will-change-transform">
                         <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
-                                <div class="p-6 sm:p-8">
-                                    <div class="space-y-6">
-                                        <div class="flex items-start gap-4">
+                            {/* Apply min-height and flex classes here */}
+                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[700px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
+
+                                {/* Added flex-grow to allow content spacing to expand */}
+                                <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
+                                    <div class="space-y-16">
+                                        {/* --- NPM Install --- */}
+                                        <div class="flex items-start gap-6">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
                                                 <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
                                                      alt="" class="h-5 w-5 filter invert"/>
@@ -174,14 +178,15 @@ collection("users")
                                             <div>
                                                 <h4 class="text-lg font-semibold text-white mb-2">Simple NPM
                                                     Install</h4>
-                                                <p class="text-gray-400 text-sm mb-3">Add FireCMS to your project with a
-                                                    single command</p>
-                                                <div class="bg-gray-900/50 rounded-lg p-4 font-mono text-sm text-gray-300">
-                                                    npm install @firecms/core @firecms/firebase
+                                                <p class="text-surface-400 text-sm mb-3">Add FireCMS to your project
+                                                    with a single command</p>
+                                                <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-gray-700/50">
+                                                    npx create-firecms-app
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex items-start gap-4">
+                                        {/* --- FireCMS Cloud --- */}
+                                        <div class="flex items-start gap-6">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
                                                 <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
                                                      alt="" class="h-5 w-5 filter invert"/>
@@ -189,12 +194,13 @@ collection("users")
                                             <div>
                                                 <h4 class="text-lg font-semibold text-white mb-2">Or Use FireCMS
                                                     Cloud</h4>
-                                                <p class="text-gray-400 text-sm">No setup required. Connect your
+                                                <p class="text-surface-400 text-sm">No setup required. Connect your
                                                     Firebase project and start managing your data instantly with our
                                                     managed platform.</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-start gap-4">
+                                        {/* --- TypeScript Support --- */}
+                                        <div class="flex items-start gap-6">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
                                                 <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg"
                                                      alt="" class="h-5 w-5 filter invert"/>
@@ -202,8 +208,8 @@ collection("users")
                                             <div>
                                                 <h4 class="text-lg font-semibold text-white mb-2">Full TypeScript
                                                     Support</h4>
-                                                <p class="text-gray-400 text-sm">Built with TypeScript from the ground
-                                                    up for the best developer experience and type safety.</p>
+                                                <p class="text-surface-400 text-sm">Built with TypeScript from the
+                                                    ground up for the best developer experience and type safety.</p>
                                             </div>
                                         </div>
                                     </div>
