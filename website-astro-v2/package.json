@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "run-s build && firebase deploy --only hosting --project firecms-backend"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",

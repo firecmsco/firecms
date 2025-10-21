@@ -1,27 +1,39 @@
 ---
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
+
+const navLinks = [
+  { href: '/features', label: 'Features' },
+  { href: '/developers', label: 'Developers' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/security', label: 'Security' },
+  { href: '/why-firecms', label: 'Why FireCMS' },
+];
 ---
 <header class="bg-black/40 backdrop-blur sticky top-0 z-50">
   <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
     <div class="flex items-center gap-8">
-      <a href="/" class="flex items-center -m-1.5 p-1.5">
+      <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50">
         <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" />
         <span class="self-center text-lg font-semibold whitespace-nowrap text-white">FireCMS</span>
       </a>
-      <div class="flex items-center gap-6 text-sm font-semibold">
-        <a href="/features" class={`transition-colors hover:text-primary ${currentPath === '/features' ? 'text-primary' : 'text-gray-300'}`}>Features</a>
-        <a href="/developers" class={`transition-colors hover:text-primary ${currentPath === '/developers' ? 'text-primary' : 'text-gray-300'}`}>Developers</a>
-        <a href="/pricing" class={`transition-colors hover:text-primary ${currentPath === '/pricing' ? 'text-primary' : 'text-gray-300'}`}>Pricing</a>
-        <a href="/security" class={`transition-colors hover:text-primary ${currentPath === '/security' ? 'text-primary' : 'text-gray-300'}`}>Security</a>
-        <a href="/why-firecms" class={`transition-colors hover:text-primary ${currentPath === '/why-firecms' ? 'text-primary' : 'text-gray-300'}`}>Why FireCMS</a>
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center gap-6 text-sm font-semibold">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class={`transition-colors hover:text-primary ${currentPath === link.href ? 'text-primary' : 'text-gray-300'}`}
+          >
+            {link.label}
+          </a>
+        ))}
       </div>
     </div>
-    <div class="flex flex-1 justify-end">
+    <div class="flex flex-1 justify-end items-center gap-4">
       <a
         href="https://app.firecms.co"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
+        class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
       >
         Start Building
         <img
@@ -30,7 +42,92 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '');
           class="h-4 w-4 text-white filter invert"
         />
       </a>
+      <!-- Mobile menu button -->
+      <button
+        type="button"
+        class="lg:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        id="mobile-menu-button"
+      >
+        <span class="sr-only">Open main menu</span>
+        <!-- Icon when menu is closed -->
+        <svg class="block h-6 w-6" id="menu-icon-closed" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+        <!-- Icon when menu is open -->
+        <svg class="hidden h-6 w-6" id="menu-icon-open" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile menu - Full Screen Overlay -->
+  <div class="lg:hidden hidden fixed inset-0 z-40" id="mobile-menu">
+    <div class="flex flex-col items-center justify-center min-h-screen px-6 py-20 bg-black/95 backdrop-blur-lg">
+      <nav class="flex flex-col items-center space-y-8 w-full max-w-md">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class={`block text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg ${
+              currentPath === link.href 
+                ? 'bg-primary/20 text-primary' 
+                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            {link.label}
+          </a>
+        ))}
+        <a
+          href="https://app.firecms.co"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 w-full inline-flex items-center justify-center gap-x-2 rounded-lg bg-primary px-6 py-4 text-xl font-semibold text-white shadow-lg hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow"
+        >
+          Start Building
+          <img
+            src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
+            alt=""
+            class="h-5 w-5 text-white filter invert"
+          />
+        </a>
+      </nav>
+    </div>
+  </div>
 </header>
+
+<script>
+  // Mobile menu toggle
+  const button = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  const menuIconClosed = document.getElementById('menu-icon-closed');
+  const menuIconOpen = document.getElementById('menu-icon-open');
+
+  if (button && menu && menuIconClosed && menuIconOpen) {
+    button.addEventListener('click', () => {
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      button.setAttribute('aria-expanded', String(!isExpanded));
+      menu.classList.toggle('hidden');
+      menuIconClosed.classList.toggle('hidden');
+      menuIconClosed.classList.toggle('block');
+      menuIconOpen.classList.toggle('hidden');
+      menuIconOpen.classList.toggle('block');
+    });
+
+    // Close mobile menu when clicking on a link
+    const mobileLinks = menu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+        menuIconClosed.classList.add('block');
+        menuIconClosed.classList.remove('hidden');
+        menuIconOpen.classList.add('hidden');
+        menuIconOpen.classList.remove('block');
+      });
+    });
+  }
+</script>
 

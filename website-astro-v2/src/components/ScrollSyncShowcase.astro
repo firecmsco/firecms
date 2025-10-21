@@ -5,26 +5,26 @@
 import { DataTalkDemo } from "./DataTalkDemo";
 
 const dataTalkExchanges = [
-//     {
-//         query: "Show me all products with price greater than 100",
-//         responseText: "Here are the products filtered by price:",
-//         showProductsTable: true,
-//     },
-//     {
-//         query: "Update all out of stock items to mark them as unavailable",
-//         responseText: "I'll help you update those items:",
-//         code: `export default async () => {
-//   const firestore = getFirestore();
-//   const productsRef = collection(firestore, "products");
-//   const q = query(productsRef, where("stock", "==", 0)); // Pretending 'stock' field exists
-//   const productsToUpdate = await getDocs(q);
-//   const batch = writeBatch(firestore);
-//   productsToUpdate.forEach((doc) => {
-//     batch.update(doc.ref, { available: false });
-//   });
-//   return await batch.commit();
-// }`
-//     },
+    {
+        query: "Show me all products with price greater than 100",
+        responseText: "Here are the products filtered by price:",
+        showProductsTable: true,
+    },
+    {
+        query: "Update all out of stock items to mark them as unavailable",
+        responseText: "I'll help you update those items:",
+        code: `export default async () => {
+  const firestore = getFirestore();
+  const productsRef = collection(firestore, "products");
+  const q = query(productsRef, where("stock", "==", 0)); // Pretending 'stock' field exists
+  const productsToUpdate = await getDocs(q);
+  const batch = writeBatch(firestore);
+  productsToUpdate.forEach((doc) => {
+    batch.update(doc.ref, { available: false });
+  });
+  return await batch.commit();
+}`
+    },
     {
         query: "Find users who signed up in the last 30 days",
         responseText: "Here's how to find recent users:",
@@ -49,9 +49,9 @@ collection("users")
             <p class="mt-6 text-lg leading-8 text-gray-400">Powerful features that make data management a breeze</p>
         </div>
 
-        <div class="flex gap-12 lg:gap-16">
-            <!-- Left: Sticky index/menu -->
-            <aside class="w-full lg:w-[400px] flex-shrink-0">
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            <!-- Left: Sticky index/menu - hidden on mobile -->
+            <aside class="hidden lg:block lg:w-[400px] flex-shrink-0">
                 <nav class="sticky top-48">
                     <ol class="space-y-8">
                         <li>
@@ -113,10 +113,12 @@ collection("users")
             </aside>
 
             <!-- Right: Content area with fixed size (can overflow) -->
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 w-full lg:min-w-0">
                 <div class="w-full lg:w-[1240px] space-y-32">
                     <!-- Screen 1: Data Editing -->
-                    <section id="screen-1" data-screen class="scroll-mt-32 will-change-transform">
+                    <div id="screen-1" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Data Editing</h3>
+                        <section data-screen class="w-full will-change-transform">
                         <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
                             <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
                                 <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
@@ -131,19 +133,25 @@ collection("users")
                                 </video>
                             </div>
                         </div>
-                    </section>
+                        </section>
+                    </div>
 
                     <!-- Screen 2: DataTalk -->
-                    <section id="screen-2" data-screen class="scroll-mt-32 will-change-transform">
+                    <div id="screen-2" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">DataTalk</h3>
+                        <section data-screen class="w-full will-change-transform">
                         <div class="relative rounded-2xl bg-linear-to-br from-white/10 via-white/5 to-transparent">
                             <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
                                 <DataTalkDemo exchanges={dataTalkExchanges} client:load/>
                             </div>
                         </div>
-                    </section>
+                        </section>
+                    </div>
 
                     <!-- Screen 3: Schema Builder -->
-                    <section id="screen-3" data-screen class="scroll-mt-32 will-change-transform">
+                    <div id="screen-3" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Schema Builder</h3>
+                        <section data-screen class="w-full will-change-transform">
                         <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
                             <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
                                 <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
@@ -158,13 +166,16 @@ collection("users")
                                 </video>
                             </div>
                         </div>
-                    </section>
+                        </section>
+                    </div>
 
                     <!-- Screen 4: Easy Integration -->
-                    <section id="screen-4" data-screen class="scroll-mt-32 will-change-transform">
+                    <div id="screen-4" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Easy Integration</h3>
+                        <section data-screen class="w-full will-change-transform">
                         <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
                             {/* Apply min-height and flex classes here */}
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[700px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
+                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
 
                                 {/* Added flex-grow to allow content spacing to expand */}
                                 <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
@@ -185,20 +196,24 @@ collection("users")
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* --- FireCMS Cloud --- */}
-                                        <div class="flex items-start gap-6">
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
-                                                     alt="" class="h-5 w-5 filter invert"/>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-lg font-semibold text-white mb-2">Or Use FireCMS
-                                                    Cloud</h4>
-                                                <p class="text-surface-400 text-sm">No setup required. Connect your
-                                                    Firebase project and start managing your data instantly with our
-                                                    managed platform.</p>
-                                            </div>
-                                        </div>
+                        {/* --- FireCMS Cloud --- */}
+                        <div class="flex items-start gap-6">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                                     alt="" class="h-5 w-5 filter invert"/>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-white mb-2">Or Use FireCMS
+                                    Cloud</h4>
+                                <p class="text-surface-400 text-sm mb-4">No setup required. Connect your
+                                    Firebase project and start managing your data instantly with our
+                                    managed platform.</p>
+                                <a href="https://app.firecms.co" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
+                                    Get Started
+                                    <span class="material-icons text-lg">arrow_forward</span>
+                                </a>
+                            </div>
+                        </div>
                                         {/* --- TypeScript Support --- */}
                                         <div class="flex items-start gap-6">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
@@ -216,7 +231,8 @@ collection("users")
                                 </div>
                             </div>
                         </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,10 +240,11 @@ collection("users")
 
     <script>
         const root = document.getElementById("scroll-sync-showcase");
+        const wrappers = (root?.querySelectorAll("[id^='screen-']") as NodeListOf<HTMLElement>) || null;
         const screens = (root?.querySelectorAll("[data-screen]") as NodeListOf<HTMLElement>) || null;
         const indexItems = (root?.querySelectorAll("[data-index-item]") as NodeListOf<HTMLAnchorElement>) || null;
 
-        if (screens && indexItems) {
+        if (wrappers && screens && indexItems) {
             const byId = new Map<string, HTMLAnchorElement>();
             indexItems.forEach((a) => {
                 const id = a.getAttribute("href")?.replace("#", "") || "";
@@ -237,7 +254,8 @@ collection("users")
                     const target = document.getElementById(id);
                     if (target) target.scrollIntoView({
                         behavior: "smooth",
-                        block: "start"
+                        block: "start",
+                        inline: "nearest"
                     });
                 });
             });
@@ -270,7 +288,10 @@ collection("users")
                 });
 
                 if (bestEntry) {
-                    activate(bestEntry.target.id);
+                    const target = (bestEntry as IntersectionObserverEntry).target;
+                    if (target instanceof HTMLElement) {
+                        activate(target.id);
+                    }
                 }
             };
 
@@ -291,7 +312,7 @@ collection("users")
                     threshold: [0.1, 0.5]
                 }
             );
-            screens.forEach((s) => io.observe(s));
+            wrappers.forEach((w) => io.observe(w));
 
             // Scroll-bound animation
             const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

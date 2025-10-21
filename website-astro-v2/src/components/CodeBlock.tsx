@@ -3,7 +3,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface CodeBlockProps {
-  children: string;
+  children?: string;
+  code?: string;
   language?: string;
   className?: string;
 }
@@ -34,11 +35,12 @@ const languageMap: Record<string, string> = {
   java: 'java'
 };
 
-export function CodeBlock({ children, language = 'javascript', className = '' }: CodeBlockProps) {
+export function CodeBlock({ children, code, language = 'javascript', className = '' }: CodeBlockProps) {
   const resolvedLanguage: string = languageMap[language?.toLowerCase?.() ?? ''] || 'javascript';
+  const codeContent = children || code || '';
 
   return (
-    <div className={`relative rounded-lg overflow-hidden bg-surface-950 border border-surface-800 p-4 ${className}`}>
+    <div className={`relative rounded-2xl overflow-hidden bg-surface-950 border border-surface-800 p-4 ${className}`}>
       {resolvedLanguage && (
         <div className="absolute top-2 right-2 text-xs text-surface-500 uppercase font-mono">
           {resolvedLanguage}
@@ -52,7 +54,7 @@ export function CodeBlock({ children, language = 'javascript', className = '' }:
         wrapLines
         wrapLongLines
       >
-        {children ?? ''}
+        {codeContent}
       </SyntaxHighlighter>
     </div>
   );

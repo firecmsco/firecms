@@ -1,8 +1,6 @@
 ---
 // src/pages/compare.astro
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 
 // Helper function or component for checkmark/dash (optional, but cleaner)
 // Or use inline SVGs directly as shown below
@@ -69,7 +67,6 @@ const features = [
         title="FireCMS Feature Comparison"
         description="Compare features across FireCMS Community (Free Self-Hosted), PRO (Self-Hosted), and Cloud plans."
 >
-    <Header />
     <main>
         {/* Hero Section */}
         <section class="relative isolate overflow-hidden bg-black pt-24 pb-16 sm:pt-32 sm:pb-24">
@@ -137,5 +134,4 @@ const features = [
         </section>
 
     </main>
-    <Footer />
 </Layout>

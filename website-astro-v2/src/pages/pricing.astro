@@ -28,13 +28,13 @@ import Layout from "../layouts/Layout.astro";
         {/* Main Pricing Section - No Toggle, Grid Layout */}
         <section class="relative isolate bg-black py-16 sm:py-24 border-t border-gray-800">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                {/* Optional Currency Toggle - Keep if needed */}
+                {/* Currency Toggle */}
                 <div class="mb-10 flex justify-center w-full">
                     <div class="flex items-center gap-2 text-xs md:text-sm text-gray-500">
                         <div class="inline-flex items-center gap-1">
-                            <button aria-pressed="true" class="px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300">EUR €</button>
+                            <button id="currency-eur" aria-pressed="true" class="px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300">EUR €</button>
                             <span class="text-gray-400">/</span>
-                            <button aria-pressed="false" class="px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700">USD $</button>
+                            <button id="currency-usd" aria-pressed="false" class="px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700">USD $</button>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,8 @@ import Layout from "../layouts/Layout.astro";
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-green-500/10 px-3 py-1 text-xs font-semibold text-green-400">Open Source</div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">Community</h3>
-                        <p class="mt-4 flex items-baseline gap-x-2">
+                        <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
+                        <p class="flex items-baseline gap-x-2">
                             <span class="text-4xl font-bold tracking-tight text-white">Free</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">Forever</span>
                         </p>
@@ -90,7 +91,7 @@ import Layout from "../layouts/Layout.astro";
                         <h3 class="text-2xl font-semibold leading-7 text-white">Cloud Plus</h3>
                         <p class="mt-4 text-base font-semibold leading-7 text-gray-400">Free 1-Month Trial, then</p>
                         <p class="flex items-baseline gap-x-2">
-                            <span class="text-4xl font-bold tracking-tight text-white">€9.99</span>
+                            <span class="text-4xl font-bold tracking-tight text-white" id="cloud-price" data-eur="€9.99" data-usd="$11.99">€9.99</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">/user/month</span>
                         </p>
                         <p class="mt-6 text-base leading-7 text-gray-300 h-16">Fully managed SaaS solution for speed and convenience.</p>
@@ -138,8 +139,9 @@ import Layout from "../layouts/Layout.astro";
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-yellow-400/20 px-3 py-1 text-xs font-semibold text-yellow-400">Self-Hosted PRO</div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">PRO License</h3>
-                        <p class="mt-4 flex items-baseline gap-x-2">
-                            <span class="text-4xl font-bold tracking-tight text-white">€149.99</span>
+                        <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
+                        <p class="flex items-baseline gap-x-2">
+                            <span class="text-4xl font-bold tracking-tight text-white" id="pro-price" data-eur="€149.99" data-usd="$199.99">€149.99</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">/project/month</span>
                         </p>
                         <p class="mt-6 text-base leading-7 text-gray-300 h-16">Advanced features and priority support for self-hosted deployments.</p>
@@ -218,8 +220,8 @@ import Layout from "../layouts/Layout.astro";
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>Choose **Cloud** for the fastest setup, zero maintenance, automatic updates, and a fully managed experience (with a free 1-month trial). It's ideal for teams prioritizing speed and convenience.</p>
-                                <p>Choose **Self-Hosted** if you require full control over your deployment environment, need deep customization, want to integrate tightly with your existing infrastructure, or need to comply with specific data residency requirements. Start with the free **Community** version or upgrade to **PRO** for more features.</p>
+                                <p>Choose <strong>Cloud</strong> for the fastest setup, zero maintenance, automatic updates, and a fully managed experience (with a free 1-month trial). It's ideal for teams prioritizing speed and convenience.</p>
+                                <p>Choose <strong>Self-Hosted</strong> if you require full control over your deployment environment, need deep customization, want to integrate tightly with your existing infrastructure, or need to comply with specific data residency requirements. Start with the free <strong>Community</strong> version or upgrade to <strong>PRO</strong> for more features.</p>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -230,8 +232,8 @@ import Layout from "../layouts/Layout.astro";
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>**Community** is the free, open-source core framework (MIT licensed). It includes all essential CMS features, full customization capabilities via code (React), and community support.</p>
-                                <p>**PRO** is a paid license for self-hosted instances that unlocks additional productivity features like the visual Schema Editor UI, advanced data import/export tools, pre-built User/Role Management UI, advanced PRO field components, and provides priority support directly from the FireCMS team.</p>
+                                <p><strong>Community</strong> is the free, open-source core framework (MIT licensed). It includes all essential CMS features, full customization capabilities via code (React), and community support.</p>
+                                <p><strong>PRO</strong> is a paid license for self-hosted instances that unlocks additional productivity features like the visual Schema Editor UI, advanced data import/export tools, pre-built User/Role Management UI, advanced PRO field components, and provides priority support directly from the FireCMS team.</p>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -242,7 +244,7 @@ import Layout from "../layouts/Layout.astro";
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>FireCMS Cloud offers a **1-month free trial** for the Plus plan. After the trial, it's a paid subscription per user per month. The **Self-Hosted Community** version is completely free (MIT licensed).</p>
+                                <p>FireCMS Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After the trial, it's a paid subscription per user per month. The <strong>Self-Hosted Community</strong> version is completely free (MIT licensed).</p>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -264,6 +266,42 @@ import Layout from "../layouts/Layout.astro";
 
     </main>
 
-    {/* Removed the script tag for the toggle */}
-
 </Layout>
+
+<script>
+  // Currency toggle functionality
+  const eurBtn = document.getElementById('currency-eur');
+  const usdBtn = document.getElementById('currency-usd');
+  const cloudPrice = document.getElementById('cloud-price');
+  const proPrice = document.getElementById('pro-price');
+
+  function updateCurrency(currency) {
+    if (currency === 'eur') {
+      eurBtn?.setAttribute('aria-pressed', 'true');
+      eurBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
+      eurBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
+
+      usdBtn?.setAttribute('aria-pressed', 'false');
+      usdBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
+      usdBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
+
+      if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || '€9.99';
+      if (proPrice) proPrice.textContent = proPrice.dataset.eur || '€149.99';
+    } else {
+      usdBtn?.setAttribute('aria-pressed', 'true');
+      usdBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
+      usdBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
+
+      eurBtn?.setAttribute('aria-pressed', 'false');
+      eurBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
+      eurBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
+
+      if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || '$9.99';
+      if (proPrice) proPrice.textContent = proPrice.dataset.usd || '$149.99';
+    }
+  }
+
+  eurBtn?.addEventListener('click', () => updateCurrency('eur'));
+  usdBtn?.addEventListener('click', () => updateCurrency('usd'));
+</script>
+

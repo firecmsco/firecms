@@ -6,6 +6,8 @@ export interface Props {
 
 import "@material-design-icons/font/filled.css";
 import "../styles/global.css";
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 const {
   title = "FireCMS - The Headless CMS for Firebase and MongoDB",
@@ -77,7 +79,9 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
 </head>
 
 <body class="font-sans bg-black text-gray-300 antialiased">
+  <Header />
   <slot />
+  <Footer />
 </body>
 
 <style>
