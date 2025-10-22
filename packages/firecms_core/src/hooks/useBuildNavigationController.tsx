@@ -457,8 +457,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         [fullCollectionPath]);
 
     const urlPathToDataPath = useCallback((path: string): string => {
-        if (path.startsWith(fullCollectionPath))
-            return path.replace(fullCollectionPath, "");
+        const decodedPath = decodeURIComponent(path);
+        if (decodedPath.startsWith(fullCollectionPath))
+            return decodedPath.replace(fullCollectionPath, "");
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
