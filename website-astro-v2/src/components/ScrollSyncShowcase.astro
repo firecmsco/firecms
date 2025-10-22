@@ -16,7 +16,7 @@ const dataTalkExchanges = [
         code: `export default async () => {
   const firestore = getFirestore();
   const productsRef = collection(firestore, "products");
-  const q = query(productsRef, where("stock", "==", 0)); // Pretending 'stock' field exists
+  const q = query(productsRef, where("stock", "==", 0));
   const productsToUpdate = await getDocs(q);
   const batch = writeBatch(firestore);
   productsToUpdate.forEach((doc) => {
@@ -119,20 +119,20 @@ collection("users")
                     <div id="screen-1" class="scroll-mt-32">
                         <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Data Editing</h3>
                         <section data-screen class="w-full will-change-transform">
-                        <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
-                                <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
-                                <video
-                                        class="w-full h-auto"
-                                        style="pointer-events: none;"
-                                        loop
-                                        autoplay
-                                        muted
-                                        playsinline>
-                                    <source src="/img/landing_1080.webm" type="video/webm"/>
-                                </video>
+                            <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
+                                    <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+                                    <video
+                                            class="w-full h-auto"
+                                            style="pointer-events: none;"
+                                            loop
+                                            autoplay
+                                            muted
+                                            playsinline>
+                                        <source src="/img/landing_1080.webm" type="video/webm"/>
+                                    </video>
+                                </div>
                             </div>
-                        </div>
                         </section>
                     </div>
 
@@ -140,11 +140,13 @@ collection("users")
                     <div id="screen-2" class="scroll-mt-32">
                         <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">DataTalk</h3>
                         <section data-screen class="w-full will-change-transform">
-                        <div class="relative rounded-2xl bg-linear-to-br from-white/10 via-white/5 to-transparent">
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
-                                <DataTalkDemo exchanges={dataTalkExchanges} client:load/>
+                            <div class="relative rounded-2xl bg-linear-to-br from-white/10 via-white/5 to-transparent">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
+                                    <DataTalkDemo
+                                            height={600}
+                                            exchanges={dataTalkExchanges} client:load/>
+                                </div>
                             </div>
-                        </div>
                         </section>
                     </div>
 
@@ -152,20 +154,20 @@ collection("users")
                     <div id="screen-3" class="scroll-mt-32">
                         <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Schema Builder</h3>
                         <section data-screen class="w-full will-change-transform">
-                        <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
-                                <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
-                                <video
-                                        class="w-full h-auto"
-                                        style="pointer-events: none;"
-                                        loop
-                                        autoplay
-                                        muted
-                                        playsinline>
-                                    <source src="/img/editor_demo_dark.webm" type="video/webm"/>
-                                </video>
+                            <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-gray-950">
+                                    <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
+                                    <video
+                                            class="w-full h-auto"
+                                            style="pointer-events: none;"
+                                            loop
+                                            autoplay
+                                            muted
+                                            playsinline>
+                                        <source src="/img/editor_demo_dark.webm" type="video/webm"/>
+                                    </video>
+                                </div>
                             </div>
-                        </div>
                         </section>
                     </div>
 
@@ -173,64 +175,69 @@ collection("users")
                     <div id="screen-4" class="scroll-mt-32">
                         <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Easy Integration</h3>
                         <section data-screen class="w-full will-change-transform">
-                        <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
-                            {/* Apply min-height and flex classes here */}
-                            <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
+                            <div class="relative rounded-2xl p-[1px] bg-linear-to-br from-white/10 via-white/5 to-transparent">
+                                {/* Apply min-height and flex classes here */}
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
 
-                                {/* Added flex-grow to allow content spacing to expand */}
-                                <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
-                                    <div class="space-y-16">
-                                        {/* --- NPM Install --- */}
-                                        <div class="flex items-start gap-6">
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
-                                                     alt="" class="h-5 w-5 filter invert"/>
-                                            </div>
-                                            <div>
-                                                <div class="text-lg font-semibold text-white mb-2">Simple NPM
-                                                    Install</div>
-                                                <p class="text-surface-400 text-sm mb-3">Add FireCMS to your project
-                                                    with a single command</p>
-                                                <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-gray-700/50">
-                                                    npx create-firecms-app
+                                    {/* Added flex-grow to allow content spacing to expand */}
+                                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
+                                        <div class="space-y-16">
+                                            {/* --- NPM Install --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Simple NPM
+                                                        Install
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm mb-3">Add FireCMS to your project
+                                                        with a single command</p>
+                                                    <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-gray-700/50">
+                                                        npx create-firecms-app
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                        {/* --- FireCMS Cloud --- */}
-                        <div class="flex items-start gap-6">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
-                                     alt="" class="h-5 w-5 filter invert"/>
-                            </div>
-                            <div>
-                                <div class="text-lg font-semibold text-white mb-2">Or Use FireCMS
-                                    Cloud</div>
-                                <p class="text-surface-400 text-sm mb-4">No setup required. Connect your
-                                    Firebase project and start managing your data instantly with our
-                                    managed platform.</p>
-                                <a href="https://app.firecms.co" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
-                                    Get Started
-                                    <span class="material-icons text-lg">arrow_forward</span>
-                                </a>
-                            </div>
-                        </div>
-                                        {/* --- TypeScript Support --- */}
-                                        <div class="flex items-start gap-6">
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg"
-                                                     alt="" class="h-5 w-5 filter invert"/>
+                                            {/* --- FireCMS Cloud --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Or Use FireCMS
+                                                        Cloud
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm mb-4">No setup required. Connect
+                                                        your
+                                                        Firebase project and start managing your data instantly with our
+                                                        managed platform.</p>
+                                                    <a href="https://app.firecms.co"
+                                                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
+                                                        Get Started
+                                                        <span class="material-icons text-lg">arrow_forward</span>
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div class="text-lg font-semibold text-white mb-2">Full TypeScript
-                                                    Support</div>
-                                                <p class="text-surface-400 text-sm">Built with TypeScript from the
-                                                    ground up for the best developer experience and type safety.</p>
+                                            {/* --- TypeScript Support --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Full TypeScript
+                                                        Support
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm">Built with TypeScript from the
+                                                        ground up for the best developer experience and type safety.</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </section>
                     </div>
                 </div>

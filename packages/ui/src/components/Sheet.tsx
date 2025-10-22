@@ -70,8 +70,8 @@ export const Sheet: React.FC<SheetProps> = ({
                     className={cls(
                         "outline-none",
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
-                        "bg-black bg-opacity-50",
-                        "dark:bg-surface-900 dark:bg-opacity-60",
+                        "bg-black bg-opacity-50 bg-black/50",
+                        "dark:bg-surface-900 dark:bg-opacity-60 dark:bg-surface-900/60",
                         displayed && open ? "opacity-100" : "opacity-0",
                         overlayClassName
                     )}

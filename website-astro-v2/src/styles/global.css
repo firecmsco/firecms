@@ -245,3 +245,72 @@ h6 {
     }
 }
 
+.subtle-shimmer {
+    /* Set to inline-block for better compatibility with
+      background-clip and transforms.
+    */
+    display: inline-block;
+
+    /* The gradient for the shimmer (orange -> white -> orange) */
+    background-image: linear-gradient(
+            90deg,
+            #f97316, /* Tailwind orange-500 */
+            #ffffff, /* White glint */
+            #f97316  /* Tailwind orange-500 */
+    );
+
+    /* Make the gradient 2x width so it can slide across */
+    background-size: 200% auto;
+
+    /* Clip the background to the text shape */
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    /* Start with transparent text (will be filled by animation) */
+    color: transparent;
+
+    /* Apply the animation */
+    animation: shimmer-once 2s ease-in-out 1;
+
+    /* Delay the shimmer until *after* the fade-in-up (0.8s)
+      This makes it feel sequential and polished.
+    */
+    animation-delay: 0.8s;
+
+    /* Hold the final frame of the animation (solid color) */
+    animation-fill-mode: forwards;
+}
+
+@keyframes shimmer-once {
+    /* Start: Gradient is off-screen to the left.
+      Text is still transparent (letting fade-in-up handle opacity)
+    */
+    0% {
+        color: transparent;
+        background-position: -200% center;
+    }
+
+    /* Mid-point: Gradient is centered, creating the "glint".
+      Text is transparent to show the gradient.
+    */
+    40% {
+        color: transparent;
+        background-position: 0% center;
+    }
+
+    /* Move-off: Gradient moves off-screen to the right.
+    */
+    70% {
+        color: transparent;
+        background-position: 200% center;
+    }
+
+    /* End state: Hold this frame.
+      We explicitly set the color to solid orange.
+    */
+    100% {
+        color: #f97316; /* text-orange-500 */
+        background-position: 200% center;
+    }
+}
+
