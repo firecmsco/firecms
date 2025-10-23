@@ -1,0 +1,53 @@
+---
+import config from "virtual:starlight/user-config";
+// @ts-ignore
+import LanguageSelect from "virtual:starlight/components/LanguageSelect";
+// @ts-ignore
+import Search from "virtual:starlight/components/Search";
+// @ts-ignore
+import SiteTitle from "virtual:starlight/components/SiteTitle";
+// @ts-ignore
+import SocialIcons from "virtual:starlight/components/SocialIcons";
+// @ts-ignore
+import ThemeSelect from "virtual:starlight/components/ThemeSelect";
+
+// Render Search if Pagefind is enabled or the default component has been overridden
+const shouldRenderSearch =
+    config.pagefind || config.components.Search !== "@astrojs/starlight/components/Search.astro";
+---
+
+<div class="mx-auto flex h-full w-full items-center gap-4 lg:gap-6">
+    <div class="min-w-0 shrink-0 overflow-clip p-1 -m-1">
+        <SiteTitle/>
+    </div>
+
+    <div class="flex min-w-0 flex-1 print:hidden">
+
+    </div>
+
+    <div class="hidden items-center gap-4 md:flex print:hidden">
+        <div class="lg:min-w-48">
+        {shouldRenderSearch &&
+                <Search/>}
+        </div>
+        <div class="flex items-center">
+            <SocialIcons/>
+        </div>
+        <!--<ThemeSelect/>-->
+        <LanguageSelect/>
+        <a
+                href="https://app.firecms.co"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shrink-0 hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
+        >
+            Start Building
+            <img
+                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
+                    alt=""
+                    class="h-4 w-4 text-white filter invert"
+            />
+        </a>
+
+    </div>
+</div>

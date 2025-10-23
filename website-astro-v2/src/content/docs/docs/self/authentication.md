@@ -1,5 +1,5 @@
 ---
-slug: docs/auth_self_hosted
+slug: docs/self/auth_self_hosted
 title: Authentication and User Management
 sidebar_label: Authentication and User Management
 description: Instructions on how to set up authentication and user management for a self-hosted FireCMS instance.

@@ -1,3 +1,5 @@
+@layer base, theme, components, utilities, starlight;
+
 @import "tailwindcss";
 @import "@firecms/ui/index.css" layer(base);
 

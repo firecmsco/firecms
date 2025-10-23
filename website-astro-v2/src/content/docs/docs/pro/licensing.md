@@ -1,5 +1,5 @@
 ---
-slug: docs/licensing
+slug: docs/pro/licensing
 title: Licensing
 ---
 

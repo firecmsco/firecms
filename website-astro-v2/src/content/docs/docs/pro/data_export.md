@@ -1,5 +1,5 @@
 ---
-slug: docs/data_export
+slug: docs/pro/data_export
 title: Data Export
 ---
 

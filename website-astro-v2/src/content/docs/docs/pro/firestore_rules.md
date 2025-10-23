@@ -1,5 +1,5 @@
 ---
-slug: docs/firestore_rules
+slug: docs/pro/firestore_rules
 title: Firestore Rules
 sidebar_label: Firestore Rules
 ---

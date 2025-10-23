@@ -4,7 +4,7 @@ title: Text search
 description: Enhance your FireCMS experience with integrated text search capabilities, despite Firestore's lack of native support for this feature. By setting the `textSearchEnabled` flag on your collection, you activate a search bar within the collection view, powered by a `FirestoreTextSearchController`. Integrate with external platforms like Algolia for indexing and provide seamless search functionality through our provided utility method for Algolia searches. Configure your custom FirestoreTextSearchController, link it with your Algolia account, and enable advanced text search across your collections for a more robust and intuitive content management system.
 ---
 
-:::note The solution described here is specific for Firestore
+:::note[The solution described here is specific for Firestore]
 If you are developing your own datasource, you are free to implement text search in
 whatever way it makes sense.
 :::

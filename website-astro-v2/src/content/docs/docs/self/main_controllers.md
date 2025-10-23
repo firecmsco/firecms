@@ -1,5 +1,5 @@
 ---
-slug: docs/controllers
+slug: docs/self/controllers
 title: Building a custom backend
 ---
 

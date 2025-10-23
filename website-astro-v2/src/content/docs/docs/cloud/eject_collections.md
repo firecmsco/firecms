@@ -1,5 +1,5 @@
 ---
-slug: eject_collections
+slug: docs/cloud/eject_collections
 title: Eject Collections
 sidebar_label: Eject Collections
 ---

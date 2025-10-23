@@ -1,5 +1,5 @@
 ---
-slug: docs/collection_editor
+slug: docs/pro/collection_editor
 title: Collection Editor UI
 ---
 

@@ -1,5 +1,5 @@
 ---
-slug: docs/data_import
+slug: docs/pro/data_import
 title: Data Import
 ---
 
