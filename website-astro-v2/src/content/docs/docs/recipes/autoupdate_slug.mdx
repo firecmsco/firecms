@@ -1,0 +1,45 @@
+---
+slug: docs/autoupdate_slug
+title: Add a slug to your documents
+sidebar_label: Add a slug to your documents
+description: Learn how to automatically generate slugs for your documents in Firestore using FireCMS. This tutorial will guide you through the process of adding a slug field to your collection, configuring a custom field to generate slugs based on a document's title, and ensuring that slugs are unique across your Firestore database. By leveraging FireCMS's custom field capabilities and Firestore's unique index constraints, you can streamline the process of creating SEO-friendly URLs for your documents, enhancing the user experience and discoverability of your CMS application.
+---
+
+When building a CMS, it is common to want to generate slugs for your documents
+based on a specific field, such as the title. This is useful for creating
+SEO-friendly URLs and improving the discoverability of your content.
+
+In this tutorial, we will show you how to automatically generate slugs for your
+documents using FireCMS. It is very straightforward to add a callback that will
+be executed before saving your document, allowing you to generate the slug based
+on the title field.
+
+### Declare your collection
+
+For illustrative purposes, let's create two simple `pages` collection, with just a title field, that we will
+be adding a slug to:
+
+
+import CodeBlock from "@theme/CodeBlock";
+import AddSlugSource from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property";
+import SlugCallbacksSource from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks";
+import FullCode from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/full";
+
+<CodeBlock language="tsx">{AddSlugSource}</CodeBlock>
+
+### Add the pre-save callback
+
+To add a slug to your documents, you can use the `onPreSave` callback provided by FireCMS.
+This callback will be executed before saving the document, allowing you to modify the document before
+it is written to the database.
+
+<CodeBlock language="tsx">{SlugCallbacksSource}</CodeBlock>
+
+
+### Complete code
+
+Here is the complete code for this example:
+
+<CodeBlock language="tsx">{FullCode}</CodeBlock>
+
+

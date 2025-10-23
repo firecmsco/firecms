@@ -1,0 +1,75 @@
+---
+slug: docs/alert
+title: Alert
+---
+
+Alerts are used to communicate a state or feedback to users. They often indicate success, information, warning, or errors.
+
+## Color
+
+The `color` prop is used to define the severity level of the alert.
+
+import CodeBlock from "@theme/CodeBlock";
+import CodeSample from "../../src/CodeSample";
+
+import AlertColorDemo from '../../samples/components/alert/alert_color';
+import AlertColorSource from '!!raw-loader!../../samples/components/alert/alert_color';
+
+<CodeSample>
+    <AlertColorDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{AlertColorSource}</CodeBlock>
+
+## Size
+
+The `size` prop is used to define the size of the alert.
+
+import AlertSizeDemo from '../../samples/components/alert/alert_size';
+import AlertSizeSource from '!!raw-loader!../../samples/components/alert/alert_size';
+
+<CodeSample>
+    <AlertSizeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{AlertSizeSource}</CodeBlock>
+
+
+## Dismissable
+
+Alerts can be dismissable when provided with the `onDismiss` callback function.
+
+import DismissableAlertDemo from '../../samples/components/alert/dismissable_alert';
+import DismissableAlertSource from '!!raw-loader!../../samples/components/alert/dismissable_alert';
+
+<CodeSample>
+    <DismissableAlertDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DismissableAlertSource}</CodeBlock>
+
+## Action Button
+
+Include an interactive element within the alert using the `action` prop.
+
+import AlertActionButtonDemo from '../../samples/components/alert/alert_action_button';
+import AlertActionButtonSource from '!!raw-loader!../../samples/components/alert/alert_action_button';
+
+<CodeSample>
+    <AlertActionButtonDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{AlertActionButtonSource}</CodeBlock>
+
+## Custom Styling
+
+Pass custom CSS classes or styles with `className` and `style` props to customize the alert.
+
+import CustomStyleAlertDemo from '../../samples/components/alert/custom_style_alert';
+import CustomStyleAlertSource from '!!raw-loader!../../samples/components/alert/custom_style_alert';
+
+<CodeSample>
+    <CustomStyleAlertDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CustomStyleAlertSource}</CodeBlock>

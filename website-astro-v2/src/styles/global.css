@@ -121,7 +121,7 @@ body {
 }
 
 h1 {
-    @apply font-sans font-semibold text-center;
+    @apply font-sans font-semibold;
 }
 
 h2 {

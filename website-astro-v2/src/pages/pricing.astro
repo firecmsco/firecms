@@ -10,18 +10,22 @@ import Layout from "../layouts/Layout.astro";
 >
     <main>
         {/* Hero Section */}
-        <section class="relative isolate overflow-hidden bg-black pt-24 pb-16 sm:pt-32 sm:pb-24">
+        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+            <!-- Background accents and subtle grid -->
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+                <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
+                <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+            </div>
+
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-                <h1 class="text-4xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl font-sans">
+                <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
                     Flexible Pricing for Every Need
                 </h1>
-                <p class="mt-6 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+                <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
                     Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced self-hosted features.
                 </p>
-            </div>
-            {/* Subtle background elements */}
-            <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
-                <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary/30 to-blue-900/30 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
             </div>
         </section>
 

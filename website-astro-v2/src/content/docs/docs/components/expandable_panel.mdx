@@ -1,0 +1,53 @@
+---
+slug: docs/expandable_panel
+title: ExpandablePanel
+sidebar_label: ExpandablePanel
+---
+
+`ExpandablePanel` is a versatile component that allows for content to be collapsible, enhancing the organization of UI by hiding content that is not immediately relevant to the user. This component can operate in controlled or uncontrolled mode, with additional features such as an invisible mode for a subtler UI, and an optional field mode to align with form field styling.
+
+## Usage
+
+To use the `ExpandablePanel`, import it from your components and provide the necessary props including `title`, `children`, and control props like `expanded`, `onExpandedChange`, and styling props such as `titleClassName`, `className`.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Expandable Panel
+
+An example showing the basic usage of the `ExpandablePanel` component.
+
+import ExpandablePanelBasicDemo from '../../samples/components/expandable_panel/expandable_panel_basic';
+import ExpandablePanelBasicSource from '!!raw-loader!../../samples/components/expandable_panel/expandable_panel_basic';
+
+<CodeSample>
+    <ExpandablePanelBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{ExpandablePanelBasicSource}</CodeBlock>
+
+## Expandable Panel as Field
+
+This variant showcases the `ExpandablePanel` utilized as a field in a form, demonstrating the combination of `asField` property.
+
+import ExpandablePanelFieldDemo from '../../samples/components/expandable_panel/expandable_panel_field';
+import ExpandablePanelFieldSource from '!!raw-loader!../../samples/components/expandable_panel/expandable_panel_field';
+
+<CodeSample>
+    <ExpandablePanelFieldDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{ExpandablePanelFieldSource}</CodeBlock>
+
+## Invisible Expandable Panel
+
+An `ExpandablePanel` example where the panel borders are made invisible for a more seamless integration into the surrounding UI.
+
+import ExpandablePanelInvisibleDemo from '../../samples/components/expandable_panel/expandable_panel_invisible';
+import ExpandablePanelInvisibleSource from '!!raw-loader!../../samples/components/expandable_panel/expandable_panel_invisible';
+
+<CodeSample>
+    <ExpandablePanelInvisibleDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{ExpandablePanelInvisibleSource}</CodeBlock>

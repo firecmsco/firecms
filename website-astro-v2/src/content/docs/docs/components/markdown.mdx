@@ -1,0 +1,53 @@
+---
+slug: docs/markdown
+title: Markdown
+sidebar_label: Markdown
+---
+
+Markdown component allows rendering Markdown content with support for custom sizes and classes for personalized styling. It leverages the `markdown-it` library for conversion and supports HTML content within markdown.
+
+## Usage
+
+To use the `Markdown` component, import it from @firecms/ui and pass the `source` prop with the markdown content you want to display. Optionally, you can specify the `size` and `className` props to adjust the appearance.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Markdown
+
+A simple markdown rendering example.
+
+import MarkdownBasicDemo from '../../samples/components/markdown/markdown_basic';
+import MarkdownBasicSource from '!!raw-loader!../../samples/components/markdown/markdown_basic';
+
+<CodeSample>
+    <MarkdownBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{MarkdownBasicSource}</CodeBlock>
+
+## Markdown Sizes
+
+Demonstrates how to adjust the size of the markdown text using the `size` prop.
+
+import MarkdownSizeDemo from '../../samples/components/markdown/markdown_sizes';
+import MarkdownSizeSource from '!!raw-loader!../../samples/components/markdown/markdown_sizes';
+
+<CodeSample>
+    <MarkdownSizeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{MarkdownSizeSource}</CodeBlock>
+
+## Custom Styled Markdown
+
+Illustrating the use of `className` prop to apply custom styles to the markdown component.
+
+import MarkdownCustomDemo from '../../samples/components/markdown/markdown_custom';
+import MarkdownCustomSource from '!!raw-loader!../../samples/components/markdown/markdown_custom';
+
+<CodeSample>
+    <MarkdownCustomDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{MarkdownCustomSource}</CodeBlock>

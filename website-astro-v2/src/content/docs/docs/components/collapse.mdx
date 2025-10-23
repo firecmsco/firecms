@@ -1,0 +1,39 @@
+---
+slug: docs/collapse
+title: Collapse
+sidebar_label: Collapse
+---
+Collapse components are used to show and hide content. React animation is used for the transition. Use it to toggle visibility of content.
+
+## Usage
+
+To use the `Collapse`, you need to import it from where it's defined, pass children to be displayed within the collapse component, and control its open state. Optionally, you can also customize its duration of the animation.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Collapse
+
+A simple example of how to use the Collapse component.
+
+import CollapseBasicDemo from '../../samples/components/collapse/collapse_basic';
+import CollapseBasicSource from '!!raw-loader!../../samples/components/collapse/collapse_basic';
+
+<CodeSample>
+    <CollapseBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CollapseBasicSource}</CodeBlock>
+
+## Custom Duration Collapse
+
+Illustrates how to use a custom duration for the collapse animation.
+
+import CollapseCustomDurationDemo from '../../samples/components/collapse/collapse_custom_duration';
+import CollapseCustomDurationSource from '!!raw-loader!../../samples/components/collapse/collapse_custom_duration';
+
+<CodeSample>
+    <CollapseCustomDurationDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CollapseCustomDurationSource}</CodeBlock>

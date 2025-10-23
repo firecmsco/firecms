@@ -1,0 +1,227 @@
+---
+// src/pages/why-firecms.astro
+import Layout from "../layouts/Layout.astro";
+
+const title = "Why Choose FireCMS? - Speed, Flexibility, and Ownership";
+const description = "Discover why developers and businesses choose FireCMS over alternatives. Explore key benefits of our open‑source, developer‑first framework with optional managed Cloud.";
+---
+
+<Layout title={title} description={description}>
+  <main>
+    <!-- Hero (compact, harmonized) -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+      <!-- Background accents and subtle grid -->
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
+        <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-gray-800/40 text-gray-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
+          <span class="text-sm font-medium">Speed, flexibility, and data ownership</span>
+        </div>
+        <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          Why teams choose FireCMS
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+          Build powerful back‑office apps in minutes, customize deeply with React and TypeScript, and keep your data entirely in your own infrastructure.
+        </p>
+      </div>
+    </section>
+
+    <!-- What makes FireCMS different -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-14">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">What makes FireCMS different</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-400">The fastest path from schema to production UI—without giving up control.</p>
+        </div>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">⚡</div>
+            <h3 class="text-xl font-semibold text-white mb-2">Speed to Value</h3>
+            <p class="text-gray-400">Go from data to a complete admin in minutes. Generate forms, tables, and detail views instantly based on your schema.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">🧩</div>
+            <h3 class="text-xl font-semibold text-white mb-2">React Extensibility</h3>
+            <p class="text-gray-400">If you can build it in React, you can build it in FireCMS—custom fields, entity views, or entire top‑level sections.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">🔒</div>
+            <h3 class="text-xl font-semibold text-white mb-2">Data Ownership</h3>
+            <p class="text-gray-400">Your data lives in your Firebase or MongoDB project. FireCMS never proxies or stores your content.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">🧠</div>
+            <h3 class="text-xl font-semibold text-white mb-2">AI‑Assisted Workflows</h3>
+            <p class="text-gray-400">Autofill content aligned to your schema and operate on data with natural language via DataTalk.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">🏗️</div>
+            <h3 class="text-xl font-semibold text-white mb-2">Cloud or Self‑Hosted</h3>
+            <p class="text-gray-400">Start instantly with our managed Cloud, or self‑host the open‑source framework for maximum control.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <div class="mb-3 text-primary">🔁</div>
+            <h3 class="text-xl font-semibold text-white mb-2">Schema as Code</h3>
+            <p class="text-gray-400">Define models in TypeScript, get typesafe UIs with validation, and version everything in Git.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data ownership & security -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
+          <div class="lg:col-span-5">
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Own your data</h2>
+            <p class="text-lg text-gray-400 mb-6">FireCMS connects directly from the browser to your database. No hidden middle‑tier, no vendor lock‑in, and a clear shared‑responsibility model.</p>
+            <ul class="space-y-3 text-gray-300">
+              <li class="flex gap-3"><span class="text-primary">•</span> Direct connection to Firebase or MongoDB</li>
+              <li class="flex gap-3"><span class="text-primary">•</span> Keep auth and permissions in your stack</li>
+              <li class="flex gap-3"><span class="text-primary">•</span> Self‑hosted and Cloud options with parity</li>
+            </ul>
+          </div>
+          <div class="lg:col-span-7">
+            <div class="relative rounded-2xl overflow-hidden ring-1 ring-gray-800 bg-gray-900 p-8">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                <div>
+                  <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">1</span></div>
+                  <h3 class="text-white font-semibold">Your Browser</h3>
+                  <p class="text-gray-400 text-sm">FireCMS runs client‑side</p>
+                </div>
+                <div>
+                  <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">2</span></div>
+                  <h3 class="text-white font-semibold">Direct Auth</h3>
+                  <p class="text-gray-400 text-sm">Authenticate with your IdP</p>
+                </div>
+                <div>
+                  <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">3</span></div>
+                  <h3 class="text-white font-semibold">Your Database</h3>
+                  <p class="text-gray-400 text-sm">Data never leaves your infra</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fit for your team -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-12">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for your workflow</h2>
+        </div>
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white mb-2">Startups</h3>
+            <p class="text-gray-400 mb-4">Ship your MVP’s admin in minutes with Cloud, then customize as you grow.</p>
+            <a href="/startups" class="text-sm font-semibold text-primary hover:text-primary-light">Learn more →</a>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white mb-2">Agencies</h3>
+            <p class="text-gray-400 mb-4">Deliver bespoke, white‑label back‑offices your clients can own and host.</p>
+            <a href="/agencies" class="text-sm font-semibold text-primary hover:text-primary-light">Learn more →</a>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-xl font-semibold text-white mb-2">Internal Tools</h3>
+            <p class="text-gray-400 mb-4">Give ops and support teams a secure, scalable admin without UI grunt work.</p>
+            <a href="/internal-tools" class="text-sm font-semibold text-primary hover:text-primary-light">Learn more →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials (streamlined) -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-14">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">What developers say</h2>
+        </div>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <figure class="rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <blockquote class="text-gray-300">“I've tried many other CMS including Strapi, Sanity, Contentful, Builder.io—none of them gave me a better experience than FireCMS.”</blockquote>
+            <figcaption class="mt-6 flex items-center gap-3">
+              <img class="h-10 w-10 rounded-full bg-gray-800 object-cover" src="/img/avatars/fulei.avif" alt="Fulei Huang" />
+              <div>
+                <div class="text-white font-semibold">Fulei Huang</div>
+                <div class="text-gray-400 text-sm">Software Engineer, Microsoft</div>
+              </div>
+            </figcaption>
+          </figure>
+          <figure class="rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <blockquote class="text-gray-300">“I think you have the best NoSQL headless CMS on the market.”</blockquote>
+            <figcaption class="mt-6 flex items-center gap-3">
+              <img class="h-10 w-10 rounded-full bg-gray-800 object-cover" src="/img/avatars/viktor-vinnk.jpeg" alt="Viktor Vinnk" />
+              <div>
+                <div class="text-white font-semibold">Viktor Vinnk</div>
+                <div class="text-gray-400 text-sm">Country Digital Development Leader, IKEA</div>
+              </div>
+            </figcaption>
+          </figure>
+          <figure class="rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+            <blockquote class="text-gray-300">“The missing piece for our Firebase backend. We throw some React in and everything feels seamless.”</blockquote>
+            <figcaption class="mt-6 flex items-center gap-3">
+              <img class="h-10 w-10 rounded-full bg-gray-800 object-cover" src="/assets/images/john-e1921cdfd368a56daab685c8e2acf9ab.avif" alt="John Coppa" />
+              <div>
+                <div class="text-white font-semibold">John Coppa</div>
+                <div class="text-gray-400 text-sm">CTO, EasyHome</div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- When to choose FireCMS -->
+    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center mb-10">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">When FireCMS is the right choice</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-400">A great fit when you want speed without losing flexibility.</p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-white font-semibold mb-2">Choose FireCMS if you need…</h3>
+            <ul class="text-gray-300 space-y-2 text-sm">
+              <li>• Production UI in minutes, not weeks</li>
+              <li>• Tight React + TypeScript integration</li>
+              <li>• Direct connection to Firebase/MongoDB</li>
+              <li>• Custom fields, actions, and views</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl bg-gray-900/50 p-7 ring-1 ring-inset ring-gray-800">
+            <h3 class="text-white font-semibold mb-2">Consider other tools if you need…</h3>
+            <ul class="text-gray-300 space-y-2 text-sm">
+              <li>• Heavy marketing content workflows (pure headless CMS)</li>
+              <li>• A traditional SQL‑first CMS with rigid models</li>
+              <li>• A no‑code builder with limited extensibility</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Ready to try FireCMS?</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Start Building for Free
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+          </a>
+          <a href="/developers" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            Explore Self‑Hosted
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

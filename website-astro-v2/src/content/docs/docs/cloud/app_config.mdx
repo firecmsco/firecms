@@ -1,0 +1,143 @@
+---
+slug: docs/app_config
+title: App Config
+description: A comprehensive guide to configuring FireCMS, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, fireCMSAppBarComponentProps, firestoreIndexesBuilder, onFirebaseInit, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor FireCMS to their specific needs.
+---
+
+The app config is the main configuration object of FireCMS Cloud. It is defined
+by the interface `FireCMSAppConfig`. In order to customize the CMS, you need
+to create a project in [app.firecms.co](https://app.firecms.co) and
+initialise a new project in code with `npx create-firecms-app` or `yarn create firecms-app`.
+
+After those steps are ready you can use the `FireCMSAppConfig` export to add
+your own customizations, like custom reusable properties or fields, collections,
+entity views, cms views, etc.
+
+
+### Customization options
+
+Let's see all the customization options available:
+
+* `collections`: List of the mapped collections in the CMS.
+    Each entry relates to a collection in the root database.
+    Each of the navigation entries in this field
+    generates an entry in the main menu.
+    See [Collections](../collections) for more information.
+
+* `modifyCollection`: Function to modify a collection before it is added to the CMS. If you are defining collections
+    in the UI, you can use this function to modify them. This callback is called for each collection.
+
+* `views`: Custom additional views created by the developer, added to the main navigation.
+    See [Custom top level views](../top_level_views) for more information.
+
+* `propertyConfigs`: List of custom property configs to be used in the CMS.
+    You can use the key to reference the custom field in the `propertyConfig` prop of a property in a collection.
+    See [Property configs](../properties/reusing_properties) for more information.
+
+* `entityViews`: List of additional custom views for entities.
+    You can use the key to reference the custom view in the `entityViews` prop of a collection.
+    You can also define an entity view from the UI.
+    See [Entity views](../collections/entity_views) for more information.
+
+* `HomePage`: Use this component to override the home page.
+* `fireCMSAppBarComponentProps`: Additional props passed to the custom AppBar.
+* `firestoreIndexesBuilder`: Use this builder to indicate which indexes are available in your Firestore database.
+    This is used to allow filtering and sorting for multiple fields in the CMS.
+* `onFirebaseInit`: Optional callback after Firebase has been initialised.
+    Useful for using the local emulator or retrieving the used configuration.
+* `dateTimeFormat`: Format of the dates in the CMS.
+    Defaults to 'MMMM dd, yyyy, HH:mm:ss'.
+* `locale`: Locale of the CMS, currently only affecting dates.
+* `textSearchController`: Use this controller to return text search results as document ids, that get then fetched from Firestore.
+* `autoOpenDrawer`: Experimental feature to open the drawer automatically when hovering.
+* `appCheck`: Firebase App Check configuration.
+    - `provider`: The provider to use for App Check.
+    - `isTokenAutoRefreshEnabled`: Whether to automatically refresh the token.
+    - `debugToken`: Debug token to use for App Check.
+    - `forceRefresh`: Whether to force refresh the token.
+
+### Example
+
+An app config is generated for you automatically when you initialise a new project, but here is an
+example of how you can customize it:
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    // Collections are the main navigation entries in the CMS
+    collections: async ({ authController, dataSource }) => {
+        // Sample of fetching some data from the database in order to build dynamic collections
+        const firstProducts = await dataSource.fetchCollection({
+            path: "products",
+            limit: 5
+        });
+
+        return ([
+           // ...your collections
+        ]);
+    },
+
+    // Top level views, not bound to any collection
+    views: [
+        {
+            path: "sales_report",
+            name: "Sales report",
+            icon: "extension",
+            view: <SalesReportView/>
+        },
+    ],
+
+    // Modify collection allows you to modify collections before they are added to the CMS
+    modifyCollection: ({ collection }) => {
+        if (collection.id === "products") {
+            return {
+                ...collection,
+                name: "Products modified",
+                entityActions: [
+                    {
+                        name: "My custom action",
+                        onClick: ({ entity }) => {
+                            console.log("Entity", entity);
+                        }
+                    }
+                ]
+            }
+        }
+        return collection;
+    },
+
+    // properties that can be reused in different collections
+    propertyConfigs: [
+        {
+            name: "Translated string",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "English"
+                    },
+                    es: {
+                        dataType: "string",
+                        name: "Español"
+                    },
+                },
+            },
+        }
+    ],
+
+    // views that can be assigned to entities
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+
+export default appConfig;
+```

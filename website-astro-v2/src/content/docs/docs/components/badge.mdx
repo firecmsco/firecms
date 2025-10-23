@@ -1,0 +1,50 @@
+---
+slug: docs/badge
+title: Badge
+sidebar_label: Badge
+---
+
+Badges are small counts and labeling components used to add additional information to any content. They're commonly used to display unread counts, status indicators, or just as decorative nodes.
+
+## Basic Badge
+
+By setting the `invisible` prop to `true`, you can hide the badge, making it not visible to users.
+
+import BadgeInvisibleDemo from '../../samples/components/badge/badge_invisible';
+import BadgeInvisibleSource from '!!raw-loader!../../samples/components/badge/badge_invisible';
+
+<CodeSample>
+    <BadgeInvisibleDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{BadgeInvisibleSource}</CodeBlock>
+
+## Color Variants
+
+The `color` prop determines the color of the badge. Possible values are `primary`, `secondary`, and `error`.
+
+import CodeBlock from "@theme/CodeBlock";
+import CodeSample from "../../src/CodeSample";
+
+import BadgeColorDemo from '../../samples/components/badge/badge_color';
+import BadgeColorSource from '!!raw-loader!../../samples/components/badge/badge_color';
+
+<CodeSample>
+    <BadgeColorDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{BadgeColorSource}</CodeBlock>
+
+
+## Usage with Icons and Buttons
+
+Badges can be wrapped around icons or buttons to provide status indicators.
+
+import BadgeIconDemo from '../../samples/components/badge/badge_icon';
+import BadgeIconSource from '!!raw-loader!../../samples/components/badge/badge_icon';
+
+<CodeSample>
+    <BadgeIconDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{BadgeIconSource}</CodeBlock>

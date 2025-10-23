@@ -13,13 +13,19 @@ const description = "Build powerful internal tools, CRUD interfaces, and custom 
 <Layout title={title} description={description}>
 
     <main>
-        <section
-                class="relative isolate overflow-hidden bg-black pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
-            <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-                 aria-hidden="true">
-                <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary/20 to-blue-900/20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+            <!-- Background accents and subtle grid -->
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+                <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
+                <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
             </div>
+
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+                <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-gray-800/40 text-gray-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
+                    <span class="text-sm font-medium">React + TypeScript. Full control, zero UI grind.</span>
+                </div>
                 <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
                     Build Back-Offices <b>Without the Frontend Hassle</b>
                 </h1>
@@ -27,10 +33,6 @@ const description = "Build powerful internal tools, CRUD interfaces, and custom 
                     FireCMS is the developer-first framework you'll love to use. Build powerful, fast, and flexible
                     internal tools, CRUD interfaces, and admin panels with React and TypeScript.
                 </p>
-            </div>
-            <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-                 aria-hidden="true">
-                <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary/20 to-blue-900/20 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
             </div>
         </section>
 

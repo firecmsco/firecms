@@ -1,0 +1,41 @@
+---
+slug: docs/separator
+title: Separator
+sidebar_label: Separator
+---
+
+Separators are used to visually distinguish content in a layout or list. They can be either horizontal or vertical, making them versatile for various design needs.
+
+## Usage
+
+To use the `Separator`, import it from your components and specify the `orientation` and optionally, the `decorative` prop to control its appearance.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Horizontal Separator
+
+A separator that spans horizontally, useful for dividing content like list items or sections in a layout.
+
+import SeparatorHorizontalDemo from '../../samples/components/separator/separator_horizontal';
+import SeparatorHorizontalSource from '!!raw-loader!../../samples/components/separator/separator_horizontal';
+
+<CodeSample>
+    <SeparatorHorizontalDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SeparatorHorizontalSource}</CodeBlock>
+
+
+## Decorative Separator
+
+Demonstrates how to use the `decorative` prop to render a separator that is meant for visual or decorative purposes rather than semantic division of content.
+
+import SeparatorDecorativeDemo from '../../samples/components/separator/separator_decorative';
+import SeparatorDecorativeSource from '!!raw-loader!../../samples/components/separator/separator_decorative';
+
+<CodeSample>
+    <SeparatorDecorativeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SeparatorDecorativeSource}</CodeBlock>

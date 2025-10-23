@@ -1,0 +1,53 @@
+---
+slug: docs/skeleton
+title: Skeleton
+sidebar_label: Skeleton
+---
+
+The `Skeleton` component is used as a placeholder while content is loading. It provides a simple visual representation of the component that is being loaded, typically as a gray or light-colored block.
+
+## Usage
+
+To use the `Skeleton`, import it from your components and pass the `width`, `height`, and `className` props to customize its appearance.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Skeleton
+
+A simple skeleton with default width and height.
+
+import SkeletonBasicDemo from '../../samples/components/skeleton/skeleton_basic';
+import SkeletonBasicSource from '!!raw-loader!../../samples/components/skeleton/skeleton_basic';
+
+<CodeSample>
+    <SkeletonBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SkeletonBasicSource}</CodeBlock>
+
+## Custom Sized Skeleton
+
+A skeleton component that showcases custom width and height.
+
+import SkeletonCustomSizeDemo from '../../samples/components/skeleton/skeleton_custom_size';
+import SkeletonCustomSizeSource from '!!raw-loader!../../samples/components/skeleton/skeleton_custom_size';
+
+<CodeSample>
+    <SkeletonCustomSizeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SkeletonCustomSizeSource}</CodeBlock>
+
+## Skeleton With Custom Classes
+
+Demonstrates usage of the `className` prop to apply custom styles.
+
+import SkeletonCustomClassDemo from '../../samples/components/skeleton/skeleton_custom_class';
+import SkeletonCustomClassSource from '!!raw-loader!../../samples/components/skeleton/skeleton_custom_class';
+
+<CodeSample>
+    <SkeletonCustomClassDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SkeletonCustomClassSource}</CodeBlock>

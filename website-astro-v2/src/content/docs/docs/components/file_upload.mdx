@@ -1,0 +1,53 @@
+---
+slug: docs/file_upload
+title: File Upload
+sidebar_label: File Upload
+---
+
+File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions.
+
+## Usage
+
+To use the `FileUpload`, import it from your components and pass the necessary props including `accept`, `onFilesAdded`, and optionally, `onFilesRejected`, `maxSize`, `disabled`, `maxFiles`, `title`, `uploadDescription`, `preventDropOnDocument`, and `size`.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic File Upload
+
+A simple file upload example with minimal configuration.
+
+import FileUploadBasicDemo from '../../samples/components/file_upload/file_upload_basic';
+import FileUploadBasicSource from '!!raw-loader!../../samples/components/file_upload/file_upload_basic';
+
+<CodeSample>
+    <FileUploadBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{FileUploadBasicSource}</CodeBlock>
+
+## File Upload with Custom Types and Sizes
+
+Demonstrating file upload with restrictions on file types and sizes, and custom messages.
+
+import FileUploadCustomDemo from '../../samples/components/file_upload/file_upload_custom';
+import FileUploadCustomSource from '!!raw-loader!../../samples/components/file_upload/file_upload_custom';
+
+<CodeSample>
+    <FileUploadCustomDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{FileUploadCustomSource}</CodeBlock>
+
+## Disabled File Upload
+
+Illustrating how to disable the file upload functionality.
+
+import FileUploadDisabledDemo from '../../samples/components/file_upload/file_upload_disabled';
+import FileUploadDisabledSource from '!!raw-loader!../../samples/components/file_upload/file_upload_disabled';
+
+<CodeSample>
+    <FileUploadDisabledDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{FileUploadDisabledSource}</CodeBlock>
