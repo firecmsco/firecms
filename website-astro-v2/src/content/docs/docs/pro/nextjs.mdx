@@ -1,5 +1,5 @@
 ---
-slug: docs/pro/nextjs
+slug: docs/nextjs
 title: Quickstart + Next.JS frontend
 description: Use our Next.js starter template to get a fully fledged CMS with an e-commerce/blog template ready to be adapted to your logic.
 ---
@@ -144,10 +144,12 @@ export default function CMS() {
 
 Now let's create the FireCMS components. Create the file `./src/cms/FireCMSApp.tsx` with the following content. Remember to replace the `firebaseConfig` with your own Firebase configuration.
 
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../samples/samples_v3/nextjs.tsx";
 
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/nextjs.tsx?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
 
 ### Import the default **FireCMS styles**
 

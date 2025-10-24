@@ -10,30 +10,30 @@ Collapse components are used to show and hide content. React animation is used f
 To use the `Collapse`, you need to import it from where it's defined, pass children to be displayed within the collapse component, and control its open state. Optionally, you can also customize its duration of the animation.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Collapse
 
 A simple example of how to use the Collapse component.
 
 import CollapseBasicDemo from '../../samples/components/collapse/collapse_basic';
-import CollapseBasicSource from '!!raw-loader!../../samples/components/collapse/collapse_basic';
+import CollapseBasicSource from '../../samples/components/collapse/collapse_basic?raw';
 
 <CodeSample>
     <CollapseBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CollapseBasicSource}</CodeBlock>
+<Code code={CollapseBasicSource} lang="tsx" />
 
 ## Custom Duration Collapse
 
 Illustrates how to use a custom duration for the collapse animation.
 
 import CollapseCustomDurationDemo from '../../samples/components/collapse/collapse_custom_duration';
-import CollapseCustomDurationSource from '!!raw-loader!../../samples/components/collapse/collapse_custom_duration';
+import CollapseCustomDurationSource from '../../samples/components/collapse/collapse_custom_duration?raw';
 
 <CodeSample>
     <CollapseCustomDurationDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CollapseCustomDurationSource}</CodeBlock>
+<Code code={CollapseCustomDurationSource} lang="tsx" />

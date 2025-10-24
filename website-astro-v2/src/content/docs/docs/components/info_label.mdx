@@ -11,30 +11,30 @@ InfoLabel is a versatile component used to display information or warning messag
 To use `InfoLabel`, import it into your component and specify the `children` to display inside it. Optionally, you can also set the `mode` prop to change the appearance based on the context (`info` or `warn`).
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Info Label
 
 A basic example showing how to use the InfoLabel component to display an informational message.
 
 import InfoLabelBasicDemo from '../../samples/components/info_label/info_label_basic';
-import InfoLabelBasicSource from '!!raw-loader!../../samples/components/info_label/info_label_basic';
+import InfoLabelBasicSource from '../../samples/components/info_label/info_label_basic?raw';
 
 <CodeSample>
     <InfoLabelBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{InfoLabelBasicSource}</CodeBlock>
+<Code code={InfoLabelBasicSource} lang="tsx" />
 
 ## Warning Label
 
 Illustrating how to use the InfoLabel component to display a warning message by setting the mode to `warn`.
 
 import InfoLabelWarnDemo from '../../samples/components/info_label/info_label_warn';
-import InfoLabelWarnSource from '!!raw-loader!../../samples/components/info_label/info_label_warn';
+import InfoLabelWarnSource from '../../samples/components/info_label/info_label_warn?raw';
 
 <CodeSample>
     <InfoLabelWarnDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{InfoLabelWarnSource}</CodeBlock>
+<Code code={InfoLabelWarnSource} lang="tsx" />

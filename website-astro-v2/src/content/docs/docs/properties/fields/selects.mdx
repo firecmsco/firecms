@@ -100,10 +100,10 @@ You can pick the colors among a list of predefined values:
 
 
 
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../../../packages/ui/src/util/chip_colors";
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../../../packages/ui/src/util/chip_colors?raw';
 
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+<Code code={MyComponentSource} lang="tsx" />
 
 And you can also define custom colors using the HTML syntax `#AAAAAA`:
 

@@ -11,43 +11,43 @@ Cards are surfaces that display content and actions on a single topic. They shou
 Import the `Card` from `@firecms/ui` and wrap the content you wish to display on the card. You can also make the card clickable by providing an `onClick` handler.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Card
 
 Represents the basic usage of a card for displaying content.
 
 import CardBasicDemo from '../../samples/components/card/card_basic';
-import CardBasicSource from '!!raw-loader!../../samples/components/card/card_basic';
+import CardBasicSource from '../../samples/components/card/card_basic?raw';
 
 <CodeSample>
     <CardBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CardBasicSource}</CodeBlock>
+<Code code={CardBasicSource} lang="tsx" />
 
 ## Clickable Card
 
 Shows a card that has an onClick event, making it behave similar to a button.
 
 import CardClickableDemo from '../../samples/components/card/card_clickable';
-import CardClickableSource from '!!raw-loader!../../samples/components/card/card_clickable';
+import CardClickableSource from '../../samples/components/card/card_clickable?raw';
 
 <CodeSample>
     <CardClickableDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CardClickableSource}</CodeBlock>
+<Code code={CardClickableSource} lang="tsx" />
 
 ## Custom Styling
 
 Demonstrates how additional classes or styles can be applied to the card for custom appearance.
 
 import CardCustomStyleDemo from '../../samples/components/card/card_custom_style';
-import CardCustomStyleSource from '!!raw-loader!../../samples/components/card/card_custom_style';
+import CardCustomStyleSource from '../../samples/components/card/card_custom_style?raw';
 
 <CodeSample>
     <CardCustomStyleDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CardCustomStyleSource}</CodeBlock>
+<Code code={CardCustomStyleSource} lang="tsx" />
