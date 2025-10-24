@@ -1,5 +1,5 @@
 ---
-slug: docs/exporting_data
+slug: docs/collections/exporting_data
 title: Exporting data
 sidebar_label: Exporting data
 ---

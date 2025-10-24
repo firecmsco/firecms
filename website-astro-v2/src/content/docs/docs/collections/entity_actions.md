@@ -1,5 +1,5 @@
 ---
-slug: docs/entity_actions
+slug: docs/collections/entity_actions
 title: Entity actions
 sidebar_label: Entity actions
 ---

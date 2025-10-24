@@ -19,7 +19,6 @@ export default defineConfig({
                 "./src/styles/global.css",
                 "./src/styles/starlight.css"
             ],
-            // logo: { src: '/img/firecms_logo.svg', alt: 'FireCMS' },
             social: [
                 {
                     icon: "github",
@@ -34,6 +33,12 @@ export default defineConfig({
                     codeFontFamily: "var(--font-mono)",
                     codeFontSize: "0.875rem",
                     codeBackground: "var(--color-surface-900)",
+                },
+                frames: {
+                    showCopyToClipboardButton: true,
+                },
+                defaultProps: {
+                    frame: 'none',
                 },
             },
             sidebar: [
@@ -214,23 +219,23 @@ export default defineConfig({
                         },
                     ],
                 },
-                // {
-                //     label: 'Collections',
-                //     collapsed: false,
-                //     items: [
-                //         { label: 'Collections', slug: 'docs/collections/collections' },
-                //         { label: 'Callbacks', slug: 'docs/collections/callbacks' },
-                //         { label: 'Entity Views', slug: 'docs/collections/entity_views' },
-                //         { label: 'Permissions', slug: 'docs/collections/permissions' },
-                //         { label: 'Exporting Data', slug: 'docs/collections/exporting_data' },
-                //         { label: 'Additional Columns', slug: 'docs/collections/additional_columns' },
-                //         { label: 'Text Search', slug: 'docs/collections/text_search' },
-                //         { label: 'Dynamic Collections', slug: 'docs/collections/dynamic_collections' },
-                //         { label: 'Collection Actions', slug: 'docs/collections/collection_actions' },
-                //         { label: 'Collection Groups', slug: 'docs/collections/collection_groups' },
-                //         { label: 'Entity Actions', slug: 'docs/collections/entity_actions' },
-                //     ],
-                // },
+                {
+                    label: 'Collections',
+                    collapsed: false,
+                    items: [
+                        { label: 'Collections', slug: 'docs/collections/index' },
+                        { label: 'Callbacks', slug: 'docs/collections/callbacks' },
+                        { label: 'Entity Views', slug: 'docs/collections/entity_views' },
+                        { label: 'Permissions', slug: 'docs/collections/permissions' },
+                        { label: 'Exporting Data', slug: 'docs/collections/exporting_data' },
+                        { label: 'Additional Columns', slug: 'docs/collections/additional_columns' },
+                        { label: 'Text Search', slug: 'docs/collections/text_search' },
+                        { label: 'Dynamic Collections', slug: 'docs/collections/dynamic_collections' },
+                        { label: 'Collection Actions', slug: 'docs/collections/collection_actions' },
+                        { label: 'Collection Groups', slug: 'docs/collections/collection_groups' },
+                        { label: 'Entity Actions', slug: 'docs/collections/entity_actions' },
+                    ],
+                },
                 // {
                 //     label: 'Properties',
                 //     collapsed: true,

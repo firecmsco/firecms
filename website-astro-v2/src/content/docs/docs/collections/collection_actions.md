@@ -1,5 +1,5 @@
 ---
-slug: docs/collection_actions
+slug: docs/collections/collection_actions
 title: Collection Bar Actions
 sidebar_label: Collection Bar Actions
 ---

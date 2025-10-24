@@ -47,7 +47,7 @@ mapped to CMS views, or create your own top-level **React views**:
 - Check all the possible configurations for defining [**collections**](https://firecms.co/docs/collections)
 - Otherwise, you can define your own [**custom top-level views**](https://firecms.co/docs/custom_top_level_views.mdx).
 
-## ✨ What's new in FireCMS 3.0
+## What's new in FireCMS 3.0
 
 The new version of FireCMS is a major release that brings a lot of new features
 and improvements. This page will guide you through the most important changes 🔥

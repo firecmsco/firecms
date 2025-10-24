@@ -1,5 +1,5 @@
 ---
-slug: docs/additional_columns
+slug: docs/collections/additional_columns
 title: Additional columns/fields
 sidebar_label: Additional columns/fields
 ---

@@ -1,5 +1,5 @@
 ---
-slug: docs/entity_views
+slug: docs/collections/entity_views
 title: Entity views
 sidebar_label: Entity views
 description: FireCMS allows you to add custom view per entity. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, FireCMS's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `FireCMSAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.

@@ -1,5 +1,5 @@
 ---
-slug: docs/callbacks
+slug: docs/collections/callbacks
 title: Entity callbacks
 sidebar_label: Entity callbacks
 ---

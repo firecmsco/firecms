@@ -1,5 +1,5 @@
 ---
-slug: docs/collection_groups
+slug: docs/collections/collection_groups
 title: Collections Groups
 sidebar_label: Collections Groups
 ---

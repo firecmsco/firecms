@@ -1,5 +1,5 @@
 ---
-slug: docs/collections
+slug: docs/collections/index
 title: Collections
 sidebar_label: Collections
 description: Discover how FireCMS Collections can streamline your data organization and management. Including features like top-level grouping and subcollections, define collections using UI or code, and implement advanced customizations, filtering, and permissions for optimized control over your CMS. Explore how to define, modify, and extend collections through intuitive UI interactions or detailed code customizations. Leverage FireCMS's robust entity and subcollection framework, with powerful filtering and sorting capabilities, for a seamless administrative experience. Learn more about collection configurations, entity actions, and inline editing options tailored to your needs. Whether you're managing products, articles, or custom data types, FireCMS Collections are the backbone of your efficient, scalable content management system.

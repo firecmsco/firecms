@@ -1,5 +1,5 @@
 ---
-slug: docs/permissions
+slug: docs/collections/permissions
 title: Permissions
 sidebar_label: Permissions
 ---

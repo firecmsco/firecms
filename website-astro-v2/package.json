@@ -30,6 +30,7 @@
     "@types/react-dom": "^19.2.1",
     "@types/react-router-dom": "^5.3.3",
     "astro": "^5.14.8",
+    "astro-expressive-code": "^0.41.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-responsive-masonry": "^2.7.1",

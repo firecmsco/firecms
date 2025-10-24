@@ -1,5 +1,5 @@
 ---
-slug: docs/multiple_filters
+slug: docs/collections/multiple_filters
 title: Multiple filters in collection views
 sidebar_label: Multiple filters
 ---

@@ -1,76 +1,91 @@
-/*@import "@astrojs/starlight/style/layers.css";*/
-/*@import "@astrojs/starlight/style/props.css";*/
-/*@import "@astrojs/starlight/style/reset.css";*/
-/*@import "@astrojs/starlight/style/util.css";*/
-/*@import "@astrojs/starlight/style/markdown.css";*/
-/*@import "@astrojs/starlight/style/asides.css";*/
-/*@import "@astrojs/starlight/style/anchor-links.css";*/
-/*@import "@astrojs/starlight/style/print.css";*/
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 @theme {
-  --color-primary: #0070f4; /* #0070f4 */
-  --color-primary-light: #359aff; /* #359aff */
-  --color-primary-dark: #0061c2; /* #0061c2 */
-  --font-sans: "Rubik", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --color-primary: #0070f4; /* #0070f4 */
+    --color-primary-light: #359aff; /* #359aff */
+    --color-primary-dark: #0061c2; /* #0061c2 */
+    --font-sans: "Rubik", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 /* Use site fonts and primary color */
 :root {
-  /* Map Starlight accent to site primary */
-  --sl-color-accent: var(--color-primary);
-  --sl-color-accent-high: color-mix(in oklab, var(--color-primary), white 20%);
-  --sl-color-accent-low: color-mix(in oklab, var(--color-primary), black 70%);
+    /* Map Starlight accent to site primary */
+    --sl-color-accent: var(--color-primary);
+    --sl-color-accent-high: color-mix(in oklab, var(--color-primary), white 20%);
+    --sl-color-accent-low: color-mix(in oklab, var(--color-primary), black 70%);
 
-  /* Typography */
-  --sl-font: var(--font-sans);
-  --sl-font-mono: var(--font-mono), ui-monospace, monospace;
+    /* Typography */
+    --sl-font: var(--font-sans);
+    --sl-font-mono: var(--font-mono), ui-monospace, monospace;
 
-  /* Make default backgrounds match our dark site */
-  --sl-color-bg: #000;
-  --sl-color-bg-nav: color-mix(in srgb, #000 80%, var(--color-primary) 0%);
-  --sl-color-bg-sidebar: #0b0b0b;
-  --sl-color-bg-inline-code: #1a1a1a;
-  --sl-color-hairline: #0f1115;
+    /* Make default backgrounds match our dark site */
+    --sl-color-bg: #000;
+    --sl-color-bg-nav: color-mix(in srgb, #000 80%, var(--color-primary) 0%);
+    --sl-color-bg-sidebar: #000000;
+    --sl-color-bg-inline-code: #1a1a1a;
+    --sl-color-hairline: #0f1115;
 
-  /* a bit taller header to match site scale */
-  --sl-nav-height: 4rem;
-  --sl-nav-pad-x: 0.75rem; /* slightly tighter than site */
+    /* a bit taller header to match site scale */
+    --sl-nav-height: 4rem;
+    --sl-nav-pad-x: 0.75rem; /* slightly tighter than site */
 
 }
 
 :root[data-theme='light'] {
-  /* Our site is primarily dark; keep light mode on dark palette too */
-  --sl-color-bg: #fff;
-  --sl-color-bg-nav: #f6f7fb;
-  --sl-color-bg-sidebar: #ffffff;
-  --sl-color-bg-inline-code: #f2f3f7;
-}
-
-@media (min-width: 64rem) { /* ~lg */
-  :root { --sl-nav-pad-x: 1.5rem; /* slightly tighter than site */ }
+    /* Our site is primarily dark; keep light mode on dark palette too */
+    --sl-color-bg: #fff;
+    --sl-color-bg-nav: #f6f7fb;
+    --sl-color-bg-sidebar: #ffffff;
+    --sl-color-bg-inline-code: #f2f3f7;
 }
 
 /* Fixed header background and translucency */
 .header {
-  background: color-mix(in srgb, #000 75%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: color-mix(in srgb, #000 75%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.starlight-aside{
-  @apply rounded-xl border border-gray-700 p-4 mb-6 text-white;
+.starlight-aside {
+    @apply rounded-xl border border-gray-700 p-4 mb-6 text-white;
 }
 
-.starlight-aside.starlight-aside--tip{
-  background-color: #454959;
+.starlight-aside.starlight-aside--tip {
+    background-color: #454959;
 }
 
 .starlight-aside__content a {
-  color: inherit;
+    color: inherit;
 }
 
 .starlight-aside__title {
-  color: inherit;
+    color: inherit;
 }
+
+/* Restore list styles for markdown content (Tailwind resets them to none) */
+/* Starlight's markdown content doesn't automatically get prose class */
+.sl-markdown-content ul:not([class]),
+.sl-markdown-content ol:not([class]) {
+  @apply list-outside;
+  padding-left: 1.625em;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.sl-markdown-content ul:not([class]) {
+  @apply list-disc;
+}
+
+.sl-markdown-content ol:not([class]) {
+  @apply list-decimal;
+}
+
+.sl-markdown-content li:not([class]) {
+  @apply list-item;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
