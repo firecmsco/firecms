@@ -4,8 +4,8 @@ import config from "virtual:starlight/user-config";
 ---
 
 <a href={config.locales ? "/" + (Astro.locals.starlightRoute.locale ?? "") : "/"}
-   class="flex items-center -m-1.5 relative gap-4">
+   class="flex items-center -m-1.5 relative gap-4" transition:name="site-logo">
     <img src="/img/firecms_logo.svg" class="h-8 w-8"
-         alt="FireCMS Logo">
-    <span class="self-center text-lg font-semibold whitespace-nowrap text-white">FireCMS</span>
+         alt="FireCMS Logo" transition:name="logo-image">
+    <span class="self-center text-lg font-semibold whitespace-nowrap text-white" transition:name="logo-text">FireCMS</span>
 </a>

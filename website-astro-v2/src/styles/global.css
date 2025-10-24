@@ -38,6 +38,37 @@
     font-feature-settings: "liga";
 }
 
+@view-transition {
+    navigation: auto;
+}
+
+/* View transition animations for logo */
+::view-transition-old(site-logo),
+::view-transition-new(site-logo) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(logo-image),
+::view-transition-new(logo-image) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(logo-text),
+::view-transition-new(logo-text) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* View transition animation for Start Building button */
+::view-transition-old(start-building-button),
+::view-transition-new(start-building-button) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
 @theme {
     --color-primary: #0070f4; /* #0070f4 */
     --color-primary-light: #359aff; /* #359aff */

@@ -363,7 +363,7 @@ export default defineConfig({
             ],
             components: {
                 // Only override PageFrame to add a global footer; keep native Header/Footer
-                PageFrame: "./src/components/starlight/PageFrame.astro",
+                // PageFrame: "./src/components/starlight/PageFrame.astro",
                 Header: "./src/components/starlight/Header.astro",
                 SiteTitle: "./src/components/starlight/SiteTitle.astro",
                 // Footer: './src/components/starlight/EmptyFooter.astro'

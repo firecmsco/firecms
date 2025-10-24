@@ -13,9 +13,9 @@ const navLinks = [
 <header class="bg-black/40 backdrop-blur sticky top-0 z-50">
   <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
     <div class="flex items-center gap-8">
-      <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50">
-        <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" />
-        <span class="self-center text-lg font-semibold whitespace-nowrap text-white">FireCMS</span>
+      <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50" transition:name="site-logo">
+        <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image" />
+        <span class="self-center text-lg font-semibold whitespace-nowrap text-white" transition:name="logo-text">FireCMS</span>
       </a>
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center gap-6 text-sm font-semibold">
@@ -35,6 +35,7 @@ const navLinks = [
         target="_blank"
         rel="noopener noreferrer"
         class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
+        transition:name="start-building-button"
       >
         Start Building
         <img
