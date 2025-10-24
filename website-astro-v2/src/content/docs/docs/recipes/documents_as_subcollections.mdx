@@ -33,13 +33,12 @@ How cool is that?
 :::
 
 
-import CodeBlock from "@theme/CodeBlock";
-import UnitCollection from "!!raw-loader!../../samples/samples_v3/recipes/document_as_subcollection/unit_collection";
-import CollectionBuilder
-    from "!!raw-loader!../../samples/samples_v3/recipes/document_as_subcollection/collection_builder";
-import FullCode from "!!raw-loader!../../samples/samples_v3/recipes/document_as_subcollection/full";
+import { Code } from '@astrojs/starlight/components';
+import UnitCollection from '../../samples/samples_v3/recipes/document_as_subcollection/unit_collection?raw';
+import CollectionBuilder from '../../samples/samples_v3/recipes/document_as_subcollection/collection_builder?raw';
+import FullCode from '../../samples/samples_v3/recipes/document_as_subcollection/full?raw';
 
-<CodeBlock language="tsx">{UnitCollection}</CodeBlock>
+<Code code={UnitCollection} lang="tsx" />
 
 
 ### Dynamic collection builder
@@ -51,7 +50,7 @@ on the data in the database.
 FireCMS allows you to pass a function that returns a list of collections to the
 `collections` prop of the `FireCMSApp` component.
 
-<CodeBlock language="tsx">{CollectionBuilder}</CodeBlock>
+<Code code={CollectionBuilder} lang="tsx" />
 
 :::tip
 Collections can be conveniently loaded asynchronously.
@@ -66,4 +65,4 @@ and creating a new collection for each of the documents.
 Wiring it all together we get a simple app that allows us to create new units
 and lessons and navigate between them:
 
-<CodeBlock language="tsx">{FullCode}</CodeBlock>
+<Code code={FullCode} lang="tsx" />

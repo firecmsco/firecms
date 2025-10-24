@@ -12,43 +12,43 @@ To use the `MultiSelect`, import it alongside its item component. You can pass p
 
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic MultiSelect
 
 A simple example demonstrating the basic usage of the `MultiSelect` component.
 
 import MultiSelectBasicDemo from '../../samples/components/multi_select/multi_select_basic';
-import MultiSelectBasicSource from '!!raw-loader!../../samples/components/multi_select/multi_select_basic';
+import MultiSelectBasicSource from '../../samples/components/multi_select/multi_select_basic?raw';
 
 <CodeSample>
     <MultiSelectBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MultiSelectBasicSource}</CodeBlock>
+<Code code={MultiSelectBasicSource} lang="tsx" />
 
 ## Custom Value Rendering
 
 This example shows how to customize the rendering of selected values.
 
 import MultiSelectCustomRenderDemo from '../../samples/components/multi_select/multi_select_custom_render';
-import MultiSelectCustomRenderSource from '!!raw-loader!../../samples/components/multi_select/multi_select_custom_render';
+import MultiSelectCustomRenderSource from '../../samples/components/multi_select/multi_select_custom_render?raw';
 
 <CodeSample>
     <MultiSelectCustomRenderDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MultiSelectCustomRenderSource}</CodeBlock>
+<Code code={MultiSelectCustomRenderSource} lang="tsx" />
 
 ## Handling Disabled State
 
 An example to demonstrate a `MultiSelect` component in a disabled state.
 
 import MultiSelectDisabledDemo from '../../samples/components/multi_select/multi_select_disabled';
-import MultiSelectDisabledSource from '!!raw-loader!../../samples/components/multi_select/multi_select_disabled';
+import MultiSelectDisabledSource from '../../samples/components/multi_select/multi_select_disabled?raw';
 
 <CodeSample>
     <MultiSelectDisabledDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MultiSelectDisabledSource}</CodeBlock>
+<Code code={MultiSelectDisabledSource} lang="tsx" />

@@ -11,43 +11,43 @@ The `Menu` component provides a flexible dropdown menu functionality. It leverag
 The `Menu` component requires a `trigger` element to toggle the visibility of the menu and can accept any ReactNode as its children, which typically includes `MenuItem` components for the menu options.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Menu
 
 A simple example of using the `Menu` component to create a dropdown menu.
 
 import MenuBasicDemo from '../../samples/components/menu/menu_basic';
-import MenuBasicSource from '!!raw-loader!../../samples/components/menu/menu_basic';
+import MenuBasicSource from '../../samples/components/menu/menu_basic?raw';
 
 <CodeSample>
     <MenuBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MenuBasicSource}</CodeBlock>
+<Code code={MenuBasicSource} lang="tsx" />
 
 ## Controlled Menu
 
 You can control the visibility of the `Menu` component by passing the `open` and `onOpenChange` props.
 
 import MenuControlledDemo from '../../samples/components/menu/menu_controlled';
-import MenuControlledSource from '!!raw-loader!../../samples/components/menu/menu_controlled';
+import MenuControlledSource from '../../samples/components/menu/menu_controlled?raw';
 
 <CodeSample>
     <MenuControlledDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MenuControlledSource}</CodeBlock>
+<Code code={MenuControlledSource} lang="tsx" />
 
 ## Dense Menu Items
 
 Showing how to make the `MenuItem` components dense for a more compact menu appearance.
 
 import MenuDenseItemsDemo from '../../samples/components/menu/menu_dense_items';
-import MenuDenseItemsSource from '!!raw-loader!../../samples/components/menu/menu_dense_items';
+import MenuDenseItemsSource from '../../samples/components/menu/menu_dense_items?raw';
 
 <CodeSample>
     <MenuDenseItemsDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MenuDenseItemsSource}</CodeBlock>
+<Code code={MenuDenseItemsSource} lang="tsx" />

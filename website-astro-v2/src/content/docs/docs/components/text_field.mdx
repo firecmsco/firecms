@@ -24,15 +24,15 @@ To use the `TextField`, import it from your components directory and pass the `v
 
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 import TextFieldBasicDemo from "../../samples/components/text_field/text_field_basic";
-import TextFieldBasicSource from "!!raw-loader!../../samples/components/text_field/text_field_basic";
+import TextFieldBasicSource from '../../samples/components/text_field/text_field_basic?raw';
 import TextFieldMultilineDemo from "../../samples/components/text_field/text_field_multiline";
-import TextFieldMultilineSource from "!!raw-loader!../../samples/components/text_field/text_field_multiline";
+import TextFieldMultilineSource from '../../samples/components/text_field/text_field_multiline?raw';
 import TextFieldSizeDemo from "../../samples/components/text_field/text_field_sizes";
-import TextFieldSizeSource from "!!raw-loader!../../samples/components/text_field/text_field_sizes";
+import TextFieldSizeSource from '../../samples/components/text_field/text_field_sizes?raw';
 import TextFieldAdornmentDemo from "../../samples/components/text_field/text_field_adornment";
-import TextFieldAdornmentSource from "!!raw-loader!../../samples/components/text_field/text_field_adornment";
+import TextFieldAdornmentSource from '../../samples/components/text_field/text_field_adornment?raw';
 
 ## Basic Text Field
 
@@ -44,7 +44,7 @@ A basic text field with minimal configuration:
     <TextFieldBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{TextFieldBasicSource}</CodeBlock>
+<Code code={TextFieldBasicSource} lang="tsx" />
 
 ## Multiline Text Field
 
@@ -56,7 +56,7 @@ A text field that supports multiline inputs, suitable for comments or notes:
     <TextFieldMultilineDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{TextFieldMultilineSource}</CodeBlock>
+<Code code={TextFieldMultilineSource} lang="tsx" />
 
 ## Text Field Sizes
 
@@ -68,7 +68,7 @@ Examples of different size options for the text field component:
     <TextFieldSizeDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{TextFieldSizeSource}</CodeBlock>
+<Code code={TextFieldSizeSource} lang="tsx" />
 
 ## Text Field with Adornment
 
@@ -80,7 +80,7 @@ A text field featuring an end adornment for icons, action buttons, or informativ
     <TextFieldAdornmentDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{TextFieldAdornmentSource}</CodeBlock>
+<Code code={TextFieldAdornmentSource} lang="tsx" />
 
 ## Text Field Props
 

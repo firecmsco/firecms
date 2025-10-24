@@ -18,16 +18,16 @@ The prop `size` can be used to change the size of the button.
 Buttons come in three sizes: `small`, `medium`, `large`, `xl` and `2xl`.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 import ButtonSizeDemo from "../../samples/components/button/button_size";
-import BasicButtonSource from "!!raw-loader!../../samples/components/button/button_size";
+import BasicButtonSource from '../../samples/components/button/button_size?raw';
 
 <CodeSample>
     <ButtonSizeDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{BasicButtonSource}</CodeBlock>
+<Code code={BasicButtonSource} lang="tsx" />
 
 
 ## Variant
@@ -35,78 +35,78 @@ import BasicButtonSource from "!!raw-loader!../../samples/components/button/butt
 The `variant` prop changes the button's style. Possible values are `filled`, `outlined`, and `text`.
 
 import VariantButtonDemo from "../../samples/components/button/variant_button";
-import VariantButtonSource from "!!raw-loader!../../samples/components/button/variant_button";
+import VariantButtonSource from '../../samples/components/button/variant_button?raw';
 
 <CodeSample>
     <VariantButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{VariantButtonSource}</CodeBlock>
+<Code code={VariantButtonSource} lang="tsx" />
 
 ## Color
 
 The `color` prop sets the color theme of the button. Possible values are `primary`, `secondary`, `text`, `error`, and `neutral`.
 
 import ButtonColorDemo from "../../samples/components/button/button_color";
-import ButtonColorSource from "!!raw-loader!../../samples/components/button/button_color";
+import ButtonColorSource from '../../samples/components/button/button_color?raw';
 
 <CodeSample>
     <ButtonColorDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{ButtonColorSource}</CodeBlock>
+<Code code={ButtonColorSource} lang="tsx" />
 
 ## Disabled
 
 Setting `disabled` to `true` disables the button, preventing interactions.
 
 import DisabledButtonDemo from "../../samples/components/button/disabled_button";
-import DisabledButtonSource from "!!raw-loader!../../samples/components/button/disabled_button";
+import DisabledButtonSource from '../../samples/components/button/disabled_button?raw';
 
 <CodeSample>
     <DisabledButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{DisabledButtonSource}</CodeBlock>
+<Code code={DisabledButtonSource} lang="tsx" />
 
 ## Start Icon
 
 The `startIcon` prop allows you to include an icon before the button's content.
 
 import StartIconButtonDemo from "../../samples/components/button/start_icon_button";
-import StartIconButtonSource from "!!raw-loader!../../samples/components/button/start_icon_button";
+import StartIconButtonSource from '../../samples/components/button/start_icon_button?raw';
 
 <CodeSample>
     <StartIconButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{StartIconButtonSource}</CodeBlock>
+<Code code={StartIconButtonSource} lang="tsx" />
 
 ## Full Width
 
 The `fullWidth` prop makes the button expand to take up the full width of its container.
 
 import FullWidthButtonDemo from "../../samples/components/button/full_width_button";
-import FullWidthButtonSource from "!!raw-loader!../../samples/components/button/full_width_button";
+import FullWidthButtonSource from '../../samples/components/button/full_width_button?raw';
 
 <CodeSample>
     <FullWidthButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{FullWidthButtonSource}</CodeBlock>
+<Code code={FullWidthButtonSource} lang="tsx" />
 
 ## Custom Class Name
 
 The `className` prop allows you to pass custom CSS classes to the button component.
 
 import CustomClassNameButtonDemo from "../../samples/components/button/custom_class_name_button";
-import CustomClassNameSource from "!!raw-loader!../../samples/components/button/custom_class_name_button";
+import CustomClassNameSource from '../../samples/components/button/custom_class_name_button?raw';
 
 <CodeSample>
     <CustomClassNameButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CustomClassNameSource}</CodeBlock>
+<Code code={CustomClassNameSource} lang="tsx" />
 
 ## Button Component Props
 

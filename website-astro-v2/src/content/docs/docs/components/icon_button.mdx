@@ -11,56 +11,56 @@ IconButtons are versatile clickable elements that can be used in various parts o
 To use the `IconButton`, import it from your components and pass the required props such as `size`, `variant`, `shape`, `disabled`, `toggled`, and `onClick`.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic IconButton
 
 A simple icon button with minimal configuration.
 
 import IconButtonBasicDemo from '../../samples/components/icon_button/icon_button_basic';
-import IconButtonBasicSource from '!!raw-loader!../../samples/components/icon_button/icon_button_basic';
+import IconButtonBasicSource from '../../samples/components/icon_button/icon_button_basic?raw';
 
 <CodeSample>
     <IconButtonBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{IconButtonBasicSource}</CodeBlock>
+<Code code={IconButtonBasicSource} lang="tsx" />
 
 ## IconButton Sizes
 
 Demonstrates how to use different sizes for the IconButton component.
 
 import IconButtonSizeDemo from '../../samples/components/icon_button/icon_button_sizes';
-import IconButtonSizeSource from '!!raw-loader!../../samples/components/icon_button/icon_button_sizes';
+import IconButtonSizeSource from '../../samples/components/icon_button/icon_button_sizes?raw';
 
 <CodeSample>
     <IconButtonSizeDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{IconButtonSizeSource}</CodeBlock>
+<Code code={IconButtonSizeSource} lang="tsx" />
 
 ## IconButton Shapes
 
 Illustrating how to use different shapes (circular or square) for the IconButton component.
 
 import IconButtonShapeDemo from '../../samples/components/icon_button/icon_button_shapes';
-import IconButtonShapeSource from '!!raw-loader!../../samples/components/icon_button/icon_button_shapes';
+import IconButtonShapeSource from '../../samples/components/icon_button/icon_button_shapes?raw';
 
 <CodeSample>
     <IconButtonShapeDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{IconButtonShapeSource}</CodeBlock>
+<Code code={IconButtonShapeSource} lang="tsx" />
 
 ## IconButton Variants
 
 Showing the different variants (ghost or filled) available for styling the IconButton.
 
 import IconButtonVariantDemo from '../../samples/components/icon_button/icon_button_variants';
-import IconButtonVariantSource from '!!raw-loader!../../samples/components/icon_button/icon_button_variants';
+import IconButtonVariantSource from '../../samples/components/icon_button/icon_button_variants?raw';
 
 <CodeSample>
     <IconButtonVariantDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{IconButtonVariantSource}</CodeBlock>
+<Code code={IconButtonVariantSource} lang="tsx" />

@@ -11,30 +11,30 @@ The Loading Button component is utilized to display an actionable button with in
 To use the `LoadingButton`, import it along with necessary props. You can pass `loading`, `disabled`, `onClick`, `startIcon`, and other button props.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Loading Button
 
 A simple loading button showcasing the loading state and default appearance.
 
 import LoadingButtonBasicDemo from '../../samples/components/loading_button/loading_button_basic';
-import LoadingButtonBasicSource from '!!raw-loader!../../samples/components/loading_button/loading_button_basic';
+import LoadingButtonBasicSource from '../../samples/components/loading_button/loading_button_basic?raw';
 
 <CodeSample>
     <LoadingButtonBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{LoadingButtonBasicSource}</CodeBlock>
+<Code code={LoadingButtonBasicSource} lang="tsx" />
 
 ## Loading Button with Start Icon
 
 A loading button example that includes a start icon which is displayed when the button is not in loading state.
 
 import LoadingButtonWithIconDemo from '../../samples/components/loading_button/loading_button_with_icon';
-import LoadingButtonWithIconSource from '!!raw-loader!../../samples/components/loading_button/loading_button_with_icon';
+import LoadingButtonWithIconSource from '../../samples/components/loading_button/loading_button_with_icon?raw';
 
 <CodeSample>
     <LoadingButtonWithIconDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{LoadingButtonWithIconSource}</CodeBlock>
+<Code code={LoadingButtonWithIconSource} lang="tsx" />

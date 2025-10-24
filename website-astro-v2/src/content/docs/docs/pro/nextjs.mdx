@@ -146,10 +146,10 @@ Now let's create the FireCMS components. Create the file `./src/cms/FireCMSApp.t
 
 
 
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../samples/samples_v3/nextjs.tsx";
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/nextjs.tsx?raw';
 
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+<Code code={MyComponentSource} lang="tsx" />
 
 ### Import the default **FireCMS styles**
 

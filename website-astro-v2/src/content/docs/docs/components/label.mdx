@@ -15,30 +15,30 @@ You can also pass any of the HTML `label` props, such as `htmlFor`, `className`,
 
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Label with a Checkbox
 
 Simple example of using the `Label` component to create a basic surface for content.
 
 import LabelCheckboxDemo from '../../samples/components/label/label_checkbox';
-import LabelCheckboxSource from '!!raw-loader!../../samples/components/label/label_checkbox';
+import LabelCheckboxSource from '../../samples/components/label/label_checkbox?raw';
 
 <CodeSample>
     <LabelCheckboxDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{LabelCheckboxSource}</CodeBlock>
+<Code code={LabelCheckboxSource} lang="tsx" />
 
 ## Label with a Radio Button
 
 This is an example of using the `Label` component with a radio button.
 
 import LabelRadioButtonDemo from '../../samples/components/label/label_radio_group';
-import LabelRadioButtonSource from '!!raw-loader!../../samples/components/label/label_radio_group';
+import LabelRadioButtonSource from '../../samples/components/label/label_radio_group?raw';
 
 <CodeSample>
     <LabelRadioButtonDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{LabelRadioButtonSource}</CodeBlock>
+<Code code={LabelRadioButtonSource} lang="tsx" />

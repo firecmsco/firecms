@@ -13,17 +13,17 @@ To use the `Slider`, import it from your components library and configure it usi
 
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 import SliderBasicDemo from "../../samples/components/slider/slider_basic";
-import SliderBasicSource from "!!raw-loader!../../samples/components/slider/slider_basic";
+import SliderBasicSource from '../../samples/components/slider/slider_basic?raw';
 import SliderRangeDemo from "../../samples/components/slider/slider_range";
-import SliderRangeSource from "!!raw-loader!../../samples/components/slider/slider_range";
+import SliderRangeSource from '../../samples/components/slider/slider_range?raw';
 import SliderSmallDemo from "../../samples/components/slider/slider_small";
-import SliderSmallSource from "!!raw-loader!../../samples/components/slider/slider_small";
+import SliderSmallSource from '../../samples/components/slider/slider_small?raw';
 import SliderDisabledDemo from "../../samples/components/slider/slider_disabled";
-import SliderDisabledSource from "!!raw-loader!../../samples/components/slider/slider_disabled";
+import SliderDisabledSource from '../../samples/components/slider/slider_disabled?raw';
 import SliderInvertedDemo from "../../samples/components/slider/slider_inverted";
-import SliderInvertedSource from "!!raw-loader!../../samples/components/slider/slider_inverted";
+import SliderInvertedSource from '../../samples/components/slider/slider_inverted?raw';
 
 ## Basic Slider
 
@@ -34,7 +34,7 @@ A basic example of the Slider component with default settings.
     <SliderBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SliderBasicSource}</CodeBlock>
+<Code code={SliderBasicSource} lang="tsx" />
 
 ## Range Slider
 
@@ -44,7 +44,7 @@ An example of a range slider with two handles that allow users to select a range
     <SliderRangeDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SliderRangeSource}</CodeBlock>
+<Code code={SliderRangeSource} lang="tsx" />
 
 ## Small Slider
 
@@ -54,7 +54,7 @@ A smaller version of the Slider component with a reduced size.
     <SliderSmallDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SliderSmallSource}</CodeBlock>
+<Code code={SliderSmallSource} lang="tsx" />
 
 
 ## Disabled Slider
@@ -66,7 +66,7 @@ Illustrating how to use the `disabled` prop to create a non-interactive Slider.
     <SliderDisabledDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SliderDisabledSource}</CodeBlock>
+<Code code={SliderDisabledSource} lang="tsx" />
 
 ## Inverted Slider
 
@@ -76,4 +76,4 @@ An example of an inverted slider where the value decreases from left to right.
     <SliderInvertedDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SliderInvertedSource}</CodeBlock>
+<Code code={SliderInvertedSource} lang="tsx" />

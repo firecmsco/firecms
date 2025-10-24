@@ -345,7 +345,7 @@ we get the following code for the blog collection:
 
 
 
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../samples/samples_v3/recipes/blog/blog_collection";
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/blog/blog_collection?raw';
 
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+<Code code={MyComponentSource} lang="tsx" />

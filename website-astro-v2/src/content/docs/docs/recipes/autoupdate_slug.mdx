@@ -20,12 +20,12 @@ For illustrative purposes, let's create two simple `pages` collection, with just
 be adding a slug to:
 
 
-import CodeBlock from "@theme/CodeBlock";
-import AddSlugSource from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property";
-import SlugCallbacksSource from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks";
-import FullCode from "!!raw-loader!../../samples/samples_v3/recipes/autoupdate_slug/full";
+import { Code } from '@astrojs/starlight/components';
+import AddSlugSource from '../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property?raw';
+import SlugCallbacksSource from '../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks?raw';
+import FullCode from '../../samples/samples_v3/recipes/autoupdate_slug/full?raw';
 
-<CodeBlock language="tsx">{AddSlugSource}</CodeBlock>
+<Code code={AddSlugSource} lang="tsx" />
 
 ### Add the pre-save callback
 
@@ -33,13 +33,13 @@ To add a slug to your documents, you can use the `onPreSave` callback provided b
 This callback will be executed before saving the document, allowing you to modify the document before
 it is written to the database.
 
-<CodeBlock language="tsx">{SlugCallbacksSource}</CodeBlock>
+<Code code={SlugCallbacksSource} lang="tsx" />
 
 
 ### Complete code
 
 Here is the complete code for this example:
 
-<CodeBlock language="tsx">{FullCode}</CodeBlock>
+<Code code={FullCode} lang="tsx" />
 
 
