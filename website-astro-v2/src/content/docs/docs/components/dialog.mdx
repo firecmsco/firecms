@@ -17,56 +17,56 @@ You will see a warning in the console if you forget to provide a `DialogTitle`.
 
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Dialog
 
 A basic example of using the dialog component to show a simple pop-up.
 
 import DialogBasicDemo from '../../samples/components/dialog/dialog_basic';
-import DialogBasicSource from '!!raw-loader!../../samples/components/dialog/dialog_basic';
+import DialogBasicSource from '../../samples/components/dialog/dialog_basic?raw';
 
 <CodeSample>
     <DialogBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{DialogBasicSource}</CodeBlock>
+<Code code={DialogBasicSource} lang="tsx" />
 
 ## Full-Screen Dialog
 
 An example of a dialog that covers the entire screen.
 
 import DialogFullScreenDemo from '../../samples/components/dialog/dialog_full_screen';
-import DialogFullScreenSource from '!!raw-loader!../../samples/components/dialog/dialog_full_screen';
+import DialogFullScreenSource from '../../samples/components/dialog/dialog_full_screen?raw';
 
 <CodeSample>
     <DialogFullScreenDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{DialogFullScreenSource}</CodeBlock>
+<Code code={DialogFullScreenSource} lang="tsx" />
 
 ## Scrollable Dialog
 
 Illustrates how to make a dialog's content scrollable.
 
 import DialogScrollableDemo from '../../samples/components/dialog/dialog_scrollable';
-import DialogScrollableSource from '!!raw-loader!../../samples/components/dialog/dialog_scrollable';
+import DialogScrollableSource from '../../samples/components/dialog/dialog_scrollable?raw';
 
 <CodeSample>
     <DialogScrollableDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{DialogScrollableSource}</CodeBlock>
+<Code code={DialogScrollableSource} lang="tsx" />
 
 ## Dialog with Custom Width
 
 Demonstrates usage of the `maxWidth` prop to customize the dialog's width.
 
 import DialogCustomWidthDemo from '../../samples/components/dialog/dialog_custom_width';
-import DialogCustomWidthSource from '!!raw-loader!../../samples/components/dialog/dialog_custom_width';
+import DialogCustomWidthSource from '../../samples/components/dialog/dialog_custom_width?raw';
 
 <CodeSample>
     <DialogCustomWidthDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{DialogCustomWidthSource}</CodeBlock>
+<Code code={DialogCustomWidthSource} lang="tsx" />

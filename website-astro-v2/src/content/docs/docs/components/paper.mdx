@@ -11,30 +11,30 @@ The `Paper` component is a simple and versatile component used to display conten
 To use the `Paper` component, import it from your components. You can pass children, an optional `style`, and an optional `className` prop for additional styling.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Paper
 
 Simple example of using the `Paper` component to create a basic surface for content.
 
 import PaperBasicDemo from '../../samples/components/paper/paper_basic';
-import PaperBasicSource from '!!raw-loader!../../samples/components/paper/paper_basic';
+import PaperBasicSource from '../../samples/components/paper/paper_basic?raw';
 
 <CodeSample>
     <PaperBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{PaperBasicSource}</CodeBlock>
+<Code code={PaperBasicSource} lang="tsx" />
 
 ## Customized Paper
 
 Illustrates how to customize the `Paper` component by passing `style` and `className` props.
 
 import PaperCustomizedDemo from '../../samples/components/paper/paper_customized';
-import PaperCustomizedSource from '!!raw-loader!../../samples/components/paper/paper_customized';
+import PaperCustomizedSource from '../../samples/components/paper/paper_customized?raw';
 
 <CodeSample>
     <PaperCustomizedDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{PaperCustomizedSource}</CodeBlock>
+<Code code={PaperCustomizedSource} lang="tsx" />

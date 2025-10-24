@@ -11,29 +11,29 @@ Badges are small counts and labeling components used to add additional informati
 By setting the `invisible` prop to `true`, you can hide the badge, making it not visible to users.
 
 import BadgeInvisibleDemo from '../../samples/components/badge/badge_invisible';
-import BadgeInvisibleSource from '!!raw-loader!../../samples/components/badge/badge_invisible';
+import BadgeInvisibleSource from '../../samples/components/badge/badge_invisible?raw';
 
 <CodeSample>
     <BadgeInvisibleDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{BadgeInvisibleSource}</CodeBlock>
+<Code code={BadgeInvisibleSource} lang="tsx" />
 
 ## Color Variants
 
 The `color` prop determines the color of the badge. Possible values are `primary`, `secondary`, and `error`.
 
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 import CodeSample from "../../src/CodeSample";
 
 import BadgeColorDemo from '../../samples/components/badge/badge_color';
-import BadgeColorSource from '!!raw-loader!../../samples/components/badge/badge_color';
+import BadgeColorSource from '../../samples/components/badge/badge_color?raw';
 
 <CodeSample>
     <BadgeColorDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{BadgeColorSource}</CodeBlock>
+<Code code={BadgeColorSource} lang="tsx" />
 
 
 ## Usage with Icons and Buttons
@@ -41,10 +41,10 @@ import BadgeColorSource from '!!raw-loader!../../samples/components/badge/badge_
 Badges can be wrapped around icons or buttons to provide status indicators.
 
 import BadgeIconDemo from '../../samples/components/badge/badge_icon';
-import BadgeIconSource from '!!raw-loader!../../samples/components/badge/badge_icon';
+import BadgeIconSource from '../../samples/components/badge/badge_icon?raw';
 
 <CodeSample>
     <BadgeIconDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{BadgeIconSource}</CodeBlock>
+<Code code={BadgeIconSource} lang="tsx" />

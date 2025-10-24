@@ -11,17 +11,17 @@ The Menubar component provides a customizable and accessible menu bar, built usi
 To use the `Menubar`, import it from your components and compose it with other related Menubar components like `MenubarMenu`, `MenubarTrigger`, `MenubarContent`, `MenubarItem`, etc.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Menubar Example
 
 A menubar showcasing all the basic functionalities of the Menubar component.
 
 import MenubarDemo from '../../samples/components/menubar/menubar_demo.tsx';
-import MenubarSource from '!!raw-loader!../../samples/components/menubar/menubar_demo';
+import MenubarSource from '../../samples/components/menubar/menubar_demo?raw';
 
 <CodeSample>
     <MenubarDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{MenubarSource}</CodeBlock>
+<Code code={MenubarSource} lang="tsx" />

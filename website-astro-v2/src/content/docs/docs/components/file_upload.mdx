@@ -11,43 +11,43 @@ File Upload component is designed to easily handle the drag and drop of files as
 To use the `FileUpload`, import it from your components and pass the necessary props including `accept`, `onFilesAdded`, and optionally, `onFilesRejected`, `maxSize`, `disabled`, `maxFiles`, `title`, `uploadDescription`, `preventDropOnDocument`, and `size`.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic File Upload
 
 A simple file upload example with minimal configuration.
 
 import FileUploadBasicDemo from '../../samples/components/file_upload/file_upload_basic';
-import FileUploadBasicSource from '!!raw-loader!../../samples/components/file_upload/file_upload_basic';
+import FileUploadBasicSource from '../../samples/components/file_upload/file_upload_basic?raw';
 
 <CodeSample>
     <FileUploadBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{FileUploadBasicSource}</CodeBlock>
+<Code code={FileUploadBasicSource} lang="tsx" />
 
 ## File Upload with Custom Types and Sizes
 
 Demonstrating file upload with restrictions on file types and sizes, and custom messages.
 
 import FileUploadCustomDemo from '../../samples/components/file_upload/file_upload_custom';
-import FileUploadCustomSource from '!!raw-loader!../../samples/components/file_upload/file_upload_custom';
+import FileUploadCustomSource from '../../samples/components/file_upload/file_upload_custom?raw';
 
 <CodeSample>
     <FileUploadCustomDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{FileUploadCustomSource}</CodeBlock>
+<Code code={FileUploadCustomSource} lang="tsx" />
 
 ## Disabled File Upload
 
 Illustrating how to disable the file upload functionality.
 
 import FileUploadDisabledDemo from '../../samples/components/file_upload/file_upload_disabled';
-import FileUploadDisabledSource from '!!raw-loader!../../samples/components/file_upload/file_upload_disabled';
+import FileUploadDisabledSource from '../../samples/components/file_upload/file_upload_disabled?raw';
 
 <CodeSample>
     <FileUploadDisabledDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{FileUploadDisabledSource}</CodeBlock>
+<Code code={FileUploadDisabledSource} lang="tsx" />

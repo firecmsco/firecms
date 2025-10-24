@@ -102,11 +102,11 @@ use it to conditionally show or hide views based on the user role.
 
 
 
-import CodeBlock from "@theme/CodeBlock";
-import CustomViewSampleCloud from "!!raw-loader!../samples/samples_v3/custom_cms_view/CustomViewSampleCloud";
-import ExampleCMSView from "!!raw-loader!../samples/samples_v3/custom_cms_view/ExampleCMSView";
+import { Code } from '@astrojs/starlight/components';
+import CustomViewSampleCloud from '../samples/samples_v3/custom_cms_view/CustomViewSampleCloud?raw';
+import ExampleCMSView from '../samples/samples_v3/custom_cms_view/ExampleCMSView?raw';
 
-<CodeBlock language="tsx">{CustomViewSampleCloud}</CodeBlock>
+<Code code={CustomViewSampleCloud} lang="tsx" />
 
 
 
@@ -117,5 +117,5 @@ You can use any of the provided hooks, including authentication, navigation, dat
 
 
 
-<CodeBlock language="tsx">{ExampleCMSView}</CodeBlock>
+<Code code={ExampleCMSView} lang="tsx" />
 

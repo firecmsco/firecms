@@ -22,13 +22,13 @@ that we will be copying from and to:
 
 
 
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../samples/samples_v3/recipes/copy_entity/simple_product_collection";
-import CopyButton from "!!raw-loader!../../samples/samples_v3/recipes/copy_entity/copy_button";
-import CopyButtonUse from "!!raw-loader!../../samples/samples_v3/recipes/copy_entity/copy_button_use";
-import FullCode from "!!raw-loader!../../samples/samples_v3/recipes/copy_entity/full";
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
 
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+<Code code={MyComponentSource} lang="tsx" />
 
 ### Add a custom action to your collection
 
@@ -41,7 +41,7 @@ custom component.
 
 
 
-<CodeBlock language="tsx">{CopyButton}</CodeBlock>
+<Code code={CopyButton} lang="tsx" />
 
 ### Add the custom copy action
 
@@ -49,10 +49,10 @@ After your component is ready, you can plug it into your collections `Actions`:
 
 
 
-<CodeBlock language="tsx">{CopyButtonUse}</CodeBlock>
+<Code code={CopyButtonUse} lang="tsx" />
 
 ## Full code
 
 
 
-<CodeBlock language="tsx">{FullCode}</CodeBlock>
+<Code code={FullCode} lang="tsx" />

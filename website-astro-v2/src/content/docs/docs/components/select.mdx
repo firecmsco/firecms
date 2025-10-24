@@ -17,46 +17,46 @@ This level of customization makes it a versatile tool for creating intuitive and
 that improve user experience.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Select
 
 A basic usage of the select component with minimal configuration.
 
 import SelectBasicDemo from '../../samples/components/select/select_basic';
-import SelectBasicSource from '!!raw-loader!../../samples/components/select/select_basic';
+import SelectBasicSource from '../../samples/components/select/select_basic?raw';
 
 <CodeSample>
     <SelectBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SelectBasicSource}</CodeBlock>
+<Code code={SelectBasicSource} lang="tsx" />
 
 ## Customized Select
 
 A select component with custom styles and functionalities.
 
 import SelectCustomDemo from '../../samples/components/select/select_custom';
-import SelectCustomSource from '!!raw-loader!../../samples/components/select/select_custom';
+import SelectCustomSource from '../../samples/components/select/select_custom?raw';
 
 <CodeSample>
     <SelectCustomDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SelectCustomSource}</CodeBlock>
+<Code code={SelectCustomSource} lang="tsx" />
 
 ## Select with Groups
 
 Demonstrates how to group options under labels using `SelectGroup`.
 
 import SelectGroupDemo from '../../samples/components/select/select_group';
-import SelectGroupSource from '!!raw-loader!../../samples/components/select/select_group';
+import SelectGroupSource from '../../samples/components/select/select_group?raw';
 
 <CodeSample>
     <SelectGroupDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SelectGroupSource}</CodeBlock>
+<Code code={SelectGroupSource} lang="tsx" />
 
 ## Select Component Props
 

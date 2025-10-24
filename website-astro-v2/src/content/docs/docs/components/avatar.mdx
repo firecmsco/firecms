@@ -10,40 +10,40 @@ Avatars are visual placeholders for representing users or entities. They can con
 
 The `src` prop specifies the image URL for the avatar.
 
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 import CodeSample from "../../src/CodeSample";
 
 import AvatarImageDemo from '../../samples/components/avatar/avatar_image';
-import AvatarImageSource from '!!raw-loader!../../samples/components/avatar/avatar_image';
+import AvatarImageSource from '../../samples/components/avatar/avatar_image?raw';
 
 <CodeSample>
     <AvatarImageDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{AvatarImageSource}</CodeBlock>
+<Code code={AvatarImageSource} lang="tsx" />
 
 ## Text Avatar
 
 When the `src` prop is not provided, the avatar can display text such as user initials.
 
 import AvatarTextDemo from '../../samples/components/avatar/avatar_text';
-import AvatarTextSource from '!!raw-loader!../../samples/components/avatar/avatar_text';
+import AvatarTextSource from '../../samples/components/avatar/avatar_text?raw';
 
 <CodeSample>
     <AvatarTextDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{AvatarTextSource}</CodeBlock>
+<Code code={AvatarTextSource} lang="tsx" />
 
 ## Custom Styling
 
 The `className` prop allows you to pass custom CSS classes to the avatar component.
 
 import CustomStyleAvatarDemo from '../../samples/components/avatar/custom_style_avatar';
-import CustomStyleAvatarSource from '!!raw-loader!../../samples/components/avatar/custom_style_avatar';
+import CustomStyleAvatarSource from '../../samples/components/avatar/custom_style_avatar?raw';
 
 <CodeSample>
     <CustomStyleAvatarDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{CustomStyleAvatarSource}</CodeBlock>
+<Code code={CustomStyleAvatarSource} lang="tsx" />

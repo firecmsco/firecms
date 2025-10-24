@@ -11,43 +11,43 @@ The `Sheet` component is used to display sliding panels from the edges of the sc
 To use the `Sheet`, import it from your components and pass the `open`, `side`, `transparent`, and `onOpenChange` props.
 
 import CodeSample from "../../src/CodeSample";
-import CodeBlock from "@theme/CodeBlock";
+import { Code } from '@astrojs/starlight/components';
 
 ## Basic Sheet
 
 A simple sheet that slides in from the right.
 
 import SheetBasicDemo from '../../samples/components/sheet/sheet_basic';
-import SheetBasicSource from '!!raw-loader!../../samples/components/sheet/sheet_basic';
+import SheetBasicSource from '../../samples/components/sheet/sheet_basic?raw';
 
 <CodeSample>
     <SheetBasicDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SheetBasicSource}</CodeBlock>
+<Code code={SheetBasicSource} lang="tsx" />
 
 ## Sheet with Top Side
 
 This example demonstrates a sheet that slides in from the top.
 
 import SheetTopDemo from '../../samples/components/sheet/sheet_top';
-import SheetTopSource from '!!raw-loader!../../samples/components/sheet/sheet_top';
+import SheetTopSource from '../../samples/components/sheet/sheet_top?raw';
 
 <CodeSample>
     <SheetTopDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SheetTopSource}</CodeBlock>
+<Code code={SheetTopSource} lang="tsx" />
 
 ## Transparent Sheet
 
 This sheet is configured to be transparent.
 
 import SheetTransparentDemo from '../../samples/components/sheet/sheet_transparent';
-import SheetTransparentSource from '!!raw-loader!../../samples/components/sheet/sheet_transparent';
+import SheetTransparentSource from '../../samples/components/sheet/sheet_transparent?raw';
 
 <CodeSample>
     <SheetTransparentDemo/>
 </CodeSample>
 
-<CodeBlock language="tsx">{SheetTransparentSource}</CodeBlock>
+<Code code={SheetTransparentSource} lang="tsx" />
