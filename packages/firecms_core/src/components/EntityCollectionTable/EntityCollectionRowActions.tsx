@@ -83,7 +83,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     return (
         <div
             className={cls(
-                "h-full flex items-center justify-center flex-col bg-surface-50 dark:bg-surface-900 bg-opacity-90 dark:bg-opacity-90 z-10",
+                "h-full flex items-center justify-center flex-col bg-surface-50 dark:bg-surface-900 bg-opacity-90 bg-surface-50/90 dark:bg-opacity-90 dark:bg-surface-900/90 z-10",
                 frozen ? "sticky left-0" : ""
             )}
             onClick={useCallback((event: any) => {
