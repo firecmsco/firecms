@@ -71,7 +71,7 @@ export const Checkbox = ({
                 padding ? paddingClasses[size] : "",
                 outerSizeClasses[size],
                 "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
-                onCheckedChange ? "rounded-full hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-700 dark:hover:bg-opacity-75" : "",
+                onCheckedChange ? "rounded-full hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-700 dark:hover:bg-opacity-75 dark:hover:bg-surface-accent-700/75" : "",
                 onCheckedChange ? "cursor-pointer" : "cursor-default"
             )}>
                 <div

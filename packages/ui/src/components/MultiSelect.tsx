@@ -313,7 +313,7 @@ export const MultiSelect = React.forwardRef<
                                                 "cursor-pointer",
                                                 "m-1",
                                                 "ring-offset-transparent",
-                                                "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
+                                                "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
                                                 "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
                                                 "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
                                             )
@@ -369,7 +369,7 @@ export function MultiSelectItem<T extends MultiSelectValue = string>({
             "cursor-pointer",
             "m-1",
             "ring-offset-transparent",
-            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
+            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
             "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
             "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
             className
