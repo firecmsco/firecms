@@ -83,7 +83,7 @@ export const Dialog = ({
                 <div className={cls("fixed inset-0 z-30", containerClassName)}>
 
                     <DialogPrimitive.Overlay
-                        className={cls("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black dark:bg-opacity-60 bg-opacity-50 bg-black/50 dark: bg-black/60  backdrop-blur-sm ",
+                        className={cls("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black dark:bg-opacity-60 dark:bg-black/60 bg-opacity-50 bg-black/50 dark: bg-black/60  backdrop-blur-sm ",
                             displayed && open ? "opacity-100" : "opacity-0",
                             "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                         )}
