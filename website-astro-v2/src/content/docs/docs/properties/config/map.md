@@ -1,5 +1,5 @@
 ---
-slug: docs/map
+slug: docs/properties/config/map
 title: Map
 sidebar_label: Map
 ---

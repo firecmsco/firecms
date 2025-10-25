@@ -274,38 +274,52 @@ import Layout from "../layouts/Layout.astro";
 
 <script>
   // Currency toggle functionality
-  const eurBtn = document.getElementById('currency-eur');
-  const usdBtn = document.getElementById('currency-usd');
-  const cloudPrice = document.getElementById('cloud-price');
-  const proPrice = document.getElementById('pro-price');
+  function initializeCurrencyToggle() {
+    const eurBtn = document.getElementById('currency-eur');
+    const usdBtn = document.getElementById('currency-usd');
+    const cloudPrice = document.getElementById('cloud-price');
+    const proPrice = document.getElementById('pro-price');
 
-  function updateCurrency(currency) {
-    if (currency === 'eur') {
-      eurBtn?.setAttribute('aria-pressed', 'true');
-      eurBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
-      eurBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
+    function updateCurrency(currency: string) {
+      if (currency === 'eur') {
+        eurBtn?.setAttribute('aria-pressed', 'true');
+        eurBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
+        eurBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
 
-      usdBtn?.setAttribute('aria-pressed', 'false');
-      usdBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
-      usdBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
+        usdBtn?.setAttribute('aria-pressed', 'false');
+        usdBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
+        usdBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
 
-      if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || '€9.99';
-      if (proPrice) proPrice.textContent = proPrice.dataset.eur || '€149.99';
-    } else {
-      usdBtn?.setAttribute('aria-pressed', 'true');
-      usdBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
-      usdBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
+        if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || '€9.99';
+        if (proPrice) proPrice.textContent = proPrice.dataset.eur || '€149.99';
+      } else {
+        usdBtn?.setAttribute('aria-pressed', 'true');
+        usdBtn?.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
+        usdBtn?.classList.remove('text-gray-500', 'hover:text-gray-700');
 
-      eurBtn?.setAttribute('aria-pressed', 'false');
-      eurBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
-      eurBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
+        eurBtn?.setAttribute('aria-pressed', 'false');
+        eurBtn?.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
+        eurBtn?.classList.add('text-gray-500', 'hover:text-gray-700');
 
-      if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || '$9.99';
-      if (proPrice) proPrice.textContent = proPrice.dataset.usd || '$149.99';
+        if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || '$9.99';
+        if (proPrice) proPrice.textContent = proPrice.dataset.usd || '$149.99';
+      }
+    }
+
+    // Remove old listeners by cloning and replacing
+    if (eurBtn && usdBtn) {
+      const newEurBtn = eurBtn.cloneNode(true) as HTMLElement;
+      const newUsdBtn = usdBtn.cloneNode(true) as HTMLElement;
+
+      eurBtn.parentNode?.replaceChild(newEurBtn, eurBtn);
+      usdBtn.parentNode?.replaceChild(newUsdBtn, usdBtn);
+
+      newEurBtn.addEventListener('click', () => updateCurrency('eur'));
+      newUsdBtn.addEventListener('click', () => updateCurrency('usd'));
     }
   }
 
-  eurBtn?.addEventListener('click', () => updateCurrency('eur'));
-  usdBtn?.addEventListener('click', () => updateCurrency('usd'));
+  // Initialize on page load
+  document.addEventListener('astro:page-load', initializeCurrencyToggle);
 </script>
 

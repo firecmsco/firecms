@@ -1,5 +1,5 @@
 ---
-slug: docs/references 
+slug: docs/properties/fields/references 
 title: References
 ---
 

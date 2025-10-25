@@ -1,5 +1,5 @@
 ---
-slug: docs/block
+slug: docs/properties/fields/block
 title: Block
 ---
 

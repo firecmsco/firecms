@@ -5,6 +5,9 @@
 
 @import "@material-design-icons/font/filled.css";
 
+@custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
+
+
 /* Override font-display for Material Design Icons to ensure text is visible during font load */
 @font-face {
     font-family: 'Material Icons';

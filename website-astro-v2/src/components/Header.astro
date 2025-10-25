@@ -100,36 +100,45 @@ const navLinks = [
 </header>
 
 <script>
-  // Mobile menu toggle
-  const button = document.getElementById('mobile-menu-button');
-  const menu = document.getElementById('mobile-menu');
-  const menuIconClosed = document.getElementById('menu-icon-closed');
-  const menuIconOpen = document.getElementById('menu-icon-open');
+  // Mobile menu toggle - works with view transitions
+  function initializeMobileMenu() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    const menuIconClosed = document.getElementById('menu-icon-closed');
+    const menuIconOpen = document.getElementById('menu-icon-open');
 
-  if (button && menu && menuIconClosed && menuIconOpen) {
-    button.addEventListener('click', () => {
-      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    if (button && menu && menuIconClosed && menuIconOpen) {
+      // Remove any existing listeners by cloning and replacing
+      const newButton = button.cloneNode(true) as HTMLElement;
+      button.parentNode?.replaceChild(newButton, button);
 
-      button.setAttribute('aria-expanded', String(!isExpanded));
-      menu.classList.toggle('hidden');
-      menuIconClosed.classList.toggle('hidden');
-      menuIconClosed.classList.toggle('block');
-      menuIconOpen.classList.toggle('hidden');
-      menuIconOpen.classList.toggle('block');
-    });
+      newButton.addEventListener('click', () => {
+        const isExpanded = newButton.getAttribute('aria-expanded') === 'true';
 
-    // Close mobile menu when clicking on a link
-    const mobileLinks = menu.querySelectorAll('a');
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        menu.classList.add('hidden');
-        button.setAttribute('aria-expanded', 'false');
-        menuIconClosed.classList.add('block');
-        menuIconClosed.classList.remove('hidden');
-        menuIconOpen.classList.add('hidden');
-        menuIconOpen.classList.remove('block');
+        newButton.setAttribute('aria-expanded', String(!isExpanded));
+        menu.classList.toggle('hidden');
+        menuIconClosed.classList.toggle('hidden');
+        menuIconClosed.classList.toggle('block');
+        menuIconOpen.classList.toggle('hidden');
+        menuIconOpen.classList.toggle('block');
       });
-    });
+
+      // Close mobile menu when clicking on a link
+      const mobileLinks = menu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          menu.classList.add('hidden');
+          newButton.setAttribute('aria-expanded', 'false');
+          menuIconClosed.classList.add('block');
+          menuIconClosed.classList.remove('hidden');
+          menuIconOpen.classList.add('hidden');
+          menuIconOpen.classList.remove('block');
+        });
+      });
+    }
   }
+
+  // Initialize on page load
+  document.addEventListener('astro:page-load', initializeMobileMenu);
 </script>
 

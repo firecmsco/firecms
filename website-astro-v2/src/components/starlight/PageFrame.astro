@@ -16,7 +16,7 @@ const { hasSidebar } = Astro.locals.starlightRoute;
         <!-- STICKY SIDEBAR -->
         {hasSidebar && (
             <aside class="sidebar-wrapper">
-                <nav class="sidebar-sticky" aria-label={Astro.locals.t("sidebarNav.accessibleLabel")}>
+                <nav class="sidebar-sticky" aria-label={Astro.locals.t("sidebarNav.accessibleLabel")} data-sidebar-scroll>
                     <MobileMenuToggle/>
                     <div id="starlight__sidebar" class="sidebar-pane">
                         <div class="sidebar-content">
@@ -106,11 +106,6 @@ const { hasSidebar } = Astro.locals.starlightRoute;
         min-width: 0; /* Prevent flex overflow */
     }
 
-    /* Footer at bottom */
-    .footer {
-        /* Footer styling handled by SiteFooter component */
-    }
-
     /* Mobile: sidebar becomes overlay menu */
     @media (max-width: 50rem) {
         .content-container {
@@ -149,3 +144,50 @@ const { hasSidebar } = Astro.locals.starlightRoute;
         }
     }
 </style>
+
+<script>
+    // Store scroll position globally
+    declare global {
+        interface Window {
+            __sidebarScrollPos: number;
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        window.__sidebarScrollPos = window.__sidebarScrollPos || 0;
+    }
+
+    function saveSidebarScroll() {
+        const sidebar = document.querySelector('[data-sidebar-scroll]') as HTMLElement;
+        if (sidebar) {
+            window.__sidebarScrollPos = sidebar.scrollTop;
+            console.log('[SIDEBAR] Saved scroll position:', window.__sidebarScrollPos);
+        }
+    }
+
+    function restoreSidebarScroll() {
+        const sidebar = document.querySelector('[data-sidebar-scroll]') as HTMLElement;
+        if (sidebar) {
+            console.log('[SIDEBAR] Restoring scroll position:', window.__sidebarScrollPos);
+            sidebar.scrollTop = window.__sidebarScrollPos;
+
+            // Force it again after a small delay
+            setTimeout(() => {
+                sidebar.scrollTop = window.__sidebarScrollPos;
+                console.log('[SIDEBAR] Re-applied scroll position:', sidebar.scrollTop);
+            }, 50);
+        }
+    }
+
+    // Save before navigation
+    document.addEventListener('astro:before-preparation', saveSidebarScroll);
+
+    // Restore after swap
+    document.addEventListener('astro:after-swap', restoreSidebarScroll);
+
+    // Also restore on page load (for initial load)
+    document.addEventListener('astro:page-load', restoreSidebarScroll);
+
+    console.log('[SIDEBAR] Scroll preservation script loaded');
+</script>
+

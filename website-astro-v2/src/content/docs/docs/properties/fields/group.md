@@ -1,5 +1,5 @@
 ---
-slug: docs/group
+slug: docs/properties/fields/group
 title: Group
 ---
 

@@ -1,5 +1,5 @@
 ---
-slug: docs/use_snackbar_controller
+slug: docs/hooks/use_snackbar_controller
 title: useSnackbarController
 sidebar_label: useSnackbarController
 ---

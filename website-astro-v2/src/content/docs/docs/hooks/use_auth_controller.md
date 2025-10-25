@@ -1,5 +1,5 @@
 ---
-slug: docs/use_auth_controller
+slug: docs/hooks/use_auth_controller
 title: useAuthController
 sidebar_label: useAuthController
 ---

@@ -1,5 +1,5 @@
 ---
-slug: docs/reference
+slug: docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
 ---

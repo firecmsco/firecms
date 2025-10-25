@@ -1,5 +1,5 @@
 ---
-slug: docs/array
+slug: docs/properties/config/array
 title: Array
 sidebar_label: Array
 ---

@@ -1,5 +1,5 @@
 ---
-slug: docs/conditional_fields
+slug: docs/properties/conditional_fields
 title: Conditional fields from properties
 sidebar_label: Conditional fields
 description: In FireCMS, conditional fields allow for dynamic property configurations within your collection schemas, offering responsive interfaces that adapt to other property values in real time. The `PropertyBuilder` function enables you to construct properties whose attributes, such as enabled or disabled states, are determined by the values of other fields in the entity. This is particularly useful when you want to create intuitive forms that change based on user input or data context, ensuring a seamless content management experience. Whether you're working with boolean toggles or conditional property types like in user authentication sources, FireCMS's conditional fields are essential tools for building flexible and user-responsive CMS platforms.

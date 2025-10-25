@@ -1,5 +1,5 @@
 ---
-slug: docs/use_data_source
+slug: docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
 ---

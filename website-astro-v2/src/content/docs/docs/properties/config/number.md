@@ -1,5 +1,5 @@
 ---
-slug: docs/number
+slug: docs/properties/config/number
 title: Number
 sidebar_label: Number
 ---

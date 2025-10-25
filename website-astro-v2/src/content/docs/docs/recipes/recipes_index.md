@@ -1,5 +1,5 @@
 ---
-slug: docs/recipes_index
+slug: docs/recipes/recipes_index
 title: Recipes
 sidebar_label: Recipes
 ---

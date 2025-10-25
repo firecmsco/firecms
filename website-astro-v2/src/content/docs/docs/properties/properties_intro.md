@@ -1,5 +1,5 @@
 ---
-slug: docs/properties_intro
+slug: docs/properties/index
 title: Properties
 description: Learn about FireCMS Properties and how to expertly define fields for forms and collection columns within your entity collections. Utilize the flexible `buildProperty` helper for TypeScript validation or create properties directly to fit your custom requirements. Discover dynamic property updates based on entity IDs, paths, or current values, ensuring your CMS fields adapt to your real-time data needs. Delve into conditional fields for tailored content management solutions, enhancing the functionality and user experience of your FireCMS setup. Whether dealing with text, numbers, or bespoke data types, master the art of property definition with FireCMS Properties.
 ---

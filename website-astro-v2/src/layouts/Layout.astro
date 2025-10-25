@@ -4,6 +4,7 @@ export interface Props {
   description?: string;
 }
 
+import { ViewTransitions } from 'astro:transitions';
 import "../styles/global.css";
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -19,7 +20,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <title>{title}</title>
@@ -74,10 +75,13 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   </script>
 
   <!-- Page-specific head slot -->
+
+  <!-- View Transitions -->
+  <ViewTransitions />
   <slot name="head" />
 </head>
 
-<body class="font-sans bg-black text-gray-300 antialiased">
+<body class="font-sans bg-black text-gray-300 antialiased" style="color-scheme: dark;">
   <Header />
   <slot />
   <Footer />

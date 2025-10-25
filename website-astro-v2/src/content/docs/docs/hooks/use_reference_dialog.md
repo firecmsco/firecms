@@ -1,5 +1,5 @@
 ---
-slug: docs/use_reference_dialog
+slug: docs/hooks/use_reference_dialog
 title: useReferenceDialog
 sidebar_label: useReferenceDialog
 ---

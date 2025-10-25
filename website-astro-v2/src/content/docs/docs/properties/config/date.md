@@ -1,5 +1,5 @@
 ---
-slug: docs/date
+slug: docs/properties/config/date
 title: Date/Time
 sidebar_label: Date/Time
 ---

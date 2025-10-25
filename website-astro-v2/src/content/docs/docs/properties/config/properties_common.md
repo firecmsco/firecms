@@ -1,5 +1,5 @@
 ---
-slug: docs/properties_common
+slug: docs/properties/config/properties_common
 title: Common config
 sidebar_label: Common config
 ---

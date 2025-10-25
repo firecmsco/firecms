@@ -1,5 +1,5 @@
 ---
-slug: docs/repeat
+slug: docs/properties/fields/repeat
 title: Repeat
 ---
 

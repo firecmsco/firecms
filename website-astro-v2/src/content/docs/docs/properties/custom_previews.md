@@ -1,5 +1,5 @@
 ---
-slug: docs/custom_previews
+slug: docs/properties/custom_previews
 title: Custom previews
 sidebar_label: Custom previews
 description: In FireCMS, custom previews infuse life into your CMS by allowing you to personalize how properties are displayed in read-only contexts, like collection views. Craft each preview with a unique React component that leverages `PropertyPreviewProps`, supporting both the property type and any additional custom props. The example showcases a tailored boolean property preview using distinct icons for true or false states, making data interpretation instant and intuitive. Implementing such custom previews empowers you to align the visual representation of your data with the specific needs and branding of your project, delivering a more engaging and informative CMS experience.

@@ -1,5 +1,5 @@
 ---
-slug: docs/use_storage_source
+slug: docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
 ---

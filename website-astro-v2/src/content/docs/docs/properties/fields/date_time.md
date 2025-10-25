@@ -1,5 +1,5 @@
 ---
-slug: docs/date_time
+slug: docs/properties/fields/date_time
 title: Date/time fields
 ---
 

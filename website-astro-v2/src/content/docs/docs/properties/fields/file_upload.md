@@ -1,5 +1,5 @@
 ---
-slug: docs/file_upload
+slug: docs/properties/fields/file_upload
 title: File upload
 ---
 

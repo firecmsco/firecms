@@ -1,5 +1,5 @@
 ---
-slug: docs/text_fields
+slug: docs/properties/fields/text_fields
 title: Text fields
 ---
 

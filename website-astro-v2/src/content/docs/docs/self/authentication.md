@@ -5,8 +5,6 @@ sidebar_label: Authentication and User Management
 description: Instructions on how to set up authentication and user management for a self-hosted FireCMS instance.
 ---
 
-# Authentication and User Management in Self-Hosted FireCMS
-
 ## Recommended: FireCMS Pro and Cloud
 
 Before implementing custom authentication, we strongly recommend considering **FireCMS Pro** or **FireCMS Cloud**, which include:

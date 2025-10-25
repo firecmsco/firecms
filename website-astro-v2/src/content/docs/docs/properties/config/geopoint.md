@@ -1,5 +1,5 @@
 ---
-slug: docs/geopoint
+slug: docs/properties/config/geopoint
 title: Geopoint
 sidebar_label: Geopoint
 ---

@@ -1,5 +1,5 @@
 ---
-slug: docs/switch
+slug: docs/properties/fields/switch
 title: Switch
 ---
 

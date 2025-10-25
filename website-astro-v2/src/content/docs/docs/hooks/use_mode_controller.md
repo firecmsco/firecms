@@ -1,5 +1,5 @@
 ---
-slug: docs/use_mode_controller
+slug: docs/hooks/use_mode_controller
 title: useModeController
 sidebar_label: useModeController
 ---

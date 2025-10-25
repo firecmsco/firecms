@@ -1,5 +1,5 @@
 ---
-slug: docs/boolean
+slug: docs/properties/config/boolean
 title: Boolean
 sidebar_label: Boolean
 ---

@@ -210,7 +210,7 @@ const dataTalkExchanges = [
 
 <script>
   // Mouse spotlight effect for SpotlightCard + Intersection Observer
-  document.addEventListener('DOMContentLoaded', () => {
+  function initializeFeaturePageEffects() {
     // Spotlight hover effect (same as landing)
     const cards = document.querySelectorAll('[data-spotlight-card]');
     cards.forEach((card) => {
@@ -238,5 +238,11 @@ const dataTalkExchanges = [
     }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' });
 
     document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
-  });
+  }
+
+  // Run on initial page load
+  document.addEventListener('DOMContentLoaded', initializeFeaturePageEffects);
+
+  // Re-run after view transitions
+  document.addEventListener('astro:page-load', initializeFeaturePageEffects);
 </script>

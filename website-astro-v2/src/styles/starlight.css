@@ -1,6 +1,15 @@
 @import "tailwindcss";
+@import "@firecms/ui/index.css";
+@import "@material-design-icons/font/filled.css";
 
 @plugin "@tailwindcss/typography";
+
+@source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
+@source "../pages/**/*.{astro,md,mdx,ts,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
+
 
 @theme {
     --color-primary: #0070f4; /* #0070f4 */
@@ -32,6 +41,9 @@
     --sl-nav-height: 4rem;
     --sl-nav-pad-x: 0.75rem; /* slightly tighter than site */
 
+    /* Make content area wider */
+    /*--sl-content-width: 50rem;*/
+    /*--sl-content-pad-x: 1.5rem;*/
 }
 
 :root[data-theme='light'] {
@@ -89,3 +101,31 @@
   margin-bottom: 0.5em;
 }
 
+/* Ensure FireCMS UI component styles have priority over Starlight defaults */
+/* This prevents Starlight's base styles from overriding component typography and styling */
+.typography-button,
+button.typography-button {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    line-height: 1.25rem !important;
+}
+
+/* Preserve other typography classes */
+.typography-h1,
+.typography-h2,
+.typography-h3,
+.typography-h4,
+.typography-h5,
+.typography-h6,
+.typography-body1,
+.typography-body2,
+.typography-caption,
+.typography-label {
+    all: revert-layer;
+}
+
+/* Ensure buttons maintain their component styles */
+button[class*="typography-"] {
+    font-family: var(--font-sans) !important;
+}

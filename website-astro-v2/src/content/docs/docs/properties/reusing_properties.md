@@ -1,5 +1,5 @@
 ---
-slug: docs/reusing_properties
+slug: docs/properties/reusing_properties
 title: Reusing property configurations
 ---
 

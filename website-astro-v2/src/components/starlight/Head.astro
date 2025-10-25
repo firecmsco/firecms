@@ -1,0 +1,9 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Head.astro';
+import { ViewTransitions } from 'astro:transitions';
+---
+
+<Default {...Astro.props}><slot /></Default>
+<ViewTransitions />
+

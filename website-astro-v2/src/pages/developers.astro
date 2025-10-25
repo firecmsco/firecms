@@ -1,4 +1,4 @@
----
+g w---
 import Layout from "../layouts/Layout.astro";
 import { CodeBlock } from "../components/CodeBlock";
 import { DataTalkDemo } from "../components/DataTalkDemo";
@@ -496,29 +496,38 @@ console.log("Updated \${users.size} users");`
     {/* The Layout component should include your Footer */}
 
     <script>
-        const tabs = document.querySelectorAll("#cli-tabs .tab-btn");
-        const panels = document.querySelectorAll("#cli-tabs .tab-panel");
+        function initializeTabs() {
+            const tabs = document.querySelectorAll("#cli-tabs .tab-btn");
+            const panels = document.querySelectorAll("#cli-tabs .tab-panel");
 
-        tabs.forEach(tab => {
-            tab.addEventListener("click", () => {
-                const target = document.getElementById(tab.dataset.target);
+            tabs.forEach(tab => {
+                // Clone and replace to remove old listeners
+                const newTab = tab.cloneNode(true) as HTMLElement;
+                tab.parentNode?.replaceChild(newTab, tab);
 
-                // Deactivate all
-                tabs.forEach(t => {
-                    t.setAttribute("aria-selected", "false");
-                    t.classList.remove("bg-gray-700", "text-white");
-                    t.classList.add("text-gray-400");
+                newTab.addEventListener("click", () => {
+                    const target = document.getElementById(newTab.dataset.target || '');
+
+                    // Deactivate all
+                    document.querySelectorAll("#cli-tabs .tab-btn").forEach(t => {
+                        t.setAttribute("aria-selected", "false");
+                        t.classList.remove("bg-gray-700", "text-white");
+                        t.classList.add("text-gray-400");
+                    });
+                    panels.forEach(p => p.classList.add("hidden"));
+
+                    // Activate clicked
+                    newTab.setAttribute("aria-selected", "true");
+                    newTab.classList.add("bg-gray-700", "text-white");
+                    newTab.classList.remove("text-gray-400");
+                    if (target) {
+                        target.classList.remove("hidden");
+                    }
                 });
-                panels.forEach(p => p.classList.add("hidden"));
-
-                // Activate clicked
-                tab.setAttribute("aria-selected", "true");
-                tab.classList.add("bg-gray-700", "text-white");
-                tab.classList.remove("text-gray-400");
-                if (target) {
-                    target.classList.remove("hidden");
-                }
             });
-        });
+        }
+
+        // Initialize on page load
+        document.addEventListener('astro:page-load', initializeTabs);
     </script>
 </Layout>
