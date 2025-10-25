@@ -57,7 +57,7 @@ export function Tab({
                                       className)}>
         <div className={cls("line-clamp-1",
             "uppercase inline-block p-2 px-4 rounded",
-            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
+            "hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
             innerClassName)}>
             {children}
         </div>

@@ -93,7 +93,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Slider</Typography>
+                <Typography variant="subtitle2" component="div" >Slider</Typography>
                 <Slider step={1}
                         min={0}
                         max={10}
@@ -109,7 +109,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Buttons</Typography>
+                <Typography variant="subtitle2" component="div">Buttons</Typography>
                 <div className={"flex flex-row flex-wrap gap-2 items-center"}>
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
@@ -128,7 +128,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Tabs</Typography>
+                <Typography variant="subtitle2" component="div">Tabs</Typography>
                 <Tabs value={tabValue} onValueChange={setTabValue}>
                     <Tab value="tab1">Tab 1</Tab>
                     <Tab value="tab2">Tab 2</Tab>
@@ -144,7 +144,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">File Upload</Typography>
+                <Typography variant="subtitle2" component="div">File Upload</Typography>
                 <FileUpload
                     accept={{ "image/*": [] }}
                     onFilesAdded={() => {
@@ -161,7 +161,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Search Bar</Typography>
+                <Typography variant="subtitle2" component="div">Search Bar</Typography>
                 <SearchBar innerClassName={"w-full"}/>
                 <SearchBar large loading/>
             </Card>
@@ -174,7 +174,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Alert</Typography>
+                <Typography variant="subtitle2" component="div">Alert</Typography>
                 <Alert color="info">This is an info alert.</Alert>
                 <Alert color="error">This is an error alert.</Alert>
                 <Alert color="success" action={<Button size="small">Undo</Button>}>Alert with
@@ -201,7 +201,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Skeleton</Typography>
+                <Typography variant="subtitle2" component="div">Skeleton</Typography>
                 <Skeleton width={240} height={20}/>
                 <Skeleton/>
                 <Skeleton width={180}/>
@@ -215,7 +215,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Chip</Typography>
+                <Typography variant="subtitle2" component="div">Chip</Typography>
                 <div className={"flex flex-row flex-wrap gap-2"}>
                     <Chip>Basic Chip</Chip>
                     <Chip colorScheme="redLighter">Red Light Chip</Chip>
@@ -234,7 +234,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Boolean Switch</Typography>
+                <Typography variant="subtitle2" component="div">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <BooleanSwitch value={checked}
                                    size="large"
@@ -262,7 +262,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Checkbox</Typography>
+                <Typography variant="subtitle2" component="div">Checkbox</Typography>
 
                 <div className={"flex flex-row items-center gap-2"}>
 
@@ -301,7 +301,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">IconButton</Typography>
+                <Typography variant="subtitle2" component="div">IconButton</Typography>
                 <div className={"flex gap-2 items-center"}>
                     <Tooltip title={"Ghost button"}>
                         <IconButton variant="ghost" onClick={() => console.log("Clicked!")}>
@@ -340,7 +340,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Dialog</Typography>
+                <Typography variant="subtitle2" component="div">Dialog</Typography>
                 <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
                 <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
 
@@ -366,7 +366,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Popover</Typography>
+                <Typography variant="subtitle2" component="div">Popover</Typography>
                 <Popover trigger={<Button>Open Popover</Button>}>
                     <div className="flow-root p-4">This is a basic Popover.</div>
                 </Popover>
@@ -380,7 +380,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Text Field</Typography>
+                <Typography variant="subtitle2" component="div">Text Field</Typography>
                 <TextField value={textFieldValue} size={"small"} onChange={(event) => {
                     setTextFieldValue(event.target.value);
                 }} label="Small Text Field" placeholder="Enter text"/>
@@ -404,7 +404,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Radio Group</Typography>
+                <Typography variant="subtitle2" component="div">Radio Group</Typography>
                 <RadioGroup className="flex items-center gap-2" defaultValue="black" id="color">
                     <Label
                         className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
@@ -438,7 +438,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Circular Progress</Typography>
+                <Typography variant="subtitle2" component="div">Circular Progress</Typography>
                 <div className={"flex items-center gap-2"}>
                     <CircularProgress size="large"/>
                     <CircularProgress/>
@@ -455,7 +455,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Menu</Typography>
+                <Typography variant="subtitle2" component="div">Menu</Typography>
                 <Menu trigger={<Button variant={"outlined"}>Open Menu</Button>}>
                     <MenuItem onClick={() => alert("Menu Item 1 clicked")}>Menu Item 1</MenuItem>
                     <MenuItem onClick={() => alert("Menu Item 2 clicked")}>Menu Item 2</MenuItem>
@@ -471,7 +471,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Expandable Panel</Typography>
+                <Typography variant="subtitle2" component="div">Expandable Panel</Typography>
                 <ExpandablePanel title={"Click to expand"}
                                  expanded={isExpandablePanelOpen}
                                  onExpandedChange={setExpandablePanelOpen}>
@@ -489,7 +489,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">DateTime Field</Typography>
+                <Typography variant="subtitle2" component="div">DateTime Field</Typography>
                 <DateTimeField value={selectedDate ?? undefined} onChange={setSelectedDate} label="Select a date"
                                mode="date"/>
                 <DateTimeField value={new Date()} onChange={setSelectedDate}
@@ -504,7 +504,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Avatar</Typography>
+                <Typography variant="subtitle2" component="div">Avatar</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <Avatar>AB</Avatar>
                     <Avatar src="https://avatars.githubusercontent.com/u/5120271?v=4" alt="User Name"/>
@@ -523,7 +523,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Select</Typography>
+                <Typography variant="subtitle2" component="div">Select</Typography>
                 <Select
                     size={"large"}
                     fullWidth={true}
@@ -557,7 +557,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">MultiSelect</Typography>
+                <Typography variant="subtitle2" component="div">MultiSelect</Typography>
 
                 {/* Custom render example with chips */}
                 <MultiSelect
@@ -594,7 +594,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Sheet</Typography>
+                <Typography variant="subtitle2" component="div">Sheet</Typography>
                 <Button onClick={() => setSheetOpen(true)}>Open Sheet</Button>
                 <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                     <div className="bg-white dark:bg-surface-800 p-4 h-full">
@@ -611,7 +611,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Loading Button</Typography>
+                <Typography variant="subtitle2" component="div">Loading Button</Typography>
                 <LoadingButton startIcon={<AddIcon size="small"/>} loading onClick={() => {
                 }}>Submitting</LoadingButton>
             </Card>
@@ -624,7 +624,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Badge</Typography>
+                <Typography variant="subtitle2" component="div">Badge</Typography>
                 <Badge color="primary"
                        invisible={!badgeDisplayed}>
                     <Button size={"small"}
@@ -648,7 +648,7 @@ export default function ClientUIComponentsShowcase({
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
-                <Typography variant="subtitle2">Collapse</Typography>
+                <Typography variant="subtitle2" component="div">Collapse</Typography>
                 <Button variant={"outlined"} onClick={() => {
                     setCollapseOpen(!isCollapseOpen);
                 }}>
