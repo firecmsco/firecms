@@ -4,6 +4,8 @@ title: Button
 sidebar_label: Button
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Buttons are interactive UI elements that allow users to trigger specific actions or events within an application.
 They play a crucial role in user interfaces, providing a visual cue for user-initiated actions.
 Buttons can be utilized in various contexts, including forms for submission, dialogs for confirmation,
@@ -17,96 +19,43 @@ The prop `size` can be used to change the size of the button.
 
 Buttons come in three sizes: `small`, `medium`, `large`, `xl` and `2xl`.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
-import ButtonSizeDemo from "../../samples/components/button/button_size";
-import BasicButtonSource from '../../samples/components/button/button_size?raw';
-
-<CodeSample>
-    <ButtonSizeDemo/>
-</CodeSample>
-
-<Code code={BasicButtonSource} lang="tsx" />
-
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_size.tsx"/>
 
 ## Variant
 
 The `variant` prop changes the button's style. Possible values are `filled`, `outlined`, and `text`.
 
-import VariantButtonDemo from "../../samples/components/button/variant_button";
-import VariantButtonSource from '../../samples/components/button/variant_button?raw';
-
-<CodeSample>
-    <VariantButtonDemo/>
-</CodeSample>
-
-<Code code={VariantButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/variant_button.tsx"/>
 
 ## Color
 
 The `color` prop sets the color theme of the button. Possible values are `primary`, `secondary`, `text`, `error`, and `neutral`.
 
-import ButtonColorDemo from "../../samples/components/button/button_color";
-import ButtonColorSource from '../../samples/components/button/button_color?raw';
-
-<CodeSample>
-    <ButtonColorDemo/>
-</CodeSample>
-
-<Code code={ButtonColorSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_color.tsx"/>
 
 ## Disabled
 
 Setting `disabled` to `true` disables the button, preventing interactions.
 
-import DisabledButtonDemo from "../../samples/components/button/disabled_button";
-import DisabledButtonSource from '../../samples/components/button/disabled_button?raw';
-
-<CodeSample>
-    <DisabledButtonDemo/>
-</CodeSample>
-
-<Code code={DisabledButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/disabled_button.tsx"/>
 
 ## Start Icon
 
 The `startIcon` prop allows you to include an icon before the button's content.
 
-import StartIconButtonDemo from "../../samples/components/button/start_icon_button";
-import StartIconButtonSource from '../../samples/components/button/start_icon_button?raw';
-
-<CodeSample>
-    <StartIconButtonDemo/>
-</CodeSample>
-
-<Code code={StartIconButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/start_icon_button.tsx"/>
 
 ## Full Width
 
 The `fullWidth` prop makes the button expand to take up the full width of its container.
 
-import FullWidthButtonDemo from "../../samples/components/button/full_width_button";
-import FullWidthButtonSource from '../../samples/components/button/full_width_button?raw';
-
-<CodeSample>
-    <FullWidthButtonDemo/>
-</CodeSample>
-
-<Code code={FullWidthButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/full_width_button.tsx"/>
 
 ## Custom Class Name
 
 The `className` prop allows you to pass custom CSS classes to the button component.
 
-import CustomClassNameButtonDemo from "../../samples/components/button/custom_class_name_button";
-import CustomClassNameSource from '../../samples/components/button/custom_class_name_button?raw';
-
-<CodeSample>
-    <CustomClassNameButtonDemo/>
-</CodeSample>
-
-<Code code={CustomClassNameSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/custom_class_name_button.tsx"/>
 
 ## Button Component Props
 
@@ -121,6 +70,3 @@ import CustomClassNameSource from '../../samples/components/button/custom_class_
 - `children`: Defines the button content, typically text or elements.
 - `component`: Custom component to be used for rendering the button.
 - `type`: The type attribute for the button, typically `"button"`, `"submit"`, or `"reset"`. Defaults to `"button"`.
-
-
-

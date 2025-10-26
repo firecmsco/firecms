@@ -4,24 +4,16 @@ title: Menubar
 sidebar_label: Menubar
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 The Menubar component provides a customizable and accessible menu bar, built using Radix UI Menubar primitives. It can be used to create complex menu structures with various functionalities such as submenus, checkboxes, and radio groups.
 
 ## Usage
 
 To use the `Menubar`, import it from your components and compose it with other related Menubar components like `MenubarMenu`, `MenubarTrigger`, `MenubarContent`, `MenubarItem`, etc.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Menubar Example
 
 A menubar showcasing all the basic functionalities of the Menubar component.
 
-import MenubarDemo from '../../samples/components/menubar/menubar_demo.tsx';
-import MenubarSource from '../../samples/components/menubar/menubar_demo?raw';
-
-<CodeSample>
-    <MenubarDemo/>
-</CodeSample>
-
-<Code code={MenubarSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/menubar/menubar_demo.tsx"/>

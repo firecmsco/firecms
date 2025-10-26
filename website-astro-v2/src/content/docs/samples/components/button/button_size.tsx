@@ -3,7 +3,7 @@ import { Button } from "@firecms/ui";
 
 export default function ButtonSizeDemo() {
     return (
-        <>
+        <div className={"flex flex-row gap-4 items-center justify-center"}>
             <Button
                 size={"small"}
                 onClick={() => console.log("Button clicked")}>
@@ -27,6 +27,6 @@ export default function ButtonSizeDemo() {
                 onClick={() => console.log("Button clicked")}>
                 XXLarge
             </Button>
-        </>
+        </div>
     );
 }

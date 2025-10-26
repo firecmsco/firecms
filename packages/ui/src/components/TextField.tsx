@@ -85,9 +85,15 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
 
         const inputRef = inputRefProp ?? useRef(null);
 
-        // @ts-ignore
-        const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
+        const [focused, setFocused] = React.useState(false);
         const hasValue = value !== undefined && value !== null && value !== "";
+
+        useEffect(() => {
+            // @ts-ignore
+            if (inputRef.current && document.activeElement === inputRef.current) {
+                setFocused(true);
+            }
+        }, []);
 
         useEffect(() => {
             if (type !== "number") return;
@@ -114,6 +120,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 maxRows={maxRows}
                 value={value ?? ""}
                 onChange={onChange}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
                 style={inputStyle}
                 className={cls(
                     invisible ? focusedInvisibleMixin : "",

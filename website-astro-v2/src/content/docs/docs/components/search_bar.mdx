@@ -4,63 +4,34 @@ title: SearchBar
 sidebar_label: SearchBar
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 The `SearchBar` component is designed for implementing search functionalities. It supports features like debouncing search input, expandable input sizes, and showing loading state.
 
 ## Usage
 
 To use the `SearchBar`, import it from your components and pass the necessary props like `onTextSearch`, `placeholder`, `expandable`, `large`, `autoFocus`, `disabled`, `loading`, and `inputRef`.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic SearchBar
 
 The basic usage of `SearchBar` with minimal configuration.
 
-import SearchBarBasicDemo from '../../samples/components/search_bar/search_bar_basic';
-import SearchBarBasicSource from '../../samples/components/search_bar/search_bar_basic?raw';
-
-<CodeSample>
-    <SearchBarBasicDemo/>
-</CodeSample>
-
-<Code code={SearchBarBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_basic.tsx"/>
 
 ## SearchBar with Loading State
 
 A demonstration of the `SearchBar` showing a loading indicator.
 
-import SearchBarLoadingDemo from '../../samples/components/search_bar/search_bar_loading';
-import SearchBarLoadingSource from '../../samples/components/search_bar/search_bar_loading?raw';
-
-<CodeSample>
-    <SearchBarLoadingDemo/>
-</CodeSample>
-
-<Code code={SearchBarLoadingSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_loading.tsx"/>
 
 ## SearchBar Expandable
 
 This example shows how to make the `SearchBar` expandable upon focusing.
 
-import SearchBarExpandableDemo from '../../samples/components/search_bar/search_bar_expandable';
-import SearchBarExpandableSource from '../../samples/components/search_bar/search_bar_expandable?raw';
-
-<CodeSample>
-    <SearchBarExpandableDemo/>
-</CodeSample>
-
-<Code code={SearchBarExpandableSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_expandable.tsx"/>
 
 ## Large SearchBar
 
 Showcases a larger variant of the `SearchBar`.
 
-import SearchBarLargeDemo from '../../samples/components/search_bar/search_bar_large';
-import SearchBarLargeSource from '../../samples/components/search_bar/search_bar_large?raw';
-
-<CodeSample>
-    <SearchBarLargeDemo/>
-</CodeSample>
-
-<Code code={SearchBarLargeSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_large.tsx"/>

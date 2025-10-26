@@ -4,50 +4,28 @@ title: Markdown
 sidebar_label: Markdown
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Markdown component allows rendering Markdown content with support for custom sizes and classes for personalized styling. It leverages the `markdown-it` library for conversion and supports HTML content within markdown.
 
 ## Usage
 
 To use the `Markdown` component, import it from @firecms/ui and pass the `source` prop with the markdown content you want to display. Optionally, you can specify the `size` and `className` props to adjust the appearance.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Markdown
 
 A simple markdown rendering example.
 
-import MarkdownBasicDemo from '../../samples/components/markdown/markdown_basic';
-import MarkdownBasicSource from '../../samples/components/markdown/markdown_basic?raw';
-
-<CodeSample>
-    <MarkdownBasicDemo/>
-</CodeSample>
-
-<Code code={MarkdownBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_basic.tsx"/>
 
 ## Markdown Sizes
 
 Demonstrates how to adjust the size of the markdown text using the `size` prop.
 
-import MarkdownSizeDemo from '../../samples/components/markdown/markdown_sizes';
-import MarkdownSizeSource from '../../samples/components/markdown/markdown_sizes?raw';
-
-<CodeSample>
-    <MarkdownSizeDemo/>
-</CodeSample>
-
-<Code code={MarkdownSizeSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_sizes.tsx"/>
 
 ## Custom Styled Markdown
 
 Illustrating the use of `className` prop to apply custom styles to the markdown component.
 
-import MarkdownCustomDemo from '../../samples/components/markdown/markdown_custom';
-import MarkdownCustomSource from '../../samples/components/markdown/markdown_custom?raw';
-
-<CodeSample>
-    <MarkdownCustomDemo/>
-</CodeSample>
-
-<Code code={MarkdownCustomSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_custom.tsx"/>

@@ -3,37 +3,22 @@ slug: docs/components/collapse
 title: Collapse
 sidebar_label: Collapse
 ---
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Collapse components are used to show and hide content. React animation is used for the transition. Use it to toggle visibility of content.
 
 ## Usage
 
 To use the `Collapse`, you need to import it from where it's defined, pass children to be displayed within the collapse component, and control its open state. Optionally, you can also customize its duration of the animation.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Collapse
 
 A simple example of how to use the Collapse component.
 
-import CollapseBasicDemo from '../../samples/components/collapse/collapse_basic';
-import CollapseBasicSource from '../../samples/components/collapse/collapse_basic?raw';
-
-<CodeSample>
-    <CollapseBasicDemo/>
-</CodeSample>
-
-<Code code={CollapseBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/collapse/collapse_basic.tsx"/>
 
 ## Custom Duration Collapse
 
 Illustrates how to use a custom duration for the collapse animation.
 
-import CollapseCustomDurationDemo from '../../samples/components/collapse/collapse_custom_duration';
-import CollapseCustomDurationSource from '../../samples/components/collapse/collapse_custom_duration?raw';
-
-<CodeSample>
-    <CollapseCustomDurationDemo/>
-</CodeSample>
-
-<Code code={CollapseCustomDurationSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/collapse/collapse_custom_duration.tsx"/>

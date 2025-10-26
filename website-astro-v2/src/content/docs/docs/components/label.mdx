@@ -4,6 +4,8 @@ title: Label
 sidebar_label: Label
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 The `Label` component is a simple and versatile component used to display text content with a label style.
 You usually use it to display a label for an input field, like a checkbox, or radio button.
 
@@ -12,33 +14,14 @@ You usually use it to display a label for an input field, like a checkbox, or ra
 To use the `Label` component, import it from your components. You can pass a `border` prop to add a border around the label.
 You can also pass any of the HTML `label` props, such as `htmlFor`, `className`, and `style`.
 
-
-
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Label with a Checkbox
 
 Simple example of using the `Label` component to create a basic surface for content.
 
-import LabelCheckboxDemo from '../../samples/components/label/label_checkbox';
-import LabelCheckboxSource from '../../samples/components/label/label_checkbox?raw';
-
-<CodeSample>
-    <LabelCheckboxDemo/>
-</CodeSample>
-
-<Code code={LabelCheckboxSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_checkbox.tsx"/>
 
 ## Label with a Radio Button
 
 This is an example of using the `Label` component with a radio button.
 
-import LabelRadioButtonDemo from '../../samples/components/label/label_radio_group';
-import LabelRadioButtonSource from '../../samples/components/label/label_radio_group?raw';
-
-<CodeSample>
-    <LabelRadioButtonDemo/>
-</CodeSample>
-
-<Code code={LabelRadioButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_radio_group.tsx"/>

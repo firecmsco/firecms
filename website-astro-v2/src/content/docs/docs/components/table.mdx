@@ -10,31 +10,16 @@ The `Table` component is a flexible data container that allows you to display ta
 
 To use the `Table` component, you will generally use a combination of `Table`, `TableBody`, `TableHeader`, `TableRow`, and `TableCell` components.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Basic Table
 
 A basic table showcasing the default structure.
 
-import TableBasicDemo from '../../samples/components/table/table_basic';
-import TableBasicSource from '../../samples/components/table/table_basic?raw';
-
-<CodeSample>
-    <TableBasicDemo/>
-</CodeSample>
-
-<Code code={TableBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/table/table_basic.tsx"/>
 
 ## Table with Custom Styling
 
 Apply any style or base attributes to the table components.
 
-import TableCustomHeadingDemo from '../../samples/components/table/table_custom_headings';
-import TableCustomHeadingSource from '../../samples/components/table/table_custom_headings?raw';
-
-<CodeSample>
-    <TableCustomHeadingDemo/>
-</CodeSample>
-
-<Code code={TableCustomHeadingSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/table/table_custom_headings.tsx"/>

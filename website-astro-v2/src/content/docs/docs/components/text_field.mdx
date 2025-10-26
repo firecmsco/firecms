@@ -23,83 +23,30 @@ interactive and visually appealing forms and input areas that enhance user exper
 To use the `TextField`, import it from your components directory and pass the `value`, `onChange`, and other necessary props to fit your use case.
 
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-import TextFieldBasicDemo from "../../samples/components/text_field/text_field_basic";
-import TextFieldBasicSource from '../../samples/components/text_field/text_field_basic?raw';
-import TextFieldMultilineDemo from "../../samples/components/text_field/text_field_multiline";
-import TextFieldMultilineSource from '../../samples/components/text_field/text_field_multiline?raw';
-import TextFieldSizeDemo from "../../samples/components/text_field/text_field_sizes";
-import TextFieldSizeSource from '../../samples/components/text_field/text_field_sizes?raw';
-import TextFieldAdornmentDemo from "../../samples/components/text_field/text_field_adornment";
-import TextFieldAdornmentSource from '../../samples/components/text_field/text_field_adornment?raw';
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Basic Text Field
 
+
 A basic text field with minimal configuration:
 
-
-
-<CodeSample>
-    <TextFieldBasicDemo/>
-</CodeSample>
-
-<Code code={TextFieldBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_basic.tsx"/>
 
 ## Multiline Text Field
 
-A text field that supports multiline inputs, suitable for comments or notes:
+You can create a multiline text field by setting the `multiline` prop to `true`. This is useful for longer text inputs like comments or descriptions.
 
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_multiline.tsx"/>
 
+## Sizes
 
-<CodeSample>
-    <TextFieldMultilineDemo/>
-</CodeSample>
+The `TextField` component comes in various sizes to fit different layout needs. You can adjust the size using the `size` prop.
 
-<Code code={TextFieldMultilineSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_sizes.tsx"/>
 
-## Text Field Sizes
+## Adornments
 
-Examples of different size options for the text field component:
+You can add adornments to the beginning or end of a text field to provide additional context or functionality.
 
-
-
-<CodeSample>
-    <TextFieldSizeDemo/>
-</CodeSample>
-
-<Code code={TextFieldSizeSource} lang="tsx" />
-
-## Text Field with Adornment
-
-A text field featuring an end adornment for icons, action buttons, or informative text:
-
-
-
-<CodeSample>
-    <TextFieldAdornmentDemo/>
-</CodeSample>
-
-<Code code={TextFieldAdornmentSource} lang="tsx" />
-
-## Text Field Props
-
-The `TextField` component in FireCMS UI is highly customizable through various props.
-Below is a comprehensive list of props you can use to tailor the `TextField` to your needs:
-
-- `value`: The current value of the text field. Required.
-- `onChange`: Handler function called when the text field value changes. Required.
-- `label`: The label displayed above the text field.
-- `placeholder`: Placeholder text displayed when the text field is empty.
-- `multiline`: If `true`, the text field will allow multiline input. Defaults to `false`.
-- `rows`: Specifies the number of visible text lines for a multiline text field.
-- `variant`: The variant to use for the text field. Options are `'standard'`, `'outlined'`, or `'filled'`. Defaults to `'standard'`.
-- `fullWidth`: If `true`, the input will take up the full width of its container. Defaults to `false`.
-- `size`: The size of the text field. Options are `'small'` or `'medium'`. Defaults to `'medium'`.
-- `color`: The color of the text field. Options are `'default'`, `'primary'`, or `'secondary'`. Defaults to `'default'`.
-- `type`: The type of input element; e.g., `password`, `text`, `number`, `email`, etc. Defaults to `'text'`.
-- `disabled`: If `true`, the text field will be disabled. Defaults to `false`.
-- `helperText`: Text that appears below the text field.
-- `error`: If `true`, the text field will have an error state. Defaults to `false`.
-- `startAdornment`: Element to be placed at the start of the text field.
-- `endAdornment`: Element to be placed at the end of the text field.
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_adornment.tsx"/>

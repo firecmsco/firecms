@@ -4,50 +4,28 @@ title: ExpandablePanel
 sidebar_label: ExpandablePanel
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 `ExpandablePanel` is a versatile component that allows for content to be collapsible, enhancing the organization of UI by hiding content that is not immediately relevant to the user. This component can operate in controlled or uncontrolled mode, with additional features such as an invisible mode for a subtler UI, and an optional field mode to align with form field styling.
 
 ## Usage
 
 To use the `ExpandablePanel`, import it from your components and provide the necessary props including `title`, `children`, and control props like `expanded`, `onExpandedChange`, and styling props such as `titleClassName`, `className`.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Expandable Panel
 
 An example showing the basic usage of the `ExpandablePanel` component.
 
-import ExpandablePanelBasicDemo from '../../samples/components/expandable_panel/expandable_panel_basic';
-import ExpandablePanelBasicSource from '../../samples/components/expandable_panel/expandable_panel_basic?raw';
-
-<CodeSample>
-    <ExpandablePanelBasicDemo/>
-</CodeSample>
-
-<Code code={ExpandablePanelBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_basic.tsx"/>
 
 ## Expandable Panel as Field
 
 This variant showcases the `ExpandablePanel` utilized as a field in a form, demonstrating the combination of `asField` property.
 
-import ExpandablePanelFieldDemo from '../../samples/components/expandable_panel/expandable_panel_field';
-import ExpandablePanelFieldSource from '../../samples/components/expandable_panel/expandable_panel_field?raw';
-
-<CodeSample>
-    <ExpandablePanelFieldDemo/>
-</CodeSample>
-
-<Code code={ExpandablePanelFieldSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_field.tsx"/>
 
 ## Invisible Expandable Panel
 
 An `ExpandablePanel` example where the panel borders are made invisible for a more seamless integration into the surrounding UI.
 
-import ExpandablePanelInvisibleDemo from '../../samples/components/expandable_panel/expandable_panel_invisible';
-import ExpandablePanelInvisibleSource from '../../samples/components/expandable_panel/expandable_panel_invisible?raw';
-
-<CodeSample>
-    <ExpandablePanelInvisibleDemo/>
-</CodeSample>
-
-<Code code={ExpandablePanelInvisibleSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_invisible.tsx"/>

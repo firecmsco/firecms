@@ -4,6 +4,8 @@ title: Dialog
 sidebar_label: Dialog
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Dialog components are used to present content in a layer above the app's main content, and they often request a user response. They are a critical component for modal dialogs, lightboxes, notification pop-ups, and custom content popups.
 
 ## Usage
@@ -15,58 +17,26 @@ You need to provide a `DialogTitle` in your `Dialog` component to ensure that th
 You will see a warning in the console if you forget to provide a `DialogTitle`.
 :::
 
-
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Dialog
 
 A basic example of using the dialog component to show a simple pop-up.
 
-import DialogBasicDemo from '../../samples/components/dialog/dialog_basic';
-import DialogBasicSource from '../../samples/components/dialog/dialog_basic?raw';
-
-<CodeSample>
-    <DialogBasicDemo/>
-</CodeSample>
-
-<Code code={DialogBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
 
 ## Full-Screen Dialog
 
 An example of a dialog that covers the entire screen.
 
-import DialogFullScreenDemo from '../../samples/components/dialog/dialog_full_screen';
-import DialogFullScreenSource from '../../samples/components/dialog/dialog_full_screen?raw';
-
-<CodeSample>
-    <DialogFullScreenDemo/>
-</CodeSample>
-
-<Code code={DialogFullScreenSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
 
 ## Scrollable Dialog
 
 Illustrates how to make a dialog's content scrollable.
 
-import DialogScrollableDemo from '../../samples/components/dialog/dialog_scrollable';
-import DialogScrollableSource from '../../samples/components/dialog/dialog_scrollable?raw';
-
-<CodeSample>
-    <DialogScrollableDemo/>
-</CodeSample>
-
-<Code code={DialogScrollableSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
 
 ## Dialog with Custom Width
 
 Demonstrates usage of the `maxWidth` prop to customize the dialog's width.
 
-import DialogCustomWidthDemo from '../../samples/components/dialog/dialog_custom_width';
-import DialogCustomWidthSource from '../../samples/components/dialog/dialog_custom_width?raw';
-
-<CodeSample>
-    <DialogCustomWidthDemo/>
-</CodeSample>
-
-<Code code={DialogCustomWidthSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

@@ -10,18 +10,10 @@ Tabs are used for navigation between different views or sections within the same
 
 To use the `Tabs` component, import it from your components along with the child `Tab` components and pass the required props.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Basic Tabs
 
 A simple tab example with minimal configuration.
 
-import TabsBasicDemo from '../../samples/components/tabs/tabs_basic';
-import TabsBasicSource from '../../samples/components/tabs/tabs_basic?raw';
-
-<CodeSample>
-    <TabsBasicDemo/>
-</CodeSample>
-
-<Code code={TabsBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/tabs/tabs_basic.tsx"/>

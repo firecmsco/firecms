@@ -4,47 +4,24 @@ title: Badge
 sidebar_label: Badge
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Badges are small counts and labeling components used to add additional information to any content. They're commonly used to display unread counts, status indicators, or just as decorative nodes.
 
 ## Basic Badge
 
 By setting the `invisible` prop to `true`, you can hide the badge, making it not visible to users.
 
-import BadgeInvisibleDemo from '../../samples/components/badge/badge_invisible';
-import BadgeInvisibleSource from '../../samples/components/badge/badge_invisible?raw';
-
-<CodeSample>
-    <BadgeInvisibleDemo/>
-</CodeSample>
-
-<Code code={BadgeInvisibleSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_invisible.tsx"/>
 
 ## Color Variants
 
 The `color` prop determines the color of the badge. Possible values are `primary`, `secondary`, and `error`.
 
-import { Code } from '@astrojs/starlight/components';
-import CodeSample from "../../../../components/CodeSample";
-
-import BadgeColorDemo from '../../samples/components/badge/badge_color';
-import BadgeColorSource from '../../samples/components/badge/badge_color?raw';
-
-<CodeSample>
-    <BadgeColorDemo/>
-</CodeSample>
-
-<Code code={BadgeColorSource} lang="tsx" />
-
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_color.tsx"/>
 
 ## Usage with Icons and Buttons
 
 Badges can be wrapped around icons or buttons to provide status indicators.
 
-import BadgeIconDemo from '../../samples/components/badge/badge_icon';
-import BadgeIconSource from '../../samples/components/badge/badge_icon?raw';
-
-<CodeSample>
-    <BadgeIconDemo/>
-</CodeSample>
-
-<Code code={BadgeIconSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_icon.tsx"/>

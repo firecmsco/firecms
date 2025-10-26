@@ -10,44 +10,22 @@ The `Skeleton` component is used as a placeholder while content is loading. It p
 
 To use the `Skeleton`, import it from your components and pass the `width`, `height`, and `className` props to customize its appearance.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Basic Skeleton
 
 A simple skeleton with default width and height.
 
-import SkeletonBasicDemo from '../../samples/components/skeleton/skeleton_basic';
-import SkeletonBasicSource from '../../samples/components/skeleton/skeleton_basic?raw';
-
-<CodeSample>
-    <SkeletonBasicDemo/>
-</CodeSample>
-
-<Code code={SkeletonBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_basic.tsx"/>
 
 ## Custom Sized Skeleton
 
 A skeleton component that showcases custom width and height.
 
-import SkeletonCustomSizeDemo from '../../samples/components/skeleton/skeleton_custom_size';
-import SkeletonCustomSizeSource from '../../samples/components/skeleton/skeleton_custom_size?raw';
-
-<CodeSample>
-    <SkeletonCustomSizeDemo/>
-</CodeSample>
-
-<Code code={SkeletonCustomSizeSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_size.tsx"/>
 
 ## Skeleton With Custom Classes
 
 Demonstrates usage of the `className` prop to apply custom styles.
 
-import SkeletonCustomClassDemo from '../../samples/components/skeleton/skeleton_custom_class';
-import SkeletonCustomClassSource from '../../samples/components/skeleton/skeleton_custom_class?raw';
-
-<CodeSample>
-    <SkeletonCustomClassDemo/>
-</CodeSample>
-
-<Code code={SkeletonCustomClassSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_class.tsx"/>

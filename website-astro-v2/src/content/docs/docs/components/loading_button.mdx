@@ -4,37 +4,22 @@ title: LoadingButton
 sidebar_label: LoadingButton
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 The Loading Button component is utilized to display an actionable button with integrated loading feedback. This is useful to provide users immediate feedback on their actions that require asynchronous operations.
 
 ## Usage
 
 To use the `LoadingButton`, import it along with necessary props. You can pass `loading`, `disabled`, `onClick`, `startIcon`, and other button props.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Loading Button
 
 A simple loading button showcasing the loading state and default appearance.
 
-import LoadingButtonBasicDemo from '../../samples/components/loading_button/loading_button_basic';
-import LoadingButtonBasicSource from '../../samples/components/loading_button/loading_button_basic?raw';
-
-<CodeSample>
-    <LoadingButtonBasicDemo/>
-</CodeSample>
-
-<Code code={LoadingButtonBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_basic.tsx"/>
 
 ## Loading Button with Start Icon
 
 A loading button example that includes a start icon which is displayed when the button is not in loading state.
 
-import LoadingButtonWithIconDemo from '../../samples/components/loading_button/loading_button_with_icon';
-import LoadingButtonWithIconSource from '../../samples/components/loading_button/loading_button_with_icon?raw';
-
-<CodeSample>
-    <LoadingButtonWithIconDemo/>
-</CodeSample>
-
-<Code code={LoadingButtonWithIconSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_with_icon.tsx"/>

@@ -4,76 +4,40 @@ title: Chip
 sidebar_label: Chip
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Chips are compact elements that represent an input, attribute, or action. They allow users to enter information, make selections, filter content, or trigger actions.
 
 ## Usage
 
 To use the `Chip`, import it from your components and pass the necessary props like `children`, `colorScheme`, `size`, `error`, `outlined`, `onClick`, and `icon`.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Chip
 
 A simple chip with minimal configuration. It displays a piece of text or a tag.
 
-import ChipBasicDemo from '../../samples/components/chip/chip_basic';
-import ChipBasicSource from '../../samples/components/chip/chip_basic?raw';
-
-<CodeSample>
-    <ChipBasicDemo/>
-</CodeSample>
-
-<Code code={ChipBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_basic.tsx"/>
 
 ## Chip Sizes
 
 Illustrating how to use different sizes for the chip component. You can choose between `tiny`, `small`, and `medium`.
 
-import ChipSizesDemo from '../../samples/components/chip/chip_sizes';
-import ChipSizesSource from '../../samples/components/chip/chip_sizes?raw';
-
-<CodeSample>
-    <ChipSizesDemo/>
-</CodeSample>
-
-<Code code={ChipSizesSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_sizes.tsx"/>
 
 ## Chip Colors
 
 Demonstrates usage of the `colorScheme` prop to customize the chip appearance according to your application's theme.
 
-import ChipColorsDemo from '../../samples/components/chip/chip_colors';
-import ChipColorsSource from '../../samples/components/chip/chip_colors?raw';
-
-<CodeSample>
-    <ChipColorsDemo/>
-</CodeSample>
-
-<Code code={ChipColorsSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_colors.tsx"/>
 
 ## Chip with Icon
 
 Showcases how to use a chip with an icon for better user interaction or providing more information within the chip.
 
-import ChipIconDemo from '../../samples/components/chip/chip_icon';
-import ChipIconSource from '../../samples/components/chip/chip_icon?raw';
-
-<CodeSample>
-    <ChipIconDemo/>
-</CodeSample>
-
-<Code code={ChipIconSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_icon.tsx"/>
 
 ## Clickable Chip
 
 This example demonstrates a clickable chip that triggers an action on click. Useful for interactive tags or selections.
 
-import ChipClickableDemo from '../../samples/components/chip/chip_clickable';
-import ChipClickableSource from '../../samples/components/chip/chip_clickable?raw';
-
-<CodeSample>
-    <ChipClickableDemo/>
-</CodeSample>
-
-<Code code={ChipClickableSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_clickable.tsx"/>

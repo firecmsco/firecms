@@ -3,73 +3,36 @@ slug: docs/components/alert
 title: Alert
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Alerts are used to communicate a state or feedback to users. They often indicate success, information, warning, or errors.
 
 ## Color
 
 The `color` prop is used to define the severity level of the alert.
 
-import { Code } from '@astrojs/starlight/components';
-import CodeSample from "../../../../components/CodeSample";
-
-import AlertColorDemo from '../../samples/components/alert/alert_color';
-import AlertColorSource from '../../samples/components/alert/alert_color?raw';
-
-<CodeSample>
-    <AlertColorDemo/>
-</CodeSample>
-
-<Code code={AlertColorSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_color.tsx"/>
 
 ## Size
 
 The `size` prop is used to define the size of the alert.
 
-import AlertSizeDemo from '../../samples/components/alert/alert_size';
-import AlertSizeSource from '../../samples/components/alert/alert_size?raw';
-
-<CodeSample>
-    <AlertSizeDemo/>
-</CodeSample>
-
-<Code code={AlertSizeSource} lang="tsx" />
-
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_size.tsx"/>
 
 ## Dismissable
 
 Alerts can be dismissable when provided with the `onDismiss` callback function.
 
-import DismissableAlertDemo from '../../samples/components/alert/dismissable_alert';
-import DismissableAlertSource from '../../samples/components/alert/dismissable_alert?raw';
-
-<CodeSample>
-    <DismissableAlertDemo/>
-</CodeSample>
-
-<Code code={DismissableAlertSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/dismissable_alert.tsx"/>
 
 ## Action Button
 
 Include an interactive element within the alert using the `action` prop.
 
-import AlertActionButtonDemo from '../../samples/components/alert/alert_action_button';
-import AlertActionButtonSource from '../../samples/components/alert/alert_action_button?raw';
-
-<CodeSample>
-    <AlertActionButtonDemo/>
-</CodeSample>
-
-<Code code={AlertActionButtonSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_action_button.tsx"/>
 
 ## Custom Styling
 
 Pass custom CSS classes or styles with `className` and `style` props to customize the alert.
 
-import CustomStyleAlertDemo from '../../samples/components/alert/custom_style_alert';
-import CustomStyleAlertSource from '../../samples/components/alert/custom_style_alert?raw';
-
-<CodeSample>
-    <CustomStyleAlertDemo/>
-</CodeSample>
-
-<Code code={CustomStyleAlertSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/custom_style_alert.tsx"/>

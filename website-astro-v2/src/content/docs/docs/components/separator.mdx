@@ -10,32 +10,16 @@ Separators are used to visually distinguish content in a layout or list. They ca
 
 To use the `Separator`, import it from your components and specify the `orientation` and optionally, the `decorative` prop to control its appearance.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Horizontal Separator
 
 A separator that spans horizontally, useful for dividing content like list items or sections in a layout.
 
-import SeparatorHorizontalDemo from '../../samples/components/separator/separator_horizontal';
-import SeparatorHorizontalSource from '../../samples/components/separator/separator_horizontal?raw';
-
-<CodeSample>
-    <SeparatorHorizontalDemo/>
-</CodeSample>
-
-<Code code={SeparatorHorizontalSource} lang="tsx" />
-
+<CodeSampleWithSource path="/src/content/docs/samples/components/separator/separator_horizontal.tsx"/>
 
 ## Decorative Separator
 
 Demonstrates how to use the `decorative` prop to render a separator that is meant for visual or decorative purposes rather than semantic division of content.
 
-import SeparatorDecorativeDemo from '../../samples/components/separator/separator_decorative';
-import SeparatorDecorativeSource from '../../samples/components/separator/separator_decorative?raw';
-
-<CodeSample>
-    <SeparatorDecorativeDemo/>
-</CodeSample>
-
-<Code code={SeparatorDecorativeSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/separator/separator_decorative.tsx"/>

@@ -4,37 +4,22 @@ title: Paper
 sidebar_label: Paper
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 The `Paper` component is a simple and versatile component used to display content within a flat or elevated surface. This makes it useful as a building block for various UI sections such as cards, dialogues, or panels.
 
 ## Usage
 
 To use the `Paper` component, import it from your components. You can pass children, an optional `style`, and an optional `className` prop for additional styling.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Paper
 
 Simple example of using the `Paper` component to create a basic surface for content.
 
-import PaperBasicDemo from '../../samples/components/paper/paper_basic';
-import PaperBasicSource from '../../samples/components/paper/paper_basic?raw';
-
-<CodeSample>
-    <PaperBasicDemo/>
-</CodeSample>
-
-<Code code={PaperBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/paper/paper_basic.tsx"/>
 
 ## Customized Paper
 
 Illustrates how to customize the `Paper` component by passing `style` and `className` props.
 
-import PaperCustomizedDemo from '../../samples/components/paper/paper_customized';
-import PaperCustomizedSource from '../../samples/components/paper/paper_customized?raw';
-
-<CodeSample>
-    <PaperCustomizedDemo/>
-</CodeSample>
-
-<Code code={PaperCustomizedSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/paper/paper_customized.tsx"/>

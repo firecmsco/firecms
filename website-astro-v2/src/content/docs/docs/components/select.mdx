@@ -16,47 +16,25 @@ including how it handles user interactions, whether it supports multiple selecti
 This level of customization makes it a versatile tool for creating intuitive and responsive dropdown menus
 that improve user experience.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
 
 ## Basic Select
 
 A basic usage of the select component with minimal configuration.
 
-import SelectBasicDemo from '../../samples/components/select/select_basic';
-import SelectBasicSource from '../../samples/components/select/select_basic?raw';
-
-<CodeSample>
-    <SelectBasicDemo/>
-</CodeSample>
-
-<Code code={SelectBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_basic.tsx"/>
 
 ## Customized Select
 
 A select component with custom styles and functionalities.
 
-import SelectCustomDemo from '../../samples/components/select/select_custom';
-import SelectCustomSource from '../../samples/components/select/select_custom?raw';
-
-<CodeSample>
-    <SelectCustomDemo/>
-</CodeSample>
-
-<Code code={SelectCustomSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_custom.tsx"/>
 
 ## Select with Groups
 
 Demonstrates how to group options under labels using `SelectGroup`.
 
-import SelectGroupDemo from '../../samples/components/select/select_group';
-import SelectGroupSource from '../../samples/components/select/select_group?raw';
-
-<CodeSample>
-    <SelectGroupDemo/>
-</CodeSample>
-
-<Code code={SelectGroupSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_group.tsx"/>
 
 ## Select Component Props
 
@@ -86,4 +64,3 @@ The `Select` component in FireCMS UI is highly customizable through various prop
 - `padding`: Adds padding to the select input. Defaults to `true`.
 - `invisible`: Hides the select component but keeps it in the DOM.
 - `children`: Content to be rendered as the options within the select component.
-

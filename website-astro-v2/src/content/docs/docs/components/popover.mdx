@@ -4,63 +4,34 @@ title: Popover
 sidebar_label: Popover
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Popover component allows you to float a content panel anchored to another element, perfect for context menus, hover cards, tooltips, and much more.
 
 ## Usage
 
 To use the `Popover`, import it from your components and pass the required `trigger` and optional `open`, `onOpenChange`, `side`, `sideOffset`, `align`, `alignOffset`, `arrowPadding`, `sticky`, `hideWhenDetached`, `avoidCollisions`, `enabled`, and `modal` props.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Popover
 
 A simple popover that shows upon clicking the trigger element.
 
-import PopoverBasicDemo from '../../samples/components/popover/popover_basic';
-import PopoverBasicSource from '../../samples/components/popover/popover_basic?raw';
-
-<CodeSample>
-    <PopoverBasicDemo/>
-</CodeSample>
-
-<Code code={PopoverBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_basic.tsx"/>
 
 ## Popover with Alignment
 
 Showcasing how to align the popover content relative to the trigger element.
 
-import PopoverAlignDemo from '../../samples/components/popover/popover_align';
-import PopoverAlignSource from '../../samples/components/popover/popover_align?raw';
-
-<CodeSample>
-    <PopoverAlignDemo/>
-</CodeSample>
-
-<Code code={PopoverAlignSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_align.tsx"/>
 
 ## Controlled Popover
 
 Demonstrates the usage of `open` and `onOpenChange` props for controlled behavior.
 
-import PopoverControlledDemo from '../../samples/components/popover/popover_controlled';
-import PopoverControlledSource from '../../samples/components/popover/popover_controlled?raw';
-
-<CodeSample>
-    <PopoverControlledDemo/>
-</CodeSample>
-
-<Code code={PopoverControlledSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_controlled.tsx"/>
 
 ## Usage with Custom Styling
 
 Illustrating custom styling applied to the popover content.
 
-import PopoverStyledDemo from '../../samples/components/popover/popover_styled';
-import PopoverStyledSource from '../../samples/components/popover/popover_styled?raw';
-
-<CodeSample>
-    <PopoverStyledDemo/>
-</CodeSample>
-
-<Code code={PopoverStyledSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_styled.tsx"/>

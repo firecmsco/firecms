@@ -4,63 +4,34 @@ title: Checkbox
 sidebar_label: Checkbox
 ---
 
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
 Checkboxes are used for selection from multiple options. They can be toggled between checked, unchecked, and an intermediate state.
 
 ## Usage
 
 To use the `Checkbox`, import it from your components and pass the `checked`, `onCheckedChange`, and optionally, `disabled`, `size`, and `color` props.
 
-import CodeSample from "../../../../components/CodeSample";
-import { Code } from '@astrojs/starlight/components';
-
 ## Basic Checkbox
 
 A simple checkbox with minimal configuration.
 
-import CheckboxBasicDemo from '../../samples/components/checkbox/checkbox_basic';
-import CheckboxBasicSource from '../../samples/components/checkbox/checkbox_basic?raw';
-
-<CodeSample>
-    <CheckboxBasicDemo/>
-</CodeSample>
-
-<Code code={CheckboxBasicSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_basic.tsx"/>
 
 ## Checkbox with Indeterminate State
 
 A checkbox that showcases the indeterminate state, typically used for 'select all' scenarios where not all sub-selections are made.
 
-import CheckboxIndeterminateDemo from '../../samples/components/checkbox/checkbox_indeterminate';
-import CheckboxIndeterminateSource from '../../samples/components/checkbox/checkbox_indeterminate?raw';
-
-<CodeSample>
-    <CheckboxIndeterminateDemo/>
-</CodeSample>
-
-<Code code={CheckboxIndeterminateSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_indeterminate.tsx"/>
 
 ## Checkbox Sizes
 
 Illustrating how to use different sizes for the checkbox component.
 
-import CheckboxSizeDemo from '../../samples/components/checkbox/checkbox_sizes';
-import CheckboxSizeSource from '../../samples/components/checkbox/checkbox_sizes?raw';
-
-<CodeSample>
-    <CheckboxSizeDemo/>
-</CodeSample>
-
-<Code code={CheckboxSizeSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_sizes.tsx"/>
 
 ## Checkbox Colors
 
 Demonstrates usage of the `color` prop to customize the checkbox appearance.
 
-import CheckboxColorDemo from '../../samples/components/checkbox/checkbox_colors';
-import CheckboxColorSource from '../../samples/components/checkbox/checkbox_colors?raw';
-
-<CodeSample>
-    <CheckboxColorDemo/>
-</CodeSample>
-
-<Code code={CheckboxColorSource} lang="tsx" />
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_colors.tsx"/>
