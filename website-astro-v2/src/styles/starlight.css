@@ -10,7 +10,6 @@
 
 @custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
 
-
 @theme {
     --color-primary: #0070f4; /* #0070f4 */
     --color-primary-light: #359aff; /* #359aff */
@@ -77,55 +76,6 @@
     color: inherit;
 }
 
-/* Restore list styles for markdown content (Tailwind resets them to none) */
-/* Starlight's markdown content doesn't automatically get prose class */
-.sl-markdown-content ul:not([class]),
-.sl-markdown-content ol:not([class]) {
-  @apply list-outside;
-  padding-left: 1.625em;
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-}
-
-.sl-markdown-content ul:not([class]) {
-  @apply list-disc;
-}
-
-.sl-markdown-content ol:not([class]) {
-  @apply list-decimal;
-}
-
-.sl-markdown-content li:not([class]) {
-  @apply list-item;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-/* Ensure FireCMS UI component styles have priority over Starlight defaults */
-/* This prevents Starlight's base styles from overriding component typography and styling */
-.typography-button,
-button.typography-button {
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    line-height: 1.25rem !important;
-}
-
-/* Preserve other typography classes */
-.typography-h1,
-.typography-h2,
-.typography-h3,
-.typography-h4,
-.typography-h5,
-.typography-h6,
-.typography-body1,
-.typography-body2,
-.typography-caption,
-.typography-label {
+.sl-markdown-content .clear-styles {
     all: revert-layer;
-}
-
-/* Ensure buttons maintain their component styles */
-button[class*="typography-"] {
-    font-family: var(--font-sans) !important;
 }

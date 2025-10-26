@@ -3,10 +3,11 @@ slug: docs/icons
 title: Icons
 ---
 
-
 import { DocsIconsView } from "../../../../components/DocsIconsView";
 
-<DocsIconsView/>
+<div className={"not-content"}>
+    <DocsIconsView client:only={"react"}/>
+</div>
 
 <br/>
 When building a UI, it's often necessary to include icons to represent different actions, states, or content.

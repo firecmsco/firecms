@@ -78,9 +78,10 @@ export default function ClientUIComponentsShowcase({
     const [badgeDisplayed, setBadgeDisplayed] = useState(true);
     const [textFieldValue, setTextFieldValue] = useState<string>("");
     const [sliderValue, setSliderValue] = useState<number[]>([4]);
+    const [multiSelectValue, setMultiSelectValue] = useState<string[]>([]);
     const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-surface-900 dark:bg-opacity-50";
 
-    return <div className={"@container max-w-7xl mx-auto"}>
+    return <div className={"@container max-w-7xl mx-auto not-content"}>
         <MenubarDemo/>
         <div className="@xl:columns-2 @4xl:columns-3 gap-4">
 
@@ -549,7 +550,7 @@ export default function ClientUIComponentsShowcase({
             </Card>
 
 
-            <Card className={cardClasses}>
+            <Card className={`${cardClasses} overflow-visible`}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
                             target={linksInNewTab ? "_blank" : undefined}
@@ -561,7 +562,7 @@ export default function ClientUIComponentsShowcase({
 
                 {/* Custom render example with chips */}
                 <MultiSelect
-                    value={[]}
+                    value={multiSelectValue}
                     label="Colors MultiSelect"
                     renderValues={(values) => (
                         <div className="flex gap-1">
@@ -577,8 +578,7 @@ export default function ClientUIComponentsShowcase({
                             ))}
                         </div>
                     )}
-                    onValueChange={() => {
-                    }}>
+                    onValueChange={setMultiSelectValue}>
                     <MultiSelectItem value="red">Red</MultiSelectItem>
                     <MultiSelectItem value="blue">Blue</MultiSelectItem>
                     <MultiSelectItem value="green">Green</MultiSelectItem>
