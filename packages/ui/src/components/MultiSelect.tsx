@@ -1,7 +1,7 @@
 "use client";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
-import { ChangeEvent, Children, useEffect } from "react";
+import { ChangeEvent, Children, useEffect, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cls } from "../util";
 import { CheckIcon, CloseIcon, KeyboardArrowDownIcon } from "../icons";
@@ -88,9 +88,13 @@ export const MultiSelect = React.forwardRef<
         },
         ref
     ) => {
-        // Properly type the state variables to match the generic props
-        const [isPopoverOpen, setIsPopoverOpen] = React.useState(open ?? false);
-        const [selectedValues, setSelectedValues] = React.useState<any[]>(value ?? []);
+        const [isMounted, setIsMounted] = useState(false);
+        const [isPopoverOpen, setIsPopoverOpen] = useState(open ?? false);
+        const [selectedValues, setSelectedValues] = useState<any[]>(value ?? []);
+
+        useEffect(() => {
+            setIsMounted(true);
+        }, []);
 
         const onPopoverOpenChange = (open: boolean) => {
             setIsPopoverOpen(open);
@@ -184,7 +188,7 @@ export const MultiSelect = React.forwardRef<
                 {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
 
                 <PopoverPrimitive.Root
-                    open={isPopoverOpen}
+                    open={isMounted && isPopoverOpen}
                     onOpenChange={onPopoverOpenChange}
                     modal={modalPopover}
                 >
@@ -278,7 +282,7 @@ export const MultiSelect = React.forwardRef<
                         </button>
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Content
-                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                        className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
                         align="start"
                         sideOffset={8}
                         onEscapeKeyDown={() => onPopoverOpenChange(false)}
@@ -398,4 +402,3 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
         </div>
     </div>
 }
-
