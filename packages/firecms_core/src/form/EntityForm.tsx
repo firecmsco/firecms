@@ -1,4 +1,4 @@
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     AuthController,
     CMSAnalyticsEvent,
@@ -38,14 +38,14 @@ import {
     useSnackbarController
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
-import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
+import { flattenKeys, Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 import { removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
-import { CustomIdField } from "../form/components/CustomIdField";
-import { ErrorFocus } from "../form/components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
+import { CustomIdField } from "./components/CustomIdField";
+import { ErrorFocus } from "./components/ErrorFocus";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
 
 export type OnUpdateParams = {
@@ -96,6 +96,22 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
     children?: React.ReactNode;
 };
+
+// extract touched values for nested touched trees and map to current values
+export function extractTouchedValues(values: any, touched: Record<string, boolean>): Record<string, any> {
+    let acc: Record<string, any> = {};
+    if (!touched || typeof touched !== "object") {
+        return acc;
+    }
+
+    Object.entries(touched).forEach(([key, value]) => {
+        if (value) {
+            acc = setIn(acc, key, getIn(values, key));
+        }
+    })
+
+    return acc;
+}
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
@@ -164,7 +180,7 @@ export function EntityForm<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const analyticsController = useAnalyticsController();
 
-    const [underlyingChanges, setUnderlyingChanges] = useState<Partial<EntityValues<M>>>({});
+    const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
     const [customIdLoading, setCustomIdLoading] = useState<boolean>(false);
 
@@ -228,13 +244,28 @@ export function EntityForm<M extends Record<string, any>>({
 
     const baseInitialValues = getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs);
     const initialValues = initialDirtyValues ? mergeDeep(baseInitialValues, initialDirtyValues) : baseInitialValues;
+    const initialDirty = Boolean(initialDirtyValues) && initialDirtyValues && Object.keys(initialDirtyValues).length > 0;
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
         initialValues: initialValues as M,
-        initialDirty: Boolean(initialDirtyValues),
+        initialDirty,
+        initialTouched: initialDirtyValues ?
+            flattenKeys(initialDirtyValues!)
+                .reduce((previousValue, currentValue) => ({
+                    ...previousValue,
+                    [currentValue]: true
+                }), {})
+            : {},
         onSubmit,
         onReset: () => {
             clearDirtyCache();
             onValuesModified?.(false);
+        },
+        onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
+            const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+            if (controller.dirty) {
+                const touchedValues = extractTouchedValues(values, controller.touched);
+                saveEntityToCache(key, touchedValues);
+            }
         },
         validation: (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
@@ -407,7 +438,7 @@ export function EntityForm<M extends Record<string, any>>({
             values,
             previousValues: entity?.values,
             autoSave: autoSave ?? false
-        }).then((res) => {
+        }).then(() => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
@@ -445,7 +476,8 @@ export function EntityForm<M extends Record<string, any>>({
             type: "error",
             message: "Error updating id, check the console"
         });
-    }, []);
+        console.error(error);
+    }, [snackbarController]);
 
     const pluginActions: React.ReactNode[] = [];
     const plugins = customizationController.plugins;
@@ -509,13 +541,11 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [formex.dirty]);
 
-    const deferredValues = useDeferredValue(formex.values);
     const modified = formex.dirty;
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
-                                                                        value,
-                                                                        property
+                                                                        value
                                                                     }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
         [dataSource, path, entityId]);
 
@@ -526,13 +556,6 @@ export function EntityForm<M extends Record<string, any>>({
                 uniqueFieldValidator)
             : undefined,
         [entityId, resolvedCollection.properties, uniqueFieldValidator]);
-
-    useEffect(() => {
-        const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
-        if (modified) {
-            saveEntityToCache(key, deferredValues);
-        }
-    }, [deferredValues, modified, path, entityId, status]);
 
     useOnAutoSave(autoSave, formex, lastSavedValues, save);
 
@@ -813,5 +836,3 @@ function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<a
         }
     }, [formex.values]);
 }
-
-

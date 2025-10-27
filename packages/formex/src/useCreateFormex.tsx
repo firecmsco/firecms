@@ -8,16 +8,19 @@ export function useCreateFormex<T extends object>({
                                                       initialValues,
                                                       initialErrors,
                                                       initialDirty,
+                                                      initialTouched,
                                                       validation,
                                                       validateOnChange = false,
                                                       validateOnInitialRender = false,
                                                       onSubmit,
                                                       onReset,
+                                                      onValuesChangeDeferred,
                                                       debugId,
                                                   }: {
     initialValues: T;
     initialErrors?: Record<string, string>;
     initialDirty?: boolean;
+    initialTouched?: Record<string, boolean>;
     validateOnChange?: boolean;
     validateOnInitialRender?: boolean;
     validation?: (
@@ -27,6 +30,7 @@ export function useCreateFormex<T extends object>({
         | Promise<Record<string, string>>
         | undefined
         | void;
+    onValuesChangeDeferred?: (values: T, controller: FormexController<T>) => void;
     onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>;
     onReset?: (controller: FormexController<T>) => void | Promise<void>;
     debugId?: string;
@@ -36,13 +40,28 @@ export function useCreateFormex<T extends object>({
     const debugIdRef = useRef<string | undefined>(debugId);
 
     const [values, setValuesInner] = useState<T>(initialValues);
-    const [touchedState, setTouchedState] = useState<Record<string, boolean>>({});
+    const [touchedState, setTouchedState] = useState<Record<string, boolean>>(initialTouched ?? {});
     const [errors, setErrors] = useState<Record<string, string>>(initialErrors ?? {});
     const [dirty, setDirty] = useState(initialDirty ?? false);
     const [submitCount, setSubmitCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isValidating, setIsValidating] = useState(false);
     const [version, setVersion] = useState(0);
+
+    const onValuesChangeRef = useRef(onValuesChangeDeferred);
+    onValuesChangeRef.current = onValuesChangeDeferred;
+    const debounceTimeoutRef = useRef<any>();
+
+    const callDebouncedOnValuesChange = useCallback((values: T) => {
+        if (onValuesChangeRef.current) {
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
+            }
+            debounceTimeoutRef.current = setTimeout(() => {
+                onValuesChangeRef.current?.(values, controllerRef.current);
+            }, 300);
+        }
+    }, []);
 
     // Replace state for history with refs
     const historyRef = useRef<T[]>([initialValues]);
@@ -63,7 +82,8 @@ export function useCreateFormex<T extends object>({
         newHistory.push(newValues);
         historyRef.current = newHistory;
         historyIndexRef.current = newHistory.length - 1;
-    }, []);
+        callDebouncedOnValuesChange(newValues);
+    }, [callDebouncedOnValuesChange]);
 
     const validate = useCallback(async () => {
         setIsValidating(true);
@@ -89,8 +109,9 @@ export function useCreateFormex<T extends object>({
             newHistory.push(newValues);
             historyRef.current = newHistory;
             historyIndexRef.current = newHistory.length - 1;
+            callDebouncedOnValuesChange(newValues);
         },
-        [validate]
+        [validate, callDebouncedOnValuesChange]
     );
 
     const setFieldError = useCallback((key: string, error: string | undefined) => {
@@ -172,7 +193,7 @@ export function useCreateFormex<T extends object>({
         initialValuesRef.current = valuesProp ?? initialValuesRef.current;
         setValuesInner(valuesProp ?? initialValuesRef.current);
         setErrors(errorsProp ?? {});
-        setTouchedState(touchedProp ?? {});
+        setTouchedState(touchedProp ?? initialTouched ?? {});
         setDirty(false);
         setSubmitCount(submitCountProp ?? 0);
         setVersion((prev) => prev + 1);
@@ -180,7 +201,7 @@ export function useCreateFormex<T extends object>({
         // Reset history with refs
         historyRef.current = [valuesProp ?? initialValuesRef.current];
         historyIndexRef.current = 0;
-    }, [onReset]);
+    }, [onReset, initialTouched]);
 
     const undo = useCallback(() => {
         if (historyIndexRef.current > 0) {
@@ -189,8 +210,10 @@ export function useCreateFormex<T extends object>({
             setValuesInner(newValues);
             valuesRef.current = newValues;
             historyIndexRef.current = newIndex;
+            setDirty(!equal(initialValuesRef.current, newValues));
+            callDebouncedOnValuesChange(newValues);
         }
-    }, []);
+    }, [callDebouncedOnValuesChange]);
 
     const redo = useCallback(() => {
         if (historyIndexRef.current < historyRef.current.length - 1) {
@@ -199,8 +222,10 @@ export function useCreateFormex<T extends object>({
             setValuesInner(newValues);
             valuesRef.current = newValues;
             historyIndexRef.current = newIndex;
+            setDirty(!equal(initialValuesRef.current, newValues));
+            callDebouncedOnValuesChange(newValues);
         }
-    }, []);
+    }, [callDebouncedOnValuesChange]);
 
     const controllerRef = useRef<FormexController<T>>({} as FormexController<T>);
 

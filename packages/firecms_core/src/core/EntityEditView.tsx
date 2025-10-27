@@ -12,7 +12,6 @@ import {
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
     canEditEntity,
-    mergeDeep,
     removeInitialAndTrailingSlashes,
     resolveCollection,
     resolveDefaultSelectedView,
@@ -32,7 +31,6 @@ import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub } from "../util/createFormexStub";
-import { getInitialEntityValues } from "../form/EntityForm";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";

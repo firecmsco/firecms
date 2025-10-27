@@ -157,7 +157,6 @@ export function hasEntityInCache(path: string): boolean {
  */
 export function removeEntityFromCache(path: string): void {
 
-
     console.debug("Removing entity from cache", path);
 
     // Remove from the in-memory cache
