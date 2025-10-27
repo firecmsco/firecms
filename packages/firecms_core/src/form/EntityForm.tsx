@@ -19,6 +19,7 @@ import { ErrorBoundary, getFormFieldKeys } from "../components";
 import {
     getDefaultValuesFor,
     getEntityTitlePropertyKey,
+    getLocalChangesBackup,
     getValueInPath,
     isHidden,
     isReadOnly,
@@ -42,11 +43,17 @@ import { flattenKeys, Formex, FormexController, getIn, setIn, useCreateFormex } 
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
-import { removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
+import {
+    getEntityFromCache,
+    removeEntityFromCache,
+    removeEntityFromMemoryCache,
+    saveEntityToCache
+} from "../util/entity_cache";
 import { CustomIdField } from "./components/CustomIdField";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
+import { LocalChangesMenu } from "./components/LocalChangesMenu";
 
 export type OnUpdateParams = {
     entity: Entity<any>,
@@ -65,7 +72,7 @@ export type EntityFormProps<M extends Record<string, any>> = {
     entity?: Entity<M>;
     databaseId?: string;
     onIdChange?: (id: string) => void;
-    onValuesModified?: (modified: boolean) => void;
+    onValuesModified?: (modified: boolean, values: M) => void;
     onSaved?: (params: OnUpdateParams) => void;
     initialDirtyValues?: Partial<M>; // dirty cached entity in memory
     onFormContextReady?: (formContext: FormContext) => void;
@@ -205,6 +212,18 @@ export function EntityForm<M extends Record<string, any>>({
 
     const autoSave = collection.formAutoSave && !collection.customId;
 
+    const baseInitialValues = useMemo(() => getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs), [authController, collection, path, status, entity, customizationController.propertyConfigs]);
+
+    const localChangesDataRaw = useMemo(() => entityId
+        ? getEntityFromCache(path + "/" + entityId)
+        : getEntityFromCache(path + "#new"), [entityId, path]);
+
+    const [localChangesCleared, setLocalChangesCleared] = useState<boolean>(false);
+
+    const localChangesBackup = getLocalChangesBackup(collection);
+    const autoApplyLocalChanges = localChangesBackup === "auto_apply";
+    const manualApplyLocalChanges = localChangesBackup === "manual_apply";
+
     const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
 
         if (mustSetCustomId && !entityId) {
@@ -242,9 +261,32 @@ export function EntityForm<M extends Record<string, any>>({
             });
     };
 
-    const baseInitialValues = getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs);
-    const initialValues = initialDirtyValues ? mergeDeep(baseInitialValues, initialDirtyValues) : baseInitialValues;
-    const initialDirty = Boolean(initialDirtyValues) && initialDirtyValues && Object.keys(initialDirtyValues).length > 0;
+    const [initialValues, initialDirty] = useMemo(() => {
+        const initialValuesWithLocalChanges: Partial<M> = autoApplyLocalChanges && localChangesDataRaw ? mergeDeep(baseInitialValues, localChangesDataRaw as Partial<M>) : baseInitialValues;
+        const initialValues = initialDirtyValues ? mergeDeep(initialValuesWithLocalChanges, initialDirtyValues) : initialValuesWithLocalChanges;
+        const initialDirty = Boolean(initialDirtyValues) && initialDirtyValues && Object.keys(initialDirtyValues).length > 0;
+        return [initialValues, initialDirty];
+    }, [autoApplyLocalChanges, localChangesDataRaw, baseInitialValues, initialDirtyValues]);
+
+    const localChangesData = useMemo(() => {
+        if (!localChangesDataRaw) {
+            return undefined;
+        }
+        let filteredChanges = {};
+        const flattenedKeys = flattenKeys(localChangesDataRaw);
+        flattenedKeys.forEach(key => {
+            const localValue = getIn(localChangesDataRaw, key);
+            const initialValue = getIn(initialValues, key);
+            if (!equal(localValue, initialValue)) {
+                filteredChanges = setIn(filteredChanges, key, localValue);
+            }
+        });
+        return filteredChanges;
+    }, [localChangesDataRaw, initialValues]);
+
+    const hasLocalChanges = !localChangesCleared && localChangesData && Object.keys(localChangesData).length > 0;
+    console.log("222 Local changes data", { localChangesDataRaw, localChangesData, hasLocalChanges });
+
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
         initialValues: initialValues as M,
         initialDirty,
@@ -258,7 +300,7 @@ export function EntityForm<M extends Record<string, any>>({
         onSubmit,
         onReset: () => {
             clearDirtyCache();
-            onValuesModified?.(false);
+            onValuesModified?.(false, initialValues as M);
         },
         onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
             const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
@@ -328,8 +370,10 @@ export function EntityForm<M extends Record<string, any>>({
 
     function clearDirtyCache() {
         if (status === "new" || status === "copy") {
+            removeEntityFromMemoryCache(path + "#new");
             removeEntityFromCache(path + "#new");
         } else {
+            removeEntityFromMemoryCache(path + "/" + entityId);
             removeEntityFromCache(path + "/" + entityId);
         }
     }
@@ -337,7 +381,7 @@ export function EntityForm<M extends Record<string, any>>({
     const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
         clearDirtyCache();
-        onValuesModified?.(false);
+        onValuesModified?.(false, updatedEntity.values);
         if (!autoSave)
             snackbarController.open({
                 type: "success",
@@ -537,7 +581,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     useEffect(() => {
         if (!autoSave) {
-            onValuesModified?.(modified);
+            onValuesModified?.(modified, formex.values);
         }
     }, [formex.dirty]);
 
@@ -750,27 +794,37 @@ export function EntityForm<M extends Record<string, any>>({
                     className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
 
                     <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
+                        <div
+                            className={"flex flex-row gap-4 self-end sticky top-4 z-10"}>
 
-                        {formex.dirty
-                            ? <Tooltip title={"Local unsaved changes"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"} colorScheme={"orangeDarker"}>
-                                    <EditIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>
-                            : <Tooltip title={"In sync with the database"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"}>
-                                    <CheckIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>}
+                            {manualApplyLocalChanges && hasLocalChanges &&
+                                <LocalChangesMenu localChangesData={localChangesData as Partial<M>}
+                                                  formex={formex}
+                                                  onClearLocalChanges={() => setLocalChangesCleared(true)}
+                                                  cacheKey={(status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId}
+                                />}
+
+                            {formex.dirty
+                                ? <Tooltip title={"There are local unsaved changes"}>
+                                    <Chip size={"small"} colorScheme={"orangeDarker"}>
+                                        <EditIcon size={"smallest"}/>
+                                    </Chip>
+                                </Tooltip>
+                                : <Tooltip title={"The current form is in sync with the database"}>
+                                    <Chip size={"small"}>
+                                        <CheckIcon size={"smallest"}/>
+                                    </Chip>
+                                </Tooltip>}
+                        </div>
 
                         {formView}
 
                     </div>
 
                 </div>
+
                 {dialogActions}
+
             </form>
 
         </Formex>

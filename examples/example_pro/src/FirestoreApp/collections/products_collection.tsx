@@ -16,7 +16,6 @@ export const localeCollection = buildCollection<Locale>({
     customId: locales,
     name: "Locales",
     singularName: "Locale",
-    enableLocalChangesBackup: false,
     entityViews: [
         {
             key: "sec",
@@ -129,7 +128,7 @@ export const productsCollection = buildCollection<Product>({
     includeJsonView: true,
     Actions: [SampleCollectionActions],
     subcollections: [localeCollection],
-    enableLocalChangesBackup: false,
+    // localChangesBackup: false,
     // defaultSelectedView: "sample_custom_view",
     entityViews: [
         {

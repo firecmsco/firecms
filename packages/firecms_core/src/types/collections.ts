@@ -354,12 +354,16 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     history?: boolean;
 
     /**
-     * If set to true, local changes to entities in this collection will be backed up
-     * in the browser's local storage. This allows users to recover unsaved changes
-     * in case of accidental navigation or browser crashes.
-     * Defaults to `true`.
+     * Should local changes be backed up in local storage, to prevent data loss on
+     * accidental navigations.
+     * - `manual_apply`: When the user navigates back to an entity with local changes,
+     *   they will be prompted to restore the changes.
+     * - `auto_apply`: When the user navigates back to an entity with local changes,
+     *   the changes will be automatically applied.
+     * - `false`: Local changes will not be backed up.
+     * Defaults to `manual_apply`.
      */
-    enableLocalChangesBackup?: boolean;
+    localChangesBackup?: "manual_apply" | "auto_apply" | false;
 }
 
 /**

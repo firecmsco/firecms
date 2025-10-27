@@ -3,6 +3,7 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
+    EntityValues,
     FireCMSPlugin,
     FormContext,
     PluginFormActionProps,
@@ -26,7 +27,7 @@ import {
     useLargeLayout
 } from "../hooks";
 import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
-import { getEntityFromCache } from "../util/entity_cache";
+import { getEntityFromMemoryCache } from "../util/entity_cache";
 import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
@@ -42,6 +43,13 @@ export type OnUpdateParams = {
     entityId?: string;
     selectedTab?: string;
     collection: EntityCollection<any>
+};
+
+export type BarActionsParams = {
+    values: object,
+    status: EntityStatus,
+    path: string,
+    entityId?: string;
 };
 
 export type OnTabChangeParams<M extends Record<string, any>> = {
@@ -67,11 +75,11 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     copy?: boolean;
     selectedTab?: string;
     parentCollectionIds: string[];
-    onValuesModified?: (modified: boolean) => void;
+    onValuesModified?: (modified: boolean, values:M) => void;
     onSaved?: (params: OnUpdateParams) => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
-    barActions?: React.ReactNode;
+    barActions?: (params: BarActionsParams) => React.ReactNode;
     formProps?: Partial<EntityFormProps<M>>,
 }
 
@@ -97,11 +105,11 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         useCache: false
     });
 
-    const enableLocalChangesBackup = props.collection.enableLocalChangesBackup !== undefined ? props.collection.enableLocalChangesBackup : true;
-
     const initialDirtyValues = entityId
-        ? getEntityFromCache(props.path + "/" + entityId, enableLocalChangesBackup)
-        : getEntityFromCache(props.path + "#new", enableLocalChangesBackup);
+        ? getEntityFromMemoryCache(props.path + "/" + entityId)
+        : getEntityFromMemoryCache(props.path + "#new");
+
+    console.log("EntityEditView initialDirtyValues:", initialDirtyValues);
 
     const authController = useAuthController();
 
@@ -390,6 +398,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         disabled={!canEdit}
         {...formProps}
         onEntityChange={(entity) => {
+            console.log("333 EntityEditView onEntityChange:", entity);
             setUsedEntity(entity);
             formProps?.onEntityChange?.(entity);
         }}
@@ -447,7 +456,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         {shouldShowTopBar && <div
             className={cls("h-14 items-center flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
 
-            {barActions}
+            {barActions?.({
+                path: fullIdPath ?? path,
+                entityId,
+                values: formContext?.values ?? usedEntity?.values ?? {},
+                status
+            })}
 
             <div className={"flex-grow"}/>
 

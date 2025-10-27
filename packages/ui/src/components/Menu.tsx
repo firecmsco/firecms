@@ -76,7 +76,7 @@ export function MenuItem({
     const classNames = cls(
         onClick && "cursor-pointer",
         "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900 flex items-center gap-4",
-        dense ? "px-3 py-1.5" : "px-4 py-2",
+        dense ? "px-4 py-1.5" : "px-4 py-2",
         className
     );
 

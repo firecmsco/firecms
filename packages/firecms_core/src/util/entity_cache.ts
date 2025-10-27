@@ -82,9 +82,6 @@ function customReviver(key: string, value: any): any {
  * @param data - The data to cache and persist.
  */
 export function saveEntityToCache(path: string, data: object): void {
-    // Update the in-memory cache
-    entityCache.set(path, data);
-
     // Persist the data individually in localStorage
     if (isLocalStorageAvailable) {
         try {
@@ -100,6 +97,23 @@ export function saveEntityToCache(path: string, data: object): void {
     }
 }
 
+export function removeEntityFromMemoryCache(path: string): void {
+    entityCache.delete(path);
+}
+
+export function saveEntityToMemoryCache(path: string, data: object): void {
+    console.log("!!! Saving entity to memory cache", path, data);
+    entityCache.set(path, data);
+}
+
+export function getEntityFromMemoryCache(path: string): object | undefined {
+    return entityCache.get(path);
+}
+
+export function hasEntityInCache(path: string): boolean {
+    return entityCache.has(path);
+}
+
 /**
  * Retrieves an entity from the in-memory cache or `localStorage`.
  * If the entity is not in the cache but exists in `localStorage`, it loads it into the cache.
@@ -107,21 +121,15 @@ export function saveEntityToCache(path: string, data: object): void {
  * @param useLocalStorage
  * @returns The cached entity or `undefined` if not found.
  */
-export function getEntityFromCache(path: string, useLocalStorage = true): object | undefined {
-
-    // Attempt to retrieve the entity from the in-memory cache
-    if (entityCache.has(path)) {
-        return entityCache.get(path);
-    }
+export function getEntityFromCache(path: string): object | undefined {
 
     // If not in the cache, attempt to load it from localStorage
-    if (isLocalStorageAvailable && useLocalStorage) {
+    if (isLocalStorageAvailable) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
             const entityString = localStorage.getItem(key);
             if (entityString) {
                 const entity: object = JSON.parse(entityString, customReviver);
-                entityCache.set(path, entity); // Update the cache
                 return entity;
             }
         } catch (error) {
@@ -136,20 +144,13 @@ export function getEntityFromCache(path: string, useLocalStorage = true): object
     return undefined;
 }
 
-export function hasEntityInCache(path: string): boolean {
-    return entityCache.has(path);
-}
-
 /**
  * Removes an entity from both the in-memory cache and `localStorage`.
  * @param path - The unique path/key for the entity to remove.
  */
 export function removeEntityFromCache(path: string): void {
 
-    console.debug("Removing entity from cache", path);
-
-    // Remove from the in-memory cache
-    entityCache.delete(path);
+    console.log("Removing entity from cache", path);
 
     // Remove from localStorage
     if (isLocalStorageAvailable) {

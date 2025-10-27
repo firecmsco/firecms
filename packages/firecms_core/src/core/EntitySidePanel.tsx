@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import { EntitySidePanelProps } from "../types";
+import { EntityCollection, EntitySidePanelProps } from "../types";
 import { useNavigationController, useSideEntityController } from "../hooks";
 
 import { ErrorBoundary } from "../components";
@@ -8,6 +8,7 @@ import { EntityEditView, OnUpdateParams } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
 import { CloseIcon, IconButton, OpenInFullIcon } from "@firecms/ui";
 import { useLocation, useNavigate } from "react-router-dom";
+import { saveEntityToMemoryCache } from "../util/entity_cache";
 
 /**
  * This is the component in charge of rendering the side dialog used
@@ -114,11 +115,14 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     {...props}
                     fullIdPath={fullIdPath}
                     layout={"side_panel"}
-                    collection={collection}
+                    collection={collection as EntityCollection}
                     parentCollectionIds={parentCollectionIds}
                     onValuesModified={onValuesModified}
                     onSaved={onUpdate}
-                    barActions={<>
+                    barActions={({
+                                     status,
+                                     values
+                                 }) => <>
                         <IconButton
                             className="self-center"
                             onClick={onClose}>
@@ -127,6 +131,8 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                         {allowFullScreen && <IconButton
                             className="self-center"
                             onClick={() => {
+                                const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+                                saveEntityToMemoryCache(key, values);
                                 if (entityId)
                                     navigate(location.pathname);
                                 else
