@@ -79,7 +79,9 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
-    const hasDraft = hasEntityInCache(fullPath + "/" + entity.id);
+    const enableLocalChangesBackup = collection?.enableLocalChangesBackup !== undefined ? collection?.enableLocalChangesBackup : true;
+    const hasDraft = enableLocalChangesBackup ? hasEntityInCache(fullPath + "/" + entity.id) : false;
+
     return (
         <div
             className={cls(
