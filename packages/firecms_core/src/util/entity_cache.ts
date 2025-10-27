@@ -18,25 +18,40 @@ function customReplacer(key: string): any {
     // Handle Date objects
     // @ts-ignore
     if (value instanceof Date) {
-        return { __type: "Date", value: value.toISOString() };
+        return {
+            __type: "Date",
+            value: value.toISOString()
+        };
     }
 
     // Handle EntityReference
     // @ts-ignore
     if (value instanceof EntityReference) {
-        return { __type: "EntityReference", id: value.id, path: value.path, databaseId: value.databaseId };
+        return {
+            __type: "EntityReference",
+            id: value.id,
+            path: value.path,
+            databaseId: value.databaseId
+        };
     }
 
     // Handle GeoPoint
     // @ts-ignore
     if (value instanceof GeoPoint) {
-        return { __type: "GeoPoint", latitude: value.latitude, longitude: value.longitude };
+        return {
+            __type: "GeoPoint",
+            latitude: value.latitude,
+            longitude: value.longitude
+        };
     }
 
     // Handle Vector
     // @ts-ignore
     if (value instanceof Vector) {
-        return { __type: "Vector", value: value.value };
+        return {
+            __type: "Vector",
+            value: value.value
+        };
     }
 
     return value;
@@ -59,33 +74,6 @@ function customReviver(key: string, value: any): any {
         }
     }
     return value;
-}
-
-// Initialize the in-memory cache by loading entities from `localStorage`
-if (isLocalStorageAvailable) {
-    try {
-        // Iterate over all keys in localStorage to find those with the specified prefix
-        for (let i = 0; i < localStorage.length; i++) {
-            const fullKey = localStorage.key(i);
-            if (fullKey && fullKey.startsWith(LOCAL_STORAGE_PREFIX)) {
-                const path = fullKey.substring(LOCAL_STORAGE_PREFIX.length);
-                const entityString = localStorage.getItem(fullKey);
-                if (entityString) {
-                    try {
-                        const entity: object = JSON.parse(entityString, customReviver);
-                        entityCache.set(path, entity);
-                    } catch (parseError) {
-                        console.error(
-                            `Failed to parse entity for path "${path}" from localStorage:`,
-                            parseError
-                        );
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        console.error("Error accessing localStorage during initialization:", error);
-    }
 }
 
 /**
@@ -116,9 +104,10 @@ export function saveEntityToCache(path: string, data: object): void {
  * Retrieves an entity from the in-memory cache or `localStorage`.
  * If the entity is not in the cache but exists in `localStorage`, it loads it into the cache.
  * @param path - The unique path/key for the entity.
+ * @param useLocalStorage
  * @returns The cached entity or `undefined` if not found.
  */
-export function getEntityFromCache(path: string): object | undefined {
+export function getEntityFromCache(path: string, useLocalStorage = true): object | undefined {
 
     // Attempt to retrieve the entity from the in-memory cache
     if (entityCache.has(path)) {
@@ -126,7 +115,7 @@ export function getEntityFromCache(path: string): object | undefined {
     }
 
     // If not in the cache, attempt to load it from localStorage
-    if (isLocalStorageAvailable) {
+    if (isLocalStorageAvailable && useLocalStorage) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
             const entityString = localStorage.getItem(key);

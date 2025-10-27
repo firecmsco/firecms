@@ -352,6 +352,14 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * This prop has no effect if the history plugin is not enabled
      */
     history?: boolean;
+
+    /**
+     * If set to true, local changes to entities in this collection will be backed up
+     * in the browser's local storage. This allows users to recover unsaved changes
+     * in case of accidental navigation or browser crashes.
+     * Defaults to `true`.
+     */
+    enableLocalChangesBackup?: boolean;
 }
 
 /**

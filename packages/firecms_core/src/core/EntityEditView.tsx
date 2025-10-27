@@ -97,9 +97,11 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         useCache: false
     });
 
+    const enableLocalChangesBackup = props.collection.enableLocalChangesBackup !== undefined ? props.collection.enableLocalChangesBackup : true;
+
     const initialDirtyValues = entityId
-        ? getEntityFromCache(props.path + "/" + entityId)
-        : getEntityFromCache(props.path + "#new");
+        ? getEntityFromCache(props.path + "/" + entityId, enableLocalChangesBackup)
+        : getEntityFromCache(props.path + "#new", enableLocalChangesBackup);
 
     const authController = useAuthController();
 
