@@ -694,7 +694,7 @@ export const EntityCollectionView = React.memo(
                                 className="mt-4"
                             >
                                 <AddIcon/>
-                                Create your first entity
+                                Create your first entry
                             </Button>
                         </div>
                         : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
