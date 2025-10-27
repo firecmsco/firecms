@@ -12,6 +12,7 @@ import {
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
     canEditEntity,
+    mergeDeep,
     removeInitialAndTrailingSlashes,
     resolveCollection,
     resolveDefaultSelectedView,
@@ -31,6 +32,7 @@ import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub } from "../util/createFormexStub";
+import { getInitialEntityValues } from "../form/EntityForm";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -97,7 +99,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         useCache: false
     });
 
-    const cachedValues = entityId
+    const initialDirtyValues = entityId
         ? getEntityFromCache(props.path + "/" + entityId)
         : getEntityFromCache(props.path + "#new");
 
@@ -114,18 +116,18 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         }
     }, [authController, entity, status]);
 
-    if ((dataLoading && !cachedValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
+    if ((dataLoading && !initialDirtyValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
         return <CircularProgressCenter/>;
     }
 
-    if (entityId && !entity && !cachedValues) {
+    if (entityId && !entity && !initialDirtyValues) {
         console.error(`Entity with id ${entityId} not found in collection ${props.path}`);
     }
 
     return <EntityEditViewInner<M> {...props}
                                    entityId={entityId}
                                    entity={entity}
-                                   cachedDirtyValues={cachedValues as Partial<M>}
+                                   initialDirtyValues={initialDirtyValues as Partial<M>}
                                    dataLoading={dataLoading}
                                    status={status}
                                    setStatus={setStatus}
@@ -144,7 +146,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        onSaved,
                                                                        onTabChange,
                                                                        entity,
-                                                                       cachedDirtyValues,
+                                                                       initialDirtyValues,
                                                                        dataLoading,
                                                                        layout = "side_panel",
                                                                        barActions,
@@ -154,7 +156,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        canEdit
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
-    cachedDirtyValues?: Partial<M>, // dirty cached entity in memory
+    initialDirtyValues?: Partial<M>, // dirty cached entity in memory
     dataLoading: boolean,
     status: EntityStatus,
     setStatus: (status: EntityStatus) => void,
@@ -379,7 +381,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         entityId={entityId ?? usedEntity?.id}
         onValuesModified={onValuesModified}
         entity={entity}
-        initialDirtyValues={cachedDirtyValues}
+        initialDirtyValues={initialDirtyValues}
         openEntityMode={layout}
         forceActionsAtTheBottom={actionsAtTheBottom}
         initialStatus={status}
@@ -523,4 +525,3 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     return result;
 }
-

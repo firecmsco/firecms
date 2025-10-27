@@ -32,7 +32,8 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext, useNavigationController,
+    useFireCMSContext,
+    useNavigationController,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
@@ -125,7 +126,6 @@ export function EntityForm<M extends Record<string, any>>({
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
-
 
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
@@ -226,8 +226,10 @@ export function EntityForm<M extends Record<string, any>>({
             });
     };
 
+    const baseInitialValues = getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs);
+    const initialValues = initialDirtyValues ? mergeDeep(baseInitialValues, initialDirtyValues) : baseInitialValues;
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
-        initialValues: (initialDirtyValues ?? getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs)) as M,
+        initialValues: initialValues as M,
         initialDirty: Boolean(initialDirtyValues),
         onSubmit,
         onReset: () => {
@@ -716,7 +718,7 @@ export function EntityForm<M extends Record<string, any>>({
             <form
                 onSubmit={formex.handleSubmit}
                 onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs) as M
+                    values: baseInitialValues as M
                 })}
                 noValidate
                 className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
@@ -752,7 +754,7 @@ export function EntityForm<M extends Record<string, any>>({
     );
 }
 
-function getInitialEntityValues<M extends object>(
+export function getInitialEntityValues<M extends object>(
     authController: AuthController,
     collection: EntityCollection,
     path: string,
@@ -811,4 +813,5 @@ function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<a
         }
     }, [formex.values]);
 }
+
 
