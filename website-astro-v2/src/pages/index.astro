@@ -192,20 +192,22 @@ const description = "Build powerful back-office apps in minutes. Go live instant
 
         <!-- Minimalistic single quote (Microsoft) -->
         <div class="mx-auto max-w-3xl animate-on-scroll fade-in-up">
-          <blockquote class="text-2xl sm:text-3xl leading-snug text-white tracking-tight">
-            “I've tried many other CMS including Strapi, Sanity, Contentful, Builder.io, none of them gave me a better experience than FireCMS!”
-          </blockquote>
-          <figcaption class="mt-6 flex items-center gap-x-4">
-            <img class="h-12 w-12 rounded-full bg-gray-800 object-cover" src="/img/avatars/fulei.avif" alt="Fulei Huang">
-            <div class="text-sm leading-6">
-              <div class="font-semibold text-white">Fulei Huang</div>
-              <div class="text-gray-400">Software Engineer, Microsoft</div>
-            </div>
-          </figcaption>
+          <figure>
+            <blockquote class="text-2xl sm:text-3xl leading-snug text-white tracking-tight">
+              “I've tried many other CMS including Strapi, Sanity, Contentful, Builder.io, none of them gave me a better experience than FireCMS!”
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-x-4">
+              <img class="h-12 w-12 rounded-full bg-gray-800 object-cover" src="/img/avatars/fulei.avif" alt="Fulei Huang">
+              <div class="text-sm leading-6">
+                <div class="font-semibold text-white">Fulei Huang</div>
+                <div class="text-gray-400">Software Engineer, Microsoft</div>
+              </div>
+            </figcaption>
+          </figure>
         </div>
 
         <div class="mt-16 text-center">
-          <a href="/why-firecms#testimonials" class="text-base font-semibold leading-6 text-primary hover:text-primary-light transition-colors">
+          <a href="/why-firecms" class="text-base font-semibold leading-6 text-primary hover:text-primary-light transition-colors">
             See more testimonials <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -240,7 +242,7 @@ const description = "Build powerful back-office apps in minutes. Go live instant
 
 <script>
   // Mouse spotlight effect for cards
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', () => {
     const cards = document.querySelectorAll('[data-spotlight-card]');
 
     cards.forEach(card => {
@@ -263,6 +265,10 @@ const description = "Build powerful back-office apps in minutes. Go live instant
     });
 
     // Intersection Observer for scroll animations
+    if ((window as any).pageObserver) {
+        (window as any).pageObserver.disconnect();
+    }
+
     const observerOptions = {
       threshold: 0.15,
       rootMargin: '0px 0px -100px 0px'
@@ -278,12 +284,15 @@ const description = "Build powerful back-office apps in minutes. Go live instant
         }
       });
     }, observerOptions);
+    (window as any).pageObserver = observer;
+
 
     // Observe all elements with animate-on-scroll class
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     console.log('Found animated elements:', animatedElements.length);
     animatedElements.forEach(el => {
       console.log('Observing:', el);
+      el.classList.remove('in-view');
       observer.observe(el);
     });
   });

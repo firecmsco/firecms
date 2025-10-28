@@ -129,40 +129,60 @@ function PropertyTypeOption({
 }
 
 export function SchemaEditorDemo() {
-    const [showDialog, setShowDialog] = useState(false);
+    const [showDialog, setShowDialog] = useState(true);
     const [scrollPosition, setScrollPosition] = useState(0);
 
     useEffect(() => {
         // Initial delay before first showing dialog
-        const initialTimer = setTimeout(() => setShowDialog(true), 800);
+        const initialTimer = setTimeout(() => setShowDialog(true), 600);
         return () => clearTimeout(initialTimer);
     }, []);
 
     useEffect(() => {
         if (!showDialog) return;
 
-        // Pause for 2 seconds after dialog opens before starting scroll
-        const pauseBeforeScroll = setTimeout(() => {
-            // Faster scroll animation - 1200px in ~3 seconds
-            const scrollInterval = setInterval(() => {
-                setScrollPosition(prev => {
-                    if (prev >= 1200) {
-                        clearInterval(scrollInterval);
-                        // Close dialog and restart the loop
-                        setTimeout(() => {
-                            setShowDialog(false);
-                            setScrollPosition(0);
-                            // Pause for 2 seconds before restarting the loop
-                            setTimeout(() => setShowDialog(true), 2000);
-                        }, 500);
-                        return prev;
-                    }
-                    return prev + 8; // Faster increment
-                });
-            }, 20);
-        }, 2000);
+        let animationFrameId: number;
+        let startTime: number;
+        const duration = 3000; // Animation duration in ms
+        const scrollDistance = 1200;
 
-        return () => clearTimeout(pauseBeforeScroll);
+        // Easing function for a slow start and fast end
+        const easeInQuart = (t: number) => t * t * t * t;
+
+        const animateScroll = (timestamp: number) => {
+            if (!startTime) {
+                startTime = timestamp;
+            }
+            const elapsedTime = timestamp - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            const easedProgress = easeInQuart(progress);
+
+            setScrollPosition(easedProgress * scrollDistance);
+
+            if (progress < 1) {
+                animationFrameId = requestAnimationFrame(animateScroll);
+            } else {
+                // End of scroll, restart loop
+                setTimeout(() => {
+                    setShowDialog(false);
+                    // Pause before restarting
+                    setTimeout(() => setShowDialog(true), 1500);
+                }, 500);
+            }
+        };
+
+        // Pause for 2 seconds before starting scroll
+        const pauseBeforeScroll = setTimeout(() => {
+            animationFrameId = requestAnimationFrame(animateScroll);
+        }, 1500);
+
+        return () => {
+            clearTimeout(pauseBeforeScroll);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            setScrollPosition(0);
+        };
     }, [showDialog]);
 
     const properties = [
@@ -597,162 +617,164 @@ export function SchemaEditorDemo() {
                          opacity: showDialog ? 1 : 0,
                          transition: "opacity 400ms ease-in-out"
                      }}>
-                    <div className="bg-white dark:bg-surface-950 border border-opacity-40 dark:border-opacity-40 border-surface-200/40 dark:border-surface-700/40 rounded-md shadow-xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
-                        <h6 className="typography-subtitle2 text-text-primary dark:text-text-primary-dark mb-3 mt-6 mx-6 flex-shrink-0">
-                            Select a property widget
-                        </h6>
+                    <div
+                        className="h-[540px] overflow-hidden bg-white dark:bg-surface-950 border border-opacity-40 dark:border-opacity-40 border-surface-200/40 dark:border-surface-700/40 rounded-md shadow-xl w-11/12 max-w-4xl max-h-[90vh] flex flex-col">
 
-                        <div className="flex-grow my-6 mx-6 overflow-hidden">
+
+                        <div className="flex-grow my-6 mx-6">
                             <div style={{
                                 transform: `translateY(-${scrollPosition}px)`,
                                 transition: "none"
                             }}>
+                                <h6 className="typography-subtitle2 text-text-primary dark:text-text-primary-dark mb-4 mt-6 flex-shrink-0">
+                                    Select a property widget
+                                </h6>
+
                                 <div>
-                                {/* Text */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Text</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="short_text" iconColor="rgb(45, 127, 249)"
-                                                            title="Text field" description="Simple short text"/>
-                                        <PropertyTypeOption icon="subject" iconColor="rgb(45, 127, 249)"
-                                                            title="Multiline" description="Text with multiple lines"/>
-                                        <PropertyTypeOption icon="format_quote" iconColor="rgb(45, 127, 249)"
-                                                            title="Markdown"
-                                                            description="Text with advanced markdown syntax"/>
-                                        <PropertyTypeOption icon="http" iconColor="rgb(21, 79, 179)" title="Url"
-                                                            description="Text with URL validation"/>
-                                        <PropertyTypeOption icon="mail" iconColor="rgb(21, 79, 179)" title="Email"
-                                                            description="Text with email validation"/>
-                                        <PropertyTypeOption icon="link" iconColor="rgb(21, 79, 179)"
-                                                            title="Reference (as string)"
-                                                            description="The value refers to a different collection (it is saved as a string)"/>
+                                    {/* Text */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Text</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="short_text" iconColor="rgb(45, 127, 249)"
+                                                                title="Text field" description="Simple short text"/>
+                                            <PropertyTypeOption icon="subject" iconColor="rgb(45, 127, 249)"
+                                                                title="Multiline"
+                                                                description="Text with multiple lines"/>
+                                            <PropertyTypeOption icon="format_quote" iconColor="rgb(45, 127, 249)"
+                                                                title="Markdown"
+                                                                description="Text with advanced markdown syntax"/>
+                                            <PropertyTypeOption icon="http" iconColor="rgb(21, 79, 179)" title="Url"
+                                                                description="Text with URL validation"/>
+                                            <PropertyTypeOption icon="mail" iconColor="rgb(21, 79, 179)" title="Email"
+                                                                description="Text with email validation"/>
+                                            <PropertyTypeOption icon="link" iconColor="rgb(21, 79, 179)"
+                                                                title="Reference (as string)"
+                                                                description="The value refers to a different collection (it is saved as a string)"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Boolean */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Boolean</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="flag" iconColor="rgb(32, 217, 210)" title="Switch"
-                                                            description="Boolean true or false field (or yes or no, 0 or 1...)"/>
+                                    {/* Boolean */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Boolean</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="flag" iconColor="rgb(32, 217, 210)" title="Switch"
+                                                                description="Boolean true or false field (or yes or no, 0 or 1...)"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Select */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Select</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="list" iconColor="rgb(66, 35, 201)" title="Select/enum"
-                                                            description="Select one text value from within an enumeration"/>
-                                        <PropertyTypeOption icon="list_alt" iconColor="rgb(66, 35, 201)"
-                                                            title="Multi select (enum)"
-                                                            description="Select multiple text values from within an enumeration"/>
-                                        <PropertyTypeOption icon="format_list_numbered" iconColor="rgb(190, 201, 32)"
-                                                            title="Number select"
-                                                            description="Select a number value from within an enumeration"/>
-                                        <PropertyTypeOption icon="format_list_numbered" iconColor="rgb(190, 201, 32)"
-                                                            title="Multiple number select"
-                                                            description="Select multiple number values from within an enumeration"/>
+                                    {/* Select */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Select</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="list" iconColor="rgb(66, 35, 201)"
+                                                                title="Select/enum"
+                                                                description="Select one text value from within an enumeration"/>
+                                            <PropertyTypeOption icon="list_alt" iconColor="rgb(66, 35, 201)"
+                                                                title="Multi select (enum)"
+                                                                description="Select multiple text values from within an enumeration"/>
+                                            <PropertyTypeOption icon="format_list_numbered"
+                                                                iconColor="rgb(190, 201, 32)"
+                                                                title="Number select"
+                                                                description="Select a number value from within an enumeration"/>
+                                            <PropertyTypeOption icon="format_list_numbered"
+                                                                iconColor="rgb(190, 201, 32)"
+                                                                title="Multiple number select"
+                                                                description="Select multiple number values from within an enumeration"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Users */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Users</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="person" iconColor="rgb(45, 127, 249)"
-                                                            title="User select"
-                                                            description="Select a user from the user management system. Store the user ID."/>
+                                    {/* Users */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Users</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="person" iconColor="rgb(45, 127, 249)"
+                                                                title="User select"
+                                                                description="Select a user from the user management system. Store the user ID."/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Number */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Number</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="numbers" iconColor="rgb(190, 201, 32)"
-                                                            title="Number input"
-                                                            description="Simple number field with validation"/>
+                                    {/* Number */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Number</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="numbers" iconColor="rgb(190, 201, 32)"
+                                                                title="Number input"
+                                                                description="Simple number field with validation"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* File */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">File</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="upload_file" iconColor="rgb(249, 45, 154)"
-                                                            title="File upload"
-                                                            description="Input for uploading single files"/>
-                                        <PropertyTypeOption icon="drive_folder_upload" iconColor="rgb(249, 45, 154)"
-                                                            title="Multiple file upload"
-                                                            description="Input for uploading multiple files"/>
+                                    {/* File */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">File</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="upload_file" iconColor="rgb(249, 45, 154)"
+                                                                title="File upload"
+                                                                description="Input for uploading single files"/>
+                                            <PropertyTypeOption icon="drive_folder_upload" iconColor="rgb(249, 45, 154)"
+                                                                title="Multiple file upload"
+                                                                description="Input for uploading multiple files"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Reference */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Reference</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="link" iconColor="rgb(255, 0, 66)" title="Reference"
-                                                            description="The value refers to a different collection (it is saved as a reference)"/>
-                                        <PropertyTypeOption icon="add_link" iconColor="rgb(255, 0, 66)"
-                                                            title="Multiple references"
-                                                            description="Multiple values that refer to a different collection"/>
+                                    {/* Reference */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Reference</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="link" iconColor="rgb(255, 0, 66)"
+                                                                title="Reference"
+                                                                description="The value refers to a different collection (it is saved as a reference)"/>
+                                            <PropertyTypeOption icon="add_link" iconColor="rgb(255, 0, 66)"
+                                                                title="Multiple references"
+                                                                description="Multiple values that refer to a different collection"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Date */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Date</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="schedule" iconColor="rgb(139, 70, 255)"
-                                                            title="Date/time" description="A date time select field"/>
+                                    {/* Date */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Date</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="schedule" iconColor="rgb(139, 70, 255)"
+                                                                title="Date/time"
+                                                                description="A date time select field"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Group */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Group</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="ballot" iconColor="rgb(255, 148, 8)" title="Group"
-                                                            description="Group of multiple fields"/>
-                                        <PropertyTypeOption icon="ballot" iconColor="rgb(255, 148, 8)" title="Key-value"
-                                                            description="Flexible field that allows the user to add multiple key-value pairs"/>
-                                        <PropertyTypeOption icon="view_stream" iconColor="rgb(255, 148, 8)"
-                                                            title="Block"
-                                                            description="A complex field that allows the user to compose different fields together, with a key/value format"/>
+                                    {/* Group */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Group</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="ballot" iconColor="rgb(255, 148, 8)" title="Group"
+                                                                description="Group of multiple fields"/>
+                                            <PropertyTypeOption icon="ballot" iconColor="rgb(255, 148, 8)"
+                                                                title="Key-value"
+                                                                description="Flexible field that allows the user to add multiple key-value pairs"/>
+                                            <PropertyTypeOption icon="view_stream" iconColor="rgb(255, 148, 8)"
+                                                                title="Block"
+                                                                description="A complex field that allows the user to compose different fields together, with a key/value format"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Array */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Array</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        <PropertyTypeOption icon="repeat" iconColor="rgb(255, 148, 8)"
-                                                            title="Repeat/list"
-                                                            description="A field that gets repeated multiple times (e.g. multiple text fields)"/>
+                                    {/* Array */}
+                                    <div className="mt-4">
+                                        <label
+                                            className="typography-label text-text-primary dark:text-text-primary-dark">Array</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                            <PropertyTypeOption icon="repeat" iconColor="rgb(255, 148, 8)"
+                                                                title="Repeat/list"
+                                                                description="A field that gets repeated multiple times (e.g. multiple text fields)"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Custom/Other */}
-                                <div className="mt-4">
-                                    <label
-                                        className="typography-label text-text-primary dark:text-text-primary-dark">Custom/Other</label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                        {/* Empty section */}
-                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -761,4 +783,3 @@ export function SchemaEditorDemo() {
         </div>
     );
 }
-
