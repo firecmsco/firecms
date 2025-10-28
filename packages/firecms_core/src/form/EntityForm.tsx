@@ -285,7 +285,6 @@ export function EntityForm<M extends Record<string, any>>({
     }, [localChangesDataRaw, initialValues]);
 
     const hasLocalChanges = !localChangesCleared && localChangesData && Object.keys(localChangesData).length > 0;
-    console.log("222 Local changes data", { localChangesDataRaw, localChangesData, hasLocalChanges });
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
         initialValues: initialValues as M,
@@ -798,10 +797,12 @@ export function EntityForm<M extends Record<string, any>>({
                             className={"flex flex-row gap-4 self-end sticky top-4 z-10"}>
 
                             {manualApplyLocalChanges && hasLocalChanges &&
-                                <LocalChangesMenu localChangesData={localChangesData as Partial<M>}
-                                                  formex={formex}
-                                                  onClearLocalChanges={() => setLocalChangesCleared(true)}
-                                                  cacheKey={(status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId}
+                                <LocalChangesMenu
+                                    cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
+                                    properties={resolvedCollection.properties}
+                                    localChangesData={localChangesData as Partial<M>}
+                                    formex={formex}
+                                    onClearLocalChanges={() => setLocalChangesCleared(true)}
                                 />}
 
                             {formex.dirty

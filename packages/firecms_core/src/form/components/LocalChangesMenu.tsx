@@ -11,23 +11,28 @@ import {
     Typography, VisibilityIcon,
     WarningIcon
 } from "@firecms/ui";
-import { flattenKeys, FormexController } from "@firecms/formex";
+import { flattenKeys, FormexController, getIn } from "@firecms/formex";
 import { useSnackbarController } from "../../hooks";
 import { mergeDeep } from "../../util";
 import { removeEntityFromCache } from "../../util/entity_cache";
+import { getPropertyInPath } from "../../util";
+import { PropertyPreview } from "../../preview";
+import { ResolvedProperties, ResolvedProperty } from "../../types";
 
 interface LocalChangesMenuProps<M extends object> {
     cacheKey: string;
     localChangesData: Partial<M>;
     formex: FormexController<M>;
     onClearLocalChanges?: () => void;
+    properties: ResolvedProperties<M>;
 }
 
 export function LocalChangesMenu<M extends object>({
                                                        localChangesData,
                                                        formex,
                                                        onClearLocalChanges,
-                                                       cacheKey
+                                                       cacheKey,
+                                                       properties
                                                    }: LocalChangesMenuProps<M>) {
 
     const snackbarController = useSnackbarController();
@@ -111,25 +116,30 @@ export function LocalChangesMenu<M extends object>({
                     </p>
                     <div
                         className={`border rounded-lg divide-y divide-surface-200 divide-surface-opacity-40 dark:divide-surface-700 dark:divide-opacity-40 ${defaultBorderMixin}`}>
-                        {Object.entries(localChangesData).map(([key, value]) => (
-                            <div key={key}
-                                 className="grid grid-cols-12 gap-x-4 px-4 py-3 items-center">
-                                <div
-                                    className="col-span-3">
-                                    <Typography variant="caption"
-                                                className="text-gray-500 dark:text-gray-400 break-words">{key}</Typography>
+                        {flattenKeys(localChangesData).map((key) => {
+                            const value = getIn(localChangesData, key);
+                            const property = getPropertyInPath(properties, key) as ResolvedProperty;
+                            if (!property) {
+                                return null;
+                            }
+                            return (
+                                <div key={key}
+                                     className="grid grid-cols-12 gap-x-4 px-4 py-3 items-center">
+                                    <div
+                                        className="col-span-3 text-right">
+                                        <Typography variant="caption"
+                                                    className="text-gray-500 dark:text-gray-400 break-words">{property.name || key}</Typography>
+                                    </div>
+                                    <div className="col-span-9">
+                                        <PropertyPreview
+                                            propertyKey={key}
+                                            value={value}
+                                            property={property}
+                                            size={"small"}/>
+                                    </div>
                                 </div>
-                                <div className="col-span-9">
-                                    <Typography component="div" variant="body2"
-                                                className="text-gray-800 dark:text-gray-200">
-                                        <div
-                                            className="whitespace-pre-wrap break-words text-sm">
-                                            {typeof value === "object" && value !== null ? JSON.stringify(value, null, 2) : String(value)}
-                                        </div>
-                                    </Typography>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </DialogContent>
                 <DialogActions>

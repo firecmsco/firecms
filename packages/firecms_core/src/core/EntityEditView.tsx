@@ -109,8 +109,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         ? getEntityFromMemoryCache(props.path + "/" + entityId)
         : getEntityFromMemoryCache(props.path + "#new");
 
-    console.log("EntityEditView initialDirtyValues:", initialDirtyValues);
-
     const authController = useAuthController();
 
     const initialStatus = props.copy ? "copy" : (entityId ? "existing" : "new");

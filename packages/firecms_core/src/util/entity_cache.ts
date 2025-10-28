@@ -102,7 +102,6 @@ export function removeEntityFromMemoryCache(path: string): void {
 }
 
 export function saveEntityToMemoryCache(path: string, data: object): void {
-    console.log("!!! Saving entity to memory cache", path, data);
     entityCache.set(path, data);
 }
 
@@ -149,10 +148,6 @@ export function getEntityFromCache(path: string): object | undefined {
  * @param path - The unique path/key for the entity to remove.
  */
 export function removeEntityFromCache(path: string): void {
-
-    console.log("Removing entity from cache", path);
-
-    // Remove from localStorage
     if (isLocalStorageAvailable) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
