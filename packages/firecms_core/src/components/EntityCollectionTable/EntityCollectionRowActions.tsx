@@ -14,7 +14,8 @@ import {
     Tooltip
 } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { hasEntityInCache } from "../../util/entity_cache";
+import { getEntityFromCache, hasEntityInCache } from "../../util/entity_cache";
+import { getLocalChangesBackup } from "../../util";
 
 /**
  *
@@ -79,7 +80,9 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
-    const hasDraft = hasEntityInCache(fullPath + "/" + entity.id);
+    const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
+    const hasDraft = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : false;
+
     return (
         <div
             className={cls(

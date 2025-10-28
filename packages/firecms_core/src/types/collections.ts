@@ -352,6 +352,18 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * This prop has no effect if the history plugin is not enabled
      */
     history?: boolean;
+
+    /**
+     * Should local changes be backed up in local storage, to prevent data loss on
+     * accidental navigations.
+     * - `manual_apply`: When the user navigates back to an entity with local changes,
+     *   they will be prompted to restore the changes.
+     * - `auto_apply`: When the user navigates back to an entity with local changes,
+     *   the changes will be automatically applied.
+     * - `false`: Local changes will not be backed up.
+     * Defaults to `manual_apply`.
+     */
+    localChangesBackup?: "manual_apply" | "auto_apply" | false;
 }
 
 /**

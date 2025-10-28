@@ -1,37 +1,33 @@
 import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import equal from "react-fast-compare"
+import { HistoryEntry, NewHistoryEntryParams } from "./types";
 
-export interface NewHistoryEntryParams {
-    context: FireCMSContext<User>;
-    previousValues?: Partial<any>;
-    values: Partial<any>;
-    path: string;
-    entityId: string;
-}
 
-export function createHistoryEntry({
+
+export function createHistoryEntry<T = any>({
                                        context,
                                        previousValues,
                                        values,
                                        path,
                                        entityId
-                                   }: NewHistoryEntryParams) {
+                                   }: NewHistoryEntryParams<T>) {
 
     const uid = context.authController.user?.uid;
     const dataSource = context.dataSource;
-    const changedFields = previousValues ? findChangedFields(previousValues, values) : null;
+    const changedFields = previousValues ? findChangedFields(previousValues as object, values as object) : null;
 
+    const entry: HistoryEntry<T> = {
+        ...values,
+        __metadata: {
+            previous_values: previousValues,
+            changed_fields: changedFields,
+            updated_on: new Date(),
+            updated_by: uid ?? null,
+        }
+    };
     dataSource.saveEntity({
         path: path + "/" + entityId + "/__history",
-        values: {
-            ...values,
-            __metadata: {
-                previous_values: previousValues,
-                changed_fields: changedFields,
-                updated_on: new Date(),
-                updated_by: uid ?? null,
-            }
-        },
+        values: entry,
         status: "new"
     }).then(() => {
         console.debug("History saved for", path, entityId);
