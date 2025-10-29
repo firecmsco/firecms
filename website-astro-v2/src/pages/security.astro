@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
 const title = "FireCMS Security - Security and Data Sovereignty by Design";
 const description = "FireCMS is engineered from the ground up to guarantee absolute data ownership, privacy, and security through a transparent, modern architecture.";
@@ -7,182 +8,365 @@ const description = "FireCMS is engineered from the ground up to guarantee absol
 
 <Layout title={title} description={description}>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
-      <!-- Background accents and subtle grid -->
-      <div class="pointer-events-none absolute inset-0 -z-10">
-        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
-        <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
-      </div>
+    <main>
+        <!-- Hero Section -->
+        <section
+            class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+            <!-- Background accents and subtle grid -->
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+            </div>
 
-      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-        <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-gray-800/40 text-gray-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
-          <span class="text-sm font-medium">Your data stays in your infrastructure</span>
-        </div>
-        <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
-          Security and Data Sovereignty by Design
-        </h1>
-        <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
-          FireCMS is engineered from the ground up to guarantee <b>absolute data ownership</b>, privacy, and security through a transparent, modern architecture.
-        </p>
-      </div>
-    </section>
+            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+                <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+                    Trust Through Transparency
+                </h1>
+                <p class="mb-4 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+                    Your data is <b>yours</b>. FireCMS is engineered from the ground up to guarantee
+                    absolute data sovereignty, privacy, and security through transparent architecture.
+                </p>
+            </div>
+            <SectionBackgroundAccents bottomLine={true}/>
+        </section>
 
-    <!-- Core Pillars Section -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center mb-16">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Our Three Pillars of Security</h2>
-        </div>
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <!-- Pillar 1 -->
-          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
-            <div class="flex items-center gap-4 mb-6">
-              <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                </svg>
-              </div>
+        <!-- Core Pillars Section -->
+        <section class="bg-black py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center mb-16">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Our Core Security
+                        Principles</h2>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">
+                        FireCMS is built on three foundational pillars that ensure your data remains secure
+                        and under your control.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    <!-- Pillar 1 -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                                     alt="Data Ownership" class="h-6 w-6 filter invert"/>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-4">Absolute Data Ownership</h3>
+                        <p class="text-gray-400">Your data lives exclusively in your own Firebase or MongoDB project.
+                            FireCMS never stores, accesses, or controls your content. You maintain 100% ownership and
+                            control.</p>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg"
+                                     alt="Multi-Layered Security" class="h-6 w-6 filter invert"/>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-4">Multi-Layered Security</h3>
+                        <p class="text-gray-400">Enterprise-grade security through a shared responsibility model: robust
+                            application controls, world-class infrastructure from Google Cloud and Firebase, and your
+                            custom security rules.</p>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/eye.svg"
+                                     alt="Transparency by Design" class="h-6 w-6 filter invert"/>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-4">Transparency by Design</h3>
+                        <p class="text-gray-400">Our open-source core, clear privacy policies, and transparent
+                            architecture mean you can audit every aspect of how FireCMS works. No hidden surprises.</p>
+                    </div>
+                </div>
             </div>
-            <h3 class="text-2xl font-semibold text-white mb-4">Absolute Data Ownership</h3>
-            <p class="text-gray-400">Your data lives exclusively in your own Firebase or MongoDB project. FireCMS never stores, accesses, or controls your content. You maintain 100% ownership and control.</p>
-          </div>
-          <!-- Pillar 2 -->
-          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
-            <div class="flex items-center gap-4 mb-6">
-              <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                </svg>
-              </div>
-            </div>
-            <h3 class="text-2xl font-semibold text-white mb-4">Multi-Layered Security</h3>
-            <p class="text-gray-400">Enterprise-grade security through a shared responsibility model: robust application controls, world-class infrastructure from Google Cloud and Firebase, and your custom security rules.</p>
-          </div>
-          <!-- Pillar 3 -->
-          <div class="relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
-            <div class="flex items-center gap-4 mb-6">
-              <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-            </div>
-            <h3 class="text-2xl font-semibold text-white mb-4">Transparency by Design</h3>
-            <p class="text-gray-400">Our open-source core, clear privacy policies, and transparent architecture mean you can audit every aspect of how FireCMS works. No hidden surprises.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Architecture Diagram Section -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center mb-16">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">How FireCMS Keeps Your Data Safe</h2>
-          <p class="mt-6 text-lg leading-8 text-gray-400">Your data never passes through FireCMS servers. We authenticate with your Firebase/MongoDB project directly from your browser.</p>
-        </div>
-        <div class="relative rounded-2xl overflow-hidden ring-1 ring-gray-800 bg-gray-900 p-12">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div class="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <span class="text-2xl font-medium text-primary">1</span>
-              </div>
-              <h3 class="text-lg font-semibold text-white mb-2">Your Browser</h3>
-              <p class="text-gray-400 text-sm">FireCMS runs entirely in your browser</p>
+        <!-- Data Sovereignty Section -->
+        <section class="bg-gray-950 py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                                 alt="Data Sovereignty" class="h-8 w-8 mr-3 filter invert"/>
+                            <h2 class="text-2xl font-medium text-white m-0">Your Data, Your Infrastructure</h2>
+                        </div>
+                        <p class="text-lg text-gray-300 mb-8">
+                            Unlike traditional SaaS CMS platforms that ingest and control your data, FireCMS operates as
+                            a sophisticated tool that connects directly to <b>your own</b> database.
+                        </p>
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                                <div>
+                                    <h4 class="font-semibold text-white">No Data Migration Required</h4>
+                                    <p class="text-gray-400">FireCMS adapts to your existing data structure, not the
+                                        other way around.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                                <div>
+                                    <h4 class="font-semibold text-white">Zero Vendor Lock-in</h4>
+                                    <p class="text-gray-400">Stop using FireCMS anytime - your data stays exactly where
+                                        it is.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                                <div>
+                                    <h4 class="font-semibold text-white">Direct Infrastructure Access</h4>
+                                    <p class="text-gray-400">Full control over your Google Cloud or MongoDB Atlas
+                                        project.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border overflow-hidden border-gray-800">
+                        <img
+                            src="/img/demo-botanic-plant-firestore.png"
+                            alt="Diagram showing FireCMS connecting to customer's own Firebase/MongoDB project"
+                            class="h-full w-full object-cover"
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-              <div class="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <span class="text-2xl font-medium text-primary">2</span>
-              </div>
-              <h3 class="text-lg font-semibold text-white mb-2">Direct Connection</h3>
-              <p class="text-gray-400 text-sm">Connects directly to your Firebase/MongoDB</p>
-            </div>
-            <div>
-              <div class="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <span class="text-2xl font-medium text-primary">3</span>
-              </div>
-              <h3 class="text-lg font-semibold text-white mb-2">Your Database</h3>
-              <p class="text-gray-400 text-sm">Your data stays in your infrastructure</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Security Features Grid -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center mb-16">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Enterprise Security Features</h2>
-        </div>
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">SAML/SSO Integration</h3>
-            <p class="text-gray-400 text-sm">Integrate with your existing identity provider for seamless authentication.</p>
-          </div>
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">Role-Based Access Control</h3>
-            <p class="text-gray-400 text-sm">Granular permissions at collection, document, and field level.</p>
-          </div>
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">Audit Logs</h3>
-            <p class="text-gray-400 text-sm">Track all changes and access to your data with comprehensive logging.</p>
-          </div>
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">2FA Support</h3>
-            <p class="text-gray-400 text-sm">Two-factor authentication for enhanced account security.</p>
-          </div>
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">Custom Auth Integration</h3>
-            <p class="text-gray-400 text-sm">Integrate with any authentication system you use.</p>
-          </div>
-          <div class="relative overflow-hidden rounded-xl bg-gray-900/50 p-6 ring-1 ring-inset ring-gray-800">
-            <h3 class="text-lg font-semibold text-white mb-2">Encrypted Communication</h3>
-            <p class="text-gray-400 text-sm">All data transmission uses industry-standard encryption.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Compliance Section -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-3xl text-center">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Simplify Your Compliance Journey</h2>
-          <p class="text-lg text-gray-400 mb-8">FireCMS's architecture simplifies your compliance with GDPR, CCPA, and other global privacy regulations. As the Data Controller, you maintain direct control over your data, making it easy to fulfill data subject requests directly from your database.</p>
-          <div class="flex flex-wrap justify-center gap-6 mt-12">
-            <div class="px-6 py-3 rounded-lg bg-gray-900/50 ring-1 ring-gray-800">
-              <span class="text-white font-semibold">GDPR Compliant</span>
+        <!-- Architecture & Security -->
+        <section class="bg-black py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Multi-Layered Security
+                        Architecture</h2>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">Security through shared responsibility and defense
+                        in depth.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="rounded-xl overflow-hidden">
+                        <img
+                            src="/img/firecms-layers.png"
+                            alt="Security architecture diagram"
+                            class="h-full w-full object-cover"
+                        />
+                    </div>
+                    <div class="space-y-6">
+                        <div class="p-6 rounded-lg border border-gray-800 bg-gray-900/50">
+                            <div class="flex items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
+                                     alt="Application Layer" class="h-6 w-6 mr-3 filter invert"/>
+                                <h3 class="text-lg font-semibold text-white m-0">Application Layer</h3>
+                            </div>
+                            <p class="text-gray-400">Granular role-based access control, dynamic permissions, custom
+                                authentication integrations, and App Check protection.</p>
+                        </div>
+                        <div class="p-6 rounded-lg border border-gray-800 bg-gray-900/50">
+                            <div class="flex items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-upload.svg"
+                                     alt="Infrastructure Layer" class="h-6 w-6 mr-3 filter invert"/>
+                                <h3 class="text-lg font-semibold text-white m-0">Infrastructure Layer</h3>
+                            </div>
+                            <p class="text-gray-400">Enterprise-grade security from Google Cloud and MongoDB Atlas:
+                                encryption, network security, compliance certifications.</p>
+                        </div>
+                        <div class="p-6 rounded-lg border border-gray-800 bg-gray-900/50">
+                            <div class="flex items-center mb-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg"
+                                     alt="Database Security" class="h-6 w-6 mr-3 filter invert"/>
+                                <h3 class="text-lg font-semibold text-white m-0">Database Security</h3>
+                            </div>
+                            <p class="text-gray-400">Your custom Firestore/MongoDB security rules enforce access at the
+                                data layer. Ultimate control in your hands.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="px-6 py-3 rounded-lg bg-gray-900/50 ring-1 ring-gray-800">
-              <span class="text-white font-semibold">CCPA Compliant</span>
-            </div>
-            <div class="px-6 py-3 rounded-lg bg-gray-900/50 ring-1 ring-gray-800">
-              <span class="text-white font-semibold">SOC 2 Type II</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Final CTA Section -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Have specific security questions?</h2>
-        <div class="flex items-center justify-center gap-x-6">
-          <a href="/contact"
-             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
-            Contact Sales
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
+        <!-- Deployment Models Section -->
+        <section class="bg-gray-950 py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Choose Your Security
+                        Posture</h2>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">Multiple deployment options, same data sovereignty
+                        principles.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Self-Hosted -->
+                    <div class="p-8 rounded-xl border bg-gray-900/50 border-gray-800">
+                        <div class="flex items-center mb-4">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/monitor.svg"
+                                 alt="Self-Hosted" class="h-8 w-8 mr-3 filter invert"/>
+                            <h3 class="text-2xl font-bold m-0 text-white">Self-Hosted</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6">Ultimate control and transparency. Deploy FireCMS entirely within
+                            your own infrastructure.</p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>Open-source MIT license available</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>Deploy on any static hosting provider</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>No external dependencies or proprietary servers</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- FireCMS Cloud -->
+                    <div class="p-8 rounded-xl border bg-gray-900/50 border-gray-800">
+                        <div class="flex items-center mb-4">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-upload.svg"
+                                 alt="FireCMS Cloud" class="h-8 w-8 mr-3 filter invert"/>
+                            <h3 class="text-2xl font-bold m-0 text-white">FireCMS Cloud</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6">Fully managed convenience without sacrificing data ownership. Your
+                            data stays in your Firebase project.</p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>Service account credentials encrypted with Google Cloud KMS</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>Transparent connection mechanism</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                                <span>Same data sovereignty guarantees</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- Privacy & Compliance Section -->
+        <section class="bg-black py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="flex items-center mb-4 justify-center">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/scale.svg"
+                             alt="Privacy & Compliance" class="h-8 w-8 mr-3 filter invert"/>
+                        <h2 class="text-3xl font-bold text-white m-0">Privacy & Compliance Ready</h2>
+                    </div>
+                    <p class="text-xl text-gray-300 mb-8">
+                        FireCMS's architecture is designed to simplify your compliance journey under <b>GDPR</b>,
+                        <b>CCPA</b>, and other global privacy regulations.
+                    </p>
+                </div>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-lg border bg-gray-900/50 border-gray-800">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/user-check.svg"
+                                 alt="Data Controller" class="h-6 w-6 mr-3 filter invert"/>
+                            <h5 class="font-semibold text-white m-0">You Are the Data Controller</h5>
+                        </div>
+                        <p class="text-gray-400 text-sm">You maintain direct control and legal responsibility for your
+                            end-user data.</p>
+                    </div>
+                    <div class="p-6 rounded-lg border bg-gray-900/50 border-gray-800">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg"
+                                 alt="Data Subject Requests" class="h-6 w-6 mr-3 filter invert"/>
+                            <h5 class="font-semibold text-white m-0">Simplified Data Subject Requests</h5>
+                        </div>
+                        <p class="text-gray-400 text-sm">Fulfill access and deletion requests directly from your
+                            database.</p>
+                    </div>
+                    <div class="p-6 rounded-lg border bg-gray-900/50 border-gray-800">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                                 alt="Data Residency" class="h-6 w-6 mr-3 filter invert"/>
+                            <h5 class="font-semibold text-white m-0">Data Residency Control</h5>
+                        </div>
+                        <p class="text-gray-400 text-sm">Choose your Firebase/MongoDB region to meet residency
+                            requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Indicators Section -->
+        <section class="bg-gray-950 py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Trusted by Leading
+                        Organizations</h2>
+                    <p class="mt-4 text-lg leading-8 text-gray-400">Enterprise teams trust FireCMS with their most
+                        critical data.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="p-6 rounded-xl border bg-gray-900/50 text-center border-gray-800">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/users.svg"
+                             alt="Active Projects" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                        <h3 class="text-3xl font-bold text-white mb-2">10000+</h3>
+                        <p class="text-gray-400">Active Projects</p>
+                    </div>
+                    <div class="p-6 rounded-xl border bg-gray-900/50 text-center border-gray-800">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg"
+                             alt="Data Sovereignty" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                        <h3 class="text-3xl font-bold text-white mb-2">100%</h3>
+                        <p class="text-gray-400">Data Sovereignty</p>
+                    </div>
+                    <div class="p-6 rounded-xl border bg-gray-900/50 text-center border-gray-800">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/monitor.svg"
+                             alt="Infrastructure Uptime" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                        <h3 class="text-3xl font-bold text-white mb-2">99.9%</h3>
+                        <p class="text-gray-400">Infrastructure Uptime</p>
+                    </div>
+                    <div class="p-6 rounded-xl border bg-gray-900/50 text-center border-gray-800">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/user-check.svg"
+                             alt="Security Monitoring" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                        <h3 class="text-3xl font-bold text-white mb-2">24/7</h3>
+                        <p class="text-gray-400">Security Monitoring</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="bg-black py-16 sm:py-24">
+
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Ready to Give It a Try?</h2>
+                <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Experience unmatched security and control. Join industry leaders who trust FireCMS
+                    to keep their data sovereign while delivering powerful content management.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://demo.firecms.co"
+                       class="inline-flex items-center justify-center gap-x-2 rounded-md border border-gray-700 bg-gray-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-700 transition-all"
+                       rel="noopener noreferrer"
+                       target="_blank">
+                        Try the Demo
+                    </a>
+                    <a href="https://app.firecms.co"
+                       class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all btn-glow">
+                        Register for FireCMS Cloud
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="Arrow"
+                             class="h-5 w-5 filter invert"/>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 </Layout>

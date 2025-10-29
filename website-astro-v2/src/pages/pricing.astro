@@ -1,7 +1,7 @@
 ---
 // src/pages/pricing.astro
 import Layout from "../layouts/Layout.astro";
-// Removed PricingToggle import
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 ---
 
 <Layout
@@ -10,11 +10,10 @@ import Layout from "../layouts/Layout.astro";
 >
     <main>
         {/* Hero Section */}
-        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+        <section
+                class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
             <!-- Background accents and subtle grid -->
             <div class="pointer-events-none absolute inset-0 -z-10">
-                <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-                <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
                 <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
             </div>
@@ -24,21 +23,29 @@ import Layout from "../layouts/Layout.astro";
                     Flexible Pricing for Every Need
                 </h1>
                 <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
-                    Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced self-hosted features.
+                    Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced
+                    self-hosted features.
                 </p>
             </div>
+            <SectionBackgroundAccents bottomLine={true}/>
         </section>
 
         {/* Main Pricing Section - No Toggle, Grid Layout */}
-        <section class="relative isolate bg-black py-16 sm:py-24 border-t border-gray-800">
+        <section class="relative isolate bg-black py-16 sm:py-24">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 {/* Currency Toggle */}
                 <div class="mb-10 flex justify-center w-full">
                     <div class="flex items-center gap-2 text-xs md:text-sm text-gray-500">
                         <div class="inline-flex items-center gap-1">
-                            <button id="currency-eur" aria-pressed="true" class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300">EUR €</button>
+                            <button id="currency-eur" aria-pressed="true"
+                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300">
+                                EUR €
+                            </button>
                             <span class="text-gray-400">/</span>
-                            <button id="currency-usd" aria-pressed="false" class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700">USD $</button>
+                            <button id="currency-usd" aria-pressed="false"
+                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700">
+                                USD $
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -48,33 +55,56 @@ import Layout from "../layouts/Layout.astro";
 
                     {/* Column 1: Community (Self-Hosted FREE) - Always Visible */}
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
-                        <div class="absolute top-0 right-0 m-4 rounded-full bg-green-500/10 px-3 py-1 text-xs font-semibold text-green-400">Open Source</div>
+                        <div class="absolute top-0 right-0 m-4 rounded-full bg-green-500/10 px-3 py-1 text-xs font-semibold text-green-400">
+                            Open Source
+                        </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">Community</h3>
                         <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
                         <p class="flex items-baseline gap-x-2">
                             <span class="text-4xl font-bold tracking-tight text-white">Free</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">Forever</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">The powerful, MIT licensed core framework for self-hosting.</p>
+                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">The powerful, MIT licensed core framework
+                            for self-hosting.</p>
                         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-green-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Full control over deployment
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-green-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Core CMS features & 20+ fields
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-green-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Custom fields & views (React)
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-green-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Theme & component customization
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-green-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Community Support (Discord, GitHub)
                             </li>
                         </ul>
@@ -83,7 +113,8 @@ import Layout from "../layouts/Layout.astro";
                             <div class="bg-gray-900 rounded-lg p-3 font-mono text-sm text-gray-300 ring-1 ring-gray-700/50 mb-4">
                                 npx create-firecms-app
                             </div>
-                            <a href="/developers" aria-describedby="tier-community" class="block rounded-md border border-gray-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-colors duration-200">
+                            <a href="/developers" aria-describedby="tier-community"
+                               class="block rounded-md border border-gray-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-gray-700 transition-colors duration-200">
                                 View Docs
                             </a>
                         </div>
@@ -91,100 +122,175 @@ import Layout from "../layouts/Layout.astro";
 
                     {/* Column 2: Cloud Plus (Trial -> Paid) */}
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-2 ring-inset ring-primary"> {/* Highlighted */}
-                        <div class="absolute top-0 right-0 m-4 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary">Cloud</div>
+                        <div class="absolute top-0 right-0 m-4 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary">
+                            Cloud
+                        </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">Cloud Plus</h3>
                         <p class="mt-4 text-base font-semibold leading-7 text-gray-400">Free 1-Month Trial, then</p>
                         <p class="flex items-baseline gap-x-2">
-                            <span class="text-4xl font-bold tracking-tight text-white" id="cloud-price" data-eur="€9.99" data-usd="$11.99">€9.99</span>
+                            <span class="text-4xl font-bold tracking-tight text-white" id="cloud-price" data-eur="€9.99"
+                                  data-usd="$11.99">€9.99</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">/user/month</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Fully managed SaaS solution for speed and convenience.</p>
+                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Fully managed SaaS solution for speed and
+                            convenience.</p>
                         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Zero setup & maintenance
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Unlimited Projects
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 User & Role Management
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Data Import/Export
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Theme & Logo Customization
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 AI Features (Content Gen, DataTalk)
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Local Text Search
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Standard Support
                             </li>
                             {/* Add other Cloud Plus features */}
                         </ul>
-                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" aria-describedby="tier-plus" class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
+                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
+                           aria-describedby="tier-plus"
+                           class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
                             Start 1-Month Free Trial
                         </a>
                     </div>
 
                     {/* Column 3: PRO (Self-Hosted PAID) */}
                     <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
-                        <div class="absolute top-0 right-0 m-4 rounded-full bg-yellow-400/20 px-3 py-1 text-xs font-semibold text-yellow-400">Self-Hosted PRO</div>
+                        <div class="absolute top-0 right-0 m-4 rounded-full bg-yellow-400/20 px-3 py-1 text-xs font-semibold text-yellow-400">
+                            Self-Hosted PRO
+                        </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">PRO License</h3>
                         <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
                         <p class="flex items-baseline gap-x-2">
-                            <span class="text-4xl font-bold tracking-tight text-white" id="pro-price" data-eur="€149.99" data-usd="$199.99">€149.99</span>
+                            <span class="text-4xl font-bold tracking-tight text-white" id="pro-price" data-eur="€149.99"
+                                  data-usd="$199.99">€149.99</span>
                             <span class="text-base font-semibold leading-7 text-gray-400">/project/month</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Advanced features and priority support for self-hosted deployments.</p>
+                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Advanced features and priority support
+                            for self-hosted deployments.</p>
                         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Everything in Community, plus:
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Advanced PRO fields & components
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Schema Editor UI & Data Inference
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Advanced Data Import/Export
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 User & Role Management UI
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Custom Authentication options
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Priority Support
                             </li>
                             <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-5 flex-none text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-5 flex-none text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.5 12.75l6 6 9-13.5"></path>
+                                </svg>
                                 Roadmap Prioritization
                             </li>
                             {/* Add other PRO features */}
                         </ul>
-                        <a href="/pro" aria-describedby="tier-pro" class="mt-8 block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors duration-200 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
+                        <a href="/pro" aria-describedby="tier-pro"
+                           class="mt-8 block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline-white transition-colors duration-200 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
                             Learn More & Buy License
                         </a>
                     </div>
@@ -196,70 +302,136 @@ import Layout from "../layouts/Layout.astro";
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <h3 class="text-2xl font-semibold leading-7 text-white">Enterprise</h3>
-                            <p class="mt-2 text-base leading-7 text-gray-300">Tailored solutions, custom features, SSO, and dedicated support for large organizations.</p>
+                            <p class="mt-2 text-base leading-7 text-gray-300">Tailored solutions, custom features, SSO,
+                                and dedicated support for large organizations.</p>
                         </div>
-                        <a href="/contact" class="flex-shrink-0 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700 transition-colors duration-200">
+                        <a href="/contact"
+                           class="flex-shrink-0 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-gray-700 transition-colors duration-200">
                             Contact Sales
                         </a>
                     </div>
                 </div>
 
+                <div class="mt-16 text-center">
+                    <a href="/compare"
+                       class="text-base font-semibold leading-6 text-primary hover:text-primary-light transition-colors">
+                        Compare all versions
+                    </a>
+                </div>
+
             </div>
         </section>
 
+        <section class="relative isolate bg-black py-32 sm:py-48">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl">
+                    <figure>
+                        <blockquote class="text-2xl sm:text-3xl leading-snug text-white tracking-tight">
+                            “I think you have the best NoSQL headless CMS on the market.”
+                        </blockquote>
+                        <figcaption class="mt-6 flex items-center gap-x-4">
+                            <img class="h-12 w-12 rounded-full bg-gray-800 object-cover" src="/img/avatars/viktor.jpeg"
+                                 alt="Viktor Vinnk"/>
+                            <div class="text-sm leading-6">
+                                <div class="font-semibold text-white">Viktor Vinnk</div>
+                                <div class="text-gray-400">Country Digital Development Leader, IKEA</div>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="mt-16 text-center">
+                    <a href="/why-firecms"
+                       class="text-base font-semibold leading-6 text-primary hover:text-primary-light transition-colors">
+                        See more testimonials <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </div>
+            <SectionBackgroundAccents bottomLine={true}/>
+        </section>
+
+
         {/* FAQ Section */}
-        <section class="bg-black py-24 sm:py-32 border-t border-gray-800">
+        <section class="bg-black py-24 sm:py-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-4xl text-center">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Frequently Asked Questions</h2>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Frequently Asked
+                        Questions</h2>
                     {/* <p class="mt-4 text-lg leading-8 text-gray-400">...</p> */}
                 </div>
                 <div class="mt-16 flow-root">
                     <div class="-my-8 divide-y divide-gray-800">
                         <details class="py-8 group" open>
                             <summary class="flex cursor-pointer items-center justify-between text-left">
-                                <h3 class="text-base font-semibold leading-7 text-white">Should I choose Cloud or Self-Hosted?</h3>
+                                <h3 class="text-base font-semibold leading-7 text-white">Should I choose Cloud or
+                                    Self-Hosted?</h3>
                                 <span class="ml-6 flex h-7 items-center">
-                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                           stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>Choose <strong>Cloud</strong> for the fastest setup, zero maintenance, automatic updates, and a fully managed experience (with a free 1-month trial). It's ideal for teams prioritizing speed and convenience.</p>
-                                <p>Choose <strong>Self-Hosted</strong> if you require full control over your deployment environment, need deep customization, want to integrate tightly with your existing infrastructure, or need to comply with specific data residency requirements. Start with the free <strong>Community</strong> version or upgrade to <strong>PRO</strong> for more features.</p>
+                                <p>Choose <strong>Cloud</strong> for the fastest setup, zero maintenance, automatic
+                                    updates, and a fully managed experience (with a free 1-month trial). It's ideal for
+                                    teams prioritizing speed and convenience.</p>
+                                <p>Choose <strong>Self-Hosted</strong> if you require full control over your deployment
+                                    environment, need deep customization, want to integrate tightly with your existing
+                                    infrastructure, or need to comply with specific data residency requirements. Start
+                                    with the free <strong>Community</strong> version or upgrade to <strong>PRO</strong>
+                                    for more features.</p>
                             </div>
                         </details>
                         <details class="py-8 group">
                             <summary class="flex cursor-pointer items-center justify-between text-left">
-                                <h3 class="text-base font-semibold leading-7 text-white">What's the difference between Self-Hosted Community and PRO?</h3>
+                                <h3 class="text-base font-semibold leading-7 text-white">What's the difference between
+                                    Self-Hosted Community and PRO?</h3>
                                 <span class="ml-6 flex h-7 items-center">
-                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                           stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p><strong>Community</strong> is the free, open-source core framework (MIT licensed). It includes all essential CMS features, full customization capabilities via code (React), and community support.</p>
-                                <p><strong>PRO</strong> is a paid license for self-hosted instances that unlocks additional productivity features like the visual Schema Editor UI, advanced data import/export tools, pre-built User/Role Management UI, advanced PRO field components, and provides priority support directly from the FireCMS team.</p>
+                                <p><strong>Community</strong> is the free, open-source core framework (MIT licensed). It
+                                    includes all essential CMS features, full customization capabilities via code
+                                    (React), and community support.</p>
+                                <p><strong>PRO</strong> is a paid license for self-hosted instances that unlocks
+                                    additional productivity features like the visual Schema Editor UI, advanced data
+                                    import/export tools, pre-built User/Role Management UI, advanced PRO field
+                                    components, and provides priority support directly from the FireCMS team.</p>
                             </div>
                         </details>
                         <details class="py-8 group">
                             <summary class="flex cursor-pointer items-center justify-between text-left">
                                 <h3 class="text-base font-semibold leading-7 text-white">Is the Cloud version free?</h3>
                                 <span class="ml-6 flex h-7 items-center">
-                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                           stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>FireCMS Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After the trial, it's a paid subscription per user per month. The <strong>Self-Hosted Community</strong> version is completely free (MIT licensed).</p>
+                                <p>FireCMS Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After
+                                    the trial, it's a paid subscription per user per month. The <strong>Self-Hosted
+                                        Community</strong> version is completely free (MIT licensed).</p>
                             </div>
                         </details>
                         <details class="py-8 group">
                             <summary class="flex cursor-pointer items-center justify-between text-left">
-                                <h3 class="text-base font-semibold leading-7 text-white">Can I migrate between Cloud and Self-Hosted?</h3>
+                                <h3 class="text-base font-semibold leading-7 text-white">Can I migrate between Cloud and
+                                    Self-Hosted?</h3>
                                 <span class="ml-6 flex h-7 items-center">
-                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                           stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>Yes. Your core schema configurations are compatible. Migrating from Cloud to Self-Hosted involves setting up the FireCMS framework in your environment and pointing it to your existing database. Migrating from Self-Hosted to Cloud generally requires ensuring your configuration is compatible with the Cloud environment (especially regarding custom code).</p>
+                                <p>Yes. Your core schema configurations are compatible. Migrating from Cloud to
+                                    Self-Hosted involves setting up the FireCMS framework in your environment and
+                                    pointing it to your existing database. Migrating from Self-Hosted to Cloud generally
+                                    requires ensuring your configuration is compatible with the Cloud environment
+                                    (especially regarding custom code).</p>
                             </div>
                         </details>
                         {/* */}
@@ -273,46 +445,46 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
-  // Currency toggle functionality
-  function initializeCurrencyToggle() {
-    const eurBtn = document.getElementById('currency-eur');
-    const usdBtn = document.getElementById('currency-usd');
-    const cloudPrice = document.getElementById('cloud-price');
-    const proPrice = document.getElementById('pro-price');
+    // Currency toggle functionality
+    function initializeCurrencyToggle() {
+        const eurBtn = document.getElementById("currency-eur");
+        const usdBtn = document.getElementById("currency-usd");
+        const cloudPrice = document.getElementById("cloud-price");
+        const proPrice = document.getElementById("pro-price");
 
-    function updateCurrency(currency: string) {
-      if (!eurBtn || !usdBtn) return;
-      if (currency === 'eur') {
-        eurBtn.setAttribute('aria-pressed', 'true');
-        eurBtn.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
-        eurBtn.classList.remove('text-gray-500', 'hover:text-gray-700');
+        function updateCurrency(currency: string) {
+            if (!eurBtn || !usdBtn) return;
+            if (currency === "eur") {
+                eurBtn.setAttribute("aria-pressed", "true");
+                eurBtn.classList.add("text-gray-800", "bg-gray-200", "border-gray-300");
+                eurBtn.classList.remove("text-gray-500", "hover:text-gray-700");
 
-        usdBtn.setAttribute('aria-pressed', 'false');
-        usdBtn.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
-        usdBtn.classList.add('text-gray-500', 'hover:text-gray-700');
+                usdBtn.setAttribute("aria-pressed", "false");
+                usdBtn.classList.remove("text-gray-800", "bg-gray-200", "border-gray-300");
+                usdBtn.classList.add("text-gray-500", "hover:text-gray-700");
 
-        if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || '€9.99';
-        if (proPrice) proPrice.textContent = proPrice.dataset.eur || '€149.99';
-      } else {
-        usdBtn.setAttribute('aria-pressed', 'true');
-        usdBtn.classList.add('text-gray-800', 'bg-gray-200', 'border-gray-300');
-        usdBtn.classList.remove('text-gray-500', 'hover:text-gray-700');
+                if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || "€9.99";
+                if (proPrice) proPrice.textContent = proPrice.dataset.eur || "€149.99";
+            } else {
+                usdBtn.setAttribute("aria-pressed", "true");
+                usdBtn.classList.add("text-gray-800", "bg-gray-200", "border-gray-300");
+                usdBtn.classList.remove("text-gray-500", "hover:text-gray-700");
 
-        eurBtn.setAttribute('aria-pressed', 'false');
-        eurBtn.classList.remove('text-gray-800', 'bg-gray-200', 'border-gray-300');
-        eurBtn.classList.add('text-gray-500', 'hover:text-gray-700');
+                eurBtn.setAttribute("aria-pressed", "false");
+                eurBtn.classList.remove("text-gray-800", "bg-gray-200", "border-gray-300");
+                eurBtn.classList.add("text-gray-500", "hover:text-gray-700");
 
-        if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || '$11.99';
-        if (proPrice) proPrice.textContent = proPrice.dataset.usd || '$199.99';
-      }
+                if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || "$11.99";
+                if (proPrice) proPrice.textContent = proPrice.dataset.usd || "$199.99";
+            }
+        }
+
+        if (eurBtn && usdBtn) {
+            eurBtn.addEventListener("click", () => updateCurrency("eur"));
+            usdBtn.addEventListener("click", () => updateCurrency("usd"));
+        }
     }
 
-    if (eurBtn && usdBtn) {
-      eurBtn.addEventListener('click', () => updateCurrency('eur'));
-      usdBtn.addEventListener('click', () => updateCurrency('usd'));
-    }
-  }
-
-  document.addEventListener('astro:page-load', initializeCurrencyToggle);
-  initializeCurrencyToggle(); // Also run on initial load
+    document.addEventListener("astro:page-load", initializeCurrencyToggle);
+    initializeCurrencyToggle(); // Also run on initial load
 </script>

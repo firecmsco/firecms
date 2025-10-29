@@ -639,6 +639,7 @@ export default defineConfig({
         resolve: {
             alias: {
                 "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
+                "@firecms/editor": path.resolve(new URL(".", import.meta.url).pathname, "../packages/editor/src"),
             }
         },
         server: {

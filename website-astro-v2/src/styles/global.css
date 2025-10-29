@@ -5,6 +5,7 @@
 
 @import "@material-design-icons/font/filled.css";
 
+@plugin "@tailwindcss/typography";
 @custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
 
 

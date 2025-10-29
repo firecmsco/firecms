@@ -22,6 +22,7 @@
     "@firecms/firebase": "file:../packages/firebase_firecms",
     "@firecms/neat": "^0.4.0",
     "@firecms/ui": "file:../packages/ui",
+    "@firecms/editor": "file:../packages/editor",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@material-design-icons/font": "^0.14.15",
     "@tailwindcss/typography": "^0.5.19",

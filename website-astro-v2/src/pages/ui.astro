@@ -13,11 +13,6 @@ const description = "Explore the FireCMS UI component library - a comprehensive 
     <!-- Hero Section -->
     <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
       <!-- Background accents and subtle grid -->
-      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
-      <div class="pointer-events-none absolute inset-0 -z-10">
-        <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,250.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
-      </div>
 
       <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
         <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans">
@@ -27,6 +22,7 @@ const description = "Explore the FireCMS UI component library - a comprehensive 
           A comprehensive collection of <b>beautiful, accessible React components</b> built for modern web applications.
         </p>
       </div>
+      <SectionBackgroundAccents bottomLine={true}/>
     </section>
 
     <!-- UI Components Showcase Section -->

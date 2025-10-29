@@ -277,9 +277,7 @@ const description = "Build powerful back-office apps in minutes. Go live instant
 
     // Observe all elements with animate-on-scroll class
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    console.log('Found animated elements:', animatedElements.length);
     animatedElements.forEach(el => {
-      console.log('Observing:', el);
       el.classList.remove('in-view');
       observer.observe(el);
     });

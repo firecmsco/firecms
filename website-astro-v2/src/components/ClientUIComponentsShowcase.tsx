@@ -79,7 +79,7 @@ export default function ClientUIComponentsShowcase({
     const [textFieldValue, setTextFieldValue] = useState<string>("");
     const [sliderValue, setSliderValue] = useState<number[]>([4]);
     const [multiSelectValue, setMultiSelectValue] = useState<string[]>([]);
-    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-surface-900 dark:bg-opacity-50";
+    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid border-none";
 
     return <div className={"@container max-w-7xl mx-auto not-content"}>
         <MenubarDemo/>
@@ -115,7 +115,7 @@ export default function ClientUIComponentsShowcase({
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
                     <Button size="large">Large Button</Button>
-                    <Button color={"neutral"}>Neutral Button</Button>
+                    <Button color={"primary"}>Primary Button</Button>
                     <Button variant={"text"}>Text Button</Button>
                     <Button variant={"outlined"}>Outlined Button</Button>
                 </div>

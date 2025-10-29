@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 interface Props {
     class?: string;
     topLine?: boolean;
+    bottomLine?: boolean;
     blob?: {
         position: "top" | "bottom";
         size: "sm" | "md" | "lg" | string;
@@ -11,7 +12,7 @@ interface Props {
     }
 }
 
-const { class: className, topLine = false, blob } = Astro.props;
+const { class: className, topLine = false, bottomLine = false, blob } = Astro.props;
 
 const sizeClasses = {
     sm: "w-[700px] h-[700px]",
@@ -19,13 +20,14 @@ const sizeClasses = {
     lg: "w-[900px] h-[900px]",
 }
 
-const blobSizeClass = blob && (sizeClasses[blob.size] ?? blob.size);
+const blobSizeClass = blob && (sizeClasses[blob.size as keyof typeof sizeClasses] ?? blob.size);
 
 const opacityClass = blob?.opacity ? `opacity-${blob.opacity}` : "";
 ---
 
 <div class={twMerge("pointer-events-none absolute inset-0 -z-10", className)}>
     {topLine && <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>}
+    {bottomLine && <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>}
     {blob && (
         <div class={twMerge(
             "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary/5 blur-3xl",
