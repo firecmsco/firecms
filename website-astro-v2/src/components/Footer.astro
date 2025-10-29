@@ -1,3 +1,44 @@
+---
+import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
+
+const footerNavs = [
+    {
+        title: "Solutions",
+        links: [
+            { label: "Startups", url: "/startups" },
+            { label: "Agencies", url: "/agencies" },
+            { label: "Internal Tools", url: "/internal-tools" },
+        ],
+    },
+    {
+        title: "Product",
+        links: [
+            { label: "Demo", url: "https://demo.firecms.co", external: true },
+            { label: "Features", url: "/features" },
+            { label: "Developers", url: "/developers" },
+            { label: "UI Components", url: "/ui" },
+            { label: "Pricing", url: "/pricing" },
+            { label: "Security", url: "/security" },
+        ],
+    },
+    {
+        title: "Company",
+        links: [
+            { label: "About", url: "/about" },
+            { label: "Why FireCMS", url: "/why-firecms" },
+            { label: "Contact", url: "/contact" },
+        ],
+    },
+    {
+        title: "Legal",
+        links: [
+            { label: "Privacy Policy", url: "/policy/privacy_policy" },
+            { label: "Terms of Service", url: "/policy/terms-of-service" },
+        ],
+    },
+];
+---
+
 <footer class="p-4 sm:p-6 bg-black py-16 sm:py-24 border-t border-gray-800">
     <div class="mx-auto max-w-7xl">
         <div class="flex flex-col md:flex-row md:justify-between gap-8">
@@ -12,76 +53,28 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
-                <div>
-                    <p class="mb-6 text-sm font-semibold uppercase text-white">Solutions</p>
-                    <ul class="text-gray-400 space-y-3">
-                        <li><a href="/startups"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Startups</a>
-                        </li>
-                        <li><a href="/agencies"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Agencies</a>
-                        </li>
-                        <li><a href="/internal-tools"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Internal
-                            Tools</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="mb-6 text-sm font-semibold uppercase text-white">Product</p>
-                    <ul class="text-gray-400 space-y-3">
-                        <li><a href="https://demo.firecms.co"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Demo</a>
-                        </li>
-                        <li><a href="/features"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Features</a>
-                        </li>
-                        <li><a href="/developers"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Developers</a>
-                        </li>
-                        <li><a href="/ui"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">UI Components</a>
-                        </li>
-                        <li><a href="/pricing"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Pricing</a>
-                        </li>
-                        <li><a href="/security"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Security</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="mb-6 text-sm font-semibold uppercase text-white">Company</p>
-                    <ul class="text-gray-400 space-y-3">
-                        <li><a href="/about"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">About</a>
-                        </li>
-                        <li><a href="/why-firecms"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Why
-                            FireCMS</a></li>
-                        <li><a href="/contact"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="mb-6 text-sm font-semibold uppercase text-white">Legal</p>
-                    <ul class="text-gray-400 space-y-3">
-                        <li><a href="/policy/privacy_policy"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Privacy
-                            Policy</a></li>
-                        <li><a href="/policy/terms-of-service"
-                               class="hover:underline hover:text-primary-light transition-colors duration-200">Terms of
-                            Service</a></li>
-                    </ul>
-                </div>
+                {footerNavs.map((nav) => (
+                    <div>
+                        <p class="mb-6 text-sm font-semibold uppercase text-white">{nav.title}</p>
+                        <ul class="text-gray-400 space-y-3">
+                            {nav.links.map((link) => (
+                                <li>
+                                    <a
+                                        href={link.url}
+                                        target={link.external ? "_blank" : "_self"}
+                                        rel={link.external ? "noopener noreferrer" : ""}
+                                        class="hover:underline hover:text-primary-light transition-colors duration-200"
+                                    >
+                                        {link.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         </div>
-        <div class="pointer-events-none absolute inset-0 -z-10">
-            <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-            <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl"></div>
-        </div>
+        <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg" }}/>
         <div class="mt-8 pt-8 ">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <span class="text-sm sm:text-center text-gray-400">© 2025 FireCMS. All Rights Reserved.</span>
@@ -107,4 +100,3 @@
         </div>
     </div>
 </footer>
-

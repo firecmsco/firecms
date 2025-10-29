@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 import SpotlightCard from '../components/SpotlightCard.astro';
 import { DataTalkDemo } from '../components/DataTalkDemo';
 import { SchemaEditorDemo } from '../components/SchemaEditorDemo';
@@ -32,8 +33,9 @@ const dataTalkExchanges = [
 
   <main>
     <!-- Hero Section -->
-    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
       <!-- Background accents and subtle grid -->
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
       <div class="pointer-events-none absolute inset-0 -z-10">
         <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
         <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
@@ -55,7 +57,7 @@ const dataTalkExchanges = [
     </section>
 
     <!-- Data Management Section (large media, centered) -->
-    <section class="bg-black py-24 sm:py-32 border-b border-gray-800">
+    <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-3xl text-center mb-10">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">An Unparalleled Data Editing Experience</h2>
@@ -76,7 +78,7 @@ const dataTalkExchanges = [
     </section>
 
     <!-- Schema Builder Section (split layout for variety) -->
-    <section class="bg-black py-24 sm:py-32 border-b border-gray-800">
+    <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-3xl text-center mb-10">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Build Your Data Models, Your Way</h2>
@@ -103,7 +105,7 @@ const dataTalkExchanges = [
 
 
     <!-- All Features Grid (reuse SpotlightCard) -->
-    <section class="bg-black py-24 sm:py-32 border-b border-gray-800">
+    <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-16">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need, Out of the Box</h2>
@@ -144,7 +146,7 @@ const dataTalkExchanges = [
     </section>
 
     <!-- Flexible and Adaptable Section -->
-    <section class="bg-black py-24 sm:py-32 border-b border-gray-800">
+    <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-3xl text-center mb-14">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Flexible and Adaptable to Your Needs</h2>

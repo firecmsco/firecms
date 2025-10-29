@@ -1,0 +1,38 @@
+---
+import { twMerge } from "tailwind-merge";
+
+interface Props {
+    class?: string;
+    topLine?: boolean;
+    blob?: {
+        position: "top" | "bottom";
+        size: "sm" | "md" | "lg" | string;
+        opacity?: number;
+    }
+}
+
+const { class: className, topLine = false, blob } = Astro.props;
+
+const sizeClasses = {
+    sm: "w-[700px] h-[700px]",
+    md: "w-[800px] h-[800px]",
+    lg: "w-[900px] h-[900px]",
+}
+
+const blobSizeClass = blob && (sizeClasses[blob.size] ?? blob.size);
+
+const opacityClass = blob?.opacity ? `opacity-${blob.opacity}` : "";
+---
+
+<div class={twMerge("pointer-events-none absolute inset-0 -z-10", className)}>
+    {topLine && <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>}
+    {blob && (
+        <div class={twMerge(
+            "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary/5 blur-3xl",
+            blob.position === "top" ? "-top-40" : "-bottom-40",
+            blobSizeClass,
+            opacityClass
+        )}></div>
+    )}
+    <slot />
+</div>

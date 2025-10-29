@@ -1,6 +1,7 @@
 ---
 // src/pages/why-firecms.astro
 import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
 const title = "Why Choose FireCMS? - Speed, Flexibility, and Ownership";
 const description = "Discover why developers and businesses choose FireCMS over alternatives. Explore key benefits of our open‑source, developer‑first framework with optional managed Cloud.";
@@ -9,11 +10,10 @@ const description = "Discover why developers and businesses choose FireCMS over 
 <Layout title={title} description={description}>
   <main>
     <!-- Hero (compact, harmonized) -->
-    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24 border-b border-gray-800">
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
       <!-- Background accents and subtle grid -->
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
       <div class="pointer-events-none absolute inset-0 -z-10">
-        <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-primary/5 blur-3xl opacity-60"></div>
         <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
         <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
       </div>
@@ -32,7 +32,7 @@ const description = "Discover why developers and businesses choose FireCMS over 
     </section>
 
     <!-- What makes FireCMS different -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <section class="bg-black py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-14">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">What makes FireCMS different</h2>
@@ -74,7 +74,7 @@ const description = "Discover why developers and businesses choose FireCMS over 
     </section>
 
     <!-- Data ownership & security -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <section class="bg-black py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
           <div class="lg:col-span-5">
@@ -112,7 +112,7 @@ const description = "Discover why developers and businesses choose FireCMS over 
     </section>
 
     <!-- Fit for your team -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <section class="bg-black py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-12">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for your workflow</h2>
@@ -138,7 +138,7 @@ const description = "Discover why developers and businesses choose FireCMS over 
     </section>
 
     <!-- Testimonials (streamlined) -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <section class="bg-black py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center mb-14">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">What developers say</h2>
@@ -179,7 +179,7 @@ const description = "Discover why developers and businesses choose FireCMS over 
     </section>
 
     <!-- When to choose FireCMS -->
-    <section class="bg-black py-16 sm:py-24 border-b border-gray-800">
+    <section class="bg-black py-16 sm:py-24">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-3xl text-center mb-10">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">When FireCMS is the right choice</h2>
