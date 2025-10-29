@@ -1,144 +1,262 @@
 ---
-const currentPath = Astro.url.pathname.replace(/\/$/, '');
+import NavigationDropdown from "./NavigationDropdown.astro";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
 
 const navLinks = [
-  { href: '/features', label: 'Features' },
-  { href: '/developers', label: 'Developers' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: '/security', label: 'Security' },
-  { href: '/why-firecms', label: 'Why FireCMS' },
-  { href: '/docs', label: 'Docs' },
+    {
+        href: "/features",
+        label: "Features"
+    },
+    {
+        href: "/why-firecms",
+        label: "Why FireCMS",
+        dropdown: [
+            [
+                {
+                    href: "/developers",
+                    label: "Developers",
+                    description: "Built for developers, by developers.",
+                    icon: "code"
+                },
+                {
+                    href: "/startups",
+                    label: "Startups",
+                    description: "Launch your project faster than ever.",
+                    icon: "rocket"
+                },
+                {
+                    href: "/agencies",
+                    label: "Agencies",
+                    description: "Deliver amazing projects to your clients.",
+                    icon: "briefcase"
+                },
+                {
+                    href: "/internal-tools",
+                    label: "Internal Tools",
+                    description: "Secure, scalable admin panels for your team.",
+                    icon: "wrench"
+                }
+            ],
+            [
+                {
+                    href: "/security",
+                    label: "Security",
+                    description: "Keep your data safe and secure.",
+                    icon: "shield"
+                },
+                {
+                    href: "/ui",
+                    label: "UI",
+                    description: "A beautiful and intuitive user interface.",
+                    icon: "palette"
+                },
+            ]
+        ]
+    },
+    {
+        href: "/pricing",
+        label: "Pricing"
+    },
+    {
+        href: "/docs",
+        label: "Docs"
+    },
 ];
 ---
 <header class="bg-black/40 backdrop-blur sticky top-0 z-20">
-  <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
-    <div class="flex items-center gap-8">
-      <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50" transition:name="site-logo">
-        <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image" />
-        <span class="self-center text-lg font-semibold whitespace-nowrap text-white" transition:name="logo-text">FireCMS</span>
-      </a>
-      <!-- Desktop Navigation -->
-      <div class="hidden lg:flex items-center gap-6 text-sm font-semibold">
-        {navLinks.map(link => (
-          <a
-            href={link.href}
-            class={`transition-colors hover:text-primary ${currentPath === link.href ? 'text-primary' : 'text-gray-300'}`}
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
-    </div>
-    <div class="flex flex-1 justify-end items-center gap-4">
-      <a
-        href="https://app.firecms.co"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
-        transition:name="start-building-button"
-      >
-        Start Building
-        <img
-          src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-          alt=""
-          class="h-4 w-4 text-white filter invert"
-        />
-      </a>
-      <!-- Mobile menu button -->
-      <button
-        type="button"
-        class="lg:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors"
-        aria-controls="mobile-menu"
-        aria-expanded="false"
-        id="mobile-menu-button"
-      >
-        <span class="sr-only">Open main menu</span>
-        <!-- Icon when menu is closed -->
-        <svg class="block h-6 w-6" id="menu-icon-closed" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-        <!-- Icon when menu is open -->
-        <svg class="hidden h-6 w-6" id="menu-icon-open" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  </nav>
+    <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
+        <div class="flex items-center gap-8">
+            <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50" transition:name="site-logo">
+                <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image"/>
+                <span class="self-center text-lg font-semibold whitespace-nowrap text-white"
+                      transition:name="logo-text">FireCMS</span>
+            </a>
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex items-center gap-6 text-sm font-semibold">
+                {navLinks.map(link => (
+                    link.dropdown ? (
+                            <NavigationDropdown title={link.label} href={link.href}>
+                                <div class="grid grid-cols-2 gap-x-8 gap-y-4 max-w-3xl">
+                                    {link.dropdown.map(column => (
+                                            <div class="flex flex-col gap-4 ">
+                                                {column.map(subLink => (
+                                                        <a href={subLink.href}
+                                                           class="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
+                                                            <img
+                                                                    src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${subLink.icon}.svg`}
+                                                                    alt=""
+                                                                    class="h-6 w-6 text-primary filter invert"
+                                                            />
+                                                            <div>
+                                                                <p class="font-semibold text-white">{subLink.label}</p>
+                                                                <p class="text-gray-400 text-sm">{subLink.description}</p>
+                                                            </div>
+                                                        </a>
+                                                ))}
+                                            </div>
+                                    ))}
+                                </div>
+                            </NavigationDropdown>
+                    ) : (
+                            <a
+                                    href={link.href}
+                                    class={`transition-colors hover:text-primary ${currentPath === link.href ? "text-primary" : "text-gray-300"}`}
+                            >
+                                {link.label}
+                            </a>
+                    )
+                ))}
+            </div>
+        </div>
+        <div class="flex flex-1 justify-end items-center gap-4">
+            <a
+                    href="https://app.firecms.co"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
+                    transition:name="start-building-button"
+            >
+                Start Building
+                <img
+                        src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
+                        alt=""
+                        class="h-4 w-4 text-white filter invert"
+                />
+            </a>
+            <!-- Mobile menu button -->
+            <button
+                    type="button"
+                    class="lg:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                    id="mobile-menu-button"
+            >
+                <span class="sr-only">Open main menu</span>
+                <!-- Icon when menu is closed -->
+                <svg class="block h-6 w-6" id="menu-icon-closed" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                </svg>
+                <!-- Icon when menu is open -->
+                <svg class="hidden h-6 w-6" id="menu-icon-open" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
 
-  <!-- Mobile menu - Full Screen Overlay -->
-  <div class="lg:hidden hidden fixed inset-0 z-40" id="mobile-menu">
-    <div class="flex flex-col items-center justify-center min-h-screen px-6 py-20 bg-black/95 backdrop-blur-lg">
-      <nav class="flex flex-col items-center space-y-8 w-full max-w-md">
-        {navLinks.map(link => (
-          <a
-            href={link.href}
-            class={`block text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg ${
-              currentPath === link.href 
-                ? 'bg-primary/20 text-primary' 
-                : 'text-gray-300 hover:bg-white/10 hover:text-white'
-            }`}
-          >
-            {link.label}
-          </a>
-        ))}
-        <a
-          href="https://app.firecms.co"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-8 w-full inline-flex items-center justify-center gap-x-2 rounded-lg bg-primary px-6 py-4 text-xl font-semibold text-white shadow-lg hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow"
-        >
-          Start Building
-          <img
-            src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-            alt=""
-            class="h-5 w-5 text-white filter invert"
-          />
-        </a>
-      </nav>
+    <!-- Mobile menu - Full Screen Overlay -->
+    <div class="lg:hidden hidden fixed inset-0 z-40 overflow-y-auto h-screen" id="mobile-menu">
+        <div class="flex flex-col items-center justify-center min-h-screen px-6 py-20 bg-black/95 backdrop-blur-lg">
+            <nav class="flex flex-col items-center space-y-8 w-full max-w-md">
+                {navLinks.map((link, index) => (
+                    link.dropdown ? (
+                            <div class="w-full text-center">
+                                <button
+                                        type="button"
+                                        class="flex items-center justify-center text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white"
+                                        aria-expanded="false"
+                                        aria-controls={`mobile-submenu-${index}`}
+                                >
+                                    {link.label}
+                                    <svg class="w-5 h-5 ml-2 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                                    </svg>
+                                </button>
+                                <div class="hidden flex-col items-center space-y-4 mt-4"
+                                     id={`mobile-submenu-${index}`}>
+                                    {link.dropdown.flat().map(subLink => (
+                                            <a
+                                                    href={subLink.href}
+                                                    class={`block text-xl font-medium transition-colors w-full text-center py-2 rounded-lg ${
+                                                        currentPath === subLink.href
+                                                            ? "bg-primary/20 text-primary"
+                                                            : "text-gray-400 hover:bg-white/10 hover:text-white"
+                                                    }`}
+                                            >
+                                                {subLink.label}
+                                            </a>
+                                    ))}
+                                </div>
+                            </div>
+                    ) : (
+                            <a
+                                    href={link.href}
+                                    class={`block text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg ${
+                                        currentPath === link.href
+                                            ? "bg-primary/20 text-primary"
+                                            : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    }`}
+                            >
+                                {link.label}
+                            </a>
+                    )
+                ))}
+                <a
+                        href="https://app.firecms.co"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mt-8 w-full inline-flex items-center justify-center gap-x-2 rounded-lg bg-primary px-6 py-4 text-xl font-semibold text-white shadow-lg hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow"
+                >
+                    Start Building
+                    <img
+                            src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
+                            alt=""
+                            class="h-5 w-5 text-white filter invert"
+                    />
+                </a>
+            </nav>
+        </div>
     </div>
-  </div>
 </header>
 
-<script>
-  // Mobile menu toggle - works with view transitions
-  function initializeMobileMenu() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-    const menuIconClosed = document.getElementById('menu-icon-closed');
-    const menuIconOpen = document.getElementById('menu-icon-open');
+<script is:inline>
+    function setupHeader() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        if (!mobileMenuButton || mobileMenuButton.dataset.initialized) {
+            return;
+        }
+        mobileMenuButton.dataset.initialized = 'true';
 
-    if (button && menu && menuIconClosed && menuIconOpen) {
-      // Remove any existing listeners by cloning and replacing
-      const newButton = button.cloneNode(true) as HTMLElement;
-      button.parentNode?.replaceChild(newButton, button);
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconClosed = document.getElementById('menu-icon-closed');
+        const menuIconOpen = document.getElementById('menu-icon-open');
 
-      newButton.addEventListener('click', () => {
-        const isExpanded = newButton.getAttribute('aria-expanded') === 'true';
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
 
-        newButton.setAttribute('aria-expanded', String(!isExpanded));
-        menu.classList.toggle('hidden');
-        menuIconClosed.classList.toggle('hidden');
-        menuIconClosed.classList.toggle('block');
-        menuIconOpen.classList.toggle('hidden');
-        menuIconOpen.classList.toggle('block');
-      });
-
-      // Close mobile menu when clicking on a link
-      const mobileLinks = menu.querySelectorAll('a');
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          menu.classList.add('hidden');
-          newButton.setAttribute('aria-expanded', 'false');
-          menuIconClosed.classList.add('block');
-          menuIconClosed.classList.remove('hidden');
-          menuIconOpen.classList.add('hidden');
-          menuIconOpen.classList.remove('block');
+            if (isExpanded) {
+                // Close menu
+                mobileMenu.classList.add('hidden');
+                menuIconClosed.classList.remove('hidden');
+                menuIconOpen.classList.add('hidden');
+                document.body.style.overflow = '';
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            } else {
+                // Open menu
+                mobileMenu.classList.remove('hidden');
+                menuIconClosed.classList.add('hidden');
+                menuIconOpen.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+            }
         });
-      });
+
+        const mobileMenuToggles = document.querySelectorAll('[id^="mobile-menu-toggle-"]');
+        mobileMenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const submenuId = toggle.getAttribute('aria-controls');
+                const submenu = document.getElementById(submenuId);
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', !isExpanded);
+                submenu.classList.toggle('hidden');
+                toggle.querySelector('svg')?.classList.toggle('rotate-180');
+            });
+        });
     }
-  }
 
-  // Initialize on page load
-  document.addEventListener('astro:page-load', initializeMobileMenu);
+    document.addEventListener('astro:page-load', setupHeader);
 </script>
-
