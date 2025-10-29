@@ -27,7 +27,7 @@ export default defineConfig({
                 }
             ],
             expressiveCode: {
-                themes: ['github-dark'],
+                themes: ["github-dark"],
                 styleOverrides: {
                     borderRadius: "0.5rem",
                     codeFontFamily: "var(--font-mono)",
@@ -38,7 +38,7 @@ export default defineConfig({
                     showCopyToClipboardButton: true,
                 },
                 defaultProps: {
-                    frame: 'none',
+                    frame: "none",
                 },
             },
             sidebar: [
@@ -220,145 +220,406 @@ export default defineConfig({
                     ],
                 },
                 {
-                    label: 'Collections',
+                    label: "Collections",
                     collapsed: false,
                     items: [
-                        { label: 'Collections', slug: 'docs/collections/index' },
-                        { label: 'Callbacks', slug: 'docs/collections/callbacks' },
-                        { label: 'Entity Views', slug: 'docs/collections/entity_views' },
-                        { label: 'Permissions', slug: 'docs/collections/permissions' },
-                        { label: 'Exporting Data', slug: 'docs/collections/exporting_data' },
-                        { label: 'Additional Columns', slug: 'docs/collections/additional_columns' },
-                        { label: 'Text Search', slug: 'docs/collections/text_search' },
-                        { label: 'Dynamic Collections', slug: 'docs/collections/dynamic_collections' },
-                        { label: 'Collection Actions', slug: 'docs/collections/collection_actions' },
-                        { label: 'Collection Groups', slug: 'docs/collections/collection_groups' },
-                        { label: 'Entity Actions', slug: 'docs/collections/entity_actions' },
+                        {
+                            label: "Collections",
+                            slug: "docs/collections/index"
+                        },
+                        {
+                            label: "Callbacks",
+                            slug: "docs/collections/callbacks"
+                        },
+                        {
+                            label: "Entity Views",
+                            slug: "docs/collections/entity_views"
+                        },
+                        {
+                            label: "Permissions",
+                            slug: "docs/collections/permissions"
+                        },
+                        {
+                            label: "Exporting Data",
+                            slug: "docs/collections/exporting_data"
+                        },
+                        {
+                            label: "Additional Columns",
+                            slug: "docs/collections/additional_columns"
+                        },
+                        {
+                            label: "Text Search",
+                            slug: "docs/collections/text_search"
+                        },
+                        {
+                            label: "Dynamic Collections",
+                            slug: "docs/collections/dynamic_collections"
+                        },
+                        {
+                            label: "Collection Actions",
+                            slug: "docs/collections/collection_actions"
+                        },
+                        {
+                            label: "Collection Groups",
+                            slug: "docs/collections/collection_groups"
+                        },
+                        {
+                            label: "Entity Actions",
+                            slug: "docs/collections/entity_actions"
+                        },
                     ],
                 },
                 {
-                    label: 'Properties',
+                    label: "Properties",
                     collapsed: true,
                     items: [
-                        { label: 'Properties Introduction', slug: 'docs/properties/index' },
                         {
-                            label: 'Fields',
+                            label: "Properties Introduction",
+                            slug: "docs/properties/index"
+                        },
+                        {
+                            label: "Fields",
                             collapsed: true,
                             items: [
-                                { label: 'Text Fields', slug: 'docs/properties/fields/text_fields' },
-                                { label: 'Selects', slug: 'docs/properties/fields/selects' },
-                                { label: 'File Upload', slug: 'docs/properties/fields/file_upload' },
-                                { label: 'Switch', slug: 'docs/properties/fields/switch' },
-                                { label: 'Date & Time', slug: 'docs/properties/fields/date_time' },
-                                { label: 'References', slug: 'docs/properties/fields/references' },
-                                { label: 'Group', slug: 'docs/properties/fields/group' },
-                                { label: 'Key Value', slug: 'docs/properties/fields/key_value' },
-                                { label: 'Repeat', slug: 'docs/properties/fields/repeat' },
-                                { label: 'Block', slug: 'docs/properties/fields/block' },
+                                {
+                                    label: "Text Fields",
+                                    slug: "docs/properties/fields/text_fields"
+                                },
+                                {
+                                    label: "Selects",
+                                    slug: "docs/properties/fields/selects"
+                                },
+                                {
+                                    label: "File Upload",
+                                    slug: "docs/properties/fields/file_upload"
+                                },
+                                {
+                                    label: "Switch",
+                                    slug: "docs/properties/fields/switch"
+                                },
+                                {
+                                    label: "Date & Time",
+                                    slug: "docs/properties/fields/date_time"
+                                },
+                                {
+                                    label: "References",
+                                    slug: "docs/properties/fields/references"
+                                },
+                                {
+                                    label: "Group",
+                                    slug: "docs/properties/fields/group"
+                                },
+                                {
+                                    label: "Key Value",
+                                    slug: "docs/properties/fields/key_value"
+                                },
+                                {
+                                    label: "Repeat",
+                                    slug: "docs/properties/fields/repeat"
+                                },
+                                {
+                                    label: "Block",
+                                    slug: "docs/properties/fields/block"
+                                },
                             ],
                         },
                         {
-                            label: 'Config',
+                            label: "Config",
                             collapsed: true,
                             items: [
-                                { label: 'Properties Common', slug: 'docs/properties/config/properties_common' },
-                                { label: 'String', slug: 'docs/properties/config/string' },
-                                { label: 'Number', slug: 'docs/properties/config/number' },
-                                { label: 'Boolean', slug: 'docs/properties/config/boolean' },
-                                { label: 'Reference', slug: 'docs/properties/config/reference' },
-                                { label: 'Date', slug: 'docs/properties/config/date' },
-                                { label: 'Array', slug: 'docs/properties/config/array' },
-                                { label: 'Map', slug: 'docs/properties/config/map' },
-                                { label: 'Geopoint', slug: 'docs/properties/config/geopoint' },
+                                {
+                                    label: "Properties Common",
+                                    slug: "docs/properties/config/properties_common"
+                                },
+                                {
+                                    label: "String",
+                                    slug: "docs/properties/config/string"
+                                },
+                                {
+                                    label: "Number",
+                                    slug: "docs/properties/config/number"
+                                },
+                                {
+                                    label: "Boolean",
+                                    slug: "docs/properties/config/boolean"
+                                },
+                                {
+                                    label: "Reference",
+                                    slug: "docs/properties/config/reference"
+                                },
+                                {
+                                    label: "Date",
+                                    slug: "docs/properties/config/date"
+                                },
+                                {
+                                    label: "Array",
+                                    slug: "docs/properties/config/array"
+                                },
+                                {
+                                    label: "Map",
+                                    slug: "docs/properties/config/map"
+                                },
+                                {
+                                    label: "Geopoint",
+                                    slug: "docs/properties/config/geopoint"
+                                },
                             ],
                         },
-                        { label: 'Conditional Fields', slug: 'docs/properties/conditional_fields' },
-                        { label: 'Custom Fields', slug: 'docs/properties/custom_fields' },
-                        { label: 'Custom Previews', slug: 'docs/properties/custom_previews' },
-                        { label: 'Reusing Properties', slug: 'docs/properties/reusing_properties' },
+                        {
+                            label: "Conditional Fields",
+                            slug: "docs/properties/conditional_fields"
+                        },
+                        {
+                            label: "Custom Fields",
+                            slug: "docs/properties/custom_fields"
+                        },
+                        {
+                            label: "Custom Previews",
+                            slug: "docs/properties/custom_previews"
+                        },
+                        {
+                            label: "Reusing Properties",
+                            slug: "docs/properties/reusing_properties"
+                        },
                     ],
                 },
                 {
-                    label: 'Top Level Views',
-                    slug: 'docs/top_level_views',
+                    label: "Top Level Views",
+                    slug: "docs/top_level_views",
                 },
                 {
-                    label: 'Provided Hooks',
+                    label: "Provided Hooks",
                     collapsed: true,
                     items: [
-                        { label: 'useAuthController', slug: 'docs/hooks/use_auth_controller' },
-                        { label: 'useSideEntityController', slug: 'docs/hooks/use_side_entity_controller' },
-                        { label: 'useSnackbarController', slug: 'docs/hooks/use_snackbar_controller' },
-                        { label: 'useReferenceDialog', slug: 'docs/hooks/use_reference_dialog' },
-                        { label: 'useFireCMSContext', slug: 'docs/hooks/use_firecms_context' },
-                        { label: 'useDataSource', slug: 'docs/hooks/use_data_source' },
-                        { label: 'useStorageSource', slug: 'docs/hooks/use_storage_source' },
-                        { label: 'useModeController', slug: 'docs/hooks/use_mode_controller' },
+                        {
+                            label: "useAuthController",
+                            slug: "docs/hooks/use_auth_controller"
+                        },
+                        {
+                            label: "useSideEntityController",
+                            slug: "docs/hooks/use_side_entity_controller"
+                        },
+                        {
+                            label: "useSnackbarController",
+                            slug: "docs/hooks/use_snackbar_controller"
+                        },
+                        {
+                            label: "useReferenceDialog",
+                            slug: "docs/hooks/use_reference_dialog"
+                        },
+                        {
+                            label: "useFireCMSContext",
+                            slug: "docs/hooks/use_firecms_context"
+                        },
+                        {
+                            label: "useDataSource",
+                            slug: "docs/hooks/use_data_source"
+                        },
+                        {
+                            label: "useStorageSource",
+                            slug: "docs/hooks/use_storage_source"
+                        },
+                        {
+                            label: "useModeController",
+                            slug: "docs/hooks/use_mode_controller"
+                        },
                     ],
                 },
                 {
-                    label: 'Recipes',
+                    label: "Recipes",
                     collapsed: false,
                     items: [
-                        { label: 'Building a Blog', slug: 'docs/recipes/building_a_blog' },
-                        { label: 'Auto-update Slug', slug: 'docs/recipes/autoupdate_slug' },
-                        { label: 'Data Type Adapter', slug: 'docs/recipes/data_type_adapter' },
-                        { label: 'Copy Entity', slug: 'docs/recipes/copy_entity' },
-                        { label: 'Documents as Subcollections', slug: 'docs/recipes/documents_as_subcollections' },
-                        { label: 'Entity Callbacks', slug: 'docs/recipes/entity_callbacks' },
+                        {
+                            label: "Building a Blog",
+                            slug: "docs/recipes/building_a_blog"
+                        },
+                        {
+                            label: "Auto-update Slug",
+                            slug: "docs/recipes/autoupdate_slug"
+                        },
+                        {
+                            label: "Data Type Adapter",
+                            slug: "docs/recipes/data_type_adapter"
+                        },
+                        {
+                            label: "Copy Entity",
+                            slug: "docs/recipes/copy_entity"
+                        },
+                        {
+                            label: "Documents as Subcollections",
+                            slug: "docs/recipes/documents_as_subcollections"
+                        },
+                        {
+                            label: "Entity Callbacks",
+                            slug: "docs/recipes/entity_callbacks"
+                        },
                     ],
                 },
                 {
-                    label: 'Icons',
-                    slug: 'docs/icons',
+                    label: "Icons",
+                    slug: "docs/icons",
                 },
                 {
-                    label: 'UI Components',
+                    label: "UI Components",
                     collapsed: false,
                     items: [
-                        { label: 'Overview', slug: 'docs/components' },
-                        { label: 'Alert', slug: 'docs/components/alert' },
-                        { label: 'Avatar', slug: 'docs/components/avatar' },
-                        { label: 'Badge', slug: 'docs/components/badge' },
-                        { label: 'Boolean Switch', slug: 'docs/components/boolean_switch' },
-                        { label: 'Button', slug: 'docs/components/button' },
-                        { label: 'Card', slug: 'docs/components/card' },
-                        { label: 'Centered View', slug: 'docs/components/centered_view' },
-                        { label: 'Checkbox', slug: 'docs/components/checkbox' },
-                        { label: 'Chip', slug: 'docs/components/chip' },
-                        { label: 'Circular Progress', slug: 'docs/components/circular_progress' },
-                        { label: 'Collapse', slug: 'docs/components/collapse' },
-                        { label: 'DateTime Field', slug: 'docs/components/datetimefield' },
-                        { label: 'Debounced Text Field', slug: 'docs/components/debounced_text_field' },
-                        { label: 'Dialog', slug: 'docs/components/dialog' },
-                        { label: 'Expandable Panel', slug: 'docs/components/expandable_panel' },
-                        { label: 'File Upload', slug: 'docs/components/file_upload' },
-                        { label: 'Icon Button', slug: 'docs/components/icon_button' },
-                        { label: 'Info Label', slug: 'docs/components/info_label' },
-                        { label: 'Label', slug: 'docs/components/label' },
-                        { label: 'Loading Button', slug: 'docs/components/loading_button' },
-                        { label: 'Markdown', slug: 'docs/components/markdown' },
-                        { label: 'Menu', slug: 'docs/components/menu' },
-                        { label: 'Menubar', slug: 'docs/components/menubar' },
-                        { label: 'Multi Select', slug: 'docs/components/multi_select' },
-                        { label: 'Paper', slug: 'docs/components/paper' },
-                        { label: 'Popover', slug: 'docs/components/popover' },
-                        { label: 'Radio Group', slug: 'docs/components/radio_group' },
-                        { label: 'Search Bar', slug: 'docs/components/search_bar' },
-                        { label: 'Select', slug: 'docs/components/select' },
-                        { label: 'Separator', slug: 'docs/components/separator' },
-                        { label: 'Sheet', slug: 'docs/components/sheet' },
-                        { label: 'Skeleton', slug: 'docs/components/skeleton' },
-                        { label: 'Slider', slug: 'docs/components/slider' },
-                        { label: 'Table', slug: 'docs/components/table' },
-                        { label: 'Tabs', slug: 'docs/components/tabs' },
-                        { label: 'Text Field', slug: 'docs/components/text_field' },
-                        { label: 'Textarea Autosize', slug: 'docs/components/textarea_autosize' },
+                        {
+                            label: "Overview",
+                            slug: "docs/components"
+                        },
+                        {
+                            label: "Alert",
+                            slug: "docs/components/alert"
+                        },
+                        {
+                            label: "Avatar",
+                            slug: "docs/components/avatar"
+                        },
+                        {
+                            label: "Badge",
+                            slug: "docs/components/badge"
+                        },
+                        {
+                            label: "Boolean Switch",
+                            slug: "docs/components/boolean_switch"
+                        },
+                        {
+                            label: "Button",
+                            slug: "docs/components/button"
+                        },
+                        {
+                            label: "Card",
+                            slug: "docs/components/card"
+                        },
+                        {
+                            label: "Centered View",
+                            slug: "docs/components/centered_view"
+                        },
+                        {
+                            label: "Checkbox",
+                            slug: "docs/components/checkbox"
+                        },
+                        {
+                            label: "Chip",
+                            slug: "docs/components/chip"
+                        },
+                        {
+                            label: "Circular Progress",
+                            slug: "docs/components/circular_progress"
+                        },
+                        {
+                            label: "Collapse",
+                            slug: "docs/components/collapse"
+                        },
+                        {
+                            label: "DateTime Field",
+                            slug: "docs/components/datetimefield"
+                        },
+                        {
+                            label: "Debounced Text Field",
+                            slug: "docs/components/debounced_text_field"
+                        },
+                        {
+                            label: "Dialog",
+                            slug: "docs/components/dialog"
+                        },
+                        {
+                            label: "Expandable Panel",
+                            slug: "docs/components/expandable_panel"
+                        },
+                        {
+                            label: "File Upload",
+                            slug: "docs/components/file_upload"
+                        },
+                        {
+                            label: "Icon Button",
+                            slug: "docs/components/icon_button"
+                        },
+                        {
+                            label: "Info Label",
+                            slug: "docs/components/info_label"
+                        },
+                        {
+                            label: "Label",
+                            slug: "docs/components/label"
+                        },
+                        {
+                            label: "Loading Button",
+                            slug: "docs/components/loading_button"
+                        },
+                        {
+                            label: "Markdown",
+                            slug: "docs/components/markdown"
+                        },
+                        {
+                            label: "Menu",
+                            slug: "docs/components/menu"
+                        },
+                        {
+                            label: "Menubar",
+                            slug: "docs/components/menubar"
+                        },
+                        {
+                            label: "Multi Select",
+                            slug: "docs/components/multi_select"
+                        },
+                        {
+                            label: "Paper",
+                            slug: "docs/components/paper"
+                        },
+                        {
+                            label: "Popover",
+                            slug: "docs/components/popover"
+                        },
+                        {
+                            label: "Radio Group",
+                            slug: "docs/components/radio_group"
+                        },
+                        {
+                            label: "Search Bar",
+                            slug: "docs/components/search_bar"
+                        },
+                        {
+                            label: "Select",
+                            slug: "docs/components/select"
+                        },
+                        {
+                            label: "Separator",
+                            slug: "docs/components/separator"
+                        },
+                        {
+                            label: "Sheet",
+                            slug: "docs/components/sheet"
+                        },
+                        {
+                            label: "Skeleton",
+                            slug: "docs/components/skeleton"
+                        },
+                        {
+                            label: "Slider",
+                            slug: "docs/components/slider"
+                        },
+                        {
+                            label: "Table",
+                            slug: "docs/components/table"
+                        },
+                        {
+                            label: "Tabs",
+                            slug: "docs/components/tabs"
+                        },
+                        {
+                            label: "Text Field",
+                            slug: "docs/components/text_field"
+                        },
+                        {
+                            label: "Textarea Autosize",
+                            slug: "docs/components/textarea_autosize"
+                        },
                     ],
                 },
                 {
-                    label: 'Changelog',
-                    slug: 'docs/changelog',
+                    label: "Changelog",
+                    slug: "docs/changelog",
                 },
             ],
             components: {
@@ -373,27 +634,11 @@ export default defineConfig({
     ],
     vite: {
         plugins: [
-            {
-                name: "compat-docusaurus-imports",
-                enforce: "pre",
-                async resolveId(id, importer) {
-                    if (id === "@theme/CodeBlock") {
-                        return this.resolve(path.resolve(new URL(".", import.meta.url).pathname, "./src/components/CodeBlock.tsx"), importer, { skipSelf: true });
-                    }
-                    if (id.startsWith("!!raw-loader!")) {
-                        const realId = id.replace(/^!!raw-loader!/, "");
-                        const resolved = await this.resolve(realId + "?raw", importer, { skipSelf: true });
-                        return resolved?.id ?? realId + "?raw";
-                    }
-                    return null;
-                }
-            },
             tailwindcss()
         ],
         resolve: {
             alias: {
                 "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
-                "@theme/CodeBlock": path.resolve(new URL(".", import.meta.url).pathname, "./src/components/CodeBlock.tsx")
             }
         },
         server: {
