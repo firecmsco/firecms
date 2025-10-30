@@ -1,7 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 
-const modules = import.meta.glob('/src/**/*.tsx');
-
 interface ClientOnlyDemoProps {
     path: string;
     className?: string;
@@ -12,13 +10,11 @@ const ClientOnlyDemo: React.FC<ClientOnlyDemoProps> = ({ path, className }) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const componentImporter = modules[path];
-
-        if (componentImporter) {
-            const LazyComponent = lazy(componentImporter as any);
+        try {
+            const LazyComponent = lazy(() => import(path));
             setComponent(() => LazyComponent);
-        } else {
-            console.error(`Component not found at path: ${path}`);
+        } catch (e) {
+            console.error(`Component not found at path: ${path}`, e);
             setError(`Component ${path} not found`);
         }
     }, [path]);

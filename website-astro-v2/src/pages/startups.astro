@@ -7,6 +7,8 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 // import Footer from "../components/Footer.astro";
 import { CodeBlock } from "../components/CodeBlock";
 import ScreenshotsMarquee from "../components/ScreenshotsMarquee.astro";
+import ClientLogos from "../components/ClientLogos.astro";
+
 const title = "FireCMS for Startups - Move Fast, Scale Smart";
 const description = "Get your startup's admin panel from database to production in minutes, not weeks. Focus on your core product and let FireCMS handle the back-office.";
 
@@ -42,6 +44,18 @@ const spreadsheetIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" vi
           </svg>
         </a>
       </div>
+    </section>
+
+    <section class="relative isolate bg-black py-16">
+        <div class="mx-auto max-w-7xl px-8 lg:px-12">
+            <h2 class="text-center text-lg font-semibold leading-8 text-gray-400">
+                Trusted by developers at forward-thinking companies
+            </h2>
+            <div class="mx-auto mt-4 mb-8">
+                <ClientLogos filter="startups"/>
+            </div>
+        </div>
+        <SectionBackgroundAccents bottomLine={true}/>
     </section>
 
     <!-- Problem / Solution Section -->
