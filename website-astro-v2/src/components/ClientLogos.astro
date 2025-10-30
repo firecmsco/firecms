@@ -6,7 +6,8 @@ const allLogos = [
         href: "https://www.getdeardoc.com",
         src: "/img/logos/deardoc.png",
         invert: true,
-        height: 22
+        height: 22,
+        type: "startups"
     },
     {
         key: "medicalmotion",
@@ -14,7 +15,8 @@ const allLogos = [
         href: "https://medicalmotion.com",
         src: "/img/logos/mm_logo.webp",
         invert: false,
-        height: 36
+        height: 36,
+        type: "startups"
     },
     {
         key: "proton",
@@ -22,7 +24,8 @@ const allLogos = [
         href: "https://www.proton-health.com",
         src: "/img/logos/proton_logo.svg",
         invert: false,
-        height: 40
+        height: 40,
+        type: "startups"
     },
     {
         key: "withu",
@@ -30,6 +33,7 @@ const allLogos = [
         href: "https://www.withuapp.com//",
         src: "/img/logos/withu.png",
         invert: true,
+        type: "startups"
     },
     {
         key: "claimgem",
@@ -37,7 +41,8 @@ const allLogos = [
         href: "https://claimgem.com/",
         text: "ClaimGem",
         invert: false,
-        height: 28
+        height: 28,
+        type: "startups"
     },
     {
         key: "socialincome",
@@ -45,7 +50,8 @@ const allLogos = [
         href: "https://socialincome.org",
         src: "/img/logos/social_income_logo.svg",
         invert: false,
-        height: 40
+        height: 40,
+        type: "startups"
     },
     {
         key: "clario",
@@ -53,7 +59,8 @@ const allLogos = [
         href: "https://clario.co/",
         src: "/img/logos/clario.svg",
         invert: true,
-        height: 28
+        height: 28,
+        type: "startups"
     },
     {
         key: "gearfocus",
@@ -61,7 +68,8 @@ const allLogos = [
         href: "https://www.gearfocus.com/",
         src: "/img/logos/gearfocus_logo.svg",
         invert: true,
-        height: 36
+        height: 36,
+        type: "startups"
     },
     {
         key: "mindswitch",
@@ -69,7 +77,8 @@ const allLogos = [
         href: "https://www.mindswitch.me/",
         src: "/img/logos/mindswitch_logo.svg",
         invert: true,
-        height: 36
+        height: 36,
+        type: "startups"
     },
     {
         key: "bitforge",
@@ -77,7 +86,8 @@ const allLogos = [
         href: "https://bitforge.ch/",
         src: "/img/logos/bitforge.svg",
         invert: true,
-        height: 32
+        height: 32,
+        type: "agencies"
     },
     {
         key: "somnio",
@@ -85,7 +95,8 @@ const allLogos = [
         href: "https://www.somniosoftware.com/",
         src: "/img/logos/logo_somnio.webp",
         invert: true,
-        height: 42
+        height: 42,
+        type: "agencies"
     },
     {
         key: "riverstone",
@@ -93,14 +104,16 @@ const allLogos = [
         href: "https://www.riverstonetech.com/",
         src: "/img/logos/riverstone.png",
         invert: true,
-        height: 20
+        height: 20,
+        type: "agencies"
     },
     {
         key: "icodelabs",
         alt: "ICode Labs",
         href: "https://icodelabs.co/",
         src: "/img/logos/icodelabs.png",
-        invert: true
+        invert: true,
+        type: "agencies"
     },
     {
         key: "nfq",
@@ -108,7 +121,8 @@ const allLogos = [
         href: "https://www.nfq.com/",
         src: "/img/logos/nfq.svg",
         invert: true,
-        height: 28
+        height: 28,
+        type: "agencies"
     },
     {
         key: "fyc",
@@ -116,7 +130,8 @@ const allLogos = [
         href: "https://fyclabs.com/",
         src: "/img/logos/fyc.svg",
         invert: true,
-        height: 42
+        height: 42,
+        type: "agencies"
     },
     {
         key: "kodecreators",
@@ -124,7 +139,8 @@ const allLogos = [
         href: "https://kodecreators.com/",
         src: "/img/logos/kodecreators.svg",
         invert: true,
-        height: 32
+        height: 32,
+        type: "agencies"
     },
     {
         key: "viscap",
@@ -132,7 +148,8 @@ const allLogos = [
         href: "https://www.viscapmedia.com/",
         src: "/img/logos/viscap.svg",
         invert: true,
-        height: 42
+        height: 42,
+        type: "agencies"
     },
     {
         key: "abacus",
@@ -140,11 +157,20 @@ const allLogos = [
         href: "https://abacusplus.ba/",
         src: "/img/logos/abacus.svg",
         invert: true,
-        height: 32
+        height: 32,
+        type: "agencies"
     }
 ];
 
-const initialLogos = allLogos.slice(0, 5);
+interface Props {
+    filter?: "startups" | "agencies";
+}
+
+const { filter } = Astro.props;
+
+const filteredLogos = allLogos.filter(logo => !filter || logo.type === filter);
+
+const initialLogos = filteredLogos.slice(0, 5);
 ---
 
 <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-4" id="logo-container">
@@ -173,7 +199,7 @@ const initialLogos = allLogos.slice(0, 5);
     ))}
 </div>
 
-<script define:vars={{ allLogos }}>
+<script define:vars={{ allLogos: filteredLogos }}>
     document.addEventListener('astro:page-load', () => {
         const container = document.getElementById('logo-container');
         if (!container) return;
