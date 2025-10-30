@@ -1,4 +1,5 @@
 import { EntityReference, GeoPoint, Vector } from "../types";
+import { isObject, isPlainObject } from "./objects";
 
 // Define a unique prefix for entity keys in localStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";
@@ -87,6 +88,10 @@ export function saveEntityToCache(path: string, data: object): void {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
             const entityString = JSON.stringify(data, customReplacer);
+            console.log("Saving entity to localStorage:", {
+                key,
+                entityString
+            });
             localStorage.setItem(key, entityString);
         } catch (error) {
             console.error(
@@ -129,6 +134,10 @@ export function getEntityFromCache(path: string): object | undefined {
             const entityString = localStorage.getItem(key);
             if (entityString) {
                 const entity: object = JSON.parse(entityString, customReviver);
+                console.log("Loaded entity from localStorage:", {
+                    key,
+                    entity
+                });
                 return entity;
             }
         } catch (error) {
@@ -185,4 +194,30 @@ export function clearEntityCache(): void {
             console.error("Failed to clear entity cache from localStorage:", error);
         }
     }
+}
+
+export function flattenKeys(obj: any, prefix = "", result: string[] = []): string[] {
+
+    if (isObject(obj) || Array.isArray(obj)) {
+        const plainObject = isPlainObject(obj);
+        if (!plainObject && prefix) {
+            result.push(prefix);
+        } else {
+            for (const key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    const newKey = prefix
+                        ? Array.isArray(obj)
+                            ? `${prefix}[${key}]`
+                            : `${prefix}.${key}`
+                        : key;
+                    if (isObject(obj[key]) || Array.isArray(obj[key])) {
+                        flattenKeys(obj[key], newKey, result);
+                    } else {
+                        result.push(newKey);
+                    }
+                }
+            }
+        }
+    }
+    return result;
 }

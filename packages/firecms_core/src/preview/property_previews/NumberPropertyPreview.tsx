@@ -16,12 +16,12 @@ export function NumberPropertyPreview({
         const enumKey = value;
         const enumValues = enumToObjectEntries(property.enumValues);
         if (!enumValues)
-            return <>{value}</>;
+            return <span className={size === "small" ? "text-sm" : ""}>{value}</span>;
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={enumValues}
             size={size !== "medium" ? "small" : "medium"}/>;
     } else {
-        return <>{value}</>;
+        return <span className={size === "small" ? "text-sm" : ""}>{value}</span>;
     }
 }
