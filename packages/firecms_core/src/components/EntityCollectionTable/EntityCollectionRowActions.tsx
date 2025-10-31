@@ -1,20 +1,9 @@
 import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
-import {
-    Checkbox,
-    Chip,
-    cls,
-    EditIcon,
-    IconButton,
-    Menu,
-    MenuItem,
-    MoreVertIcon,
-    Skeleton,
-    Tooltip
-} from "@firecms/ui";
+import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { getEntityFromCache, hasEntityInCache } from "../../util/entity_cache";
+import { getEntityFromCache } from "../../util/entity_cache";
 import { getLocalChangesBackup } from "../../util";
 
 /**
@@ -82,7 +71,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
     const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
     const hasDraft = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : false;
-
+    const iconSize = largeLayout && (size === "m" || size === "l" || size == "xl") ? "medium" : "small";
     return (
         <div
             className={cls(
@@ -102,37 +91,50 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
             {(hasActions || selectionEnabled) &&
                 <div className="w-34 flex justify-center">
 
-                    {uncollapsedActions.map((action, index) => (
-                        <Tooltip key={index}
-                                 title={action.name}
-                                 asChild={true}>
-                            <IconButton
-                                onClick={(event: MouseEvent) => {
-                                    event.stopPropagation();
-                                    action.onClick({
-                                        view: "collection",
-                                        entity,
-                                        fullPath,
-                                        fullIdPath,
-                                        collection,
-                                        context,
-                                        selectionController,
-                                        highlightEntity,
-                                        unhighlightEntity,
-                                        onCollectionChange,
-                                        openEntityMode: openEntityMode ?? collection?.openEntityMode
-                                    });
-                                }}
-                                size={largeLayout ? "medium" : "small"}>
-                                {action.icon}
-                            </IconButton>
-                        </Tooltip>
-                    ))}
+                    {uncollapsedActions.map((action, index) => {
+                        const isEditAction = action.key === "edit";
+                        const tooltip = isEditAction && hasDraft ? "Local unsaved changes" : action.name;
+
+                        let iconButton = <IconButton
+                            onClick={(event: MouseEvent) => {
+                                event.stopPropagation();
+                                action.onClick({
+                                    view: "collection",
+                                    entity,
+                                    fullPath,
+                                    fullIdPath,
+                                    collection,
+                                    context,
+                                    selectionController,
+                                    highlightEntity,
+                                    unhighlightEntity,
+                                    onCollectionChange,
+                                    openEntityMode: openEntityMode ?? collection?.openEntityMode
+                                });
+                            }}
+                            size={iconSize}>
+                            {action.icon}
+                        </IconButton>;
+                        if (isEditAction && hasDraft) {
+                            iconButton = (
+                                <Badge color={"warning"}>
+                                    {iconButton}
+                                </Badge>
+                            );
+                        }
+                        return (
+                            <Tooltip key={index}
+                                     title={tooltip}
+                                     asChild={true}>
+                                {iconButton}
+                            </Tooltip>
+                        );
+                    })}
 
                     {hasCollapsedActions &&
                         <Menu
                             trigger={<IconButton
-                                size={largeLayout ? "medium" : "small"}>
+                                size={iconSize}>
                                 <MoreVertIcon/>
                             </IconButton>}>
                             {collapsedActions.map((action, index) => (
@@ -164,7 +166,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                     {selectionEnabled &&
                         <Tooltip title={`Select ${entity.id}`}>
                             <Checkbox
-                                size={largeLayout ? "medium" : "small"}
+                                size={iconSize}
                                 checked={Boolean(isSelected)}
                                 onCheckedChange={onCheckedChange}
                             />
@@ -178,11 +180,6 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                     onClick={(event) => {
                         event.stopPropagation();
                     }}>
-                    {hasDraft && <Tooltip title={"Local unsaved changes"} className={"inline"}>
-                        <Chip colorScheme={"orangeDarker"} className={"p-0.5"}>
-                            <EditIcon size={12}/>
-                        </Chip>
-                    </Tooltip>}
                     <span className="min-w-0 truncate text-center">
                         {entity
                             ? entity.id
