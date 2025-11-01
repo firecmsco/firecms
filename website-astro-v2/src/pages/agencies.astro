@@ -1,6 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 import ClientLogos from "../components/ClientLogos.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import BrowserFrame from "../components/BrowserFrame.astro";
+import UsageExamples from "../components/UsageExamples.astro";
 
 const title = "FireCMS for Agencies: Deliver Faster, Impress Clients";
 const description = "Build custom admin panels & CMS for your clients efficiently with FireCMS. Reduce development time, enhance client satisfaction, and scale your agency's offerings.";
@@ -13,10 +16,10 @@ const description = "Build custom admin panels & CMS for your clients efficientl
         <section
                 class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-                <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans">
+                <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans animate-on-scroll fade-in-up">
                     Deliver Exceptional Client Projects, Faster
                 </h1>
-                <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+                <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48 animate-on-scroll fade-in-up delay-100">
                     Empower your agency to build robust, custom admin panels and CMS solutions
                     <b> efficiently</b>. Delight clients, streamline workflows, and boost profitability.
                 </p>
@@ -24,116 +27,138 @@ const description = "Build custom admin panels & CMS for your clients efficientl
         </section>
 
         <section class="relative isolate bg-black py-16">
+            <SectionBackgroundAccents topLine={true}/>
             <div class="mx-auto max-w-7xl px-8 lg:px-12">
-                <div class="mx-auto mt-4 mb-8">
+                <div class="mx-auto mt-4 mb-8 animate-on-scroll fade-in">
                     <ClientLogos filter="agencies"/>
                 </div>
             </div>
         </section>
 
+
         <!-- Agency Advantage Section -->
-        <section class="bg-gray-900/50 py-16 sm:py-24">
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <div class="flex items-center mb-4">
-                            <svg class="h-8 w-8 mr-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/>
-                            </svg>
-                            <h3 class="m-0 text-3xl font-bold text-white">
-                                Your Agency's Secret Weapon
-                            </h3>
+                <div class="mx-auto max-w-4xl text-center animate-on-scroll fade-in-up">
+                    <div class="flex items-center justify-center mb-4">
+                        <h3 class="m-0 text-3xl font-bold text-white">
+                            Your Agency's Secret Weapon
+                        </h3>
+                    </div>
+                    <p class="text-xl md:text-2xl mb-4 text-gray-300">
+                        Client demands are high, timelines are tight. Building custom back-office
+                        solutions from scratch eats into margins and slows down delivery.
+                    </p>
+                    <p class="text-lg text-gray-400">
+                        FireCMS provides a powerful, flexible foundation. Build bespoke admin interfaces
+                        and CMS tailored to client needs in a fraction of the time, freeing up your
+                        developers for complex features.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <UsageExamples/>
+
+
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center animate-on-scroll fade-in-up delay-100">
+                    <div class="lg:col-span-6">
+                        <div class="text-center mb-12 animate-on-scroll fade-in-up">
+                            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Accelerate Delivery, Enhance
+                                Value</h2>
                         </div>
-                        <p class="text-xl md:text-2xl mb-4 text-gray-300">
-                            Client demands are high, timelines are tight. Building custom back-office
-                            solutions from scratch eats into margins and slows down delivery.
-                        </p>
-                        <p class="text-lg text-gray-400">
-                            FireCMS provides a powerful, flexible foundation. Build bespoke admin interfaces
-                            and CMS tailored to client needs in a fraction of the time, freeing up your
-                            developers for complex features.
-                        </p>
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="h-10 w-10 rounded-lg bg-green-500/15 flex items-center justify-center">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/bolt.svg" alt="Speed"
+                                     class="h-6 w-6 filter invert opacity-80"/>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-1">Rapid Development</h3>
+                                <p class="text-gray-400">Pre-built components and schema inference reduce weeks of work
+                                    to days.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="h-10 w-10 rounded-lg bg-indigo-500/15 flex items-center justify-center">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sliders-horizontal.svg"
+                                     alt="Customization" class="h-6 w-6 filter invert opacity-80"/>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-1">Deep Customization</h3>
+                                <p class="text-gray-400">Custom fields, views, actions, and branding for each
+                                    client.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="h-10 w-10 rounded-lg bg-purple-500/15 flex items-center justify-center">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/users.svg"
+                                     alt="Empower" class="h-6 w-6 filter invert opacity-80"/>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-1">Client Empowerment</h3>
+                                <p class="text-gray-400">Simple UX for non-technical stakeholders to reduce your support
+                                    load.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rounded-xl border border-gray-700 overflow-hidden">
-                        <img
-                                src="/img/users_table.png"
-                                alt="Screenshot of FireCMS showing data management"
-                                class="h-full w-full object-cover"
-                        />
+                    <div class="lg:col-span-6">
+                        <div
+                                style={{
+                                    aspectRatio: 550 / 692,
+                                    maxHeight: "692px",
+                                    maxWidth: "550px"
+                                }}
+                                class={" flex content-center justify-center"}>
+                            <img
+                                    class={"pointer-events-none rounded-2xl border border-gray-800 shadow-lg"}
+                                    width="100%"
+                                    src={"/img/history.png"}>
+                            </img>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Benefits for Agencies Section -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="max-w-5xl mx-auto text-center mb-12 px-6 lg:px-8">
-                <h2 class="text-3xl font-bold mb-4 text-white">Accelerate Delivery, Enhance Value</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto px-6 lg:px-8">
-                <!-- Card 1: Speed -->
-                <div class="p-6 rounded-xl border border-gray-700 bg-gray-900/50">
-                    <svg class="w-10 h-10 mb-3 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                    <h3 class="text-xl font-bold mb-2 text-white">Rapid Development</h3>
-                    <p class="text-gray-400">
-                        Launch client admin panels significantly faster using pre-built components and
-                        schema inference. Reduce boilerplate code.
-                    </p>
-                </div>
-                <!-- Card 2: Customization -->
-                <div class="p-6 rounded-xl border border-gray-700 bg-gray-900/50">
-                    <svg class="w-10 h-10 mb-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 16v-2m0-10v2m0 6v2m-6-4h2m10 0h2M6 12H4m16 0h-2m-5-5v2m0 6v2m-5-5h2m6 0h2"/>
-                    </svg>
-                    <h3 class="text-xl font-bold mb-2 text-white">Deep Customization</h3>
-                    <p class="text-gray-400">
-                        Tailor every aspect to client requirements – custom fields, views, logic, branding.
-                        Deliver truly bespoke solutions.
-                    </p>
-                </div>
-                <!-- Card 3: Client Satisfaction -->
-                <div class="p-6 rounded-xl border border-gray-700 bg-gray-900/50">
-                    <svg class="w-10 h-10 mb-3 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.25-1.26-.688-1.717M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.25-1.26.688-1.717m0 0A1.125 1.125 0 009 15.125V15c0-1.044.448-2.01 1.188-2.717a4.5 4.5 0 016.624 0c.74.707 1.188 1.673 1.188 2.717v.125a1.125 1.125 0 011.125 1.125v0c0 .621-.504 1.125-1.125 1.125H9.812a1.125 1.125 0 01-1.125-1.125v0c0-.621.504-1.125 1.125-1.125H12m0-4.875c-1.036 0-1.875-.84-1.875-1.875S10.964 6.375 12 6.375s1.875.84 1.875 1.875S13.036 10.125 12 10.125z"/>
-                    </svg>
-                    <h3 class="text-xl font-bold mb-2 text-white">Client Empowerment</h3>
-                    <p class="text-gray-400">
-                        Provide clients with intuitive, easy-to-use interfaces they can manage themselves,
-                        reducing your support load.
-                    </p>
-                </div>
-            </div>
-        </section>
 
         <!-- Easy to Customize Section -->
-        <section class="bg-gray-900/50 py-16 sm:py-24">
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div class="rounded-xl border border-gray-700 overflow-hidden">
-                        <img
-                                src="/img/easy_to_customize.webp"
-                                alt="Screenshot of FireCMS showing code customization"
-                                class="h-full w-full object-cover"
-                        />
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center animate-on-scroll fade-in-up">
+                    <div class="rounded-xl ring-1 ring-inset ring-gray-800 overflow-hidden">
+                        <video
+                                class="w-full h-auto"
+                                loop
+                                autoplay
+                                muted
+                                playsinline>
+                            <source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
+                        </video>
                     </div>
                     <div>
                         <div class="flex items-center mb-4">
-                             <svg class="h-8 w-8 mr-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
+                            <div class="h-10 w-10 mr-3 rounded-lg bg-primary/20 flex items-center justify-center">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/settings-2.svg"
+                                     alt="Customize" class="h-6 w-6 filter invert opacity-80"/>
+                            </div>
                             <h3 class="m-0 text-3xl font-bold text-white">
                                 Easy to customize
                             </h3>
                         </div>
                         <p class="text-xl md:text-2xl mb-4 text-gray-300">
-                            FireCMS is designed for developers. Customize every aspect to fit your clients' needs perfectly.
+                            FireCMS is designed for developers. Customize every aspect to fit your clients' needs
+                            perfectly.
                         </p>
                         <p class="text-lg text-gray-400">
-                            Create custom form fields, override widgets, or build entirely new views with your own React components. FireCMS provides the flexibility to deliver a truly bespoke experience.
+                            Create custom form fields, override widgets, or build entirely new views with your own React
+                            components. FireCMS provides the flexibility to deliver a truly bespoke experience.
                         </p>
                     </div>
                 </div>
@@ -141,236 +166,281 @@ const description = "Build custom admin panels & CMS for your clients efficientl
         </section>
 
         <!-- Features for Agency Success Section -->
-        <section class="bg-gray-950 py-16 sm:py-24">
-            <div class="max-w-5xl mx-auto px-4">
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4 text-white">Features Built for Agencies</h2>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Features Built for
+                        Agencies</h2>
                     <p class="text-xl text-gray-400">Tools to streamline your development process.</p>
                 </div>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Feature Items -->
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg"
+                                     alt="Reusable" class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">Reusable Components</h3>
-                                <p class="text-sm text-gray-400">Build custom fields and views once,
-                                    reuse across client projects.</p>
+                                <p class="text-sm text-gray-400">Build custom fields and views once, reuse across client
+                                    projects.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/palette.svg"
+                                     alt="White label" class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">White-Labeling Ready</h3>
-                                <p class="text-sm text-gray-400">Easily customize branding and themes to
-                                    match client identity (especially with PRO).</p>
+                                <p class="text-sm text-gray-400">Easily customize branding and themes to match client
+                                    identity.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
+                                     alt="Permissions" class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">Granular Permissions</h3>
-                                <p class="text-sm text-gray-400">Define precise roles and access control
-                                    for different client users.</p>
+                                <p class="text-sm text-gray-400">Define precise roles and access control for different
+                                    users.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                                     alt="Deployment" class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">Fast Deployment</h3>
-                                <p class="text-sm text-gray-400">Integrates smoothly with Firebase/GCP
-                                    or self-host for quick project setup.</p>
+                                <p class="text-sm text-gray-400">Integrates smoothly with Firebase/GCP or self-host in
+                                    minutes.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud.svg" alt="Cloud"
+                                     class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">Cloud or Self-Hosted</h3>
-                                <p class="text-sm text-gray-400">Choose the best hosting option based on
-                                    client needs and budget.</p>
+                                <p class="text-sm text-gray-400">Choose the best hosting option based on client
+                                    needs.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5 rounded-lg border border-gray-800 bg-gray-900">
+                    <div class="p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50">
                         <div class="flex items-start space-x-3">
-                            <svg class="w-6 h-6 text-white flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                            </svg>
+                            <div class="h-8 w-8 rounded-md bg-gray-800 flex items-center justify-center flex-shrink-0">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
+                                     alt="Developer friendly" class="h-4 w-4 filter invert opacity-80"/>
+                            </div>
                             <div>
                                 <h3 class="text-lg font-semibold mb-1 text-white">Developer Friendly</h3>
-                                <p class="text-sm text-gray-400">Leverages React and TypeScript for a
-                                    familiar and efficient dev experience.</p>
+                                <p class="text-sm text-gray-400">React + TypeScript for a familiar and efficient DX.</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="relative isolate bg-black py-10 sm:py-12">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center animate-on-scroll scale-in">
+                    <div>
+                        <div class="text-4xl font-extrabold text-white">5×</div>
+                        <div class="mt-1 text-gray-400">Faster project delivery</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-extrabold text-white"><span class="align-baseline">↓</span>80%</div>
+                        <div class="mt-1 text-gray-400">Less boilerplate</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-extrabold text-white">100%</div>
+                        <div class="mt-1 text-gray-400">Client ownership</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Agency Client Showcase Section -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white">How Agencies Leverage
-                    FireCMS</h2>
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-12 text-center text-white animate-on-scroll fade-in-up">
+                    How Agencies Leverage FireCMS</h2>
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                    <div class="p-6 rounded-lg border border-gray-800 flex flex-col">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-6 h-6 mr-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                            </svg>
-                            <h3 class="text-xl font-semibold text-white">E-commerce Store</h3>
-                        </div>
-                        <div class="flex-grow mb-4">
-                            <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Needed a custom admin panel to manage products, orders, and customer data integrated with their existing Shopify backend.</p>
-                            <p class="text-sm text-white"><b>FireCMS Solution:</b> Used FireCMS with custom actions and views to create a tailored interface, pulling data via APIs.</p>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
-                            <svg class="w-4 h-4 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-sm font-medium text-white">
-                                <b>Result:</b> Faster order processing and inventory management.
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6 rounded-lg border border-gray-800 flex flex-col">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-6 h-6 mr-3 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <h3 class="text-xl font-semibold text-white">SaaS Platform</h3>
-                        </div>
-                        <div class="flex-grow mb-4">
-                            <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Required an internal tool for the support team to manage user accounts, subscriptions, and feature flags.</p>
-                            <p class="text-sm text-white"><b>FireCMS Solution:</b> Deployed FireCMS connected to their Firestore database, using role-based access for different support tiers.</p>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
-                            <svg class="w-4 h-4 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-sm font-medium text-white">
-                                <b>Result:</b> Reduced support resolution time by 30%.
-                            </span>
+                    <div class="group relative overflow-hidden p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50 flex flex-col transition-all duration-300 hover:ring-primary/30 animate-on-scroll scale-in"
+                         data-spotlight-card>
+                        <!-- Mouse spotlight effect -->
+                        <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                             data-spotlight></div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-4">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shopping-cart.svg"
+                                         alt="E-commerce Icon"
+                                         class="w-6 h-6 filter invert opacity-80"/>
+                                </div>
+                                <h3 class="text-xl font-semibold text-white">E-commerce Store</h3>
+                            </div>
+                            <div class="flex-grow mb-4">
+                                <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Needed a custom admin panel to
+                                    manage products, orders, and customer data integrated with their existing Shopify
+                                    backend.</p>
+                                <p class="text-sm text-white"><b>FireCMS Solution:</b> Used FireCMS with custom actions
+                                    and views to create a tailored interface, pulling data via APIs.</p>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Checkmark"
+                                     class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                                <span class="text-sm font-medium text-white">
+                                    <b>Result:</b> Faster order processing and inventory management.
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="p-6 rounded-lg border border-gray-800 flex flex-col">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-6 h-6 mr-3 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h10l-1-1-1-3"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15h14M5 11h14M5 7h14"/>
-                            </svg>
-                            <h3 class="text-xl font-semibold text-white">Content Marketing Site</h3>
-                        </div>
-                        <div class="flex-grow mb-4">
-                            <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Client needed an easy way for non-technical marketers to update blog posts, case studies, and landing pages.</p>
-                            <p class="text-sm text-white"><b>FireCMS Solution:</b> Set up FireCMS with predefined content schemas and markdown editors, enabling easy content updates.</p>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
-                            <svg class="w-4 h-4 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-sm font-medium text-white">
-                                <b>Result:</b> Empowered marketing team, freeing up dev resources.
-                            </span>
+
+                    <div class="group relative overflow-hidden p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50 flex flex-col transition-all duration-300 hover:ring-primary/30 animate-on-scroll scale-in delay-100"
+                         data-spotlight-card>
+                        <!-- Mouse spotlight effect -->
+                        <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                             data-spotlight></div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-4">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/settings-2.svg"
+                                         alt="SaaS Platform Icon"
+                                         class="w-6 h-6 filter invert opacity-80"/>
+                                </div>
+                                <h3 class="text-xl font-semibold text-white">SaaS Platform</h3>
+                            </div>
+                            <div class="flex-grow mb-4">
+                                <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Required an internal tool for
+                                    the support team to manage user accounts, subscriptions, and feature flags.</p>
+                                <p class="text-sm text-white"><b>FireCMS Solution:</b> Deployed FireCMS connected to
+                                    their Firestore database, using role-based access for different support tiers.</p>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Checkmark"
+                                     class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                                <span class="text-sm font-medium text-white">
+                                    <b>Result:</b> Reduced support resolution time by 30%.
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="p-6 rounded-lg border border-gray-800 flex flex-col">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-6 h-6 mr-3 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"/>
-                            </svg>
-                            <h3 class="text-xl font-semibold text-white">Service Business</h3>
+
+                    <div class="group relative overflow-hidden p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50 flex flex-col transition-all duration-300 hover:ring-primary/30 animate-on-scroll scale-in delay-200"
+                         data-spotlight-card>
+                        <!-- Mouse spotlight effect -->
+                        <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                             data-spotlight></div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-4">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-template.svg"
+                                         alt="Content Marketing Icon"
+                                         class="w-6 h-6 filter invert opacity-80"/>
+                                </div>
+                                <h3 class="text-xl font-semibold text-white">Content Marketing Site</h3>
+                            </div>
+                            <div class="flex-grow mb-4">
+                                <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Client needed an easy way for
+                                    non-technical marketers to update blog posts, case studies, and landing pages.</p>
+                                <p class="text-sm text-white"><b>FireCMS Solution:</b> Set up FireCMS with predefined
+                                    content schemas and markdown editors, enabling easy content updates.</p>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Checkmark"
+                                     class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                                <span class="text-sm font-medium text-white">
+                                    <b>Result:</b> Empowered marketing team, freeing up dev resources.
+                                </span>
+                            </div>
                         </div>
-                        <div class="flex-grow mb-4">
-                            <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Needed a simple CRM to track client projects, communication logs, and assigned tasks.</p>
-                            <p class="text-sm text-white"><b>FireCMS Solution:</b> Built a custom CRM interface using FireCMS collections for clients, projects, and logs with relations.</p>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
-                            <svg class="w-4 h-4 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-sm font-medium text-white">
-                                <b>Result:</b> Improved project tracking and client communication.
-                            </span>
+                    </div>
+
+                    <div class="group relative overflow-hidden p-8 rounded-lg ring-1 ring-inset ring-gray-800 bg-gray-900/50 flex flex-col transition-all duration-300 hover:ring-primary/30 animate-on-scroll scale-in delay-300"
+                         data-spotlight-card>
+                        <!-- Mouse spotlight effect -->
+                        <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                             data-spotlight></div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-4">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
+                                         alt="Service Business Icon"
+                                         class="w-6 h-6 filter invert opacity-80"/>
+                                </div>
+                                <h3 class="text-xl font-semibold text-white">Service Business</h3>
+                            </div>
+                            <div class="flex-grow mb-4">
+                                <p class="text-sm text-gray-400 mb-2"><b>Challenge:</b> Needed a simple CRM to track
+                                    client projects, communication logs, and assigned tasks.</p>
+                                <p class="text-sm text-white"><b>FireCMS Solution:</b> Built a custom CRM interface
+                                    using FireCMS collections for clients, projects, and logs with relations.</p>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-gray-800 flex items-start">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                     alt="Checkmark"
+                                     class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                                <span class="text-sm font-medium text-white">
+                                    <b>Result:</b> Improved project tracking and client communication.
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Developer Features Section -->
-        <section class="bg-gray-900/50 py-16 sm:py-24">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="text-center">
-                    <h2 class="text-3xl font-bold mb-4 text-white">Developer-Centric Flexibility</h2>
-                    <p class="text-xl text-gray-400">FireCMS is built by developers, for developers.
-                        Enjoy a seamless workflow that integrates with your existing tools and practices.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Hero Buttons Section -->
-        <section class="bg-black py-16">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                <a href="/docs"
-                   class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-                    Get Started
-                </a>
-            </div>
-        </section>
-
-        <!-- Pro Teaser Section -->
-        <section class="bg-gray-950 py-16 sm:py-24">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Looking for more?</h2>
-                <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-                    FireCMS PRO offers advanced features for agencies and businesses that need to scale, including advanced roles, SSO, and more.
-                </p>
-                <a href="/pricing"
-                   class="inline-flex items-center gap-x-2 rounded-md border border-primary px-6 py-3 text-base font-semibold text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-200 ease-in-out">
-                    Explore FireCMS PRO
-                </a>
-            </div>
-        </section>
-
+        <!-- Final CTA (keep consistent with site) -->
         <!-- CTA Section -->
-        <section class="bg-black py-16 sm:py-24">
+        <section class="relative isolate bg-black py-16 sm:py-24">
+            <SectionBackgroundAccents topLine={true}/>
             <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Ready to build something amazing?</h2>
-                <div class="flex items-center justify-center gap-x-6">
-                  <a href="/developers"
-                     class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-                    View Documentation
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
-                  </a>
-                  <a href="/pricing"
-                     class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
-                    View Pricing
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
-                  </a>
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8 animate-on-scroll fade-in-up">
+                    Ready to build something amazing?</h2>
+                <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up delay-100">
+                    <a href="https://app.firecms.co"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+                        Try FireCMS Cloud
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-5 w-5 text-white filter invert"/>
+                    </a>
+                    <a href="/developers"
+                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                        View Documentation
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-4 w-4 text-white filter invert"/>
+                    </a>
                 </div>
             </div>
         </section>
-      </main>
+    </main>
 
 </Layout>
