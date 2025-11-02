@@ -1,0 +1,13 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Head.astro';
+import CookieBanner from "../CookieBanner.astro";
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<!-- Google tag (gtag.js) - Load the library -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"></script>
+<!-- Google Analytics -->
+<script src="/src/scripts/google-analytics.js"></script>
+

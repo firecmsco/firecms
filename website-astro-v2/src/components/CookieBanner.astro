@@ -116,8 +116,8 @@
                     }, 300);
                 }
                 // Enable Google Analytics tracking (Consent Mode v2)
-                if (typeof (window as any).gtag !== "undefined") {
-                    (window as any).gtag("consent", "update", {
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
                         "ad_storage": "granted",
                         "ad_user_data": "granted",
                         "ad_personalization": "granted",
@@ -144,8 +144,8 @@
                     }, 300);
                 }
                 // Disable Google Analytics tracking (Consent Mode v2)
-                if (typeof (window as any).gtag !== "undefined") {
-                    (window as any).gtag("consent", "update", {
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
                         "ad_storage": "denied",
                         "ad_user_data": "denied",
                         "ad_personalization": "denied",

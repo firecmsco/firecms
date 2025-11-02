@@ -69,36 +69,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <!-- Google tag (gtag.js) - Load the library -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"></script>
   <!-- Google Analytics -->
-  <script>
-
-    // Define dataLayer and the gtag function ONCE
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-
-    // Default consent to 'denied' as a placeholder (Consent Mode v2)
-    // This must be set before the Google tag loads
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied'
-    });
-
-    // Check if user has already consented
-    const cookieConsent = localStorage.getItem('cookie-consent');
-    if (cookieConsent === 'accepted') {
-      gtag('consent', 'update', {
-        'ad_storage': 'granted',
-        'ad_user_data': 'granted',
-        'ad_personalization': 'granted',
-        'analytics_storage': 'granted'
-      });
-    }
-
-    // Initialize Google Analytics
-    gtag("js", new Date());
-    gtag("config", "G-NL75PPNYXD");
-  </script>
+  <script src="/src/scripts/google-analytics.js"></script>
 
   <!-- View Transitions -->
   <ViewTransitions />
