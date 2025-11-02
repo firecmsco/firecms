@@ -8,6 +8,7 @@ import { ViewTransitions } from 'astro:transitions';
 import "../styles/global.css";
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 
 const {
   title = "FireCMS - The Headless CMS for Firebase and MongoDB",
@@ -65,16 +66,39 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
+  <!-- Google tag (gtag.js) - Load the library -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"></script>
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GFH7K538SW"></script>
   <script>
+    // Initialize Google Analytics
+    gtag("js", new Date());
+    gtag("config", "G-NL75PPNYXD");
+
+    // Define dataLayer and the gtag function ONCE
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
-    gtag("js", new Date());
-    gtag("config", "G-GFH7K538SW");
-  </script>
 
-  <!-- Page-specific head slot -->
+    // Default consent to 'denied' as a placeholder (Consent Mode v2)
+    // This must be set before the Google tag loads
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+
+    // Check if user has already consented
+    const cookieConsent = localStorage.getItem('cookie-consent');
+    if (cookieConsent === 'accepted') {
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
+    }
+
+  </script>
 
   <!-- View Transitions -->
   <ViewTransitions />
@@ -85,6 +109,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <Header />
   <slot />
   <Footer />
+  <CookieBanner />
 </body>
 <script src="../page-effects.ts"></script>
 
