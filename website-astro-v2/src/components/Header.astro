@@ -59,15 +59,15 @@ const navLinks = [
 ];
 ---
 <header class="bg-black/40 backdrop-blur sticky top-0 z-20">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
-        <div class="flex items-center gap-8">
-            <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50" transition:name="site-logo">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between py-2 px-4 lg:px-8" aria-label="Global">
+        <div class="flex items-center">
+            <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50 mr-6" transition:name="site-logo">
                 <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image"/>
                 <span class="self-center text-lg font-semibold whitespace-nowrap text-white"
                       transition:name="logo-text">FireCMS</span>
             </a>
             <!-- Desktop Navigation -->
-            <div class="hidden lg:flex items-center gap-6 text-sm font-semibold">
+            <div class="hidden lg:flex items-center gap-4 text-sm font-semibold">
                 {navLinks.map(link => (
                     link.dropdown ? (
                             <NavigationDropdown title={link.label} href={link.href}>
@@ -76,7 +76,7 @@ const navLinks = [
                                             <div class="flex flex-col gap-4 ">
                                                 {column.map(subLink => (
                                                         <a href={subLink.href}
-                                                           class="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
+                                                           class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
                                                             <img
                                                                     src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${subLink.icon}.svg`}
                                                                     alt=""
@@ -84,7 +84,7 @@ const navLinks = [
                                                             />
                                                             <div>
                                                                 <p class="font-semibold text-white">{subLink.label}</p>
-                                                                <p class="text-gray-400 text-sm">{subLink.description}</p>
+                                                                <p class="text-surface-400 text-sm">{subLink.description}</p>
                                                             </div>
                                                         </a>
                                                 ))}
@@ -95,7 +95,7 @@ const navLinks = [
                     ) : (
                             <a
                                     href={link.href}
-                                    class={`transition-colors hover:text-primary ${currentPath === link.href ? "text-primary" : "text-gray-300"}`}
+                                    class={`p-3 transition-colors hover:text-primary ${currentPath === link.href ? "text-primary" : "text-surface-300"}`}
                             >
                                 {link.label}
                             </a>
@@ -121,7 +121,7 @@ const navLinks = [
             <!-- Mobile menu button -->
             <button
                     type="button"
-                    class="lg:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors"
+                    class="lg:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-surface-300 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors"
                     aria-controls="mobile-menu"
                     aria-expanded="false"
                     id="mobile-menu-button"
@@ -151,7 +151,7 @@ const navLinks = [
                             <div class="w-full text-center">
                                 <button
                                         type="button"
-                                        class="flex items-center justify-center text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white"
+                                        class="flex items-center justify-center text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg text-surface-300 hover:bg-white/10 hover:text-white"
                                         aria-expanded="false"
                                         aria-controls={`mobile-submenu-${index}`}
                                 >
@@ -168,7 +168,7 @@ const navLinks = [
                                                     class={`block text-xl font-medium transition-colors w-full text-center py-2 rounded-lg ${
                                                         currentPath === subLink.href
                                                             ? "bg-primary/20 text-primary"
-                                                            : "text-gray-400 hover:bg-white/10 hover:text-white"
+                                                            : "text-surface-400 hover:bg-white/10 hover:text-white"
                                                     }`}
                                             >
                                                 {subLink.label}
@@ -182,7 +182,7 @@ const navLinks = [
                                     class={`block text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg ${
                                         currentPath === link.href
                                             ? "bg-primary/20 text-primary"
-                                            : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                            : "text-surface-300 hover:bg-white/10 hover:text-white"
                                     }`}
                             >
                                 {link.label}

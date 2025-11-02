@@ -7,9 +7,9 @@ export interface Props {
 const { title, href } = Astro.props;
 ---
 
-<div class="relative inline-block" data-dropdown-container>
+<div class="p-4 relative inline-block" data-dropdown-container>
     <a href={href}
-       class="text-gray-300 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded px-1 py-0.5"
+       class="p-4 text-surface-300 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded px-1 py-0.5"
        data-dropdown-trigger
        aria-haspopup="true"
        aria-expanded="false"
@@ -17,7 +17,7 @@ const { title, href } = Astro.props;
         {title}
     </a>
     <div
-            class={`absolute top-full left-0 w-screen bg-gray-950/95 backdrop-blur-xl shadow-2xl z-50 transition-opacity duration-150 ease-in-out border-b border-gray-800 hidden`}
+            class={`absolute top-full left-0 w-screen bg-surface-950/95 backdrop-blur-xl shadow-2xl z-50 transition-opacity duration-150 ease-in-out border-b border-surface-800 hidden`}
             role="navigation"
             aria-label={title + " navigation panel"}
             data-dropdown-panel

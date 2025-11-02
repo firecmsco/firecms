@@ -401,7 +401,7 @@ const usersData = [
 
 const statusColors: Record<string, string> = {
     "Active": "bg-green-950 text-green-200",
-    "Inactive": "bg-gray-950 text-gray-200",
+    "Inactive": "bg-surface-950 text-surface-200",
     "Pending": "bg-yellow-950 text-yellow-200"
 };
 

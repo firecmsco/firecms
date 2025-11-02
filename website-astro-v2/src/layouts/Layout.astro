@@ -70,9 +70,6 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"></script>
   <!-- Google Analytics -->
   <script>
-    // Initialize Google Analytics
-    gtag("js", new Date());
-    gtag("config", "G-NL75PPNYXD");
 
     // Define dataLayer and the gtag function ONCE
     window.dataLayer = window.dataLayer || [];
@@ -98,6 +95,9 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
       });
     }
 
+    // Initialize Google Analytics
+    gtag("js", new Date());
+    gtag("config", "G-NL75PPNYXD");
   </script>
 
   <!-- View Transitions -->
@@ -105,7 +105,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <slot name="head" />
 </head>
 
-<body class="font-sans bg-black text-gray-300 antialiased" style="color-scheme: dark;">
+<body class="font-sans bg-black text-surface-300 antialiased" style="color-scheme: dark;">
   <Header />
   <slot />
   <Footer />

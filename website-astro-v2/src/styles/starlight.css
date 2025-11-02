@@ -61,7 +61,7 @@
 }
 
 .starlight-aside {
-    @apply rounded-xl border border-gray-700 p-4 mb-6 text-white;
+    @apply rounded-xl border border-surface-700 p-4 mb-6 text-white;
 }
 
 .starlight-aside.starlight-aside--tip {

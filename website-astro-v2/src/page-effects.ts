@@ -13,7 +13,7 @@ document.addEventListener('astro:page-load', () => {
       const y = mouseEvent.clientY - rect.top;
 
       // Create radial gradient that follows mouse
-      spotlight.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(56, 189, 248, 0.15), transparent 40%)`;
+      spotlight.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(66, 189, 238, 0.10), transparent 40%)`;
     });
 
     card.addEventListener('mouseleave', () => {

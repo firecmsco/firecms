@@ -10,7 +10,7 @@ export default function LabelRadioButtonDemo() {
             <RadioGroup className="flex flex-col gap-2" defaultValue="black" id="color">
                 <Label
                     border={true}
-                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-black"
                 >
                     <RadioGroupItem id="color-black" value="black"/>
@@ -18,7 +18,7 @@ export default function LabelRadioButtonDemo() {
                 </Label>
                 <Label
                     border={true}
-                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-white"
                 >
                     <RadioGroupItem id="color-white" value="white"/>
@@ -26,7 +26,7 @@ export default function LabelRadioButtonDemo() {
                 </Label>
                 <Label
                     border={true}
-                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-blue"
                 >
                     <RadioGroupItem id="color-blue" value="blue"/>

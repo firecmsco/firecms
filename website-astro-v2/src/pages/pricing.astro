@@ -11,7 +11,7 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
     <main>
         {/* Hero Section */}
         <section
-                class="relative isolate overflow-hidden bg-linear-to-br from-black to-gray-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+                class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
             <!-- Background accents and subtle grid -->
             <div class="pointer-events-none absolute inset-0 -z-10">
                 <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
@@ -22,7 +22,7 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                 <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
                     Flexible Pricing for Every Need
                 </h1>
-                <p class="mb-10 text-lg leading-8 text-gray-300 lg:text-xl sm:px-16 xl:px-48">
+                <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
                     Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced
                     self-hosted features.
                 </p>
@@ -35,15 +35,15 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 {/* Currency Toggle */}
                 <div class="mb-10 flex justify-center w-full">
-                    <div class="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+                    <div class="flex items-center gap-2 text-xs md:text-sm text-surface-500">
                         <div class="inline-flex items-center gap-1">
                             <button id="currency-eur" aria-pressed="true"
-                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-800 bg-gray-200 border border-gray-300">
+                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-surface-800 bg-surface-200 border border-surface-300">
                                 EUR €
                             </button>
-                            <span class="text-gray-400">/</span>
+                            <span class="text-surface-400">/</span>
                             <button id="currency-usd" aria-pressed="false"
-                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-gray-500 hover:text-gray-700">
+                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-surface-500 hover:text-surface-700">
                                 USD $
                             </button>
                         </div>
@@ -54,19 +54,19 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 
                     {/* Column 1: Community (Self-Hosted FREE) - Always Visible */}
-                    <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+                    <div class="relative flex flex-col rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-green-500/10 px-3 py-1 text-xs font-semibold text-green-400">
                             Open Source
                         </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">Community</h3>
-                        <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
+                        <p class="mt-4 text-base font-semibold leading-7 text-surface-400 h-7">&nbsp;</p>
                         <p class="flex items-baseline gap-x-2">
                             <span class="text-4xl font-bold tracking-tight text-white">Free</span>
-                            <span class="text-base font-semibold leading-7 text-gray-400">Forever</span>
+                            <span class="text-base font-semibold leading-7 text-surface-400">Forever</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">The powerful, MIT licensed core framework
+                        <p class="mt-6 text-base leading-7 text-surface-300 h-16">The powerful, MIT licensed core framework
                             for self-hosting.</p>
-                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
+                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-surface-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="h-6 w-5 flex-none text-green-400">
@@ -109,32 +109,32 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                             </li>
                         </ul>
                         <div class="mt-8 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
-                            <p class="text-sm text-gray-400 mb-2">Get started:</p>
-                            <div class="bg-gray-900 rounded-lg p-3 font-mono text-sm text-gray-300 ring-1 ring-gray-700/50 mb-4">
+                            <p class="text-sm text-surface-400 mb-2">Get started:</p>
+                            <div class="bg-surface-900 rounded-lg p-3 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50 mb-4">
                                 npx create-firecms-app
                             </div>
                             <a href="/developers" aria-describedby="tier-community"
-                               class="block rounded-md border border-gray-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-gray-700 transition-colors duration-200">
+                               class="block rounded-md border border-surface-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
                                 View Docs
                             </a>
                         </div>
                     </div>
 
                     {/* Column 2: Cloud Plus (Trial -> Paid) */}
-                    <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-2 ring-inset ring-primary"> {/* Highlighted */}
+                    <div class="relative flex flex-col rounded-2xl bg-surface-900/50 p-8 ring-2 ring-inset ring-primary"> {/* Highlighted */}
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary">
                             Cloud
                         </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">Cloud Plus</h3>
-                        <p class="mt-4 text-base font-semibold leading-7 text-gray-400">Free 1-Month Trial, then</p>
+                        <p class="mt-4 text-base font-semibold leading-7 text-surface-400">Free 1-Month Trial, then</p>
                         <p class="flex items-baseline gap-x-2">
                             <span class="text-4xl font-bold tracking-tight text-white" id="cloud-price" data-eur="€9.99"
                                   data-usd="$11.99">€9.99</span>
-                            <span class="text-base font-semibold leading-7 text-gray-400">/user/month</span>
+                            <span class="text-base font-semibold leading-7 text-surface-400">/user/month</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Fully managed SaaS solution for speed and
+                        <p class="mt-6 text-base leading-7 text-surface-300 h-16">Fully managed SaaS solution for speed and
                             convenience.</p>
-                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
+                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-surface-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="h-6 w-5 flex-none text-primary">
@@ -209,20 +209,20 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                     </div>
 
                     {/* Column 3: PRO (Self-Hosted PAID) */}
-                    <div class="relative flex flex-col rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800">
+                    <div class="relative flex flex-col rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-yellow-400/20 px-3 py-1 text-xs font-semibold text-yellow-400">
                             Self-Hosted PRO
                         </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">PRO License</h3>
-                        <p class="mt-4 text-base font-semibold leading-7 text-gray-400 h-7">&nbsp;</p>
+                        <p class="mt-4 text-base font-semibold leading-7 text-surface-400 h-7">&nbsp;</p>
                         <p class="flex items-baseline gap-x-2">
                             <span class="text-4xl font-bold tracking-tight text-white" id="pro-price" data-eur="€149.99"
                                   data-usd="$199.99">€149.99</span>
-                            <span class="text-base font-semibold leading-7 text-gray-400">/project/month</span>
+                            <span class="text-base font-semibold leading-7 text-surface-400">/project/month</span>
                         </p>
-                        <p class="mt-6 text-base leading-7 text-gray-300 h-16">Advanced features and priority support
+                        <p class="mt-6 text-base leading-7 text-surface-300 h-16">Advanced features and priority support
                             for self-hosted deployments.</p>
-                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-300 xl:mt-10">
+                        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-surface-300 xl:mt-10">
                             <li class="flex gap-x-3 items-center">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="h-6 w-5 flex-none text-yellow-400">
@@ -298,15 +298,15 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                 </div>
 
                 {/* --- Enterprise Section (Below Grid) --- */}
-                <div class="mt-16 rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 lg:col-span-3">
+                <div class="mt-16 rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800 lg:col-span-3">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <h3 class="text-2xl font-semibold leading-7 text-white">Enterprise</h3>
-                            <p class="mt-2 text-base leading-7 text-gray-300">Tailored solutions, custom features, SSO,
+                            <p class="mt-2 text-base leading-7 text-surface-300">Tailored solutions, custom features, SSO,
                                 and dedicated support for large organizations.</p>
                         </div>
                         <a href="/contact"
-                           class="flex-shrink-0 rounded-md border border-gray-700 bg-gray-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline-gray-700 transition-colors duration-200">
+                           class="flex-shrink-0 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
                             Contact Sales
                         </a>
                     </div>
@@ -330,11 +330,11 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                             “I think you have the best NoSQL headless CMS on the market.”
                         </blockquote>
                         <figcaption class="mt-6 flex items-center gap-x-4">
-                            <img class="h-12 w-12 rounded-full bg-gray-800 object-cover" src="/img/avatars/viktor.jpeg"
+                            <img class="h-12 w-12 rounded-full bg-surface-800 object-cover" src="/img/avatars/viktor.jpeg"
                                  alt="Viktor Vinnk"/>
                             <div class="text-sm leading-6">
                                 <div class="font-semibold text-white">Viktor Vinnk</div>
-                                <div class="text-gray-400">Country Digital Development Leader, IKEA</div>
+                                <div class="text-surface-400">Country Digital Development Leader, IKEA</div>
                             </div>
                         </figcaption>
                     </figure>
@@ -356,21 +356,21 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                 <div class="mx-auto max-w-4xl text-center">
                     <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Frequently Asked
                         Questions</h2>
-                    {/* <p class="mt-4 text-lg leading-8 text-gray-400">...</p> */}
+                    {/* <p class="mt-4 text-lg leading-8 text-surface-400">...</p> */}
                 </div>
                 <div class="mt-16 flow-root">
-                    <div class="-my-8 divide-y divide-gray-800">
+                    <div class="-my-8 divide-y divide-surface-800">
                         <details class="py-8 group" open>
                             <summary class="flex cursor-pointer items-center justify-between text-left">
                                 <h3 class="text-base font-semibold leading-7 text-white">Should I choose Cloud or
                                     Self-Hosted?</h3>
                                 <span class="ml-6 flex h-7 items-center">
                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                        class="h-6 w-6 text-surface-400 group-open:rotate-180 transition-transform"><path
                            stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
-                            <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
+                            <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
                                 <p>Choose <strong>Cloud</strong> for the fastest setup, zero maintenance, automatic
                                     updates, and a fully managed experience (with a free 1-month trial). It's ideal for
                                     teams prioritizing speed and convenience.</p>
@@ -387,11 +387,11 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                                     Self-Hosted Community and PRO?</h3>
                                 <span class="ml-6 flex h-7 items-center">
                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                        class="h-6 w-6 text-surface-400 group-open:rotate-180 transition-transform"><path
                            stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
-                            <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
+                            <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
                                 <p><strong>Community</strong> is the free, open-source core framework (MIT licensed). It
                                     includes all essential CMS features, full customization capabilities via code
                                     (React), and community support.</p>
@@ -406,11 +406,11 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                                 <h3 class="text-base font-semibold leading-7 text-white">Is the Cloud version free?</h3>
                                 <span class="ml-6 flex h-7 items-center">
                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                        class="h-6 w-6 text-surface-400 group-open:rotate-180 transition-transform"><path
                            stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
-                            <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
+                            <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
                                 <p>FireCMS Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After
                                     the trial, it's a paid subscription per user per month. The <strong>Self-Hosted
                                         Community</strong> version is completely free (MIT licensed).</p>
@@ -422,11 +422,11 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                                     Self-Hosted?</h3>
                                 <span class="ml-6 flex h-7 items-center">
                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="h-6 w-6 text-gray-400 group-open:rotate-180 transition-transform"><path
+                        class="h-6 w-6 text-surface-400 group-open:rotate-180 transition-transform"><path
                            stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
                 </span>
                             </summary>
-                            <div class="mt-4 leading-7 text-gray-300 prose prose-invert max-w-none prose-p:my-2">
+                            <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
                                 <p>Yes. Your core schema configurations are compatible. Migrating from Cloud to
                                     Self-Hosted involves setting up the FireCMS framework in your environment and
                                     pointing it to your existing database. Migrating from Self-Hosted to Cloud generally
@@ -456,23 +456,23 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
             if (!eurBtn || !usdBtn) return;
             if (currency === "eur") {
                 eurBtn.setAttribute("aria-pressed", "true");
-                eurBtn.classList.add("text-gray-800", "bg-gray-200", "border-gray-300");
-                eurBtn.classList.remove("text-gray-500", "hover:text-gray-700");
+                eurBtn.classList.add("text-surface-800", "bg-surface-200", "border-surface-300");
+                eurBtn.classList.remove("text-surface-500", "hover:text-surface-700");
 
                 usdBtn.setAttribute("aria-pressed", "false");
-                usdBtn.classList.remove("text-gray-800", "bg-gray-200", "border-gray-300");
-                usdBtn.classList.add("text-gray-500", "hover:text-gray-700");
+                usdBtn.classList.remove("text-surface-800", "bg-surface-200", "border-surface-300");
+                usdBtn.classList.add("text-surface-500", "hover:text-surface-700");
 
                 if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || "€9.99";
                 if (proPrice) proPrice.textContent = proPrice.dataset.eur || "€149.99";
             } else {
                 usdBtn.setAttribute("aria-pressed", "true");
-                usdBtn.classList.add("text-gray-800", "bg-gray-200", "border-gray-300");
-                usdBtn.classList.remove("text-gray-500", "hover:text-gray-700");
+                usdBtn.classList.add("text-surface-800", "bg-surface-200", "border-surface-300");
+                usdBtn.classList.remove("text-surface-500", "hover:text-surface-700");
 
                 eurBtn.setAttribute("aria-pressed", "false");
-                eurBtn.classList.remove("text-gray-800", "bg-gray-200", "border-gray-300");
-                eurBtn.classList.add("text-gray-500", "hover:text-gray-700");
+                eurBtn.classList.remove("text-surface-800", "bg-surface-200", "border-surface-300");
+                eurBtn.classList.add("text-surface-500", "hover:text-surface-700");
 
                 if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || "$11.99";
                 if (proPrice) proPrice.textContent = proPrice.dataset.usd || "$199.99";

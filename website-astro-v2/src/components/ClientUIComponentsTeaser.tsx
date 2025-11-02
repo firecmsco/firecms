@@ -122,7 +122,7 @@ export default function ClientUIComponentsTeaser() {
                         </DialogActions>
                     </Dialog>
                     <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-                        <div className="bg-white font-bold dark:bg-gray-800 p-4 h-full">
+                        <div className="bg-white font-bold dark:bg-surface-800 p-4 h-full">
                             Sheet Content
                         </div>
                     </Sheet>

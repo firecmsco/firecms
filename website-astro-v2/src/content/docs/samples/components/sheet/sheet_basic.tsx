@@ -8,7 +8,7 @@ export default function SheetBasicDemo() {
         <div>
             <Button onClick={() => setOpen(true)}>Open Sheet</Button>
             <Sheet open={open} onOpenChange={setOpen}>
-                <div className={"bg-white dark:bg-gray-800 p-4 h-full"}>
+                <div className={"bg-white dark:bg-surface-800 p-4 h-full"}>
                     Sheet Content
                 </div>
             </Sheet>

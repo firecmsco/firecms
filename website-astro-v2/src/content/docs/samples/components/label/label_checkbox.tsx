@@ -8,7 +8,7 @@ export default function LabelCheckboxDemo() {
     return (
         <Label
             border={true}
-            className="cursor-pointer p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+            className="cursor-pointer p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
             htmlFor="my-filter"
         >
             <Checkbox id="my-filter"

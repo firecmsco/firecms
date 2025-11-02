@@ -15,7 +15,7 @@ const Component = link ? 'a' : 'div';
 
 <Component
   href={link?.href}
-  class="group relative overflow-hidden rounded-2xl bg-gray-900/50 p-8 ring-1 ring-inset ring-gray-800 transition-all duration-300 hover:ring-primary/30 block animate-on-scroll scale-in"
+  class="group relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800 transition-all duration-300 hover:ring-primary/30 block animate-on-scroll scale-in"
   data-spotlight-card>
   <!-- Mouse spotlight effect -->
   <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" data-spotlight></div>
@@ -27,7 +27,7 @@ const Component = link ? 'a' : 'div';
       <img src={icon} alt="" class="h-5 w-5 filter invert" />
     </div>
     <h3 class="text-xl font-semibold text-white mb-4">{title}</h3>
-    <p class="text-gray-400 mb-6">{description}</p>
+    <p class="text-surface-400 mb-6">{description}</p>
     {link && (
       <span class="inline-flex items-center gap-x-2 text-primary group-hover:text-primary-light font-semibold transition-colors">
         {link.text}
