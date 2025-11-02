@@ -67,7 +67,7 @@ const navLinks = [
                       transition:name="logo-text">FireCMS</span>
             </a>
             <!-- Desktop Navigation -->
-            <div class="hidden lg:flex items-center gap-4 text-sm font-semibold">
+            <div class="hidden lg:flex items-center gap-2 text-sm font-semibold">
                 {navLinks.map(link => (
                     link.dropdown ? (
                             <NavigationDropdown title={link.label} href={link.href}>
