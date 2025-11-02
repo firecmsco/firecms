@@ -5,6 +5,8 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import path from "node:path";
 import starlight from "@astrojs/starlight";
+import mdx from '@astrojs/mdx';
+import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
@@ -629,12 +631,13 @@ export default defineConfig({
                 Head: "./src/components/starlight/Head.astro",
             },
         }),
-
+        mdx(),
         sitemap()
     ],
     vite: {
         plugins: [
-            tailwindcss()
+            tailwindcss(),
+            yaml()
         ],
         resolve: {
             alias: {
