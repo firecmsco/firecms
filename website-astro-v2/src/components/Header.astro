@@ -143,7 +143,7 @@ const navLinks = [
     </nav>
 
     <!-- Mobile menu - Full Screen Overlay -->
-    <div class="lg:hidden hidden fixed inset-0 z-40 overflow-y-auto h-screen" id="mobile-menu">
+    <div class="lg:hidden hidden fixed inset-0 z-50 overflow-y-auto h-screen" id="mobile-menu">
         <div class="flex flex-col items-center justify-center min-h-screen px-6 py-20 bg-black/95 backdrop-blur-lg">
             <nav class="flex flex-col items-center space-y-8 w-full max-w-md">
                 {navLinks.map((link, index) => (
@@ -151,6 +151,7 @@ const navLinks = [
                             <div class="w-full text-center">
                                 <button
                                         type="button"
+                                        id={`mobile-menu-toggle-${index}`}
                                         class="flex items-center justify-center text-2xl font-semibold transition-colors w-full text-center py-3 rounded-lg text-surface-300 hover:bg-white/10 hover:text-white"
                                         aria-expanded="false"
                                         aria-controls={`mobile-submenu-${index}`}
@@ -245,8 +246,10 @@ const navLinks = [
                 const submenuId = toggle.getAttribute('aria-controls');
                 const submenu = document.getElementById(submenuId);
                 const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-                toggle.setAttribute('aria-expanded', !isExpanded);
+
+                toggle.setAttribute('aria-expanded', String(!isExpanded));
                 submenu.classList.toggle('hidden');
+                submenu.classList.toggle('flex');
                 toggle.querySelector('svg')?.classList.toggle('rotate-180');
             });
         });

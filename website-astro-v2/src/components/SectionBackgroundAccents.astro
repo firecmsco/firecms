@@ -25,7 +25,7 @@ const blobSizeClass = blob && (sizeClasses[blob.size as keyof typeof sizeClasses
 const opacityClass = blob?.opacity ? `opacity-${blob.opacity}` : "";
 ---
 
-<div class={twMerge("pointer-events-none absolute inset-0 -z-10", className)}>
+<div class={twMerge("pointer-events-none absolute inset-0 -z-10 overflow-x-hidden", className)}>
     {topLine && <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>}
     {bottomLine && <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>}
     {blob && (

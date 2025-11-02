@@ -77,7 +77,7 @@ export function DataTalkDemo({
     };
 
     return (
-        <div className=" bg-surface-950 rounded-xl p-6">
+        <div className=" bg-surface-950 rounded-xl p-2 md:p-6">
             <div
                 className="container mx-auto flex-1 flex flex-col gap-4 overflow-hidden"
                 style={{ height: height }}

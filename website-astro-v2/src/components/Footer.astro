@@ -3,6 +3,15 @@ import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
 
 const footerNavs = [
     {
+        title: "Company",
+        links: [
+            { label: "Contact", url: "/contact" },
+            { label: "About", url: "/about" },
+            { label: "Why FireCMS", url: "/why-firecms" },
+            { label: "Book a Call", url: "https://calendar.app.google/QipmvFoUznse8KnNA", external: true },
+        ],
+    },
+    {
         title: "Solutions",
         links: [
             { label: "Startups", url: "/startups" },
@@ -18,14 +27,7 @@ const footerNavs = [
             { label: "UI Components", url: "/ui" },
             { label: "Pricing", url: "/pricing" },
             { label: "Security", url: "/security" },
-        ],
-    },
-    {
-        title: "Company",
-        links: [
-            { label: "About", url: "/about" },
-            { label: "Why FireCMS", url: "/why-firecms" },
-            { label: "Contact", url: "/contact" },
+            { label: "Blog", url: "/blog" },
         ],
     },
     {
@@ -33,6 +35,7 @@ const footerNavs = [
         links: [
             { label: "Privacy Policy", url: "/policy/privacy_policy" },
             { label: "Terms of Service", url: "/policy/terms_conditions" },
+            { label: "Cookie Policy", url: "/policy/cookies_policy" },
         ],
     },
 ];
