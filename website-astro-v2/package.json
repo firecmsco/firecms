@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "run-s build && firebase deploy --only hosting --project firecms-backend",
-    "generate-llms": "node scripts/generate_llms_txt.js"
+    "generate-llms": "node scripts/generate_llms_txt.js",
+    "genAPI": "typedoc && node scripts/add_api_frontmatter.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.9",
@@ -49,6 +50,8 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@types/react-syntax-highlighter": "^15.5.13"
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0"
   }
 }

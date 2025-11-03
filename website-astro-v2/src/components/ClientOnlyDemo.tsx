@@ -5,18 +5,33 @@ interface ClientOnlyDemoProps {
     className?: string;
 }
 
+// Use import.meta.glob to pre-load all sample components at build time
+const modules = import.meta.glob('/src/content/docs/samples/**/*.tsx');
+
 const ClientOnlyDemo: React.FC<ClientOnlyDemoProps> = ({ path, className }) => {
     const [Component, setComponent] = useState<React.ComponentType | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        try {
-            const LazyComponent = lazy(() => import(path));
-            setComponent(() => LazyComponent);
-        } catch (e) {
-            console.error(`Component not found at path: ${path}`, e);
-            setError(`Component ${path} not found`);
-        }
+        const loadComponent = async () => {
+            try {
+                const moduleLoader = modules[path];
+                if (!moduleLoader) {
+                    console.error(`Component not found at path: ${path}`);
+                    console.error('Available paths:', Object.keys(modules));
+                    setError(`Component ${path} not found`);
+                    return;
+                }
+                const module = await moduleLoader() as { default: React.ComponentType };
+                const LazyComponent = lazy(() => Promise.resolve(module));
+                setComponent(() => LazyComponent);
+            } catch (e) {
+                console.error(`Failed to load component at path: ${path}`, e);
+                setError(`Component ${path} failed to load`);
+            }
+        };
+
+        loadComponent();
     }, [path]);
 
     return (
