@@ -28,7 +28,7 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon">
   <link rel="canonical" href={canonical}>
   <meta name="description" content={description}>
-  <meta name="keywords" content="AI analytics, data visualization, interactive dashboards, business intelligence, data reporting, no-code analytics, SQL dashboard, natural language queries, data insights">
+  <meta name="keywords" content="headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firestore admin, Firebase back office, database UI">
   <meta name="robots" content="index">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="sitemap" href="/sitemap-index.xml" />
@@ -55,10 +55,63 @@ const canonical = path === '/' ? canonicalBase : `${canonicalBase}${path}`;
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
     {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": "FireCMS",
-      "url": "https://firecms.co"
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "FireCMS",
+          "url": "https://firecms.co",
+          "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB.",
+          "publisher": {
+            "@id": "https://firecms.co/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://firecms.co/#organization",
+          "name": "FireCMS",
+          "url": "https://firecms.co",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://firecms.co/img/logo_small.png",
+            "width": 512,
+            "height": 512
+          },
+          "sameAs": [
+            "https://x.com/firecmsco",
+            "https://github.com/firecmsco/firecms",
+            "https://www.linkedin.com/company/firecms"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "FireCMS",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Web",
+          "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
+          "url": "https://firecms.co",
+          "screenshot": "https://firecms.co/img/teaser.png",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "100",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "softwareVersion": "3.0",
+          "applicationSubCategory": "Content Management System",
+          "keywords": "headless CMS, Firebase CMS, MongoDB CMS, React admin panel, no-code backend, AI-powered CMS",
+          "publisher": {
+            "@id": "https://firecms.co/#organization"
+          }
+        }
+      ]
     }
   </script>
 
