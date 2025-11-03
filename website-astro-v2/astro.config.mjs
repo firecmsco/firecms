@@ -46,16 +46,7 @@ export default defineConfig({
             sidebar: [
                 {
                     label: "Getting Started",
-                    items: [
-                        {
-                            label: "Introduction",
-                            slug: "docs/index"
-                        },
-                        {
-                            label: "What's New in v3",
-                            slug: "docs/what_is_new_v3"
-                        },
-                    ],
+                    slug: "docs/index"
                 },
                 {
                     label: "☁️ FireCMS Cloud",
@@ -618,6 +609,10 @@ export default defineConfig({
                             slug: "docs/components/textarea_autosize"
                         },
                     ],
+                },
+                {
+                    label: "What's New in v3",
+                    slug: "docs/what_is_new_v3"
                 },
                 {
                     label: "Changelog",

@@ -6,6 +6,23 @@
             "firebase.json",
             "**/.*",
             "**/node_modules/**"
+        ],
+        "redirects": [
+            {
+                "source": "/pro",
+                "destination": "/pricing",
+                "type": 301
+            },
+            {
+                "source": "/f/backend_extension",
+                "destination": "/features",
+                "type": 301
+            },
+            {
+                "source": "/openai",
+                "destination": "/features",
+                "type": 301
+            }
         ]
     }
 }
