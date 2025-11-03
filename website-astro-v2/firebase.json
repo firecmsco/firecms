@@ -1,75 +1,75 @@
 {
-    "hosting": {
-        "public": "dist",
-        "site": "firecms-landing-preview",
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**"
-        ],
-        "redirects": [
-            {
-                "source": "/pro",
-                "destination": "/pricing",
-                "type": 301
-            },
-            {
-                "source": "/f/backend_extension",
-                "destination": "/features",
-                "type": 301
-            },
-            {
-                "source": "/openai",
-                "destination": "/features",
-                "type": 301
-            }
-        ],
+  "hosting": {
+    "public": "dist",
+    "site": "firecms-landing-2",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/pro",
+        "destination": "/pricing",
+        "type": 301
+      },
+      {
+        "source": "/f/backend_extension",
+        "destination": "/features",
+        "type": 301
+      },
+      {
+        "source": "/openai",
+        "destination": "/features",
+        "type": 301
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2|ttf|otf|eot|mp4|webm|avif)",
         "headers": [
-            {
-                "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2|ttf|otf|eot|mp4|webm|avif)",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "public, max-age=31536000, immutable"
-                    }
-                ]
-            },
-            {
-                "source": "**/*.@(js|css)",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "public, max-age=31536000, immutable"
-                    }
-                ]
-            },
-            {
-                "source": "**/*.@(json|xml|txt)",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "public, max-age=3600, must-revalidate"
-                    }
-                ]
-            },
-            {
-                "source": "**/*.@(html)",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "public, max-age=0, must-revalidate"
-                    }
-                ]
-            },
-            {
-                "source": "/",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "public, max-age=0, must-revalidate"
-                    }
-                ]
-            }
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
         ]
-    }
+      },
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(json|xml|txt)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -253,6 +253,51 @@ const navLinks = [
                 toggle.querySelector('svg')?.classList.toggle('rotate-180');
             });
         });
+
+        // Track all header link clicks
+        function trackHeaderLinkClick(link, linkType, isMobile = false) {
+            if (!link.dataset.trackingAdded) {
+                link.dataset.trackingAdded = 'true';
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
+                    const linkText = link.textContent?.trim() || '';
+                    const isAppLink = href?.includes('app.firecms.co');
+
+                    // Send analytics event
+                    if (typeof window.gtag === 'function') {
+                        const eventName = isAppLink ? 'go_to_app' : 'header_link_click';
+                        window.gtag('event', eventName, {
+                            event_category: 'header_navigation',
+                            event_label: href,
+                            link_type: linkType,
+                            link_text: linkText,
+                            link_url: href,
+                            is_mobile: isMobile,
+                            page_path: window.location.pathname
+                        });
+                    }
+
+                    // Log to console for debugging
+                    console.log(`Header link clicked: ${linkText} (${href}) - ${linkType}${isMobile ? ' [mobile]' : ''}`);
+                });
+            }
+        }
+
+        // Track desktop navigation links
+        const desktopLinks = document.querySelectorAll('header nav > div.hidden.lg\\:flex a');
+        desktopLinks.forEach(link => trackHeaderLinkClick(link, 'desktop_nav', false));
+
+        // Track desktop CTA button
+        const desktopCTA = document.querySelector('header nav a[href*="app.firecms.co"].hidden.sm\\:inline-flex');
+        if (desktopCTA) trackHeaderLinkClick(desktopCTA, 'desktop_cta', false);
+
+        // Track logo link
+        const logoLink = document.querySelector('header a[href="/"]');
+        if (logoLink) trackHeaderLinkClick(logoLink, 'logo', false);
+
+        // Track mobile menu links
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => trackHeaderLinkClick(link, 'mobile_nav', true));
     }
 
     document.addEventListener('astro:page-load', setupHeader);

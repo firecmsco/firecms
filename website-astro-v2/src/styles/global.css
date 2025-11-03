@@ -234,20 +234,24 @@ h6 {
 
 .animate-on-scroll.fade-in-up {
     animation-name: fadeInUp;
-    animation-duration: 0.7s;
+    animation-duration: 0.4s;
 }
 
 .animate-on-scroll.fade-in {
     animation-name: fadeIn;
-    animation-duration: 0.9s;
+    animation-duration: 0.5s;
 }
 
 .animate-on-scroll.scale-in {
     animation-name: scaleIn;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
 }
 
 /* Staggered animation delays */
+.animate-on-scroll.delay-50 {
+    animation-delay: 0.05s;
+}
+
 .animate-on-scroll.delay-100 {
     animation-delay: 0.1s;
 }
