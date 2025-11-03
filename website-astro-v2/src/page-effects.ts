@@ -34,7 +34,6 @@ document.addEventListener('astro:page-load', () => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        console.log('Animation triggered for:', entry.target);
         entry.target.classList.add('in-view');
         // Unobserve after animation to improve performance
         observer.unobserve(entry.target);
