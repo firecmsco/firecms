@@ -15,12 +15,15 @@ It is the most similar version to FireCMS 2.0, but with a lot of improvements an
 
 Most of the concepts are the same as in FireCMS 2.0, but there are some changes that you need to be aware of.
 We recommend starting a new project with:
-```bash
-yarn create firecms-app --pro
-```
-or
+
 ```bash
 npx create-firecms-app --pro
+```
+
+or
+
+```bash
+yarn create firecms-app --pro
 ```
 
 This will create a new project with the latest version of FireCMS PRO.
@@ -100,13 +103,25 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 
 ### Continue using MUI
 
+```bash
+npm install @mui/material @emotion/react @emotion/styled
 However, if you want to keep using mui: you can still use the old components, but you will need to
+
+or
+
+```bash
 install the `mui` package manually.
 
 ```
 yarn add @mui/material @emotion/react @emotion/styled
 ```
+```bash
+npm install @mui/icons-material
 
+
+or
+
+```bash
 If you need MUI icons, run:
 
 ```

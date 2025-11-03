@@ -105,6 +105,10 @@ and React:
 
 1. **Set Up Your React App**: Begin with a fresh React installation.
    ```bash
+   npx create-firecms-app --pro
+   ```
+   or
+   ```bash
    yarn create firecms-app --pro
    ```
 2. **Connect Firebase**: Integrate Firebase for backend functionality.

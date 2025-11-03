@@ -2,7 +2,7 @@
 slug: docs/self/deployment
 title: Self-Hosted Deployment
 sidebar_label: Deployment
-description: Deploy your custom features effortlessly with FireCMS PRO, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
+description: Deploy your custom features effortlessly with FireCMS PRO, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `npm run deploy` or `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `npm run build && firebase deploy --only hosting` or `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
 ---
 
 FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
@@ -58,13 +58,25 @@ look similar to this (remember to replace `[YOUR_SITE_HERE]`).
 
 Then simply run:
 
+```bash
+npm run build && firebase deploy --only hosting
 ```
+
+or
+
+```bash
 yarn run build && firebase deploy --only hosting
 ```
 
 to deploy.
 
+```bash
+npm run build
 
+
+or
+
+```bash
 ## Deploying to other platforms
 
 If you would like to deploy your CMS to other platforms, you can build it

@@ -10,34 +10,23 @@ image: /img/blog/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg
 ![React Code](/img/blog/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg)
 
 
-I love Javascript.
+I love JavaScript.
 
 But.
 
-I hate Javascript.
+I hate JavaScript.
 
-I love it because it's the language that I use the most, and I love it because
-it's the language that I use the most. I actually use Typescript 99% of the
-time, but it transpiles to Javascript, so it's the same.
+I love it because it's the language I use the most, and I hate it for the same reason. I actually use TypeScript 99% of the time, but since it transpiles to JavaScript, it's essentially the same thing.
 
-There is one thing I struggle with when working with it, and that is the
-different formats that it can be used in.
+There's one aspect I struggle with when working with JavaScript: the different module formats.
 
-I'm not talking about the different frameworks, or the different libraries, or
-the different build tools, or the different ways to write it. I'm talking about
-the different formats that it can be used in.
+I'm not talking about the different frameworks, libraries, build tools, or coding styles. I'm talking specifically about the different **module formats** JavaScript can be written in.
 
-It is easy to get confused when you start working with Javascript, because
-there are so many ways to use it. You can use it in the browser,
-you can use it in Node, you can use it in a
-service worker, you can use it in a React Native app, you can use it in a
-Electron app... the list goes on.
+It's easy to get confused when you start working with JavaScript because there are so many environments where you can use it. You can use it in the browser, in Node.js, in a service worker, in a React Native app, in an Electron app... the list goes on.
 
-In any case you will need both to import and to export something, and that's
-where the confusion starts.
+In any case, you'll need to both import and export code, and that's where the confusion starts.
 
-Let's start with the most common format, the one that you will find in the
-browser, and that is the ES module format.
+Let's start with the most common format, the one you'll find in the browser: the ES module format.
 
 ## The Module Formats Landscape
 

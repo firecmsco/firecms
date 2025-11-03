@@ -57,7 +57,7 @@ For some low-complexity products, these tools can be a great help. If you need t
 
 Is [FireCMS](https://app.firecms.co) a No Code tool? Yes, we built FireCMS Cloud for that: a fully managed SaaS.
 
-But allow us to share a secret. We had the SaaS, a full No Code tool ready to launch, but we stopped. Why? Because we are developers. We wanted our customers to have the freedom to build anything they could with the previous code-based version. We didn't want to limit them. It didn't make any sense for us to release a new product with fewer features. So we stopped and built that. Using module federation, we allow FireCMS Cloud customers to upload custom code and change whatever they want. Give us the code, and we will handle it for you. From `yarn deploy` to [app.firecms.co](https://app.firecms.co).
+But allow us to share a secret. We had the SaaS, a full No Code tool ready to launch, but we stopped. Why? Because we are developers. We wanted our customers to have the freedom to build anything they could with the previous code-based version. We didn't want to limit them. It didn't make any sense for us to release a new product with fewer features. So we stopped and built that. Using module federation, we allow FireCMS Cloud customers to upload custom code and change whatever they want. Give us the code, and we will handle it for you. From `npm run deploy` or `yarn deploy` to [app.firecms.co](https://app.firecms.co).
 
 You could say that FireCMS is a No Code, Low Code, or even Full Code tool. It depends on how you want to use it.
 

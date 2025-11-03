@@ -167,7 +167,7 @@ in `example/src`.
 That file needs to export a valid Firebase config, that you can get
 from your Firebase console when creating a webapp for your project.
 
-Then simply run `yarn` and `yarn dev`
+Then simply run `npm install` and `npm run dev` (or `yarn` and `yarn dev`)
 
 ## License
 

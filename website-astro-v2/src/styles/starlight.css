@@ -79,3 +79,19 @@
 .sl-markdown-content .clear-styles {
     all: revert-layer;
 }
+
+.sl-markdown-content video {
+    @apply rounded-xl border border-surface-800/50;
+}
+
+.sl-markdown-content img {
+    @apply rounded-xl border border-surface-800/50;
+}
+
+.sl-markdown-content ul {
+    @apply list-disc;
+}
+
+.sl-markdown-content li {
+    @apply ml-6;
+}

@@ -26,13 +26,13 @@ project to a new FireCMS Cloud project.
 
 Once you have both projects created you can initialize your codebase by running:
 
-```
+```bash
 npx create-firecms-app
 ```
 
 or
 
-```
+```bash
 yarn create firecms-app
 ```
 
@@ -48,12 +48,13 @@ fields, custom actions, custom properties, etc.
 To run your project locally, you can run the following command, like any
 other Vite project:
 
-```
+```bash
 npm run dev
 ```
+
 or
 
-```
+```bash
 yarn dev
 ```
 
@@ -82,7 +83,7 @@ Alternatively, you can use the url `http://localhost:5173`.
 We use module federation to upload your code to FireCMS Cloud.
 This means that you can upload your code to FireCMS Cloud without
 having to worry about the infrastructure.
-
+When you run the command `npm run deploy` or `yarn deploy`, your code
 When you run the command `yarn deploy` or `npm run deploy`, your code
 will be uploaded to FireCMS Cloud and will be available in the
 FireCMS Cloud instance.
