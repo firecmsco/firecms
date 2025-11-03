@@ -2,6 +2,134 @@
 slug: docs/changelog
 title: Changelog
 ---
+## [3.0.0-rc.2] - 2025-10-16
+
+- **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
+- **User Fields as String Values**: Fully implemented support for user fields as string values, improving flexibility in user data handling.
+- **TipTap V3 Migration**: Migrated markdown editor to TipTap V3 for improved performance and features.
+- **Tailwind 4 Retrofit**: Multiple adaptations to support Tailwind 4 retrofit, modernizing the styling infrastructure.
+- **Login Enhancements**:
+  - Implemented Cloud email login
+  - Added email and password authentication to Cloud SaaS
+  - Added login analytic events
+  - Fixed demo login layout
+- **Website Updates**:
+  - Added Astro landing site (WIP)
+  - Website migration updates
+  - Migrated images
+  - Inline website CSS
+  - Web design updates
+  - Security page tweaks
+- **Home Page Improvements**:
+  - Storing home page collapsed state in local storage
+  - Attempted fix for group renaming on home page
+  - Reverted some drag-and-drop changes
+- **Fixes**:
+  - Fixed editor SSR (Server-Side Rendering) support
+  - Fixed importing references with secondary databases
+  - Fixed support for secondary database references
+  - Fixed SaaS permission view
+  - Fixed filter input for numbers when value is 0
+  - Better error management for doctor (diagnostic tool)
+- **UI/UX**:
+  - Removed forced parent collection button
+- **Dependencies**: Updated template dependencies
+- **Documentation**: 
+  - Improved documentation for custom icons in collections
+  - Added authentication documentation
+  - Added security information section
+
+## [3.0.0-rc.1] - 2025-09-25
+
+- **Firebase 12 Upgrade**: Updated to Firebase 12 for improved performance and features.
+- **History Plugin Enhancements**: 
+  - Added previous values tracking to history plugin
+  - Added programmatic creation of history entries
+- **Reference Properties Improvements**:
+  - Added reference as string field configuration
+  - Fixed additional columns not showing in reference selection
+  - Fixed reference properties not rendering correctly with no path but with a custom Field
+- **UI Updates**:
+  - Updated default SaaS icon
+  - Button color updates
+  - Collapsing home sections
+  - Small web updates and removed Algolia DocSearch
+- **Fixes**:
+  - Fixed Google Cloud login issue
+  - Fixed error returning from subscription view
+  - Fixed storing recent project
+  - Fixed TipTap imports
+  - Fixed passing gclid correctly to app
+  - Website CLS (Cumulative Layout Shift) fix
+- **CLI**: Added npm instructions to CLI
+- **Dependencies**: Various dependency updates and cleanup
+- **Documentation**: Corrected typo in custom_previews.md
+- **Import/Export**: Cleaned up imports
+- **Roles Management**: Added ability to set roles programmatically in code
+
+## [3.0.0-beta.15] - 2025-08-18
+
+- **Survey Feature**: Added initial user survey with analytics tracking to improve user experience and gather feedback.
+- **Entity Actions Improvements**:
+  - Added entity actions registry for better organization
+  - Added form context to entity actions
+  - Entity actions now available in full screen mode
+  - Improved entity actions page
+- **Subscription Management**:
+  - Added Stripe portal link for easy subscription management
+  - Improved subscription view in project settings
+  - Added ability to change payment method
+  - Added analytics events for subscription success or failure
+  - Price updates
+- **Home Page Enhancements**:
+  - Added drag and drop functionality to home page sections
+  - Added back default empty view in home page
+  - Implemented group drop behavior
+  - Added ability to rename groups
+  - Collections can now be edited within the entity edit view
+  - Fixed home page search re-rendering issue
+- **UI/UX Improvements**:
+  - Changed default buttons from primary to neutral color
+  - Added smallest switch size
+  - Updated hero background gradient
+  - Minor styling updates
+  - Added currency toggle in pricing page
+  - Made collection icons smaller
+  - Landing page mobile optimizations
+  - Added small animation to login views
+  - Updated logo
+  - Small drawer visual updates
+- **Analytics**:
+  - Added campaign tracking to analytics
+  - Added landing analytics events
+  - Added analytics events for surveys
+- **Component Updates**:
+  - Changed Alert class props
+  - Added `viewportClassName` to Select component
+  - File upload visual update
+  - Allow use of React components as icons
+  - Added `previous values` to history plugin
+  - Allow disabling focus in dialog
+- **Performance & Bug Fixes**:
+  - Fixed loading button size
+  - Fixed entities getting dirty on creation due to markdown field
+  - Fixed filtering for null values bug
+  - Fixed useMemo with changing arguments error
+  - Fixed id paths bug
+  - Fixed merged collections order
+  - DND (drag and drop) performance optimizations and bugfixes
+  - Fixed collection groups path handling
+- **Custom Fields**: Improved custom fields page
+- **Reference Dialog Fix**: Fixed reference dialog sorting issue when filters are applied in main collection
+- **Product Demo**: Improved product sync demo action
+- **Web Updates**: 
+  - Web design updates
+  - Web mobile optimizations
+  - Enhanced getPath function
+  - Added data attributes to Button component
+- **Documentation**: Improved llms.txt generation pipeline
+- **Docusaurus**: Version update
+
 ## [3.0.0-beta.14] - 2025-04-17
 
 - **JSON View Toggle**: Added toggle in collections editor view for accessing raw JSON data.

@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/copy_changelog.js && node scripts/generate_llms_txt.js",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "run-s build && firebase deploy --only hosting --project firecms-backend"
+    "deploy": "run-s build && firebase deploy --only hosting --project firecms-backend",
+    "generate-llms": "node scripts/generate_llms_txt.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.9",
@@ -34,6 +36,7 @@
     "astro": "^5.14.8",
     "astro-expressive-code": "^0.41.3",
     "date-fns": "^3.6.0",
+    "gray-matter": "^4.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-responsive-masonry": "^2.7.1",
