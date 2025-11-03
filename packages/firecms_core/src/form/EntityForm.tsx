@@ -22,6 +22,7 @@ import {
     getLocalChangesBackup,
     getValueInPath,
     isHidden,
+    isObject,
     isReadOnly,
     mergeDeep,
     resolveCollection,
@@ -39,11 +40,12 @@ import {
     useSnackbarController
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
-import { flattenKeys, Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
+import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 import {
+    flattenKeys,
     getEntityFromCache,
     removeEntityFromCache,
     removeEntityFromMemoryCache,
@@ -118,6 +120,64 @@ export function extractTouchedValues(values: any, touched: Record<string, boolea
     })
 
     return acc;
+}
+
+export function getChanges<T extends object>(source: Partial<T>, comparison: Partial<T>): Partial<T> {
+    const changes: Partial<T> = {};
+
+    if (!source) {
+        return {};
+    }
+    if (!comparison) {
+        return source;
+    }
+
+    const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(comparison)]));
+
+    for (const key of allKeys) {
+        const sourceValue = (source as any)[key];
+        const comparisonValue = (comparison as any)[key];
+
+        if (equal(sourceValue, comparisonValue)) {
+            continue;
+        }
+
+        const sourceHasKey = source && typeof source === "object" && Object.prototype.hasOwnProperty.call(source, key);
+        const comparisonHasKey = comparison && typeof comparison === "object" && Object.prototype.hasOwnProperty.call(comparison, key);
+
+        if (comparisonHasKey && !sourceHasKey) {
+            (changes as any)[key] = undefined;
+        } else if (Array.isArray(sourceValue)) {
+            const comparisonArray = Array.isArray(comparisonValue) ? comparisonValue : [];
+            if (sourceValue.length < comparisonArray.length) {
+                (changes as any)[key] = sourceValue;
+                continue;
+            }
+            const changedArray = sourceValue.map((item, index) => {
+                const comparisonItem = comparisonArray[index];
+                if (equal(item, comparisonItem)) {
+                    return null;
+                }
+                if (isObject(item) && item && isObject(comparisonItem) && comparisonItem) {
+                    const nestedChanges = getChanges(item, comparisonItem);
+                    return Object.keys(nestedChanges).length > 0 ? nestedChanges : item;
+                }
+                return item;
+            });
+            if (changedArray.some(item => item !== null) || sourceValue.length > comparisonArray.length) {
+                (changes as any)[key] = changedArray;
+            }
+        } else if (isObject(sourceValue) && sourceValue && isObject(comparisonValue) && comparisonValue) {
+            const nestedChanges = getChanges(sourceValue, comparisonValue);
+            if (Object.keys(nestedChanges).length > 0) {
+                (changes as any)[key] = nestedChanges;
+            }
+        } else {
+            (changes as any)[key] = sourceValue;
+        }
+    }
+
+    return changes;
 }
 
 export function EntityForm<M extends Record<string, any>>({
@@ -272,16 +332,7 @@ export function EntityForm<M extends Record<string, any>>({
         if (!localChangesDataRaw) {
             return undefined;
         }
-        let filteredChanges = {};
-        const flattenedKeys = flattenKeys(localChangesDataRaw);
-        flattenedKeys.forEach(key => {
-            const localValue = getIn(localChangesDataRaw, key);
-            const initialValue = getIn(initialValues, key);
-            if (!equal(localValue, initialValue)) {
-                filteredChanges = setIn(filteredChanges, key, localValue);
-            }
-        });
-        return filteredChanges;
+        return getChanges(localChangesDataRaw, initialValues);
     }, [localChangesDataRaw, initialValues]);
 
     const hasLocalChanges = !localChangesCleared && localChangesData && Object.keys(localChangesData).length > 0;
@@ -891,3 +942,4 @@ function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<a
         }
     }, [formex.values]);
 }
+

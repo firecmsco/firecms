@@ -1,6 +1,6 @@
 import React from "react";
 
-export type BadgeColor = "primary" | "secondary" | "error";
+export type BadgeColor = "primary" | "secondary" | "warning" | "error";
 
 export interface BadgeProps {
     color?: BadgeColor;
@@ -14,6 +14,8 @@ const getColor = (color: BadgeColor) => {
             return "bg-primary";
         case "secondary":
             return "bg-secondary";
+        case "warning":
+            return "bg-orange-500";
         case "error":
             return "bg-red-500";
         default:

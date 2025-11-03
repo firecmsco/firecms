@@ -94,23 +94,3 @@ function toPath(value: string | string[]) {
     // Replace brackets with dots, remove leading/trailing dots, then split by dot.
     return value.replace(/\[(\d+)]/g, ".$1").replace(/^\./, "").replace(/\.$/, "").split(".");
 }
-
-export function flattenKeys(obj: any, prefix = "", result: string[] = []): string[] {
-    if (isObject(obj) || Array.isArray(obj)) {
-        for (const key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                const newKey = prefix
-                    ? Array.isArray(obj)
-                        ? `${prefix}[${key}]`
-                        : `${prefix}.${key}`
-                    : key;
-                if (isObject(obj[key]) || Array.isArray(obj[key])) {
-                    flattenKeys(obj[key], newKey, result);
-                } else {
-                    result.push(newKey);
-                }
-            }
-        }
-    }
-    return result;
-}
