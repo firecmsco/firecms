@@ -32,5 +32,12 @@ if (cookieConsent === 'accepted') {
 
 // Initialize Google Analytics
 gtag("js", new Date());
-gtag("config", "G-NL75PPNYXD");
+gtag("config", "G-NL75PPNYXD", {
+    send_page_view: true
+});
+
+// Also track on initial load (before Astro takes over)
+if (typeof gtag === 'function') {
+    console.log('Initial pageview tracked:', window.location.pathname);
+}
 
