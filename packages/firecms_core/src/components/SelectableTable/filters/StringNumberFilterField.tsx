@@ -139,7 +139,6 @@ export function StringNumberFilterField({
                                 updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
                         }}
                         endAdornment={internalValue && <IconButton
-                            className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
                             <CloseIcon/>
                         </IconButton>}
