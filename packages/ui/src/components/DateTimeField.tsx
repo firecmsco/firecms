@@ -41,13 +41,16 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                                                             }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [focused, setFocused] = useState(false);
-    const hasValue = value !== undefined && value !== null;
+    const [internalValue, setInternalValue] = useState<string>("");
+    const [isTyping, setIsTyping] = useState(false);
     const invalidValue = value !== undefined && value !== null && !(value instanceof Date);
 
     useInjectStyles("DateTimeField", inputStyles);
 
     const handleClear = (e: React.MouseEvent) => {
         e.preventDefault();
+        setInternalValue("");
+        setIsTyping(false);
         onChange?.(null);
     };
 
@@ -76,28 +79,45 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     // Handle input value change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
+        setInternalValue(inputValue);
+        setIsTyping(true);
 
         if (!inputValue) {
             onChange?.(null);
             return;
         }
 
-        let newDate: Date | null = null;
         try {
-            if (mode === "date_time") {
-                const [datePart, timePart] = inputValue.split("T");
-                const [year, month, day] = datePart.split("-").map(Number);
-                const [hours, minutes] = timePart.split(":").map(Number);
-                newDate = new Date(year, month - 1, day, hours, minutes);
-            } else {
-                const [year, month, day] = inputValue.split("-").map(Number);
-                newDate = new Date(year, month - 1, day);
+            const parsed = new Date(inputValue);
+            if (isNaN(parsed.getTime())) {
+                throw new Error("Invalid date");
             }
-        } catch (e) {
-            newDate = null;
-        }
 
-        onChange?.(newDate);
+            let newDate: Date;
+            if (mode === "date") {
+                // Adjust for timezone offset for date-only inputs
+                const userTimezoneOffset = parsed.getTimezoneOffset() * 60000;
+                newDate = new Date(parsed.getTime() + userTimezoneOffset);
+            } else {
+                newDate = parsed;
+            }
+
+            onChange?.(newDate);
+        } catch (e) {
+            // Don't call onChange with null while typing
+            return;
+        }
+    };
+
+    const handleFocus = () => {
+        setFocused(true);
+        setIsTyping(true);
+        setInternalValue(valueAsInputValue(value ?? null, mode));
+    };
+
+    const handleBlur = () => {
+        setFocused(false);
+        setIsTyping(false);
     };
 
     return (
@@ -145,10 +165,10 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                 <input
                     ref={inputRef}
                     type={mode === "date_time" ? "datetime-local" : "date"}
-                    value={valueAsInputValue(value ?? null, mode)}
+                    value={isTyping ? internalValue : valueAsInputValue(value ?? null, mode)}
                     onChange={handleInputChange}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(false)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                     disabled={disabled}
                     className={cls(
                         "w-full outline-none bg-transparent leading-normal text-base px-3",

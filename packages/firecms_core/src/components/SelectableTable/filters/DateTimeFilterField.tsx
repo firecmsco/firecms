@@ -55,7 +55,7 @@ export function DateTimeFilterField({
         }
 
         setOperation(op);
-        setInternalValue(newValue === null ? undefined : newValue);
+        setInternalValue(newValue);
 
         const hasNewValue = newValue !== null && Array.isArray(newValue)
             ? newValue.length > 0
@@ -96,6 +96,7 @@ export function DateTimeFilterField({
                     mode={mode}
                     size={"large"}
                     locale={locale}
+                    disabled={internalValue === null}
                     value={internalValue ?? undefined}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
