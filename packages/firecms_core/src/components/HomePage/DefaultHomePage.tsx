@@ -1,8 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
-import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
-import { useCollapsedGroups } from "../../hooks/useCollapsedGroups";
+import {
+    useCollapsedGroups,
+    useCustomizationController,
+    useFireCMSContext,
+    useNavigationController
+} from "../../hooks";
 import {
     CMSAnalyticsEvent,
     NavigationEntry,
@@ -143,7 +147,6 @@ export function DefaultHomePage({
             allProcessed = allProcessed.filter(
                 (g) =>
                     g.entries.length ||
-                    groupOrderFromNavController.includes(g.name) ||
                     (g.name === DEFAULT_GROUP_NAME && hasPluginAdditionalCards)
             );
         }
@@ -177,6 +180,7 @@ export function DefaultHomePage({
     const persistNavigationGroups = (
         latest: { name: string; entries: NavigationEntry[] }[]
     ) => {
+        // Map ALL groups including "Views"
         const draggable: NavigationGroupMapping[] = latest.map((g) => ({
             name: g.name,
             entries: g.entries.map((e) => e.path)
@@ -221,13 +225,14 @@ export function DefaultHomePage({
         dialogOpenForGroup,
         setDialogOpenForGroup,
         handleRenameGroup,
+        handleDialogClose,
         isHoveringNewGroupDropZone,
         setIsHoveringNewGroupDropZone
     } = useHomePageDnd({
         items,
         setItems: updateItems,
         disabled: !allowDragAndDrop || performingSearch,
-        onPersist: persistNavigationGroups, // ——► persistence here
+        onPersist: persistNavigationGroups,
         onGroupMoved: (g) =>
             context.analyticsController?.onAnalyticsEvent?.("home_move_group", {
                 name: g
@@ -355,7 +360,7 @@ export function DefaultHomePage({
                         items={containers}
                         strategy={verticalListSortingStrategy}
                     >
-                        {items.map((groupData) => {
+                        {items.map((groupData, groupIndex) => {
                             const groupKey = groupData.name;
                             const entriesInGroup = groupData.entries;
 
@@ -378,14 +383,13 @@ export function DefaultHomePage({
 
                             if (
                                 entriesInGroup.length === 0 &&
-                                (AdditionalCards.length === 0 || performingSearch) &&
-                                !groupOrderFromNavController.includes(groupKey)
+                                (AdditionalCards.length === 0 || performingSearch)
                             )
                                 return null;
 
                             return (
                                 <SortableNavigationGroup
-                                    key={groupKey}
+                                    key={`group-${groupIndex}`}
                                     groupName={groupKey}
                                     disabled={dndDisabled}
                                 >
@@ -557,7 +561,7 @@ export function DefaultHomePage({
                     existingGroupNames={items
                         .map((g) => g.name)
                         .filter((n) => n !== dialogOpenForGroup)}
-                    onClose={() => setDialogOpenForGroup(null)}
+                    onClose={handleDialogClose}
                     onRename={(newName) => {
                         handleRenameGroup(dialogOpenForGroup, newName);
                     }}
