@@ -1,17 +1,14 @@
 import { isPropertyBuilder, Properties, PropertiesOrBuilders, Property, PropertyOrBuilder } from "@firecms/core";
 
-export function editableProperty(property: PropertyOrBuilder | PropertyOrBuilder): boolean {
-    if (isPropertyBuilder(property))
+export function editableProperty(property: PropertyOrBuilder): boolean {
+    if (isPropertyBuilder(property)) {
         return false;
-    if (isPropertyBuilder(property as PropertyOrBuilder))
-        return false;
-    else {
-        const eProperty = property as Property;
-        if (eProperty.dataType === "array" && typeof eProperty.of === "function")
+    } else {
+        if (property.dataType === "array" && typeof property.of === "function")
             return false;
-        else if (eProperty.dataType === "array" && Array.isArray(eProperty.of))
+        else if (property.dataType === "array" && Array.isArray(property.of))
             return false;
-        return Boolean(eProperty.editable);
+        return property.editable === undefined ? true : Boolean(property.editable);
     }
 }
 

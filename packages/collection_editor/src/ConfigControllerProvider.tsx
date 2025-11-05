@@ -174,7 +174,7 @@ export const ConfigControllerProvider = React.memo(
                 currentPropertiesOrder,
                 editedCollectionId,
                 parentCollectionIds,
-                collectionEditable: collection?.editable ?? false,
+                collectionEditable: collection?.editable === undefined || collection?.editable === true,
                 existingEntities
             });
         };

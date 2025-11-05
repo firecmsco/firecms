@@ -15,7 +15,7 @@ export function ValidationPanel({
                 <div className="flex flex-row text-surface-500">
                     <RuleIcon/>
                     <Typography variant={"subtitle2"}
-                                className="ml-2">
+                                className="ml-4">
                         Validation
                     </Typography>
                 </div>

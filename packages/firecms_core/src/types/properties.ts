@@ -155,6 +155,10 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     /**
      * Should this property be editable. If set to true, the user will be able to modify the property and
      * save the new config. The saved config will then become the source of truth.
+     * Defaults to `true.
+     * This props is only useful when you are using the collection editor to modify collection
+     * configurations from the CMS itself. You can also use the `editable` prop in the
+     * `EntityCollection` interface to disable the edition of all properties in a collection.
      */
     editable?: boolean;
 

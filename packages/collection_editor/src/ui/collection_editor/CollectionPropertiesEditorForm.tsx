@@ -255,14 +255,6 @@ export function CollectionPropertiesEditorForm({
             setFieldTouched(previousPropertyPath, false, false);
         }
 
-        console.debug("onPropertyChanged", {
-            id,
-            property,
-            previousId,
-            namespace,
-            propertyPath
-        })
-
         if (propertyPath) {
             setFieldValue(propertyPath, property, false);
             setFieldTouched(propertyPath, true, false);

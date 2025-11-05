@@ -229,14 +229,14 @@ export function App() {
                                                                      }) => {
 
         const sourceCollections: EntityCollection[] = [
-            productsCollection,
-            // productsCollection2,
-            booksCollection,
-            usersCollection,
-            blogCollection,
-            showcaseCollection,
-            cryptoCollection,
-            localeCollectionGroup,
+            // productsCollection,
+            // // productsCollection2,
+            // booksCollection,
+            // usersCollection,
+            // blogCollection,
+            // showcaseCollection,
+            // cryptoCollection,
+            // localeCollectionGroup,
             // carsCollection(secondaryFirestoreDelegate)
         ];
         if (process.env.NODE_ENV !== "production") {

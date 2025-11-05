@@ -82,7 +82,7 @@ export function PropertyFieldPreview({
                     <div className="flex flex-row items-center">
                         <ErrorBoundary>
                             <Typography className="flex-grow pr-2"
-                                        variant={includeName ? "body2" : "subtitle1"}
+                                        variant={includeName ? "body2" : "label"}
                                         component="span"
                                         color="secondary">
                                 {propertyConfig?.name}
@@ -147,7 +147,7 @@ export function NonEditablePropertyPreview({
             >
 
                 <div className="w-full flex flex-col">
-                    <Typography variant="body1"
+                    <Typography variant="label"
                                 component="span"
                                 className="flex-grow pr-2">
                         {property?.name
