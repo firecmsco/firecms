@@ -120,7 +120,8 @@ export function FormEnhanceAction({
             align={"end"}
             sideOffset={8}
             className={"max-w-[100vw]"}
-            trigger={<Button variant={"outlined"}
+            trigger={<Button variant={"filled"}
+                             color={"neutral"}
                              fullWidth={largeLayout && openEntityMode === "full_screen"}
                              size={"small"}
                              disabled={loading || disabled}>

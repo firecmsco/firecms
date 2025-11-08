@@ -83,6 +83,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      underlyingValueHasChanged,
      disabled: disabledProp,
      partOfArray,
+     partOfBlock,
      minimalistView,
      autoFocus,
      index,
@@ -92,10 +93,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
-
-    if(propertyKey === "created_by"){
-        console.log("Rendering field for created_by", {propertyKey, property, context});
-    }
 
     return (
         <Field
@@ -168,6 +165,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     context,
                     disabled,
                     partOfArray,
+                    partOfBlock,
                     minimalistView,
                     autoFocus,
                     size,
@@ -199,6 +197,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          includeDescription,
          underlyingValueHasChanged,
          partOfArray,
+         partOfBlock,
          minimalistView,
          autoFocus,
          context,
@@ -261,6 +260,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         disabled: disabled ?? false,
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         partOfArray: partOfArray ?? false,
+        partOfBlock: partOfBlock ?? false,
         minimalistView: minimalistView ?? false,
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
