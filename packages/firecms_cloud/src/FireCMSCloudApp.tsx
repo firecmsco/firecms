@@ -529,7 +529,7 @@ function FireCMSAppAuthenticated({
     const historyDefaultEnabled = projectConfig.historyDefaultEnabled;
     const historyPlugin = useEntityHistoryPlugin({
         defaultEnabled: historyDefaultEnabled,
-        getUser: (uid) => userManagement.users.find((user) => user.firebase_uid === uid) ?? null,
+        getUser: (uid) => userManagement.users.find((user) => user.uid === uid) ?? null,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({

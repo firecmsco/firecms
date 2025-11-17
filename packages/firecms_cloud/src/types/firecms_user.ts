@@ -1,7 +1,7 @@
 import { Role } from "@firecms/core";
 
 export type FireCMSCloudUser = {
-    uid: string;
+    uid: string; // This is the uid in FireCMS Cloud
     email: string;
     displayName: string;
     photoURL: string;
@@ -10,7 +10,7 @@ export type FireCMSCloudUser = {
     active: boolean;
     updated_on: Date;
     created_on: Date;
-    firebase_uid: string;
+    firebase_uid: string; // This is the uid in the client app
 }
 
 export type FireCMSCloudUserWithRoles = FireCMSCloudUser & {

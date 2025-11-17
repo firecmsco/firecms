@@ -195,8 +195,8 @@ export function useBuildCloudUserManagement({
 
 const docsToUsers = (docs: DocumentSnapshot[]): UserWithRoleIds[] => {
     return docs.map((doc) => ({
-        uid: doc.id,
         ...doc.data(),
+        uid: doc.data()?.firebase_uid,
         created_on: doc.data()?.created_on?.toDate(),
         updated_on: doc.data()?.updated_on?.toDate()
     } as unknown as UserWithRoleIds));
