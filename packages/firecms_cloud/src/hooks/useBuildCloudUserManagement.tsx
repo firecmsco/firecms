@@ -17,7 +17,7 @@ import { CMSType, PermissionsBuilder, Role, User } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
 import { resolveUserRolePermissions, UserManagement } from "@firecms/user_management";
 
-type UserWithRoleIds = User & { roles: string[] };
+type UserWithRoleIds = User & { roles: string[], firebase_uid: string };
 
 interface UserManagementParams {
     backendFirebaseApp?: FirebaseApp;
@@ -45,8 +45,10 @@ export function useBuildCloudUserManagement({
     const [usersWithRoleIds, setUsersWithRoleIds] = React.useState<UserWithRoleIds[]>([]);
     const users = usersWithRoleIds.map(u => ({
         ...u,
+        uid: u.firebase_uid,
+        saas_uid: u.uid,
         roles: roles.filter(r => u.roles.includes(r.id))
-    } as FireCMSCloudUserWithRoles));
+    } satisfies FireCMSCloudUserWithRoles));
 
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
@@ -112,11 +114,11 @@ export function useBuildCloudUserManagement({
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting", user);
         const {
-            uid,
+            saas_uid,
             ...userData
         } = user;
-        if (uid) {
-            return projectsApi.updateUser(projectId, uid, user);
+        if (saas_uid) {
+            return projectsApi.updateUser(projectId, saas_uid, user);
         } else {
             return projectsApi.createNewUser(projectId, user);
         }
@@ -138,8 +140,8 @@ export function useBuildCloudUserManagement({
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);
-        const { uid } = user;
-        return projectsApi.deleteUser(projectId, uid);
+        const { saas_uid } = user;
+        return projectsApi.deleteUser(projectId, saas_uid);
     }, [configPath]);
 
     const deleteRole = useCallback((role: Role): Promise<void> => {
@@ -152,7 +154,7 @@ export function useBuildCloudUserManagement({
         return deleteDoc(ref);
     }, [configPath]);
 
-    const loggedInUser = users.find((u) => u.email.toLowerCase() === fireCMSBackend.user?.email?.toLowerCase());
+    const loggedInUser = users.find((u) => u.email?.toLowerCase() === fireCMSBackend.user?.email?.toLowerCase());
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,
@@ -196,7 +198,6 @@ export function useBuildCloudUserManagement({
 const docsToUsers = (docs: DocumentSnapshot[]): UserWithRoleIds[] => {
     return docs.map((doc) => ({
         ...doc.data(),
-        uid: doc.data()?.firebase_uid,
         created_on: doc.data()?.created_on?.toDate(),
         updated_on: doc.data()?.updated_on?.toDate()
     } as unknown as UserWithRoleIds));

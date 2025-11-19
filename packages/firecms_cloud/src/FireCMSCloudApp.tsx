@@ -325,7 +325,7 @@ export function FireCMSClientWithController({
             if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return userManagement.users.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
+            return userManagement.users.find((fireCMSUser) => fireCMSUser.email?.toLowerCase() === user?.email?.toLowerCase());
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
