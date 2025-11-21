@@ -8,8 +8,9 @@ import { User } from "@firecms/core";
 
 export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
 
-    const [dialogOpen, setDialogOpen] = useState<boolean>();
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | undefined>();
+    const [newFormKey, setNewFormKey] = useState<number>(0);
 
     const { users } = useUserManagement();
 
@@ -21,6 +22,12 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
     const handleClose = useCallback(() => {
         setDialogOpen(false);
         setSelectedUser(undefined);
+    }, []);
+
+    const handleAddUser = useCallback(() => {
+        setSelectedUser(undefined);
+        setNewFormKey(k => k + 1);
+        setDialogOpen(true);
     }, []);
 
     return (
@@ -38,7 +45,7 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
                 <Button
                     size={"large"}
                     startIcon={<AddIcon/>}
-                    onClick={() => setDialogOpen(true)}>
+                    onClick={handleAddUser}>
                     Add user
                 </Button>
             </div>
@@ -46,8 +53,8 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
             <UsersTable onUserClicked={onUserClicked}/>
 
             <UserDetailsForm
-                key={selectedUser?.uid ?? "new"}
-                open={dialogOpen ?? false}
+                key={selectedUser?.uid ?? `new-${newFormKey}`}
+                open={dialogOpen}
                 user={selectedUser}
                 handleClose={handleClose}/>
 
