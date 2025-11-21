@@ -41,7 +41,7 @@ import {
     useBuildCloudUserManagement,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useDelegatedLogin
+    useDelegatedLogin, useProjectConfig
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
@@ -605,8 +605,8 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: appConfig?.collections,
-        views: appConfig?.views,
+        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        views: projectConfig.isTrialOver ? [] :appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
         plugins
