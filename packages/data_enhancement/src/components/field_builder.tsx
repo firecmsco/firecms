@@ -97,6 +97,9 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
     const property = props.property;
     const topClass = useMemo(() => {
+        if (props.partOfBlock) {
+            return "-top-4";
+        }
         if (property.widthPercentage !== undefined) {
             return "top-4";
         } else {
@@ -107,7 +110,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         }
     }, []);
 
-    const rightClass = props.partOfArray ? "right-12" : "right-2";
+    const rightClass = props.partOfBlock ? "right-8" : (props.partOfArray ? "right-12" : "right-2");
 
     if (!enabled) {
         return <Field {...props} />
@@ -179,7 +182,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                     onOpenChange={setMenuOpen}
                     trigger={
                         <IconButton
-                            size="small"
+                            size="smallest"
                             aria-label="Enhance field"
                             disabled={dataLoading || loading}
                             className={enoughData ? "text-surface-900 dark:text-white" : "text-surface-400 dark:text-surface-600"}
@@ -198,7 +201,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                             {dataLoading || loading
                                 ? <CircularProgress size={"smallest"}/>
                                 : <AutoAwesomeIcon
-                                    size={"small"}/>}
+                                    size={"smallest"}/>}
                         </IconButton>}>
                     <MenuItem onClick={() => enhanceData()}>
                         <AutoAwesomeIcon size="small"/>

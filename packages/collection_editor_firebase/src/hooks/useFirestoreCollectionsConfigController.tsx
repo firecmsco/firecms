@@ -263,21 +263,52 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         const collectionPath = buildCollectionId(path, parentCollectionIds);
         const ref = doc(firestore, collectionsConfigPath, collectionPath);
         return runTransaction(firestore, async (transaction) => {
-            const data = {
-                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: setUndefinedToDelete(removeFunctions(removeUndefined(property))),
-            };
-            if (newPropertiesOrder) {
-                data.propertiesOrder = newPropertiesOrder;
-            }
+            const propertyPath = namespaceToPropertiesPath(namespace);
+            const fullPath = propertyPath + "." + propertyKey;
+
             console.debug("Saving property", {
                 path,
                 propertyKey,
                 property,
                 collectionPath,
                 namespace,
-                data
+                propertyPath,
+                fullPath
             });
-            transaction.update(ref, data);
+
+            const docSnap = await transaction.get(ref);
+            if (docSnap.exists()) {
+                // For existing documents, use update with dot notation
+                const data: Record<string, any> = {
+                    id: path,
+                    [fullPath]: setUndefinedToDelete(removeFunctions(removeUndefined(property))),
+                };
+                if (newPropertiesOrder) {
+                    data.propertiesOrder = newPropertiesOrder;
+                }
+                transaction.update(ref, data);
+            } else {
+                // For new documents, build the nested structure
+                const nestedData: any = {
+                    id: path
+                };
+                const pathParts = propertyPath.split('.');
+                let current = nestedData;
+                for (let i = 0; i < pathParts.length; i++) {
+                    if (i === pathParts.length - 1) {
+                        current[pathParts[i]] = {
+                            [propertyKey]: setUndefinedToDelete(removeFunctions(removeUndefined(property)))
+                        };
+                    } else {
+                        current[pathParts[i]] = {};
+                        current = current[pathParts[i]];
+                    }
+                }
+                if (newPropertiesOrder) {
+                    nestedData.propertiesOrder = newPropertiesOrder;
+                }
+                transaction.set(ref, nestedData);
+            }
         });
 
     }, [collectionsConfigPath, firebaseApp]);

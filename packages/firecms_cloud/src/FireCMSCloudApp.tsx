@@ -41,7 +41,7 @@ import {
     useBuildCloudUserManagement,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useDelegatedLogin
+    useDelegatedLogin, useProjectConfig
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
@@ -325,7 +325,7 @@ export function FireCMSClientWithController({
             if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return userManagement.users.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
+            return userManagement.users.find((fireCMSUser) => fireCMSUser.email?.toLowerCase() === user?.email?.toLowerCase());
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
@@ -529,7 +529,7 @@ function FireCMSAppAuthenticated({
     const historyDefaultEnabled = projectConfig.historyDefaultEnabled;
     const historyPlugin = useEntityHistoryPlugin({
         defaultEnabled: historyDefaultEnabled,
-        getUser: (uid) => userManagement.users.find((user) => user.firebase_uid === uid) ?? null,
+        getUser: (uid) => userManagement.users.find((user) => user.uid === uid) ?? null,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
@@ -605,8 +605,8 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: appConfig?.collections,
-        views: appConfig?.views,
+        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        views: projectConfig.isTrialOver ? [] :appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
         plugins

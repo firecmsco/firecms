@@ -7,9 +7,12 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     KeyboardArrowDownIcon,
     Menu,
-    MenuItem, VisibilityIcon,
+    MenuItem,
+    Typography,
+    VisibilityIcon,
     WarningIcon
 } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
@@ -108,17 +111,18 @@ export function LocalChangesMenu<M extends object>({
                 onOpenChange={setPreviewDialogOpen}
                 maxWidth={"4xl"}
             >
-                <DialogContent>
-                    <h3 className={"text-2xl mb-4"}>Preview Local Changes</h3>
-                    <p className={"mb-4"}>
+                <DialogTitle variant={"h6"}>Preview Local Changes</DialogTitle>
+                <DialogContent className={"my-4"}>
+                    <Typography variant={"body2"} className={"mb-4"}>
                         These are the local changes that will be applied to the form.
-                    </p>
+                    </Typography>
                     <div className={`border rounded-lg ${defaultBorderMixin}`} style={{
                         maxHeight: 520,
                         overflow: "auto"
                     }}>
                         <div className="p-4">
-                            <PropertyCollectionView data={localChangesData} properties={properties as ResolvedProperties}/>
+                            <PropertyCollectionView data={localChangesData}
+                                                    properties={properties as ResolvedProperties}/>
                         </div>
                     </div>
                 </DialogContent>

@@ -327,15 +327,3 @@ function createFilterField({
     );
 }
 
-function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
-    if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.dataType);
-    }
-    if (property.dataType === "array") {
-        if (property.of)
-            return filterableProperty(property.of, true);
-        else
-            return false;
-    }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
-}

@@ -200,6 +200,7 @@ function BlockEntry({
             context,
             autoFocus,
             partOfArray: false,
+            partOfBlock: true,
             minimalistView: true,
             onPropertyChange: storeProps,
         }

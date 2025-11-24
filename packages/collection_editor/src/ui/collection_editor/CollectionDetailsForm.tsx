@@ -357,6 +357,19 @@ export function CollectionDetailsForm({
                                 </div>
 
                                 <div className={"col-span-12"}>
+                                    <BooleanSwitchWithLabel
+                                        position={"start"}
+                                        size={"large"}
+                                        label={values.inlineEditing === undefined || values.inlineEditing ? "Data can be edited directly in the table view" : "Data can be edited only  in the form view"}
+                                        onValueChange={(v) => setFieldValue("inlineEditing", v)}
+                                        value={values.inlineEditing === undefined ? true : values.inlineEditing}
+                                    />
+                                    <FieldCaption>
+                                        Allow editing data directly in the table view, without opening the form view.
+                                    </FieldCaption>
+                                </div>
+
+                                <div className={"col-span-12"}>
                                     <Select
                                         name="customId"
                                         label="Document IDs generation"

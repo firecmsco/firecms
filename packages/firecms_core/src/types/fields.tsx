@@ -82,6 +82,11 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     partOfArray?: boolean;
 
     /**
+     * Is this field part of a block
+     */
+    partOfBlock?: boolean;
+
+    /**
      * Display the child properties directly, without being wrapped in an
      * extendable panel. Note that this will also hide the title of this property.
      */
@@ -219,6 +224,11 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * Is this field part of an array
      */
     partOfArray?: boolean;
+
+    /**
+     * Is this field part of a block
+     */
+    partOfBlock?: boolean;
 
     /**
      * Display the child properties directly, without being wrapped in an

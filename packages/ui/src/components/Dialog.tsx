@@ -106,8 +106,10 @@ export const Dialog = ({
                     >
                         <div
                             className={cls(paperMixin,
+                                "rounded-2xl",
                                 "z-30",
                                 "relative",
+                                "overflow-hidden",
                                 "outline-none focus:outline-none",
                                 fullWidth && !fullScreen ? "w-11/12" : undefined,
                                 fullHeight && !fullScreen ? "h-full" : undefined,

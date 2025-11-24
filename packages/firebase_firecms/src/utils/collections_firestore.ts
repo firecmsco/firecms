@@ -128,6 +128,7 @@ function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyCon
             } else {
                 cleanProperty = property;
             }
+            delete cleanProperty.editable;
             res[key] = { ...cleanProperty };
         }
     });

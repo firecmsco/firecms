@@ -26,7 +26,7 @@ export function UnsavedChangesDialog({
         >
 
             <DialogTitle>{title ?? "Unsaved changes"}</DialogTitle>
-            <DialogContent>
+            <DialogContent className={"mt-4"}>
                 {body && <Typography>
                     {body}
                 </Typography>}

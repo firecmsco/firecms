@@ -857,13 +857,13 @@ export function EntityForm<M extends Record<string, any>>({
                                 />}
 
                             {formex.dirty
-                                ? <Tooltip title={"There are local unsaved changes"}>
-                                    <Chip size={"small"} colorScheme={"orangeDarker"}>
+                                ? <Tooltip title={"This form has been modified"}>
+                                    <Chip size={"small"} className={"py-1"} colorScheme={"orangeDarker"}>
                                         <EditIcon size={"smallest"}/>
                                     </Chip>
                                 </Tooltip>
                                 : <Tooltip title={"The current form is in sync with the database"}>
-                                    <Chip size={"small"}>
+                                    <Chip size={"small"} className={"py-1"} >
                                         <CheckIcon size={"smallest"}/>
                                     </Chip>
                                 </Tooltip>}

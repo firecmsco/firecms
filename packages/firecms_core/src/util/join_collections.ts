@@ -78,7 +78,6 @@ export function mergeCollection(target: EntityCollection,
                                 modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
-
     const subcollectionsMerged = joinCollectionLists(
         target?.subcollections ?? [],
         source?.subcollections ?? [],
@@ -132,8 +131,9 @@ function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBui
         return target;
     } else {
         const mergedProperty = mergeDeep(target, source);
-        const targetEditable = Boolean(target.editable);
-        const sourceEditable = Boolean(source.editable);
+        const targetEditable = target.editable === undefined ? true : Boolean(target.editable);
+        const sourceEditable = source.editable === undefined ? true : Boolean(source.editable);
+
         if (source.dataType === "map" && source.properties) {
             const targetProperties = ("properties" in target ? target.properties : {}) as PropertiesOrBuilders;
             const sourceProperties = ("properties" in source ? source.properties : {}) as PropertiesOrBuilders;

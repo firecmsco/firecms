@@ -124,6 +124,7 @@ export const testCollection = buildCollection<any>({
                 Builder: PromptConfigSecondaryForm
             }
         ],
+    // editable:false,
         // additionalFields: [{
         //     key: "custom",
         //     name: "Custom",
@@ -132,39 +133,44 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            date: {
+                name: "My date",
+                dataType: "date",
+            },
             user_select: {
                 dataType: "string",
                 name: "User select",
                 userSelect: true,
+                editable:false,
             },
-            basic_number: {
-                dataType: "number",
-                name: "Basic number",
-                validation: {
-                    min: 0,
-                    max: 100
-                }
-            },
-            basic: {
-                dataType: "string",
-                name: "Basic",
-                validation: {
-                    unique: true,
-                }
-            },
-            ref_as_string: {
-                dataType: "string",
-                name: "Reference as string",
-                reference: {
-                    dataType: "reference",
-                    path: "products",
-                }
-            },
-            ref: {
-                dataType: "reference",
-                name: "Reference",
-                path: "products",
-            },
+            // basic_number: {
+            //     dataType: "number",
+            //     name: "Basic number",
+            //     validation: {
+            //         min: 0,
+            //         max: 100
+            //     }
+            // },
+            // basic: {
+            //     dataType: "string",
+            //     name: "Basic",
+            //     validation: {
+            //         unique: true,
+            //     }
+            // },
+            // ref_as_string: {
+            //     dataType: "string",
+            //     name: "Reference as string",
+            //     reference: {
+            //         dataType: "reference",
+            //         path: "products",
+            //     }
+            // },
+            // ref: {
+            //     dataType: "reference",
+            //     name: "Reference",
+            //     path: "products",
+            // },
 
             // answers: ({ entityId }) => {
             //     return {
@@ -223,12 +229,12 @@ export const testCollection = buildCollection<any>({
             //         }
             //     };
             // },
-            multiline: {
-                dataType: "string",
-                name: "Multiline",
-                multiline: true,
-                defaultValue: "Hello\nWorld",
-            },
+            // multiline: {
+            //     dataType: "string",
+            //     name: "Multiline",
+            //     multiline: true,
+            //     defaultValue: "Hello\nWorld",
+            // },
             // date: {
             //     name: "My date",
             //     dataType: "date",
@@ -247,46 +253,46 @@ export const testCollection = buildCollection<any>({
             //     mode: "date_time",
             //     clearable: true
             // },
-            locale: {
-                name: "Locales",
-                dataType: "string",
-                enumValues: locales,
-                clearable: true
-            },
-            available_locales: {
-                name: "Available locales",
-                dataType: "array",
-                of: {
-                    dataType: "string",
-                    enumValues: locales
-                }
-            },
-            image: {
-                dataType: "string",
-                name: "Image",
-                storage: {
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
-                },
-                // validation: { required: true }
-            },
-            images: {
-                dataType: "array",
-                name: "Images",
-                of: {
-                    dataType: "string",
-                    storage: {
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
-                    }
-                }
-            },
+            // locale: {
+            //     name: "Locales",
+            //     dataType: "string",
+            //     enumValues: locales,
+            //     clearable: true
+            // },
+            // available_locales: {
+            //     name: "Available locales",
+            //     dataType: "array",
+            //     of: {
+            //         dataType: "string",
+            //         enumValues: locales
+            //     }
+            // },
+            // image: {
+            //     dataType: "string",
+            //     name: "Image",
+            //     storage: {
+            //         storagePath: "images",
+            //         acceptedFiles: ["image/*"],
+            //         metadata: {
+            //             cacheControl: "max-age=1000000"
+            //         }
+            //     },
+            //     // validation: { required: true }
+            // },
+            // images: {
+            //     dataType: "array",
+            //     name: "Images",
+            //     of: {
+            //         dataType: "string",
+            //         storage: {
+            //             storagePath: "images",
+            //             acceptedFiles: ["image/*"],
+            //             metadata: {
+            //                 cacheControl: "max-age=1000000"
+            //             }
+            //         }
+            //     }
+            // },
             // readOnly: {
             //     dataType: "string",
             //     readOnly: true,
@@ -399,45 +405,44 @@ export const testCollection = buildCollection<any>({
             //         return <div>Test</div>;
             //     }
             // }),
-            body: buildProperty({
-                name: "Body",
-                validation: { required: false },
-                dataType: "map",
-                keyValue: true,
-                customProps: {
-                    editable: true
-                },
-                defaultValue: {
-                    clientIp: "client.ip",
-                    clientDeviceType: "client.deviceType",
-                    clientLanguage: "client.language",
-                    clientReferral: "client.referral",
-                    clientUserAgent: "client.userAgent"
-                }
-            }),
-
-            size: {
-                dataType: "map",
-                minimalistView: true,
-                name: "Size",
-                properties: {
-                    width: {
-                        name: "Width",
-                        dataType: "number",
-                        validation: {
-                            required: true
-                        }
-                    },
-                    height: {
-                        name: "Height",
-                        dataType: "number",
-                        validation: {
-                            required: true
-                        }
-                    }
-                },
-                widthPercentage: 50
-            },
+            // body: buildProperty({
+            //     name: "Body",
+            //     validation: { required: false },
+            //     dataType: "map",
+            //     keyValue: true,
+            //     customProps: {
+            //         editable: true
+            //     },
+            //     defaultValue: {
+            //         clientIp: "client.ip",
+            //         clientDeviceType: "client.deviceType",
+            //         clientLanguage: "client.language",
+            //         clientReferral: "client.referral",
+            //         clientUserAgent: "client.userAgent"
+            //     }
+            // }),
+            // size: {
+            //     dataType: "map",
+            //     minimalistView: true,
+            //     name: "Size",
+            //     properties: {
+            //         width: {
+            //             name: "Width",
+            //             dataType: "number",
+            //             validation: {
+            //                 required: true
+            //             }
+            //         },
+            //         height: {
+            //             name: "Height",
+            //             dataType: "number",
+            //             validation: {
+            //                 required: true
+            //             }
+            //         }
+            //     },
+            //     widthPercentage: 50
+            // },
             // background: {
             //     dataType: "number",
             //     name: "Colour",
@@ -630,15 +635,15 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            tags: {
-                name: "Tags",
-                dataType: "array",
-                // sortable: false,
-                // canAddElements: false,
-                of: {
-                    dataType: "string"
-                }
-            },
+            // tags: {
+            //     name: "Tags",
+            //     dataType: "array",
+            //     // sortable: false,
+            //     // canAddElements: false,
+            //     of: {
+            //         dataType: "string"
+            //     }
+            // },
             // specSheet: ({
             //                 values,
             //                 entityId
@@ -724,16 +729,16 @@ export const testCollection = buildCollection<any>({
             //     dataType: "reference",
             //     path: "test_entity"
             // },
-            self_refs: {
-                dataType: "array",
-                name: "Self references",
-                of: {
-                    dataType: "reference",
-                    name: "Self refs",
-                    path: "test_entity"
-                    // previewProperties: ["name","url_image"]
-                }
-            },
+            // self_refs: {
+            //     dataType: "array",
+            //     name: "Self references",
+            //     of: {
+            //         dataType: "reference",
+            //         name: "Self refs",
+            //         path: "test_entity"
+            //         // previewProperties: ["name","url_image"]
+            //     }
+            // },
             // url_image: {
             //     dataType: "string",
             //     name: "URL image",
@@ -779,31 +784,31 @@ export const testCollection = buildCollection<any>({
             //         }
             //     ]
             // },
-            impacts: {
-                name: "Impacts",
-                validation: { required: true },
-                dataType: "array",
-                of: buildProperty({
-                    dataType: "map",
-                    properties: {
-                        name: {
-                            name: "Name",
-                            validation: { required: true },
-                            dataType: "string"
-                        },
-                        point1: {
-                            name: "Point-1",
-                            validation: { required: true },
-                            dataType: "number"
-                        },
-                        point2: {
-                            name: "Point-2",
-                            validation: { required: true },
-                            dataType: "number"
-                        }
-                    }
-                })
-            },
+            // impacts: {
+            //     name: "Impacts",
+            //     validation: { required: true },
+            //     dataType: "array",
+            //     of: buildProperty({
+            //         dataType: "map",
+            //         properties: {
+            //             name: {
+            //                 name: "Name",
+            //                 validation: { required: true },
+            //                 dataType: "string"
+            //             },
+            //             point1: {
+            //                 name: "Point-1",
+            //                 validation: { required: true },
+            //                 dataType: "number"
+            //             },
+            //             point2: {
+            //                 name: "Point-2",
+            //                 validation: { required: true },
+            //                 dataType: "number"
+            //             }
+            //         }
+            //     })
+            // },
             // products: buildProperty(({ values }) => ({
             //     name: "Products",
             //     dataType: "array",
@@ -927,20 +932,20 @@ export const testCollection = buildCollection<any>({
             //         properties: properties
             //     });
             // },
-            gallery: {
-                name: "Gallery",
-                dataType: "array",
-                of: {
-                    dataType: "string",
-                    storage: {
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
-                    }
-                }
-            }
+            // gallery: {
+            //     name: "Gallery",
+            //     dataType: "array",
+            //     of: {
+            //         dataType: "string",
+            //         storage: {
+            //             storagePath: "images",
+            //             acceptedFiles: ["image/*"],
+            //             metadata: {
+            //                 cacheControl: "max-age=1000000"
+            //             }
+            //         }
+            //     }
+            // }
 
             // title: ({ values, entityId }) => {
             //     if (values?.available_locales && Array.isArray(values.available_locales)) {

@@ -49,7 +49,7 @@ const Menu = React.forwardRef<
                 side={side}
                 sideOffset={sideOffset}
                 align={align}
-                className={cls(paperMixin, focusedDisabled, "shadow py-2 z-30", className)}>
+                className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
                 {children}
             </DropdownMenu.Content>
         </DropdownMenu.Portal>

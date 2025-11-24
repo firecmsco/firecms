@@ -57,7 +57,7 @@ export function MarkdownPropertyField({
                         <div className="flex flex-row text-surface-500">
                             <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
-                                        className="ml-2">
+                                        className="ml-4">
                                 File upload config
                             </Typography>
                         </div>

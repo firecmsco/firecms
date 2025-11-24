@@ -96,6 +96,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         const firebaseAccessToken = await getBackendAuthToken();
         const persistedUserData = {
             ...user,
+            uid: uid,
             roles: user.roles.map(r => r.id),
             updated_on: new Date()
         }

@@ -6,6 +6,8 @@ import {
     ExpandablePanel,
     MultiSelect,
     MultiSelectItem,
+    Select,
+    SelectItem,
     Typography
 } from "@firecms/ui";
 
@@ -47,9 +49,24 @@ export function StoragePropertyField({
     const storagePath = `${baseStoragePath}.storagePath`;
     const storeUrl = `${baseStoragePath}.storeUrl`;
 
+    // Image resize config paths
+    const imageResize = `${baseStoragePath}.imageResize`;
+    const imageResizeMaxWidth = `${imageResize}.maxWidth`;
+    const imageResizeMaxHeight = `${imageResize}.maxHeight`;
+    const imageResizeMode = `${imageResize}.mode`;
+    const imageResizeFormat = `${imageResize}.format`;
+    const imageResizeQuality = `${imageResize}.quality`;
+
     const fileNameValue = getIn(values, fileName) ?? "{rand}_{file}";
     const storagePathValue = getIn(values, storagePath) ?? "/";
     const maxSizeValue = getIn(values, maxSize);
+
+    // Image resize values
+    const imageResizeMaxWidthValue = getIn(values, imageResizeMaxWidth);
+    const imageResizeMaxHeightValue = getIn(values, imageResizeMaxHeight);
+    const imageResizeModeValue = getIn(values, imageResizeMode) ?? "cover";
+    const imageResizeFormatValue = getIn(values, imageResizeFormat) ?? "original";
+    const imageResizeQualityValue = getIn(values, imageResizeQuality);
 
     const storedValue = getIn(values, acceptedFiles);
     const fileTypesValue: string[] | undefined = Array.isArray(storedValue) ? storedValue : undefined;
@@ -57,10 +74,6 @@ export function StoragePropertyField({
 
     const handleTypesChange = (value: string[]) => {
         if (!value) setFieldValue(acceptedFiles, undefined);
-        // else if (value.includes("all")) setFieldValue(acceptedFiles, undefined);
-        // else if (value.length >= Object.keys(fileTypes).length) setFieldValue(acceptedFiles, undefined);
-        // else if (allFileTypesSelected)
-        //     setFieldValue(acceptedFiles, Object.keys(fileTypes).filter((v) => !value.includes(v)));
         else setFieldValue(acceptedFiles, value);
     };
 
@@ -77,7 +90,7 @@ export function StoragePropertyField({
                         <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
                             <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
-                                        className="ml-2">
+                                        className="ml-4">
                                 File upload config
                             </Typography>
                         </div>
@@ -191,6 +204,123 @@ export function StoragePropertyField({
                                                     else setFieldValue(maxSize, parseInt(value));
                                                 }}
                             />
+                        </div>
+
+                        <div className={"col-span-12 mt-4"}>
+                            <Typography variant={"subtitle2"}
+                                        color={"secondary"}
+                                        className={"mb-2 block"}>
+                                Image Resize Configuration
+                            </Typography>
+                            <Typography variant={"caption"} className={"mb-2 block text-xs"}>
+                                Automatically resize and optimize images before upload (JPEG, PNG, WebP only)
+                            </Typography>
+                        </div>
+
+                        <div className={"col-span-6"}>
+                            <DebouncedTextField
+                                name={imageResizeMaxWidth}
+                                type={"number"}
+                                label={"Max width (px)"}
+                                size={"small"}
+                                disabled={disabled}
+                                value={imageResizeMaxWidthValue !== undefined && imageResizeMaxWidthValue !== null ? imageResizeMaxWidthValue.toString() : ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === "") setFieldValue(imageResizeMaxWidth, undefined);
+                                    else setFieldValue(imageResizeMaxWidth, parseInt(value));
+                                }}
+                            />
+                        </div>
+
+                        <div className={"col-span-6"}>
+                            <DebouncedTextField
+                                name={imageResizeMaxHeight}
+                                type={"number"}
+                                label={"Max height (px)"}
+                                size={"small"}
+                                disabled={disabled}
+                                value={imageResizeMaxHeightValue !== undefined && imageResizeMaxHeightValue !== null ? imageResizeMaxHeightValue.toString() : ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === "") setFieldValue(imageResizeMaxHeight, undefined);
+                                    else setFieldValue(imageResizeMaxHeight, parseInt(value));
+                                }}
+                            />
+                        </div>
+
+                        <div className={"col-span-6"}>
+                            <Select
+                                disabled={disabled}
+                                name={imageResizeMode}
+                                fullWidth
+                                size={"medium"}
+                                value={imageResizeModeValue || "cover"}
+                                onValueChange={(value) => setFieldValue(imageResizeMode, value || "cover")}
+                                label={"Resize mode"}
+                                renderValue={(selected) => {
+                                    if (!selected) return "Cover";
+                                    return selected === "contain" ? "Contain (fit within bounds)" : "Cover (fill bounds, may crop)";
+                                }}>
+                                <SelectItem value="contain">
+                                    Contain (fit within bounds)
+                                </SelectItem>
+                                <SelectItem value="cover">
+                                    Cover (fill bounds, may crop)
+                                </SelectItem>
+                            </Select>
+                        </div>
+
+                        <div className={"col-span-6"}>
+                            <Select
+                                disabled={disabled}
+                                size={"medium"}
+                                fullWidth
+                                name={imageResizeFormat}
+                                value={imageResizeFormatValue || "original"}
+                                onValueChange={(value) => setFieldValue(imageResizeFormat, value || "original")}
+                                label={"Output format"}
+                                renderValue={(selected) => {
+                                    if (!selected) return "Original";
+                                    return selected.charAt(0).toUpperCase() + selected.slice(1);
+                                }}>
+                                <SelectItem value="original">
+                                    Original (keep same format)
+                                </SelectItem>
+                                <SelectItem value="jpeg">
+                                    JPEG
+                                </SelectItem>
+                                <SelectItem value="png">
+                                    PNG
+                                </SelectItem>
+                                <SelectItem value="webp">
+                                    WebP (best compression)
+                                </SelectItem>
+                            </Select>
+                        </div>
+
+                        <div className={"col-span-12"}>
+                            <DebouncedTextField
+                                name={imageResizeQuality}
+                                type={"number"}
+                                label={"Quality (0-100)"}
+                                size={"small"}
+                                disabled={disabled}
+                                value={imageResizeQualityValue !== undefined && imageResizeQualityValue !== null ? imageResizeQualityValue.toString() : ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === "") setFieldValue(imageResizeQuality, undefined);
+                                    else {
+                                        const numValue = parseInt(value);
+                                        if (numValue >= 0 && numValue <= 100) {
+                                            setFieldValue(imageResizeQuality, numValue);
+                                        }
+                                    }
+                                }}
+                            />
+                            <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
+                                Higher quality = larger file size. Recommended: 80-90 for photos, 90-100 for graphics
+                            </Typography>
                         </div>
 
                     </div>

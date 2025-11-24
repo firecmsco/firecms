@@ -131,7 +131,7 @@ export const PropertyCollectionView = ({
         if (baseKey && property && isArrayOfPrimitives) {
             return (
                 <div
-                    className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin}` : ""}`}>
+                    className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>
                     <div className="col-span-4 pr-2">
                         <Typography variant="caption"
                                     color={"secondary"}
@@ -152,7 +152,7 @@ export const PropertyCollectionView = ({
 
         // Array of maps or unknown -> array header + combined item header (MapName [index]) then content
         return (
-            <div className={`${isTopLevel ? "py-4" : "py-1"} ${isTopLevel ? `border-b ${defaultBorderMixin}` : ""}`}>
+            <div className={`${isTopLevel ? "py-4" : "py-1"} ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>
                 {baseKey && arrayLabel && !suppressHeader && (
                     <Typography variant="caption"
                                 color={"secondary"}
@@ -211,7 +211,7 @@ export const PropertyCollectionView = ({
             if (!property) return null;
             return (
                 <div
-                    className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin}` : ""}`}>
+                    className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>
                     <div className="col-span-4 pr-2">
                         <Typography variant="caption"
                                     color={"secondary"}
@@ -240,7 +240,7 @@ export const PropertyCollectionView = ({
         const headerText = property?.name || label;
 
         return (
-            <div className={`${isTopLevel ? "py-4" : "py-1"} ${isTopLevel ? `border-b ${defaultBorderMixin}` : ""}`}>
+            <div className={`${isTopLevel ? "py-4" : "py-1"} ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>
                 {showMapHeader && (
                     <Typography variant="caption"
                                 color={"secondary"}
@@ -277,7 +277,7 @@ export const PropertyCollectionView = ({
         if (!property) return null;
         return (
             <div
-                className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin}` : ""}`}>
+                className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>
                 <div className="col-span-4 pr-2">
                     <Typography variant="caption"
                                 color={"secondary"}
