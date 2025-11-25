@@ -146,7 +146,7 @@ export function UserDetailsForm({
                     </DialogTitle>
                     <DialogContent className="h-full flex-grow">
 
-                        <div className={"grid grid-cols-12 gap-8"}>
+                        <div className={"grid grid-cols-12 gap-4"}>
 
                             <div className={"col-span-12"}>
                                 <TextField
