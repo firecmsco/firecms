@@ -61,3 +61,22 @@ export function unslugify(slug?: string): string {
         return slug.trim();
     }
 }
+
+export function prettifyIdentifier(input: string) {
+    if (!input) return "";
+
+    let text = input;
+
+    // 1. Handle camelCase and Acronyms
+    // Group 1 ($1 $2): Lowercase followed by Uppercase (e.g., imageURL -> image URL)
+    // Group 2 ($3 $4): Uppercase followed by Uppercase+lowercase (e.g., XMLParser -> XML Parser)
+    text = text.replace(/([a-z])([A-Z])|([A-Z])([A-Z][a-z])/g, "$1$3 $2$4");
+
+    // 2. Replace hyphens/underscores with spaces
+    text = text.replace(/[_-]+/g, " ");
+
+    // 3. Capitalize first letter of each word (Title Case)
+    return text
+        .trim()
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+}

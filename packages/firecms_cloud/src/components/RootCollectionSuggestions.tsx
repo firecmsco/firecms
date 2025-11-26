@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
+import { prettifyIdentifier, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
@@ -85,7 +85,7 @@ export function RootCollectionSuggestions({
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: {
                                             path,
-                                            name: unslugify(path)
+                                            name: prettifyIdentifier(path)
                                         },
                                         parentCollectionIds: [],
                                         redirect: true,

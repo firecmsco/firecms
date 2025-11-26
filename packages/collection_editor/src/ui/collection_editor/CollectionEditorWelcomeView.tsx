@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EntityCollection, unslugify, } from "@firecms/core";
+import { EntityCollection, prettifyIdentifier, } from "@firecms/core";
 import { Button, Card, Chip, CircularProgress, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 
 import { productsCollectionTemplate } from "./templates/products_template";
@@ -79,7 +79,7 @@ export function CollectionEditorWelcomeView({
                             <Chip key={suggestion}
                                   colorScheme={"cyanLighter"}
                                   onClick={() => {
-                                      setFieldValue("name", unslugify(suggestion));
+                                      setFieldValue("name", prettifyIdentifier(suggestion));
                                       setFieldValue("id", suggestion);
                                       setFieldValue("path", suggestion);
                                       setFieldValue("properties", undefined);

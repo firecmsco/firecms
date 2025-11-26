@@ -2,7 +2,7 @@ import { Field, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
-import { FieldCaption, toSnakeCase, unslugify } from "@firecms/core";
+import { FieldCaption, prettifyIdentifier, toSnakeCase } from "@firecms/core";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,
@@ -78,7 +78,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                             const newIdValue = e.target.value;
                             const nameTouched = getIn(touched, name);
                             if (!nameTouched && autoUpdateId) {
-                                setFieldValue(name, newIdValue ? unslugify(newIdValue) : "")
+                                setFieldValue(name, newIdValue ? prettifyIdentifier(newIdValue) : "")
                             }
                             setFieldValue(id, newIdValue, true);
                             setFieldTouched(id, true);
