@@ -110,6 +110,8 @@ const navLinks = [
                     rel="noopener noreferrer"
                     class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
                     transition:name="start-building-button"
+                    data-track
+                    id="header-start-building-desktop"
             >
                 Start Building
                 <img
@@ -125,6 +127,7 @@ const navLinks = [
                     aria-controls="mobile-menu"
                     aria-expanded="false"
                     id="mobile-menu-button"
+                    data-track
             >
                 <span class="sr-only">Open main menu</span>
                 <!-- Icon when menu is closed -->
@@ -195,6 +198,8 @@ const navLinks = [
                         target="_blank"
                         rel="noopener noreferrer"
                         class="mt-8 w-full inline-flex items-center justify-center gap-x-2 rounded-lg bg-primary px-6 py-4 text-xl font-semibold text-white shadow-lg hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow"
+                        data-track
+                        id="header-start-building-mobile"
                 >
                     Start Building
                     <img

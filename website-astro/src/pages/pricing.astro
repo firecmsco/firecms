@@ -214,7 +214,9 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                         </ul>
                         <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
                            aria-describedby="tier-plus"
-                           class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
+                            class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"
+                            data-track
+                            id="pricing-cloud-trial"> {/* Use flex-grow and justify-end */}
                             Start 1-Month Free Trial
                         </a>
                     </div>
@@ -301,6 +303,8 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                             {/* Add other PRO features */}
                         </ul>
                         <a href="/pro" aria-describedby="tier-pro"
+                           data-track
+                           id="pricing-pro-license"
                            class="mt-8 block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline-white transition-colors duration-200 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
                             Learn More & Buy License
                         </a>
@@ -317,6 +321,8 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                                 and dedicated support for large organizations.</p>
                         </div>
                         <a href="/contact"
+                           data-track
+                           id="pricing-contact-sales"
                            class="flex-shrink-0 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
                             Contact Sales
                         </a>
@@ -374,8 +380,10 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
                         <p class="text-lg text-surface-400 mb-8 max-w-2xl mx-auto">Talk to our team about your project requirements and we'll help you pick the right plan.</p>
                         <a href="https://calendar.app.google/QipmvFoUznse8KnNA"
                            target="_blank"
-                           rel="noopener noreferrer"
-                           class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200">
+                            rel="noopener noreferrer"
+                            data-track
+                            id="pricing-schedule-call"
+                            class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                             </svg>
