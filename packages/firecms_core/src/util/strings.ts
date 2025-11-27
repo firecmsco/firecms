@@ -76,7 +76,9 @@ export function prettifyIdentifier(input: string) {
     text = text.replace(/[_-]+/g, " ");
 
     // 3. Capitalize first letter of each word (Title Case)
-    return text
+    const s = text
         .trim()
         .replace(/\b\w/g, (char) => char.toUpperCase());
+    console.log("Prettified identifier:", { input,s });
+    return s;
 }
