@@ -41,3 +41,4 @@ report.**.json
 !.yarn/sdks
 !.yarn/versions
 /.yarn/install-state.gz
+/website-astro-v2/.firebase/hosting.ZGlzdA.cache

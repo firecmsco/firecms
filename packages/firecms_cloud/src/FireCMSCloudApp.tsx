@@ -90,7 +90,7 @@ import { useEntityHistoryPlugin } from "@firecms/entity_history";
 export function FireCMSCloudApp({
                                     projectId,
                                     appConfig,
-                                    backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
+                                    backendApiHost = "https://api.firecms.co", // TODO
                                     onAnalyticsEvent,
                                     basePath,
                                     baseCollectionPath
