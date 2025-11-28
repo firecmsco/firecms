@@ -8,9 +8,8 @@ import {
 import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
-import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
+import { extractEnumFromValues, mergeDeep, prettifyIdentifier, resolveEnumValues } from "./util";
 import { DataType, EnumValues, Properties, Property, StringProperty } from "./cms_types";
-import { prettifyIdentifier } from "@firecms/core";
 
 export type InferenceTypeBuilder = (value: any) => DataType;
 
