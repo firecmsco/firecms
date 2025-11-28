@@ -233,6 +233,7 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
+                        pathSuggestions
                     }}>
 
                     {children}

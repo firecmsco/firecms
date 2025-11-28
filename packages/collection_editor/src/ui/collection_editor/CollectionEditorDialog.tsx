@@ -80,7 +80,6 @@ export interface CollectionEditorDialogProps {
         }>,
         icon: React.ReactNode
     };
-    pathSuggestions?: string[];
     getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
@@ -241,7 +240,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                                                      extraView,
                                                                      handleCancel,
                                                                      setFormDirty,
-                                                                     pathSuggestions,
                                                                      getUser,
                                                                      parentCollection,
                                                                      getData,
@@ -604,8 +602,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             path={path}
                             onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
-                            parentCollection={parentCollection}
-                            pathSuggestions={pathSuggestions}/>}
+                            parentCollection={parentCollection}/>}
 
                     {currentView === "import_data_mapping" && importConfig &&
                         <CollectionEditorImportMapping importConfig={importConfig}

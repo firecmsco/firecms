@@ -1,6 +1,6 @@
 import React from "react";
 import { EntityCollection, prettifyIdentifier, } from "@firecms/core";
-import { Button, Card, Chip, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import { Card, Chip, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
@@ -8,20 +8,21 @@ import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import";
 import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@firecms/formex";
+import { useCollectionEditorController } from "../../useCollectionEditorController";
 
 export function CollectionEditorWelcomeView({
                                                 path,
-                                                pathSuggestions,
                                                 parentCollection,
                                                 onContinue,
                                                 existingCollectionPaths
                                             }: {
     path: string;
-    pathSuggestions?: string[];
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
 }) {
+
+    const { pathSuggestions } = useCollectionEditorController();
 
     const filteredSuggestions = (pathSuggestions ?? []).filter(s => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === s.trim().toLowerCase()));
 
@@ -127,7 +128,6 @@ export function CollectionEditorWelcomeView({
                     <ImportFileUpload onDataAdded={(data, propertiesOrder) => onContinue(data, propertiesOrder)}/>
 
                 </div>}
-
 
 
                 {/*<div style={{ height: "52px" }}/>*/}

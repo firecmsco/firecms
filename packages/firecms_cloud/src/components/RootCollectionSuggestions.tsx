@@ -1,5 +1,5 @@
 import React from "react";
-import { prettifyIdentifier, useAuthController } from "@firecms/core";
+import { prettifyIdentifier, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
@@ -15,6 +15,7 @@ export function RootCollectionSuggestions({
     rootPathSuggestions?: string[]; // undefined means loading
 }) {
 
+    const navigationController = useNavigationController();
     const authController = useAuthController();
     const fireCMSBackend = useFireCMSBackend();
     const projectConfig = useProjectConfig();
@@ -26,8 +27,11 @@ export function RootCollectionSuggestions({
         }).createCollections
         : true;
 
-    const loading = rootPathSuggestions === undefined;
-    const showSuggestions = (rootPathSuggestions ?? []).length > 0;
+    const existingPaths = (navigationController.collections ?? []).map(c => c.path);
+    const filteredSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+
+    const loading = filteredSuggestions === undefined;
+    const showSuggestions = (filteredSuggestions ?? []).length > 0;
     const forceShowSuggestions = introMode === "existing_project";
     return <Collapse
         in={forceShowSuggestions || showSuggestions}>
@@ -55,7 +59,7 @@ export function RootCollectionSuggestions({
 
                 {loading && <CircularProgress size={"smallest"}/>}
 
-                {!loading && (rootPathSuggestions ?? []).map((path) => {
+                {!loading && (filteredSuggestions ?? []).map((path) => {
                     return (
                         <div key={path} className={"flex-shrink-0"}>
                             <Chip
@@ -78,7 +82,7 @@ export function RootCollectionSuggestions({
                         </div>
                     );
                 })}
-                {!loading && rootPathSuggestions?.length === 0 &&
+                {!loading && filteredSuggestions?.length === 0 &&
                     <Typography variant={"caption"}>No suggestions </Typography>
                 }
             </div>
