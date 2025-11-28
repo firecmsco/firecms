@@ -44,6 +44,8 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     collectionInference?: CollectionInference;
 
+    pathSuggestions?: string[];
+
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 
     getUser?: (uid: string) => USER | null;
@@ -75,7 +77,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      collectionInference,
      getData,
      onAnalyticsEvent,
-     includeIntroView = true
+     includeIntroView = true,
+     pathSuggestions
  }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -92,6 +95,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getUser,
                 getData,
                 onAnalyticsEvent,
+                pathSuggestions
             }
         },
         homePage: {

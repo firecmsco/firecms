@@ -49,6 +49,8 @@ export interface ConfigControllerProviderProps {
         icon: React.ReactNode
     };
 
+    pathSuggestions?: string[];
+
     getUser?: (uid: string) => User | null;
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
@@ -68,6 +70,7 @@ export const ConfigControllerProvider = React.memo(
                                           getUser,
                                           getData,
                                           onAnalyticsEvent,
+                                          pathSuggestions
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -87,7 +90,8 @@ export const ConfigControllerProvider = React.memo(
                 name?: string
             },
             redirect: boolean,
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[],
+            pathSuggestions?: string[];
         }>();
 
         const [currentPropertyDialog, setCurrentPropertyDialog] = React.useState<{
@@ -134,7 +138,8 @@ export const ConfigControllerProvider = React.memo(
                 isNewCollection: false,
                 parentCollection,
                 redirect: false,
-                existingEntities
+                existingEntities,
+                pathSuggestions
             });
         };
 
@@ -215,7 +220,8 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
-                redirect
+                redirect,
+                pathSuggestions
             });
         };
 
@@ -227,6 +233,7 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
+                        pathSuggestions
                     }}>
 
                     {children}

@@ -41,4 +41,6 @@ export interface CollectionEditorController {
 
     configPermissions: CollectionEditorPermissionsBuilder;
 
+    pathSuggestions: string[] | undefined;
+
 }

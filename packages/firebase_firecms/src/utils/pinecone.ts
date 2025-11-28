@@ -2,7 +2,7 @@ import { User as FirebaseUser } from "@firebase/auth";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
-const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
+const DEFAULT_SERVER = "https://api.firecms.co";
 
 /**
  * Utility function to perform a text search in an algolia index,

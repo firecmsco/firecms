@@ -10,7 +10,7 @@ import { flatMapEntityValues } from "./utils/values";
 
 // const DEFAULT_SERVER = "http://localhost:5001/firecms-dev-2da42/europe-west3/api"; // Local
 
-const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
+const DEFAULT_SERVER = "https://api.firecms.co";
 
 export async function enhanceDataAPIStream<M extends object>(props: {
     apiKey: string,

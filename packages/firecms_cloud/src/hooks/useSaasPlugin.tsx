@@ -25,7 +25,8 @@ export function useSaasPlugin({
                                   introMode,
                                   fireCMSBackend,
                                   onAnalyticsEvent,
-                                  historyDefaultEnabled
+                                  historyDefaultEnabled,
+                                  rootPathSuggestions
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
@@ -36,6 +37,7 @@ export function useSaasPlugin({
     fireCMSBackend: FireCMSBackend;
     onAnalyticsEvent?: (event: string, data?: object) => void;
     historyDefaultEnabled?: boolean;
+    rootPathSuggestions?: string[];
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
@@ -54,6 +56,7 @@ export function useSaasPlugin({
             onAnalyticsEvent={onAnalyticsEvent}/>
         <RootCollectionSuggestions introMode={introMode}
                                    onAnalyticsEvent={onAnalyticsEvent}
+                                   rootPathSuggestions={rootPathSuggestions}
         />
     </>;
 

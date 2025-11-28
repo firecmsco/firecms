@@ -1,6 +1,12 @@
 import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
 import { DocumentReference, Firestore, Timestamp } from "@firebase/firestore";
-import { DataType, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
+import {
+    DataType,
+    EntityCollection,
+    GeoPoint,
+    prettifyIdentifier,
+    removeInitialAndTrailingSlashes
+} from "@firecms/core";
 import { getDocuments } from "./firestore";
 
 /**
@@ -25,7 +31,7 @@ export async function getInferredEntityCollectionFromData(collectionPath: string
     const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
     return {
         path: cleanPath,
-        name: unslugify(lastPathSegment),
+        name: prettifyIdentifier(lastPathSegment),
         properties,
         propertiesOrder
     };

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { EntityCollection, unslugify, } from "@firecms/core";
-import { Button, Card, Chip, CircularProgress, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import React from "react";
+import { EntityCollection, prettifyIdentifier, } from "@firecms/core";
+import { Card, Chip, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
@@ -8,34 +8,23 @@ import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import";
 import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@firecms/formex";
+import { useCollectionEditorController } from "../../useCollectionEditorController";
 
 export function CollectionEditorWelcomeView({
                                                 path,
-                                                pathSuggestions,
                                                 parentCollection,
                                                 onContinue,
                                                 existingCollectionPaths
                                             }: {
     path: string;
-    pathSuggestions?: (path: string) => Promise<string[]>;
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
 }) {
 
-    const [loadingPathSuggestions, setLoadingPathSuggestions] = useState(false);
-    const [filteredPathSuggestions, setFilteredPathSuggestions] = useState<string[] | undefined>();
-    useEffect(() => {
-        if (pathSuggestions && existingCollectionPaths) {
-            setLoadingPathSuggestions(true);
-            pathSuggestions(path)
-                .then(suggestions => {
-                    const filteredSuggestions = suggestions.filter(s => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === s.trim().toLowerCase()));
-                    setFilteredPathSuggestions(filteredSuggestions);
-                })
-                .finally(() => setLoadingPathSuggestions(false));
-        }
-    }, [existingCollectionPaths, path, pathSuggestions]);
+    const { pathSuggestions } = useCollectionEditorController();
+
+    const filteredSuggestions = (pathSuggestions ?? []).filter(s => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === s.trim().toLowerCase()));
 
     const {
         values,
@@ -43,11 +32,6 @@ export function CollectionEditorWelcomeView({
         setValues,
         submitCount
     } = useFormex<EntityCollection>();
-
-    const noSuggestions = !loadingPathSuggestions && (filteredPathSuggestions ?? [])?.length === 0;
-    if (!noSuggestions) {
-        return null;
-    }
 
     return (
         <div className={"overflow-auto my-auto"}>
@@ -66,20 +50,19 @@ export function CollectionEditorWelcomeView({
                     </Typography>
                 </Chip>}
 
-                <div className={"my-2"}>
+                {(filteredSuggestions ?? []).length > 0 && <div className={"my-2"}>
+
                     <Typography variant={"caption"}
                                 color={"secondary"}>
                         ● Use one of the existing paths in your database:
                     </Typography>
                     <div className={"flex flex-wrap gap-x-2 gap-y-1 items-center my-2 min-h-7"}>
 
-                        {loadingPathSuggestions && !filteredPathSuggestions && <CircularProgress size={"small"}/>}
-
-                        {filteredPathSuggestions?.map((suggestion, index) => (
+                        {filteredSuggestions?.map((suggestion, index) => (
                             <Chip key={suggestion}
                                   colorScheme={"cyanLighter"}
                                   onClick={() => {
-                                      setFieldValue("name", unslugify(suggestion));
+                                      setFieldValue("name", prettifyIdentifier(suggestion));
                                       setFieldValue("id", suggestion);
                                       setFieldValue("path", suggestion);
                                       setFieldValue("properties", undefined);
@@ -89,15 +72,10 @@ export function CollectionEditorWelcomeView({
                                 {suggestion}
                             </Chip>
                         ))}
-                        {(filteredPathSuggestions ?? []).length === 0 && !loadingPathSuggestions && <Typography
-                            variant={"caption"}
-                            color={"secondary"}>
-                            No existing paths found
-                        </Typography>}
 
                     </div>
 
-                </div>
+                </div>}
 
                 <div className={"my-2"}>
                     <Typography variant={"caption"}
@@ -151,12 +129,6 @@ export function CollectionEditorWelcomeView({
 
                 </div>}
 
-                <div>
-
-                    <Button variant={"text"} onClick={() => onContinue()} className={"my-2"}>
-                        Continue from scratch
-                    </Button>
-                </div>
 
                 {/*<div style={{ height: "52px" }}/>*/}
 

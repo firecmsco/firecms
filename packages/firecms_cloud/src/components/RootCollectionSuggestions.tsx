@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
+import React from "react";
+import { prettifyIdentifier, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
@@ -7,15 +7,16 @@ import { useFireCMSBackend, useProjectConfig } from "../hooks";
 
 export function RootCollectionSuggestions({
                                               introMode,
-                                              onAnalyticsEvent
+                                              onAnalyticsEvent,
+                                              rootPathSuggestions
                                           }: {
     introMode?: "new_project" | "existing_project",
     onAnalyticsEvent?: (event: string, data?: object) => void;
+    rootPathSuggestions?: string[]; // undefined means loading
 }) {
 
-    const authController = useAuthController();
     const navigationController = useNavigationController();
-
+    const authController = useAuthController();
     const fireCMSBackend = useFireCMSBackend();
     const projectConfig = useProjectConfig();
 
@@ -27,27 +28,10 @@ export function RootCollectionSuggestions({
         : true;
 
     const existingPaths = (navigationController.collections ?? []).map(c => c.path);
-    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
-    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+    const filteredSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
 
-    const requested = useRef(false);
-
-    useEffect(() => {
-        if (requested.current)
-            return;
-        const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
-        requested.current = true;
-        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken)
-            .then((paths) => {
-                setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
-            });
-    }, []);
-
-    if ((filteredRootPathSuggestions ?? []).length === 0 || !navigationController.initialised) {
-        return null;
-    }
-
-    const showSuggestions = filteredRootPathSuggestions.length > 0;
+    const loading = filteredSuggestions === undefined;
+    const showSuggestions = (filteredSuggestions ?? []).length > 0;
     const forceShowSuggestions = introMode === "existing_project";
     return <Collapse
         in={forceShowSuggestions || showSuggestions}>
@@ -73,9 +57,9 @@ export function RootCollectionSuggestions({
                                             onError={() => onAnalyticsEvent?.("suggestions_cols_setup_error")}
                 />
 
-                {rootPathSuggestions === undefined && <CircularProgress size={"smallest"}/>}
+                {loading && <CircularProgress size={"smallest"}/>}
 
-                {(filteredRootPathSuggestions ?? []).map((path) => {
+                {!loading && (filteredSuggestions ?? []).map((path) => {
                     return (
                         <div key={path} className={"flex-shrink-0"}>
                             <Chip
@@ -85,7 +69,7 @@ export function RootCollectionSuggestions({
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: {
                                             path,
-                                            name: unslugify(path)
+                                            name: prettifyIdentifier(path)
                                         },
                                         parentCollectionIds: [],
                                         redirect: true,
@@ -98,8 +82,9 @@ export function RootCollectionSuggestions({
                         </div>
                     );
                 })}
-                {filteredRootPathSuggestions?.length === 0 &&
-                    <Typography variant={"caption"}>No suggestions</Typography>}
+                {!loading && filteredSuggestions?.length === 0 &&
+                    <Typography variant={"caption"}>No suggestions </Typography>
+                }
             </div>
         </div>
     </Collapse>

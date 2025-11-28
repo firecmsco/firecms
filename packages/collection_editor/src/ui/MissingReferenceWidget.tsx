@@ -1,4 +1,4 @@
-import { ErrorView, unslugify, useNavigationController } from "@firecms/core";
+import { ErrorView, prettifyIdentifier, useNavigationController } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { Button } from "@firecms/ui";
 
@@ -15,7 +15,7 @@ export function MissingReferenceWidget({ path: pathProp }: {
                 size={"small"}
                 onClick={() => {
                     collectionEditor.createCollection({
-                        initialValues: { path, name: unslugify(path) },
+                        initialValues: { path, name: prettifyIdentifier(path) },
                         parentCollectionIds,
                         redirect: false,
                         sourceClick: "missing_reference"
