@@ -80,7 +80,7 @@ export interface CollectionEditorDialogProps {
         }>,
         icon: React.ReactNode
     };
-    pathSuggestions?: (path?: string) => Promise<string[]>;
+    pathSuggestions?: string[];
     getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
@@ -555,6 +555,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         });
     };
 
+    const onWelcomeScreenContinue = (importData?: object[], propertiesOrder?: string[]) => {
+        if (importData) {
+            onImportDataSet(importData, propertiesOrder);
+            setCurrentView("import_data_mapping");
+        } else {
+            setCurrentView("details");
+        }
+    };
+
     return <DialogContent fullHeight={true}>
         <Formex value={formController}>
 
@@ -593,15 +602,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "welcome" &&
                         <CollectionEditorWelcomeView
                             path={path}
-                            onContinue={(importData, propertiesOrder) => {
-                                // console.log("Import data", importData, propertiesOrder)
-                                if (importData) {
-                                    onImportDataSet(importData, propertiesOrder);
-                                    setCurrentView("import_data_mapping");
-                                } else {
-                                    setCurrentView("details");
-                                }
-                            }}
+                            onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
                             parentCollection={parentCollection}
                             pathSuggestions={pathSuggestions}/>}
@@ -688,7 +689,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 </IconButton>}/>
                     }
 
-                    {currentView !== "welcome" && <DialogActions
+                    <DialogActions
                         position={"absolute"}>
                         {error && <ErrorView error={error}/>}
 
@@ -717,7 +718,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && includeTemplates && currentView === "details" &&
                             <Button variant={"text"}
-                                    color={"primary"}
+                                    color={"neutral"}
                                     type="button"
                                     onClick={() => setCurrentView("welcome")}>
                                 <ArrowBackIcon/>
@@ -726,19 +727,24 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
                                                                                     type="button"
-                                                                                    color={"primary"}
+                                                                                    color={"neutral"}
                                                                                     onClick={() => setCurrentView("details")}>
                             <ArrowBackIcon/>
                             Back
                         </Button>}
 
                         <Button variant={"text"}
-                                color={"primary"}
+                                color={"neutral"}
                                 onClick={() => {
                                     handleCancel();
                                 }}>
                             Cancel
                         </Button>
+
+                        {currentView === "welcome" &&
+                            <Button variant={"text"} onClick={() => onWelcomeScreenContinue()}>
+                                Continue from scratch
+                            </Button>}
 
                         {isNewCollection && currentView === "import_data_mapping" &&
                             <Button
@@ -784,7 +790,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             Update collection
                         </LoadingButton>}
 
-                    </DialogActions>}
+                    </DialogActions>
                 </form>
             </>
 

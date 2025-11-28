@@ -41,7 +41,7 @@ import {
     useBuildCloudUserManagement,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useDelegatedLogin, useProjectConfig
+    useDelegatedLogin
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
@@ -73,6 +73,7 @@ import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firec
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -569,6 +570,10 @@ function FireCMSAppAuthenticated({
         loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0
     });
 
+    const { rootPathSuggestions } = useRootCollectionSuggestions({
+        projectId: projectConfig.projectId
+    });
+
     const saasPlugin = useSaasPlugin({
         projectConfig,
         collectionConfigController,
@@ -578,7 +583,8 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
-        historyDefaultEnabled
+        historyDefaultEnabled,
+        rootPathSuggestions
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
@@ -589,7 +595,8 @@ function FireCMSAppAuthenticated({
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
-        includeIntroView: false
+        includeIntroView: false,
+        pathSuggestions: rootPathSuggestions
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [
@@ -606,7 +613,7 @@ function FireCMSAppAuthenticated({
         baseCollectionPath,
         authController,
         collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
-        views: projectConfig.isTrialOver ? [] :appConfig?.views,
+        views: projectConfig.isTrialOver ? [] : appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
         plugins
