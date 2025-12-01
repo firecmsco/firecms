@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
@@ -61,15 +61,15 @@ export function SideDialogs() {
                 <SideDialogView
                     key={`side_dialog_${index}`}
                     panel={panel}
-                    offsetPosition={sidePanels.length - index - 1}/>)
+                    offsetPosition={sidePanels.length - index - 1} />)
         }
     </>;
 }
 
 function SideDialogView({
-                            offsetPosition,
-                            panel
-                        }: {
+    offsetPosition,
+    panel
+}: {
     offsetPosition: number,
     panel?: SideDialogPanelProps
 }) {
@@ -134,7 +134,17 @@ function SideDialogView({
 
             <Sheet
                 open={Boolean(panel)}
-                onOpenChange={(open) => !open && onCloseRequest()}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        // Check if any suggestion menu (e.g., slash command) is visible in DOM
+                        const suggestionMenu = document.querySelector("[data-suggestion-menu=\"true\"]");
+                        if (suggestionMenu && window.getComputedStyle(suggestionMenu).visibility !== "hidden") {
+                            // Don't close the sheet if a suggestion menu is visible
+                            return;
+                        }
+                        onCloseRequest();
+                    }
+                }}
                 title={"Side dialog " + panel?.key}
             >
                 {panel &&
@@ -150,7 +160,7 @@ function SideDialogView({
                         </ErrorBoundary>
                     </div>}
 
-                {!panel && <div style={{ width }}/>}
+                {!panel && <div style={{ width }} />}
 
             </Sheet>
 
@@ -158,7 +168,7 @@ function SideDialogView({
                 open={drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                body={blockedNavigationMessage}/>
+                body={blockedNavigationMessage} />
 
         </SideDialogContext.Provider>
 

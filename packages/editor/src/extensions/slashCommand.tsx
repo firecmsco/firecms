@@ -4,7 +4,7 @@ import { ReactRenderer, useCurrentEditor } from "@tiptap/react";
 import { DOMOutputSpec, Node as ProseMirrorNode } from "@tiptap/pm/model"
 import { PluginKey } from "@tiptap/pm/state"
 import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
-import { computePosition, offset, flip, shift, autoUpdate } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 
 import {
     AutoFixHighIcon,
@@ -312,7 +312,7 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
     ({
             items: ({ query }) => {
                 const availableSuggestionItems = [...suggestionItems];
-                if ( aiController) {
+                if (aiController) {
                     availableSuggestionItems.push(autocompleteSuggestionItem)
                 }
 
@@ -347,6 +347,7 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
 
                         // Create floating container
                         containerEl = document.createElement("div");
+                        containerEl.setAttribute("data-suggestion-menu", "true");
                         containerEl.style.position = "fixed";
                         containerEl.style.left = "0px";
                         containerEl.style.top = "0px";
@@ -366,7 +367,10 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                                 placement: "bottom-start",
                                 middleware: [offset(4), flip(), shift()],
                                 strategy: "fixed"
-                            }).then(({ x, y }) => {
+                            }).then(({
+                                         x,
+                                         y
+                                     }) => {
                                 Object.assign(containerEl!.style, {
                                     left: `${x}px`,
                                     top: `${y}px`,
@@ -390,7 +394,10 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                             placement: "bottom-start",
                             middleware: [offset(4), flip(), shift()],
                             strategy: "fixed"
-                        }).then(({ x, y }) => {
+                        }).then(({
+                                     x,
+                                     y
+                                 }) => {
                             Object.assign(containerEl!.style, {
                                 left: `${x}px`,
                                 top: `${y}px`,
@@ -402,7 +409,8 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                     onKeyDown(props) {
                         if (props.event.key === "Escape") {
                             props.event.preventDefault();
-                            return true
+                            props.event.stopPropagation();
+                            return false
                         }
 
                         return component.ref?.onKeyDown(props)
@@ -433,8 +441,10 @@ const CommandList = forwardRef((props: {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const { editor } = useCurrentEditor();
-    const selectItem = (item?: SuggestionItem) => {
+    const selectItem = (item?: SuggestionItem, event?: React.MouseEvent) => {
         if (!editor) return;
+        event?.preventDefault();
+        event?.stopPropagation();
         item?.command?.({
             editor,
             range: props.range,
@@ -497,7 +507,8 @@ const CommandList = forwardRef((props: {
                             if (!el) return;
                             itemRefs.current[index] = el;
                         }}
-                        onClick={() => selectItem(item)}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={(e) => selectItem(item, e)}
                         tabIndex={index === selectedIndex ? 0 : -1}
                         aria-selected={index === selectedIndex}
                         className={cls("flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-surface-700 aria-selected:bg-blue-50 aria-selected:dark:bg-surface-700",
@@ -523,7 +534,6 @@ const CommandList = forwardRef((props: {
     );
 });
 CommandList.displayName = "CommandList";
-
 
 const autocompleteSuggestionItem: SuggestionItem = {
     title: "Autocomplete",
