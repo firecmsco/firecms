@@ -136,10 +136,11 @@ function SideDialogView({
                 open={Boolean(panel)}
                 onOpenChange={(open) => {
                     if (!open) {
-                        // Check if any suggestion menu (e.g., slash command) is visible in DOM
+                        // Check if any suggestion menu is visible in DOM
                         const suggestionMenu = document.querySelector("[data-suggestion-menu=\"true\"]");
                         if (suggestionMenu && window.getComputedStyle(suggestionMenu).visibility !== "hidden") {
                             // Don't close the sheet if a suggestion menu is visible
+                            // Let Tiptap handle closing the menu first
                             return;
                         }
                         onCloseRequest();

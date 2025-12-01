@@ -122,7 +122,6 @@ export function hasEntityInCache(path: string): boolean {
  * Retrieves an entity from the in-memory cache or `localStorage`.
  * If the entity is not in the cache but exists in `localStorage`, it loads it into the cache.
  * @param path - The unique path/key for the entity.
- * @param useLocalStorage
  * @returns The cached entity or `undefined` if not found.
  */
 export function getEntityFromCache(path: string): object | undefined {
@@ -134,10 +133,6 @@ export function getEntityFromCache(path: string): object | undefined {
             const entityString = localStorage.getItem(key);
             if (entityString) {
                 const entity: object = JSON.parse(entityString, customReviver);
-                console.log("Loaded entity from localStorage:", {
-                    key,
-                    entity
-                });
                 return entity;
             }
         } catch (error) {

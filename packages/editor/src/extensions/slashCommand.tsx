@@ -98,16 +98,16 @@ export const SlashCommand = Node.create<CommandOptions>({
         return {
             HTMLAttributes: {},
             renderText({
-                           options,
-                           node
-                       }) {
+                options,
+                node
+            }) {
                 return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
             },
             deleteTriggerWithBackspace: false,
             renderHTML({
-                           options,
-                           node
-                       }) {
+                options,
+                node
+            }) {
                 return [
                     "span",
                     mergeAttributes(this.HTMLAttributes, options.HTMLAttributes),
@@ -118,10 +118,10 @@ export const SlashCommand = Node.create<CommandOptions>({
                 char: "/",
                 pluginKey: CommandPluginKey,
                 command: ({
-                              editor,
-                              range,
-                              props
-                          }) => {
+                    editor,
+                    range,
+                    props
+                }) => {
                     // increase range.to by one when the next node is of type "text"
                     // and starts with a space character
                     const nodeAfter = editor.view.state.selection.$to.nodeAfter
@@ -149,9 +149,9 @@ export const SlashCommand = Node.create<CommandOptions>({
                     window.getSelection()?.collapseToEnd()
                 },
                 allow: ({
-                            state,
-                            range
-                        }) => {
+                    state,
+                    range
+                }) => {
                     const $from = state.doc.resolve(range.from)
                     const type = state.schema.nodes[this.name]
                     return !!$from.parent.type.contentMatch.matchType(type)
@@ -209,9 +209,9 @@ export const SlashCommand = Node.create<CommandOptions>({
     },
 
     renderHTML({
-                   node,
-                   HTMLAttributes
-               }) {
+        node,
+        HTMLAttributes
+    }) {
         if (this.options.renderLabel !== undefined) {
             console.warn("renderLabel is deprecated use renderText and renderHTML instead")
             return [
@@ -251,9 +251,9 @@ export const SlashCommand = Node.create<CommandOptions>({
     addKeyboardShortcuts() {
         return {
             Backspace: () => this.editor.commands.command(({
-                                                               tr,
-                                                               state
-                                                           }) => {
+                tr,
+                state
+            }) => {
                 let isCommand = false
                 const { selection } = state
                 const {
@@ -309,126 +309,151 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
     upload: UploadFn,
     aiController?: EditorAIController
 }): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
-    ({
-            items: ({ query }) => {
-                const availableSuggestionItems = [...suggestionItems];
-                if (aiController) {
-                    availableSuggestionItems.push(autocompleteSuggestionItem)
+({
+    items: ({ query }) => {
+        const availableSuggestionItems = [...suggestionItems];
+        if (aiController) {
+            availableSuggestionItems.push(autocompleteSuggestionItem)
+        }
+
+        return availableSuggestionItems
+            .filter(item => {
+                const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
+                if (inTitle) return inTitle;
+                return item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
+            })
+    },
+
+    allow: ({ editor, range }) => {
+        return editor.can().insertContentAt(range, { type: "command" });
+    },
+
+    render: () => {
+        let component: any;
+        let containerEl: HTMLDivElement | null = null;
+        let cleanupAutoUpdate: (() => void) | null = null;
+        let reference: { getBoundingClientRect: () => DOMRect } | null = null;
+        let escapeListener: ((e: KeyboardEvent) => void) | null = null;
+
+        function exit() {
+            if (cleanupAutoUpdate) cleanupAutoUpdate();
+            if (containerEl && containerEl.parentNode) {
+                containerEl.parentNode.removeChild(containerEl);
+            }
+            if (escapeListener) {
+                document.removeEventListener('keydown', escapeListener, true);
+                escapeListener = null;
+            }
+            containerEl = null;
+            reference = null;
+            component?.destroy()
+        }
+
+        return {
+            onStart: (props) => {
+                // Add capture-phase escape listener
+                escapeListener = (e: KeyboardEvent) => {
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        exit();
+                    }
+                };
+                document.addEventListener('keydown', escapeListener, true);
+
+                component = new ReactRenderer(CommandList, {
+                    props: {
+                        ...props,
+                        upload,
+                        aiController,
+                        onClose: exit
+                    },
+                    editor: props.editor,
+                })
+
+                if (!props.clientRect) {
+                    return
                 }
 
-                return availableSuggestionItems
-                    .filter(item => {
-                        const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
-                        if (inTitle) return inTitle;
-                        return item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
-                    })
+                // Create floating container
+                containerEl = document.createElement("div");
+                containerEl.setAttribute("data-suggestion-menu", "true");
+                containerEl.style.position = "fixed";
+                containerEl.style.left = "0px";
+                containerEl.style.top = "0px";
+                containerEl.style.zIndex = "9999";
+                (ref?.current || document.body).appendChild(containerEl);
+                containerEl.appendChild(component.element);
+
+                // Virtual reference element using provided clientRect
+                reference = {
+                    getBoundingClientRect: props.clientRect as () => DOMRect
+                }
+
+                // Auto-update position
+                cleanupAutoUpdate = autoUpdate(reference as any, containerEl, () => {
+                    if (!reference) return;
+                    computePosition(reference as any, containerEl!, {
+                        placement: "bottom-start",
+                        middleware: [offset(4), flip(), shift()],
+                        strategy: "fixed"
+                    }).then(({
+                        x,
+                        y
+                    }) => {
+                        Object.assign(containerEl!.style, {
+                            left: `${x}px`,
+                            top: `${y}px`,
+                            visibility: "visible",
+                        });
+                    });
+                });
             },
 
-            render: () => {
-                let component: any;
-                let containerEl: HTMLDivElement | null = null;
-                let cleanupAutoUpdate: (() => void) | null = null;
-                let reference: { getBoundingClientRect: () => DOMRect } | null = null;
+            onUpdate(props) {
+                component.updateProps(props)
 
-                return {
-                    onStart: (props) => {
-                        component = new ReactRenderer(CommandList, {
-                            props: {
-                                ...props,
-                                upload,
-                                aiController
-                            },
-                            editor: props.editor,
-                        })
-
-                        if (!props.clientRect) {
-                            return
-                        }
-
-                        // Create floating container
-                        containerEl = document.createElement("div");
-                        containerEl.setAttribute("data-suggestion-menu", "true");
-                        containerEl.style.position = "fixed";
-                        containerEl.style.left = "0px";
-                        containerEl.style.top = "0px";
-                        containerEl.style.zIndex = "9999";
-                        (ref?.current || document.body).appendChild(containerEl);
-                        containerEl.appendChild(component.element);
-
-                        // Virtual reference element using provided clientRect
-                        reference = {
-                            getBoundingClientRect: props.clientRect as () => DOMRect
-                        }
-
-                        // Auto-update position
-                        cleanupAutoUpdate = autoUpdate(reference as any, containerEl, () => {
-                            if (!reference) return;
-                            computePosition(reference as any, containerEl!, {
-                                placement: "bottom-start",
-                                middleware: [offset(4), flip(), shift()],
-                                strategy: "fixed"
-                            }).then(({
-                                         x,
-                                         y
-                                     }) => {
-                                Object.assign(containerEl!.style, {
-                                    left: `${x}px`,
-                                    top: `${y}px`,
-                                    visibility: "visible",
-                                });
-                            });
-                        });
-                    },
-
-                    onUpdate(props) {
-                        component.updateProps(props)
-
-                        if (!props.clientRect || !containerEl || !reference) {
-                            return
-                        }
-
-                        // Update reference rect and reposition
-                        reference.getBoundingClientRect = props.clientRect as () => DOMRect;
-
-                        computePosition(reference as any, containerEl!, {
-                            placement: "bottom-start",
-                            middleware: [offset(4), flip(), shift()],
-                            strategy: "fixed"
-                        }).then(({
-                                     x,
-                                     y
-                                 }) => {
-                            Object.assign(containerEl!.style, {
-                                left: `${x}px`,
-                                top: `${y}px`,
-                                visibility: "visible",
-                            });
-                        });
-                    },
-
-                    onKeyDown(props) {
-                        if (props.event.key === "Escape") {
-                            props.event.preventDefault();
-                            props.event.stopPropagation();
-                            return false
-                        }
-
-                        return component.ref?.onKeyDown(props)
-                    },
-
-                    onExit() {
-                        if (cleanupAutoUpdate) cleanupAutoUpdate();
-                        if (containerEl && containerEl.parentNode) {
-                            containerEl.parentNode.removeChild(containerEl);
-                        }
-                        containerEl = null;
-                        reference = null;
-                        component?.destroy()
-                    }
+                if (!props.clientRect || !containerEl || !reference) {
+                    return
                 }
+
+                // Update reference rect and reposition
+                reference.getBoundingClientRect = props.clientRect as () => DOMRect;
+
+                computePosition(reference as any, containerEl!, {
+                    placement: "bottom-start",
+                    middleware: [offset(4), flip(), shift()],
+                    strategy: "fixed"
+                }).then(({
+                    x,
+                    y
+                }) => {
+                    Object.assign(containerEl!.style, {
+                        left: `${x}px`,
+                        top: `${y}px`,
+                        visibility: "visible",
+                    });
+                });
+            },
+
+            onKeyDown(props) {
+                if (props.event.key === 'Escape') {
+                    props.event.preventDefault();
+                    props.event.stopPropagation();
+                    exit();
+                    return true;
+                }
+                return component.ref?.onKeyDown(props);
+            },
+
+            onExit() {
+                exit();
             }
         }
-    );
+    }
+}
+);
 
 const CommandList = forwardRef((props: {
     items: SuggestionItem[];
@@ -437,6 +462,7 @@ const CommandList = forwardRef((props: {
     command: (props: { id: string }) => void;
     upload: UploadFn;
     aiController: EditorAIController;
+    onClose: () => void;
 }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -539,12 +565,12 @@ const autocompleteSuggestionItem: SuggestionItem = {
     title: "Autocomplete",
     description: "Add text based on the context.",
     searchTerms: ["ai"],
-    icon: <AutoFixHighIcon size={18}/>,
+    icon: <AutoFixHighIcon size={18} />,
     command: async ({
-                        editor,
-                        range,
-                        aiController
-                    }) => {
+        editor,
+        range,
+        aiController
+    }) => {
         if (!aiController)
             throw Error("No AiController");
 
@@ -591,11 +617,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Text",
         description: "Just start typing with plain text.",
         searchTerms: ["p", "paragraph"],
-        icon: <TextFieldsIcon size={18}/>,
+        icon: <TextFieldsIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor
                 .chain()
                 .focus()
@@ -608,11 +634,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "To-do List",
         description: "Track tasks with a to-do list.",
         searchTerms: ["todo", "task", "list", "check", "checkbox"],
-        icon: <CheckBoxIcon size={18}/>,
+        icon: <CheckBoxIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor.chain().focus().deleteRange(range).toggleTaskList().run();
         }
     },
@@ -620,11 +646,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Heading 1",
         description: "Big section heading.",
         searchTerms: ["title", "big", "large"],
-        icon: <LooksOneIcon size={18}/>,
+        icon: <LooksOneIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor
                 .chain()
                 .focus()
@@ -637,11 +663,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Heading 2",
         description: "Medium section heading.",
         searchTerms: ["subtitle", "medium"],
-        icon: <LooksTwoIcon size={18}/>,
+        icon: <LooksTwoIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor
                 .chain()
                 .focus()
@@ -654,11 +680,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Heading 3",
         description: "Small section heading.",
         searchTerms: ["subtitle", "small"],
-        icon: <Looks3Icon size={18}/>,
+        icon: <Looks3Icon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor
                 .chain()
                 .focus()
@@ -671,11 +697,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Bullet List",
         description: "Create a simple bullet list.",
         searchTerms: ["unordered", "point"],
-        icon: <FormatListBulletedIcon size={18}/>,
+        icon: <FormatListBulletedIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor.chain().focus().deleteRange(range).toggleBulletList().run();
         }
     },
@@ -683,11 +709,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Numbered List",
         description: "Create a list with numbering.",
         searchTerms: ["ordered"],
-        icon: <FormatListNumberedIcon size={18}/>,
+        icon: <FormatListNumberedIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) => {
+            editor,
+            range
+        }) => {
             editor.chain().focus().deleteRange(range).toggleOrderedList().run();
         }
     },
@@ -695,11 +721,11 @@ const suggestionItems: SuggestionItem[] = [
         title: "Quote",
         description: "Capture a quote.",
         searchTerms: ["blockquote"],
-        icon: <FormatQuoteIcon size={18}/>,
+        icon: <FormatQuoteIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) =>
+            editor,
+            range
+        }) =>
             editor
                 .chain()
                 .focus()
@@ -712,23 +738,23 @@ const suggestionItems: SuggestionItem[] = [
         title: "Code",
         description: "Capture a code snippet.",
         searchTerms: ["codeblock"],
-        icon: <CodeIcon size={18}/>,
+        icon: <CodeIcon size={18} />,
         command: ({
-                      editor,
-                      range
-                  }) =>
+            editor,
+            range
+        }) =>
             editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
     {
         title: "Image",
         description: "Upload an image from your computer.",
         searchTerms: ["photo", "picture", "media", "upload", "file"],
-        icon: <ImageIcon size={18}/>,
+        icon: <ImageIcon size={18} />,
         command: ({
-                      editor,
-                      range,
-                      upload
-                  }) => {
+            editor,
+            range,
+            upload
+        }) => {
 
             editor.chain().focus().deleteRange(range).run();
             // upload image
