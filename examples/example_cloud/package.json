@@ -2,7 +2,7 @@
   "name": "firecms-example-cloud",
   "private": true,
   "type": "module",
-  "version": "3.0.0-tw4.2",
+  "version": "3.0.0",
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/cloud": "^3.0.0-tw4.2",
+    "@firecms/cloud": "^3.0.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "firebase": "^12.6.0",
     "react": "^18.3.1",
@@ -29,7 +29,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
   }

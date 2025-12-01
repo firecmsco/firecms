@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-tw4.2",
+  "version": "3.0.0",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "type": "module",
   "main": "dist/index.cjs",
@@ -29,7 +29,7 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-tw4.2",
+    "@firecms/ui": "^3.0.0",
     "@floating-ui/dom": "^1.7.4",
     "@radix-ui/react-slot": "^1.2.4",
     "@tiptap/core": "3.11.0",
@@ -62,8 +62,7 @@
     "react-compiler-runtime": "^19.0.0-beta-ebf51a3-20250411",
     "react-markdown": "^9.1.0",
     "react-moveable": "^0.56.0",
-    "tiptap-markdown": "^0.9.0",
-    "use-sync-external-store": "^1.6.0"
+    "tiptap-markdown": "^0.9.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.24",
