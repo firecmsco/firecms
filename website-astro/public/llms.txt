@@ -14481,6 +14481,91 @@ firecms deploy
 
 
 ## Changelog
+### [3.0.0] - 2025-12-01
+
+- **Editor Enhancements**:
+  - Improved escape key behavior in editor slash command
+  - Enhanced suggestion menu behavior
+  - Improved path suggestions handling in collection editor components
+  - Refactored root collection suggestions
+- **UI/UX Improvements**:
+  - Added `prettifyIdentifier` function to format identifiers and improve readability
+  - Refactored key formatting to use prettifyIdentifier
+  - Small UI adjustments across the application
+  - Small visual update to dialogs
+  - Removed font-mono from map preview
+- **Collection Editor**:
+  - Added inline editing prop editing to collection editor
+  - Fixes for collection editor property saving
+  - Applied consistent behavior to `editable` props in collections and properties
+- **API Updates**:
+  - Updated API server URLs to use new endpoints
+- **Dependencies**:
+  - Many dependency updates
+  - Added PostCSS configuration with Tailwind CSS and Autoprefixer
+- **User Management**:
+  - Refactored user management to consistently use `saas_uid` and `firebase_uid`
+  - Updated button styles in EnableAuthView for consistency
+  - Refactored user forms to improve layout and state management
+- **Project Configuration**:
+  - Updated project configuration handling to account for trial status
+  - Added initial loading screen
+- **Fixes**:
+  - Fixed home DND issues
+  - Fixed local changes preview in row actions
+  - Fixed local changes diff
+  - Fixed dates losing focus while typing and when selecting null values in date filters
+  - Fixed select enum filters UI glitch
+  - Fixed full screen entity views with encoded characters in their ID
+- **Storage & Images**:
+  - Added new image resizing capabilities
+  - Replaced internal compressing library with compressor.js
+  - Improved error message when Firebase Storage is likely not enabled
+- **Data Enhancement**:
+  - Adjusted data enhancement cosmetics
+- **Form Handling**:
+  - Displaying pre-save errors in table view
+  - Improved error focus when saving form with errors and feedback
+  - Debouncing on values change in Formex
+  - Added `initialTouched` to Formex controller
+  - Changed how dirty values are persisted in local storage
+- **Local Changes**:
+  - Added `enableLocalChangesBackup` to collections, allowing users to disable the local copy of unsaved entities in the browser
+  - Changed local changes to be able to be applied manually
+  - Clearing unsaved changes indicator if the feature is not enabled in collections
+- **Entity History**:
+  - Added a cleaner type to the entity history plugin
+- **Marketing**:
+  - Updated Cloud marketing login info
+  - Added download badge
+
+### [3.0.0-rc.4] - 2025-11-25
+
+- Refactored user forms to improve layout and state management
+- Updated project configuration handling to account for trial status
+- Many dependency updates
+
+### [3.0.0-rc.3] - 2025-11-07
+
+- Displaying pre-save errors in table view
+- Fixed home DND issues
+- Added new image resizing capabilities and replaced internal compressing library with compressor.js
+- Improved error message when Firebase Storage is likely not enabled
+- Small visual update to dialogs
+- Added inline editing prop editing to collection editor
+- Fixes for collection editor property saving and applying consistent behavior to `editable` props in collections and properties
+- Fixed select enum filters UI glitch
+- Fixed dates losing focus while typing and when selecting null values in date filters
+- Fixed local changes preview in row actions
+- Removed font-mono from map preview
+- Fixed local changes diff
+- Added a cleaner type to the entity history plugin
+- Changed local changes to be able to be applied manually
+- Added `enableLocalChangesBackup` to collections, allowing users to disable the local copy of unsaved entities in the browser
+- Debouncing on values change in Formex and added `initialTouched` to Formex controller
+- Changed how dirty values are persisted in local storage
+- Improved error focus when saving form with errors and feedback
+
 ### [3.0.0-rc.2] - 2025-10-16
 
 - **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
