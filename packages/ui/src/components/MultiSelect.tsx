@@ -264,73 +264,75 @@ export const MultiSelect = React.forwardRef<
                                         />}
                                         <div className={cls("px-2 h-full flex items-center")}>
                                             <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                                                   className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                                className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-center justify-between w-full mx-auto">
                                     <span className="text-sm">
-                                      {placeholder}
+                                        {placeholder}
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
                                         <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                                               className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
                                     </div>
                                 </div>
                             )}
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Content
-                        className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
-                        align="start"
-                        sideOffset={8}
-                        onEscapeKeyDown={() => onPopoverOpenChange(false)}
-                    >
-                        <CommandPrimitive>
-                            <div className={"flex flex-row items-center"}>
-                                <CommandPrimitive.Input
-                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow ")}
-                                    placeholder="Search..."
-                                    onKeyDown={handleInputKeyDown}
-                                />
-                                {selectedValues.length > 0 && (
-                                    <div
-                                        onClick={handleClear}
-                                        className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark">
-                                        Clear
-                                    </div>
-                                )}
-                            </div>
-                            <Separator orientation={"horizontal"} className={"my-0"}/>
-                            <CommandPrimitive.List>
-                                <CommandPrimitive.Empty className={"px-4 py-2"}>
-                                    No results found.
-                                </CommandPrimitive.Empty>
-                                <CommandPrimitive.Group>
-                                    {includeSelectAll && <CommandPrimitive.Item
-                                        key="all"
-                                        onSelect={toggleAll}
-                                        className={
-                                            cls(
-                                                "flex flex-row items-center gap-1.5",
-                                                "cursor-pointer",
-                                                "m-1",
-                                                "ring-offset-transparent",
-                                                "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
-                                                "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
-                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
-                                            )
-                                        }
-                                    >
-                                        <InnerCheckBox checked={selectedValues.length === allValues.length}/>
-                                        <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
-                                    </CommandPrimitive.Item>}
-                                    {children}
-                                </CommandPrimitive.Group>
-                            </CommandPrimitive.List>
-                        </CommandPrimitive>
-                    </PopoverPrimitive.Content>
+                    <PopoverPrimitive.Portal>
+                        <PopoverPrimitive.Content
+                            className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                            align="start"
+                            sideOffset={8}
+                            onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                        >
+                            <CommandPrimitive>
+                                <div className={"flex flex-row items-center"}>
+                                    <CommandPrimitive.Input
+                                        className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow text-surface-accent-900 dark:text-white")}
+                                        placeholder="Search..."
+                                        onKeyDown={handleInputKeyDown}
+                                    />
+                                    {selectedValues.length > 0 && (
+                                        <div
+                                            onClick={handleClear}
+                                            className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark">
+                                            Clear
+                                        </div>
+                                    )}
+                                </div>
+                                <Separator orientation={"horizontal"} className={"my-0"} />
+                                <CommandPrimitive.List>
+                                    <CommandPrimitive.Empty className={"px-4 py-2 text-sm text-text-secondary dark:text-text-secondary-dark"}>
+                                        No results found.
+                                    </CommandPrimitive.Empty>
+                                    <CommandPrimitive.Group>
+                                        {includeSelectAll && <CommandPrimitive.Item
+                                            key="all"
+                                            onSelect={toggleAll}
+                                            className={
+                                                cls(
+                                                    "flex flex-row items-center gap-1.5",
+                                                    "cursor-pointer",
+                                                    "m-1",
+                                                    "ring-offset-transparent",
+                                                    "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
+                                                    "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+                                                    "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
+                                                )
+                                            }
+                                        >
+                                            <InnerCheckBox checked={selectedValues.length === allValues.length} />
+                                            <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
+                                        </CommandPrimitive.Item>}
+                                        {children}
+                                    </CommandPrimitive.Group>
+                                </CommandPrimitive.List>
+                            </CommandPrimitive>
+                        </PopoverPrimitive.Content>
+                    </PopoverPrimitive.Portal>
                 </PopoverPrimitive.Root>
             </MultiSelectContext.Provider>
         );
@@ -346,10 +348,10 @@ export interface MultiSelectItemProps<T extends MultiSelectValue = string> {
 }
 
 export function MultiSelectItem<T extends MultiSelectValue = string>({
-                                                                         children,
-                                                                         value,
-                                                                         className
-                                                                     }: MultiSelectItemProps<T>) {
+    children,
+    value,
+    className
+}: MultiSelectItemProps<T>) {
     const context = React.useContext(MultiSelectContext);
     if (!context) throw new Error("MultiSelectItem must be used inside a MultiSelect");
     const {
@@ -376,10 +378,11 @@ export function MultiSelectItem<T extends MultiSelectValue = string>({
             "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
             "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
             "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+            "text-surface-accent-700 dark:text-surface-accent-300",
             className
         )}
     >
-        <InnerCheckBox checked={isSelected}/>
+        <InnerCheckBox checked={isSelected} />
         {children}
     </CommandPrimitive.Item>;
 }
@@ -398,7 +401,7 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
                 (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                 (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
             )}>
-            {checked && <CheckIcon size={16} className={"absolute"}/>}
+            {checked && <CheckIcon size={16} className={"absolute"} />}
         </div>
     </div>
 }
