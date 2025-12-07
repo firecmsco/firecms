@@ -56,9 +56,7 @@ title: Changelog
   - Clearing unsaved changes indicator if the feature is not enabled in collections
 - **Entity History**:
   - Added a cleaner type to the entity history plugin
-- **Marketing**:
-  - Updated Cloud marketing login info
-  - Added download badge
+
 
 ## [3.0.0-rc.4] - 2025-11-25
 
