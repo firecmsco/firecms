@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewCompactAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_compact_alt"}/>
-}
+export const ViewCompactAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_compact_alt"} ref={ref}/>
+});
+
+ViewCompactAltIcon.displayName = "ViewCompactAltIcon";

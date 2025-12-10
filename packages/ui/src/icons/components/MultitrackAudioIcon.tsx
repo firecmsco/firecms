@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MultitrackAudioIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"multitrack_audio"}/>
-}
+export const MultitrackAudioIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"multitrack_audio"} ref={ref}/>
+});
+
+MultitrackAudioIcon.displayName = "MultitrackAudioIcon";

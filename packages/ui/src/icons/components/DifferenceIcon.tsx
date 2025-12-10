@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DifferenceIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"difference"}/>
-}
+export const DifferenceIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"difference"} ref={ref}/>
+});
+
+DifferenceIcon.displayName = "DifferenceIcon";

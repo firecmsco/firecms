@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PageviewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pageview"}/>
-}
+export const PageviewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pageview"} ref={ref}/>
+});
+
+PageviewIcon.displayName = "PageviewIcon";

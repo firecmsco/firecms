@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RocketLaunchIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rocket_launch"}/>
-}
+export const RocketLaunchIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rocket_launch"} ref={ref}/>
+});
+
+RocketLaunchIcon.displayName = "RocketLaunchIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HowToVoteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"how_to_vote"}/>
-}
+export const HowToVoteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"how_to_vote"} ref={ref}/>
+});
+
+HowToVoteIcon.displayName = "HowToVoteIcon";

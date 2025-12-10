@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BlurOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"blur_off"}/>
-}
+export const BlurOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"blur_off"} ref={ref}/>
+});
+
+BlurOffIcon.displayName = "BlurOffIcon";

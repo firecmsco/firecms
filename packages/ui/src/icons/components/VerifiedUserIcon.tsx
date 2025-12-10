@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VerifiedUserIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"verified_user"}/>
-}
+export const VerifiedUserIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"verified_user"} ref={ref}/>
+});
+
+VerifiedUserIcon.displayName = "VerifiedUserIcon";

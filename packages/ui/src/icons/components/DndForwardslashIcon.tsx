@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DndForwardslashIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dnd_forwardslash"}/>
-}
+export const DndForwardslashIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dnd_forwardslash"} ref={ref}/>
+});
+
+DndForwardslashIcon.displayName = "DndForwardslashIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PollIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"poll"}/>
-}
+export const PollIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"poll"} ref={ref}/>
+});
+
+PollIcon.displayName = "PollIcon";

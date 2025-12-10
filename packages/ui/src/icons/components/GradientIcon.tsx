@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GradientIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gradient"}/>
-}
+export const GradientIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gradient"} ref={ref}/>
+});
+
+GradientIcon.displayName = "GradientIcon";

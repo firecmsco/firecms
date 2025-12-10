@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DynamicFormIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dynamic_form"}/>
-}
+export const DynamicFormIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dynamic_form"} ref={ref}/>
+});
+
+DynamicFormIcon.displayName = "DynamicFormIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RampLeftIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"ramp_left"}/>
-}
+export const RampLeftIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"ramp_left"} ref={ref}/>
+});
+
+RampLeftIcon.displayName = "RampLeftIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TextIncreaseIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"text_increase"}/>
-}
+export const TextIncreaseIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"text_increase"} ref={ref}/>
+});
+
+TextIncreaseIcon.displayName = "TextIncreaseIcon";

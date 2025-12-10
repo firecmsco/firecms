@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EdgesensorHighIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"edgesensor_high"}/>
-}
+export const EdgesensorHighIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"edgesensor_high"} ref={ref}/>
+});
+
+EdgesensorHighIcon.displayName = "EdgesensorHighIcon";

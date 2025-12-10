@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EnhancedEncryptionIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"enhanced_encryption"}/>
-}
+export const EnhancedEncryptionIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"enhanced_encryption"} ref={ref}/>
+});
+
+EnhancedEncryptionIcon.displayName = "EnhancedEncryptionIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LabelOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"label_off"}/>
-}
+export const LabelOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"label_off"} ref={ref}/>
+});
+
+LabelOffIcon.displayName = "LabelOffIcon";

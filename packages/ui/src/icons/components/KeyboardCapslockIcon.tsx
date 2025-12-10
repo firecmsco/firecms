@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function KeyboardCapslockIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"keyboard_capslock"}/>
-}
+export const KeyboardCapslockIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"keyboard_capslock"} ref={ref}/>
+});
+
+KeyboardCapslockIcon.displayName = "KeyboardCapslockIcon";

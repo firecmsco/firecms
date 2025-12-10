@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SendTimeExtensionIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"send_time_extension"}/>
-}
+export const SendTimeExtensionIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"send_time_extension"} ref={ref}/>
+});
+
+SendTimeExtensionIcon.displayName = "SendTimeExtensionIcon";

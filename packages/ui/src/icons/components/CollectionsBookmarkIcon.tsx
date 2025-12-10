@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CollectionsBookmarkIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"collections_bookmark"}/>
-}
+export const CollectionsBookmarkIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"collections_bookmark"} ref={ref}/>
+});
+
+CollectionsBookmarkIcon.displayName = "CollectionsBookmarkIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ExitToAppIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"exit_to_app"}/>
-}
+export const ExitToAppIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"exit_to_app"} ref={ref}/>
+});
+
+ExitToAppIcon.displayName = "ExitToAppIcon";

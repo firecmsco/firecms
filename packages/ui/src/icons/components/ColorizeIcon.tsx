@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ColorizeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"colorize"}/>
-}
+export const ColorizeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"colorize"} ref={ref}/>
+});
+
+ColorizeIcon.displayName = "ColorizeIcon";

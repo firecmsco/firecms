@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DialpadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dialpad"}/>
-}
+export const DialpadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dialpad"} ref={ref}/>
+});
+
+DialpadIcon.displayName = "DialpadIcon";

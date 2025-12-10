@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DialerSipIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dialer_sip"}/>
-}
+export const DialerSipIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dialer_sip"} ref={ref}/>
+});
+
+DialerSipIcon.displayName = "DialerSipIcon";

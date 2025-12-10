@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScaleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"scale"}/>
-}
+export const ScaleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"scale"} ref={ref}/>
+});
+
+ScaleIcon.displayName = "ScaleIcon";

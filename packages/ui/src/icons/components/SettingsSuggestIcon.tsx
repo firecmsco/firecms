@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SettingsSuggestIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"settings_suggest"}/>
-}
+export const SettingsSuggestIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"settings_suggest"} ref={ref}/>
+});
+
+SettingsSuggestIcon.displayName = "SettingsSuggestIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RestoreFromTrashIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"restore_from_trash"}/>
-}
+export const RestoreFromTrashIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"restore_from_trash"} ref={ref}/>
+});
+
+RestoreFromTrashIcon.displayName = "RestoreFromTrashIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WheelchairPickupIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wheelchair_pickup"}/>
-}
+export const WheelchairPickupIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wheelchair_pickup"} ref={ref}/>
+});
+
+WheelchairPickupIcon.displayName = "WheelchairPickupIcon";

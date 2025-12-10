@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PixIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pix"}/>
-}
+export const PixIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pix"} ref={ref}/>
+});
+
+PixIcon.displayName = "PixIcon";

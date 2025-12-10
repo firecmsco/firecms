@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DensityLargeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"density_large"}/>
-}
+export const DensityLargeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"density_large"} ref={ref}/>
+});
+
+DensityLargeIcon.displayName = "DensityLargeIcon";

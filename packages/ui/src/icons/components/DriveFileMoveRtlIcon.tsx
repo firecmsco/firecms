@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DriveFileMoveRtlIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"drive_file_move_rtl"}/>
-}
+export const DriveFileMoveRtlIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"drive_file_move_rtl"} ref={ref}/>
+});
+
+DriveFileMoveRtlIcon.displayName = "DriveFileMoveRtlIcon";

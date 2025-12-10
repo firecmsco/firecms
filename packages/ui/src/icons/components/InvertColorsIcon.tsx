@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function InvertColorsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"invert_colors"}/>
-}
+export const InvertColorsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"invert_colors"} ref={ref}/>
+});
+
+InvertColorsIcon.displayName = "InvertColorsIcon";

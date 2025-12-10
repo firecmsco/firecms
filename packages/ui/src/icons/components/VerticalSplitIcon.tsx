@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VerticalSplitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"vertical_split"}/>
-}
+export const VerticalSplitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"vertical_split"} ref={ref}/>
+});
+
+VerticalSplitIcon.displayName = "VerticalSplitIcon";

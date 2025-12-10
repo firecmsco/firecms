@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RestartAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"restart_alt"}/>
-}
+export const RestartAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"restart_alt"} ref={ref}/>
+});
+
+RestartAltIcon.displayName = "RestartAltIcon";

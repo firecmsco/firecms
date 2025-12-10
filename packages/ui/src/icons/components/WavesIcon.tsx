@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WavesIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"waves"}/>
-}
+export const WavesIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"waves"} ref={ref}/>
+});
+
+WavesIcon.displayName = "WavesIcon";

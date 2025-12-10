@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PermScanWifiIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"perm_scan_wifi"}/>
-}
+export const PermScanWifiIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"perm_scan_wifi"} ref={ref}/>
+});
+
+PermScanWifiIcon.displayName = "PermScanWifiIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChairAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"chair_alt"}/>
-}
+export const ChairAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"chair_alt"} ref={ref}/>
+});
+
+ChairAltIcon.displayName = "ChairAltIcon";

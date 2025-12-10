@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SoapIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"soap"}/>
-}
+export const SoapIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"soap"} ref={ref}/>
+});
+
+SoapIcon.displayName = "SoapIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VolumeDownIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"volume_down"}/>
-}
+export const VolumeDownIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"volume_down"} ref={ref}/>
+});
+
+VolumeDownIcon.displayName = "VolumeDownIcon";

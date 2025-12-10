@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwitchCameraIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"switch_camera"}/>
-}
+export const SwitchCameraIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"switch_camera"} ref={ref}/>
+});
+
+SwitchCameraIcon.displayName = "SwitchCameraIcon";

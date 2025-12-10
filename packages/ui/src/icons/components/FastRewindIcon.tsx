@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FastRewindIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fast_rewind"}/>
-}
+export const FastRewindIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fast_rewind"} ref={ref}/>
+});
+
+FastRewindIcon.displayName = "FastRewindIcon";

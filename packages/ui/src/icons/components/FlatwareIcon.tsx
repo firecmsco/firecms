@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FlatwareIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"flatware"}/>
-}
+export const FlatwareIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"flatware"} ref={ref}/>
+});
+
+FlatwareIcon.displayName = "FlatwareIcon";

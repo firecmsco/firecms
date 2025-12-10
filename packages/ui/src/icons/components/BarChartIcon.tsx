@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BarChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"bar_chart"}/>
-}
+export const BarChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"bar_chart"} ref={ref}/>
+});
+
+BarChartIcon.displayName = "BarChartIcon";

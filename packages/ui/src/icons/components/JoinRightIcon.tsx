@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function JoinRightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"join_right"}/>
-}
+export const JoinRightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"join_right"} ref={ref}/>
+});
+
+JoinRightIcon.displayName = "JoinRightIcon";

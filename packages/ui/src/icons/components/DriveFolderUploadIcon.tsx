@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DriveFolderUploadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"drive_folder_upload"}/>
-}
+export const DriveFolderUploadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"drive_folder_upload"} ref={ref}/>
+});
+
+DriveFolderUploadIcon.displayName = "DriveFolderUploadIcon";

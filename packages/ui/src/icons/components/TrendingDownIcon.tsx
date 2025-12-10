@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TrendingDownIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"trending_down"}/>
-}
+export const TrendingDownIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"trending_down"} ref={ref}/>
+});
+
+TrendingDownIcon.displayName = "TrendingDownIcon";

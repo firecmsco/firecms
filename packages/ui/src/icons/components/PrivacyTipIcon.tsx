@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PrivacyTipIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"privacy_tip"}/>
-}
+export const PrivacyTipIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"privacy_tip"} ref={ref}/>
+});
+
+PrivacyTipIcon.displayName = "PrivacyTipIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LineAxisIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"line_axis"}/>
-}
+export const LineAxisIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"line_axis"} ref={ref}/>
+});
+
+LineAxisIcon.displayName = "LineAxisIcon";

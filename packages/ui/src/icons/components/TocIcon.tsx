@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TocIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"toc"}/>
-}
+export const TocIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"toc"} ref={ref}/>
+});
+
+TocIcon.displayName = "TocIcon";

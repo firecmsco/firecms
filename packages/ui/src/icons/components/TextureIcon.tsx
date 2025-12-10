@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TextureIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"texture"}/>
-}
+export const TextureIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"texture"} ref={ref}/>
+});
+
+TextureIcon.displayName = "TextureIcon";

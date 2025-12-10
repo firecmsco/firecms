@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AlignHorizontalLeftIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"align_horizontal_left"}/>
-}
+export const AlignHorizontalLeftIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"align_horizontal_left"} ref={ref}/>
+});
+
+AlignHorizontalLeftIcon.displayName = "AlignHorizontalLeftIcon";

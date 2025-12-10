@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ForkLeftIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fork_left"}/>
-}
+export const ForkLeftIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fork_left"} ref={ref}/>
+});
+
+ForkLeftIcon.displayName = "ForkLeftIcon";

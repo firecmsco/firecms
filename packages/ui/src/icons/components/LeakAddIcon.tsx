@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LeakAddIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"leak_add"}/>
-}
+export const LeakAddIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"leak_add"} ref={ref}/>
+});
+
+LeakAddIcon.displayName = "LeakAddIcon";

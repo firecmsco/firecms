@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CommentBankIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"comment_bank"}/>
-}
+export const CommentBankIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"comment_bank"} ref={ref}/>
+});
+
+CommentBankIcon.displayName = "CommentBankIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NestCamWiredStandIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"nest_cam_wired_stand"}/>
-}
+export const NestCamWiredStandIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"nest_cam_wired_stand"} ref={ref}/>
+});
+
+NestCamWiredStandIcon.displayName = "NestCamWiredStandIcon";

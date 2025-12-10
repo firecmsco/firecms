@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BrightnessMediumIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"brightness_medium"}/>
-}
+export const BrightnessMediumIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"brightness_medium"} ref={ref}/>
+});
+
+BrightnessMediumIcon.displayName = "BrightnessMediumIcon";

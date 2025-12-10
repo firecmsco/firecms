@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DomainVerificationIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"domain_verification"}/>
-}
+export const DomainVerificationIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"domain_verification"} ref={ref}/>
+});
+
+DomainVerificationIcon.displayName = "DomainVerificationIcon";

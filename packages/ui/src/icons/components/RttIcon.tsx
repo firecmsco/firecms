@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RttIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rtt"}/>
-}
+export const RttIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rtt"} ref={ref}/>
+});
+
+RttIcon.displayName = "RttIcon";

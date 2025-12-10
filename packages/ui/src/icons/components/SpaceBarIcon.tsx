@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SpaceBarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"space_bar"}/>
-}
+export const SpaceBarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"space_bar"} ref={ref}/>
+});
+
+SpaceBarIcon.displayName = "SpaceBarIcon";

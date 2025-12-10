@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AssignmentLateIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"assignment_late"}/>
-}
+export const AssignmentLateIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"assignment_late"} ref={ref}/>
+});
+
+AssignmentLateIcon.displayName = "AssignmentLateIcon";

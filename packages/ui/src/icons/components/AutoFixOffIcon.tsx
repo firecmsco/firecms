@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutoFixOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"auto_fix_off"}/>
-}
+export const AutoFixOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"auto_fix_off"} ref={ref}/>
+});
+
+AutoFixOffIcon.displayName = "AutoFixOffIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function JavascriptIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"javascript"}/>
-}
+export const JavascriptIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"javascript"} ref={ref}/>
+});
+
+JavascriptIcon.displayName = "JavascriptIcon";

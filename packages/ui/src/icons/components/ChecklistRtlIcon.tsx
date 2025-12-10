@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChecklistRtlIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"checklist_rtl"}/>
-}
+export const ChecklistRtlIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"checklist_rtl"} ref={ref}/>
+});
+
+ChecklistRtlIcon.displayName = "ChecklistRtlIcon";

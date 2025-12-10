@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BrowseGalleryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"browse_gallery"}/>
-}
+export const BrowseGalleryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"browse_gallery"} ref={ref}/>
+});
+
+BrowseGalleryIcon.displayName = "BrowseGalleryIcon";

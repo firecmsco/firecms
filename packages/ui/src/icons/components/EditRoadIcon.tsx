@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EditRoadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"edit_road"}/>
-}
+export const EditRoadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"edit_road"} ref={ref}/>
+});
+
+EditRoadIcon.displayName = "EditRoadIcon";

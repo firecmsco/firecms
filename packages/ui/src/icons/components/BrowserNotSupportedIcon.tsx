@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BrowserNotSupportedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"browser_not_supported"}/>
-}
+export const BrowserNotSupportedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"browser_not_supported"} ref={ref}/>
+});
+
+BrowserNotSupportedIcon.displayName = "BrowserNotSupportedIcon";

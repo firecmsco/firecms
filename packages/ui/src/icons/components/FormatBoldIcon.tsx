@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatBoldIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_bold"}/>
-}
+export const FormatBoldIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_bold"} ref={ref}/>
+});
+
+FormatBoldIcon.displayName = "FormatBoldIcon";

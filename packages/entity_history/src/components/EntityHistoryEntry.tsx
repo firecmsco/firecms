@@ -44,11 +44,11 @@ export type EntityPreviewProps = {
 function PreviousValueView({
                                previousValueInPath,
                                childProperty,
-                               key
+                               propertyKey
                            }: {
     previousValueInPath: any,
     childProperty: Property,
-    key: string
+    propertyKey: string
 }) {
     if (typeof previousValueInPath === "string" || typeof previousValueInPath === "number") {
         return <Typography variant={"caption"} color={"secondary"} className="line-through">
@@ -67,7 +67,7 @@ function PreviousValueView({
                     Previous value
                 </Typography>
                 <PropertyPreview
-                    propertyKey={key as string}
+                    propertyKey={propertyKey as string}
                     value={previousValueInPath}
                     property={childProperty as ResolvedProperty}
                     size={"small"}/>
@@ -200,7 +200,7 @@ export function EntityHistoryEntry({
                                 {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
                                     <PreviousValueView previousValueInPath={previousValueInPath}
                                                        childProperty={childProperty as ResolvedProperty}
-                                                       key={key}/>
+                                                       propertyKey={key}/>
                                 }
                                 {element}
                             </div>

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AttachFileIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"attach_file"}/>
-}
+export const AttachFileIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"attach_file"} ref={ref}/>
+});
+
+AttachFileIcon.displayName = "AttachFileIcon";

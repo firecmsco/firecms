@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutoGraphIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"auto_graph"}/>
-}
+export const AutoGraphIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"auto_graph"} ref={ref}/>
+});
+
+AutoGraphIcon.displayName = "AutoGraphIcon";

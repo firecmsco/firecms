@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PolylineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"polyline"}/>
-}
+export const PolylineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"polyline"} ref={ref}/>
+});
+
+PolylineIcon.displayName = "PolylineIcon";

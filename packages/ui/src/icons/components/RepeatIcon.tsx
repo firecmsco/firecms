@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RepeatIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"repeat"}/>
-}
+export const RepeatIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"repeat"} ref={ref}/>
+});
+
+RepeatIcon.displayName = "RepeatIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MicExternalOnIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mic_external_on"}/>
-}
+export const MicExternalOnIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mic_external_on"} ref={ref}/>
+});
+
+MicExternalOnIcon.displayName = "MicExternalOnIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TransitEnterexitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"transit_enterexit"}/>
-}
+export const TransitEnterexitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"transit_enterexit"} ref={ref}/>
+});
+
+TransitEnterexitIcon.displayName = "TransitEnterexitIcon";

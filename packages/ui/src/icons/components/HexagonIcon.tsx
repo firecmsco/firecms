@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HexagonIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"hexagon"}/>
-}
+export const HexagonIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"hexagon"} ref={ref}/>
+});
+
+HexagonIcon.displayName = "HexagonIcon";

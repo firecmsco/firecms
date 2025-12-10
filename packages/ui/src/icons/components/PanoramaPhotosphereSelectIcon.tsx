@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PanoramaPhotosphereSelectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"panorama_photosphere_select"}/>
-}
+export const PanoramaPhotosphereSelectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"panorama_photosphere_select"} ref={ref}/>
+});
+
+PanoramaPhotosphereSelectIcon.displayName = "PanoramaPhotosphereSelectIcon";

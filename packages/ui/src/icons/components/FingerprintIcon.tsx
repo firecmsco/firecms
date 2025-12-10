@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FingerprintIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fingerprint"}/>
-}
+export const FingerprintIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fingerprint"} ref={ref}/>
+});
+
+FingerprintIcon.displayName = "FingerprintIcon";

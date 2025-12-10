@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FirstPageIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"first_page"}/>
-}
+export const FirstPageIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"first_page"} ref={ref}/>
+});
+
+FirstPageIcon.displayName = "FirstPageIcon";

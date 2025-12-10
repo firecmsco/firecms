@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function UpgradeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"upgrade"}/>
-}
+export const UpgradeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"upgrade"} ref={ref}/>
+});
+
+UpgradeIcon.displayName = "UpgradeIcon";

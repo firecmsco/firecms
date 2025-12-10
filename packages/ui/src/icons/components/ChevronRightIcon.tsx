@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChevronRightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"chevron_right"}/>
-}
+export const ChevronRightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"chevron_right"} ref={ref}/>
+});
+
+ChevronRightIcon.displayName = "ChevronRightIcon";

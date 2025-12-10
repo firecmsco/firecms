@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DnsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dns"}/>
-}
+export const DnsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dns"} ref={ref}/>
+});
+
+DnsIcon.displayName = "DnsIcon";

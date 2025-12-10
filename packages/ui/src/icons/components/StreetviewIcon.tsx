@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StreetviewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"streetview"}/>
-}
+export const StreetviewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"streetview"} ref={ref}/>
+});
+
+StreetviewIcon.displayName = "StreetviewIcon";

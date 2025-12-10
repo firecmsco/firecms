@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CookieIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"cookie"}/>
-}
+export const CookieIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"cookie"} ref={ref}/>
+});
+
+CookieIcon.displayName = "CookieIcon";

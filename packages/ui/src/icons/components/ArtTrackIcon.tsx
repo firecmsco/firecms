@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ArtTrackIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"art_track"}/>
-}
+export const ArtTrackIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"art_track"} ref={ref}/>
+});
+
+ArtTrackIcon.displayName = "ArtTrackIcon";

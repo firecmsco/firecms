@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BurstModeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"burst_mode"}/>
-}
+export const BurstModeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"burst_mode"} ref={ref}/>
+});
+
+BurstModeIcon.displayName = "BurstModeIcon";

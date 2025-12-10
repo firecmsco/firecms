@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DarkModeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dark_mode"}/>
-}
+export const DarkModeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dark_mode"} ref={ref}/>
+});
+
+DarkModeIcon.displayName = "DarkModeIcon";

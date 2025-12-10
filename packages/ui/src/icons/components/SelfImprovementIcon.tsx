@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SelfImprovementIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"self_improvement"}/>
-}
+export const SelfImprovementIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"self_improvement"} ref={ref}/>
+});
+
+SelfImprovementIcon.displayName = "SelfImprovementIcon";

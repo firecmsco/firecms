@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutoAwesomeMotionIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"auto_awesome_motion"}/>
-}
+export const AutoAwesomeMotionIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"auto_awesome_motion"} ref={ref}/>
+});
+
+AutoAwesomeMotionIcon.displayName = "AutoAwesomeMotionIcon";

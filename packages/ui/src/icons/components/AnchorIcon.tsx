@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AnchorIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"anchor"}/>
-}
+export const AnchorIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"anchor"} ref={ref}/>
+});
+
+AnchorIcon.displayName = "AnchorIcon";

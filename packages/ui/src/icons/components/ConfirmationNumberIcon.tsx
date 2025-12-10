@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ConfirmationNumberIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"confirmation_number"}/>
-}
+export const ConfirmationNumberIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"confirmation_number"} ref={ref}/>
+});
+
+ConfirmationNumberIcon.displayName = "ConfirmationNumberIcon";

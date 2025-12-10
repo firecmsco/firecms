@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PowerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"power"}/>
-}
+export const PowerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"power"} ref={ref}/>
+});
+
+PowerIcon.displayName = "PowerIcon";

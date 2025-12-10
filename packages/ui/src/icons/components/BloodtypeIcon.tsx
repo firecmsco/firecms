@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BloodtypeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"bloodtype"}/>
-}
+export const BloodtypeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"bloodtype"} ref={ref}/>
+});
+
+BloodtypeIcon.displayName = "BloodtypeIcon";

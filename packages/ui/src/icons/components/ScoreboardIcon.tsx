@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScoreboardIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"scoreboard"}/>
-}
+export const ScoreboardIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"scoreboard"} ref={ref}/>
+});
+
+ScoreboardIcon.displayName = "ScoreboardIcon";

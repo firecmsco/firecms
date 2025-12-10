@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Filter9Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"filter_9"}/>
-}
+export const Filter9Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"filter_9"} ref={ref}/>
+});
+
+Filter9Icon.displayName = "Filter9Icon";

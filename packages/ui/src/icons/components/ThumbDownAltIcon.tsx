@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ThumbDownAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"thumb_down_alt"}/>
-}
+export const ThumbDownAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"thumb_down_alt"} ref={ref}/>
+});
+
+ThumbDownAltIcon.displayName = "ThumbDownAltIcon";

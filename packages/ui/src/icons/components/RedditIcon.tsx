@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RedditIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"reddit"}/>
-}
+export const RedditIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"reddit"} ref={ref}/>
+});
+
+RedditIcon.displayName = "RedditIcon";

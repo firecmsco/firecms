@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AddToHomeScreenIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"add_to_home_screen"}/>
-}
+export const AddToHomeScreenIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"add_to_home_screen"} ref={ref}/>
+});
+
+AddToHomeScreenIcon.displayName = "AddToHomeScreenIcon";

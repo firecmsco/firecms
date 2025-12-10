@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AndroidIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"android"}/>
-}
+export const AndroidIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"android"} ref={ref}/>
+});
+
+AndroidIcon.displayName = "AndroidIcon";

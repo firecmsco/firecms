@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RemoveRedEyeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"remove_red_eye"}/>
-}
+export const RemoveRedEyeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"remove_red_eye"} ref={ref}/>
+});
+
+RemoveRedEyeIcon.displayName = "RemoveRedEyeIcon";

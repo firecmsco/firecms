@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PaletteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"palette"}/>
-}
+export const PaletteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"palette"} ref={ref}/>
+});
+
+PaletteIcon.displayName = "PaletteIcon";

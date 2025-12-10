@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DirectionsTransitFilledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"directions_transit_filled"}/>
-}
+export const DirectionsTransitFilledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"directions_transit_filled"} ref={ref}/>
+});
+
+DirectionsTransitFilledIcon.displayName = "DirectionsTransitFilledIcon";

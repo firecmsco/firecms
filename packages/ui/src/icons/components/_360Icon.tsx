@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function _360Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"360"}/>
-}
+export const _360Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"360"} ref={ref}/>
+});
+
+_360Icon.displayName = "_360Icon";

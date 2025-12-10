@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ManIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"man"}/>
-}
+export const ManIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"man"} ref={ref}/>
+});
+
+ManIcon.displayName = "ManIcon";

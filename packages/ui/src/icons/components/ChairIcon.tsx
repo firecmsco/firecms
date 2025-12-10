@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChairIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"chair"}/>
-}
+export const ChairIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"chair"} ref={ref}/>
+});
+
+ChairIcon.displayName = "ChairIcon";

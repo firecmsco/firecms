@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FactoryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"factory"}/>
-}
+export const FactoryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"factory"} ref={ref}/>
+});
+
+FactoryIcon.displayName = "FactoryIcon";

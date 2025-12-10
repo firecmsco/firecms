@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SocialDistanceIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"social_distance"}/>
-}
+export const SocialDistanceIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"social_distance"} ref={ref}/>
+});
+
+SocialDistanceIcon.displayName = "SocialDistanceIcon";

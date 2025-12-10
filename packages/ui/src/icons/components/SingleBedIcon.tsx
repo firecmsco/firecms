@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SingleBedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"single_bed"}/>
-}
+export const SingleBedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"single_bed"} ref={ref}/>
+});
+
+SingleBedIcon.displayName = "SingleBedIcon";

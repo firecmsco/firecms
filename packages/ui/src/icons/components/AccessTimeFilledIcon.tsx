@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AccessTimeFilledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"access_time_filled"}/>
-}
+export const AccessTimeFilledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"access_time_filled"} ref={ref}/>
+});
+
+AccessTimeFilledIcon.displayName = "AccessTimeFilledIcon";

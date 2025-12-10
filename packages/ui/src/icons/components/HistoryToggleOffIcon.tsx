@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HistoryToggleOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"history_toggle_off"}/>
-}
+export const HistoryToggleOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"history_toggle_off"} ref={ref}/>
+});
+
+HistoryToggleOffIcon.displayName = "HistoryToggleOffIcon";

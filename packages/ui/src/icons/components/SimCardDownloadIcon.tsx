@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SimCardDownloadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"sim_card_download"}/>
-}
+export const SimCardDownloadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sim_card_download"} ref={ref}/>
+});
+
+SimCardDownloadIcon.displayName = "SimCardDownloadIcon";

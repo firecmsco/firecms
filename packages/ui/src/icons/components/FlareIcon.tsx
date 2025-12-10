@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FlareIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"flare"}/>
-}
+export const FlareIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"flare"} ref={ref}/>
+});
+
+FlareIcon.displayName = "FlareIcon";

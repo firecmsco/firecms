@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GTranslateIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"g_translate"}/>
-}
+export const GTranslateIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"g_translate"} ref={ref}/>
+});
+
+GTranslateIcon.displayName = "GTranslateIcon";

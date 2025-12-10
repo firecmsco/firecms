@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function UndoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"undo"}/>
-}
+export const UndoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"undo"} ref={ref}/>
+});
+
+UndoIcon.displayName = "UndoIcon";

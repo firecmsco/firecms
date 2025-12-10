@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RawOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"raw_off"}/>
-}
+export const RawOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"raw_off"} ref={ref}/>
+});
+
+RawOffIcon.displayName = "RawOffIcon";

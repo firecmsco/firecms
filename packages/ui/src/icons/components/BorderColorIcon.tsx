@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BorderColorIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"border_color"}/>
-}
+export const BorderColorIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"border_color"} ref={ref}/>
+});
+
+BorderColorIcon.displayName = "BorderColorIcon";

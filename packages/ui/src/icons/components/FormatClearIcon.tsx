@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatClearIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_clear"}/>
-}
+export const FormatClearIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_clear"} ref={ref}/>
+});
+
+FormatClearIcon.displayName = "FormatClearIcon";

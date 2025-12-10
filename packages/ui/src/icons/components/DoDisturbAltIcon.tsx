@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DoDisturbAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"do_disturb_alt"}/>
-}
+export const DoDisturbAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"do_disturb_alt"} ref={ref}/>
+});
+
+DoDisturbAltIcon.displayName = "DoDisturbAltIcon";

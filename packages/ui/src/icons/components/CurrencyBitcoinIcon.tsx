@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CurrencyBitcoinIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"currency_bitcoin"}/>
-}
+export const CurrencyBitcoinIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"currency_bitcoin"} ref={ref}/>
+});
+
+CurrencyBitcoinIcon.displayName = "CurrencyBitcoinIcon";

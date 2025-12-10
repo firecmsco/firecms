@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PlagiarismIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"plagiarism"}/>
-}
+export const PlagiarismIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"plagiarism"} ref={ref}/>
+});
+
+PlagiarismIcon.displayName = "PlagiarismIcon";

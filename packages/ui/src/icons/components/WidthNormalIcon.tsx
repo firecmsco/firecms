@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WidthNormalIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"width_normal"}/>
-}
+export const WidthNormalIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"width_normal"} ref={ref}/>
+});
+
+WidthNormalIcon.displayName = "WidthNormalIcon";

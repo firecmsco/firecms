@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MinimizeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"minimize"}/>
-}
+export const MinimizeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"minimize"} ref={ref}/>
+});
+
+MinimizeIcon.displayName = "MinimizeIcon";

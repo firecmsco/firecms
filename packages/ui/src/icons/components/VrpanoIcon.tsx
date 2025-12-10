@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VrpanoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"vrpano"}/>
-}
+export const VrpanoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"vrpano"} ref={ref}/>
+});
+
+VrpanoIcon.displayName = "VrpanoIcon";

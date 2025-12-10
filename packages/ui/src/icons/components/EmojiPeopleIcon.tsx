@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EmojiPeopleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"emoji_people"}/>
-}
+export const EmojiPeopleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"emoji_people"} ref={ref}/>
+});
+
+EmojiPeopleIcon.displayName = "EmojiPeopleIcon";

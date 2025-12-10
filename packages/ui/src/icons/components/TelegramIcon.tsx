@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TelegramIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"telegram"}/>
-}
+export const TelegramIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"telegram"} ref={ref}/>
+});
+
+TelegramIcon.displayName = "TelegramIcon";

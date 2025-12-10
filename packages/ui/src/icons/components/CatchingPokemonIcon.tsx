@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CatchingPokemonIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"catching_pokemon"}/>
-}
+export const CatchingPokemonIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"catching_pokemon"} ref={ref}/>
+});
+
+CatchingPokemonIcon.displayName = "CatchingPokemonIcon";

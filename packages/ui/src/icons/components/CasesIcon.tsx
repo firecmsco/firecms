@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CasesIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"cases"}/>
-}
+export const CasesIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"cases"} ref={ref}/>
+});
+
+CasesIcon.displayName = "CasesIcon";

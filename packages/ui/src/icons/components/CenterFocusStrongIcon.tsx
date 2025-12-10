@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CenterFocusStrongIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"center_focus_strong"}/>
-}
+export const CenterFocusStrongIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"center_focus_strong"} ref={ref}/>
+});
+
+CenterFocusStrongIcon.displayName = "CenterFocusStrongIcon";

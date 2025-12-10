@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatUnderlinedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_underlined"}/>
-}
+export const FormatUnderlinedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_underlined"} ref={ref}/>
+});
+
+FormatUnderlinedIcon.displayName = "FormatUnderlinedIcon";

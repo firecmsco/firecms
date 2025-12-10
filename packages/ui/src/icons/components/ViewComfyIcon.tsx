@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewComfyIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_comfy"}/>
-}
+export const ViewComfyIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_comfy"} ref={ref}/>
+});
+
+ViewComfyIcon.displayName = "ViewComfyIcon";

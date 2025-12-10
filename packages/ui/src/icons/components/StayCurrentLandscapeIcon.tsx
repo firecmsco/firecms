@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StayCurrentLandscapeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"stay_current_landscape"}/>
-}
+export const StayCurrentLandscapeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"stay_current_landscape"} ref={ref}/>
+});
+
+StayCurrentLandscapeIcon.displayName = "StayCurrentLandscapeIcon";

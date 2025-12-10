@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BrowserUpdatedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"browser_updated"}/>
-}
+export const BrowserUpdatedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"browser_updated"} ref={ref}/>
+});
+
+BrowserUpdatedIcon.displayName = "BrowserUpdatedIcon";

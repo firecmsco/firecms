@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TextRotationAngleupIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"text_rotation_angleup"}/>
-}
+export const TextRotationAngleupIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"text_rotation_angleup"} ref={ref}/>
+});
+
+TextRotationAngleupIcon.displayName = "TextRotationAngleupIcon";

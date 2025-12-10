@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatStrikethroughIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_strikethrough"}/>
-}
+export const FormatStrikethroughIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_strikethrough"} ref={ref}/>
+});
+
+FormatStrikethroughIcon.displayName = "FormatStrikethroughIcon";

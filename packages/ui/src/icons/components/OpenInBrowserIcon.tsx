@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function OpenInBrowserIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"open_in_browser"}/>
-}
+export const OpenInBrowserIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"open_in_browser"} ref={ref}/>
+});
+
+OpenInBrowserIcon.displayName = "OpenInBrowserIcon";

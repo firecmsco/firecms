@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChromeReaderModeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"chrome_reader_mode"}/>
-}
+export const ChromeReaderModeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"chrome_reader_mode"} ref={ref}/>
+});
+
+ChromeReaderModeIcon.displayName = "ChromeReaderModeIcon";

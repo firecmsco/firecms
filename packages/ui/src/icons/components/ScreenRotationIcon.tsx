@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScreenRotationIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"screen_rotation"}/>
-}
+export const ScreenRotationIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"screen_rotation"} ref={ref}/>
+});
+
+ScreenRotationIcon.displayName = "ScreenRotationIcon";

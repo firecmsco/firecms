@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FolderSpecialIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"folder_special"}/>
-}
+export const FolderSpecialIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"folder_special"} ref={ref}/>
+});
+
+FolderSpecialIcon.displayName = "FolderSpecialIcon";

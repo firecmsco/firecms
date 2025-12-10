@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DashboardIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dashboard"}/>
-}
+export const DashboardIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dashboard"} ref={ref}/>
+});
+
+DashboardIcon.displayName = "DashboardIcon";

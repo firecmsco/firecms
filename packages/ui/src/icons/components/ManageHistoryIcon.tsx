@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ManageHistoryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"manage_history"}/>
-}
+export const ManageHistoryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"manage_history"} ref={ref}/>
+});
+
+ManageHistoryIcon.displayName = "ManageHistoryIcon";

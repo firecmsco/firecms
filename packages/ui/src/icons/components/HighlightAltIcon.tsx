@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HighlightAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"highlight_alt"}/>
-}
+export const HighlightAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"highlight_alt"} ref={ref}/>
+});
+
+HighlightAltIcon.displayName = "HighlightAltIcon";

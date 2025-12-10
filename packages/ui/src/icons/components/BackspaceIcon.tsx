@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BackspaceIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"backspace"}/>
-}
+export const BackspaceIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"backspace"} ref={ref}/>
+});
+
+BackspaceIcon.displayName = "BackspaceIcon";

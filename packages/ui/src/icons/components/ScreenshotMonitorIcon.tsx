@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScreenshotMonitorIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"screenshot_monitor"}/>
-}
+export const ScreenshotMonitorIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"screenshot_monitor"} ref={ref}/>
+});
+
+ScreenshotMonitorIcon.displayName = "ScreenshotMonitorIcon";

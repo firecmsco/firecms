@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FilterBAndWIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"filter_b_and_w"}/>
-}
+export const FilterBAndWIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"filter_b_and_w"} ref={ref}/>
+});
+
+FilterBAndWIcon.displayName = "FilterBAndWIcon";

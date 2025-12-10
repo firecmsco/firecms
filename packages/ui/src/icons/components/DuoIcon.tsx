@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DuoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"duo"}/>
-}
+export const DuoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"duo"} ref={ref}/>
+});
+
+DuoIcon.displayName = "DuoIcon";

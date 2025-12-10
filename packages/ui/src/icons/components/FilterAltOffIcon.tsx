@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FilterAltOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"filter_alt_off"}/>
-}
+export const FilterAltOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"filter_alt_off"} ref={ref}/>
+});
+
+FilterAltOffIcon.displayName = "FilterAltOffIcon";

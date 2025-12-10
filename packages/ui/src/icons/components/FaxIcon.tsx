@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FaxIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fax"}/>
-}
+export const FaxIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fax"} ref={ref}/>
+});
+
+FaxIcon.displayName = "FaxIcon";
