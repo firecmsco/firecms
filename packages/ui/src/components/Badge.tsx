@@ -23,13 +23,13 @@ const getColor = (color: BadgeColor) => {
     }
 }
 
-export const Badge: React.FC<BadgeProps> = ({
-                                                color = "primary",
-                                                invisible = false,
-                                                children
-                                            }) => {
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({
+                                                                     color = "primary",
+                                                                     invisible = false,
+                                                                     children
+                                                                 }, ref) => {
     return (
-        <div className="relative inline-block w-fit">
+        <div ref={ref} className="relative inline-block w-fit">
             {children}
             <span
                 className={`absolute top-0.5 right-0.5 transform translate-x-1/2 -translate-y-1/2 rounded-full
@@ -39,4 +39,6 @@ export const Badge: React.FC<BadgeProps> = ({
             />
         </div>
     );
-}
+});
+
+Badge.displayName = "Badge";

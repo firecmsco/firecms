@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TableViewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"table_view"}/>
-}
+export const TableViewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"table_view"} ref={ref}/>
+});
+
+TableViewIcon.displayName = "TableViewIcon";

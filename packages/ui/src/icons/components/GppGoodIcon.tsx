@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GppGoodIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gpp_good"}/>
-}
+export const GppGoodIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gpp_good"} ref={ref}/>
+});
+
+GppGoodIcon.displayName = "GppGoodIcon";

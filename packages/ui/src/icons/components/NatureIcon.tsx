@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NatureIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"nature"}/>
-}
+export const NatureIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"nature"} ref={ref}/>
+});
+
+NatureIcon.displayName = "NatureIcon";

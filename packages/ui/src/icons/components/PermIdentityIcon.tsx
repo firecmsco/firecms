@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PermIdentityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"perm_identity"}/>
-}
+export const PermIdentityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"perm_identity"} ref={ref}/>
+});
+
+PermIdentityIcon.displayName = "PermIdentityIcon";

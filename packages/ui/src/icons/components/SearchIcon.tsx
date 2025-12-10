@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SearchIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"search"}/>
-}
+export const SearchIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"search"} ref={ref}/>
+});
+
+SearchIcon.displayName = "SearchIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LocalPostOfficeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"local_post_office"}/>
-}
+export const LocalPostOfficeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"local_post_office"} ref={ref}/>
+});
+
+LocalPostOfficeIcon.displayName = "LocalPostOfficeIcon";

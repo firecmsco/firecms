@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SubdirectoryArrowRightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"subdirectory_arrow_right"}/>
-}
+export const SubdirectoryArrowRightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"subdirectory_arrow_right"} ref={ref}/>
+});
+
+SubdirectoryArrowRightIcon.displayName = "SubdirectoryArrowRightIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DiscordIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"discord"}/>
-}
+export const DiscordIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"discord"} ref={ref}/>
+});
+
+DiscordIcon.displayName = "DiscordIcon";

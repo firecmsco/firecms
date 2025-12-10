@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Wifi2BarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wifi_2_bar"}/>
-}
+export const Wifi2BarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wifi_2_bar"} ref={ref}/>
+});
+
+Wifi2BarIcon.displayName = "Wifi2BarIcon";

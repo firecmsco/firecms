@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HttpIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"http"}/>
-}
+export const HttpIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"http"} ref={ref}/>
+});
+
+HttpIcon.displayName = "HttpIcon";

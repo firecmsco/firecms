@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LineStyleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"line_style"}/>
-}
+export const LineStyleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"line_style"} ref={ref}/>
+});
+
+LineStyleIcon.displayName = "LineStyleIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TramIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tram"}/>
-}
+export const TramIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tram"} ref={ref}/>
+});
+
+TramIcon.displayName = "TramIcon";

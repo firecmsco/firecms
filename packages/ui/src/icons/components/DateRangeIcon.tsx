@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DateRangeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"date_range"}/>
-}
+export const DateRangeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"date_range"} ref={ref}/>
+});
+
+DateRangeIcon.displayName = "DateRangeIcon";

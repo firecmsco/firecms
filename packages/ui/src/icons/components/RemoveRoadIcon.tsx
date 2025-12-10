@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RemoveRoadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"remove_road"}/>
-}
+export const RemoveRoadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"remove_road"} ref={ref}/>
+});
+
+RemoveRoadIcon.displayName = "RemoveRoadIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RoundaboutLeftIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"roundabout_left"}/>
-}
+export const RoundaboutLeftIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"roundabout_left"} ref={ref}/>
+});
+
+RoundaboutLeftIcon.displayName = "RoundaboutLeftIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatShapesIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_shapes"}/>
-}
+export const FormatShapesIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_shapes"} ref={ref}/>
+});
+
+FormatShapesIcon.displayName = "FormatShapesIcon";

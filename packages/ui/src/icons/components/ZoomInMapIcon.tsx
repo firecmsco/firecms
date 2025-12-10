@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ZoomInMapIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"zoom_in_map"}/>
-}
+export const ZoomInMapIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"zoom_in_map"} ref={ref}/>
+});
+
+ZoomInMapIcon.displayName = "ZoomInMapIcon";

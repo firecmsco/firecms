@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwitchAccessShortcutIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"switch_access_shortcut"}/>
-}
+export const SwitchAccessShortcutIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"switch_access_shortcut"} ref={ref}/>
+});
+
+SwitchAccessShortcutIcon.displayName = "SwitchAccessShortcutIcon";

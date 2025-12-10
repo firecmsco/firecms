@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SnippetFolderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"snippet_folder"}/>
-}
+export const SnippetFolderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"snippet_folder"} ref={ref}/>
+});
+
+SnippetFolderIcon.displayName = "SnippetFolderIcon";

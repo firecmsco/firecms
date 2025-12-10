@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewStreamIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_stream"}/>
-}
+export const ViewStreamIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_stream"} ref={ref}/>
+});
+
+ViewStreamIcon.displayName = "ViewStreamIcon";

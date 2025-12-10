@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NoLuggageIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"no_luggage"}/>
-}
+export const NoLuggageIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"no_luggage"} ref={ref}/>
+});
+
+NoLuggageIcon.displayName = "NoLuggageIcon";

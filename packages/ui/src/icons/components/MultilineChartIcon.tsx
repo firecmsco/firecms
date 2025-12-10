@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MultilineChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"multiline_chart"}/>
-}
+export const MultilineChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"multiline_chart"} ref={ref}/>
+});
+
+MultilineChartIcon.displayName = "MultilineChartIcon";

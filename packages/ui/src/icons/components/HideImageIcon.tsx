@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HideImageIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"hide_image"}/>
-}
+export const HideImageIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"hide_image"} ref={ref}/>
+});
+
+HideImageIcon.displayName = "HideImageIcon";

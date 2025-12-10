@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StarBorderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"star_border"}/>
-}
+export const StarBorderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"star_border"} ref={ref}/>
+});
+
+StarBorderIcon.displayName = "StarBorderIcon";

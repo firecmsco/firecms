@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LeaderboardIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"leaderboard"}/>
-}
+export const LeaderboardIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"leaderboard"} ref={ref}/>
+});
+
+LeaderboardIcon.displayName = "LeaderboardIcon";

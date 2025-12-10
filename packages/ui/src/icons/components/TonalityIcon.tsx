@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TonalityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tonality"}/>
-}
+export const TonalityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tonality"} ref={ref}/>
+});
+
+TonalityIcon.displayName = "TonalityIcon";

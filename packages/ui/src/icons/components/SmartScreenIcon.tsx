@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SmartScreenIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"smart_screen"}/>
-}
+export const SmartScreenIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"smart_screen"} ref={ref}/>
+});
+
+SmartScreenIcon.displayName = "SmartScreenIcon";

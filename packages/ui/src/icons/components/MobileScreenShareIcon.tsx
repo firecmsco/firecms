@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MobileScreenShareIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mobile_screen_share"}/>
-}
+export const MobileScreenShareIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mobile_screen_share"} ref={ref}/>
+});
+
+MobileScreenShareIcon.displayName = "MobileScreenShareIcon";

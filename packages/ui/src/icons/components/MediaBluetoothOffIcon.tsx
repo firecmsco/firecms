@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MediaBluetoothOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"media_bluetooth_off"}/>
-}
+export const MediaBluetoothOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"media_bluetooth_off"} ref={ref}/>
+});
+
+MediaBluetoothOffIcon.displayName = "MediaBluetoothOffIcon";

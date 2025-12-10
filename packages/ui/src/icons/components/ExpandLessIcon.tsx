@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ExpandLessIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"expand_less"}/>
-}
+export const ExpandLessIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"expand_less"} ref={ref}/>
+});
+
+ExpandLessIcon.displayName = "ExpandLessIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function QuickContactsMailIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"quick_contacts_mail"}/>
-}
+export const QuickContactsMailIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"quick_contacts_mail"} ref={ref}/>
+});
+
+QuickContactsMailIcon.displayName = "QuickContactsMailIcon";

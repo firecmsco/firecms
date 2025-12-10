@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MemoryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"memory"}/>
-}
+export const MemoryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"memory"} ref={ref}/>
+});
+
+MemoryIcon.displayName = "MemoryIcon";

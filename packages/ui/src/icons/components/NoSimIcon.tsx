@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NoSimIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"no_sim"}/>
-}
+export const NoSimIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"no_sim"} ref={ref}/>
+});
+
+NoSimIcon.displayName = "NoSimIcon";

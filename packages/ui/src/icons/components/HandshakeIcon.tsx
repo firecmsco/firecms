@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HandshakeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"handshake"}/>
-}
+export const HandshakeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"handshake"} ref={ref}/>
+});
+
+HandshakeIcon.displayName = "HandshakeIcon";

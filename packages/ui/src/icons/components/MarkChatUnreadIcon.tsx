@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MarkChatUnreadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mark_chat_unread"}/>
-}
+export const MarkChatUnreadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mark_chat_unread"} ref={ref}/>
+});
+
+MarkChatUnreadIcon.displayName = "MarkChatUnreadIcon";

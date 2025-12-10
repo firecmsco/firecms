@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TranscribeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"transcribe"}/>
-}
+export const TranscribeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"transcribe"} ref={ref}/>
+});
+
+TranscribeIcon.displayName = "TranscribeIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewComfyAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_comfy_alt"}/>
-}
+export const ViewComfyAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_comfy_alt"} ref={ref}/>
+});
+
+ViewComfyAltIcon.displayName = "ViewComfyAltIcon";

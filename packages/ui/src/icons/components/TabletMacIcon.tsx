@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TabletMacIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tablet_mac"}/>
-}
+export const TabletMacIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tablet_mac"} ref={ref}/>
+});
+
+TabletMacIcon.displayName = "TabletMacIcon";

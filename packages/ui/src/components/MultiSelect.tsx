@@ -105,7 +105,7 @@ export const MultiSelect = React.forwardRef<
             setIsPopoverOpen(open ?? false);
         }, [open]);
 
-        const allValues = children
+        const allValues = React.useMemo(() => children
             ?
             // @ts-ignore
             Children.map(children, (child) => {
@@ -114,7 +114,18 @@ export const MultiSelect = React.forwardRef<
                 }
                 return null;
             }).filter(Boolean) as any[]
-            : [];
+            : [], [children]);
+
+        const optionsMap = React.useMemo(() => {
+            const map = new Map<string, React.ReactNode>();
+            Children.forEach(children, (child) => {
+                if (React.isValidElement(child)) {
+                    // @ts-ignore
+                    map.set(String(child.props.value), child.props.children);
+                }
+            });
+            return map;
+        }, [children]);
 
         React.useEffect(() => {
             setSelectedValues(value ?? []);
@@ -224,16 +235,9 @@ export const MultiSelect = React.forwardRef<
                                         {renderValues && renderValues(selectedValues)}
                                         {!renderValues && selectedValues.map((value) => {
 
-                                            // @ts-ignore
-                                            const childrenProps: MultiSelectItemProps[] = Children.map(children, (child) => {
-                                                if (React.isValidElement(child)) {
-                                                    return child.props;
-                                                }
-                                            }).filter(Boolean);
-
-                                            const option = childrenProps.find((o) => String(o.value) === String(value));
+                                            const optionChildren = optionsMap.get(String(value));
                                             if (!useChips) {
-                                                return option?.children;
+                                                return optionChildren;
                                             }
                                             return (
                                                 <Chip
@@ -241,7 +245,7 @@ export const MultiSelect = React.forwardRef<
                                                     key={String(value)}
                                                     className={cls("flex flex-row items-center p-1")}
                                                 >
-                                                    {option?.children}
+                                                    {optionChildren}
                                                     <CloseIcon
                                                         size={"smallest"}
                                                         onClick={(event) => {
@@ -347,7 +351,7 @@ export interface MultiSelectItemProps<T extends MultiSelectValue = string> {
     className?: string;
 }
 
-export function MultiSelectItem<T extends MultiSelectValue = string>({
+export const MultiSelectItem = React.memo(function MultiSelectItem<T extends MultiSelectValue = string>({
     children,
     value,
     className
@@ -385,9 +389,9 @@ export function MultiSelectItem<T extends MultiSelectValue = string>({
         <InnerCheckBox checked={isSelected} />
         {children}
     </CommandPrimitive.Item>;
-}
+});
 
-function InnerCheckBox({ checked }: { checked: boolean }) {
+const InnerCheckBox = React.memo(function InnerCheckBox({ checked }: { checked: boolean }) {
     return <div className={cls(
         "p-2",
         "w-8 h-8",
@@ -404,4 +408,4 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
             {checked && <CheckIcon size={16} className={"absolute"} />}
         </div>
     </div>
-}
+});

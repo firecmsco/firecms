@@ -1,4 +1,4 @@
-import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import equal from "react-fast-compare"
 
@@ -297,7 +297,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     </div>)
                 : undefined);
 
-        const virtualListController = {
+        const virtualListController = useMemo(() => ({
             data,
             rowHeight: rowHeight,
             cellRenderer,
@@ -316,7 +316,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             rowClassName,
             endAdornment,
             AddColumnComponent
-        };
+        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeInternal, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent]);
 
         return (
             <div

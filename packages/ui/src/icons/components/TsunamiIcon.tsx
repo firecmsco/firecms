@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TsunamiIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tsunami"}/>
-}
+export const TsunamiIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tsunami"} ref={ref}/>
+});
+
+TsunamiIcon.displayName = "TsunamiIcon";

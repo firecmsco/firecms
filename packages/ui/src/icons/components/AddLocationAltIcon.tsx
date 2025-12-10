@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AddLocationAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"add_location_alt"}/>
-}
+export const AddLocationAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"add_location_alt"} ref={ref}/>
+});
+
+AddLocationAltIcon.displayName = "AddLocationAltIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FavoriteBorderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"favorite_border"}/>
-}
+export const FavoriteBorderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"favorite_border"} ref={ref}/>
+});
+
+FavoriteBorderIcon.displayName = "FavoriteBorderIcon";

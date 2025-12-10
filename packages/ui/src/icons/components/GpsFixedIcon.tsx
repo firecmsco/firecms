@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GpsFixedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gps_fixed"}/>
-}
+export const GpsFixedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gps_fixed"} ref={ref}/>
+});
+
+GpsFixedIcon.displayName = "GpsFixedIcon";

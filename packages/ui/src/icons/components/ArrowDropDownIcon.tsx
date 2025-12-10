@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ArrowDropDownIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"arrow_drop_down"}/>
-}
+export const ArrowDropDownIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"arrow_drop_down"} ref={ref}/>
+});
+
+ArrowDropDownIcon.displayName = "ArrowDropDownIcon";

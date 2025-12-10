@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PaddingIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"padding"}/>
-}
+export const PaddingIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"padding"} ref={ref}/>
+});
+
+PaddingIcon.displayName = "PaddingIcon";

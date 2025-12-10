@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AdfScannerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"adf_scanner"}/>
-}
+export const AdfScannerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"adf_scanner"} ref={ref}/>
+});
+
+AdfScannerIcon.displayName = "AdfScannerIcon";

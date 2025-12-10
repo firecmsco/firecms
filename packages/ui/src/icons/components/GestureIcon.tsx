@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GestureIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gesture"}/>
-}
+export const GestureIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gesture"} ref={ref}/>
+});
+
+GestureIcon.displayName = "GestureIcon";

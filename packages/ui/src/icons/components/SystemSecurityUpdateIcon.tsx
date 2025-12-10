@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SystemSecurityUpdateIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"system_security_update"}/>
-}
+export const SystemSecurityUpdateIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"system_security_update"} ref={ref}/>
+});
+
+SystemSecurityUpdateIcon.displayName = "SystemSecurityUpdateIcon";

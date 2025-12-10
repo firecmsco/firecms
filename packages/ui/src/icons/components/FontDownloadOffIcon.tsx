@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FontDownloadOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"font_download_off"}/>
-}
+export const FontDownloadOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"font_download_off"} ref={ref}/>
+});
+
+FontDownloadOffIcon.displayName = "FontDownloadOffIcon";

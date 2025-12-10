@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function OfflinePinIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"offline_pin"}/>
-}
+export const OfflinePinIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"offline_pin"} ref={ref}/>
+});
+
+OfflinePinIcon.displayName = "OfflinePinIcon";

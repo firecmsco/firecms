@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PhishingIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"phishing"}/>
-}
+export const PhishingIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"phishing"} ref={ref}/>
+});
+
+PhishingIcon.displayName = "PhishingIcon";

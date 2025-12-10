@@ -259,7 +259,7 @@ export type SelectItemProps<T extends SelectValue = string> = {
     className?: string,
 };
 
-export function SelectItem<T extends SelectValue = string>({
+export const SelectItem = React.memo(function SelectItem<T extends SelectValue = string>({
                                                                value,
                                                                children,
                                                                disabled,
@@ -289,7 +289,7 @@ export function SelectItem<T extends SelectValue = string>({
             <CheckIcon size={16}/>
         </div>
     </SelectPrimitive.Item>;
-}
+});
 
 export type SelectGroupProps = {
     label: React.ReactNode,
@@ -297,7 +297,7 @@ export type SelectGroupProps = {
     className?: string
 };
 
-export function SelectGroup({
+export const SelectGroup = React.memo(function SelectGroup({
                                 label,
                                 children,
                                 className
@@ -314,4 +314,4 @@ export function SelectGroup({
 
         {children}
     </>;
-}
+});

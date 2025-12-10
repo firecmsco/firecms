@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Timer3SelectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"timer_3_select"}/>
-}
+export const Timer3SelectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"timer_3_select"} ref={ref}/>
+});
+
+Timer3SelectIcon.displayName = "Timer3SelectIcon";

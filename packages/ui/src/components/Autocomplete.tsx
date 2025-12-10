@@ -77,7 +77,7 @@ export type AutocompleteItemProps = {
     className?: string
 };
 
-export function AutocompleteItem({
+export const AutocompleteItem = React.memo(function AutocompleteItem({
                                      children,
                                      onClick,
                                      className
@@ -90,4 +90,4 @@ export function AutocompleteItem({
             {children}
         </div>
     )
-}
+});

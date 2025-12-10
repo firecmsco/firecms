@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RefreshIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"refresh"}/>
-}
+export const RefreshIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"refresh"} ref={ref}/>
+});
+
+RefreshIcon.displayName = "RefreshIcon";

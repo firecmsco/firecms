@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AllInclusiveIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"all_inclusive"}/>
-}
+export const AllInclusiveIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"all_inclusive"} ref={ref}/>
+});
+
+AllInclusiveIcon.displayName = "AllInclusiveIcon";

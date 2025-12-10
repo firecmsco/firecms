@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FolderSharedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"folder_shared"}/>
-}
+export const FolderSharedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"folder_shared"} ref={ref}/>
+});
+
+FolderSharedIcon.displayName = "FolderSharedIcon";

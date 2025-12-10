@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DataSaverOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"data_saver_off"}/>
-}
+export const DataSaverOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"data_saver_off"} ref={ref}/>
+});
+
+DataSaverOffIcon.displayName = "DataSaverOffIcon";

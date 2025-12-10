@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MicrowaveIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"microwave"}/>
-}
+export const MicrowaveIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"microwave"} ref={ref}/>
+});
+
+MicrowaveIcon.displayName = "MicrowaveIcon";

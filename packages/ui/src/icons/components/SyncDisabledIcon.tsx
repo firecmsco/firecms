@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SyncDisabledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"sync_disabled"}/>
-}
+export const SyncDisabledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sync_disabled"} ref={ref}/>
+});
+
+SyncDisabledIcon.displayName = "SyncDisabledIcon";

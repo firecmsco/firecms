@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LandscapeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"landscape"}/>
-}
+export const LandscapeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"landscape"} ref={ref}/>
+});
+
+LandscapeIcon.displayName = "LandscapeIcon";

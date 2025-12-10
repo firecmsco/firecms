@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ContrastIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"contrast"}/>
-}
+export const ContrastIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"contrast"} ref={ref}/>
+});
+
+ContrastIcon.displayName = "ContrastIcon";

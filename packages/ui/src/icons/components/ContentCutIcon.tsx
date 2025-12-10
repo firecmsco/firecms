@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ContentCutIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"content_cut"}/>
-}
+export const ContentCutIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"content_cut"} ref={ref}/>
+});
+
+ContentCutIcon.displayName = "ContentCutIcon";

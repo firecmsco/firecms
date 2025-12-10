@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MotionPhotosPauseIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"motion_photos_pause"}/>
-}
+export const MotionPhotosPauseIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"motion_photos_pause"} ref={ref}/>
+});
+
+MotionPhotosPauseIcon.displayName = "MotionPhotosPauseIcon";

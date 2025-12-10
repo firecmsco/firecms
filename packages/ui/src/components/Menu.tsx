@@ -66,12 +66,12 @@ export type MenuItemProps = {
     className?: string;
 };
 
-export function MenuItem({
+export const MenuItem = React.memo(({
                              children,
                              dense = false, // Default value is false if not provided
                              onClick,
                              className
-                         }: MenuItemProps) {
+                         }: MenuItemProps) => {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
         onClick && "cursor-pointer",
@@ -87,4 +87,4 @@ export function MenuItem({
             {children}
         </DropdownMenu.Item>
     );
-}
+});

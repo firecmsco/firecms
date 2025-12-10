@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CommitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"commit"}/>
-}
+export const CommitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"commit"} ref={ref}/>
+});
+
+CommitIcon.displayName = "CommitIcon";

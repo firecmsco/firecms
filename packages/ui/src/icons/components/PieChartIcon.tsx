@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PieChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pie_chart"}/>
-}
+export const PieChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pie_chart"} ref={ref}/>
+});
+
+PieChartIcon.displayName = "PieChartIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BubbleChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"bubble_chart"}/>
-}
+export const BubbleChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"bubble_chart"} ref={ref}/>
+});
+
+BubbleChartIcon.displayName = "BubbleChartIcon";

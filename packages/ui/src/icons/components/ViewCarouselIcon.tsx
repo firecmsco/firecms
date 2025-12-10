@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewCarouselIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_carousel"}/>
-}
+export const ViewCarouselIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_carousel"} ref={ref}/>
+});
+
+ViewCarouselIcon.displayName = "ViewCarouselIcon";

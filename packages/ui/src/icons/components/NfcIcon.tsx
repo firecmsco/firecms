@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NfcIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"nfc"}/>
-}
+export const NfcIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"nfc"} ref={ref}/>
+});
+
+NfcIcon.displayName = "NfcIcon";

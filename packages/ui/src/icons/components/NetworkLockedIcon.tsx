@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NetworkLockedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"network_locked"}/>
-}
+export const NetworkLockedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"network_locked"} ref={ref}/>
+});
+
+NetworkLockedIcon.displayName = "NetworkLockedIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function UnfoldLessDoubleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"unfold_less_double"}/>
-}
+export const UnfoldLessDoubleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"unfold_less_double"} ref={ref}/>
+});
+
+UnfoldLessDoubleIcon.displayName = "UnfoldLessDoubleIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CalendarMonthIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"calendar_month"}/>
-}
+export const CalendarMonthIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"calendar_month"} ref={ref}/>
+});
+
+CalendarMonthIcon.displayName = "CalendarMonthIcon";

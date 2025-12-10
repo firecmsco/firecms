@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ModeEditOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mode_edit_outline"}/>
-}
+export const ModeEditOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mode_edit_outline"} ref={ref}/>
+});
+
+ModeEditOutlineIcon.displayName = "ModeEditOutlineIcon";

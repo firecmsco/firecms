@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CloudSyncIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"cloud_sync"}/>
-}
+export const CloudSyncIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"cloud_sync"} ref={ref}/>
+});
+
+CloudSyncIcon.displayName = "CloudSyncIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MouseIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mouse"}/>
-}
+export const MouseIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mouse"} ref={ref}/>
+});
+
+MouseIcon.displayName = "MouseIcon";

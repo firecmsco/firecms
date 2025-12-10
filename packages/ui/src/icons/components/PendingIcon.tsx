@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PendingIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pending"}/>
-}
+export const PendingIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pending"} ref={ref}/>
+});
+
+PendingIcon.displayName = "PendingIcon";

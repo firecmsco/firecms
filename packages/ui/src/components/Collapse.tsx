@@ -12,12 +12,12 @@ interface CollapseProps {
     duration?: number;
 }
 
-export function Collapse({
+export const Collapse = React.memo(({
                              children,
                              className,
                              in: isOpen = false,
                              duration = 220
-                         }: CollapseProps) {
+                         }: CollapseProps) => {
 
     useInjectStyles(`Collapse-${duration}`, `
 .CollapseContent-${duration} {
@@ -61,4 +61,4 @@ export function Collapse({
             </Collapsible.Content>
         </Collapsible.Root>
     )
-};
+});

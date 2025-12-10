@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TimelapseIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"timelapse"}/>
-}
+export const TimelapseIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"timelapse"} ref={ref}/>
+});
+
+TimelapseIcon.displayName = "TimelapseIcon";

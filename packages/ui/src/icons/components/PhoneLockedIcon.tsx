@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PhoneLockedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"phone_locked"}/>
-}
+export const PhoneLockedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"phone_locked"} ref={ref}/>
+});
+
+PhoneLockedIcon.displayName = "PhoneLockedIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NearbyOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"nearby_off"}/>
-}
+export const NearbyOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"nearby_off"} ref={ref}/>
+});
+
+NearbyOffIcon.displayName = "NearbyOffIcon";

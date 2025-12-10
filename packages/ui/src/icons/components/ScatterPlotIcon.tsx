@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScatterPlotIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"scatter_plot"}/>
-}
+export const ScatterPlotIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"scatter_plot"} ref={ref}/>
+});
+
+ScatterPlotIcon.displayName = "ScatterPlotIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ThumbUpIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"thumb_up"}/>
-}
+export const ThumbUpIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"thumb_up"} ref={ref}/>
+});
+
+ThumbUpIcon.displayName = "ThumbUpIcon";

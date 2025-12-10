@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewInArIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_in_ar"}/>
-}
+export const ViewInArIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_in_ar"} ref={ref}/>
+});
+
+ViewInArIcon.displayName = "ViewInArIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SkipNextIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"skip_next"}/>
-}
+export const SkipNextIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"skip_next"} ref={ref}/>
+});
+
+SkipNextIcon.displayName = "SkipNextIcon";

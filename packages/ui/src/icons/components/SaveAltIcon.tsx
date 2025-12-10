@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SaveAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"save_alt"}/>
-}
+export const SaveAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"save_alt"} ref={ref}/>
+});
+
+SaveAltIcon.displayName = "SaveAltIcon";

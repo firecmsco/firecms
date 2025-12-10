@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatSizeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_size"}/>
-}
+export const FormatSizeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_size"} ref={ref}/>
+});
+
+FormatSizeIcon.displayName = "FormatSizeIcon";

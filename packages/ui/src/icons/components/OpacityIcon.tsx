@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function OpacityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"opacity"}/>
-}
+export const OpacityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"opacity"} ref={ref}/>
+});
+
+OpacityIcon.displayName = "OpacityIcon";

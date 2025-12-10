@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HdrOffSelectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"hdr_off_select"}/>
-}
+export const HdrOffSelectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"hdr_off_select"} ref={ref}/>
+});
+
+HdrOffSelectIcon.displayName = "HdrOffSelectIcon";

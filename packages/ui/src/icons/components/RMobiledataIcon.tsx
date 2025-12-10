@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RMobiledataIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"r_mobiledata"}/>
-}
+export const RMobiledataIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"r_mobiledata"} ref={ref}/>
+});
+
+RMobiledataIcon.displayName = "RMobiledataIcon";

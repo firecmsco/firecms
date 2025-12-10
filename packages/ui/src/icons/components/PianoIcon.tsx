@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PianoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"piano"}/>
-}
+export const PianoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"piano"} ref={ref}/>
+});
+
+PianoIcon.displayName = "PianoIcon";

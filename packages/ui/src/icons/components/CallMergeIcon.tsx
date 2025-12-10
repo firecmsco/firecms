@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CallMergeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"call_merge"}/>
-}
+export const CallMergeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"call_merge"} ref={ref}/>
+});
+
+CallMergeIcon.displayName = "CallMergeIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DiscFullIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"disc_full"}/>
-}
+export const DiscFullIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"disc_full"} ref={ref}/>
+});
+
+DiscFullIcon.displayName = "DiscFullIcon";

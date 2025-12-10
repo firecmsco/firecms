@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GamepadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gamepad"}/>
-}
+export const GamepadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gamepad"} ref={ref}/>
+});
+
+GamepadIcon.displayName = "GamepadIcon";

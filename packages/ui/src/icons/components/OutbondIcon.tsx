@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function OutbondIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"outbond"}/>
-}
+export const OutbondIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"outbond"} ref={ref}/>
+});
+
+OutbondIcon.displayName = "OutbondIcon";

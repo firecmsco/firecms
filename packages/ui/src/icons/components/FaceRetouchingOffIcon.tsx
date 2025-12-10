@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FaceRetouchingOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"face_retouching_off"}/>
-}
+export const FaceRetouchingOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"face_retouching_off"} ref={ref}/>
+});
+
+FaceRetouchingOffIcon.displayName = "FaceRetouchingOffIcon";

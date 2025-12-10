@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CastConnectedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"cast_connected"}/>
-}
+export const CastConnectedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"cast_connected"} ref={ref}/>
+});
+
+CastConnectedIcon.displayName = "CastConnectedIcon";

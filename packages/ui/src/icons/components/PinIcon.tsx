@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PinIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pin"}/>
-}
+export const PinIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pin"} ref={ref}/>
+});
+
+PinIcon.displayName = "PinIcon";

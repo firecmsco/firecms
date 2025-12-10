@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PhotoSizeSelectSmallIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"photo_size_select_small"}/>
-}
+export const PhotoSizeSelectSmallIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"photo_size_select_small"} ref={ref}/>
+});
+
+PhotoSizeSelectSmallIcon.displayName = "PhotoSizeSelectSmallIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StarHalfIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"star_half"}/>
-}
+export const StarHalfIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"star_half"} ref={ref}/>
+});
+
+StarHalfIcon.displayName = "StarHalfIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DomainDisabledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"domain_disabled"}/>
-}
+export const DomainDisabledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"domain_disabled"} ref={ref}/>
+});
+
+DomainDisabledIcon.displayName = "DomainDisabledIcon";

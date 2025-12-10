@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DesktopWindowsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"desktop_windows"}/>
-}
+export const DesktopWindowsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"desktop_windows"} ref={ref}/>
+});
+
+DesktopWindowsIcon.displayName = "DesktopWindowsIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatColorResetIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_color_reset"}/>
-}
+export const FormatColorResetIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_color_reset"} ref={ref}/>
+});
+
+FormatColorResetIcon.displayName = "FormatColorResetIcon";

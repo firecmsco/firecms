@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PermContactCalendarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"perm_contact_calendar"}/>
-}
+export const PermContactCalendarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"perm_contact_calendar"} ref={ref}/>
+});
+
+PermContactCalendarIcon.displayName = "PermContactCalendarIcon";

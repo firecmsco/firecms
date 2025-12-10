@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatOverlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_overline"}/>
-}
+export const FormatOverlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_overline"} ref={ref}/>
+});
+
+FormatOverlineIcon.displayName = "FormatOverlineIcon";

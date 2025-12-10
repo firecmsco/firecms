@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AssuredWorkloadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"assured_workload"}/>
-}
+export const AssuredWorkloadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"assured_workload"} ref={ref}/>
+});
+
+AssuredWorkloadIcon.displayName = "AssuredWorkloadIcon";

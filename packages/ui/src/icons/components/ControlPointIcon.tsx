@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ControlPointIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"control_point"}/>
-}
+export const ControlPointIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"control_point"} ref={ref}/>
+});
+
+ControlPointIcon.displayName = "ControlPointIcon";

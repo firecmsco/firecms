@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HorizontalSplitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"horizontal_split"}/>
-}
+export const HorizontalSplitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"horizontal_split"} ref={ref}/>
+});
+
+HorizontalSplitIcon.displayName = "HorizontalSplitIcon";

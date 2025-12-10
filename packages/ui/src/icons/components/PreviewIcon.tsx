@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PreviewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"preview"}/>
-}
+export const PreviewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"preview"} ref={ref}/>
+});
+
+PreviewIcon.displayName = "PreviewIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WallpaperIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wallpaper"}/>
-}
+export const WallpaperIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wallpaper"} ref={ref}/>
+});
+
+WallpaperIcon.displayName = "WallpaperIcon";

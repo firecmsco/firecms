@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VpnKeyIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"vpn_key"}/>
-}
+export const VpnKeyIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"vpn_key"} ref={ref}/>
+});
+
+VpnKeyIcon.displayName = "VpnKeyIcon";

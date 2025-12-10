@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwipeRightAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"swipe_right_alt"}/>
-}
+export const SwipeRightAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"swipe_right_alt"} ref={ref}/>
+});
+
+SwipeRightAltIcon.displayName = "SwipeRightAltIcon";

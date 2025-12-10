@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatAlignRightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_align_right"}/>
-}
+export const FormatAlignRightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_align_right"} ref={ref}/>
+});
+
+FormatAlignRightIcon.displayName = "FormatAlignRightIcon";

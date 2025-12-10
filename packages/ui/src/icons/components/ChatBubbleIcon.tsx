@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ChatBubbleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"chat_bubble"}/>
-}
+export const ChatBubbleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"chat_bubble"} ref={ref}/>
+});
+
+ChatBubbleIcon.displayName = "ChatBubbleIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CommuteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"commute"}/>
-}
+export const CommuteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"commute"} ref={ref}/>
+});
+
+CommuteIcon.displayName = "CommuteIcon";

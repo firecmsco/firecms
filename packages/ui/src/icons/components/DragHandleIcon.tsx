@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DragHandleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"drag_handle"}/>
-}
+export const DragHandleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"drag_handle"} ref={ref}/>
+});
+
+DragHandleIcon.displayName = "DragHandleIcon";

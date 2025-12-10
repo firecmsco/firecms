@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BorderClearIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"border_clear"}/>
-}
+export const BorderClearIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"border_clear"} ref={ref}/>
+});
+
+BorderClearIcon.displayName = "BorderClearIcon";

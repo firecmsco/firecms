@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HeadsetIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"headset"}/>
-}
+export const HeadsetIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"headset"} ref={ref}/>
+});
+
+HeadsetIcon.displayName = "HeadsetIcon";

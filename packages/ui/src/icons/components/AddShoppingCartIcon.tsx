@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AddShoppingCartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"add_shopping_cart"}/>
-}
+export const AddShoppingCartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"add_shopping_cart"} ref={ref}/>
+});
+
+AddShoppingCartIcon.displayName = "AddShoppingCartIcon";

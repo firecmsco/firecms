@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DisplaySettingsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"display_settings"}/>
-}
+export const DisplaySettingsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"display_settings"} ref={ref}/>
+});
+
+DisplaySettingsIcon.displayName = "DisplaySettingsIcon";

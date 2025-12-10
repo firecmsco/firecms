@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function QueryBuilderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"query_builder"}/>
-}
+export const QueryBuilderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"query_builder"} ref={ref}/>
+});
+
+QueryBuilderIcon.displayName = "QueryBuilderIcon";

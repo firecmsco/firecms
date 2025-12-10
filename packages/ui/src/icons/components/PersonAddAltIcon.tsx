@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PersonAddAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"person_add_alt"}/>
-}
+export const PersonAddAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"person_add_alt"} ref={ref}/>
+});
+
+PersonAddAltIcon.displayName = "PersonAddAltIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NotificationsPausedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"notifications_paused"}/>
-}
+export const NotificationsPausedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"notifications_paused"} ref={ref}/>
+});
+
+NotificationsPausedIcon.displayName = "NotificationsPausedIcon";

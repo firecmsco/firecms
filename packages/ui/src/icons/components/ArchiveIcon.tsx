@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ArchiveIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"archive"}/>
-}
+export const ArchiveIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"archive"} ref={ref}/>
+});
+
+ArchiveIcon.displayName = "ArchiveIcon";

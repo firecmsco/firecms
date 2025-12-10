@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwapCallsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"swap_calls"}/>
-}
+export const SwapCallsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"swap_calls"} ref={ref}/>
+});
+
+SwapCallsIcon.displayName = "SwapCallsIcon";

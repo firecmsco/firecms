@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SquareIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"square"}/>
-}
+export const SquareIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"square"} ref={ref}/>
+});
+
+SquareIcon.displayName = "SquareIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SsidChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"ssid_chart"}/>
-}
+export const SsidChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"ssid_chart"} ref={ref}/>
+});
+
+SsidChartIcon.displayName = "SsidChartIcon";

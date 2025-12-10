@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BentoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"bento"}/>
-}
+export const BentoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"bento"} ref={ref}/>
+});
+
+BentoIcon.displayName = "BentoIcon";

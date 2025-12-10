@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DoneAllIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"done_all"}/>
-}
+export const DoneAllIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"done_all"} ref={ref}/>
+});
+
+DoneAllIcon.displayName = "DoneAllIcon";

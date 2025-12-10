@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VolumeMuteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"volume_mute"}/>
-}
+export const VolumeMuteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"volume_mute"} ref={ref}/>
+});
+
+VolumeMuteIcon.displayName = "VolumeMuteIcon";

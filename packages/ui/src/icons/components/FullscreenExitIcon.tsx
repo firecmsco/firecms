@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FullscreenExitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fullscreen_exit"}/>
-}
+export const FullscreenExitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fullscreen_exit"} ref={ref}/>
+});
+
+FullscreenExitIcon.displayName = "FullscreenExitIcon";

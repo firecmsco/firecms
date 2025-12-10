@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutoFixNormalIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"auto_fix_normal"}/>
-}
+export const AutoFixNormalIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"auto_fix_normal"} ref={ref}/>
+});
+
+AutoFixNormalIcon.displayName = "AutoFixNormalIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Crop32Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"crop_3_2"}/>
-}
+export const Crop32Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"crop_3_2"} ref={ref}/>
+});
+
+Crop32Icon.displayName = "Crop32Icon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ProductionQuantityLimitsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"production_quantity_limits"}/>
-}
+export const ProductionQuantityLimitsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"production_quantity_limits"} ref={ref}/>
+});
+
+ProductionQuantityLimitsIcon.displayName = "ProductionQuantityLimitsIcon";

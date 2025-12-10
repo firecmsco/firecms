@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FlashOnIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"flash_on"}/>
-}
+export const FlashOnIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"flash_on"} ref={ref}/>
+});
+
+FlashOnIcon.displayName = "FlashOnIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PrivateConnectivityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"private_connectivity"}/>
-}
+export const PrivateConnectivityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"private_connectivity"} ref={ref}/>
+});
+
+PrivateConnectivityIcon.displayName = "PrivateConnectivityIcon";

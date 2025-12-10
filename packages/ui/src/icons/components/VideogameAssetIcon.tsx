@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VideogameAssetIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"videogame_asset"}/>
-}
+export const VideogameAssetIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"videogame_asset"} ref={ref}/>
+});
+
+VideogameAssetIcon.displayName = "VideogameAssetIcon";

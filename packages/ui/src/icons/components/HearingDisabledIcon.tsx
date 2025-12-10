@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HearingDisabledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"hearing_disabled"}/>
-}
+export const HearingDisabledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"hearing_disabled"} ref={ref}/>
+});
+
+HearingDisabledIcon.displayName = "HearingDisabledIcon";

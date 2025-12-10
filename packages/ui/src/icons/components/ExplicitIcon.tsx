@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ExplicitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"explicit"}/>
-}
+export const ExplicitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"explicit"} ref={ref}/>
+});
+
+ExplicitIcon.displayName = "ExplicitIcon";

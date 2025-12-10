@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TvIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tv"}/>
-}
+export const TvIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tv"} ref={ref}/>
+});
+
+TvIcon.displayName = "TvIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function QuickContactsDialerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"quick_contacts_dialer"}/>
-}
+export const QuickContactsDialerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"quick_contacts_dialer"} ref={ref}/>
+});
+
+QuickContactsDialerIcon.displayName = "QuickContactsDialerIcon";

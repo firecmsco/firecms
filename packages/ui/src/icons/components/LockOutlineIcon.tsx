@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LockOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"lock_outline"}/>
-}
+export const LockOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"lock_outline"} ref={ref}/>
+});
+
+LockOutlineIcon.displayName = "LockOutlineIcon";

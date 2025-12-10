@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NetworkCellIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"network_cell"}/>
-}
+export const NetworkCellIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"network_cell"} ref={ref}/>
+});
+
+NetworkCellIcon.displayName = "NetworkCellIcon";

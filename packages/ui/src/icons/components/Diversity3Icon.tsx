@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Diversity3Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"diversity_3"}/>
-}
+export const Diversity3Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"diversity_3"} ref={ref}/>
+});
+
+Diversity3Icon.displayName = "Diversity3Icon";

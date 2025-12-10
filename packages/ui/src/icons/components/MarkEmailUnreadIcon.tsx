@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MarkEmailUnreadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mark_email_unread"}/>
-}
+export const MarkEmailUnreadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mark_email_unread"} ref={ref}/>
+});
+
+MarkEmailUnreadIcon.displayName = "MarkEmailUnreadIcon";

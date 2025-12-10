@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MoneyOffCsredIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"money_off_csred"}/>
-}
+export const MoneyOffCsredIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"money_off_csred"} ref={ref}/>
+});
+
+MoneyOffCsredIcon.displayName = "MoneyOffCsredIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NoteAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"note_alt"}/>
-}
+export const NoteAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"note_alt"} ref={ref}/>
+});
+
+NoteAltIcon.displayName = "NoteAltIcon";

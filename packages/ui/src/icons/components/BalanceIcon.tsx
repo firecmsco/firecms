@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BalanceIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"balance"}/>
-}
+export const BalanceIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"balance"} ref={ref}/>
+});
+
+BalanceIcon.displayName = "BalanceIcon";

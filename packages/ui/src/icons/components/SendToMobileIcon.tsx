@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SendToMobileIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"send_to_mobile"}/>
-}
+export const SendToMobileIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"send_to_mobile"} ref={ref}/>
+});
+
+SendToMobileIcon.displayName = "SendToMobileIcon";

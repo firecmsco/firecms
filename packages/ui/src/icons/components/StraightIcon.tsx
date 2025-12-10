@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StraightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"straight"}/>
-}
+export const StraightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"straight"} ref={ref}/>
+});
+
+StraightIcon.displayName = "StraightIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PhpIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"php"}/>
-}
+export const PhpIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"php"} ref={ref}/>
+});
+
+PhpIcon.displayName = "PhpIcon";

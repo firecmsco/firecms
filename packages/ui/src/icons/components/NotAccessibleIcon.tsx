@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NotAccessibleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"not_accessible"}/>
-}
+export const NotAccessibleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"not_accessible"} ref={ref}/>
+});
+
+NotAccessibleIcon.displayName = "NotAccessibleIcon";

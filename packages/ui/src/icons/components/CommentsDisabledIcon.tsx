@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CommentsDisabledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"comments_disabled"}/>
-}
+export const CommentsDisabledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"comments_disabled"} ref={ref}/>
+});
+
+CommentsDisabledIcon.displayName = "CommentsDisabledIcon";

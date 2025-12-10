@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TerminalIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"terminal"}/>
-}
+export const TerminalIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"terminal"} ref={ref}/>
+});
+
+TerminalIcon.displayName = "TerminalIcon";

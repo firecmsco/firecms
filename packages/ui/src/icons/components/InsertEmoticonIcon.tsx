@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function InsertEmoticonIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"insert_emoticon"}/>
-}
+export const InsertEmoticonIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"insert_emoticon"} ref={ref}/>
+});
+
+InsertEmoticonIcon.displayName = "InsertEmoticonIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwapHorizontalCircleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"swap_horizontal_circle"}/>
-}
+export const SwapHorizontalCircleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"swap_horizontal_circle"} ref={ref}/>
+});
+
+SwapHorizontalCircleIcon.displayName = "SwapHorizontalCircleIcon";

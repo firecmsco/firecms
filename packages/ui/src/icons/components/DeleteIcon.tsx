@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DeleteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"delete"}/>
-}
+export const DeleteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"delete"} ref={ref}/>
+});
+
+DeleteIcon.displayName = "DeleteIcon";

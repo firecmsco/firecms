@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SettingsEthernetIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"settings_ethernet"}/>
-}
+export const SettingsEthernetIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"settings_ethernet"} ref={ref}/>
+});
+
+SettingsEthernetIcon.displayName = "SettingsEthernetIcon";

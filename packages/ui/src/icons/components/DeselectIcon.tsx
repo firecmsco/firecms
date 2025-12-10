@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DeselectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"deselect"}/>
-}
+export const DeselectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"deselect"} ref={ref}/>
+});
+
+DeselectIcon.displayName = "DeselectIcon";

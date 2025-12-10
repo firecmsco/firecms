@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewTimelineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_timeline"}/>
-}
+export const ViewTimelineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_timeline"} ref={ref}/>
+});
+
+ViewTimelineIcon.displayName = "ViewTimelineIcon";

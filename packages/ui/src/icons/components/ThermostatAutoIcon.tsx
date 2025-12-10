@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ThermostatAutoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"thermostat_auto"}/>
-}
+export const ThermostatAutoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"thermostat_auto"} ref={ref}/>
+});
+
+ThermostatAutoIcon.displayName = "ThermostatAutoIcon";

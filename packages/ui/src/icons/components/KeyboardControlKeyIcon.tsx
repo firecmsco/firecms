@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function KeyboardControlKeyIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"keyboard_control_key"}/>
-}
+export const KeyboardControlKeyIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"keyboard_control_key"} ref={ref}/>
+});
+
+KeyboardControlKeyIcon.displayName = "KeyboardControlKeyIcon";

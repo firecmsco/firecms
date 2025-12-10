@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ShieldMoonIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"shield_moon"}/>
-}
+export const ShieldMoonIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"shield_moon"} ref={ref}/>
+});
+
+ShieldMoonIcon.displayName = "ShieldMoonIcon";

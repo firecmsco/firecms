@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MapIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"map"}/>
-}
+export const MapIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"map"} ref={ref}/>
+});
+
+MapIcon.displayName = "MapIcon";

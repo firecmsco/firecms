@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScreenSearchDesktopIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"screen_search_desktop"}/>
-}
+export const ScreenSearchDesktopIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"screen_search_desktop"} ref={ref}/>
+});
+
+ScreenSearchDesktopIcon.displayName = "ScreenSearchDesktopIcon";

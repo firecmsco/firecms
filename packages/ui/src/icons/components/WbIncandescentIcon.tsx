@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WbIncandescentIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wb_incandescent"}/>
-}
+export const WbIncandescentIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wb_incandescent"} ref={ref}/>
+});
+
+WbIncandescentIcon.displayName = "WbIncandescentIcon";

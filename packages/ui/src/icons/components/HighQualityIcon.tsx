@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HighQualityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"high_quality"}/>
-}
+export const HighQualityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"high_quality"} ref={ref}/>
+});
+
+HighQualityIcon.displayName = "HighQualityIcon";

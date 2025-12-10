@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ErrorOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"error_outline"}/>
-}
+export const ErrorOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"error_outline"} ref={ref}/>
+});
+
+ErrorOutlineIcon.displayName = "ErrorOutlineIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutorenewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"autorenew"}/>
-}
+export const AutorenewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"autorenew"} ref={ref}/>
+});
+
+AutorenewIcon.displayName = "AutorenewIcon";
