@@ -1,22 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from "react";
 
-export function useEmbedPortal(): HTMLElement | undefined {
-    const [portalContainer, setPortalContainer] = useState<HTMLElement | undefined>();
+export function useShadowPortal(providedRef?: React.Ref<HTMLElement>) {
+    const [container, setContainer] = useState<HTMLElement | undefined>(undefined);
 
-    useEffect(() => {
-        // Walk up the DOM tree to find the shadow root
-        let element = document.activeElement;
-
-        // If we're in a shadow DOM, getRootNode() will return the shadow root
-        while (element) {
-            const root = element.getRootNode();
-            if (root instanceof ShadowRoot) {
-                setPortalContainer((root as any).__portalContainer);
-                return;
+    const ref = useCallback((node: HTMLElement | null) => {
+        // 1. Forward the ref to the user provided ref (if it exists)
+        if (providedRef) {
+            if (typeof providedRef === "function") {
+                providedRef(node);
+            } else {
+                (providedRef as React.MutableRefObject<HTMLElement | null>).current = node;
             }
-            element = element.parentElement;
         }
-    }, []);
 
-    return portalContainer;
+        // 2. Efficiently detect Shadow DOM on mount
+        if (node) {
+            const root = node.getRootNode();
+            if (root instanceof ShadowRoot) {
+                setContainer(root as any);
+            } else {
+                setContainer(document.body);
+            }
+        }
+    }, [providedRef]);
+
+    return {
+        ref,
+        container
+    };
 }

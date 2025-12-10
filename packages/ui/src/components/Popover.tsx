@@ -5,6 +5,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { paperMixin } from "../styles";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
+import { useShadowPortal } from "../hooks/useShadowPortal";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";
@@ -49,16 +50,30 @@ export function Popover({
 
     useInjectStyles("Popover", popoverStyles);
 
+    // 1. Get the detection ref and the auto-detected container
+    const {
+        ref: detectRef,
+        container: shadowContainer
+    } = useShadowPortal();
+
+    // 2. Prioritize manual prop, fallback to auto-detected container
+    // We cast to HTMLElement because Radix types are strict about null vs undefined
+    const finalContainer = (portalContainer || shadowContainer) as HTMLElement | undefined;
+
     if (!enabled)
         return <>{trigger}</>;
 
     return <PopoverPrimitive.Root open={open}
                                   onOpenChange={onOpenChange}
                                   modal={modal}>
-        <PopoverPrimitive.Trigger asChild>
+
+        {/* 3. Attach the detection ref here.
+            Radix handles merging this ref with the child's existing ref automatically. */}
+        <PopoverPrimitive.Trigger asChild ref={detectRef}>
             {trigger}
         </PopoverPrimitive.Trigger>
-        <PopoverPrimitive.Portal container={portalContainer}>
+
+        <PopoverPrimitive.Portal container={finalContainer}>
             <PopoverPrimitive.Content
                 className={cls(paperMixin,
                     "PopoverContent z-40", className)}
@@ -79,7 +94,7 @@ export function Popover({
 }
 
 const popoverStyles = `
-
+/* ... (styles remain unchanged) ... */
 .PopoverContent {
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -97,7 +112,6 @@ const popoverStyles = `
 .PopoverContent[data-state='open'][data-side='left'] {
   animation-name: slideRightAndFade;
 }
-
 
 @keyframes slideUpAndFade {
   from {

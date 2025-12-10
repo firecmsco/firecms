@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, Children, forwardRef, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, Children, forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import {
     defaultBorderMixin,
@@ -12,6 +12,7 @@ import {
 import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
+import { useShadowPortal } from "../hooks/useShadowPortal";
 
 export type SelectValue = string | number | boolean;
 
@@ -40,6 +41,7 @@ export type SelectProps<T extends SelectValue = string> = {
     invisible?: boolean,
     children?: React.ReactNode;
     dataType?: "string" | "number" | "boolean";
+    portalContainer?: HTMLElement | null; // Explicitly added to props type if missing
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
@@ -67,6 +69,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    invisible,
                                                                    children,
                                                                    dataType = "string",
+                                                                   portalContainer: manualContainer, // Rename to avoid confusion
                                                                    ...props
                                                                }, ref) => {
 
@@ -76,8 +79,19 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
         setOpenInternal(open ?? false);
     }, [open]);
 
-    const onValueChangeInternal = useCallback((newValue: string) => {
+    // 1. PERFORMANCE: Pass inputRef to the hook.
+    // The hook returns 'triggerRef' which does two things:
+    // a) Updates your original inputRef (if provided)
+    // b) Detects the ShadowRoot efficiently
+    const {
+        ref: triggerRef,
+        container: shadowContainer
+    } = useShadowPortal(inputRef as any);
 
+    // 2. Resolve final container (Manual Prop > Shadow Root > Undefined/Body)
+    const finalContainer = (manualContainer || shadowContainer) as HTMLElement | undefined;
+
+    const onValueChangeInternal = useCallback((newValue: string) => {
         let typedValue: SelectValue = newValue;
         if (dataType === "boolean") {
             if (newValue === "true") typedValue = true;
@@ -96,11 +110,23 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             } as unknown as ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
-    }, [onChange, onValueChange, name]);
+    }, [onChange, onValueChange, name, dataType]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : (value != null && value !== "" && value !== undefined);
-    // Convert non-string values to strings for Radix UI
     const stringValue = value !== undefined ? String(value) : undefined;
+
+    const displayChildren = useMemo(() => {
+        if (!hasValue || renderValue) return null;
+
+        // Find the child that matches the current value to display its content
+        let found: React.ReactNode = null;
+        Children.forEach(children, (child) => {
+            if (React.isValidElement(child) && String((child.props as any).value) === String(value)) {
+                found = child.props.children;
+            }
+        });
+        return found;
+    }, [children, hasValue, renderValue, value]);
 
     return (
         <SelectPrimitive.Root
@@ -131,7 +157,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 }
             )}>
                 <SelectPrimitive.Trigger
-                    ref={inputRef}
+                    ref={triggerRef}
                     id={id}
                     asChild
                 >
@@ -178,19 +204,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 }}
                                 placeholder={placeholder}
                                 className={"w-full"}>
-                                {hasValue && value !== undefined && renderValue ? renderValue(value) : placeholder}
-                                {/*{hasValue && !renderValue && value}*/}
-                                {hasValue && !renderValue && (() => {
-                                    // @ts-ignore
-                                    const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
-                                        if (React.isValidElement(child)) {
-                                            return child.props;
-                                        }
-                                    }).filter(Boolean);
 
-                                    const option = childrenProps.find((o) => String(o.value) === String(value));
-                                    return option?.children;
-                                })()}
+                                {hasValue && value !== undefined && renderValue
+                                    ? renderValue(value)
+                                    : (displayChildren || placeholder)
+                                }
 
                             </SelectPrimitive.Value>
                         </div>
@@ -216,7 +234,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     </div>
                 )}
             </div>
-            <SelectPrimitive.Portal>
+
+            {/* Pass the calculated finalContainer */}
+            <SelectPrimitive.Portal container={finalContainer}>
                 <SelectPrimitive.Content position={position}
                                          className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={cls("p-1", viewportClassName)}
@@ -231,6 +251,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
 Select.displayName = "Select";
 
+// ... (SelectItem and SelectGroup remain unchanged)
 export type SelectItemProps<T extends SelectValue = string> = {
     value: T,
     children?: React.ReactNode,
