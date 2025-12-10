@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-tw4.6",
+  "version": "3.0.0-tw4.7",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-tw4.6",
-    "@firecms/firebase": "^3.0.0-tw4.6",
-    "@firecms/ui": "^3.0.0-tw4.6"
+    "@firecms/core": "^3.0.0-tw4.7",
+    "@firecms/firebase": "^3.0.0-tw4.7",
+    "@firecms/ui": "^3.0.0-tw4.7"
   },
   "exports": {
     ".": {
@@ -39,5 +39,5 @@
     "src",
     "tailwind.config.js"
   ],
-  "gitHead": "3bdbaf874e6086e8cbf6856e0b74eacf16985763"
+  "gitHead": "b0602e4524b8e11b54d1ca7f315def39c230c5d5"
 }
