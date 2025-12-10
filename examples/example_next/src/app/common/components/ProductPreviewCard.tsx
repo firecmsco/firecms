@@ -22,7 +22,7 @@ const ProductPreviewCard: React.FC<ProductPreviewCardProps> = ({ product, classN
             )}
 
             <div
-                className={"h-full relative flex flex-col justify-end bg-gradient-to-t from-surface-600 via-[#00000010] via-40% to-60% pb-2"}>
+                className={"h-full relative flex flex-col justify-end bg-linear-to-t from-surface-600 via-[#00000010] via-40% to-60% pb-2"}>
                 <div className="px-6 typography-h6">{product.name}</div>
                 <div className="px-6 flex gap-4">
                     {product.price && <span

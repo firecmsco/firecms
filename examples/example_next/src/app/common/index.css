@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../../packages/**/src/**/*.{js,ts,jsx,tsx}";
+@source "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
 
 :root {
     --color-primary: #0070F4;
@@ -15,61 +22,58 @@ a {
     @apply text-primary dark:text-primary
 }
 
-@layer utilities {
+.typography-h1 {
+    @apply text-5xl font-headers;
+}
 
-    .typography-h1 {
-        @apply text-5xl font-headers;
-    }
+.typography-h2 {
+    @apply text-4xl font-headers;
+}
 
-    .typography-h2 {
-        @apply text-4xl font-headers;
-    }
+.typography-h3 {
+    @apply text-3xl font-headers font-normal;
+}
 
-    .typography-h3 {
-        @apply text-3xl font-headers font-normal;
-    }
+.typography-h4 {
+    @apply text-3xl font-headers font-normal;
+}
 
-    .typography-h4 {
-        @apply text-3xl font-headers font-normal;
-    }
+.typography-h5 {
+    @apply text-2xl font-headers font-normal;
+}
 
-    .typography-h5 {
-        @apply text-2xl font-headers font-normal;
-    }
+.typography-h6 {
+    @apply text-xl font-headers font-medium;
+}
 
-    .typography-h6 {
-        @apply text-xl font-headers font-medium;
-    }
+.typography-subtitle1 {
+    @apply text-lg font-headers font-medium;
+}
 
-    .typography-subtitle1 {
-        @apply text-lg font-headers font-medium;
-    }
+.typography-subtitle2 {
+    @apply text-base font-headers font-medium;
+}
 
-    .typography-subtitle2 {
-        @apply text-base font-headers font-medium;
-    }
+.typography-body1 {
+    /*@apply text-base;*/
+}
 
-    .typography-body1 {
-        /*@apply text-base;*/
-    }
+.typography-body2 {
+    @apply text-sm;
+}
 
-    .typography-body2 {
-        @apply text-sm;
-    }
+.typography-caption {
+    @apply text-xs;
+}
 
-    .typography-caption {
-        @apply text-xs;
-    }
+.typography-label {
+    @apply text-sm font-medium;
+}
 
-    .typography-label {
-        @apply text-sm font-medium;
-    }
+.typography-inherit {
+    @apply text-inherit;
+}
 
-    .typography-inherit {
-        @apply text-inherit;
-    }
-
-    .typography-button {
-        @apply text-sm font-medium uppercase;
-    }
+.typography-button {
+    @apply text-sm font-medium uppercase;
 }

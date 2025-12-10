@@ -25,7 +25,7 @@ export default function RootLayout({
         <body>
         <NextTopLoader color={"#16D6D1"}/>
 
-        <main className={"relative w-full min-h-[100dvh] flex flex-col"}>
+        <main className={"relative w-full min-h-dvh flex flex-col"}>
 
             <Header/>
 

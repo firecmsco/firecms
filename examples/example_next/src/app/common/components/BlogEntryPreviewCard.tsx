@@ -20,7 +20,7 @@ const BlogEntryPreviewCard: React.FC<BlogEntryPreviewCardProps> = ({ blogEntry }
             )}
 
             <div
-                className={"h-full relative flex flex-col justify-end bg-gradient-to-t from-black via-[#00000010] via-40% to-60% pb-2"}>
+                className={"h-full relative flex flex-col justify-end bg-linear-to-t from-black via-[#00000010] via-40% to-60% pb-2"}>
                 <div className="px-6 py-4 typography-h5">{blogEntry.name}</div>
             </div>
 

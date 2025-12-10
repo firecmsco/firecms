@@ -68,8 +68,18 @@ export function useBuildProjectConfig({
                                           projectId,
                                       }: ProjectConfigParams): ProjectConfig {
 
-    const [primaryColor, setPrimaryColor] = useState<string | undefined>(DEFAULT_PRIMARY_COLOR);
-    const [secondaryColor, setSecondaryColor] = useState<string | undefined>(DEFAULT_SECONDARY_COLOR);
+    const [primaryColor, setPrimaryColor] = useState<string | undefined>(() => {
+        // Check for legacy CSS property
+        const legacyPrimary = getComputedStyle(document.documentElement)
+            .getPropertyValue('--fcms-primary')?.trim();
+        return legacyPrimary || DEFAULT_PRIMARY_COLOR;
+    });
+    const [secondaryColor, setSecondaryColor] = useState<string | undefined>(() => {
+        // Check for legacy CSS property
+        const legacySecondary = getComputedStyle(document.documentElement)
+            .getPropertyValue('--fcms-secondary')?.trim();
+        return legacySecondary || DEFAULT_SECONDARY_COLOR;
+    });
 
     const projectPath = `projects/${projectId}`;
     const configPath = projectId ? projectPath : undefined;
@@ -121,13 +131,17 @@ export function useBuildProjectConfig({
     useEffect(() => {
         if (primaryColor) {
             document.documentElement.style.setProperty("--color-primary", primaryColor);
+            document.documentElement.style.setProperty("--fcms-primary", primaryColor);
         } else {
             document.documentElement.style.setProperty("--color-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
         }
         if (secondaryColor) {
             document.documentElement.style.setProperty("--color-secondary", secondaryColor);
+            document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
         } else {
             document.documentElement.style.setProperty("--color-secondary", DEFAULT_SECONDARY_COLOR);
+            document.documentElement.style.setProperty("--fcms-secondary", DEFAULT_SECONDARY_COLOR);
         }
 
     }, [primaryColor, secondaryColor]);

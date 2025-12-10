@@ -1,8 +1,11 @@
-@import "@firecms/ui/index.css";
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+
 
 :root {
     --color-primary: #0070F4;

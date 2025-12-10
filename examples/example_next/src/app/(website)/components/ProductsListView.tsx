@@ -183,7 +183,7 @@ export function ProductsListView({
                 <div className={"flex flex-row my-4 w-full items-end gap-4"}>
 
                     <Tabs
-                        className={"flex-grow overflow-auto"}
+                        className={"grow overflow-auto"}
                         innerClassName={"items-end"}
                         value={categoryFilter ?? "_all"}
                         onValueChange={(value) => updateCategoriesFilter(value === "_all" ? undefined : value)}
