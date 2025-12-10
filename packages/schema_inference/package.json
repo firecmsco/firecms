@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-tw4.6",
+  "version": "3.0.0-tw4.7",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
