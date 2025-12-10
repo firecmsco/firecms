@@ -1,7 +1,7 @@
 {
   "name": "@firecms/data_enhancement",
   "type": "module",
-  "version": "3.0.0-tw4.5",
+  "version": "3.0.0-tw4.6",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +15,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-tw4.5",
-    "@firecms/editor": "^3.0.0-tw4.5"
+    "@firecms/core": "^3.0.0-tw4.6",
+    "@firecms/editor": "^3.0.0-tw4.6"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",
@@ -78,5 +78,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "c6a343dcea7157a578df2908d1a487aa18ae1112"
+  "gitHead": "755784003778a08a59e4b21c21ddbb37f0f18e77"
 }
