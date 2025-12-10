@@ -12,6 +12,9 @@
     --color-secondary-light: oklch(from var(--color-secondary) calc(l + 0.15) c h);
     --color-secondary-dark: oklch(from var(--color-secondary) calc(l - 0.15) c h);
 
+    --color-primary-bg: oklch(from var(--color-primary) l c h / 0.1);
+    --color-secondary-bg: oklch(from var(--color-secondary) l c h / 0.1);
+
     /* Field Colors */
     --color-field-disabled: rgb(224 224 226);
     --color-field-disabled-dark: rgb(35 35 37);

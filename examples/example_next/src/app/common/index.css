@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #12b6b2;
+    --color-primary: #0070F4;
+    --color-secondary: #12b6b2;
 }
 
 body {

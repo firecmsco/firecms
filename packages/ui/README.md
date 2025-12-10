@@ -74,9 +74,8 @@ Finally, you need to define your primary and secondary colors in your `index.css
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
 }
 ```
 
