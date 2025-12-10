@@ -1,7 +1,7 @@
 {
   "name": "@firecms/collection_editor_firebase",
   "type": "module",
-  "version": "3.0.0-tw4.5",
+  "version": "3.0.0-tw4.6",
   "publishConfig": {
     "access": "public"
   },
@@ -29,9 +29,9 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-tw4.5",
-    "@firecms/core": "^3.0.0-tw4.5",
-    "@firecms/firebase": "^3.0.0-tw4.5"
+    "@firecms/collection_editor": "^3.0.0-tw4.6",
+    "@firecms/core": "^3.0.0-tw4.6",
+    "@firecms/firebase": "^3.0.0-tw4.6"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",
@@ -56,5 +56,5 @@
     "dist",
     "src"
   ],
-  "gitHead": "0f16c9b5332f70bbcad9eb4d249ba220964d4195"
+  "gitHead": "3bdbaf874e6086e8cbf6856e0b74eacf16985763"
 }

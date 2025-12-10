@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-tw4.5",
+  "version": "3.0.0-tw4.6",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
@@ -29,7 +29,7 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "0f16c9b5332f70bbcad9eb4d249ba220964d4195",
+  "gitHead": "3bdbaf874e6086e8cbf6856e0b74eacf16985763",
   "dependencies": {
     "axios": "1.13.2",
     "vite-plugin-static-copy": "3.1.4"

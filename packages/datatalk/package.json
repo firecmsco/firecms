@@ -1,6 +1,6 @@
 {
   "name": "@firecms/datatalk",
-  "version": "3.0.0-tw4.5",
+  "version": "3.0.0-tw4.6",
   "description": "Talk to your Firestore data",
   "type": "module",
   "main": "dist/index.cjs",
@@ -29,15 +29,15 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@firecms/collection_editor_firebase": "^3.0.0-tw4.5",
-    "@firecms/core": "^3.0.0-tw4.5",
-    "@firecms/data_export": "^3.0.0-tw4.5",
-    "@firecms/data_import": "^3.0.0-tw4.5",
-    "@firecms/data_import_export": "^3.0.0-tw4.5",
-    "@firecms/firebase": "^3.0.0-tw4.5",
-    "@firecms/formex": "^3.0.0-tw4.5",
-    "@firecms/schema_inference": "^3.0.0-tw4.5",
-    "@firecms/ui": "^3.0.0-tw4.5",
+    "@firecms/collection_editor_firebase": "^3.0.0-tw4.6",
+    "@firecms/core": "^3.0.0-tw4.6",
+    "@firecms/data_export": "^3.0.0-tw4.6",
+    "@firecms/data_import": "^3.0.0-tw4.6",
+    "@firecms/data_import_export": "^3.0.0-tw4.6",
+    "@firecms/firebase": "^3.0.0-tw4.6",
+    "@firecms/formex": "^3.0.0-tw4.6",
+    "@firecms/schema_inference": "^3.0.0-tw4.6",
+    "@firecms/ui": "^3.0.0-tw4.6",
     "@monaco-editor/react": "^4.7.0"
   },
   "devDependencies": {
@@ -47,5 +47,5 @@
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
   },
-  "gitHead": "0f16c9b5332f70bbcad9eb4d249ba220964d4195"
+  "gitHead": "3bdbaf874e6086e8cbf6856e0b74eacf16985763"
 }
