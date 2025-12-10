@@ -1,7 +1,7 @@
 {
   "name": "@firecms/firebase",
   "type": "module",
-  "version": "3.0.0-tw4.9",
+  "version": "3.0.0-tw4.10",
   "publishConfig": {
     "access": "public"
   },
@@ -11,14 +11,14 @@
   "source": "src/index.ts",
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/collection_editor": "^3.0.0-tw4.9",
-    "@firecms/core": "^3.0.0-tw4.9",
-    "@firecms/data_enhancement": "^3.0.0-tw4.9",
-    "@firecms/data_export": "^3.0.0-tw4.9",
-    "@firecms/data_import": "^3.0.0-tw4.9",
-    "@firecms/data_import_export": "^3.0.0-tw4.9",
-    "@firecms/schema_inference": "^3.0.0-tw4.9",
-    "@firecms/ui": "^3.0.0-tw4.9",
+    "@firecms/collection_editor": "^3.0.0-tw4.10",
+    "@firecms/core": "^3.0.0-tw4.10",
+    "@firecms/data_enhancement": "^3.0.0-tw4.10",
+    "@firecms/data_export": "^3.0.0-tw4.10",
+    "@firecms/data_import": "^3.0.0-tw4.10",
+    "@firecms/data_import_export": "^3.0.0-tw4.10",
+    "@firecms/schema_inference": "^3.0.0-tw4.10",
+    "@firecms/ui": "^3.0.0-tw4.10",
     "react-router": "^6.30.2",
     "react-router-dom": "^6.30.2"
   },
@@ -53,5 +53,5 @@
     "dist",
     "src"
   ],
-  "gitHead": "84019e86e3afd216fbfad4502aafa0b5b9134dd5"
+  "gitHead": "ee51b8c020d0b7523c17cd962b66db803f3e7b3d"
 }
