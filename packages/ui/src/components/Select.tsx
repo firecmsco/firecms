@@ -102,6 +102,19 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
     // Convert non-string values to strings for Radix UI
     const stringValue = value !== undefined ? String(value) : undefined;
 
+    const selectedChild = React.useMemo(() => {
+        if (!hasValue || renderValue) return null;
+        // @ts-ignore
+        const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+                return child.props;
+            }
+        }).filter(Boolean);
+
+        const option = childrenProps.find((o) => String(o.value) === String(value));
+        return option?.children;
+    }, [children, hasValue, renderValue, value]);
+
     return (
         <SelectPrimitive.Root
             name={name}
@@ -179,17 +192,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 className={"w-full"}>
                                 {hasValue && value !== undefined && renderValue ? renderValue(value) : placeholder}
                                 {/*{hasValue && !renderValue && value}*/}
-                                {hasValue && !renderValue && (() => {
-                                    // @ts-ignore
-                                    const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
-                                        if (React.isValidElement(child)) {
-                                            return child.props;
-                                        }
-                                    }).filter(Boolean);
-
-                                    const option = childrenProps.find((o) => String(o.value) === String(value));
-                                    return option?.children;
-                                })()}
+                                {hasValue && !renderValue && selectedChild}
 
                             </SelectPrimitive.Value>
                         </div>
@@ -237,7 +240,7 @@ export type SelectItemProps<T extends SelectValue = string> = {
     className?: string,
 };
 
-export function SelectItem<T extends SelectValue = string>({
+export const SelectItem = React.memo(function SelectItem<T extends SelectValue = string>({
                                                                value,
                                                                children,
                                                                disabled,
@@ -267,7 +270,7 @@ export function SelectItem<T extends SelectValue = string>({
             <CheckIcon size={16}/>
         </div>
     </SelectPrimitive.Item>;
-}
+});
 
 export type SelectGroupProps = {
     label: React.ReactNode,
@@ -275,7 +278,7 @@ export type SelectGroupProps = {
     className?: string
 };
 
-export function SelectGroup({
+export const SelectGroup = React.memo(function SelectGroup({
                                 label,
                                 children,
                                 className
@@ -292,4 +295,4 @@ export function SelectGroup({
 
         {children}
     </>;
-}
+});

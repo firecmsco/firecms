@@ -135,7 +135,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         };
     }, [maxRows, minRows, props.placeholder]);
 
-    const updateState = (prevState: State, newState: State) => {
+    const updateState = React.useCallback((prevState: State, newState: State) => {
         const {
             outerHeightStyle,
             overflow
@@ -165,7 +165,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             }
         }
         return prevState;
-    };
+    }, []);
 
     const syncHeight = React.useCallback(() => {
         const newState = getUpdatedState();
@@ -180,9 +180,9 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         setState((prevState) => {
             return updateState(prevState, newState);
         });
-    }, [getUpdatedState, onResize]);
+    }, [getUpdatedState, onResize, updateState]);
 
-    const syncHeightWithFlushSync = () => {
+    const syncHeightWithFlushSync = React.useCallback(() => {
         const newState = getUpdatedState();
 
         if (isEmpty(newState)) {
@@ -197,7 +197,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                 return updateState(prevState, newState);
             });
         });
-    };
+    }, [getUpdatedState, updateState]);
 
     React.useEffect(() => {
         const handleResize = debounce(() => {
@@ -232,7 +232,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                 resizeObserver.disconnect();
             }
         };
-    });
+    }, [syncHeightWithFlushSync]);
 
     useLayoutEffect(() => {
         syncHeight();

@@ -15,7 +15,7 @@ export type ButtonProps<C extends React.ElementType = "button"> = {
     onClick?: React.MouseEventHandler<any>;
 } & React.ComponentPropsWithoutRef<C>;
 
-const ButtonInner = React.forwardRef<
+const ButtonInner = React.memo(React.forwardRef<
     HTMLButtonElement,
     ButtonProps<React.ElementType>
 >(({
@@ -103,7 +103,7 @@ const ButtonInner = React.forwardRef<
         </button>
     );
 
-});
+}));
 
 ButtonInner.displayName = "Button"
 

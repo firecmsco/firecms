@@ -40,7 +40,7 @@ const colorClasses = {
     secondary: "bg-secondary"
 }
 
-export const Checkbox = ({
+export const Checkbox = React.memo(({
                              id,
                              checked,
                              indeterminate = false,
@@ -99,4 +99,4 @@ export const Checkbox = ({
             </div>
         </CheckboxPrimitive.Root>
     );
-};
+});
