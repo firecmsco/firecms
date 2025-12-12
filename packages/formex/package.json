@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-tw4.11",
+  "version": "3.0.0-tw4.12",
   "publishConfig": {
     "access": "public"
   },
@@ -74,5 +74,5 @@
       "node"
     ]
   },
-  "gitHead": "d919bc9f709287e84e79780867dd34ec3367b110"
+  "gitHead": "1f7c6023c1029d6036388cbb361b078629a6a4a3"
 }
