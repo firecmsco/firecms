@@ -88,7 +88,8 @@ module.exports = {
                 "self/custom_storage",
                 "self/controllers",
                 "self/migrating_from_v2_to_v3",
-                "self/migrating_from_v3_beta"
+                "self/migrating_from_v3_beta",
+                "self/upgrade_tailwind_v4",
             ]
         },
         {

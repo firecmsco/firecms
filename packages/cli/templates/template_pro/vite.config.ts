@@ -1,5 +1,6 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     esbuild: {
@@ -12,6 +13,7 @@ export default defineConfig({
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
-        react({})
+        react({}),
+        tailwindcss()
     ]
 })

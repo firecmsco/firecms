@@ -2559,35 +2559,35 @@ Feel free to add any of this classes to your `index.css` file, to override the d
 
 ```css
 .typography-h1 {
-    @apply text-6xl font-headers font-light;
+    @apply text-6xl font-light;
 }
 
 .typography-h2 {
-    @apply text-5xl font-headers font-light;
+    @apply text-5xl font-light;
 }
 
 .typography-h3 {
-    @apply text-4xl font-headers font-normal;
+    @apply text-4xl font-normal;
 }
 
 .typography-h4 {
-    @apply text-3xl font-headers font-normal;
+    @apply text-3xl font-normal;
 }
 
 .typography-h5 {
-    @apply text-2xl font-headers font-normal;
+    @apply text-2xl font-normal;
 }
 
 .typography-h6 {
-    @apply text-xl font-headers font-medium;
+    @apply text-xl font-medium;
 }
 
 .typography-subtitle1 {
-    @apply text-lg font-headers font-medium;
+    @apply text-lg font-medium;
 }
 
 .typography-subtitle2 {
-    @apply text-base font-headers font-medium;
+    @apply text-base font-medium;
 }
 
 .typography-body1 {
