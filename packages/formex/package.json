@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-tw4.10",
+  "version": "3.0.0-tw4.11",
   "publishConfig": {
     "access": "public"
   },
