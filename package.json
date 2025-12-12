@@ -28,6 +28,7 @@
     "packages/schema_inference",
     "packages/data_enhancement",
     "packages/user_management",
+    "packages/explorer",
     "packages/formex",
     "packages/editor",
     "examples/example_cloud",
