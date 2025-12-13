@@ -12,7 +12,7 @@ import {
 import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
-import { useShadowPortal } from "../hooks/useShadowPortal";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type SelectValue = string | number | boolean;
 
@@ -79,17 +79,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
         setOpenInternal(open ?? false);
     }, [open]);
 
-    // 1. PERFORMANCE: Pass inputRef to the hook.
-    // The hook returns 'triggerRef' which does two things:
-    // a) Updates your original inputRef (if provided)
-    // b) Detects the ShadowRoot efficiently
-    const {
-        ref: triggerRef,
-        container: shadowContainer
-    } = useShadowPortal(inputRef as any);
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
 
-    // 2. Resolve final container (Manual Prop > Shadow Root > Undefined/Body)
-    const finalContainer = (manualContainer || shadowContainer) as HTMLElement | undefined;
+    // Resolve final container (Manual Prop > Context Container > Undefined/Body)
+    const finalContainer = (manualContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
     const onValueChangeInternal = useCallback((newValue: string) => {
         let typedValue: SelectValue = newValue;
@@ -157,7 +151,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 }
             )}>
                 <SelectPrimitive.Trigger
-                    ref={triggerRef}
+                    ref={inputRef}
                     id={id}
                     asChild
                 >

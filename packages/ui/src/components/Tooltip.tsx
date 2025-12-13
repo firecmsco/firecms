@@ -4,6 +4,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type TooltipProps = {
     open?: boolean,
@@ -43,6 +44,12 @@ export const Tooltip = ({
 
     useInjectStyles("Tooltip", styles);
 
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (container ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     if (!title)
         return <>{children}</>;
 
@@ -60,7 +67,7 @@ export const Tooltip = ({
         <TooltipPrimitive.Provider delayDuration={delayDuration}>
             <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
                 {trigger}
-                <TooltipPrimitive.Portal container={container}>
+                <TooltipPrimitive.Portal container={finalContainer}>
                     <TooltipPrimitive.Content
                         className={cls("TooltipContent",
                             "max-w-lg leading-relaxed",

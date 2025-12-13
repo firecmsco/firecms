@@ -3,6 +3,7 @@ import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export function Menubar({
                             children,
@@ -53,9 +54,19 @@ export function MenubarTrigger({
 
 export function MenubarPortal({
                                   children,
-                              }: { children: React.ReactNode }) {
+                                  portalContainer,
+                              }: {
+    children: React.ReactNode;
+    portalContainer?: HTMLElement | null;
+}) {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     return (
-        <MenubarPrimitive.Portal>
+        <MenubarPrimitive.Portal container={finalContainer}>
             {children}
         </MenubarPrimitive.Portal>
     )

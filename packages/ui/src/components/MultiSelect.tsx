@@ -17,6 +17,7 @@ import {
     focusedDisabled
 } from "../styles";
 import { useInjectStyles } from "../hooks";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type MultiSelectValue = string | number | boolean;
 
@@ -59,6 +60,7 @@ interface MultiSelectProps<T extends MultiSelectValue = string> {
     invisible?: boolean,
     children: React.ReactNode;
     renderValues?: (values: T[]) => React.ReactNode;
+    portalContainer?: HTMLElement | null;
 }
 
 // Use generic type for the forwarded ref
@@ -85,12 +87,19 @@ export const MultiSelect = React.forwardRef<
             renderValues,
             open,
             onOpenChange,
+            portalContainer,
         },
         ref
     ) => {
         const [isMounted, setIsMounted] = useState(false);
         const [isPopoverOpen, setIsPopoverOpen] = useState(open ?? false);
         const [selectedValues, setSelectedValues] = useState<any[]>(value ?? []);
+
+        // Get the portal container from context
+        const contextContainer = usePortalContainer();
+
+        // Prioritize manual prop, fallback to context container
+        const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
         useEffect(() => {
             setIsMounted(true);
@@ -285,7 +294,7 @@ export const MultiSelect = React.forwardRef<
                             )}
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Portal>
+                    <PopoverPrimitive.Portal container={finalContainer}>
                         <PopoverPrimitive.Content
                             className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
                             align="start"

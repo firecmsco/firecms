@@ -5,7 +5,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { paperMixin } from "../styles";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
-import { useShadowPortal } from "../hooks/useShadowPortal";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";
@@ -50,15 +50,11 @@ export function Popover({
 
     useInjectStyles("Popover", popoverStyles);
 
-    // 1. Get the detection ref and the auto-detected container
-    const {
-        ref: detectRef,
-        container: shadowContainer
-    } = useShadowPortal();
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
 
-    // 2. Prioritize manual prop, fallback to auto-detected container
-    // We cast to HTMLElement because Radix types are strict about null vs undefined
-    const finalContainer = (portalContainer || shadowContainer) as HTMLElement | undefined;
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
     if (!enabled)
         return <>{trigger}</>;
@@ -67,9 +63,7 @@ export function Popover({
                                   onOpenChange={onOpenChange}
                                   modal={modal}>
 
-        {/* 3. Attach the detection ref here.
-            Radix handles merging this ref with the child's existing ref automatically. */}
-        <PopoverPrimitive.Trigger asChild ref={detectRef}>
+        <PopoverPrimitive.Trigger asChild>
             {trigger}
         </PopoverPrimitive.Trigger>
 

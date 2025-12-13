@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { paperMixin } from "../styles";
 import { cls } from "../util";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type DialogProps = {
     open?: boolean;
@@ -24,6 +25,7 @@ export type DialogProps = {
      * If `true`, the dialog will not focus the first focusable element when opened.
      */
     disableInitialFocus?: boolean;
+    portalContainer?: HTMLElement | null;
 };
 
 const widthClasses = {
@@ -57,9 +59,16 @@ export const Dialog = ({
                            onEscapeKeyDown,
                            onPointerDownOutside,
                            onInteractOutside,
-                           disableInitialFocus = true
+                           disableInitialFocus = true,
+                           portalContainer
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
+
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
     useEffect(() => {
         if (!open) {
@@ -78,7 +87,7 @@ export const Dialog = ({
         <DialogPrimitive.Root open={displayed || open}
                               modal={modal}
                               onOpenChange={onOpenChange}>
-            <DialogPrimitive.Portal>
+            <DialogPrimitive.Portal container={finalContainer}>
 
                 <div className={cls("fixed inset-0 z-30", containerClassName)}>
 

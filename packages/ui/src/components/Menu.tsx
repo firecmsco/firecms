@@ -3,6 +3,7 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { focusedDisabled, paperMixin } from "../styles";
 import { cls } from "../util";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type MenuProps = {
     children: React.ReactNode;
@@ -34,17 +35,24 @@ const Menu = React.forwardRef<
        portalContainer,
        sideOffset = 4,
                                     className
-   }, ref) => (
-    <DropdownMenu.Root
-        open={open}
-        defaultOpen={defaultOpen}
-        onOpenChange={onOpenChange}>
-        <DropdownMenu.Trigger
-            ref={ref}
-            asChild>
-            {trigger}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal container={portalContainer}>
+   }, ref) => {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
+    return (
+        <DropdownMenu.Root
+            open={open}
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}>
+            <DropdownMenu.Trigger
+                ref={ref}
+                asChild>
+                {trigger}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal container={finalContainer}>
             <DropdownMenu.Content
                 side={side}
                 sideOffset={sideOffset}
@@ -54,7 +62,8 @@ const Menu = React.forwardRef<
             </DropdownMenu.Content>
         </DropdownMenu.Portal>
     </DropdownMenu.Root>
-))
+    );
+})
 Menu.displayName = "Menu"
 
 export { Menu }
