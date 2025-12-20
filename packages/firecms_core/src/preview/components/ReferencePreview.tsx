@@ -57,7 +57,12 @@ function ReferencePreviewInternal({
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={reference.path}/>;
         } else {
-            throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
+            return <EntityPreviewContainer
+                onClick={onClick}
+                size={size ?? "medium"}>
+                <ErrorView error={"Unexpected reference value. Click to edit"}
+                           tooltip={reference.pathWithId}/>
+            </EntityPreviewContainer>;
         }
     }
 
