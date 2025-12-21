@@ -10,12 +10,12 @@ export function ImportSaveInProgress<C extends EntityCollection>
      collection,
      onImportSuccess
  }:
-     {
-         path: string,
-         importConfig: ImportConfig,
-         collection: C,
-         onImportSuccess: (collection: C) => void
-     }) {
+ {
+     path: string,
+     importConfig: ImportConfig,
+     collection: C,
+     onImportSuccess: (collection: C) => void
+ }) {
 
     const [errorSaving, setErrorSaving] = useState<Error | undefined>(undefined);
     const dataSource = useDataSource();
@@ -72,7 +72,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
     }
 
     return (
-        <CenteredView className={"flex flex-col gap-4 items-center"}>
+        <div className={"flex flex-col gap-4 items-center"}>
             <CircularProgress/>
 
             <Typography variant={"h6"}>
@@ -87,7 +87,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
                 Do not close this tab or the import will be interrupted.
             </Typography>
 
-        </CenteredView>
+        </div>
     );
 
 }

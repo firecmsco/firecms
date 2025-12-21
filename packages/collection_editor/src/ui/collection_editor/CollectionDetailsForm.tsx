@@ -165,7 +165,6 @@ export function CollectionDetailsForm({
                         <Field name={"path"}
                                as={DebouncedTextField}
                                label={"Path"}
-                               disabled={!isNewCollection}
                                required
                                error={showErrors && Boolean(errors.path)}/>
 
