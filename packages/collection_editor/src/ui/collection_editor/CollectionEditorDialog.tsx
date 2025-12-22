@@ -693,32 +693,26 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
                             <Button variant={"text"}
                                     type="button"
-                                    color={"primary"}
                                     onClick={() => {
                                         importConfig.setInUse(false);
                                         return setCurrentView("welcome");
                                     }}>
-                                <ArrowBackIcon/>
                                 Back
                             </Button>}
 
                         {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
                             <Button variant={"text"}
                                     type="button"
-                                    color={"primary"}
                                     onClick={() => {
                                         setCurrentView("import_data_mapping");
                                     }}>
-                                <ArrowBackIcon/>
                                 Back
                             </Button>}
 
                         {isNewCollection && includeTemplates && currentView === "details" &&
                             <Button variant={"text"}
-                                    color={"neutral"}
                                     type="button"
                                     onClick={() => setCurrentView("welcome")}>
-                                <ArrowBackIcon/>
                                 Back
                             </Button>}
 

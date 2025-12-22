@@ -19,7 +19,7 @@ export function useRootCollectionSuggestions({ projectId }: { projectId: string 
             return;
         const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
         requested.current = true;
-        fireCMSBackend.projectsApi.getRootCollections(projectId, googleAccessToken)
+        fireCMSBackend.projectsApi?.getRootCollections(projectId, googleAccessToken)
             .then((paths) => {
                 setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
             })

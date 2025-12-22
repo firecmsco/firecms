@@ -99,7 +99,6 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
             onAnalyticsEvent?.("import_data_added");
             setStep("mapping");
         }, 100);
-        // setStep("mapping");
     };
 
     const resolvedCollection = resolveCollection({
@@ -134,9 +133,9 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                 fullHeight={step !== "initial"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}>
 
-            <DialogTitle variant={"h6"}>Import data</DialogTitle>
+            <DialogTitle variant={"h6"} hidden={step === "preview"}>Import data</DialogTitle>
 
-            <DialogContent className={"flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
+            <DialogContent className={"h-full flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
 
                 {step === "initial" && <>
                     <Typography variant={"body2"}>Upload a CSV, Excel or JSON file and map it to your existing
