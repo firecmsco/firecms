@@ -4,8 +4,41 @@ import ScrollSyncShowcase from '../components/ScrollSyncShowcase.astro';
 import SpotlightCard from '../components/SpotlightCard.astro';
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
-const title = "FireCMS - The Headless CMS Framework for Firebase";
-const description = "Build powerful back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework for full control.";
+const title = "Firebase CMS & Firestore CMS | FireCMS";
+const description = "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://firecms.co/#organization",
+      "name": "FireCMS",
+      "url": "https://firecms.co/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://firecms.co/#website",
+      "url": "https://firecms.co/",
+      "name": "FireCMS",
+      "publisher": { "@id": "https://firecms.co/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://firecms.co/#software",
+      "name": "FireCMS",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "url": "https://firecms.co/",
+      "description": "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+};
 ---
 
 <Layout title={title} description={description}>
@@ -19,8 +52,8 @@ const description = "Build powerful back-office apps in minutes. Go live instant
           The Headless CMS<br/> Framework for <span class="text-orange-500 subtle-shimmer">Firebase</span>
         </h1>
         <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-64 animate-on-scroll fade-in-up ">
-          Build powerful back-office apps in minutes.<br/> Go live instantly with our <b>managed Cloud</b>, or self-host our <b>open-source framework</b> for full control.
-        </p>
+          Build powerful back-office apps in minutes.<br/>
+          Go live instantly with our <b>Hosted Headless CMS Cloud</b>, or self-host our <b>open-source framework</b> for full control. </p>
         <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up">
           <a href="https://app.firecms.co"
              data-track
@@ -36,6 +69,7 @@ const description = "Build powerful back-office apps in minutes. Go live instant
             Explore Self-Hosted
           </a>
         </div>
+
       </div>
 
     </section>
@@ -63,24 +97,24 @@ const description = "Build powerful back-office apps in minutes. Go live instant
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="w-full lg:w-[400px] mb-20 mt-16 animate-on-scroll fade-in-up">
           <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One Framework,<br/> Endless Back-Office Solutions</h2>
-          <!--<p class="mt-6 text-lg leading-8 text-surface-400">Powerful features that make data management a breeze</p>-->
+          <p class="mt-6 text-lg leading-8 text-surface-400">Use FireCMS as your Firestore CMS to manage content, users, and operations right from Firebase.</p>
         </div>
         <div class="mx-auto mt-16 max-w-7xl">
           <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <SpotlightCard
                 icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg"
-                title="Content Management Systems"
-                description="Power your blogs and marketing sites with an intuitive, Notion-style editor your content team will love."
+                title="Content Management on Firestore"
+                description="Power blogs and marketing sites with an intuitive, Notion-style editor backed by Firestore."
             />
             <SpotlightCard
                 icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
-                title="Internal Tools"
-                description="Build robust internal dashboards for customer support, inventory management, or logistics tracking, without the frontend hassle."
+                title="Internal Tools for Firebase"
+                description="Build robust internal dashboards for support and ops, connected to Firebase and Firestore."
             />
             <SpotlightCard
                 icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cog.svg"
-                title="Custom Admin Panels"
-                description="Create bespoke, data-intensive admin panels for any application, with full control to add custom views and business logic."
+                title="Custom Admin Panels on Firestore"
+                description="Create bespoke, data-intensive admin panels with full control to add custom views and business logic."
             />
           </div>
         </div>
@@ -149,9 +183,13 @@ const description = "Build powerful back-office apps in minutes. Go live instant
     <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6">
         <div class="mx-auto max-w-3xl text-center animate-on-scroll fade-in-up">
-          <h2 class="text-3xl sm:text-4xl font-medium text-white">FAQ</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-white">Firebase CMS &amp; Firestore CMS FAQ</h2>
         </div>
         <div class="mt-10 max-w-3xl mx-auto space-y-4 animate-on-scroll fade-in-up delay-100">
+          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+            <summary class="cursor-pointer text-white font-semibold">Is FireCMS a Firebase CMS or a Firestore CMS?</summary>
+            <p class="mt-2 text-surface-300">FireCMS works as both: it connects to Firebase and uses Firestore as the database, giving you a Firestore CMS experience for content and admin tooling.</p>
+          </details>
           <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
             <summary class="cursor-pointer text-white font-semibold">Cloud vs Self‑hosted — which should I choose?</summary>
             <p class="mt-2 text-surface-300">Choose Cloud for the fastest setup and zero maintenance. Choose Self‑hosted if you need full control, custom workflows, or client delivery. You can start on Cloud and move to self‑host anytime.</p>
@@ -223,6 +261,8 @@ const description = "Build powerful back-office apps in minutes. Go live instant
         </div>
       </div>
     </section>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
   </main>
 
 </Layout>

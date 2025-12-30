@@ -45,8 +45,8 @@ collection("users")
         <!-- Section Title - independent but aligned with left menu -->
         <div class="w-full lg:w-[400px] mb-36 mt-16">
             <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need to Manage Your
-                Data</h2>
-            <p class="mt-6 text-lg leading-8 text-surface-400">Powerful features that make data management a breeze</p>
+                Firestore Data</h2>
+            <p class="mt-6 text-lg leading-8 text-surface-400">Key features for a fast, flexible Firebase CMS experience</p>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
@@ -61,8 +61,8 @@ collection("users")
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Manage your data with an intuitive spreadsheet-like interface. Edit entries
-                                        inline, sort and filter collections in real-time, and create beautiful
+                                        Manage your Firestore collections with an intuitive spreadsheet-like interface. Edit entries
+                                        inline, sort and filter data in real-time, use collection groups, and create beautiful
                                         structured content with our powerful Notion-style editor. Built for speed and
                                         ease of use.</p>
                                 </div>
@@ -71,12 +71,13 @@ collection("users")
                         <li>
                             <a href="#screen-2" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">DataTalk</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">DataTalk: AI Search</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Talk to your data using natural language. Ask questions, filter collections, or
-                                        perform batch updates with simple commands. FireCMS understands your schema and
+                                        <b>Search and talk</b> to your data using <b>ChatGPT-style</b> natural language.
+                                        Instantly filter collections, generate complex queries, or perform batch updates
+                                        with simple commands. FireCMS understands your schema and
                                         turns conversational queries into powerful data operations.</p>
                                 </div>
                             </a>
@@ -89,7 +90,7 @@ collection("users")
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
                                         Design your data models visually with our powerful schema editor, or let FireCMS
-                                        automatically infer schemas from your existing data. Choose from 20+ field types
+                                        automatically infer schemas from your existing Firestore data. Choose from 20+ field types
                                         with advanced validation rules and customize everything to match your needs.</p>
                                 </div>
                             </a>
@@ -104,7 +105,7 @@ collection("users")
                                         Get started in minutes with FireCMS Cloud's managed platform, or self-host our
                                         open-source framework with full TypeScript support. Simple NPM install,
                                         comprehensive documentation, and seamless integration with your existing
-                                        Firebase or MongoDB setup.</p>
+                                        Firebase setup.</p>
                                 </div>
                             </a>
                         </li>
@@ -141,7 +142,7 @@ collection("users")
                         <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">DataTalk</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl">
-                                <div class="relative rounded-2xl overflow-hidden overflow-hidden ring-1 ring-surface-800">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
                                     <DataTalkDemo
                                             height={600}
                                             exchanges={dataTalkExchanges} client:load/>
@@ -214,7 +215,7 @@ collection("users")
                                                         Firebase project and start managing your data instantly with our
                                                         managed platform.</p>
                                                     <a href="https://app.firecms.co"
-                                                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
+                                                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
                                                         Get Started
                                                         <span class="material-icons text-lg">arrow_forward</span>
                                                     </a>
