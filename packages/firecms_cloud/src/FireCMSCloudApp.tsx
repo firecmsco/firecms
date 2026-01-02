@@ -261,10 +261,12 @@ function ErrorDelegatingLoginView({
             {errorBody}
         </div>
         <div>
-            Some login errors may be caused by the user not being registered in the client project.
-            Make sure a user exists in the client project with the same email as the one trying to log in.
+            If you are experiencing issues logging in, feel free to reach us at <a href="mailto:hello@firecms.co"
+                                                                                rel="noopener noreferrer"
+                                                                                target="_blank">
+            hello@firecms.co</a>
         </div>
-        <Button variant="outlined" onClick={onLogout}>Sign out</Button>
+        <Button variant="outlined" size="small" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
