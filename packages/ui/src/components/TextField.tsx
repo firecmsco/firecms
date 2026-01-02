@@ -137,7 +137,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     label
@@ -147,7 +147,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         : "py-2",
                     endAdornment ? "pr-12" : "pr-3",
                     disabled &&
-                    "outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
+                    "outline-none opacity-65 dark:opacity-60 text-surface-accent-800 dark:text-white",
                     inputClassName
                 )}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
@@ -171,7 +171,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     className

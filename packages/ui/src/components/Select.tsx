@@ -137,7 +137,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 {
                     "min-h-[28px]": size === "smallest",
                     "min-h-[32px]": size === "small",
-                    "min-h-[42px]": size === "medium",
+                    "min-h-[44px]": size === "medium",
                     "min-h-[64px]": size === "large",
                     "w-fit": !fullWidth,
                     "w-full": fullWidth
@@ -146,9 +146,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
-                    asChild
-                >
-                    <div className={cls(
+                    asChild={false}
+                    type="button"
+                    className={cls(
                         "h-full",
                         padding ? {
                             "px-4": size === "large",
@@ -164,25 +164,26 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         {
                             "min-h-[28px]": size === "smallest",
                             "min-h-[32px]": size === "small",
-                            "min-h-[42px]": size === "medium",
+                            "min-h-[44px]": size === "medium",
                             "min-h-[64px]": size === "large",
                             "w-full": fullWidth,
                             "w-fit": !fullWidth
                         },
                         inputClassName
-                    )}>
-                        <div
-                            ref={ref}
-                            className={cls(
-                                "flex-grow max-w-full flex flex-row gap-2 items-center",
-                                "overflow-visible",
-                                {
-                                    "min-h-[28px]": size === "smallest",
-                                    "min-h-[32px]": size === "small",
-                                    "min-h-[42px]": size === "medium",
-                                    "min-h-[64px]": size === "large"
-                                }
-                            )}>
+                    )}
+                >
+                    <div
+                        ref={ref}
+                        className={cls(
+                            "flex-grow max-w-full flex flex-row gap-2 items-center",
+                            "overflow-visible",
+                            {
+                                "min-h-[28px]": size === "smallest",
+                                "min-h-[32px]": size === "small",
+                                "min-h-[44px]": size === "medium",
+                                "min-h-[64px]": size === "large"
+                            }
+                        )}>
                             <SelectPrimitive.Value
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -204,8 +205,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                        "px-1": size === "medium" || size === "small",
                                                    })}/>
                         </SelectPrimitive.Icon>
-                    </div>
-                </SelectPrimitive.Trigger>
+                 </SelectPrimitive.Trigger>
 
                 {endAdornment && (
                     <div

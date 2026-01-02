@@ -88,7 +88,7 @@ function NicerTable() {
                 {/* Right Side: Search and Action Buttons */}
                 <div className="flex items-center gap-2">
                     <div
-                        className="relative h-[42px] bg-surface-800 border border-surface-700 border-opacity-40 rounded-lg flex items-center">
+                        className="relative h-[44px] bg-surface-800 border border-surface-700 border-opacity-40 rounded-lg flex items-center">
                         <div
                             className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0 left-0">
                                        <span

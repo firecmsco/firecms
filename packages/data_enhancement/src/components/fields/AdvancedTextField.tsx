@@ -119,7 +119,7 @@ export function AdvancedTextField<T extends string | number>({
             {
                 "min-h-[28px]": size === "smallest",
                 "min-h-[32px]": size === "small",
-                "min-h-[42px]": size === "medium",
+                "min-h-[44px]": size === "medium",
                 "min-h-[64px]": size === "large",
             },
             className)}>
@@ -157,7 +157,7 @@ export function AdvancedTextField<T extends string | number>({
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     "rounded-md resize-none w-full outline-none text-base bg-transparent ",
