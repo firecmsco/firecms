@@ -3,6 +3,7 @@ import { FirebaseApp } from "@firebase/app";
 import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction } from "@firebase/firestore";
 import {
     CollectionsConfigController,
+    CollectionsSetupInfo,
     DeleteCollectionParams,
     namespaceToPropertiesPath,
     PersistedCollection,
@@ -92,8 +93,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
 
     const [configLoading, setConfigLoading] = React.useState<boolean>(true);
     const [navigationEntries, setNavigationEntries] = React.useState<NavigationGroupMapping[]>([]);
-
-    const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
+    const [collectionsSetup, setCollectionsSetup] = React.useState<CollectionsSetupInfo | undefined>();
 
     useEffect(() => {
         if (!firebaseApp || !collectionsConfigPath) return;
@@ -103,19 +103,17 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return onSnapshot(collection(firestore, collectionsConfigPath),
             {
                 next: (snapshot) => {
-                    setCollectionsError(undefined);
                     try {
                         const newCollections = docsToCollectionTree(snapshot.docs);
                         setPersistedCollections(newCollections);
                     } catch (e) {
                         console.error(e);
-                        setCollectionsError(e as Error);
                     }
                     setCollectionsLoading(false);
                 },
                 error: (e) => {
                     setCollectionsLoading(false);
-                    setCollectionsError(e);
+                    console.error(e);
                 }
             }
         );
@@ -135,6 +133,13 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             } else {
                 setNavigationEntries([]);
             }
+
+            if (data?.collectionsSetup) {
+                setCollectionsSetup(data.collectionsSetup as CollectionsSetupInfo);
+            } else {
+                setCollectionsSetup(undefined);
+            }
+
             setConfigLoading(false);
         }, (e) => {
             console.error("Error loading homepage groups", e);
@@ -359,6 +364,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         saveProperty,
         deleteProperty,
         navigationEntries,
-        saveNavigationEntries
+        saveNavigationEntries,
+        collectionsSetup
     }
 }

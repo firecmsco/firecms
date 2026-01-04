@@ -1,6 +1,11 @@
 import { CMSType, NavigationGroupMapping, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
+export interface CollectionsSetupInfo {
+    status: "ongoing" | "complete";
+    error: string | null;
+}
+
 /**
  * Use this controller to access the configuration that is stored externally,
  * and not defined in code.
@@ -10,6 +15,12 @@ export interface CollectionsConfigController {
     loading: boolean;
 
     collections?: PersistedCollection[];
+
+    /**
+     * Status information about the automatic collections setup process.
+     * Stored in the project config document at `collectionsSetup`.
+     */
+    collectionsSetup?: CollectionsSetupInfo;
 
     getCollection: (id: string) => PersistedCollection;
 

@@ -2,6 +2,7 @@ import React from "react";
 import { ConfirmationDialog, useSnackbarController } from "@firecms/core";
 import { AutoAwesomeIcon, LoadingButton } from "@firecms/ui";
 import { ProjectsApi } from "../api/projects";
+import { useCollectionsConfigController } from "@firecms/collection_editor";
 
 export function AutoSetUpCollectionsButton({
                                                projectsApi,
@@ -26,6 +27,9 @@ export function AutoSetUpCollectionsButton({
     color?: "primary" | "secondary" | "text" | "error" | "neutral";
     disabled?: boolean;
 }) {
+
+    const configController = useCollectionsConfigController();
+    const setupLoading = configController.collectionsSetup?.status === "ongoing";
 
     const [setUpRequested, setSetupRequested] = React.useState(false);
     const snackbarController = useSnackbarController();
@@ -69,7 +73,7 @@ export function AutoSetUpCollectionsButton({
     return <>
         <LoadingButton
             disabled={disabled}
-            loading={loadingAutomaticallyCreate}
+            loading={loadingAutomaticallyCreate || setupLoading}
             color={color}
             className={small ? "px-2 py-0.5 rounded-lg" : undefined}
             size={small ? "small" : undefined}
