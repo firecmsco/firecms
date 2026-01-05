@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseApp } from "@firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -262,8 +262,8 @@ function ErrorDelegatingLoginView({
         </div>
         <div>
             If you are experiencing issues logging in, feel free to reach us at <a href="mailto:hello@firecms.co"
-                                                                                rel="noopener noreferrer"
-                                                                                target="_blank">
+                                                                                   rel="noopener noreferrer"
+                                                                                   target="_blank">
             hello@firecms.co</a>
         </div>
         <Button variant="outlined" size="small" onClick={onLogout}>Sign out</Button>
@@ -575,6 +575,12 @@ function FireCMSAppAuthenticated({
     const { rootPathSuggestions } = useRootCollectionSuggestions({
         projectId: projectConfig.projectId
     });
+
+    useEffect(() => {
+        if (collectionConfigController.collectionsSetup?.status !== "ongoing") {
+            navigationController?.refreshNavigation();
+        }
+    }, [collectionConfigController.collectionsSetup?.status]);
 
     const saasPlugin = useSaasPlugin({
         projectConfig,
