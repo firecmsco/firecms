@@ -26,8 +26,6 @@ indicate that this string refers to a path in Google Cloud Storage.
 
 * `mediaType` Media type of this reference, used for displaying the
   preview.
-* `storagePath` Absolute path in your bucket. You can specify it
-  directly or use a callback
 * `acceptedFiles` File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) that can be uploaded to this
   reference. Note that you can also use the asterisk notation, so `image/*`
   accepts any image file, and so on.
@@ -52,15 +50,36 @@ indicate that this string refers to a path in Google Cloud Storage.
   - `{entityId}` - ID of the entity
   - `{propertyKey}` - ID of this property
   - `{path}` - Path of this entity
+* `includeBucketUrl` When set to `true`, FireCMS will store a fully-qualified
+  storage URL instead of just the storage path.
+  For Firebase Storage this is a `gs://...` URL, e.g.
+  `gs://my-bucket/path/to/file.png`.
+  Defaults to `false`.
 * `storeUrl` When set to `true`, this flag indicates that the download
   URL of the file will be saved in Firestore instead of the Cloud
   storage path. Note that the generated URL may use a token that, if
   disabled, may make the URL unusable and lose the original reference to
   Cloud Storage, so it is not encouraged to use this flag. Defaults to
-  false.
-* `imageCompression` Use client side image compression and resizing
-  Will only be applied to these MIME types: `image/jpeg`, `image/png`
-  and `image/webp`
+  `false`.
+* `maxSize` Max file size in bytes.
+* `processFile` Use this callback to process the file before uploading it.
+  If you return `undefined`, the original file is uploaded.
+* `postProcess` Postprocess the saved value (storage path, storage URL or download URL)
+  after it has been resolved.
+* `previewUrl` Provide a custom preview URL for a given file name.
+
+#### Images: resize/compress before upload
+
+FireCMS supports client-side image optimization before upload:
+
+* `imageResize` (recommended) Advanced image resizing and cropping configuration.
+  Only applied to images (`image/jpeg`, `image/png`, `image/webp`).
+  - `maxWidth`, `maxHeight`
+  - `mode`: `contain` or `cover`
+  - `format`: `original`, `jpeg`, `png`, `webp`
+  - `quality`: 0-100
+
+* `imageCompression` (deprecated) Legacy image resizing/compression.
 
 ```tsx
 import { buildProperty } from "./builders";
@@ -75,6 +94,14 @@ const imageProperty = buildProperty({
         acceptedFiles: ["image/*"],
         fileName: (context) => {
             return context.file.name;
+        },
+        includeBucketUrl: true,
+        imageResize: {
+            maxWidth: 1200,
+            maxHeight: 1200,
+            mode: "cover",
+            format: "webp",
+            quality: 85
         }
     }
 });
