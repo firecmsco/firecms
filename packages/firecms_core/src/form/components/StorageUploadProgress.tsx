@@ -11,7 +11,8 @@ export interface StorageUploadItemProps {
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: any) => Promise<void>;
+                           metadata?: any,
+                           uploadedUrl?: string) => Promise<void>;
     imageSize: number;
     simple: boolean;
 }
@@ -47,9 +48,9 @@ export function StorageUploadProgress({
             path: storagePath,
             metadata
         })
-            .then(async ({ path }) => {
+            .then(async ({ path, storageUrl }) => {
                 console.debug("Upload successful", path);
-                await onFileUploadComplete(path, entry, metadata);
+                await onFileUploadComplete(path, entry, metadata, storageUrl);
                 if (mounted.current)
                     setLoading(false);
             })
