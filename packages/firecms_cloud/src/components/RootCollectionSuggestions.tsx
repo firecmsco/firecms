@@ -44,7 +44,7 @@ export function RootCollectionSuggestions({
             </Typography>
 
             <div
-                className={"flex flex-row gap-1 overflow-scroll no-scrollbar "}>
+                className={"flex flex-row gap-1 overflow-scroll no-scrollbar justify-start items-center"}>
 
                 <AutoSetUpCollectionsButton projectsApi={fireCMSBackend.projectsApi}
                                             projectId={projectConfig.projectId}
@@ -83,7 +83,7 @@ export function RootCollectionSuggestions({
                     );
                 })}
                 {!loading && filteredSuggestions?.length === 0 &&
-                    <Typography variant={"caption"}>No suggestions </Typography>
+                    <Typography variant={"caption"} className={"ml-2"}>No unmapped collections in the database</Typography>
                 }
             </div>
         </div>

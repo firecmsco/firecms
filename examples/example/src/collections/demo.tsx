@@ -194,23 +194,6 @@ export const demoCollection = buildCollection({
             expanded: true
         },
 
-        // reference to another collection
-        client: {
-            dataType: "reference",
-            path: "users",
-            name: "Related client"
-        },
-
-        // multiple references to another collection
-        related_products: {
-            dataType: "array",
-            name: "Related products",
-            of: {
-                dataType: "reference",
-                path: "products"
-            }
-        },
-
         // block of content with dynamic properties
         content: {
             name: "Content",

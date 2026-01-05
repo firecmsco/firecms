@@ -125,7 +125,7 @@ export function EntityHistoryEntry({
         <div
             className={cls(
                 "bg-white dark:bg-surface-900",
-                "min-h-[42px]",
+                "min-h-[44px]",
                 "w-full",
                 "items-center",
                 hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",

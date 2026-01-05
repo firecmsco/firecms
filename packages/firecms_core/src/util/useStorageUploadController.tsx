@@ -134,11 +134,21 @@ export function useStorageUploadController<M extends object>({
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
                                                     entry: StorageFieldItem,
-                                                    metadata?: any) => {
+                                                    metadata?: any,
+                                                    uploadedUrl?: string) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
         let uploadPathOrDownloadUrl: string | null = uploadedPath;
+
+        if (storage.includeBucketUrl) {
+            if (!uploadedUrl) {
+                console.warn("includeBucketUrl is set but no fully-qualified storage URL was returned by the StorageSource. Falling back to the storage path.");
+            } else {
+                uploadPathOrDownloadUrl = uploadedUrl;
+            }
+        }
+
         if (storage.storeUrl) {
             uploadPathOrDownloadUrl = (await storageSource.getDownloadURL(uploadedPath)).url;
         }

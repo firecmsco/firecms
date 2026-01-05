@@ -132,7 +132,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     className
@@ -177,7 +177,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         {
                             "min-h-[28px]": size === "smallest",
                             "min-h-[32px]": size === "small",
-                            "min-h-[42px]": size === "medium",
+                            "min-h-[44px]": size === "medium",
                             "min-h-[64px]": size === "large",
                         },
                         label ? "pt-8 pb-2" : "py-2",

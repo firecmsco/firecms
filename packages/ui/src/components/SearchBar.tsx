@@ -62,7 +62,7 @@ export function SearchBar({
         <div
             onClick={onClick}
             className={cls("relative",
-                large ? "h-14" : "h-[42px]",
+                large ? "h-14" : "h-[44px]",
                 "bg-surface-accent-50 dark:bg-surface-800 border",
                 defaultBorderMixin,
                 "rounded-lg",

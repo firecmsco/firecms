@@ -70,7 +70,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 {
                     "min-h-[28px]": size === "smallest",
                     "min-h-[32px]": size === "small",
-                    "min-h-[42px]": size === "medium",
+                    "min-h-[44px]": size === "medium",
                     "min-h-[64px]": size === "large",
                 },
                 size === "small" || size === "smallest" ? "pl-2" : "pl-4",
