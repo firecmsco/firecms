@@ -4,6 +4,7 @@ import equal from "react-fast-compare"
 import {
     CMSType,
     EntityReference,
+    GeoPoint,
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
@@ -26,12 +27,14 @@ import { ArrayPropertyEnumPreview } from "./property_previews/ArrayPropertyEnumP
 import { ArrayOfStringsPreview } from "./property_previews/ArrayOfStringsPreview";
 import { ArrayOneOfPreview } from "./property_previews/ArrayOneOfPreview";
 import { MapPropertyPreview } from "./property_previews/MapPropertyPreview";
+import { GeopointPropertyPreview } from "./property_previews/GeopointPropertyPreview";
 import { ReferencePreview } from "./components/ReferencePreview";
 import { DatePreview } from "./components/DatePreview";
 import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 import { ErrorView } from "../components";
 import { UserPreview } from "./components/UserPreview";
+import { getGeoPointCoordinates } from "../util";
 
 /**
  * @group Preview components
@@ -189,6 +192,15 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
     } else if (property.dataType === "date") {
         if (value instanceof Date) {
             content = <DatePreview date={value}/>;
+        } else {
+            content = buildWrongValueType(propertyKey, property.dataType, value);
+        }
+    } else if (property.dataType === "geopoint") {
+        const coordinates = getGeoPointCoordinates(value as GeoPoint);
+        if (coordinates) {
+            content = <GeopointPropertyPreview {...props}
+                                               property={property}
+                                               value={value as GeoPoint}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }

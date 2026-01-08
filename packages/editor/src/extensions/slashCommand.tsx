@@ -639,7 +639,8 @@ const suggestionItems: SuggestionItem[] = [
             editor,
             range
         }) => {
-            editor.chain().focus().deleteRange(range).toggleTaskList().run();
+            const chain = editor.chain() as any;
+            chain.focus().deleteRange(range).toggleTaskList().run();
         }
     },
     {
@@ -702,7 +703,8 @@ const suggestionItems: SuggestionItem[] = [
             editor,
             range
         }) => {
-            editor.chain().focus().deleteRange(range).toggleBulletList().run();
+            const chain = editor.chain() as any;
+            chain.focus().deleteRange(range).toggleBulletList().run();
         }
     },
     {
@@ -714,7 +716,8 @@ const suggestionItems: SuggestionItem[] = [
             editor,
             range
         }) => {
-            editor.chain().focus().deleteRange(range).toggleOrderedList().run();
+            const chain = editor.chain() as any;
+            chain.focus().deleteRange(range).toggleOrderedList().run();
         }
     },
     {
