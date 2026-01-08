@@ -23,6 +23,11 @@ export interface CollectionEditorController {
             path?: string,
             name?: string
         },
+        /**
+         * A collection to duplicate from. If provided, the new collection will be
+         * pre-populated with the same properties (but with empty name, path, and id).
+         */
+        copyFrom?: PersistedCollection,
         parentCollectionIds: string[],
         parentCollection?: PersistedCollection,
         redirect: boolean,

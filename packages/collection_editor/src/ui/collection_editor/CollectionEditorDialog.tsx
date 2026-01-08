@@ -67,6 +67,11 @@ export interface CollectionEditorDialogProps {
         path?: string,
         name?: string,
     }
+    /**
+     * A collection to duplicate from. If provided, the new collection will be
+     * pre-populated with the same properties (but with empty name, path, and id).
+     */
+    copyFrom?: PersistedCollection;
     editedCollectionId?: string;
     fullPath?: string; // full path of this particular collection, like `products/123/locales`
     parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
@@ -157,7 +162,9 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     } = navigation;
 
     const initialValuesProp = props.initialValues;
-    const includeTemplates = !initialValuesProp?.path && (props.parentCollectionIds ?? []).length === 0;
+    const copyFromProp = props.copyFrom;
+    // Skip templates when duplicating (copyFrom is provided)
+    const includeTemplates = !copyFromProp && !initialValuesProp?.path && (props.parentCollectionIds ?? []).length === 0;
     const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.path.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.id?.trim().toLowerCase()).filter(Boolean) as string[];
@@ -194,18 +201,29 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         }
         : undefined;
 
+    // Build initial values - handle copyFrom for duplication
     const initialValues: PersistedCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
-        : {
-            id: initialValuesProp?.path ?? randomString(16),
-            path: initialValuesProp?.path ?? "",
-            name: initialValuesProp?.name ?? "",
-            group: initialValuesProp?.group ?? "",
-            properties: {} as PropertiesOrBuilders,
-            propertiesOrder: [],
-            icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
-            ownerId: authController.user?.uid ?? ""
-        };
+        : copyFromProp
+            ? {
+                // When duplicating, copy all properties but clear identifiers
+                ...copyFromProp,
+                id: randomString(16),
+                path: "",
+                name: "",
+                subcollections: undefined, // Don't copy subcollections
+                ownerId: authController.user?.uid ?? ""
+            }
+            : {
+                id: initialValuesProp?.path ?? randomString(16),
+                path: initialValuesProp?.path ?? "",
+                name: initialValuesProp?.name ?? "",
+                group: initialValuesProp?.group ?? "",
+                properties: {} as PropertiesOrBuilders,
+                propertiesOrder: [],
+                icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
+                ownerId: authController.user?.uid ?? ""
+            };
 
     if (!initialLoadingCompleted) {
         return <CircularProgressCenter/>;
