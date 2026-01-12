@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@apollo/client": "^3.14.0",
+    "@firecms/media_manager": "^3.0.0-tw4.18",
     "@firecms/collection_editor": "^3.0.0-tw4.18",
     "@firecms/collection_editor_firebase": "^3.0.0-tw4.18",
     "@firecms/core": "^3.0.0-tw4.18",
