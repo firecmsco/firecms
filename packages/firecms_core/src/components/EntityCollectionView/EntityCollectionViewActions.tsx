@@ -7,11 +7,9 @@ import {
     AddIcon,
     AppsIcon,
     Button,
-    CheckIcon,
-    cls,
     DeleteIcon,
-    Icon,
-    IconButton, ListAltIcon, ListIcon,
+    IconButton,
+    ListIcon,
     Menu,
     MenuItem,
     Tooltip
@@ -67,7 +65,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
-                startIcon={<AddIcon />}
+                startIcon={<AddIcon size={"small"}/>}
                 variant="filled"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
@@ -78,7 +76,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 variant="filled"
                 color="primary"
             >
-                <AddIcon />
+                <AddIcon size={"small"}/>
             </Button>);
 
     const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null);
@@ -178,4 +176,3 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         </>
     );
 }
-

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { DataSourceDelegate, StorageSource } from "@firecms/core";
 import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types";
+import Compressor from "compressorjs";
 
 export interface UseMediaManagerControllerProps {
     storageSource: StorageSource;
@@ -371,9 +372,6 @@ async function generateThumbnail(
     maxHeight: number,
     quality: number
 ): Promise<Blob> {
-    // Dynamic import to avoid bundling issues
-    const Compressor = (await import("compressorjs")).default;
-
     return new Promise<Blob>((resolve, reject) => {
         new Compressor(file, {
             quality,

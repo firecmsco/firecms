@@ -22,6 +22,7 @@ import {
     EntityCollectionTable,
     useDataSourceTableController
 } from "../EntityCollectionTable";
+import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
 import {
     canCreateEntity,
@@ -53,6 +54,7 @@ import {
     AddIcon,
     Button,
     cls,
+    defaultBorderMixin,
     focusedDisabled,
     IconButton,
     KeyboardTabIcon,
@@ -216,6 +218,9 @@ export const EntityCollectionView = React.memo(
             const savedViewMode = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
             return (savedViewMode as ViewMode) ?? defaultViewMode;
         });
+
+        // Card view size state - controls the grid column count
+        const [cardSize, setCardSize] = useState<CollectionSize>(collection.defaultSize ?? "m");
 
         const selectionController = useSelectionController<M>();
         const usedSelectionController = collection.selectionController ?? selectionController;
@@ -666,38 +671,39 @@ export const EntityCollectionView = React.memo(
                 {/* Common actions component used for both views */}
                 {viewMode === "cards" ? (
                     <>
-                        {/* Card View Header/Toolbar */}
-                        <div className={cls("no-scrollbar min-h-[56px] overflow-x-auto px-2 md:px-4 bg-surface-50 dark:bg-surface-900 border-b flex flex-row justify-between items-center w-full", "border-surface-200 dark:border-surface-700")}>
-                            <div className="flex items-center gap-1 md:mr-4 mr-2">
-                                {title && <div className={"hidden lg:block"}>
-                                    {title}
-                                </div>}
-                                <EntityCollectionViewStartActions
-                                    parentCollectionIds={parentCollectionIds ?? []}
-                                    collection={collection}
-                                    tableController={tableController}
-                                    path={fullPath}
-                                    relativePath={collection.path}
-                                    selectionController={usedSelectionController}
-                                    collectionEntitiesCount={docsCount} />
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <EntityCollectionViewActions
-                                    parentCollectionIds={parentCollectionIds ?? []}
-                                    collection={collection}
-                                    tableController={tableController}
-                                    onMultipleDeleteClick={onMultipleDeleteClick}
-                                    onNewClick={onNewClick}
-                                    path={fullPath}
-                                    relativePath={collection.path}
-                                    selectionController={usedSelectionController}
-                                    selectionEnabled={selectionEnabled}
-                                    collectionEntitiesCount={docsCount}
-                                    viewMode={viewMode}
-                                    onViewModeChange={onViewModeChange}
-                                />
-                            </div>
-                        </div>
+                        {/* Card View Toolbar - reusing CollectionTableToolbar */}
+                        <CollectionTableToolbar
+                            title={title}
+                            loading={tableController.dataLoading}
+                            size={cardSize}
+                            onSizeChanged={setCardSize}
+                            onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
+                            onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
+                            textSearchLoading={textSearchLoading}
+                            actionsStart={<EntityCollectionViewStartActions
+                                parentCollectionIds={parentCollectionIds ?? []}
+                                collection={collection}
+                                tableController={tableController}
+                                path={fullPath}
+                                relativePath={collection.path}
+                                selectionController={usedSelectionController}
+                                collectionEntitiesCount={docsCount}
+                                resolvedProperties={resolvedCollection.properties} />}
+                            actions={<EntityCollectionViewActions
+                                parentCollectionIds={parentCollectionIds ?? []}
+                                collection={collection}
+                                tableController={tableController}
+                                onMultipleDeleteClick={onMultipleDeleteClick}
+                                onNewClick={onNewClick}
+                                path={fullPath}
+                                relativePath={collection.path}
+                                selectionController={usedSelectionController}
+                                selectionEnabled={selectionEnabled}
+                                collectionEntitiesCount={docsCount}
+                                viewMode={viewMode}
+                                onViewModeChange={onViewModeChange}
+                            />}
+                        />
                         {/* Card Grid View */}
                         <EntityCollectionCardView
                             collection={collection}
@@ -706,6 +712,9 @@ export const EntityCollectionView = React.memo(
                             selectionController={usedSelectionController}
                             selectionEnabled={selectionEnabled}
                             highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                            onScroll={tableController.onScroll}
+                            initialScroll={tableController.initialScroll}
+                            size={cardSize}
                             emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                                 ? <div className="flex flex-col items-center justify-center">
                                     <Typography variant={"subtitle2"}>So empty...</Typography>
@@ -754,7 +763,8 @@ export const EntityCollectionView = React.memo(
                             path={fullPath}
                             relativePath={collection.path}
                             selectionController={usedSelectionController}
-                            collectionEntitiesCount={docsCount} />}
+                            collectionEntitiesCount={docsCount}
+                            resolvedProperties={resolvedCollection.properties} />}
                         actions={<EntityCollectionViewActions
                             parentCollectionIds={parentCollectionIds ?? []}
                             collection={collection}

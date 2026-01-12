@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { EnumValuesChip } from "../../../preview";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import {
-    Checkbox,
     CloseIcon,
     IconButton,
-    Label,
     MultiSelect,
     MultiSelectItem,
     Select,
@@ -34,24 +32,25 @@ const operationLabels = {
     in: "In",
     "not-in": "Not in",
     "array-contains": "Contains",
-    "array-contains-any": "Any"
+    "array-contains-any": "Any",
+    "is-null": "Is null"
 };
 
 const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
 export function StringNumberFilterField({
-                                            name,
-                                            value,
-                                            setValue,
-                                            dataType,
-                                            isArray,
-                                            enumValues,
-                                            title
-                                        }: StringNumberFilterFieldProps) {
+    name,
+    value,
+    setValue,
+    dataType,
+    isArray,
+    enumValues,
+    title
+}: StringNumberFilterFieldProps) {
 
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+    const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
-        : ["==", "!=", ">", "<", ">=", "<="];
+        : ["==", "!=", ">", "<", ">=", "<=", "is-null"];
 
     if (enumValues)
         isArray
@@ -59,10 +58,20 @@ export function StringNumberFilterField({
             : possibleOperations.push("in", "not-in");
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<VirtualTableWhereFilterOp | "is-null">(fieldOperation === "==" && fieldValue === null ? "is-null" : fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | null | undefined>(fieldValue);
 
-    function updateFilter(op: VirtualTableWhereFilterOp, val: string | number | string[] | number[] | null | undefined) {
+    const isNullOperation = operation === "is-null";
+
+    function updateFilter(op: VirtualTableWhereFilterOp | "is-null", val: string | number | string[] | number[] | null | undefined) {
+        // Handle "is null" operation
+        if (op === "is-null") {
+            setOperation(op);
+            setInternalValue(null);
+            setValue(["==", null]);
+            return;
+        }
+
         let newValue = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -95,15 +104,16 @@ export function StringNumberFilterField({
 
     return (
 
-        <div className="flex w-[440px]">
-            <div className={"w-[80px]"}>
+        <div className="flex w-full">
+            <div className={"w-[100px]"}>
                 <Select value={operation}
-                        fullWidth={true}
-                        position={"item-aligned"}
-                        onValueChange={(value) => {
-                            updateFilter(value as VirtualTableWhereFilterOp, internalValue);
-                        }}
-                        renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
+                    size={"medium"}
+                    fullWidth={true}
+                    position={"item-aligned"}
+                    onValueChange={(value) => {
+                        updateFilter(value as VirtualTableWhereFilterOp | "is-null", internalValue);
+                    }}
+                    renderValue={(op) => operationLabels[op as keyof typeof operationLabels]}>
                     {possibleOperations.map((op) => (
                         <SelectItem key={op} value={op}>
                             {operationLabels[op]}
@@ -115,8 +125,11 @@ export function StringNumberFilterField({
             <div className="flex-grow ml-2 flex flex-col gap-2">
 
                 {!enumValues && <TextField
+                    size={"medium"}
                     type={dataType === "number" ? "number" : undefined}
                     value={internalValue !== undefined && internalValue != null ? String(internalValue) : ""}
+                    disabled={isNullOperation}
+                    placeholder={isNullOperation ? "null" : undefined}
                     onChange={(evt) => {
                         const val = dataType === "number"
                             ? parseFloat(evt.target.value)
@@ -125,14 +138,16 @@ export function StringNumberFilterField({
                     }}
                     endAdornment={internalValue !== undefined && internalValue != null && <IconButton
                         onClick={(e) => updateFilter(operation, undefined)}>
-                        <CloseIcon/>
+                        <CloseIcon />
                     </IconButton>}
                 />}
 
                 {enumValues && !multiple &&
                     <Select
+                        size={"medium"}
                         position={"item-aligned"}
                         fullWidth={true}
+                        disabled={isNullOperation}
                         value={typeof internalValue === "string" ? internalValue : ""}
                         onValueChange={(value) => {
                             if (value !== "")
@@ -140,7 +155,7 @@ export function StringNumberFilterField({
                         }}
                         endAdornment={internalValue && <IconButton
                             onClick={(e) => updateFilter(operation, undefined)}>
-                            <CloseIcon/>
+                            <CloseIcon />
                         </IconButton>}
                         renderValue={(enumKey) => {
                             if (enumKey === null)
@@ -152,15 +167,15 @@ export function StringNumberFilterField({
                                 key={`select_value_${name}_${enumKey}`}
                                 enumKey={enumKey}
                                 enumValues={enumValues}
-                                size={"small"}/>;
+                                size={"small"} />;
                         }}>
                         {enumValues.map((enumConfig) => (
                             <SelectItem key={`select_item_${name}_${enumConfig.id}`}
-                                        value={String(enumConfig.id)}>
+                                value={String(enumConfig.id)}>
                                 <EnumValuesChip
                                     enumKey={String(enumConfig.id)}
                                     enumValues={enumValues}
-                                    size={"small"}/>
+                                    size={"small"} />
                             </SelectItem>
                         ))}
                     </Select>
@@ -168,8 +183,10 @@ export function StringNumberFilterField({
 
                 {enumValues && multiple &&
                     <MultiSelect
+                        size={"medium"}
                         position={"item-aligned"}
                         value={Array.isArray(internalValue) ? internalValue.map(e => String(e)) : []}
+                        disabled={isNullOperation}
                         onValueChange={(value) => {
                             updateFilter(operation, dataType === "number" ? value.map(v => parseInt(v)) : value)
                         }}
@@ -177,46 +194,20 @@ export function StringNumberFilterField({
                         endAdornment={internalValue && <IconButton
                             className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
-                            <CloseIcon/>
+                            <CloseIcon />
                         </IconButton>}
-                        // renderValues={(enumKeys) => {
-                        //     console.log("renderValues", enumKeys);
-                        //     if (enumKeys === null)
-                        //         return "Filter for null values";
-                        //
-                        //     return enumKeys.map(key => <EnumValuesChip
-                        //         key={`select_value_${name}_${enumKeys}`}
-                        //         enumKey={key}
-                        //         enumValues={enumValues}
-                        //         size={"small"}/>);
-                        // }}
                     >
                         {enumValues.map((enumConfig) => (
                             <MultiSelectItem key={`select_value_${name}_${enumConfig.id}`}
-                                             value={String(enumConfig.id)}>
+                                value={String(enumConfig.id)}>
                                 <EnumValuesChip
                                     enumKey={String(enumConfig.id)}
                                     enumValues={enumValues}
-                                    size={"small"}/>
+                                    size={"small"} />
                             </MultiSelectItem>
                         ))}
                     </MultiSelect>
                 }
-
-                {!isArray && <Label
-                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
-                    htmlFor="null-filter"
-                >
-                    <Checkbox id="null-filter"
-                              checked={internalValue === null}
-                              size={"small"}
-                              onCheckedChange={(checked) => {
-                                  if (internalValue !== null)
-                                      updateFilter(operation, null);
-                                  else updateFilter(operation, undefined);
-                              }}/>
-                    Filter for null values
-                </Label>}
 
             </div>
 
