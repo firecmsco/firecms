@@ -5,12 +5,13 @@ import { HistoryEntry, NewHistoryEntryParams } from "./types";
 
 
 export function createHistoryEntry<T = any>({
-                                       context,
-                                       previousValues,
-                                       values,
-                                       path,
-                                       entityId
-                                   }: NewHistoryEntryParams<T>) {
+    context,
+    previousValues,
+    values,
+    path,
+    entityId,
+    collection
+}: NewHistoryEntryParams<T>) {
 
     const uid = context.authController.user?.uid;
     const dataSource = context.dataSource;
@@ -28,7 +29,8 @@ export function createHistoryEntry<T = any>({
     dataSource.saveEntity({
         path: path + "/" + entityId + "/__history",
         values: entry,
-        status: "new"
+        status: "new",
+        collection
     }).then(() => {
         console.debug("History saved for", path, entityId);
     });
@@ -42,12 +44,14 @@ export const entityHistoryCallbacks: EntityCallbacks = {
         const path = props.path;
         const entityId = props.entityId;
         const context = props.context;
+        const collection = props.collection;
         createHistoryEntry({
             context: context,
             previousValues: previousValues,
             values: values,
             path: path,
-            entityId: entityId
+            entityId: entityId,
+            collection: collection
         });
     }
 }
