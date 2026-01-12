@@ -364,7 +364,21 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Defaults to `manual_apply`.
      */
     localChangesBackup?: "manual_apply" | "auto_apply" | false;
+
+    /**
+     * Default view mode for displaying this collection.
+     * - "table": Display entities in a spreadsheet-like table (default)
+     * - "cards": Display entities as a grid of cards with thumbnails
+     * Defaults to "table".
+     */
+    defaultViewMode?: ViewMode;
 }
+
+/**
+ * View mode for displaying a collection.
+ * @group Collections
+ */
+export type ViewMode = "table" | "cards";
 
 /**
  * Parameter passed to the `Actions` prop in the collection configuration.
@@ -647,7 +661,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     paginationEnabled?: boolean;
     pageSize?: number;
     checkFilterCombination?: (filterValues: FilterValues<any>,
-                              sortBy?: [string, "asc" | "desc"]) => boolean;
+        sortBy?: [string, "asc" | "desc"]) => boolean;
     popupCell?: SelectedCellProps<M>;
     setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
 
