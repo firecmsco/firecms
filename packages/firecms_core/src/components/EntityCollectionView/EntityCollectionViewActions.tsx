@@ -11,7 +11,7 @@ import {
     cls,
     DeleteIcon,
     Icon,
-    IconButton,
+    IconButton, ListAltIcon, ListIcon,
     Menu,
     MenuItem,
     Tooltip
@@ -19,8 +19,7 @@ import {
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
 
-// Re-export ViewMode for backwards compatibility
-export type { ViewMode } from "../../types";
+
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -116,23 +115,23 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         <Menu
             trigger={
                 <IconButton size="small">
-                    {viewMode === "cards" ? <AppsIcon size="small" /> : <Icon iconKey="table_rows" size="small" />}
+                    {viewMode === "cards" ? <AppsIcon size="small" /> : <ListIcon size="small" />}
                 </IconButton>
             }
         >
             <MenuItem
+                dense={true}
                 onClick={() => onViewModeChange("table")}
             >
-                <Icon iconKey="table_rows" size="small" className="mr-2" />
+                <ListIcon size="smallest" className="mr-1" />
                 Table view
-                {viewMode === "table" && <CheckIcon size="small" className="ml-auto" />}
             </MenuItem>
             <MenuItem
+                dense={true}
                 onClick={() => onViewModeChange("cards")}
             >
-                <AppsIcon size="small" className="mr-2" />
+                <AppsIcon size="smallest" className="mr-1" />
                 Card view
-                {viewMode === "cards" && <CheckIcon size="small" className="ml-auto" />}
             </MenuItem>
         </Menu>
     );
@@ -170,10 +169,10 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     return (
         <>
-            {viewModeToggle}
             <ErrorBoundary>
                 {actions}
             </ErrorBoundary>
+            {viewModeToggle}
             {multipleDeleteButton}
             {addButton}
         </>

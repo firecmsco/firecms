@@ -14,7 +14,8 @@ import {
     PartialEntityCollection,
     PropertyOrBuilder,
     ResolvedProperty,
-    SaveEntityProps
+    SaveEntityProps,
+    ViewMode
 } from "../../types";
 import {
     EntityCollectionRowActions,
@@ -46,7 +47,7 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { EntityCollectionViewActions, ViewMode } from "./EntityCollectionViewActions";
+import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { EntityCollectionCardView } from "./EntityCollectionCardView";
 import {
     AddIcon,

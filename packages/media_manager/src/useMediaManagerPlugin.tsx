@@ -66,9 +66,9 @@ const MEDIA_VIEW = buildMediaView();
 
 /**
  * Hook to create the Media Manager plugin for FireCMS.
- * 
+ *
  * The plugin automatically registers the Media Library view in the navigation.
- * 
+ *
  * @example
  * ```tsx
  * const { plugin: mediaManagerPlugin } = useMediaManagerPlugin({
@@ -77,7 +77,7 @@ const MEDIA_VIEW = buildMediaView();
  *     storagePath: "media",
  *     collectionPath: "media_assets"
  * });
- * 
+ *
  * // Add plugin to your plugins array - view is auto-registered
  * const plugins = [mediaManagerPlugin, ...otherPlugins];
  * ```
@@ -93,5 +93,5 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
                 </MediaManagerConfigContext.Provider>
             )
         }
-    } satisfies FireCMSPlugin), [props]);
+    } satisfies FireCMSPlugin), []);
 }
