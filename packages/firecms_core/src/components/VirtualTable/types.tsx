@@ -40,4 +40,6 @@ export type VirtualTableContextProps<T extends any> = {
     rowClassName?: (rowData: T) => string | undefined;
     endAdornment?: React.ReactNode;
     AddColumnComponent?: React.ComponentType;
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+    draggingColumnId?: string | null;
 };

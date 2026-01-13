@@ -79,7 +79,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
      onTextSearchClick,
      textSearchLoading,
      enablePopupIcon,
-     openEntityMode = "side_panel"
+     openEntityMode = "side_panel",
+     onColumnsOrderChange
  }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -324,7 +325,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                              filterable={filterable}
                              emptyComponent={emptyComponent}
                              endAdornment={endAdornment}
-                             AddColumnComponent={AddColumnComponent}/>
+                             AddColumnComponent={AddColumnComponent}
+                             onColumnsOrderChange={onColumnsOrderChange}/>
 
         </div>
     );

@@ -93,6 +93,11 @@ export type SelectableTableProps<M extends Record<string, any>> = {
     endAdornment?: React.ReactNode;
 
     AddColumnComponent?: React.ComponentType;
+
+    /**
+     * Callback when columns are reordered via drag-and-drop
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
 }
 
 /**
@@ -153,7 +158,8 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
      forceFilter,
      highlightedRow,
      endAdornment,
-     AddColumnComponent
+     AddColumnComponent,
+     onColumnsOrderChange
  }: SelectableTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -253,6 +259,7 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
                     emptyComponent={emptyComponent}
                     endAdornment={endAdornment}
                     AddColumnComponent={AddColumnComponent}
+                    onColumnsOrderChange={onColumnsOrderChange}
                 />
 
             </div>

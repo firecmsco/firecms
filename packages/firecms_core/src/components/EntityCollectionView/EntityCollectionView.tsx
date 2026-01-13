@@ -714,6 +714,10 @@ export const EntityCollectionView = React.memo(
                         fullIdPath={fullIdPath ?? fullPath}
                         collection={collection}/>}
                     openEntityMode={openEntityMode}
+                    onColumnsOrderChange={(newColumns) => {
+                        // Column reorder callback - persistence to be implemented
+                        console.log("Columns reordered:", newColumns.map(c => c.key));
+                    }}
                 />
 
                 {popupCell && <PopupFormField

@@ -162,6 +162,12 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     initialScroll?: number;
 
+    /**
+     * Callback when columns are reordered via drag-and-drop.
+     * @param columns The new column order
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+
 }
 
 export type CellRendererParams<T = any> = {
