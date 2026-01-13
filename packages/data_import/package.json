@@ -1,17 +1,17 @@
 {
   "name": "@firecms/data_import",
   "type": "module",
-  "version": "3.0.1",
+  "version": "3.0.0-canary.298",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.1",
-    "@firecms/formex": "^3.0.1",
-    "@firecms/schema_inference": "^3.0.1",
-    "@firecms/ui": "^3.0.1",
+    "@firecms/core": "^3.0.0-canary.298",
+    "@firecms/formex": "^3.0.0-canary.298",
+    "@firecms/schema_inference": "^3.0.0-canary.298",
+    "@firecms/ui": "^3.0.0-canary.298",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "peerDependencies": {
@@ -86,5 +86,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "cd48a0242a16e899f5ce36d9d75f5dcffd2ac285"
+  "gitHead": "59205059d9ea7d36ca249d55e67b49fd01fac621"
 }
