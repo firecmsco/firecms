@@ -29,7 +29,7 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "0f16c9b5332f70bbcad9eb4d249ba220964d4195",
+  "gitHead": "bde32073c085d1a28c5ca09dfb2fd6e6bcbbe5f7",
   "dependencies": {
     "axios": "1.13.2",
     "vite-plugin-static-copy": "3.1.4"
