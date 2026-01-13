@@ -3,6 +3,8 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+@plugin "@tailwindcss/typography";
+
 @source "../index.html";
 @source "../**/*.{js,ts,jsx,tsx}";
 @source "../../../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
@@ -19,8 +21,10 @@
 }
 
 .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 .typography-h1 {

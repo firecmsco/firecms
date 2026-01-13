@@ -2,6 +2,8 @@
 @import "@firecms/ui/index.css" layer(base);
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+@plugin "@tailwindcss/typography";
+
 @source "../index.html";
 @source "../src/**/*.{js,ts,jsx,tsx}";
 @source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
