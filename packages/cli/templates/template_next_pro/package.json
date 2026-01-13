@@ -27,7 +27,7 @@
     "@fontsource/poppins": "^5.1.0",
     "@tailwindcss/typography": "^0.5.15",
     "firebase": "^12.2.1",
-    "next": "15.0.3",
+    "next": "15.5.9",
     "nextjs-toploader": "^3.7.15",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -37,10 +37,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.17.9",
-    "@types/react": "^18.3.11",
+    "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "eslint": "^9.16.0",
-    "eslint-config-next": "15.0.3",
+    "eslint-config-next": "15.5.9",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.7.3"
