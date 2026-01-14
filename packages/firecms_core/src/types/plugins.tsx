@@ -161,6 +161,17 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             collection: EC;
             tableController: EntityTableController;
         }>;
+
+        /**
+         * Callback called when columns are reordered via drag and drop.
+         * Used by plugins to persist the new column order.
+         */
+        onColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            newPropertiesOrder: string[];
+        }) => void;
     }
 
     form?: {

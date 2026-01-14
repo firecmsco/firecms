@@ -111,7 +111,28 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             CollectionActionsStart: EditorCollectionActionStart,
             CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
-            AddColumnComponent: PropertyAddColumnComponent
+            AddColumnComponent: PropertyAddColumnComponent,
+            onColumnsReorder: ({
+                                   collection,
+                                   newPropertiesOrder,
+                                   parentCollectionIds
+                               }) => {
+                console.log("onColumnsReorder", newPropertiesOrder)
+                // Only update if the collection is editable (persisted)
+                if (collection.editable === false) {
+                    return;
+                }
+                // Persist the new column order
+                collectionConfigController.updateCollection({
+                    id: collection.id,
+                    collectionData: {
+                        propertiesOrder: newPropertiesOrder
+                    },
+                    parentCollectionIds
+                }).catch((e) => {
+                    console.error("Error persisting column order:", e);
+                });
+            }
         },
         form: {
             ActionsTop: EditorEntityAction,

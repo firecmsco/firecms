@@ -142,14 +142,14 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                                     fullPath: fullPathProp,
-                                                                     fullIdPath,
-                                                                     parentCollectionIds,
-                                                                     isSubCollection,
-                                                                     className,
-                                                                     updateUrl,
-                                                                     ...collectionProp
-                                                                 }: EntityCollectionViewProps<M>
+        fullPath: fullPathProp,
+        fullIdPath,
+        parentCollectionIds,
+        isSubCollection,
+        className,
+        updateUrl,
+        ...collectionProp
+    }: EntityCollectionViewProps<M>
     ) {
 
         const context = useFireCMSContext();
@@ -186,6 +186,14 @@ export const EntityCollectionView = React.memo(
 
         // number of entities in the collection
         const [docsCount, setDocsCount] = useState<number>(0);
+
+        // Optimistic state for column order to prevent UI flickering during persistence
+        const [localPropertiesOrder, setLocalPropertiesOrder] = useState<string[] | undefined>(collection.propertiesOrder);
+
+        // Sync local state with collection's propertiesOrder when it changes from external sources
+        useEffect(() => {
+            setLocalPropertiesOrder(collection.propertiesOrder);
+        }, [collection.propertiesOrder]);
 
         const unselectNavigatedEntity = useCallback(() => {
             const currentSelection = highlightedEntity;
@@ -317,9 +325,9 @@ export const EntityCollectionView = React.memo(
         }, [userConfigPersistence]);
 
         const onColumnResize = useCallback(({
-                                                width,
-                                                key
-                                            }: OnColumnResizeParams) => {
+            width,
+            key
+        }: OnColumnResizeParams) => {
 
             const collection = collectionRef.current;
             // Only for property columns
@@ -337,20 +345,20 @@ export const EntityCollectionView = React.memo(
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
-                 name,
-                 value,
-                 property,
-                 entityId
-             }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection),
+                name,
+                value,
+                property,
+                entityId
+            }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection),
             [fullPath]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
-                                                                value,
-                                                                propertyKey,
-                                                                onValueUpdated,
-                                                                setError,
-                                                                data: entity,
-                                                            }) => {
+            value,
+            propertyKey,
+            onValueUpdated,
+            setError,
+            data: entity,
+        }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
@@ -395,9 +403,9 @@ export const EntityCollectionView = React.memo(
         }), [collection, fullPath]);
 
         const getPropertyFor = useCallback(({
-                                                propertyKey,
-                                                entity
-                                            }: GetPropertyForProps<M>) => {
+            propertyKey,
+            entity
+        }: GetPropertyForProps<M>) => {
             let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
@@ -417,7 +425,15 @@ export const EntityCollectionView = React.memo(
             });
         }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 
-        const displayedColumnIds = useColumnIds(resolvedCollection, true);
+        // Use a collection with local propertiesOrder for optimistic UI updates
+        const collectionWithLocalOrder = useMemo(() => {
+            if (localPropertiesOrder && localPropertiesOrder !== resolvedCollection.propertiesOrder) {
+                return { ...resolvedCollection, propertiesOrder: localPropertiesOrder };
+            }
+            return resolvedCollection;
+        }, [resolvedCollection, localPropertiesOrder]);
+
+        const displayedColumnIds = useColumnIds(collectionWithLocalOrder, true);
 
         const additionalFields = useMemo(() => {
             const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.map((subcollection) => {
@@ -428,22 +444,22 @@ export const EntityCollectionView = React.memo(
                     dependencies: [],
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
-                                variant={"outlined"}
-                                className={"max-w-full truncate justify-start"}
-                                startIcon={<KeyboardTabIcon size={"small"}/>}
-                                onClick={(event: any) => {
-                                    event.stopPropagation();
-                                    navigateToEntity({
-                                        openEntityMode,
-                                        collection,
-                                        entityId: entity.id,
-                                        selectedTab: subcollection.id ?? subcollection.path,
-                                        path: fullPath,
-                                        fullIdPath,
-                                        navigation,
-                                        sideEntityController
-                                    })
-                                }}>
+                            variant={"outlined"}
+                            className={"max-w-full truncate justify-start"}
+                            startIcon={<KeyboardTabIcon size={"small"} />}
+                            onClick={(event: any) => {
+                                event.stopPropagation();
+                                navigateToEntity({
+                                    openEntityMode,
+                                    collection,
+                                    entityId: entity.id,
+                                    selectedTab: subcollection.id ?? subcollection.path,
+                                    path: fullPath,
+                                    fullIdPath,
+                                    navigation,
+                                    sideEntityController
+                                })
+                            }}>
                             {subcollection.name}
                         </Button>
                     )
@@ -465,7 +481,7 @@ export const EntityCollectionView = React.memo(
                                         <ReferencePreview
                                             key={reference.path + "/" + reference.id}
                                             reference={reference}
-                                            size={"small"}/>
+                                            size={"small"} />
                                     );
                                 })}
                             </div>
@@ -488,9 +504,9 @@ export const EntityCollectionView = React.memo(
         const largeLayout = useLargeLayout();
 
         const getActionsForEntity = ({
-                                         entity,
-                                         customEntityActions
-                                     }: {
+            entity,
+            customEntityActions
+        }: {
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
@@ -514,11 +530,11 @@ export const EntityCollectionView = React.memo(
         };
 
         const tableRowActionsBuilder = useCallback(({
-                                                        entity,
-                                                        size,
-                                                        width,
-                                                        frozen
-                                                    }: {
+            entity,
+            size,
+            width,
+            frozen
+        }: {
             entity: Entity<any>,
             size: CollectionSize,
             width: number,
@@ -587,16 +603,16 @@ export const EntityCollectionView = React.memo(
         >
 
             {collection.description && <div className="m-4 text-surface-900 dark:text-white">
-                <Markdown source={collection.description}/>
+                <Markdown source={collection.description} />
             </div>}
 
         </Popover>;
 
         const buildAdditionalHeaderWidget = useCallback(({
-                                                             property,
-                                                             propertyKey,
-                                                             onHover
-                                                         }: {
+            property,
+            propertyKey,
+            onHover
+        }: {
             property: ResolvedProperty,
             propertyKey: string,
             onHover: boolean
@@ -616,7 +632,7 @@ export const EntityCollectionView = React.memo(
                             fullPath={fullPath}
                             collection={collection}
                             tableController={tableController}
-                            parentCollectionIds={parentCollectionIds ?? []}/>;
+                            parentCollectionIds={parentCollectionIds ?? []} />;
                     })}
             </>;
         }, [customizationController.plugins, fullPath, parentCollectionIds]);
@@ -625,9 +641,9 @@ export const EntityCollectionView = React.memo(
             ? function () {
                 if (typeof AddColumnComponent === "function")
                     return <AddColumnComponent fullPath={fullPath}
-                                               parentCollectionIds={parentCollectionIds ?? []}
-                                               collection={collection}
-                                               tableController={tableController}/>;
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController} />;
                 return null;
             }
             : undefined;
@@ -645,7 +661,7 @@ export const EntityCollectionView = React.memo(
 
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md", className)}
-                 ref={containerRef}>
+                ref={containerRef}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     additionalFields={additionalFields}
@@ -676,7 +692,7 @@ export const EntityCollectionView = React.memo(
                         path={fullPath}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
-                        collectionEntitiesCount={docsCount}/>}
+                        collectionEntitiesCount={docsCount} />}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -698,7 +714,7 @@ export const EntityCollectionView = React.memo(
                                 onClick={onNewClick}
                                 className="mt-4"
                             >
-                                <AddIcon/>
+                                <AddIcon />
                                 Create your first entry
                             </Button>
                         </div>
@@ -712,11 +728,31 @@ export const EntityCollectionView = React.memo(
                     additionalIDHeaderWidget={<EntityIdHeaderWidget
                         path={fullPath}
                         fullIdPath={fullIdPath ?? fullPath}
-                        collection={collection}/>}
+                        collection={collection} />}
                     openEntityMode={openEntityMode}
                     onColumnsOrderChange={(newColumns) => {
-                        // Column reorder callback - persistence to be implemented
-                        console.log("Columns reordered:", newColumns.map(c => c.key));
+                        // Extract property keys from the new column order
+                        // Filter to only include actual property columns (not frozen columns, not additional fields, etc.)
+                        const newPropertiesOrder = newColumns
+                            .filter(col => !col.frozen && getPropertyInPath(collection.properties, col.key))
+                            .map(col => col.key);
+
+                        // Optimistically update local state to prevent UI flickering
+                        setLocalPropertiesOrder(newPropertiesOrder);
+
+                        // Call each plugin's onColumnsReorder callback
+                        if (customizationController?.plugins) {
+                            customizationController.plugins
+                                .filter(plugin => plugin.collectionView?.onColumnsReorder)
+                                .forEach(plugin => {
+                                    plugin.collectionView!.onColumnsReorder!({
+                                        fullPath,
+                                        parentCollectionIds: parentCollectionIds ?? [],
+                                        collection,
+                                        newPropertiesOrder
+                                    });
+                                });
+                        }
                     }}
                 />
 
@@ -732,7 +768,7 @@ export const EntityCollectionView = React.memo(
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
                     onCellValueChange={onValueChange}
-                    container={containerRef.current}/>}
+                    container={containerRef.current} />}
 
                 {deleteEntityClicked &&
                     <DeleteEntityDialog
@@ -743,7 +779,7 @@ export const EntityCollectionView = React.memo(
                         open={Boolean(deleteEntityClicked)}
                         onEntityDelete={internalOnEntityDelete}
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                        onClose={() => setDeleteEntityClicked(undefined)}/>}
+                        onClose={() => setDeleteEntityClicked(undefined)} />}
 
             </div>
         );
@@ -773,12 +809,12 @@ export const EntityCollectionView = React.memo(
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
 function EntitiesCount({
-                           fullPath,
-                           collection,
-                           filter,
-                           sortBy,
-                           onCountChange
-                       }: {
+    fullPath,
+    collection,
+    filter,
+    sortBy,
+    onCountChange
+}: {
     fullPath: string,
     collection: EntityCollection,
     filter?: FilterValues<any>,
@@ -821,7 +857,7 @@ function EntitiesCount({
         className="w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left w-fit-content"
         variant={"caption"}
         color={"secondary"}>
-        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"}/>}
+        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"} />}
     </Typography>;
 }
 
@@ -834,10 +870,10 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
 }
 
 function EntityIdHeaderWidget({
-                                  collection,
-                                  path,
-                                  fullIdPath
-                              }: {
+    collection,
+    path,
+    fullIdPath
+}: {
     collection: EntityCollection,
     path: string,
     fullIdPath: string
@@ -861,29 +897,29 @@ function EntityIdHeaderWidget({
                 alignOffset={-117}
                 trigger={
                     <IconButton size={"small"}>
-                        <SearchIcon size={"small"}/>
+                        <SearchIcon size={"small"} />
                     </IconButton>
                 }>
                 <div
                     className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
                     <form noValidate={true}
-                          onSubmit={(e) => {
-                              e.preventDefault();
-                              if (!searchString) return;
-                              setOpenPopup(false);
-                              const entityId = searchString.trim();
-                              setRecentIds(addRecentId(collection.id, entityId));
-                              navigateToEntity({
-                                  openEntityMode,
-                                  collection,
-                                  entityId,
-                                  path,
-                                  fullIdPath,
-                                  sideEntityController,
-                                  navigation
-                              })
-                          }}
-                          className={"w-96 max-w-full"}>
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!searchString) return;
+                            setOpenPopup(false);
+                            const entityId = searchString.trim();
+                            setRecentIds(addRecentId(collection.id, entityId));
+                            navigateToEntity({
+                                openEntityMode,
+                                collection,
+                                entityId,
+                                path,
+                                fullIdPath,
+                                sideEntityController,
+                                navigation
+                            })
+                        }}
+                        className={"w-96 max-w-full"}>
 
                         <div className="flex p-2 w-full gap-2">
                             <input
@@ -894,32 +930,32 @@ function EntityIdHeaderWidget({
                                     setSearchString(e.target.value);
                                 }}
                                 value={searchString}
-                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
+                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled} />
                             <Button variant={"text"}
-                                    disabled={!(searchString.trim())}
-                                    type={"submit"}
-                            ><KeyboardTabIcon/></Button>
+                                disabled={!(searchString.trim())}
+                                type={"submit"}
+                            ><KeyboardTabIcon /></Button>
                         </div>
                     </form>
                     {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
                         {recentIds.map(id => (
                             <ReferencePreview reference={new EntityReference(id, path)}
-                                              key={id}
-                                              hover={true}
-                                              onClick={() => {
-                                                  setOpenPopup(false);
-                                                  navigateToEntity({
-                                                      openEntityMode,
-                                                      collection,
-                                                      entityId: id,
-                                                      path,
-                                                      fullIdPath,
-                                                      sideEntityController,
-                                                      navigation
-                                                  })
-                                              }}
-                                              includeEntityLink={false}
-                                              size={"small"}/>
+                                key={id}
+                                hover={true}
+                                onClick={() => {
+                                    setOpenPopup(false);
+                                    navigateToEntity({
+                                        openEntityMode,
+                                        collection,
+                                        entityId: id,
+                                        path,
+                                        fullIdPath,
+                                        sideEntityController,
+                                        navigation
+                                    })
+                                }}
+                                includeEntityLink={false}
+                                size={"small"} />
                         ))}
                     </div>}
                 </div>
