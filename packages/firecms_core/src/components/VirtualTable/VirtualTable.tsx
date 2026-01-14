@@ -31,7 +31,6 @@ import {
     useSensors
 } from "@dnd-kit/core";
 import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -43,52 +42,52 @@ type InnerElementProps = {
 
 // eslint-disable-next-line react/display-name
 const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
-    children,
-    ...rest
-}: InnerElementProps, ref) => {
+                                                                            children,
+                                                                            ...rest
+                                                                        }: InnerElementProps, ref) => {
 
-    return (
-        <VirtualListContext.Consumer>
-            {(virtualTableProps) => {
-                const customView = virtualTableProps.customView;
-                return (
-                    <>
-                        <div
-                            id={"virtual-table"}
-                            style={{
-                                position: "relative",
-                                height: "100%"
-                            }}>
+        return (
+            <VirtualListContext.Consumer>
+                {(virtualTableProps) => {
+                    const customView = virtualTableProps.customView;
+                    return (
+                        <>
                             <div
-                                ref={ref}
-                                {...rest}
+                                id={"virtual-table"}
                                 style={{
-                                    ...rest?.style,
-                                    minHeight: "100%",
-                                    position: "relative"
+                                    position: "relative",
+                                    height: "100%"
                                 }}>
-                                <VirtualTableHeaderRow {...virtualTableProps} />
-                                {!customView && children}
+                                <div
+                                    ref={ref}
+                                    {...rest}
+                                    style={{
+                                        ...rest?.style,
+                                        minHeight: "100%",
+                                        position: "relative"
+                                    }}>
+                                    <VirtualTableHeaderRow {...virtualTableProps} />
+                                    {!customView && children}
+                                </div>
+
                             </div>
 
-                        </div>
+                            {customView && <div style={{
+                                position: "sticky",
+                                top: "48px",
+                                flexGrow: 1,
+                                height: "calc(100% - 48px)",
+                                marginTop: "calc(48px - 100vh)",
+                                left: 0
+                            }}>{customView}</div>}
 
-                        {customView && <div style={{
-                            position: "sticky",
-                            top: "48px",
-                            flexGrow: 1,
-                            height: "calc(100% - 48px)",
-                            marginTop: "calc(48px - 100vh)",
-                            left: 0
-                        }}>{customView}</div>}
-
-                    </>
-                );
-            }}
-        </VirtualListContext.Consumer>
-    );
-})
-    ;
+                        </>
+                    );
+                }}
+            </VirtualListContext.Consumer>
+        );
+    })
+;
 
 /**
  * This is a Table component that allows displaying arbitrary data, not
@@ -100,34 +99,34 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  */
 export const VirtualTable = React.memo<VirtualTableProps<any>>(
     function VirtualTable<T extends Record<string, any>>({
-        data,
-        onResetPagination,
-        onEndReached,
-        endOffset = 600,
-        rowHeight = 54,
-        columns: columnsProp,
-        onRowClick,
-        onColumnResize,
-        filter: filterInput,
-        checkFilterCombination,
-        onFilterUpdate,
-        sortBy,
-        error,
-        emptyComponent,
-        onSortByUpdate,
-        onScroll: onScrollProp,
-        loading,
-        cellRenderer,
-        hoverRow,
-        createFilterField,
-        rowClassName,
-        style,
-        className,
-        endAdornment,
-        AddColumnComponent,
-        initialScroll = 0,
-        onColumnsOrderChange,
-    }: VirtualTableProps<T>) {
+                                                             data,
+                                                             onResetPagination,
+                                                             onEndReached,
+                                                             endOffset = 600,
+                                                             rowHeight = 54,
+                                                             columns: columnsProp,
+                                                             onRowClick,
+                                                             onColumnResize,
+                                                             filter: filterInput,
+                                                             checkFilterCombination,
+                                                             onFilterUpdate,
+                                                             sortBy,
+                                                             error,
+                                                             emptyComponent,
+                                                             onSortByUpdate,
+                                                             onScroll: onScrollProp,
+                                                             loading,
+                                                             cellRenderer,
+                                                             hoverRow,
+                                                             createFilterField,
+                                                             rowClassName,
+                                                             style,
+                                                             className,
+                                                             endAdornment,
+                                                             AddColumnComponent,
+                                                             initialScroll = 0,
+                                                             onColumnsOrderChange,
+                                                         }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
         const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -286,10 +285,10 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [data?.length, onEndReached]);
 
         const onScroll = useCallback(({
-            scrollDirection,
-            scrollOffset,
-            scrollUpdateWasRequested
-        }: {
+                                          scrollDirection,
+                                          scrollOffset,
+                                          scrollUpdateWasRequested
+                                      }: {
             scrollDirection: "forward" | "backward",
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
@@ -328,21 +327,21 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error
             ? <CenteredView maxWidth={"2xl"}
-                className="flex flex-col gap-2">
+                            className="flex flex-col gap-2">
 
                 <Typography variant={"h6"}>
                     {"Error"}
                 </Typography>
 
-                {error?.message && <SafeLinkRenderer text={error.message} />}
+                {error?.message && <SafeLinkRenderer text={error.message}/>}
 
             </CenteredView>
             : (empty
                 ? (loading
-                    ? <CircularProgressCenter />
+                    ? <CircularProgressCenter/>
                     : <div
                         className="flex flex-col overflow-auto items-center justify-center p-2 gap-2 h-full">
-                        <AssignmentIcon />
+                        <AssignmentIcon/>
                         {emptyComponent}
                     </div>)
                 : undefined);
@@ -398,7 +397,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
                         onScroll={draggingColumnId ? undefined : onScroll}
                         includeAddColumn={Boolean(AddColumnComponent)}
-                        itemSize={rowHeight} />
+                        itemSize={rowHeight}/>
 
                 </VirtualListContext.Provider>
             </div>
@@ -429,67 +428,78 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
     equal
 );
 
-// Wrapper that applies sortable transforms to cells
-const SortableCellWrapper = ({
-    columnKey,
-    width,
-    isDragging,
-    isDraggable,
-    frozen,
-    children
-}: {
-    columnKey: string;
-    width: number;
+// Cell component that computes sortable props and passes them to VirtualTableCell
+const SortableCell = ({
+                          column,
+                          columns,
+                          cellData,
+                          rowData,
+                          rowIndex,
+                          columnIndex,
+                          cellRenderer,
+                          isDragging,
+                          isDraggable
+                      }: {
+    column: VirtualTableColumn;
+    columns: VirtualTableColumn[];
+    cellData: any;
+    rowData: any;
+    rowIndex: number;
+    columnIndex: number;
+    cellRenderer: React.ComponentType<any>;
     isDragging: boolean;
     isDraggable: boolean;
-    frozen?: boolean;
-    children: React.ReactNode;
 }) => {
     const {
         attributes,
-        listeners,
         setNodeRef,
         transform,
         transition,
     } = useSortable({
-        id: columnKey,
-        disabled: !isDraggable || frozen
+        id: column.key,
+        disabled: !isDraggable || column.frozen
     });
 
-    const style = {
+    const sortableStyle: React.CSSProperties = {
         // Only use translate, ignore any scale transforms
         transform: transform ? `translateX(${transform.x}px)` : undefined,
         // Don't transition the dragged item - only other items should animate
         transition: isDragging ? undefined : transition,
-        minWidth: width,
-        maxWidth: width,
-        width: width,
+        minWidth: column.width,
+        maxWidth: column.width,
+        width: column.width,
     };
 
     return (
-        <div
-            ref={setNodeRef}
-            style={style}
-            className={cls(
-                "flex-shrink-0",
-                frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
-            )}
-            {...attributes}
-        >
-            {children}
-        </div>
+        <VirtualTableCell
+            key={`cell_${column.key}`}
+            dataKey={column.key}
+            cellRenderer={cellRenderer}
+            column={column}
+            columns={columns}
+            rowData={rowData}
+            cellData={cellData}
+            rowIndex={rowIndex}
+            columnIndex={columnIndex}
+            sortableNodeRef={setNodeRef}
+            sortableStyle={sortableStyle}
+            sortableAttributes={attributes}
+            isDragging={isDragging}
+            isDraggable={isDraggable}
+            frozen={column.frozen}
+        />
     );
 };
 
 function MemoizedList({
-    outerRef,
-    width,
-    height,
-    itemCount,
-    onScroll,
-    itemSize,
-    includeAddColumn
-}: {
+                          outerRef,
+                          width,
+                          height,
+                          itemCount,
+                          onScroll,
+                          itemSize,
+                          includeAddColumn
+                      }: {
     outerRef: RefObject<HTMLDivElement>;
     width: number;
     height: number;
@@ -504,22 +514,22 @@ function MemoizedList({
 }) {
 
     const Row = useCallback(({
-        index,
-        style
-    }: any) => {
+                                 index,
+                                 style
+                             }: any) => {
         return <VirtualListContext.Consumer>
             {({
-                onRowClick,
-                data,
-                columns,
-                rowHeight = 54,
-                cellRenderer,
-                hoverRow,
-                rowClassName,
-                endAdornment,
-                draggingColumnId,
-                onColumnsOrderChange
-            }) => {
+                  onRowClick,
+                  data,
+                  columns,
+                  rowHeight = 54,
+                  cellRenderer,
+                  hoverRow,
+                  rowClassName,
+                  endAdornment,
+                  draggingColumnId,
+                  onColumnsOrderChange
+              }) => {
 
                 if (endAdornment && index === (data ?? []).length) {
                     return <div style={{
@@ -555,28 +565,22 @@ function MemoizedList({
                             const isDraggable = !column.frozen && !!onColumnsOrderChange;
 
                             return (
-                                <SortableCellWrapper
-                                    key={`cell_wrapper_${column.key}`}
-                                    columnKey={column.key}
-                                    width={column.width}
+                                <SortableCell
+                                    key={`cell_${column.key}`}
+                                    column={column}
+                                    columns={columns}
+                                    cellData={cellData}
+                                    rowData={rowData}
+                                    rowIndex={index}
+                                    columnIndex={columnIndex}
+                                    cellRenderer={cellRenderer}
                                     isDragging={isDragging}
                                     isDraggable={isDraggable}
-                                    frozen={column.frozen}
-                                >
-                                    <VirtualTableCell
-                                        dataKey={column.key}
-                                        cellRenderer={cellRenderer}
-                                        column={column}
-                                        columns={columns}
-                                        rowData={rowData}
-                                        cellData={cellData}
-                                        rowIndex={index}
-                                        columnIndex={columnIndex} />
-                                </SortableCellWrapper>
+                                />
                             );
                         })}
 
-                        {includeAddColumn && <div className={"w-20"} />}
+                        {includeAddColumn && <div className={"w-20"}/>}
 
                     </VirtualTableRow>
                 );
@@ -607,6 +611,6 @@ const SafeLinkRenderer: React.FC<{
     });
 
     return (
-        <div className={"break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        <div className={"break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }}/>
     );
 };

@@ -22,16 +22,17 @@ import {
 import { Field, getIn, useFormex } from "@firecms/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { LayoutModeSwitch } from "./LayoutModeSwitch";
+import { ViewModeSwitch } from "./ViewModeSwitch";
 
 export function CollectionDetailsForm({
-                                          isNewCollection,
-                                          reservedGroups,
-                                          existingPaths,
-                                          existingIds,
-                                          groups,
-                                          parentCollection,
-                                          children
-                                      }: {
+    isNewCollection,
+    reservedGroups,
+    existingPaths,
+    existingIds,
+    groups,
+    parentCollection,
+    children
+}: {
     isNewCollection: boolean,
     reservedGroups?: string[];
     existingPaths?: string[];
@@ -89,7 +90,7 @@ export function CollectionDetailsForm({
         }
     }, [errors.id]);
 
-    const collectionIcon = <IconForView collectionOrView={values}/>;
+    const collectionIcon = <IconForView collectionOrView={values} />;
 
     const groupOptions = groups?.filter((group) => !reservedGroups?.includes(group));
 
@@ -127,10 +128,10 @@ export function CollectionDetailsForm({
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
                         <DefaultDatabaseField databaseId={values.databaseId}
-                                              onDatabaseIdUpdate={updateDatabaseId}/>
+                            onDatabaseIdUpdate={updateDatabaseId} />
 
                         <Tooltip title={"Change icon"}
-                                 asChild={true}>
+                            asChild={true}>
                             <IconButton
                                 shape={"square"}
                                 onClick={() => setIconDialogOpen(true)}>
@@ -155,7 +156,7 @@ export function CollectionDetailsForm({
                             label={"Name"}
                             autoFocus={true}
                             required
-                            error={showErrors && Boolean(errors.name)}/>
+                            error={showErrors && Boolean(errors.name)} />
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
                             {touched.name && Boolean(errors.name) ? errors.name : "Name of this collection, usually a plural name (e.g. Products)"}
                         </FieldCaption>
@@ -163,10 +164,10 @@ export function CollectionDetailsForm({
 
                     <div className={cls("col-span-12 ")}>
                         <Field name={"path"}
-                               as={DebouncedTextField}
-                               label={"Path"}
-                               required
-                               error={showErrors && Boolean(errors.path)}/>
+                            as={DebouncedTextField}
+                            label={"Path"}
+                            required
+                            error={showErrors && Boolean(errors.path)} />
 
                         <FieldCaption error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
@@ -214,7 +215,12 @@ export function CollectionDetailsForm({
                     <LayoutModeSwitch
                         className={"col-span-12"}
                         value={values.openEntityMode ?? "side_panel"}
-                        onChange={(value) => setFieldValue("openEntityMode", value)}/>
+                        onChange={(value) => setFieldValue("openEntityMode", value)} />
+
+                    <ViewModeSwitch
+                        className={"col-span-12"}
+                        value={values.defaultViewMode ?? "table"}
+                        onChange={(value) => setFieldValue("defaultViewMode", value)} />
 
                     <div className={"col-span-12"}>
                         <BooleanSwitchWithLabel
@@ -241,9 +247,9 @@ export function CollectionDetailsForm({
                             onExpandedChange={setAdvancedPanelExpanded}
                             title={
                                 <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
-                                    <SettingsIcon/>
+                                    <SettingsIcon />
                                     <Typography variant={"subtitle2"}
-                                                className="ml-2">
+                                        className="ml-2">
                                         Advanced
                                     </Typography>
                                 </div>}
@@ -252,10 +258,10 @@ export function CollectionDetailsForm({
 
                                 <div className={"col-span-12"}>
                                     <Field name={"id"}
-                                           as={DebouncedTextField}
-                                           disabled={!isNewCollection}
-                                           label={"Collection id"}
-                                           error={showErrors && Boolean(errors.id)}/>
+                                        as={DebouncedTextField}
+                                        disabled={!isNewCollection}
+                                        label={"Collection id"}
+                                        error={showErrors && Boolean(errors.id)} />
                                     <FieldCaption error={touched.id && Boolean(errors.id)}>
                                         {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection. Typically the same as the path."}
                                     </FieldCaption>
@@ -271,7 +277,7 @@ export function CollectionDetailsForm({
                                             return handleChange(e);
                                         }}
                                         value={values.singularName ?? ""}
-                                        label={"Singular name"}/>
+                                        label={"Singular name"} />
                                     <FieldCaption error={showErrors && Boolean(errors.singularName)}>
                                         {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
                                     </FieldCaption>
@@ -297,10 +303,10 @@ export function CollectionDetailsForm({
                                                 setFieldValue("sideDialogWidth", null);
                                             }}
                                             disabled={!values.sideDialogWidth}>
-                                            <CloseIcon size={"small"}/>
+                                            <CloseIcon size={"small"} />
                                         </IconButton>}
                                         value={values.sideDialogWidth ?? ""}
-                                        label={"Side dialog width"}/>
+                                        label={"Side dialog width"} />
                                     <FieldCaption error={showErrors && Boolean(errors.singularName)}>
                                         {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define the width (in pixels) of entities side dialog. Default is 768px"}
                                     </FieldCaption>
@@ -443,7 +449,7 @@ export function CollectionDetailsForm({
 
                 </div>
 
-                <div style={{ height: "52px" }}/>
+                <div style={{ height: "52px" }} />
 
                 <Dialog
                     open={iconDialogOpen}
@@ -453,10 +459,10 @@ export function CollectionDetailsForm({
                 >
                     <div className={"p-4 overflow-auto min-h-[200px]"}>
                         <SearchIconsView selectedIcon={typeof values.icon === "string" ? values.icon : undefined}
-                                         onIconSelected={(icon: string) => {
-                                             setIconDialogOpen(false);
-                                             setFieldValue("icon", icon);
-                                         }}/>
+                            onIconSelected={(icon: string) => {
+                                setIconDialogOpen(false);
+                                setFieldValue("icon", icon);
+                            }} />
                     </div>
 
                 </Dialog>
@@ -467,18 +473,18 @@ export function CollectionDetailsForm({
 }
 
 function DefaultDatabaseField({
-                                  databaseId,
-                                  onDatabaseIdUpdate
-                              }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
+    databaseId,
+    onDatabaseIdUpdate
+}: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
 
     return <Tooltip title={"Database ID"}
-                    side={"top"}
-                    align={"start"}>
+        side={"top"}
+        align={"start"}>
         <TextField size={"small"}
-                   invisible={true}
-                   inputClassName={"text-end"}
-                   value={databaseId ?? ""}
-                   onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
-                   placeholder={"(default)"}></TextField>
+            invisible={true}
+            inputClassName={"text-end"}
+            value={databaseId ?? ""}
+            onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
+            placeholder={"(default)"}></TextField>
     </Tooltip>
 }

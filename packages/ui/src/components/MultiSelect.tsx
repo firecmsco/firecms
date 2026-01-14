@@ -83,6 +83,8 @@ export const MultiSelect = React.forwardRef<
             includeSelectAll = true,
             useChips = true,
             className,
+            inputClassName,
+            inputRef,
             children,
             renderValues,
             open,
@@ -214,7 +216,7 @@ export const MultiSelect = React.forwardRef<
                 >
                     <PopoverPrimitive.Trigger asChild>
                         <button
-                            ref={ref}
+                            ref={inputRef ?? ref}
                             onClick={handleTogglePopover}
                             className={cls(
                                 {
@@ -232,10 +234,12 @@ export const MultiSelect = React.forwardRef<
                                     "px-4": size === "medium" || size === "large",
                                 },
                                 "select-none rounded-md text-sm",
+                                "focus:ring-0 focus-visible:ring-0 outline-none focus:outline-none focus-visible:outline-none",
                                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                                 "relative flex items-center",
-                                className
+                                className,
+                                inputClassName
                             )}
                         >
                             {selectedValues.length > 0 ? (
