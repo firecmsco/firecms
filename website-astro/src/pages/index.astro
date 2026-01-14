@@ -1,268 +1,332 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ScrollSyncShowcase from '../components/ScrollSyncShowcase.astro';
-import SpotlightCard from '../components/SpotlightCard.astro';
+import Layout from "../layouts/Layout.astro";
+import ScrollSyncShowcase from "../components/ScrollSyncShowcase.astro";
+import SpotlightCard from "../components/SpotlightCard.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
 const title = "Firebase CMS & Firestore CMS | FireCMS";
 const description = "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework.";
 
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://firecms.co/#organization",
-      "name": "FireCMS",
-      "url": "https://firecms.co/"
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://firecms.co/#website",
-      "url": "https://firecms.co/",
-      "name": "FireCMS",
-      "publisher": { "@id": "https://firecms.co/#organization" }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://firecms.co/#software",
-      "name": "FireCMS",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web",
-      "url": "https://firecms.co/",
-      "description": "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-  ]
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "@id": "https://firecms.co/#organization",
+            "name": "FireCMS",
+            "url": "https://firecms.co/"
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://firecms.co/#website",
+            "url": "https://firecms.co/",
+            "name": "FireCMS",
+            "publisher": { "@id": "https://firecms.co/#organization" }
+        },
+        {
+            "@type": "SoftwareApplication",
+            "@id": "https://firecms.co/#software",
+            "name": "FireCMS",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "url": "https://firecms.co/",
+            "description": "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps.",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            }
+        }
+    ]
 };
 ---
 
 <Layout title={title} description={description}>
 
-  <main>
+    <main>
 
-    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-24 sm:pt-32 sm:pb-32 lg:pt-48 lg:pb-48">
+        <section
+                class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-24 sm:pt-32 sm:pb-32 lg:pt-48 lg:pb-48">
 
-      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-        <h1 class="mb-8 text-5xl sm:text-6xl font-extrabold tracking-tight leading-none md:text-6xl lg:text-6xl text-white font-sans animate-on-scroll fade-in-up">
-          The Headless CMS<br/> Framework for <span class="text-orange-500 subtle-shimmer">Firebase</span>
-        </h1>
-        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-64 animate-on-scroll fade-in-up ">
-          Build powerful back-office apps in minutes.<br/>
-          Go live instantly with our <b>Hosted Headless CMS Cloud</b>, or self-host our <b>open-source framework</b> for full control. </p>
-        <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up">
-          <a href="https://app.firecms.co"
-             data-track
-             id="hero-start-building"
-             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-            Start Building for Free
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
-          </a>
-          <a href="/developers"
-             data-track
-             id="hero-explore-self-hosted"
-             class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-700 transition-all duration-200 ease-in-out">
-            Explore Self-Hosted
-          </a>
-        </div>
+            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+                <h1 class="mb-8 text-5xl sm:text-6xl font-extrabold tracking-tight leading-none md:text-6xl lg:text-6xl text-white font-sans animate-on-scroll fade-in-up">
+                    The Headless CMS<br/> Framework for <span class="text-orange-500 subtle-shimmer">Firebase</span>
+                </h1>
+                <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-64 animate-on-scroll fade-in-up ">
+                    Build powerful back-office apps in minutes.<br/>
+                    Go live instantly with our <b>Hosted Headless CMS Cloud</b>, or self-host our <b>open-source
+                    framework</b> for full control. </p>
+                <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up">
+                    <a href="https://app.firecms.co"
+                       data-track
+                       id="hero-start-building"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+                        Start Building for Free
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-5 w-5 text-white filter invert"/>
+                    </a>
+                    <a href="/developers"
+                       data-track
+                       id="hero-explore-self-hosted"
+                       class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-700 transition-all duration-200 ease-in-out">
+                        Explore Self-Hosted
+                    </a>
+                </div>
 
-      </div>
+            </div>
 
-    </section>
+        </section>
 
-    <!-- Social Proof Section with gradient divider -->
-    <section class="relative isolate bg-black py-16 overflow-hidden">
-      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "sm" }}/>
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <p class="text-center text-lg font-semibold leading-8 text-surface-400 mb-10 animate-on-scroll fade-in">
-          Trusted by developers at leading companies
-        </p>
-        <div class="mx-auto flex items-center justify-center gap-x-12 gap-y-8 flex-wrap max-w-2xl animate-on-scroll scale-in ">
-          <img src="/img/logos/Google_2015_logo.svg" alt="Google" class="h-10 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale" />
-          <img src="/img/logos/Microsoft_logo_%282012%29.svg" alt="Microsoft" class="h-8 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale" />
-          <img src="/img/logos/Ikea_logo.svg" alt="IKEA" class="h-10 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale" />
-        </div>
-        <p class="text-center text-sm text-surface-500 mt-8 animate-on-scroll fade-in ">and thousands more</p>
-      </div>
-    </section>
+        <!-- Social Proof Section with gradient divider -->
+        <section class="relative isolate bg-black py-16 overflow-hidden">
+            <SectionBackgroundAccents topLine={true} blob={{
+                position: "top",
+                size: "sm"
+            }}/>
 
-    <!-- What Can You Build Section with icon accents -->
-    <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
-      <SectionBackgroundAccents topLine={true}/>
 
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="w-full lg:w-[400px] mb-20 mt-16 animate-on-scroll fade-in-up">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One Framework,<br/> Endless Back-Office Solutions</h2>
-          <p class="mt-6 text-lg leading-8 text-surface-400">Use FireCMS as your Firestore CMS to manage content, users, and operations right from Firebase.</p>
-        </div>
-        <div class="mx-auto mt-16 max-w-7xl">
-          <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <SpotlightCard
-                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg"
-                title="Content Management on Firestore"
-                description="Power blogs and marketing sites with an intuitive, Notion-style editor backed by Firestore."
-            />
-            <SpotlightCard
-                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
-                title="Internal Tools for Firebase"
-                description="Build robust internal dashboards for support and ops, connected to Firebase and Firestore."
-            />
-            <SpotlightCard
-                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cog.svg"
-                title="Custom Admin Panels on Firestore"
-                description="Create bespoke, data-intensive admin panels with full control to add custom views and business logic."
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <p class="text-center text-lg font-semibold leading-8 text-surface-400 mb-10 animate-on-scroll fade-in">
+                    Trusted by developers at leading companies
+                </p>
+                <div class="mx-auto flex items-center justify-center gap-x-12 gap-y-8 flex-wrap max-w-2xl animate-on-scroll scale-in ">
+                    <img src="/img/logos/Google_2015_logo.svg" alt="Google"
+                         class="h-10 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale"/>
+                    <img src="/img/logos/Microsoft_logo_%282012%29.svg" alt="Microsoft"
+                         class="h-8 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale"/>
+                    <img src="/img/logos/Ikea_logo.svg" alt="IKEA"
+                         class="h-10 w-auto opacity-50 hover:opacity-80 transition-opacity grayscale"/>
+                </div>
+                <p class="text-center text-sm text-surface-500 mt-8 animate-on-scroll fade-in ">and thousands more</p>
 
-    <!-- Scroll-sync showcase (sticky index on the right) -->
-    <ScrollSyncShowcase />
+            </div>
+        </section>
 
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <!-- What Can You Build Section with icon accents -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
+            <SectionBackgroundAccents topLine={true}/>
 
-        <p class="text-center text-sm font-medium text-surface-500 mb-8 uppercase tracking-wider">
-          Built with modern technologies
-        </p>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="w-full lg:w-[400px] mb-20 mt-16 animate-on-scroll fade-in-up">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One Framework,<br/> Endless
+                        Back-Office Solutions</h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">Use FireCMS as your Firestore CMS to manage
+                        content, users, and operations right from Firebase.</p>
+                </div>
+                <div class="mx-auto mt-16 max-w-7xl">
+                    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                        <SpotlightCard
+                                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg"
+                                title="Content Management on Firestore"
+                                description="Power blogs and marketing sites with an intuitive, Notion-style editor backed by Firestore."
+                        />
+                        <SpotlightCard
+                                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
+                                title="Internal Tools for Firebase"
+                                description="Build robust internal dashboards for support and ops, connected to Firebase and Firestore."
+                        />
+                        <SpotlightCard
+                                icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cog.svg"
+                                title="Custom Admin Panels on Firestore"
+                                description="Create bespoke, data-intensive admin panels with full control to add custom views and business logic."
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 sm:gap-x-12 lg:gap-x-16">
+        <section class="flex flex-col items-center justify-center bg-black py-16 sm:py-24">
+            <!-- Google Cloud Partner Badge -->
+            <div class="mt-2 flex justify-center animate-on-scroll fade-in">
+                <a href="https://cloud.google.com/partners" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-3 px-4 py-1 rounded-full border border-surface-800 bg-surface-900/50 hover:bg-surface-800 transition-all duration-200"
+                   title="Google Cloud Partner">
+                    <img src="/img/logos/google_cloud_partner.svg" alt="Google Cloud Partner" class="h-8 w-auto"/>
+                </a>
+            </div>
 
-          <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-               src="/img/reactjs-icon.svg" alt="React">
+        </section>
 
-          <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-               src="/img/typescript_logo.svg" alt="TypeScript">
+        <!-- Scroll-sync showcase (sticky index on the right) -->
+        <ScrollSyncShowcase/>
 
-          <img class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-               src="/img/tailwind_logo.svg" alt="Tailwind CSS">
+        <section class="bg-black py-16 sm:py-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
-          <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-               src="/img/firebase.svg" alt="Firebase">
+                <p class="text-center text-sm font-medium text-surface-500 mb-8 uppercase tracking-wider">
+                    Built with modern technologies
+                </p>
 
-        </div>
-      </div>
-    </section>
+                <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 sm:gap-x-12 lg:gap-x-16">
 
-    <!-- Persona Routing Section with subtle accents -->
-    <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
-      <SectionBackgroundAccents topLine={true} blob={{ position: "bottom", size: "md" }}/>
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for Your Workflow</h2>
-        </div>
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <SpotlightCard
-              icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
-              title="For Startups"
-              description="Launch your MVP's back-office in minutes and iterate at lightning speed."
-              link={{ href: "/startups", text: "Learn More" }}
-          />
-          <SpotlightCard
-              icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
-              title="For Agencies"
-              description="Deliver deeply customized, self-hosted solutions for your clients."
-              link={{ href: "/agencies", text: "Learn More" }}
-          />
-          <SpotlightCard
-              icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
-              title="For Developers"
-              description="Built for developers, with ultimate flexibility and control."
-              link={{ href: "/developers", text: "Learn More" }}
-          />
-        </div>
-      </div>
-    </section>
+                    <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                         src="/img/reactjs-icon.svg" alt="React">
 
-    <!-- FAQ -->
-    <section class="bg-black py-24 sm:py-32">
-      <div class="mx-auto max-w-7xl px-6">
-        <div class="mx-auto max-w-3xl text-center animate-on-scroll fade-in-up">
-          <h2 class="text-3xl sm:text-4xl font-medium text-white">Firebase CMS &amp; Firestore CMS FAQ</h2>
-        </div>
-        <div class="mt-10 max-w-3xl mx-auto space-y-4 animate-on-scroll fade-in-up delay-100">
-          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-            <summary class="cursor-pointer text-white font-semibold">Is FireCMS a Firebase CMS or a Firestore CMS?</summary>
-            <p class="mt-2 text-surface-300">FireCMS works as both: it connects to Firebase and uses Firestore as the database, giving you a Firestore CMS experience for content and admin tooling.</p>
-          </details>
-          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-            <summary class="cursor-pointer text-white font-semibold">Cloud vs Self‑hosted — which should I choose?</summary>
-            <p class="mt-2 text-surface-300">Choose Cloud for the fastest setup and zero maintenance. Choose Self‑hosted if you need full control, custom workflows, or client delivery. You can start on Cloud and move to self‑host anytime.</p>
-          </details>
-          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-            <summary class="cursor-pointer text-white font-semibold">Can I infer a schema from my existing data?</summary>
-            <p class="mt-2 text-surface-300">Yes. FireCMS analyzes your Firestore/Atlas collections and generates a starting schema you can refine in a visual editor.</p>
-          </details>
-          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-            <summary class="cursor-pointer text-white font-semibold">Do you support SSO/SAML?</summary>
-            <p class="mt-2 text-surface-300">SSO/SAML and advanced enterprise features are available on Enterprise plans. Contact us for details.</p>
-          </details>
-          <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-            <summary class="cursor-pointer text-white font-semibold">Is FireCMS open‑source?</summary>
-            <p class="mt-2 text-surface-300">Yes. The core framework is MIT‑licensed and open‑source. A PRO license adds advanced components, theming, and priority support.</p>
-          </details>
-        </div>
-      </div>
-    </section>
+                    <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                         src="/img/typescript_logo.svg" alt="TypeScript">
 
-    <section class="relative isolate bg-black py-32 sm:py-48 border-t border-surface-800">
-      <SectionBackgroundAccents blob={{ position: "bottom", size: "md", opacity: 50 }}/>
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <img class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                         src="/img/tailwind_logo.svg" alt="Tailwind CSS">
 
-        <!-- Minimalistic single quote (Microsoft) -->
-        <div class="mx-auto max-w-3xl animate-on-scroll fade-in-up">
-          <figure>
-            <blockquote class="text-2xl sm:text-3xl leading-snug text-white tracking-tight">
-              “I've tried many other CMS including Strapi, Sanity, Contentful, Builder.io, none of them gave me a better experience than FireCMS!”
-            </blockquote>
-            <figcaption class="mt-6 flex items-center gap-x-4">
-              <img class="h-12 w-12 rounded-full bg-surface-800 object-cover" src="/img/avatars/fulei.avif" alt="Fulei Huang">
-              <div class="text-sm leading-6">
-                <div class="font-semibold text-white">Fulei Huang</div>
-                <div class="text-surface-400">Software Engineer, Microsoft</div>
-              </div>
-            </figcaption>
-          </figure>
-        </div>
+                    <img class="h-10 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                         src="/img/firebase.svg" alt="Firebase">
 
-        <div class="mt-16 text-center">
-          <a href="/why-firecms" class="text-base font-semibold leading-6 text-primary-light hover:text-primary transition-colors">
-            Why choose FireCMS? <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-    </section>
+                </div>
+            </div>
+        </section>
 
-    <!-- Final CTA with background accents -->
-    <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
-      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg" }}/>
-      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8 animate-on-scroll fade-in-up">Ready to get started?</h2>
-        <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up delay-100">
-          <a href="https://app.firecms.co"
-             data-track
-             id="cta-try-cloud"
-             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-            Try FireCMS Cloud
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
-          </a>
-          <a href="/docs"
-             data-track
-             id="cta-view-docs"
-             class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
-            View Documentation
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
-          </a>
-        </div>
-      </div>
-    </section>
+        <!-- Persona Routing Section with subtle accents -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
+            <SectionBackgroundAccents topLine={true} blob={{
+                position: "bottom",
+                size: "md"
+            }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for Your Workflow</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                            title="For Startups"
+                            description="Launch your MVP's back-office in minutes and iterate at lightning speed."
+                            link={{
+                                href: "/startups",
+                                text: "Learn More"
+                            }}
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
+                            title="For Agencies"
+                            description="Deliver deeply customized, self-hosted solutions for your clients."
+                            link={{
+                                href: "/agencies",
+                                text: "Learn More"
+                            }}
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
+                            title="For Developers"
+                            description="Built for developers, with ultimate flexibility and control."
+                            link={{
+                                href: "/developers",
+                                text: "Learn More"
+                            }}
+                    />
+                </div>
+            </div>
+        </section>
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
-  </main>
+        <!-- FAQ -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="mx-auto max-w-3xl text-center animate-on-scroll fade-in-up">
+                    <h2 class="text-3xl sm:text-4xl font-medium text-white">Firebase CMS &amp; Firestore CMS FAQ</h2>
+                </div>
+                <div class="mt-10 max-w-3xl mx-auto space-y-4 animate-on-scroll fade-in-up delay-100">
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Is FireCMS a Firebase CMS or a
+                            Firestore CMS?
+                        </summary>
+                        <p class="mt-2 text-surface-300">FireCMS works as both: it connects to Firebase and uses
+                            Firestore as the database, giving you a Firestore CMS experience for content and admin
+                            tooling.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Cloud vs Self‑hosted — which should I
+                            choose?
+                        </summary>
+                        <p class="mt-2 text-surface-300">Choose Cloud for the fastest setup and zero maintenance. Choose
+                            Self‑hosted if you need full control, custom workflows, or client delivery. You can start on
+                            Cloud and move to self‑host anytime.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Can I infer a schema from my existing
+                            data?
+                        </summary>
+                        <p class="mt-2 text-surface-300">Yes. FireCMS analyzes your Firestore/Atlas collections and
+                            generates a starting schema you can refine in a visual editor.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Do you support SSO/SAML?</summary>
+                        <p class="mt-2 text-surface-300">SSO/SAML and advanced enterprise features are available on
+                            Enterprise plans. Contact us for details.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Is FireCMS open‑source?</summary>
+                        <p class="mt-2 text-surface-300">Yes. The core framework is MIT‑licensed and open‑source. A PRO
+                            license adds advanced components, theming, and priority support.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative isolate bg-black py-32 sm:py-48 border-t border-surface-800">
+            <SectionBackgroundAccents blob={{
+                position: "bottom",
+                size: "md",
+                opacity: 50
+            }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+                <!-- Minimalistic single quote (Microsoft) -->
+                <div class="mx-auto max-w-3xl animate-on-scroll fade-in-up">
+                    <figure>
+                        <blockquote class="text-2xl sm:text-3xl leading-snug text-white tracking-tight">
+                            “I've tried many other CMS including Strapi, Sanity, Contentful, Builder.io, none of them
+                            gave me a better experience than FireCMS!”
+                        </blockquote>
+                        <figcaption class="mt-6 flex items-center gap-x-4">
+                            <img class="h-12 w-12 rounded-full bg-surface-800 object-cover"
+                                 src="/img/avatars/fulei.avif" alt="Fulei Huang">
+                            <div class="text-sm leading-6">
+                                <div class="font-semibold text-white">Fulei Huang</div>
+                                <div class="text-surface-400">Software Engineer, Microsoft</div>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </div>
+
+                <div class="mt-16 text-center">
+                    <a href="/why-firecms"
+                       class="text-base font-semibold leading-6 text-primary-light hover:text-primary transition-colors">
+                        Why choose FireCMS? <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA with background accents -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
+            <SectionBackgroundAccents topLine={true} blob={{
+                position: "top",
+                size: "lg"
+            }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8 animate-on-scroll fade-in-up">
+                    Ready to get started?</h2>
+                <div class="flex items-center justify-center gap-x-6 animate-on-scroll fade-in-up delay-100">
+                    <a href="https://app.firecms.co"
+                       data-track
+                       id="cta-try-cloud"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+                        Try FireCMS Cloud
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-5 w-5 text-white filter invert"/>
+                    </a>
+                    <a href="/docs"
+                       data-track
+                       id="cta-view-docs"
+                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                        View Documentation
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-4 w-4 text-white filter invert"/>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    </main>
 
 </Layout>
