@@ -1,0 +1,317 @@
+---
+const allLogos = [
+    {
+        key: "deardoc",
+        alt: "DearDoc Logo",
+        href: "https://www.getdeardoc.com",
+        src: "/img/logos/deardoc.png",
+        invert: true,
+        height: 22,
+        type: "startups"
+    },
+    {
+        key: "medicalmotion",
+        alt: "MedicalMotion Logo",
+        href: "https://medicalmotion.com",
+        src: "/img/logos/mm_logo.webp",
+        invert: false,
+        height: 36,
+        type: "startups"
+    },
+    {
+        key: "proton",
+        alt: "Proton Health",
+        href: "https://www.proton-health.com",
+        src: "/img/logos/proton_logo.svg",
+        invert: false,
+        height: 40,
+        type: "startups"
+    },
+    {
+        key: "withu",
+        alt: "WithU",
+        href: "https://www.withuapp.com//",
+        src: "/img/logos/withu.png",
+        invert: true,
+        type: "startups"
+    },
+    {
+        key: "claimgem",
+        alt: "ClaimGem",
+        href: "https://claimgem.com/",
+        text: "ClaimGem",
+        invert: false,
+        height: 28,
+        type: "startups"
+    },
+    {
+        key: "socialincome",
+        alt: "Social Income",
+        href: "https://socialincome.org",
+        src: "/img/logos/social_income_logo.svg",
+        invert: false,
+        height: 40,
+        type: "startups"
+    },
+    {
+        key: "clario",
+        alt: "Clario",
+        href: "https://clario.co/",
+        src: "/img/logos/clario.svg",
+        invert: true,
+        height: 28,
+        type: "startups"
+    },
+    {
+        key: "gearfocus",
+        alt: "GearFocus",
+        href: "https://www.gearfocus.com/",
+        src: "/img/logos/gearfocus_logo.svg",
+        invert: true,
+        height: 36,
+        type: "startups"
+    },
+    {
+        key: "mindswitch",
+        alt: "Mindswitch",
+        href: "https://www.mindswitch.me/",
+        src: "/img/logos/mindswitch_logo.svg",
+        invert: true,
+        height: 36,
+        type: "startups"
+    },
+    {
+        key: "bitforge",
+        alt: "BitForge",
+        href: "https://bitforge.ch/",
+        src: "/img/logos/bitforge.svg",
+        invert: true,
+        height: 32,
+        type: "agencies"
+    },
+    {
+        key: "somnio",
+        alt: "Somnio Software",
+        href: "https://www.somniosoftware.com/",
+        src: "/img/logos/logo_somnio.webp",
+        invert: true,
+        height: 42,
+        type: "agencies"
+    },
+    {
+        key: "riverstone",
+        alt: "Riverstone",
+        href: "https://www.riverstonetech.com/",
+        src: "/img/logos/riverstone.png",
+        invert: true,
+        height: 20,
+        type: "agencies"
+    },
+    {
+        key: "icodelabs",
+        alt: "ICode Labs",
+        href: "https://icodelabs.co/",
+        src: "/img/logos/icodelabs.png",
+        invert: true,
+        type: "agencies"
+    },
+    {
+        key: "nfq",
+        alt: "NFQ",
+        href: "https://www.nfq.com/",
+        src: "/img/logos/nfq.svg",
+        invert: true,
+        height: 28,
+        type: "agencies"
+    },
+    {
+        key: "fyc",
+        alt: "FYC Labs",
+        href: "https://fyclabs.com/",
+        src: "/img/logos/fyc.svg",
+        invert: true,
+        height: 42,
+        type: "agencies"
+    },
+    {
+        key: "kodecreators",
+        alt: "Kode Creators",
+        href: "https://kodecreators.com/",
+        src: "/img/logos/kodecreators.svg",
+        invert: true,
+        height: 32,
+        type: "agencies"
+    },
+    {
+        key: "viscap",
+        alt: "Viscap",
+        href: "https://www.viscapmedia.com/",
+        src: "/img/logos/viscap.svg",
+        invert: true,
+        height: 42,
+        type: "agencies"
+    },
+    {
+        key: "abacus",
+        alt: "Abacus",
+        href: "https://abacusplus.ba/",
+        src: "/img/logos/abacus.svg",
+        invert: true,
+        height: 32,
+        type: "agencies"
+    }
+];
+
+interface Props {
+    filter?: "startups" | "agencies";
+}
+
+const { filter } = Astro.props;
+
+const filteredLogos = allLogos.filter(logo => !filter || logo.type === filter);
+
+const initialLogos = filteredLogos.slice(0, 5);
+---
+
+<div class="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-4" id="logo-container">
+    {initialLogos.map((logo) => (
+            <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={logo.alt}
+                    href={logo.href}
+                    class="logo-item flex h-16 w-36 items-center justify-center"
+                    data-key={logo.key}
+            >
+                {logo.src && <img
+                        src={logo.src}
+                        alt={logo.alt}
+                        style={logo.height ? `height: ${logo.height}px` : ""}
+                        class:list={[
+                            "max-w-full h-auto grayscale opacity-60 hover:opacity-100 transition-all duration-500",
+                            { "dark:invert hover:brightness-110": logo.invert },
+                            { "hover:grayscale-0": !logo.invert }
+                        ]}
+                />}
+                {logo.text && <span
+                        class="text-2xl font-bold text-surface-400 hover:text-white transition-colors">{logo.text}</span>}
+            </a>
+    ))}
+</div>
+
+<script define:vars={{ allLogos: filteredLogos }}>
+    document.addEventListener('astro:page-load', () => {
+        const container = document.getElementById('logo-container');
+        if (!container) return;
+
+        let currentLogoKeys = Array.from(container.querySelectorAll('.logo-item')).map(el => el.dataset.key);
+        let lastReplacedIndex = -1;
+
+        const intervalId = setInterval(() => {
+            const allElements = Array.from(container.children);
+            const nonHoveredIndices = allElements
+                .map((el, index) => ({ el, index }))
+                .filter(({ el }) => !el.matches(':hover'))
+                .map(({ index }) => index);
+
+            if (nonHoveredIndices.length === 0) return;
+
+            let possibleIndices = nonHoveredIndices;
+            if (lastReplacedIndex !== -1 && nonHoveredIndices.length > 1) {
+                possibleIndices = nonHoveredIndices.filter(index => index !== lastReplacedIndex);
+            }
+
+            const logoToReplaceIndex = possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
+            lastReplacedIndex = logoToReplaceIndex;
+
+            const availableLogos = allLogos.filter(logo => !currentLogoKeys.includes(logo.key));
+            if (availableLogos.length === 0) return;
+
+            const newLogo = availableLogos[Math.floor(Math.random() * availableLogos.length)];
+
+            const oldElement = container.children[logoToReplaceIndex];
+            if (!oldElement) return;
+
+            // Animate out old element
+            oldElement.style.opacity = '0';
+            oldElement.style.transform = 'translateY(-20px)';
+
+            const replace = () => {
+                const newElement = document.createElement('a');
+                newElement.target = '_blank';
+                newElement.rel = 'noopener noreferrer';
+                newElement.setAttribute('aria-label', newLogo.alt);
+                newElement.href = newLogo.href;
+                newElement.className = 'logo-item flex h-16 w-36 items-center justify-center';
+                newElement.dataset.key = newLogo.key;
+
+                // Ensure transition applies even for dynamically-created nodes
+                newElement.style.transition = 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out';
+                newElement.style.opacity = '0';
+                newElement.style.transform = 'translateY(20px)';
+
+                if (newLogo.src) {
+                    const img = document.createElement('img');
+                    img.src = newLogo.src;
+                    img.alt = newLogo.alt;
+
+                    if (newLogo.height) {
+                        img.style.height = `${newLogo.height}px`;
+                    }
+
+                    const baseClasses = "max-w-full h-auto grayscale opacity-60 hover:opacity-100 transition-all duration-500";
+                    const hoverClasses = newLogo.invert ? "dark:invert hover:brightness-110" : "hover:grayscale-0";
+                    img.className = `${baseClasses} ${hoverClasses}`;
+
+                    newElement.appendChild(img);
+                } else if (newLogo.text) {
+                    const span = document.createElement('span');
+                    span.className = 'text-2xl font-bold text-surface-400 hover:text-white transition-colors';
+                    span.textContent = newLogo.text;
+                    newElement.appendChild(span);
+                }
+
+                if (container.contains(oldElement)) {
+                    container.replaceChild(newElement, oldElement);
+                }
+
+                currentLogoKeys = Array.from(container.querySelectorAll('.logo-item')).map(el => el.dataset.key);
+
+                // Force a reflow to ensure the initial state is rendered before transitioning
+                void newElement.offsetWidth;
+
+                // Animate in the new element
+                newElement.style.opacity = '1';
+                newElement.style.transform = 'translateY(0)';
+            };
+
+            // Prefer transitionend; fallback in case it doesn't fire
+            const onEnd = (e) => {
+                if (e.target !== oldElement) return;
+                oldElement.removeEventListener('transitionend', onEnd);
+                replace();
+            };
+            oldElement.addEventListener('transitionend', onEnd);
+
+            // Fallback after 700ms
+            setTimeout(() => {
+                if (document.body.contains(oldElement)) {
+                    oldElement.removeEventListener('transitionend', onEnd);
+                    replace();
+                }
+            }, 700);
+
+        }, 2000);
+
+        // Clean up interval on page unload
+        document.addEventListener('astro:before-swap', () => {
+            clearInterval(intervalId);
+        }, { once: true });
+    });
+</script>
+
+<style is:global>
+    .logo-item {
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    }
+</style>

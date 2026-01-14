@@ -1,0 +1,37 @@
+---
+slug: docs/components/checkbox
+title: Checkbox
+sidebar_label: Checkbox
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Checkboxes are used for selection from multiple options. They can be toggled between checked, unchecked, and an intermediate state.
+
+## Usage
+
+To use the `Checkbox`, import it from your components and pass the `checked`, `onCheckedChange`, and optionally, `disabled`, `size`, and `color` props.
+
+## Basic Checkbox
+
+A simple checkbox with minimal configuration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_basic.tsx"/>
+
+## Checkbox with Indeterminate State
+
+A checkbox that showcases the indeterminate state, typically used for 'select all' scenarios where not all sub-selections are made.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_indeterminate.tsx"/>
+
+## Checkbox Sizes
+
+Illustrating how to use different sizes for the checkbox component.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_sizes.tsx"/>
+
+## Checkbox Colors
+
+Demonstrates usage of the `color` prop to customize the checkbox appearance.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_colors.tsx"/>

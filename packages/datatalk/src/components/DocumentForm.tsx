@@ -447,7 +447,7 @@
 //         <div className="h-full overflow-auto">
 //
 //             {pluginActions.length > 0 && <div
-//                 className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-surface-accent-200 dark:bg-opacity-60 dark:bg-surface-accent-800 backdrop-blur-md")}>
+//                 className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-surface-accent-200 bg-surface-accent-200/60 dark:bg-opacity-60 dark:bg-surface-accent-800 dark:bg-surface-accent-800/60 backdrop-blur-md")}>
 //                 {pluginActions}
 //             </div>}
 //

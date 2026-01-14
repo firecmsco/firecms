@@ -14,13 +14,15 @@ import {
     PartialEntityCollection,
     PropertyOrBuilder,
     ResolvedProperty,
-    SaveEntityProps
+    SaveEntityProps,
+    ViewMode
 } from "../../types";
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
     useDataSourceTableController
 } from "../EntityCollectionTable";
+import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
 import {
     canCreateEntity,
@@ -47,10 +49,12 @@ import {
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import { EntityCollectionCardView } from "./EntityCollectionCardView";
 import {
     AddIcon,
     Button,
     cls,
+    defaultBorderMixin,
     focusedDisabled,
     IconButton,
     KeyboardTabIcon,
@@ -216,6 +220,16 @@ export const EntityCollectionView = React.memo(
 
         const [popOverOpen, setPopOverOpen] = useState(false);
 
+        // View mode state - initialize from collection prop or user config
+        const defaultViewMode = collection.defaultViewMode ?? "table";
+        const [viewMode, setViewMode] = useState<ViewMode>(() => {
+            const savedViewMode = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
+            return (savedViewMode as ViewMode) ?? defaultViewMode;
+        });
+
+        // Card view size state - controls the grid column count
+        const [cardSize, setCardSize] = useState<CollectionSize>(collection.defaultSize ?? "m");
+
         const selectionController = useSelectionController<M>();
         const usedSelectionController = collection.selectionController ?? selectionController;
         const {
@@ -340,6 +354,13 @@ export const EntityCollectionView = React.memo(
             if (userConfigPersistence)
                 onCollectionModifiedForUser(fullPath, { defaultSize: size })
         }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
+
+        const onViewModeChange = useCallback((mode: ViewMode) => {
+            setViewMode(mode);
+            if (userConfigPersistence) {
+                onCollectionModifiedForUser(fullPath, { defaultViewMode: mode } as PartialEntityCollection<M>);
+            }
+        }, [fullPath, userConfigPersistence, onCollectionModifiedForUser]);
 
         const createEnabled = canCreateEntity(collection, authController, fullPath, null);
 
@@ -660,9 +681,73 @@ export const EntityCollectionView = React.memo(
         });
 
         return (
-            <div className={cls("overflow-hidden h-full w-full rounded-md", className)}
+            <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
                 ref={containerRef}>
-                <EntityCollectionTable
+{/* Common actions component used for both views */}
+                {viewMode === "cards" ? (
+                    <>
+                        {/* Card View Toolbar - reusing CollectionTableToolbar */}
+                        <CollectionTableToolbar
+                            title={title}
+                            loading={tableController.dataLoading}
+                            size={cardSize}
+                            onSizeChanged={setCardSize}
+                            onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
+                            onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
+                            textSearchLoading={textSearchLoading}
+                            actionsStart={<EntityCollectionViewStartActions
+                                parentCollectionIds={parentCollectionIds ?? []}
+                                collection={collection}
+                                tableController={tableController}
+                                path={fullPath}
+                                relativePath={collection.path}
+                                selectionController={usedSelectionController}
+                                collectionEntitiesCount={docsCount}
+                                resolvedProperties={resolvedCollection.properties} />}
+                            actions={<EntityCollectionViewActions
+                                parentCollectionIds={parentCollectionIds ?? []}
+                                collection={collection}
+                                tableController={tableController}
+                                onMultipleDeleteClick={onMultipleDeleteClick}
+                                onNewClick={onNewClick}
+                                path={fullPath}
+                                relativePath={collection.path}
+                                selectionController={usedSelectionController}
+                                selectionEnabled={selectionEnabled}
+                                collectionEntitiesCount={docsCount}
+                                viewMode={viewMode}
+                                onViewModeChange={onViewModeChange}
+                            />}
+                        />
+                        {/* Card Grid View */}
+                        <EntityCollectionCardView
+                            collection={collection}
+                            tableController={tableController}
+                            onEntityClick={onEntityClick}
+                            selectionController={usedSelectionController}
+                            selectionEnabled={selectionEnabled}
+                            highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                            onScroll={tableController.onScroll}
+                            initialScroll={tableController.initialScroll}
+                            size={cardSize}
+                            emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                                ? <div className="flex flex-col items-center justify-center">
+                                    <Typography variant={"subtitle2"}>So empty...</Typography>
+                                    <Button
+                                        color={"primary"}
+                                        variant={"outlined"}
+                                        onClick={onNewClick}
+                                        className="mt-4"
+                                    >
+                                        <AddIcon />
+                                        Create your first entry
+                                    </Button>
+                                </div>
+                                : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            }
+                        />
+                    </>
+                ) : (                <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     additionalFields={additionalFields}
                     tableController={tableController}
@@ -692,19 +777,20 @@ export const EntityCollectionView = React.memo(
                         path={fullPath}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
-                        collectionEntitiesCount={docsCount} />}
-                    actions={<EntityCollectionViewActions
-                        parentCollectionIds={parentCollectionIds ?? []}
-                        collection={collection}
-                        tableController={tableController}
-                        onMultipleDeleteClick={onMultipleDeleteClick}
-                        onNewClick={onNewClick}
-                        path={fullPath}
-                        relativePath={collection.path}
-                        selectionController={usedSelectionController}
-                        selectionEnabled={selectionEnabled}
-                        collectionEntitiesCount={docsCount}
-                    />}
+                        collectionEntitiesCount={docsCount} resolvedProperties={resolvedCollection.properties} />}
+                        actions={<EntityCollectionViewActions
+                            parentCollectionIds={parentCollectionIds ?? []}
+                            collection={collection}
+                            tableController={tableController}
+                            onMultipleDeleteClick={onMultipleDeleteClick}
+                            onNewClick={onNewClick}
+                            path={fullPath}
+                            relativePath={collection.path}
+                            selectionController={usedSelectionController}
+                            selectionEnabled={selectionEnabled}
+                            collectionEntitiesCount={docsCount}
+                            viewMode={viewMode}
+                            onViewModeChange={onViewModeChange}/>}
                     emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                         ? <div className="flex flex-col items-center justify-center">
                             <Typography variant={"subtitle2"}>So empty...</Typography>
@@ -754,7 +840,7 @@ export const EntityCollectionView = React.memo(
                                 });
                         }
                     }}
-                />
+                />)}
 
                 {popupCell && <PopupFormField
                     key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entityId}`}

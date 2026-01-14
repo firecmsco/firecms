@@ -6,8 +6,8 @@ authors: francesco
 
 ![Dark mode](../static/img/dark_mode.png)
 
-> FireCMS 1.0 is ready to ship! 🙌 abd why Firebase makes for an amazing developer
-> experince
+> FireCMS 1.0 is ready to ship! 🙌 and why Firebase makes for an amazing developer
+> experience
 
 A few months have passed since we entered the beta period of FireCMS, our
 Firestore-based CMS built with developer experience in mind.

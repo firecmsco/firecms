@@ -85,7 +85,7 @@ export function DefaultDrawer({
 
                     {groupsWithoutAdmin.map((group) => (
                         <div
-                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-3 mr-1"}
+                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 dark:bg-surface-800/30 bg-surface-50 dark:bg-surface-800/30  my-4 rounded-lg ml-3 mr-1"}
                             key={`drawer_group_${group}`}>
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)

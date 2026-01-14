@@ -94,7 +94,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             ? "bg-primary-bg dark:bg-primary-bg-dark"
                             : "bg-surface-50 dark:bg-surface-900",
                         "text-text-secondary hover:text-text-primary dark:text-text-secondary-dark dark:hover:text-text-primary-dark",
-                        !isDragging && "hover:bg-surface-100 dark:hover:bg-surface-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
+                        !isDragging && "hover:bg-surface-100 dark:hover:bg-surface-800 hover:bg-opacity-50 hover:bg-surface-100/50 dark:hover:bg-opacity-50 dark:hover:bg-surface-800/50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0",
                         isDraggable && "cursor-grab"
                     )}
@@ -255,7 +255,7 @@ function FilterForm<M>({
                 className={cls(defaultBorderMixin, "py-4 px-6 typography-label border-b")}>
                 {column.title ?? id}
             </div>
-            {filterField && <div className="m-4">
+            {filterField && <div className="m-4 w-[400px]">
                 {filterField}
             </div>}
             <div className="flex justify-end m-4">
@@ -263,13 +263,10 @@ function FilterForm<M>({
                     className="mr-4"
                     disabled={!filterIsSet}
                     variant={"text"}
-                    color="primary"
                     type="reset"
                     aria-label="filter clear"
                     onClick={reset}>Clear</Button>
                 <Button
-                    variant="outlined"
-                    color="primary"
                     type="submit">Filter</Button>
             </div>
         </form>

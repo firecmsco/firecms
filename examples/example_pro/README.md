@@ -13,13 +13,25 @@ which is not in VCS, but there is a template `firebase_config.ts.template`
 
 To run the app, in the main folder run: 
 
+```bash
+npm install
 ```
+
+or
+
+```bash
 yarn
 ```
 
 and in either in the root or the `example` folder, simply run:
 
+```bash
+npm run dev
 ```
+
+or
+
+```bash
 yarn dev
 ```
 

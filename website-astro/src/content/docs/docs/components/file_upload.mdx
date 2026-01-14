@@ -1,0 +1,31 @@
+---
+slug: docs/components/file_upload
+title: File Upload
+sidebar_label: File Upload
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions.
+
+## Usage
+
+To use the `FileUpload`, import it from your components and pass the necessary props including `accept`, `onFilesAdded`, and optionally, `onFilesRejected`, `maxSize`, `disabled`, `maxFiles`, `title`, `uploadDescription`, `preventDropOnDocument`, and `size`.
+
+## Basic File Upload
+
+A simple file upload example with minimal configuration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_basic.tsx"/>
+
+## File Upload with Custom Types and Sizes
+
+Demonstrating file upload with restrictions on file types and sizes, and custom messages.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_custom.tsx"/>
+
+## Disabled File Upload
+
+Illustrating how to disable the file upload functionality.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_disabled.tsx"/>

@@ -188,9 +188,9 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
             <div
                 className={cls(
                     "transition-colors duration-100 ease-in-out",
-                    `flex relative h-full rounded-md p-${p} border border-4  border-opacity-75`,
+                    `flex relative h-full rounded-md p-${p} border border-4 border-opacity-75`,
                     onHover && !disabled ? "bg-surface-50 dark:bg-surface-900" : "",
-                    saved ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "",
+                    saved ? "bg-surface-100/75 dark:bg-surface-800/75" : "",
                     hideOverflow ? "overflow-hidden" : "",
                     isSelected ? "bg-surface-50 dark:bg-surface-900" : "",
                     borderClass
@@ -237,7 +237,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
-                            <DoNotDisturbOnIcon size={"smallest"} color={"disabled"} className={"text-surface-500"}/>
+                            <DoNotDisturbOnIcon size={"smallest"} color={"disabled"} className={"text-text-disabled"}/>
                         </Tooltip>
                     </div>}
 

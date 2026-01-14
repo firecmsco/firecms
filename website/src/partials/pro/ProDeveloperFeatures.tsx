@@ -3,10 +3,6 @@ import React from "react";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 
-// @ts-ignore
-// import SyntaxHighlighter from "react-syntax-highlighter";
-// @ts-ignore
-// import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import {

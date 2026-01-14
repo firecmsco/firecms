@@ -351,7 +351,7 @@ export function CollectionPropertiesEditorForm({
     };
 
     const body = (
-        <div className={"grid grid-cols-12 gap-2 h-full bg-white dark:bg-surface-950"}>
+        <div className={"grid grid-cols-12 gap-2 h-full bg-surface dark:bg-surface-dark"}>
             <div className={cls(
                 "bg-surface-50 dark:bg-surface-900",
                 "p-4 md:p-8 pb-20 md:pb-20",

@@ -88,7 +88,7 @@ export function StoragePropertyField({
 
                 <ExpandablePanel
                     title={
-                        <div className="flex flex-row text-surface-500">
+                        <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
                             <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
                                         className="ml-4">

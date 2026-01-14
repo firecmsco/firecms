@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import ClientUIComponentsShowcase from '../components/ClientUIComponentsShowcase.tsx';
+
+const title = "FireCMS UI Components - Beautiful, Accessible React Components";
+const description = "Explore the FireCMS UI component library - a comprehensive collection of beautiful, accessible React components built for modern web applications.";
+---
+
+<Layout title={title} description={description}>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <!-- Background accents and subtle grid -->
+
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans">
+          Build Beautifully, Build Fast
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          A comprehensive collection of <b>beautiful, accessible React components</b> built for modern web applications.
+        </p>
+      </div>
+      <SectionBackgroundAccents bottomLine={true}/>
+    </section>
+
+    <!-- UI Components Showcase Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div id="showcase-container" class="relative min-h-[600px]">
+          <!-- Loading indicator -->
+          <div id="showcase-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <div class="relative w-16 h-16">
+              <div class="absolute inset-0 border-4 border-surface-800 rounded-full"></div>
+              <div class="absolute inset-0 border-4 border-orange-500 rounded-full border-t-transparent animate-spin"></div>
+            </div>
+            <p class="text-surface-400 text-lg">Loading UI Components...</p>
+          </div>
+
+          <ClientUIComponentsShowcase client:only="react" docsUrl="https://firecms.co" linksInNewTab={true} />
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Hide loading indicator once the component is visible
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const container = entry.target;
+            // Check if component has rendered by looking for its content
+            const checkLoaded = setInterval(() => {
+              const hasContent = container.querySelector('.max-w-6xl');
+              if (hasContent) {
+                const loader = document.getElementById('showcase-loading');
+                if (loader) {
+                  loader.style.opacity = '0';
+                  loader.style.transition = 'opacity 0.3s ease-out';
+                  setTimeout(() => loader.remove(), 300);
+                }
+                clearInterval(checkLoaded);
+                observer.disconnect();
+              }
+            }, 100);
+
+            // Fallback: remove loader after 3 seconds anyway
+            setTimeout(() => {
+              clearInterval(checkLoaded);
+              const loader = document.getElementById('showcase-loading');
+              if (loader) loader.remove();
+            }, 3000);
+          }
+        });
+      });
+
+      const container = document.getElementById('showcase-container');
+      if (container) observer.observe(container);
+    </script>
+
+  </main>
+
+</Layout>

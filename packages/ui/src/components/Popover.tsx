@@ -5,6 +5,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { paperMixin } from "../styles";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";
@@ -49,16 +50,24 @@ export function Popover({
 
     useInjectStyles("Popover", popoverStyles);
 
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     if (!enabled)
         return <>{trigger}</>;
 
     return <PopoverPrimitive.Root open={open}
                                   onOpenChange={onOpenChange}
                                   modal={modal}>
+
         <PopoverPrimitive.Trigger asChild>
             {trigger}
         </PopoverPrimitive.Trigger>
-        <PopoverPrimitive.Portal container={portalContainer}>
+
+        <PopoverPrimitive.Portal container={finalContainer}>
             <PopoverPrimitive.Content
                 className={cls(paperMixin,
                     "PopoverContent z-40", className)}
@@ -79,7 +88,7 @@ export function Popover({
 }
 
 const popoverStyles = `
-
+/* ... (styles remain unchanged) ... */
 .PopoverContent {
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -97,7 +106,6 @@ const popoverStyles = `
 .PopoverContent[data-state='open'][data-side='left'] {
   animation-name: slideRightAndFade;
 }
-
 
 @keyframes slideUpAndFade {
   from {

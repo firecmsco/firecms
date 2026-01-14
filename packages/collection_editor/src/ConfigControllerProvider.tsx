@@ -89,6 +89,7 @@ export const ConfigControllerProvider = React.memo(
                 group?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
             existingEntities?: Entity<any>[],
             pathSuggestions?: string[];
@@ -188,6 +189,7 @@ export const ConfigControllerProvider = React.memo(
                                       parentCollectionIds,
                                       parentCollection,
                                       initialValues,
+                                      copyFrom,
                                       redirect,
                                       sourceClick
                                   }: {
@@ -198,6 +200,7 @@ export const ConfigControllerProvider = React.memo(
                 path?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
             sourceClick?: string
         }) => {
@@ -205,10 +208,11 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
+                copyFrom,
                 redirect,
                 sourceClick
             });
-            onAnalyticsEvent?.("create_collection", {
+            onAnalyticsEvent?.(copyFrom ? "duplicate_collection" : "create_collection", {
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
@@ -220,6 +224,7 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
+                copyFrom,
                 redirect,
                 pathSuggestions
             });

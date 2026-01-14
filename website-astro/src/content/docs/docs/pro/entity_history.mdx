@@ -1,0 +1,183 @@
+---
+slug: docs/pro/entity_history
+title: Entity History
+---
+
+This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time, showing who made the change and when.
+
+## Installation
+
+```bash
+npm install @firecms/entity_history
+# or
+yarn add @firecms/entity_history
+```
+
+## Features
+
+-   Adds a "History" tab to entity detail views.
+-   Displays a log of changes for each entity.
+-   Can be enabled globally or on a per-collection basis.
+-   Allows customization of user display in the history log.
+
+## Basic Usage
+
+To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseCMSApp` plugins array.
+
+If you are using the user management plugin, you can provide a function to resolve user details from a UID.
+You can also pass your own custom `getUser` function to fetch user details.
+
+```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+
+export default function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Enable history for all collections by default
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true,
+
+        // Provide a function to resolve user details from a UID
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+                /*... rest of your configuration */
+            >
+              {({ context, loading }) => {
+                  // ... your components
+              }}
+            </FireCMS>
+    );
+}
+```
+
+By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection configuration:
+
+```tsx
+import { buildCollection } from "@firecms/core";
+
+const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            dataType: "string"
+        }
+        // ...other properties
+    },
+    history: true // Enable history for this collection
+});
+```
+
+
+## Configuration Options
+
+| Option           | Type                                | Description                                                                                                                               |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultEnabled` | `boolean`                           | If `true`, the history view will be enabled for all collections by default. Each collection can override this by setting its `history` property. |
+| `getUser`        | `(uslug: docs/string) => User \| null` | Optional function to get the user object (display name, photo, etc.) from a user ID to display in the history log.                        |
+
+## Collection Configuration
+
+To enable or disable history for a specific collection, set the `history` property in the collection configuration:
+
+```tsx
+const sampleCollection = buildCollection({
+    // ...
+    history: true // or false
+});
+```
+
+## Additional Notes
+
+-   The plugin relies on callbacks to record entity changes. Ensure that your data persistence logic correctly triggers these callbacks.
+-   The `getUser` function is crucial for displaying meaningful user information in the history log. If not provided, only user IDs might be shown.
+
+## Programmatic History Creation
+
+For advanced use cases where you need to create history entries programmatically (outside of the normal save callbacks), you can use the `createHistoryEntry` function:
+
+```tsx
+import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
+
+// Example: Creating a history entry when importing data
+const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
+    for (const item of importedData) {
+        // Save the entity first
+        await context.dataSource.saveEntity({
+            path: "products",
+            entityId: item.id,
+            values: item,
+            status: "new"
+        });
+
+        // Create a history entry for the import action
+        createHistoryEntry({
+            context: context,
+            previousValues: undefined, // No previous values for new entities
+            values: item,
+            path: "products",
+            entityId: item.id
+        });
+    }
+};
+
+// Example: Creating a history entry for a custom update operation
+const handleCustomUpdate = async (context: FireCMSContext, entityId: string, oldValues: any, newValues: any) => {
+    // Perform your custom update logic here
+    await context.dataSource.saveEntity({
+        path: "products",
+        entityId: entityId,
+        values: newValues,
+        status: "existing"
+    });
+
+    // Create a history entry to track the change
+    createHistoryEntry({
+        context: context,
+        previousValues: oldValues,
+        values: newValues,
+        path: "products",
+        entityId: entityId
+    });
+};
+```
+
+### Parameters
+
+| Parameter        | Type                      | Description                                                                                                                                       |
+| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `context`        | `FireCMSContext<User>`    | The FireCMS context object containing the data source and auth controller                                                                        |
+| `previousValues` | `Partial<any>` (optional) | The previous values of the entity. If not provided, the history entry will be marked as a creation rather than an update                       |
+| `values`         | `Partial<any>`            | The current/new values of the entity                                                                                                              |
+| `path`           | `string`                  | The collection path where the entity is stored                                                                                                    |
+| `entityId`       | `string`                  | The unique identifier of the entity                                                                                                               |
+
+### History Entry Structure
+
+Each history entry is automatically stored in a subcollection `__history` under the entity and includes:
+
+- All entity values at the time of the change
+- `__metadata` object containing:
+  - `previous_values`: The previous state of the entity (if provided)
+  - `changed_fields`: Array of field paths that were modified
+  - `updated_on`: Timestamp of when the change occurred
+  - `updated_by`: User ID of who made the change (if authenticated)

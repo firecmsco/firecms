@@ -1,0 +1,72 @@
+---
+slug: docs/components/button
+title: Button
+sidebar_label: Button
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Buttons are interactive UI elements that allow users to trigger specific actions or events within an application.
+They play a crucial role in user interfaces, providing a visual cue for user-initiated actions.
+Buttons can be utilized in various contexts, including forms for submission, dialogs for confirmation,
+and toolbars for quick access to functions and features. By clicking a button, users can submit data,
+open new windows, execute commands, and much more, making buttons an essential component for driving user
+interaction and engagement.
+
+## Size
+
+The prop `size` can be used to change the size of the button.
+
+Buttons come in three sizes: `small`, `medium`, `large`, `xl` and `2xl`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_size.tsx"/>
+
+## Variant
+
+The `variant` prop changes the button's style. Possible values are `filled`, `outlined`, and `text`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/variant_button.tsx"/>
+
+## Color
+
+The `color` prop sets the color theme of the button. Possible values are `primary`, `secondary`, `text`, `error`, and `neutral`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_color.tsx"/>
+
+## Disabled
+
+Setting `disabled` to `true` disables the button, preventing interactions.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/disabled_button.tsx"/>
+
+## Start Icon
+
+The `startIcon` prop allows you to include an icon before the button's content.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/start_icon_button.tsx"/>
+
+## Full Width
+
+The `fullWidth` prop makes the button expand to take up the full width of its container.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/full_width_button.tsx"/>
+
+## Custom Class Name
+
+The `className` prop allows you to pass custom CSS classes to the button component.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/custom_class_name_button.tsx"/>
+
+## Button Component Props
+
+- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, or `"text"`. Defaults to `"filled"`.
+- `disabled`: Disables the button, preventing user interaction. Defaults to `false`.
+- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"neutral"`, `"text"`, or `"error"`.
+- `size`: Specifies the size of the button. Options are `"small"`, `"medium"`, `"large"`, `"xl"`, or `"2xl"`. Defaults to `"medium"`.
+- `startIcon`: Adds an icon at the start of the button content.
+- `fullWidth`: When `true`, the button will expand to fill its container's width. Defaults to `false`.
+- `className`: Additional classes to apply to the button element.
+- `onClick`: Handler function called when the button is clicked.
+- `children`: Defines the button content, typically text or elements.
+- `component`: Custom component to be used for rendering the button.
+- `type`: The type attribute for the button, typically `"button"`, `"submit"`, or `"reset"`. Defaults to `"button"`.

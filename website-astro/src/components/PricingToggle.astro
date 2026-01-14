@@ -1,0 +1,23 @@
+---
+// src/components/PricingToggle.astro
+---
+<div id="pricing-toggle" class="flex justify-center w-full mb-10">
+    <div role="tablist" class="inline-flex space-x-1 rounded-lg bg-black p-1 border border-solid border-surface-800">
+        <button
+                id="cloud-btn"
+                role="tab"
+                aria-selected="true"
+                class="rounded-md px-4 py-2 text-sm font-semibold outline-none transition-colors duration-200"
+        >
+            Cloud
+        </button>
+        <button
+                id="self-hosted-btn"
+                role="tab"
+                aria-selected="false"
+                class="rounded-md px-4 py-2 text-sm font-semibold outline-none transition-colors duration-200"
+        >
+            Self-Hosted
+        </button>
+    </div>
+</div>

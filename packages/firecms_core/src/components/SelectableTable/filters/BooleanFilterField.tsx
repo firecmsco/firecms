@@ -10,11 +10,11 @@ interface BooleanFieldProps {
 }
 
 export function BooleanFilterField({
-                                       name,
-                                       title,
-                                       value,
-                                       setValue
-                                   }: BooleanFieldProps) {
+    name,
+    title,
+    value,
+    setValue
+}: BooleanFieldProps) {
 
     function updateFilter(val?: boolean) {
         if (val !== undefined) {
@@ -32,8 +32,9 @@ export function BooleanFilterField({
     const valueSet = !!value;
 
     return (
-        <div className="w-[300px]">
+        <div className="w-full">
             <BooleanSwitchWithLabel
+                size={"medium"}
                 value={valueSetToTrue}
                 allowIndeterminate={true}
                 onValueChange={(v: boolean | null) => updateFilter(v === null ? undefined : v)}

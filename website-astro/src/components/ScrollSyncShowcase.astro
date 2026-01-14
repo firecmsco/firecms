@@ -1,0 +1,370 @@
+---
+// ScrollSyncShowcase.astro
+// A two-column scroll-sync section with a sticky index on the left
+// Uses Tailwind classes available in the site. Pure placeholders.
+import { DataTalkDemo } from "./DataTalkDemo";
+
+const dataTalkExchanges = [
+    {
+        query: "Show me all products with price greater than 100",
+        responseText: "Here are the products filtered by price:",
+        showProductsTable: true,
+    },
+    {
+        query: "Update all out of stock items to mark them as unavailable",
+        responseText: "I'll help you update those items:",
+        code: `export default async () => {
+  const firestore = getFirestore();
+  const productsRef = collection(firestore, "products");
+  const q = query(productsRef, where("stock", "==", 0));
+  const productsToUpdate = await getDocs(q);
+  const batch = writeBatch(firestore);
+  productsToUpdate.forEach((doc) => {
+    batch.update(doc.ref, { available: false });
+  });
+  return await batch.commit();
+}`
+    },
+    {
+        query: "Find users who signed up in the last 30 days",
+        responseText: "Here's how to find recent users:",
+        code: `const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+collection("users")
+  .where("createdAt", ">", thirtyDaysAgo)
+  .get()`,
+        showUsersTable: true,
+
+    },
+];
+---
+
+<section id="scroll-sync-showcase" class="relative isolate bg-black py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <!-- Section Title - independent but aligned with left menu -->
+        <div class="w-full lg:w-[400px] mb-36 mt-16">
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need to Manage Your
+                Firestore Data</h2>
+            <p class="mt-6 text-lg leading-8 text-surface-400">Key features for a fast, flexible Firebase CMS experience</p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            <!-- Left: Sticky index/menu - hidden on mobile -->
+            <aside class="hidden lg:block lg:w-[400px] flex-shrink-0">
+                <nav class="sticky top-48">
+                    <ol class="space-y-8">
+                        <li>
+                            <a href="#screen-1" data-index-item class="group block" data-active="false">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Data Editing</span>
+                                </div>
+                                <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
+                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
+                                        Manage your Firestore collections with an intuitive spreadsheet-like interface. Edit entries
+                                        inline, sort and filter data in real-time, use collection groups, and create beautiful
+                                        structured content with our powerful Notion-style editor. Built for speed and
+                                        ease of use.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#screen-2" data-index-item class="group block" data-active="false">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">DataTalk: AI Search</span>
+                                </div>
+                                <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
+                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
+                                        <b>Search and talk</b> to your data using <b>ChatGPT-style</b> natural language.
+                                        Instantly filter collections, generate complex queries, or perform batch updates
+                                        with simple commands. FireCMS understands your schema and
+                                        turns conversational queries into powerful data operations.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#screen-3" data-index-item class="group block" data-active="false">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Schema Builder</span>
+                                </div>
+                                <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
+                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
+                                        Design your data models visually with our powerful schema editor, or let FireCMS
+                                        automatically infer schemas from your existing Firestore data. Choose from 20+ field types
+                                        with advanced validation rules and customize everything to match your needs.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#screen-4" data-index-item class="group block" data-active="false">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Easy Integration</span>
+                                </div>
+                                <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
+                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
+                                        Get started in minutes with FireCMS Cloud's managed platform, or self-host our
+                                        open-source framework with full TypeScript support. Simple NPM install,
+                                        comprehensive documentation, and seamless integration with your existing
+                                        Firebase setup.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+            </aside>
+
+            <!-- Right: Content area with fixed size (can overflow) -->
+            <div class="flex-1 w-full lg:min-w-0">
+                <div class="w-full lg:w-[1240px] space-y-32">
+                    <!-- Screen 1: Data Editing -->
+                    <div id="screen-1" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Data Editing</h3>
+                        <section data-screen class="w-full will-change-transform">
+                            <div class="relative rounded-2xl p-[1px]">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
+                                    <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+                                    <video
+                                            class="w-full h-auto"
+                                            style="pointer-events: none;"
+                                            loop
+                                            autoplay
+                                            muted
+                                            playsinline>
+                                        <source src="/img/landing_1080.webm" type="video/webm"/>
+                                    </video>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Screen 2: DataTalk -->
+                    <div id="screen-2" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">DataTalk</h3>
+                        <section data-screen class="w-full will-change-transform">
+                            <div class="relative rounded-2xl">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
+                                    <DataTalkDemo
+                                            height={600}
+                                            exchanges={dataTalkExchanges} client:load/>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Screen 3: Schema Builder -->
+                    <div id="screen-3" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Schema Builder</h3>
+                        <section data-screen class="w-full will-change-transform">
+                            <div class="relative rounded-2xl p-[1px]">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
+                                    <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
+                                    <video
+                                            class="w-full h-auto"
+                                            style="pointer-events: none;"
+                                            loop
+                                            autoplay
+                                            muted
+                                            playsinline>
+                                        <source src="/img/editor_demo_dark.webm" type="video/webm"/>
+                                    </video>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Screen 4: Easy Integration -->
+                    <div id="screen-4" class="scroll-mt-32">
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Easy Integration</h3>
+                        <section data-screen class="w-full will-change-transform">
+                            <div class="relative rounded-2xl p-[1px]">
+                                {/* Apply min-height and flex classes here */}
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
+
+                                    {/* Added flex-grow to allow content spacing to expand */}
+                                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
+                                        <div class="space-y-16">
+                                            {/* --- NPM Install --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Simple NPM
+                                                        Install
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm mb-3">Add FireCMS to your project
+                                                        with a single command</p>
+                                                    <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50">
+                                                        npx create-firecms-app
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* --- FireCMS Cloud --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Or Use FireCMS
+                                                        Cloud
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm mb-4">No setup required. Connect
+                                                        your
+                                                        Firebase project and start managing your data instantly with our
+                                                        managed platform.</p>
+                                                    <a href="https://app.firecms.co"
+                                                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
+                                                        Get Started
+                                                        <span class="material-icons text-lg">arrow_forward</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {/* --- TypeScript Support --- */}
+                                            <div class="flex items-start gap-6">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg"
+                                                         alt="" class="h-5 w-5 filter invert"/>
+                                                </div>
+                                                <div>
+                                                    <div class="text-lg font-semibold text-white mb-2">Full TypeScript
+                                                        Support
+                                                    </div>
+                                                    <p class="text-surface-400 text-sm">Built with TypeScript from the
+                                                        ground up for the best developer experience and type safety.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const root = document.getElementById("scroll-sync-showcase");
+        const wrappers = (root?.querySelectorAll("[id^='screen-']") as NodeListOf<HTMLElement>) || null;
+        const screens = (root?.querySelectorAll("[data-screen]") as NodeListOf<HTMLElement>) || null;
+        const indexItems = (root?.querySelectorAll("[data-index-item]") as NodeListOf<HTMLAnchorElement>) || null;
+
+        if (wrappers && screens && indexItems) {
+            const byId = new Map<string, HTMLAnchorElement>();
+            indexItems.forEach((a) => {
+                const id = a.getAttribute("href")?.replace("#", "") || "";
+                if (id) byId.set(id, a);
+                a.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const target = document.getElementById(id);
+                    if (target) target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                        inline: "nearest"
+                    });
+                });
+            });
+
+            let currentActive = "";
+
+            const activate = (id: string) => {
+                if (currentActive === id) return; // Prevent unnecessary updates
+                currentActive = id;
+                indexItems.forEach((a) => a.setAttribute("data-active", "false"));
+                const el = byId.get(id);
+                if (el) el.setAttribute("data-active", "true");
+            };
+
+            // Track all intersecting sections
+            const intersectionState = new Map<string, IntersectionObserverEntry>();
+
+            let updateTimeout: number | null = null;
+
+            const updateActiveSection = () => {
+                // Find the section with highest intersection ratio
+                let bestEntry: IntersectionObserverEntry | null = null;
+                let bestRatio = 0;
+
+                intersectionState.forEach((entry) => {
+                    if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
+                        bestRatio = entry.intersectionRatio;
+                        bestEntry = entry;
+                    }
+                });
+
+                if (bestEntry) {
+                    const target = (bestEntry as IntersectionObserverEntry).target;
+                    if (target instanceof HTMLElement) {
+                        activate(target.id);
+                    }
+                }
+            };
+
+            // Keep IO for index activation only
+            const io = new IntersectionObserver(
+                (entries) => {
+                    // Update the state for each entry
+                    entries.forEach((entry) => {
+                        intersectionState.set(entry.target.id, entry);
+                    });
+
+                    // Debounce the activation to prevent flashing
+                    if (updateTimeout) clearTimeout(updateTimeout);
+                    updateTimeout = window.setTimeout(updateActiveSection, 50);
+                },
+                {
+                    rootMargin: "-20% 0px -30% 0px",
+                    threshold: [0.1, 0.5]
+                }
+            );
+            wrappers.forEach((w) => io.observe(w));
+
+            // Scroll-bound animation
+            const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            const maxOffsetPx = 32; // slide distance
+            const minOpacity = 0.25; // ensure minimum opacity is not 0 for subtlety
+
+            const clamp = (v: number, min: number, max: number): number => Math.max(min, Math.min(max, v));
+
+            const update = () => {
+                const vh = window.innerHeight || 1;
+                const start = vh * 0.2;
+                const end = vh * 0.6;
+                const span = Math.max(1, end - start);
+
+                screens.forEach((s) => {
+                    const rect = s.getBoundingClientRect();
+                    if (prefersReduced) {
+                        s.style.opacity = "1";
+                        s.style.transform = "translate3d(0,0,0)";
+                        return;
+                    }
+                    // progress 0..1 based on section top moving from start to end
+                    const p = clamp((end - rect.top) / span, 0, 1);
+                    const tx = (1 - p) * maxOffsetPx;
+                    const op = minOpacity + p * (1 - minOpacity);
+                    s.style.opacity = String(op);
+                    s.style.transform = `translate3d(${tx}px, 0, 0)`;
+                });
+            };
+
+            let ticking = false;
+            const requestTick = () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => {
+                    update();
+                    ticking = false;
+                });
+            };
+
+            window.addEventListener("scroll", requestTick, { passive: true });
+            window.addEventListener("resize", requestTick);
+            // Initial paint
+            requestTick();
+        }
+    </script>
+</section>

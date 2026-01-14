@@ -3,6 +3,7 @@ import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export function Menubar({
                             children,
@@ -44,7 +45,7 @@ export function MenubarTrigger({
     return (
         <MenubarPrimitive.Trigger
             onSelect={onSelect}
-            className={cls("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800 data-[state=open]:bg-surface-accent-100 data-[state=open]:dark:bg-surface-800 hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
+            className={cls("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800 data-[state=open]:bg-surface-accent-100 data-[state=open]:dark:bg-surface-800 hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
                 className)}>
             {children}
         </MenubarPrimitive.Trigger>
@@ -53,9 +54,19 @@ export function MenubarTrigger({
 
 export function MenubarPortal({
                                   children,
-                              }: { children: React.ReactNode }) {
+                                  portalContainer,
+                              }: {
+    children: React.ReactNode;
+    portalContainer?: HTMLElement | null;
+}) {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     return (
-        <MenubarPrimitive.Portal>
+        <MenubarPrimitive.Portal container={finalContainer}>
             {children}
         </MenubarPrimitive.Portal>
     )

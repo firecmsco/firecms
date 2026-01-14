@@ -1,7 +1,7 @@
 "use client";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
-import { ChangeEvent, Children, useEffect } from "react";
+import { ChangeEvent, Children, useEffect, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cls } from "../util";
 import { CheckIcon, CloseIcon, KeyboardArrowDownIcon } from "../icons";
@@ -17,6 +17,7 @@ import {
     focusedDisabled
 } from "../styles";
 import { useInjectStyles } from "../hooks";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type MultiSelectValue = string | number | boolean;
 
@@ -59,6 +60,7 @@ interface MultiSelectProps<T extends MultiSelectValue = string> {
     invisible?: boolean,
     children: React.ReactNode;
     renderValues?: (values: T[]) => React.ReactNode;
+    portalContainer?: HTMLElement | null;
 }
 
 // Use generic type for the forwarded ref
@@ -85,12 +87,23 @@ export const MultiSelect = React.forwardRef<
             renderValues,
             open,
             onOpenChange,
+            portalContainer,
         },
         ref
     ) => {
-        // Properly type the state variables to match the generic props
-        const [isPopoverOpen, setIsPopoverOpen] = React.useState(open ?? false);
-        const [selectedValues, setSelectedValues] = React.useState<any[]>(value ?? []);
+        const [isMounted, setIsMounted] = useState(false);
+        const [isPopoverOpen, setIsPopoverOpen] = useState(open ?? false);
+        const [selectedValues, setSelectedValues] = useState<any[]>(value ?? []);
+
+        // Get the portal container from context
+        const contextContainer = usePortalContainer();
+
+        // Prioritize manual prop, fallback to context container
+        const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
+        useEffect(() => {
+            setIsMounted(true);
+        }, []);
 
         const onPopoverOpenChange = (open: boolean) => {
             setIsPopoverOpen(open);
@@ -195,7 +208,7 @@ export const MultiSelect = React.forwardRef<
                 {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
 
                 <PopoverPrimitive.Root
-                    open={isPopoverOpen}
+                    open={isMounted && isPopoverOpen}
                     onOpenChange={onPopoverOpenChange}
                     modal={modalPopover}
                 >
@@ -264,73 +277,75 @@ export const MultiSelect = React.forwardRef<
                                         />}
                                         <div className={cls("px-2 h-full flex items-center")}>
                                             <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                                                   className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                                className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-center justify-between w-full mx-auto">
                                     <span className="text-sm">
-                                      {placeholder}
+                                        {placeholder}
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
                                         <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                                               className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
                                     </div>
                                 </div>
                             )}
                         </button>
                     </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Content
-                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
-                        align="start"
-                        sideOffset={8}
-                        onEscapeKeyDown={() => onPopoverOpenChange(false)}
-                    >
-                        <CommandPrimitive>
-                            <div className={"flex flex-row items-center"}>
-                                <CommandPrimitive.Input
-                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow ")}
-                                    placeholder="Search..."
-                                    onKeyDown={handleInputKeyDown}
-                                />
-                                {selectedValues.length > 0 && (
-                                    <div
-                                        onClick={handleClear}
-                                        className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark">
-                                        Clear
-                                    </div>
-                                )}
-                            </div>
-                            <Separator orientation={"horizontal"} className={"my-0"}/>
-                            <CommandPrimitive.List>
-                                <CommandPrimitive.Empty className={"px-4 py-2"}>
-                                    No results found.
-                                </CommandPrimitive.Empty>
-                                <CommandPrimitive.Group>
-                                    {includeSelectAll && <CommandPrimitive.Item
-                                        key="all"
-                                        onSelect={toggleAll}
-                                        className={
-                                            cls(
-                                                "flex flex-row items-center gap-1.5",
-                                                "cursor-pointer",
-                                                "m-1",
-                                                "ring-offset-transparent",
-                                                "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-                                                "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
-                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
-                                            )
-                                        }
-                                    >
-                                        <InnerCheckBox checked={selectedValues.length === allValues.length}/>
-                                        <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
-                                    </CommandPrimitive.Item>}
-                                    {children}
-                                </CommandPrimitive.Group>
-                            </CommandPrimitive.List>
-                        </CommandPrimitive>
-                    </PopoverPrimitive.Content>
+                    <PopoverPrimitive.Portal container={finalContainer}>
+                        <PopoverPrimitive.Content
+                            className={cls("z-50 overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                            align="start"
+                            sideOffset={8}
+                            onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                        >
+                            <CommandPrimitive>
+                                <div className={"flex flex-row items-center"}>
+                                    <CommandPrimitive.Input
+                                        className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow text-surface-accent-900 dark:text-white")}
+                                        placeholder="Search..."
+                                        onKeyDown={handleInputKeyDown}
+                                    />
+                                    {selectedValues.length > 0 && (
+                                        <div
+                                            onClick={handleClear}
+                                            className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark">
+                                            Clear
+                                        </div>
+                                    )}
+                                </div>
+                                <Separator orientation={"horizontal"} className={"my-0"} />
+                                <CommandPrimitive.List>
+                                    <CommandPrimitive.Empty className={"px-4 py-2 text-sm text-text-secondary dark:text-text-secondary-dark"}>
+                                        No results found.
+                                    </CommandPrimitive.Empty>
+                                    <CommandPrimitive.Group>
+                                        {includeSelectAll && <CommandPrimitive.Item
+                                            key="all"
+                                            onSelect={toggleAll}
+                                            className={
+                                                cls(
+                                                    "flex flex-row items-center gap-1.5",
+                                                    "cursor-pointer",
+                                                    "m-1",
+                                                    "ring-offset-transparent",
+                                                    "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
+                                                    "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+                                                    "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
+                                                )
+                                            }
+                                        >
+                                            <InnerCheckBox checked={selectedValues.length === allValues.length} />
+                                            <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
+                                        </CommandPrimitive.Item>}
+                                        {children}
+                                    </CommandPrimitive.Group>
+                                </CommandPrimitive.List>
+                            </CommandPrimitive>
+                        </PopoverPrimitive.Content>
+                    </PopoverPrimitive.Portal>
                 </PopoverPrimitive.Root>
             </MultiSelectContext.Provider>
         );
@@ -346,10 +361,10 @@ export interface MultiSelectItemProps<T extends MultiSelectValue = string> {
 }
 
 export const MultiSelectItem = React.memo(function MultiSelectItem<T extends MultiSelectValue = string>({
-                                                                         children,
-                                                                         value,
-                                                                         className
-                                                                     }: MultiSelectItemProps<T>) {
+    children,
+    value,
+    className
+}: MultiSelectItemProps<T>) {
     const context = React.useContext(MultiSelectContext);
     if (!context) throw new Error("MultiSelectItem must be used inside a MultiSelect");
     const {
@@ -373,13 +388,14 @@ export const MultiSelectItem = React.memo(function MultiSelectItem<T extends Mul
             "cursor-pointer",
             "m-1",
             "ring-offset-transparent",
-            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
+            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-primary/75 aria-[selected=true]:ring-offset-2",
             "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
             "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+            "text-surface-accent-700 dark:text-surface-accent-300",
             className
         )}
     >
-        <InnerCheckBox checked={isSelected}/>
+        <InnerCheckBox checked={isSelected} />
         {children}
     </CommandPrimitive.Item>;
 });
@@ -398,8 +414,7 @@ const InnerCheckBox = React.memo(function InnerCheckBox({ checked }: { checked: 
                 (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                 (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
             )}>
-            {checked && <CheckIcon size={16} className={"absolute"}/>}
+            {checked && <CheckIcon size={16} className={"absolute"} />}
         </div>
     </div>
 });
-

@@ -6,17 +6,17 @@ import { cls } from "../util";
 type CardProps = {
     children: React.ReactNode;
     style?: React.CSSProperties;
-    onClick?: () => void;
+    onClick?: (e?: React.MouseEvent) => void;
     className?: string;
 };
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(({
-                                                              children,
-                                                              className,
-                                                              onClick,
-                                                              style,
-                                                              ...props
-                                                          }, ref) => {
+    children,
+    className,
+    onClick,
+    style,
+    ...props
+}, ref) => {
     const onKeyPress = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === "Enter" || e.key === " ") {
             onClick?.();

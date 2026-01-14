@@ -1,0 +1,86 @@
+---
+export interface Props {
+    title: string;
+    href: string;
+}
+
+const { title, href } = Astro.props;
+---
+
+<div class="p-4 relative inline-block" data-dropdown-container>
+    <a href={href}
+       class="p-4 text-surface-300 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded px-1 py-0.5"
+       data-dropdown-trigger
+       aria-haspopup="true"
+       aria-expanded="false"
+    >
+        {title}
+    </a>
+    <div
+            class={`absolute top-full left-0 w-screen bg-surface-950/95 backdrop-blur-xl shadow-2xl z-50 transition-opacity duration-150 ease-in-out border-b border-surface-800 hidden`}
+            role="navigation"
+            aria-label={title + " navigation panel"}
+            data-dropdown-panel
+    >
+        <div class="relative max-w-full w-[84rem] mx-auto px-16 py-8 md:py-10">
+            <slot/>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const dropdowns = document.querySelectorAll('[data-dropdown-container]');
+
+        dropdowns.forEach(container => {
+            const trigger = container.querySelector('[data-dropdown-trigger]') as HTMLElement;
+            const panel = container.querySelector('[data-dropdown-panel]') as HTMLElement;
+            let hideTimeout: number;
+
+            if (!trigger || !panel) return;
+
+            const calculateOffset = () => {
+                if (panel.offsetParent) {
+                    const rect = container.getBoundingClientRect();
+                    panel.style.transform = `translateX(-${rect.left}px) translateY(1rem)`;
+                }
+            };
+
+            const show = () => {
+                clearTimeout(hideTimeout);
+                panel.classList.remove('hidden');
+                trigger.setAttribute('aria-expanded', 'true');
+                calculateOffset();
+                window.addEventListener('resize', calculateOffset);
+                window.addEventListener('scroll', calculateOffset, true);
+            };
+
+            const hide = () => {
+                panel.classList.add('hidden');
+                trigger.setAttribute('aria-expanded', 'false');
+                window.removeEventListener('resize', calculateOffset);
+                window.removeEventListener('scroll', calculateOffset, true);
+            };
+
+            const hideDelayed = () => {
+                hideTimeout = window.setTimeout(hide, 150);
+            };
+
+            container.addEventListener('mouseenter', show);
+            container.addEventListener('mouseleave', hideDelayed);
+            trigger.addEventListener('focus', show);
+            container.addEventListener('focusout', (e) => {
+                if (!container.contains((e as FocusEvent).relatedTarget as Node)) {
+                    hide();
+                }
+            });
+
+            container.addEventListener('keydown', (e) => {
+                if ((e as KeyboardEvent).key === 'Escape') {
+                    hide();
+                    trigger.focus();
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,37 @@
+---
+slug: docs/components/popover
+title: Popover
+sidebar_label: Popover
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Popover component allows you to float a content panel anchored to another element, perfect for context menus, hover cards, tooltips, and much more.
+
+## Usage
+
+To use the `Popover`, import it from your components and pass the required `trigger` and optional `open`, `onOpenChange`, `side`, `sideOffset`, `align`, `alignOffset`, `arrowPadding`, `sticky`, `hideWhenDetached`, `avoidCollisions`, `enabled`, and `modal` props.
+
+## Basic Popover
+
+A simple popover that shows upon clicking the trigger element.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_basic.tsx"/>
+
+## Popover with Alignment
+
+Showcasing how to align the popover content relative to the trigger element.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_align.tsx"/>
+
+## Controlled Popover
+
+Demonstrates the usage of `open` and `onOpenChange` props for controlled behavior.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_controlled.tsx"/>
+
+## Usage with Custom Styling
+
+Illustrating custom styling applied to the popover content.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_styled.tsx"/>

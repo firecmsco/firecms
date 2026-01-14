@@ -1,0 +1,166 @@
+---
+// Cookie Banner Component
+---
+
+<style>
+    @keyframes ursula-peek {
+        0% {
+            top: -4rem;
+        }
+        10% {
+            top: -4rem;
+        }
+        20% {
+            top: -4.3rem;
+        }
+        30% {
+            top: -4rem;
+        }
+        84% {
+            top: -6.5rem;
+        }
+        94% {
+            top: -6.5rem;
+        }
+        100% {
+            top: -4rem;
+        }
+    }
+
+    .ursula-animate {
+        animation: ursula-peek 6s ease-in-out infinite;
+    }
+</style>
+
+<div id="cookie-banner" class="fixed right-0 bottom-0 z-40 hidden p-5 pointer-events-none">
+    <div class="flex justify-end items-end pointer-events-none w-full">
+        <div class="relative flex flex-col pointer-events-auto opacity-0 translate-y-8 transition-all duration-300 ease-out">
+            <!-- Ursula peeking from behind -->
+            <img src="/img/ursula.webp"
+                 alt=""
+                 class="absolute right-4 w-32 h-32 object-contain opacity-0 -translate-y-4 transition-all duration-500 ease-out delay-150 pointer-events-none ursula-peek ursula-animate -z-10"
+                 aria-hidden="true" />
+            <div class="relative z-10 bg-white dark:bg-surface-900 rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.05)_inset] w-full max-w-[360px] overflow-hidden border border-surface-200 dark:border-surface-800">
+                <div class="p-5">
+                    <div class="mb-4">
+                        <p class="text-sm leading-relaxed text-surface-800 dark:text-surface-200 m-0">
+                            <strong class="font-semibold text-surface-900 dark:text-white">We use cookies</strong> to
+                            enhance your browsing experience and analyze our traffic.
+                            By clicking "Accept", you consent to
+                            <a href="/policy/cookies_policy" target="_blank"
+                               class="text-primary-light hover:text-primary underline transition-colors">our use of
+                                cookies</a>.
+                        </p>
+                    </div>
+                    <div class="flex flex-row gap-2.5">
+                        <button
+                                id="cookie-decline"
+                                type="button"
+                                class="w-full h-auto border-none px-4 py-2.5 rounded-lg bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 text-sm leading-none cursor-pointer font-semibold hover:bg-surface-300 dark:hover:bg-surface-700 transition-colors duration-200">
+                            Decline
+                        </button>
+                        <button
+                                id="cookie-accept"
+                                type="button"
+                                class="w-full h-auto border-none px-4 py-2.5 rounded-lg bg-black dark:bg-white text-white dark:text-black text-sm leading-none cursor-pointer font-semibold hover:opacity-90 transition-opacity duration-200">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initializeCookieBanner() {
+        // Check if user has already made a choice
+        const cookieConsent = localStorage.getItem("cookie-consent");
+        const banner = document.getElementById("cookie-banner");
+
+        if (!banner) return;
+
+        if (!cookieConsent) {
+            // Show banner immediately with animation
+            banner.classList.remove("hidden");
+            // Trigger reflow
+            banner.offsetHeight;
+            // Animate in
+            const card = banner.querySelector(".opacity-0");
+            const ursula = banner.querySelector(".ursula-peek");
+            if (card) {
+                card.classList.remove("opacity-0", "translate-y-8");
+            }
+            if (ursula) {
+                ursula.classList.remove("opacity-0", "-translate-y-4");
+            }
+        } else {
+            // Ensure banner stays hidden if consent was already given
+            banner.classList.add("hidden");
+        }
+
+        // Handle accept button
+        const acceptBtn = document.getElementById("cookie-accept");
+        if (acceptBtn) {
+            // Remove any existing listeners by cloning the element
+            const newAcceptBtn = acceptBtn.cloneNode(true);
+            acceptBtn.parentNode?.replaceChild(newAcceptBtn, acceptBtn);
+
+            newAcceptBtn.addEventListener("click", () => {
+                localStorage.setItem("cookie-consent", "accepted");
+                const card = banner?.querySelector(".pointer-events-auto");
+                if (card) {
+                    card.classList.add("opacity-0", "translate-y-8");
+                    setTimeout(() => {
+                        banner?.classList.add("hidden");
+                    }, 300);
+                }
+                // Enable Google Analytics tracking (Consent Mode v2)
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
+                        "ad_storage": "granted",
+                        "ad_user_data": "granted",
+                        "ad_personalization": "granted",
+                        "analytics_storage": "granted"
+                    });
+                }
+            });
+        }
+
+        // Handle decline button
+        const declineBtn = document.getElementById("cookie-decline");
+        if (declineBtn) {
+            // Remove any existing listeners by cloning the element
+            const newDeclineBtn = declineBtn.cloneNode(true);
+            declineBtn.parentNode?.replaceChild(newDeclineBtn, declineBtn);
+
+            newDeclineBtn.addEventListener("click", () => {
+                localStorage.setItem("cookie-consent", "declined");
+                const card = banner?.querySelector(".pointer-events-auto");
+                if (card) {
+                    card.classList.add("opacity-0", "translate-y-8");
+                    setTimeout(() => {
+                        banner?.classList.add("hidden");
+                    }, 300);
+                }
+                // Disable Google Analytics tracking (Consent Mode v2)
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
+                        "ad_storage": "denied",
+                        "ad_user_data": "denied",
+                        "ad_personalization": "denied",
+                        "analytics_storage": "denied"
+                    });
+                }
+            });
+        }
+    }
+
+    // Initialize on first load
+    initializeCookieBanner();
+
+    // Re-initialize after Astro view transitions
+    document.addEventListener("astro:page-load", initializeCookieBanner);
+</script>
+
+

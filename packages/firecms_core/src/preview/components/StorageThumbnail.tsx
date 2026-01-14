@@ -12,6 +12,7 @@ type StorageThumbnailProps = {
     storeUrl: boolean;
     size: PreviewSize;
     interactive?: boolean;
+    fill?: boolean;
 };
 
 /**
@@ -22,18 +23,20 @@ export const StorageThumbnail = React.memo<StorageThumbnailProps>(StorageThumbna
 function areEqual(prevProps: StorageThumbnailProps, nextProps: StorageThumbnailProps) {
     return prevProps.size === nextProps.size &&
         prevProps.storagePathOrDownloadUrl === nextProps.storagePathOrDownloadUrl &&
-        prevProps.storeUrl === nextProps.storeUrl&&
-        prevProps.interactive === nextProps.interactive;
+        prevProps.storeUrl === nextProps.storeUrl &&
+        prevProps.interactive === nextProps.interactive &&
+        prevProps.fill === nextProps.fill;
 }
 
 const URL_CACHE: Record<string, DownloadConfig> = {};
 
 export function StorageThumbnailInternal({
-                                             storeUrl,
-                                             interactive,
-                                             storagePathOrDownloadUrl,
-                                             size
-                                         }: StorageThumbnailProps) {
+    storeUrl,
+    interactive,
+    storagePathOrDownloadUrl,
+    size,
+    fill
+}: StorageThumbnailProps) {
 
     const [error, setError] = React.useState<Error | undefined>(undefined);
     const storage = useStorageSource();
@@ -70,10 +73,11 @@ export function StorageThumbnailInternal({
 
     return downloadConfig?.url
         ? <UrlComponentPreview previewType={previewType}
-                               url={downloadConfig.url}
-                               interactive={interactive}
-                               size={size}
-                               hint={storagePathOrDownloadUrl}/>
+            url={downloadConfig.url}
+            interactive={interactive}
+            size={size}
+            fill={fill}
+            hint={storagePathOrDownloadUrl} />
         : renderSkeletonImageThumbnail(size);
 }
 
