@@ -109,7 +109,7 @@ export function UsersTable({ onUserClicked }: {
                                 <Typography variant={"label"}>
                                     There are no users yet
                                 </Typography>
-                                <Button variant={"outlined"}
+                                <Button
                                         onClick={() => {
                                             if (!authController.user?.uid) {
                                                 throw Error("UsersTable, authController misconfiguration");

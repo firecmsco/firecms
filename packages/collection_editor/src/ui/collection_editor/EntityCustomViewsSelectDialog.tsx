@@ -33,9 +33,7 @@ export function EntityCustomViewsSelectDialog({
             }
         </DialogContent>
         <DialogActions>
-            <Button variant={"outlined"}
-                    color={"primary"}
-                    onClick={() => onClose()}>Cancel</Button>
+            <Button onClick={() => onClose()}>Cancel</Button>
         </DialogActions>
     </Dialog>
 }

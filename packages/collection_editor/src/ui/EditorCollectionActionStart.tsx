@@ -58,7 +58,6 @@ export function EditorCollectionActionStart({
             {(collection.initialFilter || collection.initialSort) && <Tooltip
                 title={"Reset to default filter and sort"}>
                 <Button
-                    color={"primary"}
                     size={"small"}
                     variant={"text"}
                     onClick={() => {

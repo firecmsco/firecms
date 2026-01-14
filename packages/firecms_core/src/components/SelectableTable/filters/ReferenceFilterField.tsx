@@ -173,7 +173,7 @@ export function ReferenceFilterField({
 
                 {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                     <Button onClick={doOpenDialog}
-                        variant={"outlined"}
+
                         size={"medium"}
                         className="h-full w-full">
                         {multiple ? "Select references" : "Select reference"}

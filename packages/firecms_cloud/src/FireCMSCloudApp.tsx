@@ -266,7 +266,7 @@ function ErrorDelegatingLoginView({
                                                                                    target="_blank">
             hello@firecms.co</a>
         </div>
-        <Button variant="outlined" size="small" onClick={onLogout}>Sign out</Button>
+        <Button  size="small" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -282,7 +282,7 @@ function NoAccessErrorView(props: { projectId: string, configError: Error, onLog
             registered in the project <code>{props.projectId}</code>.
             You can ask the project owner to add you to the project.
         </Typography>
-        <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
+        <Button  onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
 }
 

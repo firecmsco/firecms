@@ -143,9 +143,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
         {child}
         {!value && <div className="justify-center text-left">
-            <Button variant="outlined"
-                    color="primary"
-                    disabled={disabled}
+            <Button disabled={disabled}
                     onClick={onEntryClick}>
                 Edit {name}
             </Button>

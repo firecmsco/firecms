@@ -28,9 +28,9 @@ export interface MediaLibraryViewProps {
  * Displays a grid of assets with search, upload, and management capabilities.
  */
 export function MediaLibraryView({
-    maxFileSize,
-    acceptedMimeTypes
-}: MediaLibraryViewProps) {
+                                     maxFileSize,
+                                     acceptedMimeTypes
+                                 }: MediaLibraryViewProps) {
     const controller = useMediaManager();
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -58,7 +58,8 @@ export function MediaLibraryView({
     return (
         <div className="h-full flex flex-col overflow-hidden">
             {/* Header */}
-            <div className="flex-shrink-0 border-b border-surface-accent-200 dark:border-surface-accent-700 bg-surface-50 dark:bg-surface-900">
+            <div
+                className="flex-shrink-0 border-b border-surface-accent-200 dark:border-surface-accent-700 bg-surface-50 dark:bg-surface-900">
                 <Container maxWidth="6xl" className="py-4">
                     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -82,7 +83,8 @@ export function MediaLibraryView({
                                 className="flex-1 sm:w-64"
                             />
 
-                            <div className="flex items-center gap-1 border-l border-surface-accent-200 dark:border-surface-accent-700 pl-2 ml-2">
+                            <div
+                                className="flex items-center gap-1 border-l border-surface-accent-200 dark:border-surface-accent-700 pl-2 ml-2">
                                 <Tooltip title="Grid view">
                                     <IconButton
                                         onClick={() => setViewMode("grid")}
@@ -90,7 +92,7 @@ export function MediaLibraryView({
                                             viewMode === "grid" && "bg-surface-accent-100 dark:bg-surface-accent-800"
                                         )}
                                     >
-                                        <AppsIcon size="small" />
+                                        <AppsIcon size="small"/>
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="List view">
@@ -100,14 +102,14 @@ export function MediaLibraryView({
                                             viewMode === "list" && "bg-surface-accent-100 dark:bg-surface-accent-800"
                                         )}
                                     >
-                                        <Icon iconKey="list" size="small" />
+                                        <Icon iconKey="list" size="small"/>
                                     </IconButton>
                                 </Tooltip>
                             </div>
 
                             <Tooltip title="Refresh">
                                 <IconButton onClick={handleRefresh} disabled={controller.loading}>
-                                    <RefreshIcon size="small" />
+                                    <RefreshIcon size="small"/>
                                 </IconButton>
                             </Tooltip>
 
@@ -115,7 +117,7 @@ export function MediaLibraryView({
                                 variant="filled"
                                 onClick={handleUploadClick}
                             >
-                                <AddIcon size="small" />
+                                <AddIcon size="small"/>
                                 Upload
                             </Button>
                         </div>
@@ -128,14 +130,14 @@ export function MediaLibraryView({
                 <Container maxWidth="6xl" className="py-6">
                     {controller.loading && controller.assets.length === 0 ? (
                         <div className="flex items-center justify-center h-64">
-                            <CircularProgress />
+                            <CircularProgress/>
                         </div>
                     ) : controller.error ? (
                         <div className="flex flex-col items-center justify-center h-64 gap-4">
                             <Typography className="text-red-500">
                                 Error loading assets: {controller.error.message}
                             </Typography>
-                            <Button variant="outlined" onClick={handleRefresh}>
+                            <Button onClick={handleRefresh}>
                                 Try Again
                             </Button>
                         </div>
@@ -144,8 +146,8 @@ export function MediaLibraryView({
                             <Typography className="text-surface-accent-500">
                                 No media assets yet
                             </Typography>
-                            <Button variant="outlined" onClick={handleUploadClick}>
-                                <AddIcon size="small" />
+                            <Button onClick={handleUploadClick}>
+                                <AddIcon size="small"/>
                                 Upload your first file
                             </Button>
                         </div>

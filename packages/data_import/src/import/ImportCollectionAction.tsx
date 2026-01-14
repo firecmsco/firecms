@@ -206,21 +206,18 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
             <DialogActions>
 
                 {step === "mapping" && <Button
-                    color={"primary"}
                     onClick={() => setStep("initial")}
                     variant={"text"}>
                     Back
                 </Button>}
 
                 {step === "preview" && <Button
-                    color={"primary"}
                     onClick={() => setStep("mapping")}
                     variant={"text"}>
                     Back
                 </Button>}
 
                 <Button onClick={handleClose}
-                        color={"primary"}
                         variant={"text"}>
                     Cancel
                 </Button>

@@ -279,14 +279,11 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                 {dataLoading && <CircularProgress size={"smallest"}/>}
 
                 <Button onClick={handleClose}
-                        color={"primary"}
                         variant={"text"}>
                     Cancel
                 </Button>
 
-                <Button variant="filled"
-                        onClick={onOkClicked}
-                        color={"primary"}
+                <Button onClick={onOkClicked}
                         disabled={dataLoading || !canExport}>
                     Download
                 </Button>

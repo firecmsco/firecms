@@ -367,7 +367,7 @@ export function LoginButton({
                     borderRadius: "4px",
                     fontSize: "14px"
                 }}
-                variant="outlined"
+
                 disabled={disabled}
                 onClick={onClick}>
                 <div

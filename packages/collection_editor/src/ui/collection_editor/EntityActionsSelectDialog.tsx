@@ -3,9 +3,9 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 import React from "react";
 
 export function EntityActionsSelectDialog({
-                                                  open,
-                                                  onClose
-                                              }: { open: boolean, onClose: (selectedActionKey?: string) => void }) {
+                                              open,
+                                              onClose
+                                          }: { open: boolean, onClose: (selectedActionKey?: string) => void }) {
     const {
         entityActions
     } = useCustomizationController();
@@ -27,15 +27,14 @@ export function EntityActionsSelectDialog({
             })}
             {(entityActions ?? []).length === 0 &&
                 <Typography variant={"body2"}>
-                    No custom actions defined. Define your custom actions in the customization settings, before using this
+                    No custom actions defined. Define your custom actions in the customization settings, before using
+                    this
                     dialog.
                 </Typography>
             }
         </DialogContent>
         <DialogActions>
-            <Button variant={"outlined"}
-                    color={"primary"}
-                    onClick={() => onClose()}>Cancel</Button>
+            <Button onClick={() => onClose()}>Cancel</Button>
         </DialogActions>
     </Dialog>
 }

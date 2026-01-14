@@ -5,7 +5,7 @@ export function NewCollectionButton() {
     const collectionEditorController = useCollectionEditorController();
     return <div className={"bg-surface-50 dark:bg-surface-900 min-w-fit rounded"}>
         <Button className={"min-w-fit"}
-                variant={"outlined"}
+
                 onClick={() => collectionEditorController.createCollection({
                     parentCollectionIds: [],
                     redirect: true,

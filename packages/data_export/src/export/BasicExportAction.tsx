@@ -105,18 +105,20 @@ export function BasicExportAction({
                             <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
                                    checked={dateExportType === "timestamp"}
                                    onChange={() => setDateExportType("timestamp")}
-                                   className={cls( "w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates as
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
                                    checked={dateExportType === "string"}
                                    onChange={() => setDateExportType("string")}
-                                   className={cls( "w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates as
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>
                     </div>
@@ -134,14 +136,11 @@ export function BasicExportAction({
             <DialogActions>
 
                 <Button onClick={handleClose}
-                        color={"primary"}
                         variant={"text"}>
                     Cancel
                 </Button>
 
-                <Button variant="filled"
-                        color={"primary"}
-                        onClick={onOkClicked}>
+                <Button onClick={onOkClicked}>
                     Download
                 </Button>
 

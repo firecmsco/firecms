@@ -526,7 +526,6 @@ export function ArrayContainer<T>({
                     <Button
                         variant={"text"}
                         size={size === "small" ? "small" : "medium"}
-                        color="primary"
                         disabled={disabled || (value?.length ?? 0) >= max}
                         startIcon={<AddIcon/>}
                         onClick={insertInEnd}

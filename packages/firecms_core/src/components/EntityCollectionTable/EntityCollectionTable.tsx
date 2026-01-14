@@ -286,12 +286,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                         entity: props.rowData,
                         size,
                         width: column.width,
-                        frozen: column.frozen,
-                        sortableNodeRef: props.sortableNodeRef,
-                        sortableStyle: props.sortableStyle,
-                        sortableAttributes: props.sortableAttributes,
-                        isDragging: props.isDragging,
-                        isDraggable: props.isDraggable
+                        frozen: column.frozen
                     });
                 else
                     return <EntityCollectionRowActions entity={props.rowData}

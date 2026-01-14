@@ -59,7 +59,6 @@ export function GetCodeDialog({
             <Button
                 variant={"text"}
                 size={"small"}
-                color={"primary"}
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();

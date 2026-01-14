@@ -205,7 +205,6 @@ export function UserDetailsForm({
                     <DialogActions>
 
                         <Button variant={"text"}
-                                color={"primary"}
                                 onClick={() => {
                                     handleClose();
                                 }}>
@@ -214,7 +213,6 @@ export function UserDetailsForm({
 
                         <LoadingButton
                             variant="filled"
-                            color="primary"
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}

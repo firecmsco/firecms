@@ -195,15 +195,10 @@ export function EntityCard<M extends Record<string, any> = any>({
 
                 {/* Title */}
                 <div className="truncate my-1 text-sm font-medium min-h-[20px]">
-                    {titleProperty && titleValue !== undefined ? (
+                    {titleProperty && titleValue ? (
                         <PropertyPreview
                             propertyKey={titlePropertyKey as string}
                             value={titleValue}
-                            property={titleProperty}
-                            size="small"
-                        />
-                    ) : titleProperty ? (
-                        <SkeletonPropertyComponent
                             property={titleProperty}
                             size="small"
                         />

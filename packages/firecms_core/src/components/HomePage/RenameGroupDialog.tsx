@@ -108,12 +108,10 @@ export function RenameGroupDialog({
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}
-                        color={"primary"}
                         variant="text">
                     Cancel
                 </Button>
                 <Button onClick={handleSave}
-                        color={"primary"}
                         disabled={!!error || !name.trim()}>
                     Save
                 </Button>
