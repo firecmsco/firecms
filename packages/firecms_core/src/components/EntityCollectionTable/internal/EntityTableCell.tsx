@@ -246,6 +246,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
         if (showError) {
             return (
                 <ErrorTooltip
+                    className={"flex h-full w-full"}
                     align={"start"}
                     title={error?.message ?? "Error"}>
                     {result}
