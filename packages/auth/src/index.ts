@@ -16,10 +16,13 @@ export type {
 
 // Hooks
 export { useCustomAuthController } from "./hooks/useCustomAuthController";
+export { useBackendUserManagement } from "./hooks/useBackendUserManagement";
+export type { BackendUserManagementConfig, UserManagement } from "./hooks/useBackendUserManagement";
 
 // Components
 export { CustomLoginView } from "./components/CustomLoginView";
 export type { CustomLoginViewProps } from "./components/CustomLoginView";
+export { createUserManagementAdminViews } from "./components/AdminViews";
 
 // API utilities
 export { setApiUrl, getApiUrl, AuthApiError } from "./api";

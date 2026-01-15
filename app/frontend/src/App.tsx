@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
@@ -20,7 +20,12 @@ import {
 import { StorageSource } from "@firecms/types";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
-import { useCustomAuthController, CustomLoginView } from "@firecms/auth";
+import {
+    useCustomAuthController,
+    CustomLoginView,
+    useBackendUserManagement,
+    createUserManagementAdminViews
+} from "@firecms/auth";
 import { collections } from "shared";
 
 // Configuration from environment
@@ -51,6 +56,23 @@ export function App() {
         apiUrl: API_URL,
         googleClientId: GOOGLE_CLIENT_ID
     });
+
+    // User management for admin views
+    const userManagement = useBackendUserManagement({
+        apiUrl: API_URL,
+        getAuthToken: authController.getAuthToken,
+        currentUser: authController.user
+    });
+
+    // Admin views for user/role management
+    const adminViews = useMemo(() =>
+        createUserManagementAdminViews({
+            userManagement,
+            apiUrl: API_URL,
+            getAuthToken: authController.getAuthToken
+        }),
+        [userManagement, authController.getAuthToken]
+    );
 
     // PostgreSQL delegate with WebSocket connection - pass auth token getter
     const postgresDelegate = usePostgresClientDataSource({
@@ -83,6 +105,7 @@ export function App() {
     const navigationController = useBuildNavigationController({
         plugins: [dataEnhancementPlugin],
         collections: collectionsBuilder,
+        views: adminViews,
         authController,
         dataSourceDelegate: postgresDelegate
     });

@@ -360,6 +360,30 @@ export class PostgresDataSourceClient {
         }
     }
 
+    private async ensureAuthenticated(): Promise<void> {
+        // If already authenticated or no token getter, skip
+        if (this.isAuthenticated || !this.getAuthToken) return;
+
+        // If auth is in progress, wait for it
+        if (this.authPromise) {
+            await this.authPromise;
+            return;
+        }
+
+        // Try to authenticate
+        try {
+            const token = await this.getAuthToken();
+            this.authPromise = this.authenticate(token);
+            await this.authPromise;
+            this.authPromise = null;
+            console.log("WebSocket authenticated on demand");
+        } catch (error) {
+            this.authPromise = null;
+            console.warn("WebSocket on-demand auth failed:", error);
+            throw error;
+        }
+    }
+
     private sendMessage(message: any): Promise<any> {
         if (!this.isConnected || !this.ws) {
             this.messageQueue.push(message);
@@ -370,7 +394,17 @@ export class PostgresDataSourceClient {
             });
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            // Ensure authenticated before sending non-auth messages
+            if (message.type !== "AUTHENTICATE" && this.getAuthToken && !this.isAuthenticated) {
+                try {
+                    await this.ensureAuthenticated();
+                } catch (error) {
+                    reject(new ApiError("Authentication required", "Please login to continue"));
+                    return;
+                }
+            }
+
             const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             message.requestId = requestId;
 

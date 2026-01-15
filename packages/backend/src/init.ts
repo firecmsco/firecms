@@ -10,7 +10,7 @@ import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, FireCMSApiServer } from "./api";
 import { Express } from "express";
 import { configureLogLevel } from "./utils/logging";
-import { configureJwt, configureGoogleOAuth, createAuthRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
+import { configureJwt, configureGoogleOAuth, createAuthRoutes, createAdminRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
 
 /**
  * Authentication configuration for FireCMS backend
@@ -162,6 +162,11 @@ export function initializeFireCMSAPI(
         const basePath = config.basePath || "/api";
         app.use(`${basePath}/auth`, authRoutes);
         console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
+
+        // Mount admin routes (for user/role management)
+        const adminRoutes = createAdminRoutes({ db: config.db });
+        app.use(`${basePath}/admin`, adminRoutes);
+        console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
     }
 
     const basePath = config.basePath || "/api";
