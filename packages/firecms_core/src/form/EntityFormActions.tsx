@@ -19,21 +19,22 @@ import {
     Typography
 } from "@firecms/ui";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
+import { FormexController } from "@firecms/formex";
 
 export function EntityFormActions({
-                                      path,
-                                      collection,
-                                      entity,
-                                      layout,
-                                      savingError,
-                                      formex,
-                                      disabled,
-                                      status,
-                                      pluginActions,
-                                      openEntityMode,
-                                      navigateBack,
-                                      formContext
-                                  }: EntityFormActionsProps) {
+    path,
+    collection,
+    entity,
+    layout,
+    savingError,
+    formex,
+    disabled,
+    status,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext
+}: EntityFormActionsProps) {
 
     const context = useFireCMSContext();
     const sideEntityController = useSideEntityController();
@@ -89,21 +90,21 @@ type ActionsViewProps<M extends object> = {
 };
 
 function buildBottomActions<M extends object>({
-                                                  savingError,
-                                                  entity,
-                                                  path,
-                                                  formActions,
-                                                  collection,
-                                                  context,
-                                                  sideEntityController,
-                                                  disabled,
-                                                  status,
-                                                  pluginActions,
-                                                  openEntityMode,
-                                                  navigateBack,
-                                                  formContext,
-                                                  formex
-                                              }: ActionsViewProps<M>) {
+    savingError,
+    entity,
+    path,
+    formActions,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext,
+    formex
+}: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
 
@@ -139,15 +140,15 @@ function buildBottomActions<M extends object>({
         </div>}
         {pluginActions}
         <Button variant="text" disabled={disabled || formex.isSubmitting}
-                color={"primary"}
-                type="reset">
+            color={"primary"}
+            type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
         <Button variant={"filled"}
-                color="primary"
-                type="submit"
-                disabled={disabled || formex.isSubmitting}
-                startIcon={hasErrors ? <ErrorIcon/> : undefined}>
+            color="primary"
+            type="submit"
+            disabled={disabled || formex.isSubmitting}
+            startIcon={hasErrors ? <ErrorIcon /> : undefined}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
@@ -157,31 +158,31 @@ function buildBottomActions<M extends object>({
 }
 
 function buildSideActions<M extends object>({
-                                                savingError,
-                                                entity,
-                                                formActions,
-                                                path,
-                                                openEntityMode,
-                                                collection,
-                                                context,
-                                                sideEntityController,
-                                                disabled,
-                                                status,
-                                                pluginActions,
-                                                formex
-                                            }: ActionsViewProps<M>) {
+    savingError,
+    entity,
+    formActions,
+    path,
+    openEntityMode,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    pluginActions,
+    formex
+}: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
 
     return <div
         className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
         <LoadingButton fullWidth={true}
-                       variant="filled"
-                       color="primary"
-                       type="submit"
-                       size={"large"}
-                       startIcon={hasErrors ? <ErrorIcon/> : undefined}
-                       disabled={disabled || formex.isSubmitting}>
+            variant="filled"
+            color="primary"
+            type="submit"
+            size={"large"}
+            startIcon={hasErrors ? <ErrorIcon /> : undefined}
+            disabled={disabled || formex.isSubmitting}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}

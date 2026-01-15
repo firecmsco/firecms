@@ -8,6 +8,7 @@ export type FormexController<T extends object> = {
     setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
     touched: Record<string, boolean>;
     setFieldTouched: (key: string, touched: boolean, shouldValidate?: boolean) => void;
+    setTouched: (touched: Record<string, boolean>) => void;
     dirty: boolean;
     setDirty: (dirty: boolean) => void;
     setSubmitCount: (submitCount: number) => void;

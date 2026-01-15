@@ -81,7 +81,6 @@ import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "../common/useScrollRestoration";
-import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { OnColumnResizeParams } from "../common/types";
 import { EntityPreviewWithId } from "../EntityPreview";
 
@@ -135,12 +134,12 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                                     path: fullPathProp,
-                                                                     parentCollectionIds,
-                                                                     className,
-                                                                     updateUrl,
-                                                                     ...collectionProp
-                                                                 }: EntityCollectionViewProps<M>
+        path: fullPathProp,
+        parentCollectionIds,
+        className,
+        updateUrl,
+        ...collectionProp
+    }: EntityCollectionViewProps<M>
     ) {
 
         const context = useFireCMSContext();
@@ -210,7 +209,7 @@ export const EntityCollectionView = React.memo(
         // View mode state - initialize from collection prop or user config
         const defaultViewMode = collection.defaultViewMode ?? "table";
         const [viewMode, setViewMode] = useState<ViewMode>(() => {
-            const savedViewMode = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
+            const savedViewMode = userConfigPersistence?.getCollectionConfig<M>(path)?.defaultViewMode;
             return (savedViewMode as ViewMode) ?? defaultViewMode;
         });
 
@@ -324,9 +323,9 @@ export const EntityCollectionView = React.memo(
         }, [userConfigPersistence]);
 
         const onColumnResize = useCallback(({
-                                                width,
-                                                key
-                                            }: OnColumnResizeParams) => {
+            width,
+            key
+        }: OnColumnResizeParams) => {
 
             const collection = collectionRef.current;
             // Only for property columns
@@ -343,28 +342,28 @@ export const EntityCollectionView = React.memo(
         const onViewModeChange = useCallback((mode: ViewMode) => {
             setViewMode(mode);
             if (userConfigPersistence) {
-                onCollectionModifiedForUser(fullPath, { defaultViewMode: mode } as PartialEntityCollection<M>);
+                onCollectionModifiedForUser(path, { defaultViewMode: mode } as PartialEntityCollection<M>);
             }
-        }, [fullPath, userConfigPersistence, onCollectionModifiedForUser]);
+        }, [path, userConfigPersistence, onCollectionModifiedForUser]);
 
         const createEnabled = canCreateEntity(collection, authController, path, null);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
-                 name,
-                 value,
-                 property,
-                 entityId
-             }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
+                name,
+                value,
+                property,
+                entityId
+            }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
             [path]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
-                                                                value,
-                                                                propertyKey,
-                                                                onValueUpdated,
-                                                                setError,
-                                                                data: entity,
-                                                            }) => {
+            value,
+            propertyKey,
+            onValueUpdated,
+            setError,
+            data: entity,
+        }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
@@ -403,9 +402,9 @@ export const EntityCollectionView = React.memo(
         const resolvedFullPath = navigation.resolveDatabasePathsFrom(path);
 
         const getPropertyFor = useCallback(({
-                                                propertyKey,
-                                                entity
-                                            }: GetPropertyForProps<M>) => {
+            propertyKey,
+            entity
+        }: GetPropertyForProps<M>) => {
             let property: Property | undefined = getPropertyInPath(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
@@ -420,19 +419,20 @@ export const EntityCollectionView = React.memo(
 
         // Use a collection with local propertiesOrder for optimistic UI updates
         const collectionWithLocalOrder = useMemo(() => {
-            if (localPropertiesOrder && localPropertiesOrder !== resolvedCollection.propertiesOrder) {
+            if (localPropertiesOrder && localPropertiesOrder !== collection.propertiesOrder) {
                 return {
-                    ...resolvedCollection,
+                    ...collection,
                     propertiesOrder: localPropertiesOrder
                 };
             }
-            return resolvedCollection;
-        }, [resolvedCollection, localPropertiesOrder]);
+            return collection;
+        }, [collection, localPropertiesOrder]);
 
         const displayedColumnIds = useColumnIds(collectionWithLocalOrder, true);
 
         const additionalFields = useMemo(() => {
-            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = subcollections.map((subcollection) => {
+            const subcollectionsList = getSubcollections(collection);
+            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = subcollectionsList.map((subcollection: EntityCollection) => {
                 return {
                     key: getSubcollectionColumnId(subcollection),
                     name: subcollection.name,
@@ -440,20 +440,20 @@ export const EntityCollectionView = React.memo(
                     dependencies: [],
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
-                                className={"max-w-full truncate justify-start"}
-                                startIcon={<KeyboardTabIcon size={"small"}/>}
-                                onClick={(event: any) => {
-                                    event.stopPropagation();
-                                    navigateToEntity({
-                                        openEntityMode,
-                                        collection: collection,
-                                        entityId: entity.id,
-                                        selectedTab: subcollection.slug,
-                                        path,
-                                        navigation,
-                                        sideEntityController
-                                    })
-                                }}>
+                            className={"max-w-full truncate justify-start"}
+                            startIcon={<KeyboardTabIcon size={"small"} />}
+                            onClick={(event: any) => {
+                                event.stopPropagation();
+                                navigateToEntity({
+                                    openEntityMode,
+                                    collection: collection,
+                                    entityId: entity.id,
+                                    selectedTab: subcollection.slug,
+                                    path,
+                                    navigation,
+                                    sideEntityController
+                                })
+                            }}>
                             {subcollection.name}
                         </Button>
                     )
@@ -475,7 +475,7 @@ export const EntityCollectionView = React.memo(
                                         <ReferencePreview
                                             key={reference.path + "/" + reference.id}
                                             reference={reference}
-                                            size={"small"}/>
+                                            size={"small"} />
                                     );
                                 })}
                             </div>
@@ -498,9 +498,9 @@ export const EntityCollectionView = React.memo(
         const largeLayout = useLargeLayout();
 
         const getActionsForEntity = ({
-                                         entity,
-                                         customEntityActions
-                                     }: {
+            entity,
+            customEntityActions
+        }: {
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
@@ -524,11 +524,11 @@ export const EntityCollectionView = React.memo(
         };
 
         const tableRowActionsBuilder = useCallback(({
-                                                        entity,
-                                                        size,
-                                                        width,
-                                                        frozen
-                                                    }: {
+            entity,
+            size,
+            width,
+            frozen
+        }: {
             entity: Entity<any>,
             size: CollectionSize,
             width: number,
@@ -596,16 +596,16 @@ export const EntityCollectionView = React.memo(
         >
 
             {collection.description && <div className="m-4 text-surface-900 dark:text-white">
-                <Markdown source={collection.description}/>
+                <Markdown source={collection.description} />
             </div>}
 
         </Popover>;
 
         const buildAdditionalHeaderWidget = useCallback(({
-                                                             property,
-                                                             propertyKey,
-                                                             onHover
-                                                         }: {
+            property,
+            propertyKey,
+            onHover
+        }: {
             property: Property,
             propertyKey: string,
             onHover: boolean
@@ -625,7 +625,7 @@ export const EntityCollectionView = React.memo(
                             path={path}
                             collection={collection}
                             tableController={tableController}
-                            parentCollectionIds={parentCollectionIds ?? []}/>;
+                            parentCollectionIds={parentCollectionIds ?? []} />;
                     })}
             </>;
         }, [customizationController.plugins, path, parentCollectionIds]);
@@ -634,9 +634,9 @@ export const EntityCollectionView = React.memo(
             ? function () {
                 if (typeof AddColumnComponent === "function")
                     return <AddColumnComponent path={path}
-                                               parentCollectionIds={parentCollectionIds ?? []}
-                                               collection={collection}
-                                               tableController={tableController}/>;
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController} />;
                 return null;
             }
             : undefined;
@@ -654,7 +654,7 @@ export const EntityCollectionView = React.memo(
 
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
-                 ref={containerRef}>
+                ref={containerRef}>
                 {/* Common actions component used for both views */}
                 {viewMode === "cards" ? (
                     <>
@@ -671,19 +671,19 @@ export const EntityCollectionView = React.memo(
                                 parentCollectionIds={parentCollectionIds ?? []}
                                 collection={collection}
                                 tableController={tableController}
-                                path={fullPath}
-                                relativePath={collection.path}
+                                path={path}
+                                relativePath={collection.slug}
                                 selectionController={usedSelectionController}
                                 collectionEntitiesCount={docsCount}
-                                resolvedProperties={resolvedCollection.properties}/>}
+                                resolvedProperties={collection.properties} />}
                             actions={<EntityCollectionViewActions
                                 parentCollectionIds={parentCollectionIds ?? []}
                                 collection={collection}
                                 tableController={tableController}
                                 onMultipleDeleteClick={onMultipleDeleteClick}
                                 onNewClick={onNewClick}
-                                path={fullPath}
-                                relativePath={collection.path}
+                                path={path}
+                                relativePath={collection.slug}
                                 selectionController={usedSelectionController}
                                 selectionEnabled={selectionEnabled}
                                 collectionEntitiesCount={docsCount}
@@ -709,7 +709,7 @@ export const EntityCollectionView = React.memo(
                                         onClick={onNewClick}
                                         className="mt-4"
                                     >
-                                        <AddIcon/>
+                                        <AddIcon />
                                         Create your first entry
                                     </Button>
                                 </div>
@@ -746,7 +746,7 @@ export const EntityCollectionView = React.memo(
                         path={path}
                         relativePath={collection.slug}
                         selectionController={usedSelectionController}
-                        collectionEntitiesCount={docsCount} resolvedProperties={resolvedCollection.properties}/>}
+                        collectionEntitiesCount={docsCount} resolvedProperties={collection.properties} />}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -759,7 +759,7 @@ export const EntityCollectionView = React.memo(
                         selectionEnabled={selectionEnabled}
                         collectionEntitiesCount={docsCount}
                         viewMode={viewMode}
-                        onViewModeChange={onViewModeChange}/>}
+                        onViewModeChange={onViewModeChange} />}
                     emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                         ? <div className="flex flex-col items-center justify-center">
                             <Typography variant={"subtitle2"}>So empty...</Typography>
@@ -767,7 +767,7 @@ export const EntityCollectionView = React.memo(
                                 onClick={onNewClick}
                                 className="mt-4"
                             >
-                                <AddIcon/>
+                                <AddIcon />
                                 Create your first entry
                             </Button>
                         </div>
@@ -780,7 +780,7 @@ export const EntityCollectionView = React.memo(
                     getIdColumnWidth={getIdColumnWidth}
                     additionalIDHeaderWidget={<EntityIdHeaderWidget
                         path={path}
-                        collection={collection}/>}
+                        collection={collection} />}
                     openEntityMode={openEntityMode}
                     onColumnsOrderChange={(newColumns) => {
                         // Extract property keys from the new column order
@@ -798,7 +798,7 @@ export const EntityCollectionView = React.memo(
                                 .filter(plugin => plugin.collectionView?.onColumnsReorder)
                                 .forEach(plugin => {
                                     plugin.collectionView!.onColumnsReorder!({
-                                        fullPath,
+                                        fullPath: path,
                                         parentCollectionIds: parentCollectionIds ?? [],
                                         collection,
                                         newPropertiesOrder
@@ -820,7 +820,7 @@ export const EntityCollectionView = React.memo(
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
                     onCellValueChange={onValueChange}
-                    container={containerRef.current}/>}
+                    container={containerRef.current} />}
 
                 {deleteEntityClicked &&
                     <DeleteEntityDialog
@@ -831,7 +831,7 @@ export const EntityCollectionView = React.memo(
                         open={Boolean(deleteEntityClicked)}
                         onEntityDelete={internalOnEntityDelete}
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                        onClose={() => setDeleteEntityClicked(undefined)}/>}
+                        onClose={() => setDeleteEntityClicked(undefined)} />}
 
             </div>
         );
@@ -860,12 +860,12 @@ export const EntityCollectionView = React.memo(
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
 function EntitiesCount({
-                           path,
-                           collection,
-                           filter,
-                           sortBy,
-                           onCountChange
-                       }: {
+    path,
+    collection,
+    filter,
+    sortBy,
+    onCountChange
+}: {
     path: string,
     collection: EntityCollection,
     filter?: FilterValues<any>,
@@ -908,7 +908,7 @@ function EntitiesCount({
         className="w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left w-fit-content"
         variant={"caption"}
         color={"secondary"}>
-        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"}/>}
+        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"} />}
     </Typography>;
 }
 
@@ -921,9 +921,9 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
 }
 
 function EntityIdHeaderWidget({
-                                  collection,
-                                  path,
-                              }: {
+    collection,
+    path,
+}: {
     collection: EntityCollection,
     path: string,
 }) {
@@ -946,28 +946,28 @@ function EntityIdHeaderWidget({
                 alignOffset={-117}
                 trigger={
                     <IconButton size={"small"}>
-                        <SearchIcon size={"small"}/>
+                        <SearchIcon size={"small"} />
                     </IconButton>
                 }>
                 <div
                     className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
                     <form noValidate={true}
-                          onSubmit={(e) => {
-                              e.preventDefault();
-                              if (!searchString) return;
-                              setOpenPopup(false);
-                              const entityId = searchString.trim();
-                              setRecentIds(addRecentId(collection.slug, entityId));
-                              navigateToEntity({
-                                  openEntityMode,
-                                  collection,
-                                  entityId,
-                                  path,
-                                  sideEntityController,
-                                  navigation
-                              })
-                          }}
-                          className={"w-96 max-w-full"}>
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!searchString) return;
+                            setOpenPopup(false);
+                            const entityId = searchString.trim();
+                            setRecentIds(addRecentId(collection.slug, entityId));
+                            navigateToEntity({
+                                openEntityMode,
+                                collection,
+                                entityId,
+                                path,
+                                sideEntityController,
+                                navigation
+                            })
+                        }}
+                        className={"w-96 max-w-full"}>
 
                         <div className="flex p-2 w-full gap-2">
                             <input
@@ -978,32 +978,32 @@ function EntityIdHeaderWidget({
                                     setSearchString(e.target.value);
                                 }}
                                 value={searchString}
-                                className={"rounded-lg bg-white dark:bg-surface-800 grow bg-transparent outline-hidden p-2 " + focusedDisabled}/>
+                                className={"rounded-lg bg-white dark:bg-surface-800 grow bg-transparent outline-hidden p-2 " + focusedDisabled} />
                             <Button variant={"text"}
-                                    disabled={!(searchString.trim())}
-                                    type={"submit"}
-                            ><KeyboardTabIcon/></Button>
+                                disabled={!(searchString.trim())}
+                                type={"submit"}
+                            ><KeyboardTabIcon /></Button>
                         </div>
                     </form>
                     {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
                         {recentIds.map(id => (
                             <EntityPreviewWithId entityId={id}
-                                                 path={path}
-                                                 key={id}
-                                                 hover={true}
-                                                 onClick={() => {
-                                                     setOpenPopup(false);
-                                                     navigateToEntity({
-                                                         openEntityMode,
-                                                         collection,
-                                                         entityId: id,
-                                                         path,
-                                                         sideEntityController,
-                                                         navigation
-                                                     })
-                                                 }}
-                                                 includeEntityLink={false}
-                                                 size={"small"}/>
+                                path={path}
+                                key={id}
+                                hover={true}
+                                onClick={() => {
+                                    setOpenPopup(false);
+                                    navigateToEntity({
+                                        openEntityMode,
+                                        collection,
+                                        entityId: id,
+                                        path,
+                                        sideEntityController,
+                                        navigation
+                                    })
+                                }}
+                                includeEntityLink={false}
+                                size={"small"} />
                         ))}
                     </div>}
                 </div>

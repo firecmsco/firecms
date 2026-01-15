@@ -9,6 +9,7 @@
   },
   "homepage": "https://firecms.co",
   "workspaces": [
+    "packages/auth",
     "packages/firecms",
     "packages/firecms_cloud",
     "packages/firecms_core",

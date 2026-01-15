@@ -4,7 +4,7 @@ import {
     CMSAnalyticsEvent,
     Entity,
     EntityCollection,
-    EntityFormProps,
+    EntityCustomViewParams,
     EntityStatus,
     EntityValues,
     FormContext,
@@ -15,7 +15,7 @@ import {
 import { deepEqual as equal } from "fast-equals";
 
 import { ErrorBoundary, getFormFieldKeys } from "../components";
-import { getDefaultValuesFor, getValueInPath, isHidden, isReadOnly, mergeDeep, } from "@firecms/common";
+import { getDefaultValuesFor, getLocalChangesBackup, getValueInPath, isHidden, isObject, isReadOnly, mergeDeep } from "@firecms/common";
 
 import {
     saveEntityWithCallbacks,
@@ -42,14 +42,15 @@ import {
 import { CustomIdField } from "./components/CustomIdField";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
+import { EntityFormActions } from "./EntityFormActions";
+import { EntityFormActionsProps } from "@firecms/types";
 import { LocalChangesMenu } from "./components/LocalChangesMenu";
 
 export type OnUpdateParams = {
     entity: Entity<any>,
     status: EntityStatus,
     path: string,
-    entityId?: string;
+    entityId?: string | number;
     selectedTab?: string;
     collection: EntityCollection<any>
 };
@@ -58,10 +59,10 @@ export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
     fullIdPath?: string;
     collection: EntityCollection<M>;
-    entityId?: string;
+    entityId?: string | number;
     entity?: Entity<M>;
     databaseId?: string;
-    onIdChange?: (id: string) => void;
+    onIdChange?: (id: string | number) => void;
     onValuesModified?: (modified: boolean, values: M) => void;
     onSaved?: (params: OnUpdateParams) => void;
     initialDirtyValues?: Partial<M>; // dirty cached entity in memory
@@ -93,11 +94,7 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
     children?: React.ReactNode;
 };
-import { removeEntityFromCache, saveEntityToCache, useDebouncedCallback } from "../util";
-import { CustomIdField } from "./components/CustomIdField";
-import { ErrorFocus } from "./components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-import { EntityFormActions } from "./EntityFormActions";
+import { useDebouncedCallback } from "../util";
 import { getEntityTitlePropertyKey } from "../util/references";
 
 // extract touched values for nested touched trees and map to current values
@@ -175,29 +172,29 @@ export function getChanges<T extends object>(source: Partial<T>, comparison: Par
 }
 
 export function EntityForm<M extends Record<string, any>>({
-                                                              path,
-                                                              entityId: entityIdProp,
-                                                              collection,
-                                                              onValuesModified,
-                                                              onIdChange,
-                                                              onSaved,
-                                                              entity,
-                                                              initialDirtyValues,
-                                                              onFormContextReady,
-                                                              forceActionsAtTheBottom,
-                                                              initialStatus,
-                                                              className,
-                                                              onStatusChange,
-                                                              onEntityChange,
-                                                              openEntityMode = "full_screen",
-                                                              formex: formexProp,
-                                                              disabled: disabledProp,
-                                                              Builder,
-                                                              EntityFormActionsComponent = EntityFormActions,
-                                                              showDefaultActions = true,
-                                                              showEntityPath = true,
-                                                              children
-                                                          }: EntityFormProps<M>) {
+    path,
+    entityId: entityIdProp,
+    collection,
+    onValuesModified,
+    onIdChange,
+    onSaved,
+    entity,
+    initialDirtyValues,
+    onFormContextReady,
+    forceActionsAtTheBottom,
+    initialStatus,
+    className,
+    onStatusChange,
+    onEntityChange,
+    openEntityMode = "full_screen",
+    formex: formexProp,
+    disabled: disabledProp,
+    Builder,
+    EntityFormActionsComponent = EntityFormActions,
+    showDefaultActions = true,
+    showEntityPath = true,
+    children
+}: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.slug} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -446,12 +443,12 @@ export function EntityForm<M extends Record<string, any>>({
     }, [entityId, path, snackbarController]);
 
     const saveEntity = ({
-                            values,
-                            previousValues,
-                            entityId,
-                            collection,
-                            path
-                        }: {
+        values,
+        previousValues,
+        entityId,
+        collection,
+        path
+    }: {
         collection: EntityCollection<M>,
         path: string,
         entityId: string | number | undefined,
@@ -484,13 +481,13 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const onSaveEntityRequest = async ({
-                                           collection,
-                                           path,
-                                           entityId,
-                                           values,
-                                           previousValues,
-                                           autoSave
-                                       }: EntityFormSaveParams<M>): Promise<void> => {
+        collection,
+        path,
+        entityId,
+        values,
+        previousValues,
+        autoSave
+    }: EntityFormSaveParams<M>): Promise<void> => {
         if (!status)
             return;
         if (autoSave) {
@@ -622,17 +619,17 @@ export function EntityForm<M extends Record<string, any>>({
     const modified = formex.dirty;
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
-                                                                        name,
-                                                                        value
-                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
+        name,
+        value
+    }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => entityId
-            ? getYupEntitySchema(
-                entityId,
-                collection.properties,
-                uniqueFieldValidator)
-            : undefined,
+        ? getYupEntitySchema(
+            entityId,
+            collection.properties,
+            uniqueFieldValidator)
+        : undefined,
         [entityId, collection.properties, uniqueFieldValidator]);
 
     useOnAutoSave(autoSave, formex, lastSavedValues, save);
@@ -691,8 +688,8 @@ export function EntityForm<M extends Record<string, any>>({
 
                         return (
                             <FormEntry propertyKey={key}
-                                       widthPercentage={widthPercentage}
-                                       key={`field_${key}`}>
+                                widthPercentage={widthPercentage}
+                                key={`field_${key}`}>
                                 <PropertyFieldBinding {...cmsFormFieldProps} />
                             </FormEntry>
                         );
@@ -705,7 +702,7 @@ export function EntityForm<M extends Record<string, any>>({
                             throw new Error("When using additional fields you need to provide a Builder or a value");
                         }
                         const child = Builder
-                            ? <Builder entity={entity} context={context}/>
+                            ? <Builder entity={entity} context={context} />
                             : <div className={"w-full"}>
                                 {additionalField.value?.({
                                     entity,
@@ -717,9 +714,9 @@ export function EntityForm<M extends Record<string, any>>({
                             <div key={`additional_${key}`} className={"w-full"}>
                                 <LabelWithIconAndTooltip
                                     propertyKey={key}
-                                    icon={<NotesIcon size={"small"}/>}
+                                    icon={<NotesIcon size={"small"} />}
                                     title={additionalField.name}
-                                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"} />
                                 <div
                                     className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
                                     <ErrorBoundary>
@@ -769,22 +766,22 @@ export function EntityForm<M extends Record<string, any>>({
 
             {!Builder && !collection.hideIdFromForm &&
                 <CustomIdField customId={collection.customId}
-                               entityId={entityId}
-                               status={status}
-                               onChange={setEntityId}
-                               error={entityIdError}
-                               loading={customIdLoading}
-                               entity={entity}/>
+                    entityId={entityId}
+                    status={status}
+                    onChange={setEntityId}
+                    error={entityIdError}
+                    loading={customIdLoading}
+                    entity={entity} />
             }
 
             {(!mustSetCustomId || entityId) && formContext && <>
                 <div className="mt-12 flex flex-col gap-8" ref={formRef}>
                     {formFields()}
-                    <ErrorFocus containerRef={formRef}/>
+                    <ErrorFocus containerRef={formRef} />
                 </div>
             </>}
 
-            {forceActionsAtTheBottom && <div className="h-16"/>}
+            {forceActionsAtTheBottom && <div className="h-16" />}
         </>
     </ErrorBoundary>;
 
@@ -833,7 +830,7 @@ export function EntityForm<M extends Record<string, any>>({
                             {manualApplyLocalChanges && hasLocalChanges &&
                                 <LocalChangesMenu
                                     cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
-                                    properties={resolvedCollection.properties}
+                                    properties={collection.properties}
                                     localChangesData={localChangesData as Partial<M>}
                                     formex={formex}
                                     onClearLocalChanges={() => setLocalChangesCleared(true)}
@@ -842,12 +839,12 @@ export function EntityForm<M extends Record<string, any>>({
                             {formex.dirty
                                 ? <Tooltip title={"This form has been modified"}>
                                     <Chip size={"small"} className={"py-1"} colorScheme={"orangeDarker"}>
-                                        <EditIcon size={"smallest"}/>
+                                        <EditIcon size={"smallest"} />
                                     </Chip>
                                 </Tooltip>
                                 : <Tooltip title={"The current form is in sync with the database"}>
                                     <Chip size={"small"} className={"py-1"}>
-                                        <CheckIcon size={"smallest"}/>
+                                        <CheckIcon size={"smallest"} />
                                     </Chip>
                                 </Tooltip>}
                         </div>

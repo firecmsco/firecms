@@ -10,6 +10,27 @@ import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, FireCMSApiServer } from "./api";
 import { Express } from "express";
 import { configureLogLevel } from "./utils/logging";
+import { configureJwt, configureGoogleOAuth, createAuthRoutes, createAdminRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
+
+/**
+ * Authentication configuration for FireCMS backend
+ */
+export interface AuthConfig {
+    /** JWT secret key - required for auth */
+    jwtSecret: string;
+    /** Access token expiration (e.g., '1h', '30m') */
+    accessExpiresIn?: string;
+    /** Refresh token expiration (e.g., '30d', '7d') */
+    refreshExpiresIn?: string;
+    /** Google OAuth configuration (optional) */
+    google?: {
+        clientId: string;
+    };
+    /** Whether auth is required for all API requests (default: true) */
+    requireAuth?: boolean;
+    /** Seed default roles on startup (default: true on first run) */
+    seedDefaultRoles?: boolean;
+}
 
 export interface FireCMSBackendConfig {
     collections: EntityCollection[];
@@ -21,14 +42,18 @@ export interface FireCMSBackendConfig {
     logging?: {
         level?: "error" | "warn" | "info" | "debug";
     };
+    /** Authentication configuration */
+    auth?: AuthConfig;
 }
 
 export interface FireCMSBackendInstance {
     dataSourceDelegate: PostgresDataSourceDelegate;
     realtimeService: RealtimeService;
+    userService?: UserService;
+    roleService?: RoleService;
 }
 
-export function initializeFireCMSBackend(config: FireCMSBackendConfig): FireCMSBackendInstance {
+export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
     // Configure logging level automatically
     if (config.logging?.level) {
         configureLogLevel(config.logging.level);
@@ -55,13 +80,46 @@ export function initializeFireCMSBackend(config: FireCMSBackendConfig): FireCMSB
     const realtimeService = new RealtimeService(config.db);
     const dataSourceDelegate = new PostgresDataSourceDelegate(config.db, realtimeService);
 
-    createPostgresWebSocket(config.server, realtimeService, dataSourceDelegate);
+    // Initialize auth if configured
+    let userService: UserService | undefined;
+    let roleService: RoleService | undefined;
+
+    if (config.auth) {
+        console.log("🔐 Configuring authentication...");
+
+        // Ensure auth tables exist (auto-create if needed)
+        await ensureAuthTablesExist(config.db);
+
+        // Configure JWT
+        configureJwt({
+            secret: config.auth.jwtSecret,
+            accessExpiresIn: config.auth.accessExpiresIn || "1h",
+            refreshExpiresIn: config.auth.refreshExpiresIn || "30d"
+        });
+
+        // Configure Google OAuth if provided
+        if (config.auth.google?.clientId) {
+            configureGoogleOAuth(config.auth.google.clientId);
+            console.log("✅ Google OAuth configured");
+        }
+
+        // Create services
+        userService = new UserService(config.db);
+        roleService = new RoleService(config.db);
+
+        console.log("✅ Authentication configured");
+    }
+
+    // Create WebSocket with auth support
+    createPostgresWebSocket(config.server, realtimeService, dataSourceDelegate, config.auth);
 
     console.log("✅ FireCMS Backend Initialized");
 
     return {
         dataSourceDelegate,
-        realtimeService
+        realtimeService,
+        userService,
+        roleService
     };
 }
 
@@ -70,12 +128,13 @@ export function initializeFireCMSBackend(config: FireCMSBackendConfig): FireCMSB
  * @param app Express application instance
  * @param backend FireCMS backend instance from initializeFireCMSBackend
  * @param config API configuration options
+ * @param db Database connection for auth routes
  * @returns API server instance
  */
 export function initializeFireCMSAPI(
     app: Express,
     backend: FireCMSBackendInstance,
-    config: Partial<ApiConfig> = {}
+    config: Partial<ApiConfig> & { db?: NodePgDatabase } = {}
 ): FireCMSApiServer {
     console.log("🚀 Initializing FireCMS API endpoints");
 
@@ -97,6 +156,19 @@ export function initializeFireCMSAPI(
     const apiRouter = apiServer.getRouter();
     app.use(apiRouter);
 
+    // Mount auth routes if db is provided
+    if (config.db) {
+        const authRoutes = createAuthRoutes({ db: config.db });
+        const basePath = config.basePath || "/api";
+        app.use(`${basePath}/auth`, authRoutes);
+        console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
+
+        // Mount admin routes (for user/role management)
+        const adminRoutes = createAdminRoutes({ db: config.db });
+        app.use(`${basePath}/admin`, adminRoutes);
+        console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
+    }
+
     const basePath = config.basePath || "/api";
     console.log(`✅ GraphQL endpoint: ${basePath}/graphql`);
     console.log(`✅ REST API: ${basePath}/`);
@@ -104,3 +176,4 @@ export function initializeFireCMSAPI(
 
     return apiServer;
 }
+

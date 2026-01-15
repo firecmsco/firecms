@@ -1,21 +1,40 @@
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
 import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "@firecms/types";
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
 import { inspect } from "util";
+import { extractUserFromToken, AccessTokenPayload } from "./auth";
+import { AuthConfig } from "./init";
 
-export function createPostgresWebSocket(server: Server, realtimeService: RealtimeService, dataSourceDelegate: PostgresDataSourceDelegate) {
+interface ClientSession {
+    ws: WebSocket;
+    user?: AccessTokenPayload;
+    authenticated: boolean;
+}
+
+const clientSessions = new Map<string, ClientSession>();
+
+export function createPostgresWebSocket(
+    server: Server,
+    realtimeService: RealtimeService,
+    dataSourceDelegate: PostgresDataSourceDelegate,
+    authConfig?: AuthConfig
+) {
     const wss = new WebSocketServer({ server });
+    const requireAuth = authConfig?.requireAuth !== false && authConfig?.jwtSecret;
 
     wss.on("connection", (ws) => {
         const clientId = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         console.debug(`WebSocket client connected: ${clientId}`);
 
+        // Initialize client session
+        clientSessions.set(clientId, { ws, authenticated: !requireAuth });
         realtimeService.addClient(clientId, ws);
 
         ws.on("close", () => {
             console.debug(`WebSocket client disconnected: ${clientId}`);
+            clientSessions.delete(clientId);
         });
 
         // Route all messages through RealtimeService for unified handling
@@ -32,6 +51,57 @@ export function createPostgresWebSocket(server: Server, realtimeService: Realtim
                 console.debug("🚀 [WebSocket Server] Received message from client:", clientId);
                 console.debug("🚀 [WebSocket Server] Message type:", type);
                 console.debug("🚀 [WebSocket Server] Message payload:", payload);
+
+                // Handle authentication first
+                if (type === "AUTHENTICATE") {
+                    const { token } = payload || {};
+                    if (!token) {
+                        ws.send(JSON.stringify({
+                            type: "AUTH_ERROR",
+                            requestId,
+                            payload: { error: "Token is required" }
+                        }));
+                        return;
+                    }
+
+                    const user = extractUserFromToken(token);
+                    if (user) {
+                        const session = clientSessions.get(clientId);
+                        if (session) {
+                            session.user = user;
+                            session.authenticated = true;
+                        }
+                        ws.send(JSON.stringify({
+                            type: "AUTH_SUCCESS",
+                            requestId,
+                            payload: { userId: user.userId, roles: user.roles }
+                        }));
+                        console.debug(`🔐 [WebSocket Server] Client ${clientId} authenticated as ${user.userId}`);
+                    } else {
+                        ws.send(JSON.stringify({
+                            type: "AUTH_ERROR",
+                            requestId,
+                            payload: { error: "Invalid or expired token" }
+                        }));
+                    }
+                    return;
+                }
+
+                // Check authentication for protected operations
+                if (requireAuth) {
+                    const session = clientSessions.get(clientId);
+                    if (!session?.authenticated) {
+                        ws.send(JSON.stringify({
+                            type: "ERROR",
+                            requestId,
+                            payload: {
+                                error: "Authentication required",
+                                code: "UNAUTHORIZED"
+                            }
+                        }));
+                        return;
+                    }
+                }
 
                 switch (type) {
                     case "FETCH_COLLECTION": {
@@ -69,7 +139,7 @@ export function createPostgresWebSocket(server: Server, realtimeService: Realtim
                         const request: SaveEntityProps = payload;
                         console.debug("💾 [WebSocket Server] Saving entity with request:", inspect(request, { depth: null, colors: true }));
                         const entity = await dataSourceDelegate.saveEntity(request);
-                        console.debug("💾 [WebSocket Server] SAVE_ENTITY result:", inspect(entity, { depth: null, colors: true  }));
+                        console.debug("💾 [WebSocket Server] SAVE_ENTITY result:", inspect(entity, { depth: null, colors: true }));
                         const response = {
                             type: "SAVE_ENTITY_SUCCESS",
                             payload: { entity },

@@ -39,12 +39,12 @@ export interface FirebaseAuthControllerProps {
  * @group Firebase
  */
 export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any, ExtraData = any>({
-                                                                                                       loading,
-                                                                                                       firebaseApp,
-                                                                                                       signInOptions,
-                                                                                                       onSignOut: onSignOutProp,
-                                                                                                       defineRolesFor
-                                                                                                   }: FirebaseAuthControllerProps): FirebaseAuthController<USER, ExtraData> => {
+    loading,
+    firebaseApp,
+    signInOptions,
+    onSignOut: onSignOutProp,
+    defineRolesFor
+}: FirebaseAuthControllerProps): FirebaseAuthController<USER, ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -64,7 +64,7 @@ export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any
         }
     }, [userRoles]);
 
-    const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
+    const authRef = useRef<Auth | null>(null);
 
     const updateUser = useCallback(async (user: FirebaseUser | null, initialize?: boolean) => {
         if (loading) return;

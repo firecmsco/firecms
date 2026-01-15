@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuthController, useCustomizationController, useFireCMSContext } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, ResolvedProperty, SelectionController } from "@firecms/types";
+import { CollectionActionsProps, EntityCollection, EntityTableController, Properties, SelectionController } from "@firecms/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
 import { toArray } from "@firecms/common";
@@ -26,7 +26,7 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
     /**
      * Resolved properties from the collection for the filters dialog
      */
-    resolvedProperties?: Record<string, ResolvedProperty>;
+    resolvedProperties?: Properties;
 }
 
 export function EntityCollectionViewStartActions<M extends Record<string, any>>({

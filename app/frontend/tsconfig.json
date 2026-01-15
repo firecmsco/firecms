@@ -3,7 +3,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,23 +22,61 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": ["../../packages/firecms_core/src"],
-      "@firecms/firebase": ["../../packages/firebase_firecms/src"],
-      "@firecms/postgresql": ["../../packages/postgresql/src"],
-      "@firecms/types": ["../../packages/types/src"],
-      "@firecms/ui": ["../../packages/ui/src"],
-      "@firecms/editor": ["../../packages/editor/src"],
-      "@firecms/datatalk": ["../../packages/datatalk/src"],
-      "@firecms/mongodb": ["../../packages/mongodb/src"],
-      "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
-      "@firecms/collection_editor": ["../../packages/collection_editor/src"],
-      "@firecms/collection_editor_firebase": ["../../packages/collection_editor_firebase/src"],
-      "@firecms/entity_history": ["../../packages/entity_history/src"],
-      "@firecms/data_import": ["../../packages/data_import/src"],
-      "@firecms/data_export": ["../../packages/data_export/src"],
-      "@firecms/user_management": ["../../packages/user_management/src"],
-      "shared": ["../shared"]
+      "@firecms/auth": [
+        "../../packages/auth/src"
+      ],
+      "@firecms/core": [
+        "../../packages/firecms_core/src"
+      ],
+      "@firecms/firebase": [
+        "../../packages/firebase_firecms/src"
+      ],
+      "@firecms/postgresql": [
+        "../../packages/postgresql/src"
+      ],
+      "@firecms/types": [
+        "../../packages/types/src"
+      ],
+      "@firecms/ui": [
+        "../../packages/ui/src"
+      ],
+      "@firecms/editor": [
+        "../../packages/editor/src"
+      ],
+      "@firecms/datatalk": [
+        "../../packages/datatalk/src"
+      ],
+      "@firecms/mongodb": [
+        "../../packages/mongodb/src"
+      ],
+      "@firecms/data_enhancement": [
+        "../../packages/data_enhancement/src"
+      ],
+      "@firecms/collection_editor": [
+        "../../packages/collection_editor/src"
+      ],
+      "@firecms/collection_editor_firebase": [
+        "../../packages/collection_editor_firebase/src"
+      ],
+      "@firecms/entity_history": [
+        "../../packages/entity_history/src"
+      ],
+      "@firecms/data_import": [
+        "../../packages/data_import/src"
+      ],
+      "@firecms/data_export": [
+        "../../packages/data_export/src"
+      ],
+      "@firecms/user_management": [
+        "../../packages/user_management/src"
+      ],
+      "shared": [
+        "../shared"
+      ]
     }
   },
-  "include": ["./src", "./vite.config.ts"]
+  "include": [
+    "./src",
+    "./vite.config.ts"
+  ]
 }
