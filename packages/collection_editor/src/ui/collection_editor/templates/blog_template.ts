@@ -108,8 +108,5 @@ export const blogCollectionTemplate:EntityCollection = {
                 previewAsTag: true
             }
         }
-    }),
-    filter: {
-        status: ["==", "published"]
-    }
+    })
 };

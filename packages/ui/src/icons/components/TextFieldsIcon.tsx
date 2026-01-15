@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TextFieldsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"text_fields"}/>
-}
+export const TextFieldsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"text_fields"} ref={ref}/>
+});
+
+TextFieldsIcon.displayName = "TextFieldsIcon";

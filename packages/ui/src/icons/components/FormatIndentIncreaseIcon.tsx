@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatIndentIncreaseIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_indent_increase"}/>
-}
+export const FormatIndentIncreaseIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_indent_increase"} ref={ref}/>
+});
+
+FormatIndentIncreaseIcon.displayName = "FormatIndentIncreaseIcon";

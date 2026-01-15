@@ -27,6 +27,7 @@ export function BooleanPropertyField({ disabled }: {
                     name={"defaultValue"}>
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
+                            size={"medium"}
                             label={defaultValue === null || defaultValue === undefined ? "Default value not set" : ("Default value is " + defaultValue.toString())}
                             disabled={disabled}
                             allowIndeterminate={true} field={field}

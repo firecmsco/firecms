@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewColumnIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_column"}/>
-}
+export const ViewColumnIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_column"} ref={ref}/>
+});
+
+ViewColumnIcon.displayName = "ViewColumnIcon";

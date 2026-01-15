@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function InterpreterModeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"interpreter_mode"}/>
-}
+export const InterpreterModeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"interpreter_mode"} ref={ref}/>
+});
+
+InterpreterModeIcon.displayName = "InterpreterModeIcon";

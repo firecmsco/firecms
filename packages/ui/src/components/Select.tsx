@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, Children, forwardRef, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, Children, forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import {
     defaultBorderMixin,
@@ -12,6 +12,7 @@ import {
 import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type SelectValue = string | number | boolean;
 
@@ -39,7 +40,8 @@ export type SelectProps<T extends SelectValue = string> = {
     padding?: boolean,
     invisible?: boolean,
     children?: React.ReactNode;
-    type?: "string" | "number" | "boolean";
+    dataType?: "string" | "number" | "boolean";
+    portalContainer?: HTMLElement | null; // Explicitly added to props type if missing
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
@@ -66,7 +68,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    endAdornment,
                                                                    invisible,
                                                                    children,
-                                                                   type = "string",
+                                                                   dataType = "string",
+                                                                   portalContainer: manualContainer, // Rename to avoid confusion
                                                                    ...props
                                                                }, ref) => {
 
@@ -76,13 +79,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
         setOpenInternal(open ?? false);
     }, [open]);
 
-    const onValueChangeInternal = useCallback((newValue: string) => {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
 
+    // Resolve final container (Manual Prop > Context Container > Undefined/Body)
+    const finalContainer = (manualContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
+    const onValueChangeInternal = useCallback((newValue: string) => {
         let typedValue: SelectValue = newValue;
-        if (type === "boolean") {
+        if (dataType === "boolean") {
             if (newValue === "true") typedValue = true;
             else if (newValue === "false") typedValue = false;
-        } else if (type === "number") {
+        } else if (dataType === "number") {
             if (!isNaN(Number(newValue)) && newValue.trim() !== "") typedValue = Number(newValue);
         }
 
@@ -96,11 +104,23 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             } as unknown as ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
-    }, [onChange, onValueChange, name]);
+    }, [onChange, onValueChange, name, dataType]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : (value != null && value !== "" && value !== undefined);
-    // Convert non-string values to strings for Radix UI
     const stringValue = value !== undefined ? String(value) : undefined;
+
+    const displayChildren = useMemo(() => {
+        if (!hasValue || renderValue) return null;
+
+        // Find the child that matches the current value to display its content
+        let found: React.ReactNode = null;
+        Children.forEach(children, (child) => {
+            if (React.isValidElement(child) && String((child.props as any).value) === String(value)) {
+                found = child.props.children;
+            }
+        });
+        return found;
+    }, [children, hasValue, renderValue, value]);
 
     return (
         <SelectPrimitive.Root
@@ -124,7 +144,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 {
                     "min-h-[28px]": size === "smallest",
                     "min-h-[32px]": size === "small",
-                    "min-h-[42px]": size === "medium",
+                    "min-h-[44px]": size === "medium",
                     "min-h-[64px]": size === "large",
                     "w-fit": !fullWidth,
                     "w-full": fullWidth
@@ -133,9 +153,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
-                    asChild
-                >
-                    <div className={cls(
+                    asChild={false}
+                    type="button"
+                    className={cls(
                         "h-full",
                         padding ? {
                             "px-4": size === "large",
@@ -143,6 +163,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             "px-2": size === "small" || size === "smallest",
                         } : "",
                         "outline-hidden focus:outline-hidden",
+                        "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
@@ -151,25 +172,26 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         {
                             "min-h-[28px]": size === "smallest",
                             "min-h-[32px]": size === "small",
-                            "min-h-[42px]": size === "medium",
+                            "min-h-[44px]": size === "medium",
                             "min-h-[64px]": size === "large",
                             "w-full": fullWidth,
                             "w-fit": !fullWidth
                         },
                         inputClassName
-                    )}>
-                        <div
-                            ref={ref}
-                            className={cls(
-                                "grow max-w-full flex flex-row gap-2 items-center",
-                                "overflow-visible",
-                                {
-                                    "min-h-[28px]": size === "smallest",
-                                    "min-h-[32px]": size === "small",
-                                    "min-h-[42px]": size === "medium",
-                                    "min-h-[64px]": size === "large"
-                                }
-                            )}>
+                    )}
+                >
+                    <div
+                        ref={ref}
+                        className={cls(
+                            "flex-grow max-w-full flex flex-row gap-2 items-center",
+                            "overflow-visible",
+                            {
+                                "min-h-[28px]": size === "smallest",
+                                "min-h-[32px]": size === "small",
+                                "min-h-[44px]": size === "medium",
+                                "min-h-[64px]": size === "large"
+                            }
+                        )}>
                             <SelectPrimitive.Value
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -177,19 +199,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 }}
                                 placeholder={placeholder}
                                 className={"w-full"}>
-                                {hasValue && value !== undefined && renderValue ? renderValue(value) : placeholder}
-                                {/*{hasValue && !renderValue && value}*/}
-                                {hasValue && !renderValue && (() => {
-                                    // @ts-ignore
-                                    const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
-                                        if (React.isValidElement(child)) {
-                                            return child.props;
-                                        }
-                                    }).filter(Boolean);
 
-                                    const option = childrenProps.find((o) => String(o.value) === String(value));
-                                    return option?.children;
-                                })()}
+                                {hasValue && value !== undefined && renderValue
+                                    ? renderValue(value)
+                                    : (displayChildren || placeholder)
+                                }
 
                             </SelectPrimitive.Value>
                         </div>
@@ -201,8 +215,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                        "px-1": size === "medium" || size === "small",
                                                    })}/>
                         </SelectPrimitive.Icon>
-                    </div>
-                </SelectPrimitive.Trigger>
+                 </SelectPrimitive.Trigger>
 
                 {endAdornment && (
                     <div
@@ -215,7 +228,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     </div>
                 )}
             </div>
-            <SelectPrimitive.Portal>
+
+            {/* Pass the calculated finalContainer */}
+            <SelectPrimitive.Portal container={finalContainer}>
                 <SelectPrimitive.Content position={position}
                                          className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={cls("p-1", viewportClassName)}
@@ -230,6 +245,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
 Select.displayName = "Select";
 
+// ... (SelectItem and SelectGroup remain unchanged)
 export type SelectItemProps<T extends SelectValue = string> = {
     value: T,
     children?: React.ReactNode,
@@ -237,7 +253,7 @@ export type SelectItemProps<T extends SelectValue = string> = {
     className?: string,
 };
 
-export function SelectItem<T extends SelectValue = string>({
+export const SelectItem = React.memo(function SelectItem<T extends SelectValue = string>({
                                                                value,
                                                                children,
                                                                disabled,
@@ -254,10 +270,10 @@ export function SelectItem<T extends SelectValue = string>({
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-surface-accent-700 dark:text-surface-accent-300",
             "focus:z-10",
-            "data-[state=checked]:bg-surface-accent-100 dark:data-[state=checked]:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
-            "data-[state=checked]:focus:bg-surface-accent-200 dark:data-[state=checked]:focus:bg-surface-950",
+            "data-[state=checked]:bg-surface-accent-100 data-[state=checked]:dark:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
+            "data-[state=checked]:focus:bg-surface-accent-200 data-[state=checked]:dark:focus:bg-surface-950",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-            "*:w-full",
+            "[&>*]:w-full",
             "overflow-visible",
             className
         )}>
@@ -267,7 +283,7 @@ export function SelectItem<T extends SelectValue = string>({
             <CheckIcon size={16}/>
         </div>
     </SelectPrimitive.Item>;
-}
+});
 
 export type SelectGroupProps = {
     label: React.ReactNode,
@@ -275,7 +291,7 @@ export type SelectGroupProps = {
     className?: string
 };
 
-export function SelectGroup({
+export const SelectGroup = React.memo(function SelectGroup({
                                 label,
                                 children,
                                 className
@@ -292,4 +308,4 @@ export function SelectGroup({
 
         {children}
     </>;
-}
+});

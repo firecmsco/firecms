@@ -1,6 +1,9 @@
 // @ts-ignore
 import path from "path";
-import { defineConfig } from "vite"
+import { defineConfig } from "vite";
+// @ts-ignore
+import tailwindcss from "@tailwindcss/vite";
+
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
@@ -18,6 +21,7 @@ export default defineConfig({
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         svgr(),
+        tailwindcss(),
         react({}),
         tailwindcss(),
     ],
@@ -38,7 +42,8 @@ export default defineConfig({
             "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
             "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
             "@firecms/collection_editor_firebase": path.resolve(__dirname, "../../packages/collection_editor_firebase/src"),
-            "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src")
+            "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
+            "@firecms/media_manager": path.resolve(__dirname, "../../packages/media_manager/src")
         }
     }
 })

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FeaturedPlayListIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"featured_play_list"}/>
-}
+export const FeaturedPlayListIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"featured_play_list"} ref={ref}/>
+});
+
+FeaturedPlayListIcon.displayName = "FeaturedPlayListIcon";

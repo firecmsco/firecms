@@ -10,7 +10,7 @@ export type TableProps = {
     style?: React.CSSProperties;
 } & React.TableHTMLAttributes<HTMLTableElement>;
 
-export const Table = ({
+export const Table = React.memo(({
                           children,
                           className,
                           style,
@@ -23,32 +23,32 @@ export const Table = ({
     >
         {children}
     </table>
-);
+));
 
 export type TableBodyProps = {
     children?: React.ReactNode;
     className?: string;
 } & React.HTMLAttributes<HTMLTableSectionElement>;
 
-export const TableBody = ({
+export const TableBody = React.memo(({
                               children,
                               className,
                               ...rest
                           }: TableBodyProps) => (
     <tbody
-        className={cls("bg-white dark:bg-surface-950 text-sm divide-y divide-surface-100 dark:divide-surface-700/70", className)}
+        className={cls("bg-white dark:bg-surface-950 text-sm divide-y divide-surface-100 dark:divide-surface-700 dark:divide-opacity-70 dark:divide-surface-700/70", className)}
         {...rest}
     >
     {children}
     </tbody>
-);
+));
 
 export type TableHeaderProps = {
     children?: React.ReactNode;
     className?: string;
 } & React.HTMLAttributes<HTMLTableSectionElement>;
 
-export const TableHeader = ({
+export const TableHeader = React.memo(({
                                 children,
                                 className,
                                 ...rest
@@ -65,7 +65,7 @@ export const TableHeader = ({
         {children}
     </tr>
     </thead>
-);
+));
 
 export type TableRowProps = {
     children?: React.ReactNode;
@@ -74,7 +74,7 @@ export type TableRowProps = {
     style?: React.CSSProperties;
 } & React.HTMLAttributes<HTMLTableRowElement>;
 
-export const TableRow = ({
+export const TableRow = React.memo(({
                              children,
                              className,
                              onClick,
@@ -93,7 +93,7 @@ export const TableRow = ({
     >
         {children}
     </tr>
-);
+));
 
 export type TableCellProps = {
     children?: React.ReactNode;
@@ -105,7 +105,7 @@ export type TableCellProps = {
     colspan?: number;
 } & React.HTMLAttributes<HTMLTableCellElement>;
 
-export const TableCell = ({
+export const TableCell = React.memo(({
                               children,
                               header = false,
                               scope = "",
@@ -133,7 +133,7 @@ export const TableCell = ({
             {children}
         </Tag>
     );
-};
+});
 
 // This is highly experimental and might break in the future
 function getParentName(element: HTMLElement | null): string | undefined {

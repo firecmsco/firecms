@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TtyIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tty"}/>
-}
+export const TtyIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tty"} ref={ref}/>
+});
+
+TtyIcon.displayName = "TtyIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RadioIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"radio"}/>
-}
+export const RadioIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"radio"} ref={ref}/>
+});
+
+RadioIcon.displayName = "RadioIcon";

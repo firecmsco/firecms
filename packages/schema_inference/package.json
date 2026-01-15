@@ -10,8 +10,8 @@
   "devDependencies": {
     "@firecms/types": "4.0.0-alpha.1",
     "@types/node": "^20.17.14",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.17"
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "exports": {
     ".": {
@@ -31,5 +31,9 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "946e1f4f5695190e903af3a71dd7111accfc1efa"
+  "gitHead": "59205059d9ea7d36ca249d55e67b49fd01fac621",
+  "dependencies": {
+    "axios": "1.13.2",
+    "vite-plugin-static-copy": "3.1.4"
+  }
 }

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HourglassBottomIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"hourglass_bottom"}/>
-}
+export const HourglassBottomIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"hourglass_bottom"} ref={ref}/>
+});
+
+HourglassBottomIcon.displayName = "HourglassBottomIcon";

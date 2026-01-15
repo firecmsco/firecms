@@ -149,26 +149,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
     const pluginGroups = [...new Set(allPluginGroups)];
 
-    const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
-        if (!plugins) {
-            return;
-        }
-        // remove all groups that have no entries
-        const filteredEntries = entries.filter(entry => entry.entries.length > 0);
-        if (plugins.some(plugin => plugin.homePage?.onNavigationEntriesUpdate)) {
-            plugins.forEach(plugin => {
-                if (plugin.homePage?.onNavigationEntriesUpdate) {
-                    plugin.homePage.onNavigationEntriesUpdate(filteredEntries);
-                }
-            });
-        }
-
-    }, [plugins]);
-
-    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[]): NavigationResult => {
+    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[], navigationGroupMappingsOverride?: NavigationGroupMapping[], onNavigationEntriesUpdateCallback?: (entries: NavigationGroupMapping[]) => void): NavigationResult => {
 
         const finalNavigationGroupMappings: NavigationGroupMapping[] = computeNavigationGroups({
-            navigationGroupMappings: navigationGroupMappings,
+            navigationGroupMappings: navigationGroupMappingsOverride ?? navigationGroupMappings,
             collections,
             views,
             plugins: plugins
@@ -206,6 +190,52 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 return acc;
             }, [] as NavigationEntry[]),
 
+            ...(views ?? []).reduce((acc, view) => {
+                if (view.hideFromNavigation) return acc;
+
+                const pathKey = view.path;
+                let groupName = getGroup(view); // Initial group
+
+                if (finalNavigationGroupMappings) {
+                    for (const pluginGroupDef of finalNavigationGroupMappings) {
+                        if (pluginGroupDef.entries.includes(pathKey)) {
+                            groupName = pluginGroupDef.name;
+                            break;
+                        }
+                    }
+                }
+
+                acc.push({
+                    id: `view:${pathKey}`,
+                    url: buildCMSUrlPath(pathKey),
+                    name: view.name.trim(),
+                    type: "view",
+                    path: view.path,
+                    view,
+                    description: view.description?.trim(),
+                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                });
+                return acc;
+            }, [] as NavigationEntry[]),
+
+            ...(adminViews ?? []).reduce((acc, view) => {
+                if (view.hideFromNavigation) return acc;
+
+                const pathKey = view.path;
+                const groupName = NAVIGATION_ADMIN_GROUP_NAME;
+
+                acc.push({
+                    id: `admin:${pathKey}`,
+                    url: buildCMSUrlPath(pathKey),
+                    name: view.name.trim(),
+                    type: "admin",
+                    path: view.path,
+                    view,
+                    description: view.description?.trim(),
+                    group: groupName
+                });
+                return acc;
+            }, [] as NavigationEntry[])
         ];
 
         const groupOrderValue = (groupName?: string): number => {
@@ -234,21 +264,62 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             .map(e => e.group)
             .filter(Boolean) as string[];
 
+        // Preserve order from finalNavigationGroupMappings (persisted order)
+        const groupsFromMappings = finalNavigationGroupMappings.map(g => g.name);
+
+        // Add any additional groups not in mappings
+        const additionalGroups = collectedGroupsFromEntries.filter(g => !groupsFromMappings.includes(g));
+
         const allDefinedGroups = [
             ...(pluginGroups ?? []),
-            ...collectedGroupsFromEntries
+            ...groupsFromMappings,
+            ...additionalGroups
         ];
 
-        const uniqueGroups = [...new Set(allDefinedGroups)]
-            .sort((a, b) => groupOrderValue(a) - groupOrderValue(b));
+        // Remove duplicates while preserving order, then separate admin to the end
+        const uniqueGroupsArray = [...new Set(allDefinedGroups)];
+        const adminGroups = uniqueGroupsArray.filter(g => g === NAVIGATION_ADMIN_GROUP_NAME);
+        const nonAdminGroups = uniqueGroupsArray.filter(g => g !== NAVIGATION_ADMIN_GROUP_NAME);
+        const uniqueGroups = [...nonAdminGroups, ...adminGroups];
 
         return {
             allowDragAndDrop: plugins?.some(plugin => plugin.homePage?.allowDragAndDrop) ?? false,
             navigationEntries,
             groups: uniqueGroups,
-            onNavigationEntriesUpdate: onNavigationEntriesOrderUpdate,
+            onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
         };
-    }, [navigationGroupMappings, buildCMSUrlPath, buildUrlCollectionPath, pluginGroups, onNavigationEntriesOrderUpdate]);
+    }, [navigationGroupMappings, buildCMSUrlPath, buildUrlCollectionPath, pluginGroups]);
+
+    const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
+        if (!plugins) {
+            return;
+        }
+        // remove all groups that have no entries
+        const filteredEntries = entries.filter(entry => entry.entries.length > 0);
+
+        // Immediately update the local topLevelNavigation with new mappings
+        if (collectionsRef.current && viewsRef.current) {
+            const updatedNav = computeTopNavigation(
+                collectionsRef.current,
+                viewsRef.current,
+                adminViewsRef.current ?? [],
+                viewsOrder,
+                filteredEntries,
+                onNavigationEntriesOrderUpdate
+            );
+            setTopLevelNavigation(updatedNav);
+        }
+
+        // Then persist to backend
+        if (plugins.some(plugin => plugin.homePage?.onNavigationEntriesUpdate)) {
+            plugins.forEach(plugin => {
+                if (plugin.homePage?.onNavigationEntriesUpdate) {
+                    plugin.homePage.onNavigationEntriesUpdate(filteredEntries);
+                }
+            });
+        }
+
+    }, [plugins, computeTopNavigation, viewsOrder]);
 
     const refreshNavigation = useCallback(async () => {
 
@@ -262,12 +333,12 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
                 [
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
-                    resolveCMSViews(viewsProp, authController, dataSourceDelegate),
-                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
-                ]
+                    resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
+                resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
+            ]
             );
 
-            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
+            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
 
             let shouldUpdateTopLevelNav = false;
             let collectionsChanged = collectionRegistryRef.current.registerMultiple(resolvedCollections);
@@ -434,8 +505,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         [fullCollectionPath]);
 
     const urlPathToDataPath = useCallback((path: string): string => {
-        if (path.startsWith(fullCollectionPath))
-            return path.replace(fullCollectionPath, "");
+        const decodedPath = decodeURIComponent(path);
+        if (decodedPath.startsWith(fullCollectionPath))
+            return decodedPath.replace(fullCollectionPath, "");
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
@@ -556,10 +628,10 @@ function applyPluginModifyCollection(resolvedCollections: EntityCollection[], mo
 }
 
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
-                                  collectionPermissions: PermissionsBuilder | undefined,
-                                  authController: AuthController,
-                                  dataSource: DataSourceDelegate,
-                                  plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
+    collectionPermissions: PermissionsBuilder | undefined,
+    authController: AuthController,
+    dataSource: DataSourceDelegate,
+    plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -588,7 +660,12 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     return resolvedCollections;
 }
 
-async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController, dataSource: DataSourceDelegate) {
+async function resolveCMSViews(
+    baseViews: CMSView[] | CMSViewsBuilder | undefined,
+    authController: AuthController,
+    dataSource: DataSourceDelegate,
+    plugins?: FireCMSPlugin[]
+) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
         resolvedViews = await baseViews({
@@ -599,6 +676,16 @@ async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefine
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;
     }
+
+    // Inject views from plugins
+    if (plugins) {
+        for (const plugin of plugins) {
+            if (plugin.views && plugin.views.length > 0) {
+                resolvedViews = [...resolvedViews, ...plugin.views];
+            }
+        }
+    }
+
     return resolvedViews;
 }
 
@@ -610,12 +697,89 @@ function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
     return trimmed ?? NAVIGATION_DEFAULT_GROUP_NAME;
 }
 
+function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    const aCopy = [...a];
+    const bCopy = [...b];
+    const aSorted = aCopy.sort((x, y) => x.id.localeCompare(y.id));
+    const bSorted = bCopy.sort((x, y) => x.id.localeCompare(y.id));
+    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
+}
+
+function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
+    const {
+        subcollections: subcollectionsA,
+        ...restA
+    } = a;
+    const {
+        subcollections: subcollectionsB,
+        ...restB
+    } = b;
+    if (!areCollectionListsEqual(subcollectionsA ?? [], subcollectionsB ?? [])) {
+        return false;
+    }
+    return equal(removeFunctions(restA), removeFunctions(restB));
+}
+
+function useCustomBlocker(): NavigationBlocker {
+    const [blockListeners, setBlockListeners] = useState<Record<string, {
+        block: boolean,
+        basePath?: string
+    }>>({});
+
+    const shouldBlock = Object.values(blockListeners).some(b => b.block);
+
+    let blocker: any;
+    try {
+        blocker = useBlocker(({
+            nextLocation
+        }) => {
+            const allBasePaths = Object.values(blockListeners).map(b => b.basePath).filter(Boolean) as string[];
+            if (allBasePaths && allBasePaths.some(path => nextLocation.pathname.startsWith(path)))
+                return false;
+            return shouldBlock;
+        });
+    } catch (e) {
+        // console.warn("Blocker not available, navigation will not be blocked");
+    }
+
+    const updateBlockListener = (path: string, block: boolean, basePath?: string) => {
+        setBlockListeners(prev => ({
+            ...prev,
+            [path]: {
+                block,
+                basePath
+            }
+        }));
+        return () => setBlockListeners(prev => {
+            const {
+                [path]: removed,
+                ...rest
+            } = prev;
+            return rest;
+        })
+    };
+
+    const isBlocked = (path: string) => {
+        return (blockListeners[path]?.block ?? false) && blocker?.state === "blocked";
+    }
+
+    return {
+        updateBlockListener,
+        isBlocked,
+        proceed: blocker?.proceed,
+        reset: blocker?.reset
+    }
+}
+
 function computeNavigationGroups({
-                                     navigationGroupMappings,
-                                     collections,
-                                     views,
-                                     plugins
-                                 }: {
+    navigationGroupMappings,
+    collections,
+    views,
+    plugins
+}: {
     navigationGroupMappings?: NavigationGroupMapping[],
     collections?: EntityCollection[],
     views?: CMSView[],
@@ -624,6 +788,7 @@ function computeNavigationGroups({
 
     let result = navigationGroupMappings;
 
+    // Merge plugin navigation entries
     result = plugins ? plugins?.reduce((acc, plugin) => {
         if (plugin.homePage?.navigationEntries) {
             plugin.homePage.navigationEntries.forEach((entry) => {
@@ -646,8 +811,54 @@ function computeNavigationGroups({
         return acc;
     }, [...(result ?? [])] as NavigationGroupMapping[]) : result;
 
+    // Track all entries that are already assigned to groups
+    const assignedEntries = new Set<string>();
+    if (result) {
+        result.forEach(group => {
+            group.entries.forEach(entry => assignedEntries.add(entry));
+        });
+    }
+
+    // Find collections and views that are NOT in any persisted group
+    const unassignedGroupMap: Record<string, string[]> = {};
+
+    // Check collections
+    (collections ?? []).forEach(collection => {
+        const entry = collection.id ?? collection.path;
+        if (!assignedEntries.has(entry)) {
+            const groupName = getGroup(collection);
+            if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
+            unassignedGroupMap[groupName].push(entry);
+        }
+    });
+
+    // Check views
+    (views ?? []).forEach(view => {
+        const entry = view.path;
+        if (!assignedEntries.has(entry)) {
+            const groupName = getGroup(view);
+            if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
+            unassignedGroupMap[groupName].push(entry);
+        }
+    });
+
+    // Merge unassigned entries into existing groups or create new groups
+    Object.entries(unassignedGroupMap).forEach(([groupName, entries]) => {
+        if (result) {
+            const existingGroup = result.find(g => g.name === groupName);
+            if (existingGroup) {
+                existingGroup.entries.push(...entries);
+            } else {
+                result.push({
+                    name: groupName,
+                    entries
+                });
+            }
+        }
+    });
+
     if (!result) {
-        // Convert views and collections to navigation group mappings, grouped by their group name
+        // No persisted data at all - create from scratch
         result = [];
         const groupMap: Record<string, string[]> = {};
 
@@ -667,7 +878,7 @@ function computeNavigationGroups({
             groupMap[name].push(entry);
         });
 
-        // Convert groupMap to initialGroupMappings array
+        // Convert groupMap to result array
         result = Object.entries(groupMap).map(([name, entries]) => ({
             name,
             entries

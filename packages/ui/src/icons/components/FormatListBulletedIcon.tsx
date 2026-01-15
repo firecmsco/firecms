@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatListBulletedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_list_bulleted"}/>
-}
+export const FormatListBulletedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_list_bulleted"} ref={ref}/>
+});
+
+FormatListBulletedIcon.displayName = "FormatListBulletedIcon";

@@ -80,6 +80,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
      underlyingValueHasChanged,
      disabled: disabledProp,
      partOfArray,
+     partOfBlock,
      minimalistView,
      autoFocus,
      index,
@@ -89,10 +90,6 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
-
-    if(propertyKey === "created_by"){
-        console.log("Rendering field for created_by", {propertyKey, property, context});
-    }
 
     return (
         <Field
@@ -166,6 +163,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                     context,
                     disabled,
                     partOfArray,
+                    partOfBlock,
                     minimalistView,
                     autoFocus,
                     size,
@@ -197,6 +195,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
          includeDescription,
          underlyingValueHasChanged,
          partOfArray,
+         partOfBlock,
          minimalistView,
          autoFocus,
          context,
@@ -259,6 +258,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
         disabled: disabled ?? false,
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         partOfArray: partOfArray ?? false,
+        partOfBlock: partOfBlock ?? false,
         minimalistView: minimalistView ?? false,
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,

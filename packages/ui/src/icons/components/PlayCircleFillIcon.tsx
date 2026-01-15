@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PlayCircleFillIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"play_circle_fill"}/>
-}
+export const PlayCircleFillIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"play_circle_fill"} ref={ref}/>
+});
+
+PlayCircleFillIcon.displayName = "PlayCircleFillIcon";

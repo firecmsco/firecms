@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SplitscreenIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"splitscreen"}/>
-}
+export const SplitscreenIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"splitscreen"} ref={ref}/>
+});
+
+SplitscreenIcon.displayName = "SplitscreenIcon";

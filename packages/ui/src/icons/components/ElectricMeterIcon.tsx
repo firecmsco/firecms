@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ElectricMeterIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"electric_meter"}/>
-}
+export const ElectricMeterIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"electric_meter"} ref={ref}/>
+});
+
+ElectricMeterIcon.displayName = "ElectricMeterIcon";

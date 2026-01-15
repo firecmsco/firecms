@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AppShortcutIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"app_shortcut"}/>
-}
+export const AppShortcutIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"app_shortcut"} ref={ref}/>
+});
+
+AppShortcutIcon.displayName = "AppShortcutIcon";

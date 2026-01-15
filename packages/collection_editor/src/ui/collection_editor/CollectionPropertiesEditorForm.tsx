@@ -6,6 +6,7 @@ import {
     ErrorBoundary,
     isPropertyBuilder,
     makePropertiesEditable,
+    mergeDeep,
     Properties,
     Property,
     PropertyConfig,
@@ -49,19 +50,19 @@ type CollectionEditorFormProps = {
 };
 
 export function CollectionPropertiesEditorForm({
-                                                   showErrors,
-                                                   isNewCollection,
-                                                   propertyErrorsRef,
-                                                   onPropertyError,
-                                                   setDirty,
-                                                   reservedGroups,
-                                                   extraIcon,
-                                                   getUser,
-                                                   getData,
-                                                   doCollectionInference,
-                                                   propertyConfigs,
-                                                   collectionEditable
-                                               }: CollectionEditorFormProps) {
+    showErrors,
+    isNewCollection,
+    propertyErrorsRef,
+    onPropertyError,
+    setDirty,
+    reservedGroups,
+    extraIcon,
+    getUser,
+    getData,
+    doCollectionInference,
+    propertyConfigs,
+    collectionEditable
+}: CollectionEditorFormProps) {
 
     const {
         values,
@@ -107,7 +108,7 @@ export function CollectionPropertiesEditorForm({
 
             setInferringProperties(true);
 
-            console.debug("CollectionEditor: inferring properties from data", doCollectionInference, values);
+            console.debug("CollectionEditor: inferring properties from data", values);
             // @ts-ignore
             doCollectionInference(values)
                 .then((newCollection) => {
@@ -122,35 +123,82 @@ export function CollectionPropertiesEditorForm({
                         });
                         return;
                     }
-                    // find properties in the new collection, not present in the current one
-                    const newPropertyKeys = (newCollection.properties ? Object.keys(newCollection.properties) : [])
+
+                    // Helper function to find all new property keys including nested ones
+                    const findNewPropertyKeys = (
+                        existingProps: Record<string, PropertyOrBuilder> | undefined,
+                        newProps: Record<string, PropertyOrBuilder> | undefined,
+                        namespace?: string
+                    ): string[] => {
+                        if (!newProps) return [];
+                        const keys: string[] = [];
+
+                        for (const key of Object.keys(newProps)) {
+                            const fullKey = namespace ? `${namespace}.${key}` : key;
+                            const existingProp = existingProps?.[key];
+                            const newProp = newProps[key];
+
+                            if (!existingProp) {
+                                // This is a completely new property
+                                keys.push(fullKey);
+                            } else if (
+                                typeof newProp === "object" &&
+                                "dataType" in newProp &&
+                                newProp.dataType === "map" &&
+                                newProp.properties
+                            ) {
+                                // This is a map property, check for new nested properties
+                                const existingMapProps = typeof existingProp === "object" &&
+                                    "dataType" in existingProp &&
+                                    existingProp.dataType === "map"
+                                    ? (existingProp as any).properties
+                                    : undefined;
+                                keys.push(...findNewPropertyKeys(existingMapProps, newProp.properties as Record<string, PropertyOrBuilder>, fullKey));
+                            }
+                        }
+                        return keys;
+                    };
+
+                    // Deep merge the inferred properties with existing ones
+                    // This ensures nested properties within maps are also merged
+                    const updatedProperties = mergeDeep(
+                        values.properties ?? {},
+                        newCollection.properties ?? {}
+                    ) as { [key: string]: PropertyOrBuilder };
+
+                    // Find all new property keys including nested ones
+                    const allNewPropertyKeys = findNewPropertyKeys(
+                        values.properties,
+                        newCollection.properties as Record<string, PropertyOrBuilder>
+                    );
+
+                    // Find new top-level property keys for the properties order
+                    const newTopLevelPropertyKeys = (newCollection.properties ? Object.keys(newCollection.properties) : [])
                         .filter((propertyKey) => !values.properties[propertyKey]);
-                    if (newPropertyKeys.length === 0) {
+
+                    // Check if there are any changes (new properties or modified nested properties)
+                    if (allNewPropertyKeys.length === 0) {
                         snackbarController.open({
                             type: "info",
                             message: "No new properties found in existing data"
                         });
                         return;
                     }
-                    // add them to the current collection
-                    const updatedProperties = {
-                        ...newPropertyKeys.reduce((acc, propertyKey) => {
-                            acc[propertyKey] = (newCollection.properties ?? {})[propertyKey];
-                            return acc;
-                        }, {} as {
-                            [key: string]: Property
-                        }),
-                        ...values.properties
-                    };
+
+                    // Update properties order with new top-level keys
                     const updatedPropertiesOrder = [
-                        ...newPropertyKeys,
-                        ...(values.propertiesOrder ?? [])
+                        ...newTopLevelPropertyKeys,
+                        ...(values.propertiesOrder ?? []).filter(key => !newTopLevelPropertyKeys.includes(key))
                     ];
+
                     setFieldValue("properties", updatedProperties, false);
-
                     updatePropertiesOrder(updatedPropertiesOrder);
+                    setInferredPropertyKeys(allNewPropertyKeys);
 
-                    setInferredPropertyKeys(newPropertyKeys);
+                    snackbarController.open({
+                        type: "success",
+                        message: `Added ${allNewPropertyKeys.length} new ${allNewPropertyKeys.length === 1 ? "property" : "properties"}`
+                    });
                 })
                 .finally(() => {
                     setInferringProperties(false);
@@ -196,9 +244,9 @@ export function CollectionPropertiesEditorForm({
     };
 
     const onPropertyCreated = ({
-                                   id,
-                                   property
-                               }: {
+        id,
+        property
+    }: {
         id?: string,
         property: Property
     }) => {
@@ -222,11 +270,11 @@ export function CollectionPropertiesEditorForm({
     };
 
     const onPropertyChanged = ({
-                                   id,
-                                   property,
-                                   previousId,
-                                   namespace
-                               }: OnPropertyChangedParams) => {
+        id,
+        property,
+        previousId,
+        namespace
+    }: OnPropertyChangedParams) => {
 
         const fullId = id ? getFullId(id, namespace) : undefined;
         const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
@@ -253,14 +301,6 @@ export function CollectionPropertiesEditorForm({
             setFieldValue(previousPropertyPath, undefined, false);
             setFieldTouched(previousPropertyPath, false, false);
         }
-
-        console.debug("onPropertyChanged", {
-            id,
-            property,
-            previousId,
-            namespace,
-            propertyPath
-        })
 
         if (propertyPath) {
             setFieldValue(propertyPath, property, false);
@@ -310,7 +350,7 @@ export function CollectionPropertiesEditorForm({
     };
 
     const body = (
-        <div className={"grid grid-cols-12 gap-2 h-full bg-white dark:bg-surface-950"}>
+        <div className={"grid grid-cols-12 gap-2 h-full bg-surface dark:bg-surface-dark"}>
             <div className={cls(
                 "bg-surface-50 dark:bg-surface-900",
                 "p-4 md:p-8 pb-20 md:pb-20",
@@ -331,12 +371,12 @@ export function CollectionPropertiesEditorForm({
                             placeholder={"Collection name"}
                             size={"small"}
                             required
-                            error={Boolean(errors?.name)}/>
+                            error={Boolean(errors?.name)} />
 
                         {owner &&
                             <Typography variant={"body2"}
-                                        className={"ml-2"}
-                                        color={"secondary"}>
+                                className={"ml-2"}
+                                color={"secondary"}>
                                 Created by {owner.displayName}
                             </Typography>}
                     </div>
@@ -347,30 +387,28 @@ export function CollectionPropertiesEditorForm({
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
                         <Tooltip title={"Get the code for this collection"}
-                                 asChild={true}>
+                            asChild={true}>
                             <IconButton
                                 variant={"filled"}
                                 disabled={inferringProperties}
                                 onClick={() => setCodeDialogOpen(true)}>
-                                <CodeIcon/>
+                                <CodeIcon />
                             </IconButton>
                         </Tooltip>
                         {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}
-                                                             asChild={true}>
+                            asChild={true}>
                             <IconButton
                                 variant={"filled"}
                                 disabled={inferringProperties}
                                 onClick={inferPropertiesFromData}>
-                                {inferringProperties ? <CircularProgress size={"small"}/> : <AutorenewIcon/>}
+                                {inferringProperties ? <CircularProgress size={"small"} /> : <AutorenewIcon />}
                             </IconButton>
                         </Tooltip>}
                         <Tooltip title={"Add new property"}
-                                 asChild={true}>
+                            asChild={true}>
                             <Button
-                                variant={"outlined"}
-                                color={"primary"}
                                 onClick={() => setNewPropertyDialogOpen(true)}>
-                                <AddIcon/>
+                                <AddIcon />
                             </Button>
                         </Tooltip>
                     </div>
@@ -386,17 +424,15 @@ export function CollectionPropertiesEditorForm({
                         propertiesOrder={usedPropertiesOrder}
                         onPropertyClick={onPropertyClick}
                         onPropertyMove={onPropertyMove}
-                        onPropertyRemove={isNewCollection ? deleteProperty : undefined}
+                        onPropertyRemove={(isNewCollection || (inferredPropertyKeys && inferredPropertyKeys.length > 0)) ? deleteProperty : undefined}
                         collectionEditable={collectionEditable}
-                        errors={errors}/>
+                        errors={errors} />
                 </ErrorBoundary>
 
                 <Button className={"mt-8 w-full"}
-                        color="primary"
-                        variant={"outlined"}
-                        size={"large"}
-                        onClick={() => setNewPropertyDialogOpen(true)}
-                        startIcon={<AddIcon/>}>
+                    size={"large"}
+                    onClick={() => setNewPropertyDialogOpen(true)}
+                    startIcon={<AddIcon />}>
                     Add new property
                 </Button>
             </div>
@@ -436,11 +472,10 @@ export function CollectionPropertiesEditorForm({
                                         ? "Now you can add your first property"
                                         : "Select a property to edit it"}
                                 </Typography>
-                                <Button variant={"outlined"}
-                                        color={"primary"}
-                                        onClick={() => setNewPropertyDialogOpen(true)}
+                                <Button
+                                    onClick={() => setNewPropertyDialogOpen(true)}
                                 >
-                                    <AddIcon/>
+                                    <AddIcon />
                                     Add new property
                                 </Button>
                             </div>}
@@ -475,36 +510,36 @@ export function CollectionPropertiesEditorForm({
                 onOkClicked={asDialog
                     ? closePropertyDialog
                     : undefined
-                }/>}
+                } />}
 
         </div>);
 
     return (<>
 
-            {body}
+        {body}
 
-            {/* This is the dialog used for new properties*/}
-            <PropertyFormDialog
-                inArray={false}
-                existingProperty={false}
-                autoOpenTypeSelect={true}
-                autoUpdateId={true}
-                forceShowErrors={showErrors}
-                open={newPropertyDialogOpen}
-                onCancel={() => setNewPropertyDialogOpen(false)}
-                onPropertyChanged={onPropertyCreated}
-                getData={getData}
-                allowDataInference={!isNewCollection}
-                propertyConfigs={propertyConfigs}
-                collectionEditable={collectionEditable}
-                existingPropertyKeys={values.propertiesOrder as string[]}/>
+        {/* This is the dialog used for new properties*/}
+        <PropertyFormDialog
+            inArray={false}
+            existingProperty={false}
+            autoOpenTypeSelect={true}
+            autoUpdateId={true}
+            forceShowErrors={showErrors}
+            open={newPropertyDialogOpen}
+            onCancel={() => setNewPropertyDialogOpen(false)}
+            onPropertyChanged={onPropertyCreated}
+            getData={getData}
+            allowDataInference={!isNewCollection}
+            propertyConfigs={propertyConfigs}
+            collectionEditable={collectionEditable}
+            existingPropertyKeys={values.propertiesOrder as string[]} />
 
-            <ErrorBoundary>
-                <GetCodeDialog
-                    collection={values}
-                    open={codeDialogOpen}
-                    onOpenChange={setCodeDialogOpen}/>
-            </ErrorBoundary>
-        </>
+        <ErrorBoundary>
+            <GetCodeDialog
+                collection={values}
+                open={codeDialogOpen}
+                onOpenChange={setCodeDialogOpen} />
+        </ErrorBoundary>
+    </>
     );
 }

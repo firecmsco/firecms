@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatPaintIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_paint"}/>
-}
+export const FormatPaintIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_paint"} ref={ref}/>
+});
+
+FormatPaintIcon.displayName = "FormatPaintIcon";

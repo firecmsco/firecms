@@ -1,0 +1,318 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import SpotlightCard from "../components/SpotlightCard.astro";
+import { DataTalkDemo } from "../components/DataTalkDemo";
+import { SchemaEditorDemo } from "../components/SchemaEditorDemo";
+import UsageExamples from "../components/UsageExamples.astro";
+
+
+const title = "FireCMS Features - A Powerful, Intuitive Experience for Your Entire Team";
+const description = "From the end-user to the developer, FireCMS is designed to make building and managing back-office applications a seamless experience.";
+
+const dataTalkExchanges = [
+    {
+        query: "Show me all products with price greater than 100",
+        responseText: "Here are the products filtered by price:",
+        showProductsTable: true
+    },
+    {
+        query: "Update all out of stock items to mark them as unavailable",
+        responseText: "I'll help you update those items:",
+        code: `export default async () => {\n  const firestore = getFirestore();\n  const productsRef = collection(firestore, \"products\");\n  const q = query(productsRef, where(\"stock\", \"==\", 0));\n  const productsToUpdate = await getDocs(q);\n  const batch = writeBatch(firestore);\n  productsToUpdate.forEach((doc) => {\n    batch.update(doc.ref, { available: false });\n  });\n  return await batch.commit();\n}`
+    },
+    {
+        query: "Find users who signed up in the last 30 days",
+        responseText: "Here's how to find recent users:",
+        code: `const thirtyDaysAgo = new Date();\nthirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\ncollection(\"users\")\n  .where(\"createdAt\", \">\", thirtyDaysAgo)\n  .get()`,
+        showUsersTable: true
+    }
+];
+---
+
+<Layout title={title} description={description}>
+
+    <main>
+        <!-- Hero Section -->
+        <section
+                class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+            <!-- Background accents and subtle grid -->
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+            </div>
+
+            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+                <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto"
+                     role="status">
+                    <span class="text-sm font-medium">Explore everything built into FireCMS</span>
+                </div>
+                <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans animate-on-scroll fade-in-up">
+                    A Powerful, Intuitive Experience for Your Entire Team
+                </h1>
+                <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48 animate-on-scroll fade-in-up delay-100">
+                    From the end-user to the developer, FireCMS is designed to make building and managing back-office
+                    applications a <b>seamless experience</b>.
+                </p>
+            </div>
+            <SectionBackgroundAccents bottomLine={true}/>
+        </section>
+
+        <!-- Data Management Section (large media, centered) -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center mb-10">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">An Unparalleled Data Editing
+                        Experience</h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">Designed for end-users, FireCMS makes data
+                        management intuitive and fast. Edit, sort, and filter data in real-time with our exceptional
+                        spreadsheet view. Create beautiful, structured content with a Notion-style editor.</p>
+                </div>
+                <div class="mx-auto max-w-[800px] lg:max-w-[1000px]">
+                    <video
+                            class="aspect-[607/373] bg-surface-950 border border-surface-800 rounded-xl flex flex-col items-center justify-center gap-4"
+                            style="pointer-events: none;"
+                            loop
+                            autoplay
+                            muted
+                            playsinline>
+                        <source src="/img/landing_1080.webm" type="video/webm"/>
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schema Builder Section (split layout for variety) -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center mb-10">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Build Your Data Models,
+                        Your Way</h2>
+                    <p class="text-lg text-surface-400 mb-8">Go from existing data to a full admin panel in seconds with
+                        <b>automatic schema inference</b>. Or, build your content model visually with our powerful
+                        schema editor, featuring 20+ field types and advanced validation rules.</p>
+                </div>
+                <div class="mx-auto max-w-[1400px]">
+                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-950"
+                         style="height: 600px;">
+                        <SchemaEditorDemo client:load/>
+                    </div>
+                </div>
+                <ul class="mt-10 mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4 text-surface-300 text-sm">
+                    <li class="flex items-end gap-3">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle-2.svg" alt=""
+                             class="h-5 w-5 filter invert mt-1"/>
+                        Automatic schema inference from existing data
+                    </li>
+                    <li class="flex items-end gap-3">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/square-pen.svg" alt=""
+                             class="h-5 w-5 filter invert mt-1"/>
+                        20+ field types with advanced validation
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- All Features Grid (reuse SpotlightCard) -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl text-center mb-16">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need, Out of
+                        the Box</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
+                            title="Advanced Permissions"
+                            description="Granular role-based access control for collections, fields, and actions."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/folder.svg"
+                            title="File Storage"
+                            description="Seamless integration with Firebase Storage for images, videos, and documents."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radio.svg"
+                            title="Real-time Updates"
+                            description="See changes instantly across all users with real-time data synchronization."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
+                            title="Custom Views"
+                            description="Build custom React components and integrate them seamlessly."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/clipboard-list.svg"
+                            title="Powerful Forms"
+                            description="Go beyond basic fields with conditional logic, complex validation, and custom form widgets."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/history.svg"
+                            title="Data History"
+                            description="Track who changed what and when. Compare versions, audit edits, and revert changes safely."
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- Flexible and Adaptable Section -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center mb-14">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Flexible and Adaptable to
+                        Your Needs</h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">FireCMS is designed to fit into your existing stack
+                        and workflow, not the other way around.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+                    <!-- Import/Export -->
+                    <div>
+                        <div class="relative w-full h-96 bg-surface-900 rounded-2xl ring-1 ring-surface-800 flex items-center justify-center mb-6">
+                            <img src="/img/import_mapping.webp" alt="Custom Branding Example"
+                                 class="h-full w-full object-cover object-left-top"/>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-3">Effortless Data Import & Export</h3>
+                        <p class="text-surface-400 leading-7">Migrate your data seamlessly. Bulk import from CSV or JSON
+                            with intuitive field mapping and validation. Export your collections to CSV, or JSON, with a
+                            single click, making backups and reporting a breeze.</p>
+                    </div>
+
+                    <!-- Custom Branding -->
+                    <div>
+                        <div class="relative w-full h-96 bg-surface-900 rounded-2xl overflow-hidden ring-1 ring-surface-800 flex items-center justify-center mb-6">
+                            <img src="/img/toleroo_recipe.webp" alt="Custom Branding Example"
+                                 class="h-full w-full object-cover object-left-top"/>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-3">Make It Yours with Custom Branding</h3>
+                        <p class="text-surface-400 leading-7">Customize logos, colors, and themes to match your brand.
+                            Provide a seamless experience for your users and clients with a back-office that feels like
+                            a part of your own product.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- AI & Conversational Data Section (mixed layouts) -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center mb-14">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Harness AI for Your
+                        Structured Data</h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">Generate content aligned with your schema, and query
+                        or update data with natural language.</p>
+                </div>
+
+                <!-- Autofill: lateral media + text (balanced 4/8 split) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16">
+                    <!-- Text left (compact) -->
+                    <div class="lg:col-span-4">
+                        <h3 class="text-2xl font-semibold text-white mb-3">AI‑Powered Autofill</h3>
+                        <p class="text-surface-400 leading-7">Use context‑aware prompts to generate titles, descriptions,
+                            and translations. Accept suggestions across multiple fields in one click.</p>
+                    </div>
+                    <!-- Video right (wide 1240:780) -->
+                    <div class="lg:col-span-8">
+                        <video
+                                class="aspect-[1240/780] bg-surface-950 border border-surface-800 rounded-xl w-full"
+                                style="pointer-events: none;"
+                                loop
+                                autoplay
+                                muted
+                                playsinline>
+                            <source src="/img/data_enhancement.webm" type="video/webm"/>
+                        </video>
+                    </div>
+                </div>
+
+                <!-- DataTalk: lateral media + text -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <!-- Demo left -->
+                    <div class="lg:col-span-8">
+                        <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-950">
+                            <DataTalkDemo exchanges={dataTalkExchanges} height="600px" client:load/>
+                        </div>
+                    </div>
+                    <!-- Text right -->
+                    <div class="lg:col-span-4">
+                        <h3 class="text-2xl font-semibold text-white mb-3">DataTalk</h3>
+                        <p class="text-surface-400 leading-7">Ask questions like “Products over $100 updated last week” and
+                            apply filters or batch updates—FireCMS understands your schema.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <UsageExamples/>
+
+        <!-- Final CTA Section -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Ready to see it in
+                    action?</h2>
+                <div class="flex items-center justify-center gap-x-6">
+                    <a href="https://demo.firecms.co"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+                        Check the Demo
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-5 w-5 text-white filter invert"/>
+                    </a>
+                    <a href="https://app.firecms.co"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                        Try FireCMS Cloud
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                             class="h-4 w-4 text-white filter invert"/>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+</Layout>
+
+<script>
+    // Mouse spotlight effect for SpotlightCard + Intersection Observer
+    function initializeFeaturePageEffects() {
+        // Spotlight hover effect (same as landing)
+        const cards = document.querySelectorAll("[data-spotlight-card]");
+        cards.forEach((card) => {
+            const spotlight = card.querySelector("[data-spotlight]");
+            if (!spotlight) return;
+            card.addEventListener("mousemove", (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = (e as MouseEvent).clientX - rect.left;
+                const y = (e as MouseEvent).clientY - rect.top;
+                (spotlight as HTMLElement).style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(56, 189, 248, 0.15), transparent 40%)`;
+            });
+            card.addEventListener("mouseleave", () => {
+                (spotlight as HTMLElement).style.background = "";
+            });
+        });
+
+        // Intersection Observer for subtle scroll animations (keep minimal)
+        const observer = new IntersectionObserver((entries, obs) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                    obs.unobserve(entry.target);
+                }
+            }
+        }, {
+            threshold: 0.15,
+            rootMargin: "0px 0px -100px 0px"
+        });
+
+        document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe(el));
+    }
+
+    // Re-run after view transitions
+    document.addEventListener("astro:page-load", initializeFeaturePageEffects);
+</script>

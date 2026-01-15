@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ShuffleOnIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"shuffle_on"}/>
-}
+export const ShuffleOnIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"shuffle_on"} ref={ref}/>
+});
+
+ShuffleOnIcon.displayName = "ShuffleOnIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TextFormatIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"text_format"}/>
-}
+export const TextFormatIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"text_format"} ref={ref}/>
+});
+
+TextFormatIcon.displayName = "TextFormatIcon";

@@ -99,7 +99,7 @@ export function RolesTable({
                             <Typography variant={"label"}>
                                 You don&apos;t have any roles yet.
                             </Typography>
-                            {allowDefaultRolesCreation && <Button variant={"outlined"}
+                            {allowDefaultRolesCreation && <Button
                                                                   onClick={() => {
                                                                       DEFAULT_ROLES.forEach((role) => {
                                                                           saveRole(role);

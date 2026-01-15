@@ -129,35 +129,37 @@ export function FireCMSCloudLoginView({
     return (
         <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto" style={fadeStyle}>
             {/* Marketing Section - Left Side (Desktop only) */}
-            <div className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
+            <div
+                className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
                 <div className="max-w-md">
                     <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
-                        The most powerful headless CMS for Firebase projects
+                        Build Your Firebase Admin Panel in Minutes
                     </Typography>
                     <ul className="space-y-3 text-left list-disc list-inside marker:text-white">
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Build admin panels in <b>minutes</b>, not weeks
+                                Go live instantly: Create <b>production-ready back-offices</b> without the frontend
+                                hassle.
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Automatic collection mapping
+                                <b>Automatic setup</b> from your existing Firestore data.
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                <b>Real-time</b> data management with Firebase integration
+                                Seamless <b>real-time</b> Firebase integration.
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Advanced <b>user roles</b> and permissions
+                                Intuitive <b>spreadsheet-like UI</b> your whole team can use.
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                <b>Customizable</b> components and workflows
+                                <b>Focus on your app</b>, not the admin panel.
                             </Typography>
                         </li>
                     </ul>
@@ -165,7 +167,8 @@ export function FireCMSCloudLoginView({
             </div>
 
             {/* Login Content - Right Side */}
-            <div className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0">
+            <div
+                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0">
                 {includeLogo && (
                     <div className="m-4" style={{
                         width: "160px",
@@ -276,7 +279,7 @@ export function FireCMSCloudLoginView({
 }
 
 const subscribeNewsletter = (email: string) => {
-    const url = "https://api-drplyi3b6q-ey.a.run.app/notifications/newsletter";
+    const url = "https://api.firecms.co/notifications/newsletter";
     fetch(url, {
         method: "POST",
         headers: {

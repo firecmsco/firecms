@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EggAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"egg_alt"}/>
-}
+export const EggAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"egg_alt"} ref={ref}/>
+});
+
+EggAltIcon.displayName = "EggAltIcon";

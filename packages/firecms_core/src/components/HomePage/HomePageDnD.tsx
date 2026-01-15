@@ -163,13 +163,9 @@ export function SortableNavigationGroup({
     );
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* Main DnD hook                                               */
-
-/* ─────────────────────────────────────────────────────────── */
 export function useHomePageDnd({
-                                   items: dndItems,
-                                   setItems: setDndItems,
+                                   items,
+                                   setItems,
                                    disabled,
                                    onCardMovedBetweenGroups,
                                    onGroupMoved,
@@ -191,6 +187,9 @@ export function useHomePageDnd({
     onPersist?: (latest: { name: string; entries: NavigationEntry[] }[]) => void;
 }) {
     /* ---------------- local state ---------------- */
+    const dndItems = items;
+    const setDndItems = setItems;
+
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [activeIsGroup, setActiveIsGroup] = useState(false);
     const [currentDraggingGroupId, setCurrentDraggingGroupId] =
@@ -200,6 +199,15 @@ export function useHomePageDnd({
     const [dialogOpenForGroup, setDialogOpenForGroup] = useState<string | null>(null);
     const [isHoveringNewGroupDropZone, setIsHoveringNewGroupDropZone] =
         useState(false);
+    const [pendingNewGroupName, setPendingNewGroupName] = useState<string | null>(null);
+    const [stateBeforeNewGroup, setStateBeforeNewGroup] = useState<
+        { name: string; entries: NavigationEntry[] }[] | null
+    >(null);
+
+    /* store the original state before any drag modifications */
+    const preDragItemsRef = useRef<
+        { name: string; entries: NavigationEntry[] }[] | null
+    >(null);
 
     /* store interim state for cross-group moves */
     const interimItemsRef = useRef<
@@ -321,6 +329,9 @@ export function useHomePageDnd({
         setDndKitActiveNode(active);
         if (disabled) return;
 
+        // Capture the original state before any drag modifications
+        preDragItemsRef.current = cloneItemsForDnd(dndItems);
+
         const isGroup = dndItems.some((g) => g.name === active.id);
         if (!active.data.current) active.data.current = {};
         active.data.current.type = isGroup ? "group" : "item";
@@ -349,18 +360,35 @@ export function useHomePageDnd({
 
         if (overCont && activeCont !== overCont) {
             recentlyMovedToNewContainer.current = true;
-            const newState = cloneItemsForDnd(dndItems);
-            const srcIdx = newState.findIndex((g) => g.name === activeCont);
-            const tgtIdx = newState.findIndex((g) => g.name === overCont);
-            if (srcIdx === -1 || tgtIdx === -1) return;
-            const src = newState[srcIdx];
-            const tgt = newState[tgtIdx];
-            const idxInSrc = src.entries.findIndex((e) => e.url === activeIdNow);
-            if (idxInSrc === -1) return;
-            const [moved] = src.entries.splice(idxInSrc, 1);
-            tgt.entries.push(moved);
-            interimItemsRef.current = newState;
-            setDndItems(newState);
+            lastOverId.current = overIdNow;
+
+            // Update state for visual feedback during drag
+            setDndItems((current) => {
+                const newState = cloneItemsForDnd(current);
+                const srcIdx = newState.findIndex((g) => g.name === activeCont);
+                const tgtIdx = newState.findIndex((g) => g.name === overCont);
+                if (srcIdx === -1 || tgtIdx === -1) return current;
+                const src = newState[srcIdx];
+                const tgt = newState[tgtIdx];
+                const idxInSrc = src.entries.findIndex((e) => e.url === activeIdNow);
+                if (idxInSrc === -1) return current;
+                const [moved] = src.entries.splice(idxInSrc, 1);
+
+                // Calculate insertion position - SAME logic as handleDragEnd
+                const overIsContainer = overIdNow === overCont;
+                if (overIsContainer) {
+                    tgt.entries.push(moved);
+                } else {
+                    const overIdx = tgt.entries.findIndex((e) => e.url === overIdNow);
+                    if (overIdx !== -1) {
+                        tgt.entries.splice(overIdx, 0, moved);
+                    } else {
+                        tgt.entries.push(moved);
+                    }
+                }
+
+                return newState;
+            });
         } else if (activeCont === overCont) {
             recentlyMovedToNewContainer.current = false;
         }
@@ -396,11 +424,26 @@ export function useHomePageDnd({
         }
         /* ─── card move ─── */
         else {
-            const activeCont = findDndContainer(activeIdNow);
+            // CRITICAL: Find source container from ORIGINAL pre-drag state, not current (potentially stale) dndItems
+            const findContainerInState = (id: string, state: { name: string; entries: NavigationEntry[] }[]): string | undefined => {
+                const group = state.find((g) => g.name === id);
+                if (group) return group.name;
+                for (const g of state) {
+                    if (g.entries.some((e) => e.url === id)) return g.name;
+                }
+                return undefined;
+            };
+
+            const sourceState = preDragItemsRef.current || dndItems;
+            const activeCont = findContainerInState(activeIdNow as string, sourceState);
+            const overCont = findDndContainer(overIdNow);
 
             /* drop on new-group zone */
             if (overIdNow === "new-group-drop-zone") {
                 if (activeCont) {
+                    // Save current state before making changes
+                    setStateBeforeNewGroup(cloneItemsForDnd(dndItems));
+
                     const newState = cloneItemsForDnd(dndItems);
                     const srcIdx = newState.findIndex((g) => g.name === activeCont);
                     if (srcIdx !== -1) {
@@ -421,8 +464,10 @@ export function useHomePageDnd({
                                 name: tentative,
                                 entries: [dragged]
                             });
+
+                            // Update local state but DON'T persist yet
                             setDndItems(newState);
-                            onPersist?.(newState);
+                            setPendingNewGroupName(tentative);
                             setDialogOpenForGroup(tentative);
                             onNewGroupDrop?.();
                         }
@@ -459,18 +504,59 @@ export function useHomePageDnd({
                             onPersist?.(newState);
                         }
                     }
-                } else if (
-                    recentlyMovedToNewContainer.current &&
-                    interimItemsRef.current
-                ) {
-                    onPersist?.(interimItemsRef.current);
-                }
+                } else if (overCont && activeCont !== overCont) {
+                    // Card moved between different groups - use CLEAN pre-drag state
+                    const finalState = cloneItemsForDnd(sourceState);
 
-                onCardMovedBetweenGroups?.(
-                    dndItems
-                        .flatMap((g) => g.entries)
-                        .find((e) => e.url === activeIdNow)!
-                );
+                    // Find target container from clean state too
+                    const finalOverId = lastOverId.current || overIdNow;
+                    const cleanOverCont = findContainerInState(finalOverId as string, sourceState) || overCont;
+
+                    const srcIdx = finalState.findIndex((g) => g.name === activeCont);
+                    const tgtIdx = finalState.findIndex((g) => g.name === cleanOverCont);
+
+                    if (srcIdx !== -1 && tgtIdx !== -1) {
+                        const src = finalState[srcIdx];
+                        const tgt = finalState[tgtIdx];
+                        const idxInSrc = src.entries.findIndex((e) => e.url === activeIdNow);
+
+                        if (idxInSrc !== -1) {
+                            // Remove from source
+                            const [moved] = src.entries.splice(idxInSrc, 1);
+
+                            // Calculate insertion position in target
+                            const overIsContainer = finalOverId === cleanOverCont;
+                            if (overIsContainer) {
+                                tgt.entries.push(moved);
+                            } else {
+                                const overIdx = tgt.entries.findIndex((e) => e.url === finalOverId);
+                                if (overIdx !== -1) {
+                                    tgt.entries.splice(overIdx, 0, moved);
+                                } else {
+                                    tgt.entries.push(moved);
+                                }
+                            }
+
+                            // Remove empty source group if needed
+                            if (src.entries.length === 0) {
+                                finalState.splice(srcIdx, 1);
+                            }
+
+                            setDndItems(finalState);
+                            onPersist?.(finalState);
+
+                            onCardMovedBetweenGroups?.(moved);
+                        }
+                    }
+                } else if (recentlyMovedToNewContainer.current) {
+                    // This shouldn't happen but log it for debugging
+                    console.error("Move between containers detected but conditions not met", {
+                        activeCont,
+                        overCont,
+                        activeIdNow,
+                        overIdNow
+                    });
+                }
             }
         }
 
@@ -501,9 +587,29 @@ export function useHomePageDnd({
                 ...updated[idx],
                 name: newName
             };
-            onPersist?.(updated); // <- ensure rename is saved
+
+            // Persist after successful rename
+            onPersist?.(updated);
             return updated;
         });
+
+        // Clear all pending state
+        setPendingNewGroupName(null);
+        setStateBeforeNewGroup(null);
+        setDialogOpenForGroup(null);
+    };
+
+    /* Handle dialog close without renaming */
+    const handleDialogClose = () => {
+        // If there's a pending new group that wasn't renamed, restore previous state
+        if (pendingNewGroupName && dialogOpenForGroup === pendingNewGroupName && stateBeforeNewGroup) {
+            // Restore the state from before the new group was created
+            setDndItems(stateBeforeNewGroup);
+        }
+
+        // Clear all pending state
+        setPendingNewGroupName(null);
+        setStateBeforeNewGroup(null);
         setDialogOpenForGroup(null);
     };
 
@@ -535,15 +641,12 @@ export function useHomePageDnd({
         dialogOpenForGroup,
         setDialogOpenForGroup,
         handleRenameGroup,
+        handleDialogClose,
         isHoveringNewGroupDropZone,
         setIsHoveringNewGroupDropZone
     };
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* New-group drop-zone component                               */
-
-/* ─────────────────────────────────────────────────────────── */
 export function NewGroupDropZone({
                                      disabled,
                                      setIsHovering
@@ -588,8 +691,7 @@ export function NewGroupDropZone({
                 isOver
                     ? "bg-surface-accent-100 dark:bg-surface-accent-800 border-surface-300 dark:border-surface-600"
                     : "bg-surface-50 dark:bg-surface-900 border-surface-200 dark:border-surface-700"
-            )}
-        >
+            )}>
             <div className="text-center p-4">
                 <span className="block font-medium text-sm">
                     Drop here to create a new group

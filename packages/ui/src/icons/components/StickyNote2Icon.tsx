@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StickyNote2Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"sticky_note_2"}/>
-}
+export const StickyNote2Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sticky_note_2"} ref={ref}/>
+});
+
+StickyNote2Icon.displayName = "StickyNote2Icon";

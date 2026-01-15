@@ -10,31 +10,33 @@ import { getThumbnailMeasure } from "../util";
  * @group Preview components
  */
 export function UrlComponentPreview({
-                                        url,
-                                        previewType,
-                                        size,
-                                        hint,
-                                        interactive = true
-                                    }: {
+    url,
+    previewType,
+    size,
+    hint,
+    interactive = true,
+    fill
+}: {
     url: string,
     previewType?: PreviewType,
     size: PreviewSize,
     hint?: string,
     // for video controls
-    interactive?: boolean
+    interactive?: boolean,
+    fill?: boolean
 }): React.ReactElement {
 
     if (!previewType) {
-        if (!url || !url.trim()) return <EmptyValue/>;
+        if (!url || !url.trim()) return <EmptyValue />;
         return (
             <a className="flex gap-4 break-words items-center font-medium text-primary visited:text-primary dark:visited:text-primary dark:text-primary"
-               href={url}
-               rel="noopener noreferrer"
-               onMouseDown={(e: React.MouseEvent) => {
-                   e.preventDefault();
-               }}
-               target="_blank">
-                <OpenInNewIcon size={"small"}/>
+                href={url}
+                rel="noopener noreferrer"
+                onMouseDown={(e: React.MouseEvent) => {
+                    e.preventDefault();
+                }}
+                target="_blank">
+                <OpenInNewIcon size={"small"} />
                 {url}
             </a>
         );
@@ -42,16 +44,17 @@ export function UrlComponentPreview({
 
     if (previewType === "image") {
         return <ImagePreview url={url}
-                             size={size}/>;
+            size={size}
+            fill={fill} />;
     } else if (previewType === "audio") {
         return <audio controls
-                      className={"max-w-100%"}
-                      src={url}>
+            className={"max-w-100%"}
+            src={url}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;
     } else if (previewType === "video") {
-        return <VideoPreview size={size} src={url} interactive={interactive}/>;
+        return <VideoPreview size={size} src={url} interactive={interactive} />;
     } else {
         return (
             <Tooltip title={hint}>
@@ -65,7 +68,7 @@ export function UrlComponentPreview({
                         width: getThumbnailMeasure(size),
                         height: getThumbnailMeasure(size)
                     }}>
-                    <DescriptionIcon className="text-surface-700 dark:text-surface-300"/>
+                    <DescriptionIcon className="text-surface-700 dark:text-surface-300" />
                     {hint && <Typography
                         className="max-w-full truncate rtl text-left"
                         variant={"caption"}>{hint}</Typography>}
@@ -76,10 +79,10 @@ export function UrlComponentPreview({
 }
 
 function VideoPreview({
-                          size,
-                          src,
-                          interactive
-                      }: { size: PreviewSize, src: string, interactive: boolean }) {
+    size,
+    src,
+    interactive
+}: { size: PreviewSize, src: string, interactive: boolean }) {
 
     const imageSize = useMemo(() => {
         if (size === "small")
@@ -105,6 +108,6 @@ function VideoPreview({
         }}
         {...videoProps}
         className={cls("max-w-100% rounded-xs", { "pointer-events-none": !interactive })}>
-        <source src={src}/>
+        <source src={src} />
     </video>;
 }

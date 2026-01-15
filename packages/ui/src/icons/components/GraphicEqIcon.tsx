@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GraphicEqIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"graphic_eq"}/>
-}
+export const GraphicEqIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"graphic_eq"} ref={ref}/>
+});
+
+GraphicEqIcon.displayName = "GraphicEqIcon";

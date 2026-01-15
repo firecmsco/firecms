@@ -35,7 +35,7 @@ export function EditorCollectionActionStart({
                 title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
                 <Button
                     size={"small"}
-                    variant={"outlined"}
+                    variant={"text"}
                     onClick={() => configController
                         ?.saveCollection({
                             id: collection.slug,
@@ -58,7 +58,6 @@ export function EditorCollectionActionStart({
             {(collection.filter || collection.sort) && <Tooltip
                 title={"Reset to default filter and sort"}>
                 <Button
-                    color={"primary"}
                     size={"small"}
                     variant={"text"}
                     onClick={() => {

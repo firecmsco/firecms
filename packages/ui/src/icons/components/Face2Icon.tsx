@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Face2Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"face_2"}/>
-}
+export const Face2Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"face_2"} ref={ref}/>
+});
+
+Face2Icon.displayName = "Face2Icon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MonitorWeightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"monitor_weight"}/>
-}
+export const MonitorWeightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"monitor_weight"} ref={ref}/>
+});
+
+MonitorWeightIcon.displayName = "MonitorWeightIcon";

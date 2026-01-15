@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function _60fpsSelectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"60fps_select"}/>
-}
+export const _60fpsSelectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"60fps_select"} ref={ref}/>
+});
+
+_60fpsSelectIcon.displayName = "_60fpsSelectIcon";

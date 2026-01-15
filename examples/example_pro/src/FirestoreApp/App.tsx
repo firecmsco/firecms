@@ -63,15 +63,16 @@ import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { useMediaManagerPlugin } from "@firecms/media_manager";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
 export function App() {
 
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
-                                                                                       user,
-                                                                                       authController
-                                                                                   }) => {
+        user,
+        authController
+    }) => {
 
         console.log("Authenticating user", user);
 
@@ -101,7 +102,7 @@ export function App() {
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHubIcon/>
+                <GitHubIcon />
             </IconButton>
         </Tooltip>
     );
@@ -223,13 +224,12 @@ export function App() {
 
     // It is important to memoize the collections and views
     const collections: EntityCollectionsBuilder = useCallback(async ({
-                                                                         authController
-                                                                     }) => {
+        authController
+    }) => {
 
         const sourceCollections: EntityCollection[] = [
             productsCollection,
             // productsCollection2,
-
             booksCollection,
             usersCollection,
             blogCollection,
@@ -257,7 +257,7 @@ export function App() {
             name: "Additional",
             group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
-            view: <ExampleCMSView/>
+            view: <ExampleCMSView />
         },
         // {
         //     path: "typography",
@@ -277,14 +277,14 @@ export function App() {
             name: "The FireCMS editor",
             description: "This view showcases a custom advanced editor",
             group: "Custom views",
-            view: <TestEditorView/>
+            view: <TestEditorView />
         },
         {
             path: "ui_components",
             description: "This view showcases some of the UI components available in FireCMS",
             name: "UI components showcase",
             group: "Custom views",
-            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true}/>
+            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true} />
         }
     ]), []);
 
@@ -319,6 +319,21 @@ export function App() {
         getUser: userManagement.getUser
     });
 
+    const mediaManagerPlugin = useMediaManagerPlugin({
+        storageSource,
+        dataSourceDelegate: firestoreDelegate,
+        storagePath: "media",
+        collectionPath: "media_assets",
+        thumbnailSizes: [
+            {
+                name: "small",
+                width: 280,
+                height: 280,
+                quality: 0.9
+            }
+        ]
+    });
+
     const demoPlugin = useMemo(() => ({
         key: "demo",
         collectionView: {
@@ -348,6 +363,7 @@ export function App() {
         // importPlugin,
         exportPlugin,
         entityHistoryPlugin,
+        mediaManagerPlugin,
         demoPlugin,
         // collectionEditorPlugin
     ];
@@ -370,11 +386,11 @@ export function App() {
         {
             key: "demo_action",
             name: "My demo action",
-            icon: <BarChartIcon size={"small"}/>,
+            icon: <BarChartIcon size={"small"} />,
             onClick: async ({
-                                entity,
-                                context
-                            }) => {
+                entity,
+                context
+            }) => {
                 context.snackbarController.open({
                     type: "info",
                     message: `Demo action for ${entity?.id}`,
@@ -384,7 +400,7 @@ export function App() {
     ], []);
 
     if (firebaseConfigLoading || secondaryFirebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (configError) {
@@ -411,34 +427,34 @@ export function App() {
                     entityActions={entityActions}
                 >
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         if (loading || authLoading) {
-                            return <CircularProgressCenter size={"large"}/>;
+                            return <CircularProgressCenter size={"large"} />;
                         }
                         if (userManagement.user === null || !canAccessMainView) {
                             return <CustomLoginView authController={authController}
-                                                    firebaseApp={firebaseApp}
-                                                    signInOptions={signInOptions}
-                                                    notAllowedError={notAllowedError}/>
+                                firebaseApp={firebaseApp}
+                                signInOptions={signInOptions}
+                                notAllowedError={notAllowedError} />
                         }
 
                         if (userManagement.usersError) {
                             return <CenteredView><ErrorView
-                                error={userManagement.usersError}/></CenteredView>;
+                                error={userManagement.usersError} /></CenteredView>;
                         }
 
                         return <Scaffold
-                            // logo={logo}
+                        // logo={logo}
                         >
                             <AppBar
                                 title={"My demo app"}
-                                endAdornment={githubLink}/>
-                            <Drawer/>
-                            <NavigationRoutes/>
-                            <SideDialogs/>
+                                endAdornment={githubLink} />
+                            <Drawer />
+                            <NavigationRoutes />
+                            <SideDialogs />
                         </Scaffold>;
                     }}
                 </FireCMS>

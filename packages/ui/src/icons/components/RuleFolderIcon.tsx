@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RuleFolderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rule_folder"}/>
-}
+export const RuleFolderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rule_folder"} ref={ref}/>
+});
+
+RuleFolderIcon.displayName = "RuleFolderIcon";

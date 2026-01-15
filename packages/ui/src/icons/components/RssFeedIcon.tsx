@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RssFeedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rss_feed"}/>
-}
+export const RssFeedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rss_feed"} ref={ref}/>
+});
+
+RssFeedIcon.displayName = "RssFeedIcon";

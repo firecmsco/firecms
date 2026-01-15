@@ -1,0 +1,205 @@
+---
+import BrowserFrame from "./BrowserFrame.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+---
+
+<div id="usage-examples-container" class="relative flex flex-col items-center justify-center bg-black mt-16">
+    <div class="relative max-w-full w-[84rem] mx-auto" style="height: 900px;">
+        <BrowserFrame
+                class="absolute z-2 w-[360px] md:w-[540px] bg-surface-900 max-w-[80vw]"
+                data-initial-left="-50"
+                data-initial-top="120"
+                data-parallax-x="-50"
+                data-parallax-y="-20">
+            <video
+                    style="pointer-events: none; aspect-ratio: 540 / 515;"
+                    width="100%"
+                    loop
+                    autoplay
+                    muted>
+                <source
+                        src="/img/custom_fields_dark.mp4"
+                        type="video/mp4"
+                />
+            </video>
+        </BrowserFrame>
+
+        <BrowserFrame
+                class="absolute z-1 md:w-[800px] bg-surface-900"
+                data-initial-right="-30"
+                data-initial-top="-50"
+                data-parallax-x="-20"
+                data-parallax-y="-50">
+
+            <img
+                    loading="lazy"
+                    src="/img/prime_um.png"
+                    class="rounded-xl"
+                    style="aspect-ratio: 1280 / 700;"
+                    alt="Editor"
+            />
+
+        </BrowserFrame>
+
+        <div
+                class="absolute z-2"
+                data-initial-right="500"
+                data-initial-top="180"
+                data-parallax-y="40">
+            <PhoneFrame>
+                <img
+                        loading="lazy"
+                        src="/img/mm_app.webp"
+                        style="aspect-ratio: 654 / 1336;"
+                        alt="MedicalMotion App"
+                        class=""
+                />
+            </PhoneFrame>
+        </div>
+
+        <BrowserFrame
+                class="absolute z-3 w-96 md:w-[720px] bg-surface-100"
+                data-initial-left="100"
+                data-initial-top="750"
+                data-parallax-y="150">
+            <img
+                    loading="lazy"
+                    src="/img/overlay.webp"
+                    class="rounded-xl"
+                    alt="Overlay"
+            />
+        </BrowserFrame>
+
+        <div
+                class="absolute top-64 z-3"
+                data-initial-right="100"
+                data-initial-top="400"
+                data-parallax-x="100">
+            <PhoneFrame>
+                <video
+                        style="pointer-events: none; aspect-ratio: 272 / 570; background: white;"
+                        class="max-w-sm rounded-xl"
+                        width="100%"
+                        loop
+                        autoplay
+                        muted>
+                    <source src="/img/tpa_app.mp4" type="video/mp4"/>
+                </video>
+            </PhoneFrame>
+        </div>
+    </div>
+    <div style="height: 160px;"></div>
+    <ul class="mt-10 mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4 text-surface-300 text-sm">
+        <li class="flex items-end gap-3">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle-2.svg" alt=""
+                 class="h-5 w-5 filter invert mt-1"/>
+            Customize every aspect of the CMS UI
+        </li>
+        <li class="flex items-end gap-3">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/square-pen.svg" alt=""
+                 class="h-5 w-5 filter invert mt-1"/>
+            Build custom fields and editors with React
+        </li>
+    </ul>
+    <div style="height: 160px;"></div>
+
+</div>
+
+<script>
+    import { easeInOut } from "../utils/transitions";
+
+    type AnimatedElement = {
+        element: HTMLElement;
+        hasLeft: boolean;
+        hasRight: boolean;
+        initialLeft: number;
+        initialRight: number;
+        initialTop: number;
+        parallaxX: number;
+        parallaxY: number;
+        currentX: number;
+        currentY: number;
+        targetX: number;
+        targetY: number;
+    };
+
+    function initialize() {
+
+        const container = document.getElementById("usage-examples-container");
+        if (container) {
+            const elementsToAnimate: AnimatedElement[] = [];
+            const elements = container.querySelectorAll("[data-initial-left], [data-initial-right], [data-initial-top]");
+
+            // Prepare elements for animation
+            elements.forEach(el => {
+                const element = el as HTMLElement;
+                elementsToAnimate.push({
+                    element: element,
+                    hasLeft: element.dataset.initialLeft !== undefined,
+                    hasRight: element.dataset.initialRight !== undefined,
+                    initialLeft: parseFloat(element.dataset.initialLeft ?? "0"),
+                    initialRight: parseFloat(element.dataset.initialRight ?? "0"),
+                    initialTop: parseFloat(element.dataset.initialTop ?? "0"),
+                    parallaxX: parseFloat(element.dataset.parallaxX ?? "0"),
+                    parallaxY: parseFloat(element.dataset.parallaxY ?? "0"),
+                    currentX: 0,
+                    currentY: 0,
+                    targetX: 0,
+                    targetY: 0,
+                });
+            });
+
+            // Set initial CSS positions
+            function setInitialPositions() {
+                elementsToAnimate.forEach(item => {
+                    if (item.hasLeft) item.element.style.left = `${item.initialLeft}px`;
+                    if (item.hasRight) item.element.style.right = `${item.initialRight}px`;
+                    item.element.style.top = `${item.initialTop}px`;
+                });
+            }
+
+            // Update target positions on scroll
+            function updateTargetPositions() {
+                if (!container) return;
+                const rect = container.getBoundingClientRect();
+                const offsetHeight = container.offsetHeight;
+                const currentTop = rect.top;
+                const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (400 + currentTop / 2) / offsetHeight))) * 2 - 1;
+
+                elementsToAnimate.forEach(item => {
+                    item.targetX = item.parallaxX * parallaxOffset;
+                    item.targetY = item.parallaxY * parallaxOffset;
+                });
+            }
+
+            const easingFactor = 0.08;
+
+            // Animation loop
+            function animationLoop() {
+                elementsToAnimate.forEach(item => {
+                    const dx = item.targetX - item.currentX;
+                    const dy = item.targetY - item.currentY;
+
+                    // Apply easing (lerp)
+                    item.currentX += dx * easingFactor;
+                    item.currentY += dy * easingFactor;
+
+                    // Use transform for performance
+                    item.element.style.transform = `translate3d(${item.currentX}px, ${item.currentY}px, 0)`;
+                });
+
+                requestAnimationFrame(animationLoop);
+            }
+
+            // Initialize
+            setInitialPositions();
+            updateTargetPositions();
+            window.addEventListener("scroll", updateTargetPositions, { passive: true });
+            requestAnimationFrame(animationLoop);
+
+        }
+    }
+
+    document.addEventListener("astro:page-load", initialize);
+
+</script>

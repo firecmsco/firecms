@@ -106,6 +106,21 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
+
+export function isPlainObject(obj:any) {
+    // 1. Rule out non-objects, null, and arrays
+    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+        return false;
+    }
+
+    // 2. Get the object's direct prototype
+    const proto = Object.getPrototypeOf(obj);
+
+    // 3. A plain object's direct prototype is Object.prototype
+    return proto === Object.prototype;
+}
+
+
 export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(
     target: T,
     source: U,
@@ -141,8 +156,31 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                 // If source value is a Date, create a new Date instance.
                 (output as any)[key] = new Date(sourceValue.getTime());
             } else if (Array.isArray(sourceValue)) {
-                // If source value is an array, create a shallow copy of the array.
-                (output as any)[key] = [...sourceValue];
+                if (Array.isArray(outputValue)) {
+                    const newArray = [];
+                    const maxLength = Math.max(outputValue.length, sourceValue.length);
+                    for (let i = 0; i < maxLength; i++) {
+                        const sourceItem = sourceValue[i];
+                        const targetItem = outputValue[i];
+
+                        if (i >= sourceValue.length) { // source is shorter
+                            newArray[i] = targetItem;
+                        } else if (i >= outputValue.length) { // target is shorter
+                            newArray[i] = sourceItem;
+                        } else if (sourceItem === null) {
+                            newArray[i] = targetItem;
+                        } else if (isObject(sourceItem) && isObject(targetItem)) {
+                            newArray[i] = mergeDeep(targetItem, sourceItem, ignoreUndefined);
+                        } else {
+                            newArray[i] = sourceItem;
+                        }
+                    }
+                    (output as any)[key] = newArray;
+                } else {
+                    // If output's value (from target) is not an array,
+                    // overwrite with a shallow copy of the source array.
+                    (output as any)[key] = [...sourceValue];
+                }
             } else if (isObject(sourceValue)) {
                 // If source value is an object:
                 if (isObject(outputValue)) {

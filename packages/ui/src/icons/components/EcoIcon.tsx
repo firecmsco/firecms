@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function EcoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"eco"}/>
-}
+export const EcoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"eco"} ref={ref}/>
+});
+
+EcoIcon.displayName = "EcoIcon";

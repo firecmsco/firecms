@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AdminPanelSettingsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"admin_panel_settings"}/>
-}
+export const AdminPanelSettingsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"admin_panel_settings"} ref={ref}/>
+});
+
+AdminPanelSettingsIcon.displayName = "AdminPanelSettingsIcon";

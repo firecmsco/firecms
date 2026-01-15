@@ -1,13 +1,7 @@
 import React, { useCallback } from "react";
-import {
-    EntityCollection,
-    FireCMSPlugin,
-    InternalUserManagement,
-    useNavigationController,
-    useSnackbarController
-} from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, InternalUserManagement, useNavigationController } from "@firecms/core";
 import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
-import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
+import { HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FireCMSAppConfig, FireCMSBackend } from "@firecms/types";
@@ -15,6 +9,7 @@ import { RootCollectionSuggestions } from "../components/RootCollectionSuggestio
 import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
 import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
+import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel";
 
 export function useSaasPlugin({
                                   projectConfig,
@@ -25,7 +20,8 @@ export function useSaasPlugin({
                                   introMode,
                                   fireCMSBackend,
                                   onAnalyticsEvent,
-                                  historyDefaultEnabled
+                                  historyDefaultEnabled,
+                                  rootPathSuggestions
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
@@ -36,11 +32,13 @@ export function useSaasPlugin({
     fireCMSBackend: FireCMSBackend;
     onAnalyticsEvent?: (event: string, data?: object) => void;
     historyDefaultEnabled?: boolean;
+    rootPathSuggestions?: string[];
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
     const additionalChildrenStart = <>
+        <CollectionsSetupLoadingLabel/>
         <IntroWidget
             fireCMSBackend={fireCMSBackend}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -54,6 +52,7 @@ export function useSaasPlugin({
             onAnalyticsEvent={onAnalyticsEvent}/>
         <RootCollectionSuggestions introMode={introMode}
                                    onAnalyticsEvent={onAnalyticsEvent}
+                                   rootPathSuggestions={rootPathSuggestions}
         />
     </>;
 
@@ -204,7 +203,8 @@ export function IntroWidget({
                 <div
                     className={"text-sm ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                     yarn create firecms-app
-                </div> or
+                </div>
+                or
                 <div
                     className={"text-sm  ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                     npx create-firecms-app

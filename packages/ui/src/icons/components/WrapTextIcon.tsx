@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WrapTextIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wrap_text"}/>
-}
+export const WrapTextIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wrap_text"} ref={ref}/>
+});
+
+WrapTextIcon.displayName = "WrapTextIcon";

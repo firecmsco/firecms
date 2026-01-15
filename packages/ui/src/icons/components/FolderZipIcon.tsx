@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FolderZipIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"folder_zip"}/>
-}
+export const FolderZipIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"folder_zip"} ref={ref}/>
+});
+
+FolderZipIcon.displayName = "FolderZipIcon";

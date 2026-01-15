@@ -51,6 +51,13 @@ export interface PropertyTableCellProps<T> {
     path: string;
     disabled: boolean;
     enablePopupIcon?: boolean;
+    // Sortable props for dnd-kit integration
+    sortableNodeRef?: (node: HTMLElement | null) => void;
+    sortableStyle?: React.CSSProperties;
+    sortableAttributes?: Record<string, any>;
+    isDragging?: boolean;
+    isDraggable?: boolean;
+    frozen?: boolean;
 }
 
 function isStorageProperty(property: Property) {
@@ -82,8 +89,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                                      entity,
                                                                      readonly,
                                                                      disabled: disabledProp,
-                                                                     enablePopupIcon = true
-                                                                 }: PropertyTableCellProps<T>) {
+                                                                     enablePopupIcon = true,
+                                                             sortableNodeRef,
+        sortableStyle,
+        sortableAttributes,
+        isDragging,
+        isDraggable,
+        frozen
+    }: PropertyTableCellProps<T>) {
 
         const {
             onValueChange,
@@ -242,7 +255,13 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 align={align ?? "left"}
                 fullHeight={false}
                 disabledTooltip={disabledTooltip ?? (readOnlyProperty ? "Read only" : undefined)}
-                disabled={true}>
+                disabled={true}
+                sortableNodeRef={sortableNodeRef}
+                sortableStyle={sortableStyle}
+                sortableAttributes={sortableAttributes}
+                isDragging={isDragging}
+                isDraggable={isDraggable}
+                frozen={frozen}>
                 <PropertyPreview
                     width={width}
                     height={getRowHeight(size)}
@@ -263,32 +282,32 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 const referenceValue = internalValue ? new EntityReference(internalValue, path) : undefined;
                 innerComponent =
                     <TableReferenceField name={propertyKey as string}
-                                         internalValue={referenceValue}
-                                         updateValue={(v) => updateValue(v ? (v as EntityReference).id : null)}
-                                         disabled={disabled}
-                                         size={size}
-                                         path={path}
-                                         multiselect={false}
-                                         previewProperties={referenceProperty.previewProperties}
-                                         includeId={referenceProperty.includeId}
-                                         includeEntityLink={referenceProperty.includeEntityLink}
-                                         title={stringProperty.name}
-                                         forceFilter={referenceProperty.forceFilter}
+                        internalValue={referenceValue}
+                        updateValue={(v) => updateValue(v ? (v as EntityReference).id : null)}
+                        disabled={disabled}
+                        size={size}
+                        path={path}
+                        multiselect={false}
+                        previewProperties={referenceProperty.previewProperties}
+                        includeId={referenceProperty.includeId}
+                        includeEntityLink={referenceProperty.includeEntityLink}
+                        title={stringProperty.name}
+                        forceFilter={referenceProperty.forceFilter}
                     />;
                 allowScroll = false;
             } else if (isAStorageProperty) {
                 innerComponent = <TableStorageUpload error={validationError ?? error}
-                                                     disabled={disabled}
-                                                     focused={selected}
-                                                     selected={selected}
-                                                     openPopup={setPopupCell ? openPopup : undefined}
-                                                     property={property as StringProperty | ArrayProperty}
-                                                     entity={entity}
-                                                     path={path}
-                                                     value={internalValue}
-                                                     previewSize={getPreviewSizeFrom(size)}
-                                                     updateValue={updateValue}
-                                                     propertyKey={propertyKey as string}
+                    disabled={disabled}
+                    focused={selected}
+                    selected={selected}
+                    openPopup={setPopupCell ? openPopup : undefined}
+                    property={property as StringProperty | ArrayProperty}
+                    entity={entity}
+                    path={path}
+                    value={internalValue}
+                    previewSize={getPreviewSizeFrom(size)}
+                    updateValue={updateValue}
+                    propertyKey={propertyKey as string}
                 />;
                 includeActions = false;
                 showExpandIcon = true;
@@ -298,15 +317,15 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 const numberProperty = property as NumberProperty;
                 if (numberProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
-                                                         multiple={false}
-                                                         disabled={disabled}
-                                                         focused={selected}
-                                                         valueType={"number"}
-                                                         small={getPreviewSizeFrom(size) !== "medium"}
-                                                         enumValues={numberProperty.enum}
-                                                         error={validationError ?? error}
-                                                         internalValue={internalValue as string | number}
-                                                         updateValue={updateValue}
+                        multiple={false}
+                        disabled={disabled}
+                        focused={selected}
+                        valueType={"number"}
+                        small={getPreviewSizeFrom(size) !== "medium"}
+                        enumValues={numberProperty.enum}
+                        error={validationError ?? error}
+                        internalValue={internalValue as string | number}
+                        updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else {
@@ -324,54 +343,54 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 const stringProperty = property as StringProperty;
                 if (stringProperty.enum) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
-                                                         multiple={false}
-                                                         focused={selected}
-                                                         disabled={disabled}
-                                                         valueType={"string"}
-                                                         small={getPreviewSizeFrom(size) !== "medium"}
-                                                         enumValues={stringProperty.enum}
-                                                         error={validationError ?? error}
-                                                         internalValue={internalValue as string | number}
-                                                         updateValue={updateValue}
+                        multiple={false}
+                        focused={selected}
+                        disabled={disabled}
+                        valueType={"string"}
+                        small={getPreviewSizeFrom(size) !== "medium"}
+                        enumValues={stringProperty.enum}
+                        error={validationError ?? error}
+                        internalValue={internalValue as string | number}
+                        updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else if (stringProperty.userSelect) {
                     innerComponent = <VirtualTableUserSelect name={propertyKey as string}
-                                                             multiple={false}
-                                                             focused={selected}
-                                                             disabled={disabled}
-                                                             small={getPreviewSizeFrom(size) !== "medium"}
-                                                             error={validationError ?? error}
-                                                             internalValue={internalValue as string}
-                                                             updateValue={updateValue}
+                        multiple={false}
+                        focused={selected}
+                        disabled={disabled}
+                        small={getPreviewSizeFrom(size) !== "medium"}
+                        error={validationError ?? error}
+                        internalValue={internalValue as string}
+                        updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else if (stringProperty.markdown || !stringProperty.storage || !stringProperty.reference) {
                     const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
                     innerComponent = <VirtualTableInput error={validationError ?? error}
-                                                        disabled={disabled}
-                                                        multiline={multiline}
-                                                        focused={selected}
-                                                        value={internalValue as string}
-                                                        updateValue={updateValue}
+                        disabled={disabled}
+                        multiline={multiline}
+                        focused={selected}
+                        value={internalValue as string}
+                        updateValue={updateValue}
                     />;
                     allowScroll = true;
                 }
             } else if (property.type === "boolean") {
                 innerComponent = <VirtualTableSwitch error={validationError ?? error}
-                                                     disabled={disabled}
-                                                     focused={selected}
-                                                     internalValue={internalValue as boolean}
-                                                     updateValue={updateValue}
+                    disabled={disabled}
+                    focused={selected}
+                    internalValue={internalValue as boolean}
+                    updateValue={updateValue}
                 />;
             } else if (property.type === "date") {
                 innerComponent = <VirtualTableDateField name={propertyKey as string}
-                                                        error={validationError ?? error}
-                                                        disabled={disabled}
-                                                        mode={property.mode}
-                                                        focused={selected}
-                                                        internalValue={internalValue as Date}
-                                                        updateValue={updateValue}
+                    error={validationError ?? error}
+                    disabled={disabled}
+                    mode={property.mode}
+                    focused={selected}
+                    internalValue={internalValue as Date}
+                    updateValue={updateValue}
                 />;
                 fullHeight = true;
                 hideOverflow = false;
@@ -380,17 +399,17 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 if (typeof property.path === "string") {
                     innerComponent =
                         <TableReferenceField name={propertyKey as string}
-                                             internalValue={internalValue as EntityReference}
-                                             updateValue={updateValue}
-                                             disabled={disabled}
-                                             size={size}
-                                             path={property.path}
-                                             multiselect={false}
-                                             previewProperties={property.previewProperties}
-                                             includeId={property.includeId}
-                                             includeEntityLink={property.includeEntityLink}
-                                             title={property.name ?? propertyKey}
-                                             forceFilter={property.forceFilter}
+                            internalValue={internalValue as EntityReference}
+                            updateValue={updateValue}
+                            disabled={disabled}
+                            size={size}
+                            path={property.path}
+                            multiselect={false}
+                            previewProperties={property.previewProperties}
+                            includeId={property.includeId}
+                            includeEntityLink={property.includeEntityLink}
+                            title={property.name ?? propertyKey}
+                            forceFilter={property.forceFilter}
                         />;
                 }
                 allowScroll = false;
@@ -433,15 +452,15 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                         if (selected && arrayProperty.of.enum) {
                             innerComponent =
                                 <VirtualTableSelect name={propertyKey as string}
-                                                    multiple={true}
-                                                    disabled={disabled}
-                                                    focused={selected}
-                                                    small={getPreviewSizeFrom(size) !== "medium"}
-                                                    valueType={arrayProperty.of.type}
-                                                    enumValues={arrayProperty.of.enum}
-                                                    error={validationError ?? error}
-                                                    internalValue={internalValue as string | number}
-                                                    updateValue={updateValue}
+                                    multiple={true}
+                                    disabled={disabled}
+                                    focused={selected}
+                                    small={getPreviewSizeFrom(size) !== "medium"}
+                                    valueType={arrayProperty.of.type}
+                                    enumValues={arrayProperty.of.enum}
+                                    error={validationError ?? error}
+                                    internalValue={internalValue as string | number}
+                                    updateValue={updateValue}
                                 />;
                             allowScroll = true;
                             fullHeight = true;
@@ -477,11 +496,11 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
             showExpandIcon = enablePopupIcon && selected && !innerComponent && !disabled && !readOnlyProperty;
             innerComponent = (
                 <PropertyPreview width={width}
-                                 height={height}
-                                 propertyKey={propertyKey as string}
-                                 value={internalValue}
-                                 property={property}
-                                 size={getPreviewSizeFrom(size)}
+                    height={height}
+                    propertyKey={propertyKey as string}
+                    value={internalValue}
+                    property={property}
+                    size={getPreviewSizeFrom(size)}
                 />
             );
         }
@@ -504,12 +523,18 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 showExpandIcon={showExpandIcon}
                 value={internalValue}
                 hideOverflow={hideOverflow}
+                sortableNodeRef={sortableNodeRef}
+                sortableStyle={sortableStyle}
+                sortableAttributes={sortableAttributes}
+                isDragging={isDragging}
+                isDraggable={isDraggable}
+                frozen={frozen}
                 actions={includeActions && <EntityTableCellActions
                     showError={showError}
                     disabled={disabled}
                     showExpandIcon={showExpandIcon}
                     selected={selected}
-                    openPopup={!disabled ? openPopup : undefined}/>}
+                    openPopup={!disabled ? openPopup : undefined} />}
             >
 
                 {innerComponent}
@@ -528,6 +553,9 @@ function areEqual(prevProps: PropertyTableCellProps<any>, nextProps: PropertyTab
         equal(prevProps.property, nextProps.property) &&
         equal(prevProps.value, nextProps.value) &&
         equal(prevProps.entity.id, nextProps.entity.id) &&
-        equal(prevProps.entity.values, nextProps.entity.values)
+        equal(prevProps.entity.values, nextProps.entity.values) &&
+        prevProps.isDragging === nextProps.isDragging &&
+        prevProps.isDraggable === nextProps.isDraggable &&
+        prevProps.frozen === nextProps.frozen
         ;
 }

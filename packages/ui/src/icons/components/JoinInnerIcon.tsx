@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function JoinInnerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"join_inner"}/>
-}
+export const JoinInnerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"join_inner"} ref={ref}/>
+});
+
+JoinInnerIcon.displayName = "JoinInnerIcon";

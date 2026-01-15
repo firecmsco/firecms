@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FlipCameraAndroidIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"flip_camera_android"}/>
-}
+export const FlipCameraAndroidIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"flip_camera_android"} ref={ref}/>
+});
+
+FlipCameraAndroidIcon.displayName = "FlipCameraAndroidIcon";

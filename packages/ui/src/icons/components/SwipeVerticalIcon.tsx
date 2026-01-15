@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SwipeVerticalIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"swipe_vertical"}/>
-}
+export const SwipeVerticalIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"swipe_vertical"} ref={ref}/>
+});
+
+SwipeVerticalIcon.displayName = "SwipeVerticalIcon";

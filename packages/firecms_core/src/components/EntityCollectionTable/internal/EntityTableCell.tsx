@@ -28,6 +28,13 @@ interface EntityTableCellProps {
     selected?: boolean;
     hideOverflow?: boolean;
     onSelect?: (cellRect: DOMRect | undefined) => void;
+    // Sortable props for dnd-kit integration
+    sortableNodeRef?: (node: HTMLElement | null) => void;
+    sortableStyle?: React.CSSProperties;
+    sortableAttributes?: Record<string, any>;
+    isDragging?: boolean;
+    isDraggable?: boolean;
+    frozen?: boolean;
 }
 
 type TableCellInnerProps = {
@@ -39,28 +46,28 @@ type TableCellInnerProps = {
 }
 
 const TableCellInner = ({
-                            justifyContent,
-                            scrollable,
-                            faded,
-                            fullHeight,
-                            children
-                        }: TableCellInnerProps) => {
+    justifyContent,
+    scrollable,
+    faded,
+    fullHeight,
+    children
+}: TableCellInnerProps) => {
     return (
         <div className={cls("flex flex-col max-h-full w-full",
             {
                 "items-start": faded || scrollable
             })}
-             style={{
-                 justifyContent,
-                 height: fullHeight ? "100%" : undefined,
-                 overflow: scrollable ? "auto" : undefined,
-                 WebkitMaskImage: faded
-                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                     : undefined,
-                 maskImage: faded
-                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                     : undefined
-             }}
+            style={{
+                justifyContent,
+                height: fullHeight ? "100%" : undefined,
+                overflow: scrollable ? "auto" : undefined,
+                WebkitMaskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined,
+                maskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined
+            }}
         >
             {children}
         </div>
@@ -69,23 +76,29 @@ const TableCellInner = ({
 
 export const EntityTableCell = React.memo<EntityTableCellProps>(
     function EntityTableCell({
-                                 children,
-                                 actions,
-                                 size,
-                                 selected,
-                                 disabled,
-                                 disabledTooltip,
-                                 saved,
-                                 error,
-                                 align,
-                                 allowScroll,
-                                 removePadding,
-                                 fullHeight,
-                                 onSelect,
-                                 width,
-                                 hideOverflow = true,
-                                 showExpandIcon = true
-                             }: EntityTableCellProps) {
+        children,
+        actions,
+        size,
+        selected,
+        disabled,
+        disabledTooltip,
+        saved,
+        error,
+        align,
+        allowScroll,
+        removePadding,
+        fullHeight,
+        onSelect,
+        width,
+        hideOverflow = true,
+        showExpandIcon = true,
+        sortableNodeRef,
+        sortableStyle,
+        sortableAttributes,
+        isDragging,
+        isDraggable,
+        frozen
+    }: EntityTableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
@@ -220,12 +233,12 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                         faded={faded}>
 
                         {!fullHeight && <div ref={measureRef}
-                                             style={{
-                                                 display: "flex",
-                                                 width: "100%",
-                                                 justifyContent,
-                                                 height: fullHeight ? "100%" : undefined
-                                             }}>
+                            style={{
+                                display: "flex",
+                                width: "100%",
+                                justifyContent,
+                                height: fullHeight ? "100%" : undefined
+                            }}>
                             {children}
                         </div>}
 
@@ -237,22 +250,47 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 {/*{disabled && onHover && disabledTooltip &&*/}
                 {/*    <div className="absolute top-1 right-1 text-xs">*/}
                 {/*        <Tooltip title={disabledTooltip}>*/}
-                {/*            <DoNotDisturbOnIcon size={"smallest"} color={"disabled"} className={"text-surface-500"}/>*/}
+                {/*            <DoNotDisturbOnIcon size={"smallest"} color={"disabled"} className={"text-text-disabled"} />*/}
                 {/*        </Tooltip>*/}
                 {/*    </div>}*/}
 
             </div>
         </>;
-        if (showError) {
-            return (
+
+        // Wrap with sortable outer div when sortable props are provided
+        // Remove tabIndex from attributes to avoid capturing focus before cell content
+        const { tabIndex: _tabIndex, ...sortableAttrsWithoutTabIndex } = sortableAttributes ?? {};
+        const sortableContent = sortableNodeRef ? (
+            <div
+                ref={sortableNodeRef}
+                style={sortableStyle}
+                className={cls(
+                    "flex-shrink-0",
+                    frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+                )}
+                {...sortableAttrsWithoutTabIndex}
+            >
+                {showError ? (
+                    <ErrorTooltip
+                        className={"flex h-full w-full"}
+                        align={"start"}
+                        title={error?.message ?? "Error"}>
+                        {result}
+                    </ErrorTooltip>
+                ) : result}
+            </div>
+        ) : (
+            showError ? (
                 <ErrorTooltip
+                    className={"flex h-full w-full"}
                     align={"start"}
                     title={error?.message ?? "Error"}>
                     {result}
                 </ErrorTooltip>
-            );
-        }
-        return result;
+            ) : result
+        );
+
+        return sortableContent;
     }, (a, b) => {
         return a.error === b.error &&
             a.value === b.value &&
@@ -266,5 +304,8 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
             a.showExpandIcon === b.showExpandIcon &&
             a.removePadding === b.removePadding &&
             a.fullHeight === b.fullHeight &&
-            a.selected === b.selected;
+            a.selected === b.selected &&
+            a.isDragging === b.isDragging &&
+            a.isDraggable === b.isDraggable &&
+            a.frozen === b.frozen;
     }) as React.FunctionComponent<EntityTableCellProps>;

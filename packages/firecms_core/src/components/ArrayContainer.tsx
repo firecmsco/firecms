@@ -186,7 +186,7 @@ export function ArrayContainerItem({
         <div
             ref={nodeRef}
             style={style}
-            className={`relative ${!isDragging ? "hover\\:bg-surface-accent-50 dark\\:hover\\:bg-surface-800 dark\\:hover\\:bg-opacity-20" : ""} rounded-md opacity-100`}
+            className={`relative ${!isDragging ? "hover\\:bg-surface-accent-50 dark\\:hover\\:bg-surface-800 dark\\:hover\\:bg-opacity-20 dark\\:hover\\:bg-surface-800/20" : ""} rounded-md opacity-100`}
         >
             <div className="flex items-start">
                 <div className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
@@ -484,7 +484,6 @@ export function ArrayContainer<T>({
                             <Button
                                 variant={"text"}
                                 size={size === "small" ? "small" : "medium"}
-                                color="primary"
                                 disabled={disabled || (value?.length ?? 0) >= max}
                                 startIcon={<AddIcon/>}
                                 onClick={insertInEnd}
@@ -527,7 +526,6 @@ export function ArrayContainer<T>({
                     <Button
                         variant={"text"}
                         size={size === "small" ? "small" : "medium"}
-                        color="primary"
                         disabled={disabled || (value?.length ?? 0) >= max}
                         startIcon={<AddIcon/>}
                         onClick={insertInEnd}

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WooCommerceIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"woo_commerce"}/>
-}
+export const WooCommerceIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"woo_commerce"} ref={ref}/>
+});
+
+WooCommerceIcon.displayName = "WooCommerceIcon";

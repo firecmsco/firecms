@@ -1,0 +1,17 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["../packages/firecms_core/src/index.ts"],
+  "tsconfig": "../packages/firecms_core/tsconfig.json",
+  "out": "./src/content/docs/docs/api",
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": true,
+  "hideGenerator": true,
+  "gitRevision": "main",
+  "gitRemote": "origin",
+  "disableSources": false,
+  "sourceLinkTemplate": "https://github.com/firecmsco/firecms/blob/main/{path}"
+}
+

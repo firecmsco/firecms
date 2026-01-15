@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewArrayIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_array"}/>
-}
+export const ViewArrayIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_array"} ref={ref}/>
+});
+
+ViewArrayIcon.displayName = "ViewArrayIcon";

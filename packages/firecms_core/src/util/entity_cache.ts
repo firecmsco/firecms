@@ -1,3 +1,4 @@
+import { isObject, isPlainObject } from "@firecms/common";
 import { EntityReference, EntityRelation, GeoPoint, Vector } from "@firecms/types";
 
 // Define a unique prefix for entity keys in sessionStorage to avoid key collisions
@@ -119,9 +120,6 @@ if (isSessionStorageAvailable) {
  * @param data - The data to cache and persist.
  */
 export function saveEntityToCache(path: string, data: object): void {
-    // Update the in-memory cache
-    entityCache.set(path, data);
-
     // Persist the data individually in sessionStorage
     if (isSessionStorageAvailable) {
         try {
@@ -137,6 +135,22 @@ export function saveEntityToCache(path: string, data: object): void {
     }
 }
 
+export function removeEntityFromMemoryCache(path: string): void {
+    entityCache.delete(path);
+}
+
+export function saveEntityToMemoryCache(path: string, data: object): void {
+    entityCache.set(path, data);
+}
+
+export function getEntityFromMemoryCache(path: string): object | undefined {
+    return entityCache.get(path);
+}
+
+export function hasEntityInCache(path: string): boolean {
+    return entityCache.has(path);
+}
+
 /**
  * Retrieves an entity from the in-memory cache or `sessionStorage`.
  * If the entity is not in the cache but exists in `sessionStorage`, it loads it into the cache.
@@ -145,11 +159,6 @@ export function saveEntityToCache(path: string, data: object): void {
  */
 export function getEntityFromCache(path: string): object | undefined {
 
-    // Attempt to retrieve the entity from the in-memory cache
-    if (entityCache.has(path)) {
-        return entityCache.get(path);
-    }
-
     // If not in the cache, attempt to load it from sessionStorage
     if (isSessionStorageAvailable) {
         try {
@@ -157,7 +166,6 @@ export function getEntityFromCache(path: string): object | undefined {
             const entityString = sessionStorage.getItem(key);
             if (entityString) {
                 const entity: object = JSON.parse(entityString, customReviver);
-                entityCache.set(path, entity); // Update the cache
                 return entity;
             }
         } catch (error) {
@@ -170,10 +178,6 @@ export function getEntityFromCache(path: string): object | undefined {
 
     // Entity not found
     return undefined;
-}
-
-export function hasEntityInCache(path: string): boolean {
-    return entityCache.has(path);
 }
 
 /**
@@ -225,4 +229,30 @@ export function clearEntityCache(): void {
             console.error("Failed to clear entity cache from sessionStorage:", error);
         }
     }
+}
+
+export function flattenKeys(obj: any, prefix = "", result: string[] = []): string[] {
+
+    if (isObject(obj) || Array.isArray(obj)) {
+        const plainObject = isPlainObject(obj);
+        if (!plainObject && prefix) {
+            result.push(prefix);
+        } else {
+            for (const key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    const newKey = prefix
+                        ? Array.isArray(obj)
+                            ? `${prefix}[${key}]`
+                            : `${prefix}.${key}`
+                        : key;
+                    if (isObject(obj[key]) || Array.isArray(obj[key])) {
+                        flattenKeys(obj[key], newKey, result);
+                    } else {
+                        result.push(newKey);
+                    }
+                }
+            }
+        }
+    }
+    return result;
 }

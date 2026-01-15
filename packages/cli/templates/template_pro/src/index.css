@@ -1,9 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @import "@firecms/ui/index.css" layer(base);
-@source "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@theme {
+@plugin "@tailwindcss/typography";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+
+:root {
     --color-primary: #0070F4;
     --color-secondary: #FF5B79;
 }

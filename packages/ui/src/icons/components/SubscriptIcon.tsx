@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SubscriptIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"subscript"}/>
-}
+export const SubscriptIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"subscript"} ref={ref}/>
+});
+
+SubscriptIcon.displayName = "SubscriptIcon";

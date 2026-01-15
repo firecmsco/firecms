@@ -1,6 +1,13 @@
 import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
 import { DocumentReference, Firestore, Timestamp } from "@firebase/firestore";
-import { DataType, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
+import {
+    DataType,
+    EntityCollection,
+    FilterValues,
+    GeoPoint,
+    prettifyIdentifier,
+    removeInitialAndTrailingSlashes
+} from "@firecms/core";
 import { getDocuments } from "./firestore";
 
 /**
@@ -9,11 +16,20 @@ import { getDocuments } from "./firestore";
  * @param collectionPath
  * @param isCollectionGroup
  * @param parentPathSegments
+ * @param initialFilter - Optional filter values to apply when fetching documents
+ * @param initialSort - Optional sort to apply when fetching documents
  */
-export async function getInferredEntityCollection(firestore: Firestore, collectionPath: string, isCollectionGroup: boolean, parentPathSegments?: string[]): Promise<Partial<EntityCollection>> {
-    console.debug("Building schema for collection", collectionPath, parentPathSegments)
+export async function getInferredEntityCollection(
+    firestore: Firestore,
+    collectionPath: string,
+    isCollectionGroup: boolean,
+    parentPathSegments?: string[],
+    initialFilter?: FilterValues<string>,
+    initialSort?: [string, "asc" | "desc"]
+): Promise<Partial<EntityCollection>> {
+    console.debug("Building schema for collection", collectionPath, parentPathSegments, { initialFilter, initialSort })
     const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
-    const docs = await getDocuments(firestore, cleanPath, isCollectionGroup, parentPathSegments);
+    const docs = await getDocuments(firestore, cleanPath, isCollectionGroup, parentPathSegments, initialFilter, initialSort);
     const data = docs.map(doc => doc.data()).filter(Boolean) as object[];
     return getInferredEntityCollectionFromData(collectionPath, data);
 }
@@ -25,7 +41,7 @@ export async function getInferredEntityCollectionFromData(collectionPath: string
     const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
     return {
         dbPath: cleanPath,
-        name: unslugify(lastPathSegment),
+        name: prettifyIdentifier(lastPathSegment),
         properties,
         propertiesOrder
     };

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function HistoryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"history"}/>
-}
+export const HistoryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"history"} ref={ref}/>
+});
+
+HistoryIcon.displayName = "HistoryIcon";

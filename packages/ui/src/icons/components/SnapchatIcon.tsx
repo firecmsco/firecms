@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SnapchatIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"snapchat"}/>
-}
+export const SnapchatIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"snapchat"} ref={ref}/>
+});
+
+SnapchatIcon.displayName = "SnapchatIcon";

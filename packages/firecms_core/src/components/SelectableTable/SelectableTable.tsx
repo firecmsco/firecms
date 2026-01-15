@@ -94,6 +94,11 @@ export type SelectableTableProps<M extends Record<string, any>> = {
     endAdornment?: React.ReactNode;
 
     AddColumnComponent?: React.ComponentType;
+
+    /**
+     * Callback when columns are reordered via drag-and-drop
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
 }
 
 /**
@@ -154,7 +159,8 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
      forceFilter,
      highlightedRow,
      endAdornment,
-     AddColumnComponent
+     AddColumnComponent,
+     onColumnsOrderChange
  }: SelectableTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -248,12 +254,13 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
                     checkFilterCombination={checkFilterCombination}
                     createFilterField={filterable ? createFilterField : undefined}
                     rowClassName={useCallback((entity: Entity<M>) => {
-                        return highlightedRow?.(entity) ? "bg-surface-50/75 dark:bg-surface-800/75" : "";
+                        return highlightedRow?.(entity) ? "bg-surface-50/75 bg-surface-100/75 dark:bg-surface-800/75 dark:bg-surface-800/75" : "";
                     }, [highlightedRow])}
                     className="grow"
                     emptyComponent={emptyComponent}
                     endAdornment={endAdornment}
                     AddColumnComponent={AddColumnComponent}
+                    onColumnsOrderChange={onColumnsOrderChange}
                 />
 
             </div>
@@ -334,3 +341,4 @@ function createFilterField({
         <div>{`Currently the filter field ${resolvedProperty.type} is not supported`}</div>
     );
 }
+

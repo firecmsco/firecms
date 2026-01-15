@@ -20,7 +20,7 @@ export function EnableEntityHistoryView({
 
         <LoadingButton
             loading={loading}
-            variant={"outlined"}
+
             disabled={enabled}
             onClick={() => {
                 setLoading(true);

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MessengerOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"messenger_outline"}/>
-}
+export const MessengerOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"messenger_outline"} ref={ref}/>
+});
+
+MessengerOutlineIcon.displayName = "MessengerOutlineIcon";

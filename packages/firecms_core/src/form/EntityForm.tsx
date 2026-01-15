@@ -1,4 +1,4 @@
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     AuthController,
     CMSAnalyticsEvent,
@@ -32,12 +32,147 @@ import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecm
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
+import {
+    flattenKeys,
+    getEntityFromCache,
+    removeEntityFromCache,
+    removeEntityFromMemoryCache,
+    saveEntityToCache
+} from "../util/entity_cache";
+import { CustomIdField } from "./components/CustomIdField";
+import { ErrorFocus } from "./components/ErrorFocus";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation";
+import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
+import { LocalChangesMenu } from "./components/LocalChangesMenu";
+
+export type OnUpdateParams = {
+    entity: Entity<any>,
+    status: EntityStatus,
+    path: string,
+    entityId?: string;
+    selectedTab?: string;
+    collection: EntityCollection<any>
+};
+
+export type EntityFormProps<M extends Record<string, any>> = {
+    path: string;
+    fullIdPath?: string;
+    collection: EntityCollection<M>;
+    entityId?: string;
+    entity?: Entity<M>;
+    databaseId?: string;
+    onIdChange?: (id: string) => void;
+    onValuesModified?: (modified: boolean, values: M) => void;
+    onSaved?: (params: OnUpdateParams) => void;
+    initialDirtyValues?: Partial<M>; // dirty cached entity in memory
+    onFormContextReady?: (formContext: FormContext) => void;
+    forceActionsAtTheBottom?: boolean;
+    className?: string;
+    initialStatus: EntityStatus;
+    onStatusChange?: (status: EntityStatus) => void;
+    onEntityChange?: (entity: Entity<M>) => void;
+    formex?: FormexController<M>;
+    openEntityMode?: "side_panel" | "full_screen";
+    /**
+     * If true, the form will be disabled and no actions will be available
+     */
+    disabled?: boolean;
+    /**
+     * Include the copy and delete actions in the form
+     */
+    showDefaultActions?: boolean;
+
+    /**
+     * Display the entity path in the form
+     */
+    showEntityPath?: boolean;
+
+    EntityFormActionsComponent?: React.FC<EntityFormActionsProps>;
+
+    Builder?: React.ComponentType<EntityCustomViewParams<M>>;
+
+    children?: React.ReactNode;
+};
 import { removeEntityFromCache, saveEntityToCache, useDebouncedCallback } from "../util";
 import { CustomIdField } from "./components/CustomIdField";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
 import { getEntityTitlePropertyKey } from "../util/references";
+
+// extract touched values for nested touched trees and map to current values
+export function extractTouchedValues(values: any, touched: Record<string, boolean>): Record<string, any> {
+    let acc: Record<string, any> = {};
+    if (!touched || typeof touched !== "object") {
+        return acc;
+    }
+
+    Object.entries(touched).forEach(([key, value]) => {
+        if (value) {
+            acc = setIn(acc, key, getIn(values, key));
+        }
+    })
+
+    return acc;
+}
+
+export function getChanges<T extends object>(source: Partial<T>, comparison: Partial<T>): Partial<T> {
+    const changes: Partial<T> = {};
+
+    if (!source) {
+        return {};
+    }
+    if (!comparison) {
+        return source;
+    }
+
+    const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(comparison)]));
+
+    for (const key of allKeys) {
+        const sourceValue = (source as any)[key];
+        const comparisonValue = (comparison as any)[key];
+
+        if (equal(sourceValue, comparisonValue)) {
+            continue;
+        }
+
+        const sourceHasKey = source && typeof source === "object" && Object.prototype.hasOwnProperty.call(source, key);
+        const comparisonHasKey = comparison && typeof comparison === "object" && Object.prototype.hasOwnProperty.call(comparison, key);
+
+        if (comparisonHasKey && !sourceHasKey) {
+            (changes as any)[key] = undefined;
+        } else if (Array.isArray(sourceValue)) {
+            const comparisonArray = Array.isArray(comparisonValue) ? comparisonValue : [];
+            if (sourceValue.length < comparisonArray.length) {
+                (changes as any)[key] = sourceValue;
+                continue;
+            }
+            const changedArray = sourceValue.map((item, index) => {
+                const comparisonItem = comparisonArray[index];
+                if (equal(item, comparisonItem)) {
+                    return null;
+                }
+                if (isObject(item) && item && isObject(comparisonItem) && comparisonItem) {
+                    const nestedChanges = getChanges(item, comparisonItem);
+                    return Object.keys(nestedChanges).length > 0 ? nestedChanges : item;
+                }
+                return item;
+            });
+            if (changedArray.some(item => item !== null) || sourceValue.length > comparisonArray.length) {
+                (changes as any)[key] = changedArray;
+            }
+        } else if (isObject(sourceValue) && sourceValue && isObject(comparisonValue) && comparisonValue) {
+            const nestedChanges = getChanges(sourceValue, comparisonValue);
+            if (Object.keys(nestedChanges).length > 0) {
+                (changes as any)[key] = nestedChanges;
+            }
+        } else {
+            (changes as any)[key] = sourceValue;
+        }
+    }
+
+    return changes;
+}
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
@@ -105,7 +240,7 @@ export function EntityForm<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const analyticsController = useAnalyticsController();
 
-    const [underlyingChanges, setUnderlyingChanges] = useState<Partial<EntityValues<M>>>({});
+    const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
     const [customIdLoading, setCustomIdLoading] = useState<boolean>(false);
 
@@ -129,6 +264,18 @@ export function EntityForm<M extends Record<string, any>>({
     const [savingError, setSavingError] = useState<Error | undefined>();
 
     const autoSave = collection.formAutoSave && !collection.customId;
+
+    const baseInitialValues = useMemo(() => getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs), [authController, collection, path, status, entity, customizationController.propertyConfigs]);
+
+    const localChangesDataRaw = useMemo(() => entityId
+        ? getEntityFromCache(path + "/" + entityId)
+        : getEntityFromCache(path + "#new"), [entityId, path]);
+
+    const [localChangesCleared, setLocalChangesCleared] = useState<boolean>(false);
+
+    const localChangesBackup = getLocalChangesBackup(collection);
+    const autoApplyLocalChanges = localChangesBackup === "auto_apply";
+    const manualApplyLocalChanges = localChangesBackup === "manual_apply";
 
     const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
 
@@ -167,13 +314,43 @@ export function EntityForm<M extends Record<string, any>>({
             });
     };
 
+    const [initialValues, initialDirty] = useMemo(() => {
+        const initialValuesWithLocalChanges: Partial<M> = autoApplyLocalChanges && localChangesDataRaw ? mergeDeep(baseInitialValues, localChangesDataRaw as Partial<M>) : baseInitialValues;
+        const initialValues = initialDirtyValues ? mergeDeep(initialValuesWithLocalChanges, initialDirtyValues) : initialValuesWithLocalChanges;
+        const initialDirty = Boolean(initialDirtyValues) && initialDirtyValues && Object.keys(initialDirtyValues).length > 0;
+        return [initialValues, initialDirty];
+    }, [autoApplyLocalChanges, localChangesDataRaw, baseInitialValues, initialDirtyValues]);
+
+    const localChangesData = useMemo(() => {
+        if (!localChangesDataRaw) {
+            return undefined;
+        }
+        return getChanges(localChangesDataRaw, initialValues);
+    }, [localChangesDataRaw, initialValues]);
+
+    const hasLocalChanges = !localChangesCleared && localChangesData && Object.keys(localChangesData).length > 0;
+
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
-        initialValues: (initialDirtyValues ?? getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs)) as M,
-        initialDirty: Boolean(initialDirtyValues),
+        initialValues: initialValues as M,
+        initialDirty,
+        initialTouched: initialDirtyValues ?
+            flattenKeys(initialDirtyValues!)
+                .reduce((previousValue, currentValue) => ({
+                    ...previousValue,
+                    [currentValue]: true
+                }), {})
+            : {},
         onSubmit,
         onReset: () => {
             clearDirtyCache();
-            onValuesModified?.(false);
+            onValuesModified?.(false, initialValues as M);
+        },
+        onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
+            const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+            if (controller.dirty) {
+                const touchedValues = extractTouchedValues(values, controller.touched);
+                saveEntityToCache(key, touchedValues);
+            }
         },
         validation: (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
@@ -226,8 +403,10 @@ export function EntityForm<M extends Record<string, any>>({
 
     function clearDirtyCache() {
         if (status === "new" || status === "copy") {
+            removeEntityFromMemoryCache(path + "#new");
             removeEntityFromCache(path + "#new");
         } else {
+            removeEntityFromMemoryCache(path + "/" + entityId);
             removeEntityFromCache(path + "/" + entityId);
         }
     }
@@ -235,7 +414,7 @@ export function EntityForm<M extends Record<string, any>>({
     const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
         clearDirtyCache();
-        onValuesModified?.(false);
+        onValuesModified?.(false, updatedEntity.values);
         if (!autoSave)
             snackbarController.open({
                 type: "success",
@@ -337,7 +516,7 @@ export function EntityForm<M extends Record<string, any>>({
             values,
             previousValues: entity?.values,
             autoSave: autoSave ?? false
-        }).then((res) => {
+        }).then(() => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
@@ -375,7 +554,8 @@ export function EntityForm<M extends Record<string, any>>({
             type: "error",
             message: "Error updating id, check the console"
         });
-    }, []);
+        console.error(error);
+    }, [snackbarController]);
 
     const pluginActions: React.ReactNode[] = [];
     const plugins = customizationController.plugins;
@@ -435,17 +615,15 @@ export function EntityForm<M extends Record<string, any>>({
 
     useEffect(() => {
         if (!autoSave) {
-            onValuesModified?.(modified);
+            onValuesModified?.(modified, formex.values);
         }
     }, [formex.dirty]);
 
-    const deferredValues = useDeferredValue(formex.values);
     const modified = formex.dirty;
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
-                                                                        value,
-                                                                        property
+                                                                        value
                                                                     }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
         [dataSource, path, entityId]);
 
@@ -456,13 +634,6 @@ export function EntityForm<M extends Record<string, any>>({
                 uniqueFieldValidator)
             : undefined,
         [entityId, collection.properties, uniqueFieldValidator]);
-
-    useEffect(() => {
-        const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
-        if (modified) {
-            saveEntityToCache(key, deferredValues);
-        }
-    }, [deferredValues, modified, path, entityId, status]);
 
     useOnAutoSave(autoSave, formex, lastSavedValues, save);
 
@@ -647,7 +818,7 @@ export function EntityForm<M extends Record<string, any>>({
             <form
                 onSubmit={formex.handleSubmit}
                 onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs) as M
+                    values: baseInitialValues as M
                 })}
                 noValidate
                 className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
@@ -656,34 +827,46 @@ export function EntityForm<M extends Record<string, any>>({
                     className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
 
                     <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
+                        <div
+                            className={"flex flex-row gap-4 self-end sticky top-4 z-10"}>
 
-                        {formex.dirty
-                            ? <Tooltip title={"Local unsaved changes"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"} colorScheme={"orangeDarker"}>
-                                    <EditIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>
-                            : <Tooltip title={"In sync with the database"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"}>
-                                    <CheckIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>}
+                            {manualApplyLocalChanges && hasLocalChanges &&
+                                <LocalChangesMenu
+                                    cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
+                                    properties={resolvedCollection.properties}
+                                    localChangesData={localChangesData as Partial<M>}
+                                    formex={formex}
+                                    onClearLocalChanges={() => setLocalChangesCleared(true)}
+                                />}
+
+                            {formex.dirty
+                                ? <Tooltip title={"This form has been modified"}>
+                                    <Chip size={"small"} className={"py-1"} colorScheme={"orangeDarker"}>
+                                        <EditIcon size={"smallest"}/>
+                                    </Chip>
+                                </Tooltip>
+                                : <Tooltip title={"The current form is in sync with the database"}>
+                                    <Chip size={"small"} className={"py-1"}>
+                                        <CheckIcon size={"smallest"}/>
+                                    </Chip>
+                                </Tooltip>}
+                        </div>
 
                         {formView}
 
                     </div>
 
                 </div>
+
                 {dialogActions}
+
             </form>
 
         </Formex>
     );
 }
 
-function getInitialEntityValues<M extends object>(
+export function getInitialEntityValues<M extends object>(
     authController: AuthController,
     collection: EntityCollection,
     path: string,

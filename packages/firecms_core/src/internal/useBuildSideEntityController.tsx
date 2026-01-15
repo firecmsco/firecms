@@ -19,7 +19,6 @@ import {
 } from "@firecms/common";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { useCustomizationController, useLargeLayout } from "../hooks";
-import { EntitySidePanel } from "../core/EntitySidePanel";
 import { JSON_TAB_VALUE } from "../core/EntityEditView";
 
 const NEW_URL_HASH = "new_side";
@@ -208,7 +207,6 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
 export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
 
-
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPath({
         path,
         collections
@@ -279,11 +277,11 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController);
     return {
         key: `${props.path}/${props.entityId}`,
-        component: <EntitySidePanel {...resolvedPanelProps}/>,
+        component: undefined, // Lazy render in SideDialogs for better performance
         urlPath: urlPath,
         parentUrlPath: buildUrlCollectionPath(collectionPath),
         width: entityViewWidth,
         onClose: props.onClose,
-        additional: props
+        additional: resolvedPanelProps
     };
 }

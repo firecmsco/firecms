@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseApp } from "@firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -73,6 +73,7 @@ import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firec
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -90,7 +91,7 @@ import { useEntityHistoryPlugin } from "@firecms/entity_history";
 export function FireCMSCloudApp({
                                     projectId,
                                     appConfig,
-                                    backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
+                                    backendApiHost = "https://api.firecms.co", // TODO
                                     onAnalyticsEvent,
                                     basePath,
                                     baseCollectionPath
@@ -260,10 +261,12 @@ function ErrorDelegatingLoginView({
             {errorBody}
         </div>
         <div>
-            Some login errors may be caused by the user not being registered in the client project.
-            Make sure a user exists in the client project with the same email as the one trying to log in.
+            If you are experiencing issues logging in, feel free to reach us at <a href="mailto:hello@firecms.co"
+                                                                                   rel="noopener noreferrer"
+                                                                                   target="_blank">
+            hello@firecms.co</a>
         </div>
-        <Button variant="outlined" onClick={onLogout}>Sign out</Button>
+        <Button  size="small" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -279,7 +282,7 @@ function NoAccessErrorView(props: { projectId: string, configError: Error, onLog
             registered in the project <code>{props.projectId}</code>.
             You can ask the project owner to add you to the project.
         </Typography>
-        <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
+        <Button  onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -325,7 +328,7 @@ export function FireCMSClientWithController({
             if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return userManagement.users.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
+            return userManagement.users.find((fireCMSUser) => fireCMSUser.email?.toLowerCase() === user?.email?.toLowerCase());
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
@@ -529,7 +532,7 @@ function FireCMSAppAuthenticated({
     const historyDefaultEnabled = projectConfig.historyDefaultEnabled;
     const historyPlugin = useEntityHistoryPlugin({
         defaultEnabled: historyDefaultEnabled,
-        getUser: (uid) => userManagement.users.find((user) => user.firebase_uid === uid) ?? null,
+        getUser: (uid) => userManagement.users.find((user) => user.uid === uid) ?? null,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
@@ -569,6 +572,16 @@ function FireCMSAppAuthenticated({
         loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0
     });
 
+    const { rootPathSuggestions } = useRootCollectionSuggestions({
+        projectId: projectConfig.projectId
+    });
+
+    useEffect(() => {
+        if (collectionConfigController.collectionsSetup?.status !== "ongoing") {
+            navigationController?.refreshNavigation();
+        }
+    }, [collectionConfigController.collectionsSetup?.status]);
+
     const saasPlugin = useSaasPlugin({
         projectConfig,
         collectionConfigController,
@@ -578,7 +591,8 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
-        historyDefaultEnabled
+        historyDefaultEnabled,
+        rootPathSuggestions
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
@@ -589,7 +603,8 @@ function FireCMSAppAuthenticated({
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
-        includeIntroView: false
+        includeIntroView: false,
+        pathSuggestions: rootPathSuggestions
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [
@@ -605,8 +620,8 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: appConfig?.collections,
-        views: appConfig?.views,
+        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        views: projectConfig.isTrialOver ? [] : appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
         plugins

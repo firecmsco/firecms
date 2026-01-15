@@ -42,11 +42,11 @@ export type EntityPreviewProps = {
 function PreviousValueView({
                                previousValueInPath,
                                childProperty,
-                               key
+                               propertyKey
                            }: {
     previousValueInPath: any,
     childProperty: Property,
-    key: string
+    propertyKey: string
 }) {
     if (typeof previousValueInPath === "string" || typeof previousValueInPath === "number") {
         return <Typography variant={"caption"} color={"secondary"} className="line-through">
@@ -65,7 +65,7 @@ function PreviousValueView({
                     Previous value
                 </Typography>
                 <PropertyPreview
-                    propertyKey={key as string}
+                    propertyKey={propertyKey as string}
                     value={previousValueInPath}
                     property={childProperty as Property}
                     size={"small"}/>
@@ -115,7 +115,7 @@ export function EntityHistoryEntry({
         <div
             className={cls(
                 "bg-white dark:bg-surface-900",
-                "min-h-[42px]",
+                "min-h-[44px]",
                 "w-full",
                 "items-center",
                 hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",
@@ -190,7 +190,7 @@ export function EntityHistoryEntry({
                                 {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
                                     <PreviousValueView previousValueInPath={previousValueInPath}
                                                        childProperty={childProperty as Property}
-                                                       key={key}/>
+                                                       propertyKey={key}/>
                                 }
                                 {element}
                             </div>

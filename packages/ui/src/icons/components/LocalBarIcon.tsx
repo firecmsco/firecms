@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LocalBarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"local_bar"}/>
-}
+export const LocalBarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"local_bar"} ref={ref}/>
+});
+
+LocalBarIcon.displayName = "LocalBarIcon";

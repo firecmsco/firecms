@@ -66,7 +66,7 @@ export function MapPropertyPreview({
                                 <div
                                     className="min-w-[140px] w-[25%] py-1">
                                     <Typography variant={"caption"}
-                                                className={"font-mono break-words"}
+                                                className={"break-words font-semibold"}
                                                 color={"secondary"}>
                                         {childProperty.name}
                                     </Typography>
@@ -119,7 +119,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                             key={`table-cell-title-${key}-${key}`}
                             className="min-w-[140px] w-[25%] py-1">
                             <Typography variant={"caption"}
-                                        className={"font-mono break-words"}
+                                        className={"font-semibold break-words"}
                                         color={"secondary"}>
                                 {key}
                             </Typography>

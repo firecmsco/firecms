@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PriorityHighIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"priority_high"}/>
-}
+export const PriorityHighIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"priority_high"} ref={ref}/>
+});
+
+PriorityHighIcon.displayName = "PriorityHighIcon";

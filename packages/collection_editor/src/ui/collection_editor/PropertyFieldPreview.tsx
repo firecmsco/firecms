@@ -41,7 +41,7 @@ export function PropertyFieldPreview({
     const disabled = !editableProperty(property);
 
     const borderColorClass = hasError
-        ? "border-red-500 dark:border-red-500 ring-0 dark:ring-0"
+        ? "border-red-500 dark:border-red-500 border-opacity-100 dark:border-opacity-100 border-red-500/100 dark:border-red-500/100 ring-0 dark:ring-0"
         : (selected ? "border-primary" : "border-transparent");
 
     return <ErrorBoundary>
@@ -81,7 +81,7 @@ export function PropertyFieldPreview({
                     <div className="flex flex-row items-center">
                         <ErrorBoundary>
                             <Typography className="grow pr-2"
-                                        variant={includeName ? "body2" : "subtitle1"}
+                                        variant={includeName ? "body2" : "label"}
                                         component="span"
                                         color="secondary">
                                 {propertyConfig?.name}
@@ -146,7 +146,7 @@ export function NonEditablePropertyPreview({
             >
 
                 <div className="w-full flex flex-col">
-                    <Typography variant="body1"
+                    <Typography variant="label"
                                 component="span"
                                 className="grow pr-2">
                         {property?.name

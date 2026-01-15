@@ -9,39 +9,55 @@ import { getThumbnailMeasure } from "../util";
  */
 export interface ImagePreviewProps {
     size: PreviewSize,
-    url: string
+    url: string,
+    /**
+     * If true, image fills its container completely with object-fit cover
+     */
+    fill?: boolean
 }
 
 /**
  * @group Preview components
  */
 export function ImagePreview({
-                                 size,
-                                 url
-                             }: ImagePreviewProps) {
+    size,
+    url,
+    fill
+}: ImagePreviewProps) {
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
+
+    // Fill mode - image fills its container completely
+    if (fill) {
+        return (
+            <img src={url}
+                className={"w-full h-full object-cover"}
+                key={"fill_image_preview_" + url}
+                loading="lazy"
+            />
+        );
+    }
 
     if (size === "small") {
         return (
             <img src={url}
-                 className={"rounded-md"}
-                 key={"tiny_image_preview_" + url}
-                 style={{
-                     position: "relative",
-                     objectFit: "cover",
-                     width: imageSize,
-                     height: imageSize,
-                     maxHeight: "100%"
-                 }}/>
+                className={"rounded-md"}
+                key={"tiny_image_preview_" + url}
+                style={{
+                    position: "relative",
+                    objectFit: "cover",
+                    width: imageSize,
+                    height: imageSize,
+                    maxHeight: "100%"
+                }} />
         );
     }
 
     const imageStyle: CSSProperties =
-        {
-            maxWidth: "100%",
-            maxHeight: "100%"
-        };
+    {
+        maxWidth: "100%",
+        maxHeight: "100%"
+    };
 
     return (
         <div
@@ -53,8 +69,8 @@ export function ImagePreview({
             key={"image_preview_" + url}>
 
             <img src={url}
-                 className={"rounded-md"}
-                 style={imageStyle}/>
+                className={"rounded-md"}
+                style={imageStyle} />
 
             <div className={"flex flex-row gap-2 absolute bottom-[-4px] right-[-4px] invisible group-hover:visible"}>
                 {navigator && <Tooltip
@@ -69,7 +85,7 @@ export function ImagePreview({
                             return navigator.clipboard.writeText(url);
                         }}>
                         <ContentCopyIcon className={"text-surface-700 dark:text-surface-300"}
-                                         size={"smallest"}/>
+                            size={"smallest"} />
                     </IconButton>
                 </Tooltip>}
 
@@ -85,7 +101,7 @@ export function ImagePreview({
                         onClick={(e: any) => e.stopPropagation()}
                     >
                         <OpenInNewIcon className={"text-surface-700 dark:text-surface-300"}
-                                       size={"smallest"}/>
+                            size={"smallest"} />
                     </IconButton>
                 </Tooltip>
             </div>

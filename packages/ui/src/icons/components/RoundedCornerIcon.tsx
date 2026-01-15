@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RoundedCornerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rounded_corner"}/>
-}
+export const RoundedCornerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rounded_corner"} ref={ref}/>
+});
+
+RoundedCornerIcon.displayName = "RoundedCornerIcon";

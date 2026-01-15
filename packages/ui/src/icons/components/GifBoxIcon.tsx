@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GifBoxIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gif_box"}/>
-}
+export const GifBoxIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gif_box"} ref={ref}/>
+});
+
+GifBoxIcon.displayName = "GifBoxIcon";

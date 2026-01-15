@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WbAutoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wb_auto"}/>
-}
+export const WbAutoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wb_auto"} ref={ref}/>
+});
+
+WbAutoIcon.displayName = "WbAutoIcon";

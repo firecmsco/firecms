@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Grid4x4Icon(props: IconProps) {
-    return <Icon {...props} iconKey={"grid_4x4"}/>
-}
+export const Grid4x4Icon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"grid_4x4"} ref={ref}/>
+});
+
+Grid4x4Icon.displayName = "Grid4x4Icon";

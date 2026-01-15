@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WbShadeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wb_shade"}/>
-}
+export const WbShadeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wb_shade"} ref={ref}/>
+});
+
+WbShadeIcon.displayName = "WbShadeIcon";

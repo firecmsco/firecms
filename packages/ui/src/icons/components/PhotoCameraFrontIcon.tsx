@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PhotoCameraFrontIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"photo_camera_front"}/>
-}
+export const PhotoCameraFrontIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"photo_camera_front"} ref={ref}/>
+});
+
+PhotoCameraFrontIcon.displayName = "PhotoCameraFrontIcon";

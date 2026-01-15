@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ExpandCircleDownIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"expand_circle_down"}/>
-}
+export const ExpandCircleDownIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"expand_circle_down"} ref={ref}/>
+});
+
+ExpandCircleDownIcon.displayName = "ExpandCircleDownIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AvTimerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"av_timer"}/>
-}
+export const AvTimerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"av_timer"} ref={ref}/>
+});
+
+AvTimerIcon.displayName = "AvTimerIcon";

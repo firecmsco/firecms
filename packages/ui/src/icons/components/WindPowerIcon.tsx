@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WindPowerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wind_power"}/>
-}
+export const WindPowerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wind_power"} ref={ref}/>
+});
+
+WindPowerIcon.displayName = "WindPowerIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SatelliteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"satellite"}/>
-}
+export const SatelliteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"satellite"} ref={ref}/>
+});
+
+SatelliteIcon.displayName = "SatelliteIcon";

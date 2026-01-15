@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function QueueMusicIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"queue_music"}/>
-}
+export const QueueMusicIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"queue_music"} ref={ref}/>
+});
+
+QueueMusicIcon.displayName = "QueueMusicIcon";

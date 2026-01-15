@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SpatialTrackingIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"spatial_tracking"}/>
-}
+export const SpatialTrackingIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"spatial_tracking"} ref={ref}/>
+});
+
+SpatialTrackingIcon.displayName = "SpatialTrackingIcon";

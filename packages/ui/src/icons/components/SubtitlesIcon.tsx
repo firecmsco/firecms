@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SubtitlesIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"subtitles"}/>
-}
+export const SubtitlesIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"subtitles"} ref={ref}/>
+});
+
+SubtitlesIcon.displayName = "SubtitlesIcon";

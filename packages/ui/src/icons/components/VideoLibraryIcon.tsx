@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VideoLibraryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"video_library"}/>
-}
+export const VideoLibraryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"video_library"} ref={ref}/>
+});
+
+VideoLibraryIcon.displayName = "VideoLibraryIcon";

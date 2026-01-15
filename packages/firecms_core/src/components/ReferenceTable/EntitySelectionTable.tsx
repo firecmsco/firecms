@@ -317,7 +317,6 @@ export function EntitySelectionTable<M extends Record<string, any>>(
                     </Typography>}
                 <Button
                     onClick={onDone}
-                    color="primary"
                     variant="filled">
                     Done
                 </Button>
@@ -354,24 +353,18 @@ function EntitySelectionDialogActions({
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}
-                startIcon={<AddIcon/>}
-                variant="outlined"
-                color="primary">
+                startIcon={<AddIcon/>}>
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
-                onClick={onClick}
-                variant="outlined"
-                color="primary"
-            >
+                onClick={onClick}>
                 <AddIcon/>
             </Button>);
 
     return (
         <>
             <Button onClick={onClear}
-                    variant={"text"}
-                    color="primary">
+                    variant={"text"}>
                 Clear
             </Button>
             {addButton}

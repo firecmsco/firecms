@@ -126,8 +126,9 @@ function mergeProperty(target: Property, source: Property): Property {
         return target;
     } else {
         const mergedProperty = mergeDeep(target, source);
-        const targetEditable = Boolean(target.editable);
-        const sourceEditable = Boolean(source.editable);
+        const targetEditable = target.editable === undefined ? true : Boolean(target.editable);
+        const sourceEditable = source.editable === undefined ? true : Boolean(source.editable);
+
         if (source.type === "map" && source.properties) {
             const targetProperties = ("properties" in target ? target.properties : {}) as Properties;
             const sourceProperties = ("properties" in source ? source.properties : {}) as Properties;

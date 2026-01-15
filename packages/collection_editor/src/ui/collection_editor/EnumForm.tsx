@@ -355,9 +355,7 @@ function EnumEntryDialog({
         <DialogActions>
             <Button
                 autoFocus
-                variant="outlined"
-                onClick={onClose}
-                color="primary">
+                onClick={onClose}>
                 Ok
             </Button>
         </DialogActions>

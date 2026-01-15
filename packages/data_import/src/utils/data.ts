@@ -118,11 +118,30 @@ export function processValueMapping(authController: AuthController, value: any, 
             return value;
         }
     } else if (from === "string" && to === "reference" && typeof value === "string") {
+        // Parse optional database name in format: database_name:::path/to/entity
+        // or simple format: path/to/entity
+        let databaseId: string | undefined = undefined;
+        let referencePath = value;
+
+        if (value.includes(":::")) {
+            const [dbName, pathPart] = value.split(":::");
+            if (dbName && dbName !== "(default)") {
+                databaseId = dbName;
+            }
+            referencePath = pathPart;
+        }
+
         // split value into path and entityId (entityId is the last part of the path, after the last /)
-        const path = value.split("/").slice(0, -1).join("/");
-        const entityId = value.split("/").slice(-1)[0];
-        const targetCollection: EntityCollection<any> | undefined = navigation.getCollectionById(path);
-        return new EntityReference(entityId, path, targetCollection?.databaseId);
+        const path = referencePath.split("/").slice(0, -1).join("/");
+        const entityId = referencePath.split("/").slice(-1)[0];
+
+        // If no explicit database was provided in the string, try to get it from the collection
+        if (databaseId === undefined) {
+            const targetCollection: EntityCollection<any> | undefined = navigation.getCollectionById(path);
+            databaseId = targetCollection?.databaseId;
+        }
+
+        return new EntityReference(entityId, path, databaseId);
 
     } else if (from === to) {
         return value;

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SpeedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"speed"}/>
-}
+export const SpeedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"speed"} ref={ref}/>
+});
+
+SpeedIcon.displayName = "SpeedIcon";

@@ -44,6 +44,7 @@ export function EntityHistoryView({
         setIsLoading(true); // Set loading true when fetching starts
         const listener = dataSource.listenCollection?.({
             path: pathAndId + "/__history",
+            collection: collection,
             order: "desc",
             orderBy: "__metadata.updated_on",
             limit: limit,

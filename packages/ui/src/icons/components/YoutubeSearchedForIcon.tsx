@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function YoutubeSearchedForIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"youtube_searched_for"}/>
-}
+export const YoutubeSearchedForIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"youtube_searched_for"} ref={ref}/>
+});
+
+YoutubeSearchedForIcon.displayName = "YoutubeSearchedForIcon";

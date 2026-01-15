@@ -5,7 +5,7 @@ import { FieldProps, FormContext } from "./fields";
 import { Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { FireCMSContext } from "../firecms_context";
-import { NavigationGroupMapping } from "../controllers";
+import { NavigationGroupMapping, CMSView } from "../controllers";
 import { User } from "../users";
 import { InternalUserManagement } from "./internal_user_management";
 
@@ -44,6 +44,12 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     };
 
     userManagement?: InternalUserManagement
+
+    /**
+     * Views to be automatically added to the navigation.
+     * These views will be merged with the views provided to useBuildNavigationController.
+     */
+    views?: CMSView[];
 
     homePage?: {
 
@@ -160,6 +166,17 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             collection: EC;
             tableController: EntityTableController;
         }>;
+
+        /**
+         * Callback called when columns are reordered via drag and drop.
+         * Used by plugins to persist the new column order.
+         */
+        onColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            newPropertiesOrder: string[];
+        }) => void;
     }
 
     form?: {

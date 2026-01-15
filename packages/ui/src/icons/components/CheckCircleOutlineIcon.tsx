@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CheckCircleOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"check_circle_outline"}/>
-}
+export const CheckCircleOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"check_circle_outline"} ref={ref}/>
+});
+
+CheckCircleOutlineIcon.displayName = "CheckCircleOutlineIcon";

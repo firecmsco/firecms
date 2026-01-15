@@ -104,7 +104,7 @@ export function AppCheckSettingsView() {
                            disabled={!enabled}/>
             </div>
 
-            <Button variant={"outlined"}
+            <Button
                     type={"submit"}>
                 Update AppCheck
             </Button>

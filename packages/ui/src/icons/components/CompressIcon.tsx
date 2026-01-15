@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CompressIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"compress"}/>
-}
+export const CompressIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"compress"} ref={ref}/>
+});
+
+CompressIcon.displayName = "CompressIcon";

@@ -1,51 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useFormex } from "@firecms/formex";
 
 export const ErrorFocus = ({ containerRef }:
                                {
                                    containerRef?: React.RefObject<HTMLDivElement>
                                }) => {
-    const { isSubmitting, isValidating, errors } = useFormex();
+    const {
+        isValidating,
+        errors,
+        version
+    } = useFormex();
+
+    const prevVersion = useRef(version);
 
     useEffect(() => {
+
+        if (version === prevVersion.current) {
+            return;
+        }
+
         const keys = Object.keys(errors);
 
-        // Whenever there are errors and the form is submitting but finished validating.
-        if (keys.length > 0 && isSubmitting && !isValidating) {
+        // Whenever there are errors and the form has been submitted and is not validating
+        if (!isValidating && keys.length > 0) {
             const errorElement = containerRef?.current?.querySelector<HTMLDivElement>(
                 `#form_field_${keys[0]}`
             );
 
-            if (errorElement && containerRef?.current) {
-                const scrollableParent = getScrollableParent(containerRef.current);
-                if (scrollableParent) {
-                    const top = errorElement.getBoundingClientRect().top;
-                    scrollableParent.scrollTo({
-                        top: scrollableParent.scrollTop + top - 196,
-                        behavior: "smooth"
-                    });
-                }
+            if (errorElement) {
+                errorElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
                 const input = errorElement.querySelector("input");
                 if (input) input.focus();
             }
+            prevVersion.current = version;
         }
-    }, [isSubmitting, isValidating, errors, containerRef]);
+    }, [isValidating, errors, containerRef, version]);
 
     // This component does not render anything by itself.
     return null;
-};
-
-const isScrollable = (ele: HTMLElement | null) => {
-    const hasScrollableContent = ele && ele.scrollHeight > ele.clientHeight;
-
-    const overflowYStyle = ele ? window.getComputedStyle(ele).overflowY : null;
-    const isOverflowHidden = overflowYStyle && overflowYStyle.indexOf("hidden") !== -1;
-
-    return hasScrollableContent && !isOverflowHidden;
-};
-
-const getScrollableParent = (ele: HTMLElement | null): HTMLElement | null => {
-    return (!ele || ele === document.body)
-        ? document.body
-        : (isScrollable(ele) ? ele : getScrollableParent(ele.parentNode as HTMLElement));
 };

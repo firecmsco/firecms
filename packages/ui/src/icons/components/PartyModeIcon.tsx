@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PartyModeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"party_mode"}/>
-}
+export const PartyModeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"party_mode"} ref={ref}/>
+});
+
+PartyModeIcon.displayName = "PartyModeIcon";

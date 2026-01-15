@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MarkAsUnreadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mark_as_unread"}/>
-}
+export const MarkAsUnreadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mark_as_unread"} ref={ref}/>
+});
+
+MarkAsUnreadIcon.displayName = "MarkAsUnreadIcon";

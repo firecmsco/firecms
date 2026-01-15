@@ -125,6 +125,7 @@ function cleanPropertyConfigs(properties: Properties, propertyConfigs: Record<st
             } else {
                 cleanProperty = property;
             }
+            delete cleanProperty.editable;
             res[key] = { ...cleanProperty };
         }
     });

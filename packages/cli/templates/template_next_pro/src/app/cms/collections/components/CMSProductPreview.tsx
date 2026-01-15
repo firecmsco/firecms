@@ -27,7 +27,7 @@ export function CMSProductPreview({
         <div className={"flex w-full justify-end p-4"}>
             <Link href={"/products/" + id}
                   target={"_blank"}>
-                <Button variant={"outlined"} size={"small"}><OpenInNewIcon/> See product in website</Button>
+                <Button size={"small"}><OpenInNewIcon/> See product in website</Button>
             </Link>
         </div>
         <ProductDetailView product={convertedProduct}/>

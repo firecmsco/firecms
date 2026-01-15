@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AirplanemodeActiveIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"airplanemode_active"}/>
-}
+export const AirplanemodeActiveIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"airplanemode_active"} ref={ref}/>
+});
+
+AirplanemodeActiveIcon.displayName = "AirplanemodeActiveIcon";

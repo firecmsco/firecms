@@ -1,20 +1,10 @@
 import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "@firecms/types";
-import {
-    Checkbox,
-    Chip,
-    cls,
-    EditIcon,
-    IconButton,
-    Menu,
-    MenuItem,
-    MoreVertIcon,
-    Skeleton,
-    Tooltip
-} from "@firecms/ui";
+import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { hasEntityInCache } from "../../util/entity_cache";
+import { getEntityFromCache } from "../../util/entity_cache";
+import { getLocalChangesBackup } from "@firecms/common";
 
 /**
  *
@@ -30,39 +20,50 @@ import { hasEntityInCache } from "../../util/entity_cache";
  * @group Collection components
  */
 export const EntityCollectionRowActions = function EntityCollectionRowActions({
-                                                                                  entity,
-                                                                                  collection,
-                                                                                  path,
-                                                                                  width,
-                                                                                  frozen,
-                                                                                  isSelected,
-                                                                                  selectionEnabled,
-                                                                                  size,
-                                                                                  highlightEntity,
-                                                                                  onCollectionChange,
-                                                                                  unhighlightEntity,
-                                                                                  actions = [],
-                                                                                  hideId,
-                                                                                  selectionController,
-                                                                                  openEntityMode
-                                                                              }:
-                                                                              {
-                                                                                  entity: Entity<any>,
-                                                                                  collection?: EntityCollection<any>,
-                                                                                  path?: string,
-                                                                                  width: number,
-                                                                                  frozen?: boolean,
-                                                                                  size: CollectionSize,
-                                                                                  isSelected?: boolean,
-                                                                                  selectionEnabled?: boolean,
-                                                                                  actions?: EntityAction[],
-                                                                                  hideId?: boolean,
-                                                                                  onCollectionChange?: () => void,
-                                                                                  selectionController?: SelectionController;
-                                                                                  highlightEntity?: (entity: Entity<any>) => void;
-                                                                                  unhighlightEntity?: (entity: Entity<any>) => void;
-                                                                                  openEntityMode: "side_panel" | "full_screen";
-                                                                              }) {
+    entity,
+    collection,
+    path,
+    width,
+    frozen,
+    isSelected,
+    selectionEnabled,
+    size,
+    highlightEntity,
+    onCollectionChange,
+    unhighlightEntity,
+    actions = [],
+    hideId,
+    selectionController,
+    openEntityMode,
+    sortableNodeRef,
+    sortableStyle,
+    sortableAttributes,
+    isDragging,
+    isDraggable
+}:
+    {
+        entity: Entity<any>,
+        collection?: EntityCollection<any>,
+        path?: string,
+        width: number,
+        frozen?: boolean,
+        size: CollectionSize,
+        isSelected?: boolean,
+        selectionEnabled?: boolean,
+        actions?: EntityAction[],
+        hideId?: boolean,
+        onCollectionChange?: () => void,
+        selectionController?: SelectionController;
+        highlightEntity?: (entity: Entity<any>) => void;
+        unhighlightEntity?: (entity: Entity<any>) => void;
+        openEntityMode: "side_panel" | "full_screen";
+        // Sortable props for dnd-kit integration
+        sortableNodeRef?: (node: HTMLElement | null) => void;
+        sortableStyle?: React.CSSProperties;
+        sortableAttributes?: Record<string, any>;
+        isDragging?: boolean;
+        isDraggable?: boolean;
+    }) {
 
     const largeLayout = useLargeLayout();
 
@@ -77,10 +78,14 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
-    const hasDraft = hasEntityInCache(path + "/" + entity.id);
-    return (
+    const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
+    const hasDraft = enableLocalChangesBackup ? getEntityFromCache(path + "/" + entity.id) : false;
+    const iconSize = largeLayout && (size === "m" || size === "l" || size == "xl") ? "medium" : "small";
+
+    const content = (
         <div
             className={cls(
+                "h-full flex items-center justify-center flex-col bg-surface-50 dark:bg-surface-900 bg-opacity-90 bg-surface-50/90 dark:bg-opacity-90 dark:bg-surface-900/90 z-10",
                 "h-full flex items-center justify-center flex-col bg-surface-50/90 dark:bg-surface-900/90 z-10",
                 frozen ? "sticky left-0" : ""
             )}
@@ -97,37 +102,50 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
             {(hasActions || selectionEnabled) &&
                 <div className="w-34 flex justify-center">
 
-                    {uncollapsedActions.map((action, index) => (
-                        <Tooltip key={index}
-                                 title={action.name}
-                                 asChild={true}>
-                            <IconButton
-                                onClick={(event: MouseEvent) => {
-                                    event.stopPropagation();
-                                    action.onClick({
-                                        view: "collection",
-                                        entity,
-                                        path,
-                                        collection,
-                                        context,
-                                        selectionController,
-                                        highlightEntity,
-                                        unhighlightEntity,
-                                        onCollectionChange,
-                                        openEntityMode: openEntityMode ?? collection?.openEntityMode
-                                    });
-                                }}
-                                size={largeLayout ? "medium" : "small"}>
-                                {action.icon}
-                            </IconButton>
-                        </Tooltip>
-                    ))}
+                    {uncollapsedActions.map((action, index) => {
+                        const isEditAction = action.key === "edit";
+                        const tooltip = isEditAction && hasDraft ? "Local unsaved changes" : action.name;
+
+                        let iconButton = <IconButton
+                            onClick={(event: MouseEvent) => {
+                                event.stopPropagation();
+                                action.onClick({
+                                    view: "collection",
+                                    entity,
+                                    path,
+                                    collection,
+                                    context,
+                                    selectionController,
+                                    highlightEntity,
+                                    unhighlightEntity,
+                                    onCollectionChange,
+                                    openEntityMode: openEntityMode ?? collection?.openEntityMode
+                                });
+                            }}
+                            size={iconSize}>
+                            {action.icon}
+                        </IconButton>;
+                        if (isEditAction && hasDraft) {
+                            iconButton = (
+                                <Badge color={"warning"}>
+                                    {iconButton}
+                                </Badge>
+                            );
+                        }
+                        return (
+                            <Tooltip key={index}
+                                title={tooltip}
+                                asChild={true}>
+                                {iconButton}
+                            </Tooltip>
+                        );
+                    })}
 
                     {hasCollapsedActions &&
                         <Menu
                             trigger={<IconButton
-                                size={largeLayout ? "medium" : "small"}>
-                                <MoreVertIcon/>
+                                size={iconSize}>
+                                <MoreVertIcon />
                             </IconButton>}>
                             {collapsedActions.map((action, index) => (
                                 <MenuItem
@@ -157,7 +175,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                     {selectionEnabled &&
                         <Tooltip title={`Select ${entity.id}`}>
                             <Checkbox
-                                size={largeLayout ? "medium" : "small"}
+                                size={iconSize}
                                 checked={Boolean(isSelected)}
                                 onCheckedChange={onCheckedChange}
                             />
@@ -171,15 +189,10 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                     onClick={(event) => {
                         event.stopPropagation();
                     }}>
-                    {hasDraft && <Tooltip title={"Local unsaved changes"} className={"inline"}>
-                        <Chip colorScheme={"orangeDarker"} className={"p-0.5"}>
-                            <EditIcon size={12}/>
-                        </Chip>
-                    </Tooltip>}
                     <span className="min-w-0 truncate text-center">
                         {entity
                             ? entity.id
-                            : <Skeleton/>
+                            : <Skeleton />
                         }
                     </span>
                 </div>
@@ -187,5 +200,26 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
         </div>
     );
+
+    // Wrap with sortable outer div when sortable props are provided
+    // Remove tabIndex from attributes to avoid capturing focus before cell content
+    if (sortableNodeRef) {
+        const { tabIndex: _tabIndex, ...sortableAttrsWithoutTabIndex } = sortableAttributes ?? {};
+        return (
+            <div
+                ref={sortableNodeRef}
+                style={sortableStyle}
+                className={cls(
+                    "flex-shrink-0",
+                    frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+                )}
+                {...sortableAttrsWithoutTabIndex}
+            >
+                {content}
+            </div>
+        );
+    }
+
+    return content;
 
 };

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PictureInPictureAltIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"picture_in_picture_alt"}/>
-}
+export const PictureInPictureAltIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"picture_in_picture_alt"} ref={ref}/>
+});
+
+PictureInPictureAltIcon.displayName = "PictureInPictureAltIcon";

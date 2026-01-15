@@ -212,6 +212,18 @@ export function FirebaseLoginView({
                         title={"Invalid API key"}
                         error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase_config.ts` file"}/>
                 </div>;
+            } else if (authController.authProviderError.code === "auth/email-already-in-use") {
+                errorView = <div className="p-4">
+                    <ErrorView
+                        title={"Email already in use"}
+                        error={"The selected email is already in use by another account"}/>
+                </div>;
+            } else if (authController.authProviderError.code === "auth/invalid-credential") {
+                errorView = <div className="p-4">
+                    <ErrorView
+                        title={"Invalid credential"}
+                        error={"The provided credential is not correct"}/>
+                </div>;
             } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
                 if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
@@ -355,7 +367,7 @@ export function LoginButton({
                     borderRadius: "4px",
                     fontSize: "14px"
                 }}
-                variant="outlined"
+
                 disabled={disabled}
                 onClick={onClick}>
                 <div

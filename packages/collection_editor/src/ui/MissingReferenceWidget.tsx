@@ -1,4 +1,4 @@
-import { ErrorView, unslugify, useNavigationController } from "@firecms/core";
+import { ErrorView, prettifyIdentifier, useNavigationController } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { Button } from "@firecms/ui";
 
@@ -11,11 +11,11 @@ export function MissingReferenceWidget({ path: pathProp }: {
     const collectionEditor = useCollectionEditorController();
     return <div className={"p-1 flex flex-col items-center"}>
         <ErrorView error={"No collection for path: " + path}/>
-        <Button className={"mx-2"} variant={"outlined"}
+        <Button className={"mx-2"}
                 size={"small"}
                 onClick={() => {
                     collectionEditor.createCollection({
-                        initialValues: { path, name: unslugify(path) },
+                        initialValues: { path, name: prettifyIdentifier(path) },
                         parentCollectionIds,
                         redirect: false,
                         sourceClick: "missing_reference"

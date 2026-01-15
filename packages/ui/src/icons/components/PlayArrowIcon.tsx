@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PlayArrowIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"play_arrow"}/>
-}
+export const PlayArrowIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"play_arrow"} ref={ref}/>
+});
+
+PlayArrowIcon.displayName = "PlayArrowIcon";

@@ -67,6 +67,16 @@ export class EntityReference {
         return `${this.path}/${this.id}`;
     }
 
+    get pathWithIdAndDatabase() {
+        if (this.databaseId) {
+            if (this.databaseId === "(default)") {
+                return this.pathWithId;
+            }
+            return `${this.databaseId}:::${this.path}/${this.id}`;
+        }
+        return this.pathWithId;
+    }
+
     isEntityReference() {
         return true;
     }

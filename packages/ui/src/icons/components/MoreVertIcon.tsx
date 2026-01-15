@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MoreVertIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"more_vert"}/>
-}
+export const MoreVertIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"more_vert"} ref={ref}/>
+});
+
+MoreVertIcon.displayName = "MoreVertIcon";

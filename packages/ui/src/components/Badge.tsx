@@ -1,6 +1,6 @@
 import React from "react";
 
-export type BadgeColor = "primary" | "secondary" | "error";
+export type BadgeColor = "primary" | "secondary" | "warning" | "error";
 
 export interface BadgeProps {
     color?: BadgeColor;
@@ -14,6 +14,8 @@ const getColor = (color: BadgeColor) => {
             return "bg-primary";
         case "secondary":
             return "bg-secondary";
+        case "warning":
+            return "bg-orange-500";
         case "error":
             return "bg-red-500";
         default:
@@ -21,13 +23,13 @@ const getColor = (color: BadgeColor) => {
     }
 }
 
-export const Badge: React.FC<BadgeProps> = ({
-                                                color = "primary",
-                                                invisible = false,
-                                                children
-                                            }) => {
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({
+                                                                     color = "primary",
+                                                                     invisible = false,
+                                                                     children
+                                                                 }, ref) => {
     return (
-        <div className="relative inline-block w-fit">
+        <div ref={ref} className="relative inline-block w-fit">
             {children}
             <span
                 className={`absolute top-0.5 right-0.5 transform translate-x-1/2 -translate-y-1/2 rounded-full
@@ -37,4 +39,6 @@ export const Badge: React.FC<BadgeProps> = ({
             />
         </div>
     );
-}
+});
+
+Badge.displayName = "Badge";

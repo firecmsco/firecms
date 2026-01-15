@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DriveEtaIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"drive_eta"}/>
-}
+export const DriveEtaIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"drive_eta"} ref={ref}/>
+});
+
+DriveEtaIcon.displayName = "DriveEtaIcon";

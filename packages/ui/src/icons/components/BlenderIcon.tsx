@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BlenderIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"blender"}/>
-}
+export const BlenderIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"blender"} ref={ref}/>
+});
+
+BlenderIcon.displayName = "BlenderIcon";

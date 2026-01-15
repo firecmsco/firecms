@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ReportGmailerrorredIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"report_gmailerrorred"}/>
-}
+export const ReportGmailerrorredIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"report_gmailerrorred"} ref={ref}/>
+});
+
+ReportGmailerrorredIcon.displayName = "ReportGmailerrorredIcon";

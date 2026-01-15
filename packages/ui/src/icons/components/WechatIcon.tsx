@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WechatIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wechat"}/>
-}
+export const WechatIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wechat"} ref={ref}/>
+});
+
+WechatIcon.displayName = "WechatIcon";

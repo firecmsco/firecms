@@ -169,7 +169,7 @@ export function LoginButton({
     return (
         <div className="m-2 w-full">
             <Button
-                variant={"outlined"}
+
                 disabled={disabled}
                 className={`w-full`}
                 onClick={onClick}>
@@ -294,7 +294,7 @@ function LoginForm({
                 {authController.initialLoading && (
                     <CircularProgress/>
                 )}
-                <Button type="submit" variant={"outlined"}>
+                <Button type="submit" >
                     {button}
                 </Button>
             </div>

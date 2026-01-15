@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FlipToBackIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"flip_to_back"}/>
-}
+export const FlipToBackIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"flip_to_back"} ref={ref}/>
+});
+
+FlipToBackIcon.displayName = "FlipToBackIcon";

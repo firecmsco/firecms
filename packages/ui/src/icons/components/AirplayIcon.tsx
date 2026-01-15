@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AirplayIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"airplay"}/>
-}
+export const AirplayIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"airplay"} ref={ref}/>
+});
+
+AirplayIcon.displayName = "AirplayIcon";

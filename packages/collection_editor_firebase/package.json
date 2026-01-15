@@ -42,13 +42,13 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.14",
-    "@types/react": "^18.3.20",
-    "@types/react-dom": "^18.3.6",
-    "babel-plugin-react-compiler": "beta",
-    "eslint-plugin-react-compiler": "beta",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.17"
+    "@types/node": "^20.19.17",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "scripts": {
     "dev": "vite",

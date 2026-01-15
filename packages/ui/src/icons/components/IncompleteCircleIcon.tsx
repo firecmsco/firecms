@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function IncompleteCircleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"incomplete_circle"}/>
-}
+export const IncompleteCircleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"incomplete_circle"} ref={ref}/>
+});
+
+IncompleteCircleIcon.displayName = "IncompleteCircleIcon";

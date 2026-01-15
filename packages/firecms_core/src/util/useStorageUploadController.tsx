@@ -1,10 +1,10 @@
-import Resizer from "react-image-file-resizer";
+import Compressor from "compressorjs";
 import { deepEqual as equal } from "fast-equals";
 
 import {
     ArrayProperty,
     EntityValues,
-    ImageCompression,
+    ImageResize,
     PreviewSize,
     Property,
     StorageConfig,
@@ -71,7 +71,9 @@ export function useStorageUploadController<M extends object>({
     const metadata: Record<string, any> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "medium" : "large";
 
-    const compression: ImageCompression | undefined = storage?.imageCompression;
+    // Support both new imageResize and deprecated imageCompression
+    const imageResize = storage?.imageResize;
+    const legacyCompression = storage?.imageCompression;
 
     const internalInitialValue: StorageFieldItem[] =
         getInternalInitialValue(multipleFilesSupported, value, metadata, size);
@@ -121,11 +123,21 @@ export function useStorageUploadController<M extends object>({
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
                                                     entry: StorageFieldItem,
-                                                    metadata?: any) => {
+                                                    metadata?: any,
+                                                    uploadedUrl?: string) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
         let uploadPathOrDownloadUrl: string | null = uploadedPath;
+
+        if (storage.includeBucketUrl) {
+            if (!uploadedUrl) {
+                console.warn("includeBucketUrl is set but no fully-qualified storage URL was returned by the StorageSource. Falling back to the storage path.");
+            } else {
+                uploadPathOrDownloadUrl = uploadedUrl;
+            }
+        }
+
         if (storage.storeUrl) {
             uploadPathOrDownloadUrl = (await storageSource.getDownloadURL(uploadedPath)).url;
         }
@@ -158,6 +170,14 @@ export function useStorageUploadController<M extends object>({
         }
     }, [internalValue, multipleFilesSupported, onChange, storage, storageSource]);
 
+    const onFileUploadError = useCallback((entry: StorageFieldItem) => {
+        console.debug("onFileUploadError", entry);
+
+        // Remove the failed entry from internalValue
+        const newValue = internalValue.filter(item => item.id !== entry.id);
+        setInternalValue(newValue);
+    }, [internalValue]);
+
     const onFilesAdded = useCallback(async (acceptedFiles: File[]) => {
 
         if (!acceptedFiles.length || disabled)
@@ -182,8 +202,8 @@ export function useStorageUploadController<M extends object>({
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
                 ...(await Promise.all(acceptedFiles.map(async file => {
-                    if (compression && compressionFormat(file)) {
-                        file = await resizeAndCompressImage(file, compression)
+                    if ((imageResize || legacyCompression) && isImageFile(file)) {
+                        file = await resizeImage(file, imageResize, legacyCompression);
                     }
 
                     return {
@@ -195,9 +215,9 @@ export function useStorageUploadController<M extends object>({
                     } as StorageFieldItem;
                 })))];
         } else {
-            let file = acceptedFiles[0]
-            if (compression && compressionFormat(file)) {
-                file = await resizeAndCompressImage(file, compression)
+            let file = acceptedFiles[0];
+            if ((imageResize || legacyCompression) && isImageFile(file)) {
+                file = await resizeImage(file, imageResize, legacyCompression);
             }
 
             newInternalValue = [{
@@ -212,7 +232,7 @@ export function useStorageUploadController<M extends object>({
         // Remove either storage path or file duplicates
         newInternalValue = removeDuplicates(newInternalValue);
         setInternalValue(newInternalValue);
-    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size]);
+    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size, imageResize, legacyCompression]);
 
     return {
         internalValue,
@@ -221,6 +241,7 @@ export function useStorageUploadController<M extends object>({
         fileNameBuilder,
         storagePathBuilder,
         onFileUploadComplete,
+        onFileUploadError,
         onFilesAdded,
         multipleFilesSupported
     }
@@ -265,31 +286,57 @@ function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
 }
 
-const supportedTypes: Record<string, string> = {
-    "image/jpeg": "JPEG",
-    "image/png": "PNG",
-    "image/webp": "WEBP"
+/**
+ * Check if a file is an image type supported for resizing
+ */
+function isImageFile(file: File): boolean {
+    return file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/webp";
 }
-const compressionFormat = (file: File) => supportedTypes[file.type] ? supportedTypes[file.type] : null;
 
-const defaultQuality = 100;
-const resizeAndCompressImage = (file: File, compression: ImageCompression) => new Promise<File>((resolve) => {
+/**
+ * Resize and compress an image using compressorjs.
+ * Supports both the new imageResize API and legacy imageCompression for backward compatibility.
+ */
+async function resizeImage(
+    file: File,
+    imageResize?: StorageConfig["imageResize"],
+    legacyCompression?: ImageResize
+): Promise<File> {
+    // Determine configuration (new API takes precedence)
+    const maxWidth = imageResize?.maxWidth ?? legacyCompression?.maxWidth;
+    const maxHeight = imageResize?.maxHeight ?? legacyCompression?.maxHeight;
+    const quality = (imageResize?.quality ?? legacyCompression?.quality ?? 80) / 100;
+    const mode = imageResize?.mode ?? "contain";
 
-    const inputQuality = compression.quality === undefined ? defaultQuality : compression.quality;
-    const quality = inputQuality >= 0 ? inputQuality <= 100 ? inputQuality : 100 : 100;
-
-    const format = compressionFormat(file);
-    if (!format) {
-        throw Error("resizeAndCompressImage: Unsupported image format");
+    // Determine output format
+    let mimeType = file.type;
+    if (imageResize?.format && imageResize.format !== "original") {
+        mimeType = `image/${imageResize.format}`;
     }
-    Resizer.imageFileResizer(
-        file,
-        compression.maxWidth || Number.MAX_VALUE,
-        compression.maxHeight || Number.MAX_VALUE,
-        format,
-        quality,
-        0,
-        (file: string | Blob | File | ProgressEvent<FileReader>) => resolve(file as File),
-        "file"
-    )
-});
+
+    return new Promise<File>((resolve, reject) => {
+        new Compressor(file, {
+            quality,
+            maxWidth,
+            maxHeight,
+            mimeType,
+            // Use cover mode if specified (crops to fit)
+            // Otherwise use contain mode (scales to fit)
+            ...(mode === "cover" || mode === undefined ? {
+                width: maxWidth,
+                height: maxHeight,
+                resize: "cover" as const
+            } : {}),
+            success: (result) => {
+                const compressedFile = new File([result], file.name, {
+                    type: result.type,
+                    lastModified: Date.now(),
+                });
+                resolve(compressedFile);
+            },
+            error: reject,
+        });
+    });
+}

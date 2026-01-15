@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LastPageIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"last_page"}/>
-}
+export const LastPageIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"last_page"} ref={ref}/>
+});
+
+LastPageIcon.displayName = "LastPageIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WifiTetheringErrorIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wifi_tethering_error"}/>
-}
+export const WifiTetheringErrorIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wifi_tethering_error"} ref={ref}/>
+});
+
+WifiTetheringErrorIcon.displayName = "WifiTetheringErrorIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ViewHeadlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"view_headline"}/>
-}
+export const ViewHeadlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"view_headline"} ref={ref}/>
+});
+
+ViewHeadlineIcon.displayName = "ViewHeadlineIcon";

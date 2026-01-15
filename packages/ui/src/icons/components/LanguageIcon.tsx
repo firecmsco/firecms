@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LanguageIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"language"}/>
-}
+export const LanguageIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"language"} ref={ref}/>
+});
+
+LanguageIcon.displayName = "LanguageIcon";

@@ -9,7 +9,8 @@ import {
     ContentCopyIcon,
     Dialog,
     DialogActions,
-    DialogContent, DialogTitle,
+    DialogContent,
+    DialogTitle,
     IconButton,
     Label,
     LoopIcon,
@@ -205,12 +206,10 @@ function BadMessageIcon({
                            placeholder={"Feel free to add specific details"}></TextField>
             </DialogContent>
             <DialogActions>
-                <Button variant={"outlined"}
-                        color={"primary"}
-                        onClick={() => {
-                            setDialogOpen(false);
-                            onFeedback?.(selected, feedbackText);
-                        }}>Submit</Button>
+                <Button onClick={() => {
+                    setDialogOpen(false);
+                    onFeedback?.(selected, feedbackText);
+                }}>Submit</Button>
             </DialogActions>
 
             <IconButton className={"absolute top-4 right-4"}

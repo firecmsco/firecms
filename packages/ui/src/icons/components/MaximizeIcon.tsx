@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MaximizeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"maximize"}/>
-}
+export const MaximizeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"maximize"} ref={ref}/>
+});
+
+MaximizeIcon.displayName = "MaximizeIcon";

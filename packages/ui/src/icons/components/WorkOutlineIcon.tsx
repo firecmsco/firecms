@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WorkOutlineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"work_outline"}/>
-}
+export const WorkOutlineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"work_outline"} ref={ref}/>
+});
+
+WorkOutlineIcon.displayName = "WorkOutlineIcon";

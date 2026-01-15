@@ -18,6 +18,7 @@ import {
     cls,
     defaultBorderMixin,
     DialogActions,
+    ErrorIcon,
     IconButton,
     LoadingButton,
     Tooltip,
@@ -31,6 +32,8 @@ import {
     useSnackbarController
 } from "../hooks";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
+import { FormexController } from "@firecms/formex";
+import { ErrorTooltip } from "../components/ErrorTooltip";
 
 export function EntityEditViewFormActions({
                                               collection,
@@ -80,14 +83,14 @@ export function EntityEditViewFormActions({
             collection,
             context,
             sideEntityController,
-            isSubmitting: formex.isSubmitting,
             disabled,
             status,
             sideDialogContext,
             pluginActions,
             openEntityMode,
             navigateBack,
-            formContext
+            formContext,
+            formex
         })
         : buildSideActions({
             savingError,
@@ -96,14 +99,14 @@ export function EntityEditViewFormActions({
             collection,
             context,
             sideEntityController,
-            isSubmitting: formex.isSubmitting,
             sideDialogContext,
             disabled,
             status,
             pluginActions,
             openEntityMode,
             navigateBack,
-            formContext
+            formContext,
+            formex
         });
 }
 
@@ -114,14 +117,14 @@ type ActionsViewProps<M extends object> = {
     collection: EntityCollection,
     context: FireCMSContext,
     sideEntityController: SideEntityController,
-    isSubmitting: boolean,
     disabled: boolean,
     status: "new" | "existing" | "copy",
     sideDialogContext: SideDialogController,
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
     navigateBack: () => void;
-    formContext: FormContext
+    formContext: FormContext,
+    formex: FormexController<any>;
 };
 
 function buildBottomActions<M extends object>({
@@ -131,16 +134,17 @@ function buildBottomActions<M extends object>({
                                                   collection,
                                                   context,
                                                   sideEntityController,
-                                                  isSubmitting,
                                                   disabled,
                                                   status,
                                                   sideDialogContext,
                                                   pluginActions,
                                                   openEntityMode,
                                                   navigateBack,
-                                                  formContext
+                                                  formContext,
+                                                  formex
                                               }: ActionsViewProps<M>) {
 
+    const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
     const canClose = openEntityMode === "side_panel";
     return <DialogActions
         position={"absolute"}>
@@ -179,16 +183,20 @@ function buildBottomActions<M extends object>({
 
         {pluginActions}
 
+        {hasErrors ?
+            <ErrorTooltip title={"This form has errors"}>
+                <ErrorIcon className="ml-4" color="error" size={"smallest"}/>
+            </ErrorTooltip> : null}
         <Button variant="text"
                 color="primary"
-                disabled={disabled || isSubmitting}
+                disabled={disabled || formex.isSubmitting}
                 type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
         <Button variant={canClose ? "text" : "filled"}
                 color="primary"
                 type="submit"
-                disabled={disabled || isSubmitting}
+                disabled={disabled || formex.isSubmitting}
                 onClick={() => {
                     sideDialogContext.setPendingClose(false);
                 }}>
@@ -199,7 +207,7 @@ function buildBottomActions<M extends object>({
         {canClose && <LoadingButton variant="filled"
                                     color="primary"
                                     type="submit"
-                                    loading={isSubmitting}
+                                    loading={formex.isSubmitting}
                                     disabled={disabled}
                                     onClick={() => {
                                         sideDialogContext.setPendingClose?.(true);
@@ -218,28 +226,35 @@ function buildSideActions<M extends object>({
                                                 collection,
                                                 context,
                                                 sideEntityController,
-                                                isSubmitting,
                                                 disabled,
                                                 status,
                                                 sideDialogContext,
                                                 pluginActions,
                                                 openEntityMode,
                                                 navigateBack,
-                                                formContext
+                                                formContext,
+                                                formex
                                             }: ActionsViewProps<M>) {
 
+    const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
     return <div
         className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
-        <LoadingButton fullWidth={true} variant="filled" color="primary" type="submit" size={"large"}
-                       disabled={disabled || isSubmitting} onClick={() => {
-            sideDialogContext.setPendingClose?.(false);
-        }}>
+        <LoadingButton fullWidth={true}
+                       variant="filled"
+                       color="primary"
+                       type="submit"
+                       size={"large"}
+                       startIcon={hasErrors ? <ErrorIcon/> : undefined}
+                       disabled={disabled || formex.isSubmitting}
+                       onClick={() => {
+                           sideDialogContext.setPendingClose?.(false);
+                       }}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
         </LoadingButton>
 
-        <Button fullWidth={true} variant="text" disabled={disabled || isSubmitting} type="reset">
+        <Button fullWidth={true} variant="text" disabled={disabled || formex.isSubmitting} type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
 

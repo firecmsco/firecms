@@ -1,4 +1,8 @@
-export * from "./EntityForm";
+export {
+    EntityForm,
+    yupToFormErrors,
+} from "./EntityForm";
+export type { EntityFormProps } from "./EntityForm";
 
 export { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
 export { MultiSelectFieldBinding } from "./field_bindings/MultiSelectFieldBinding";

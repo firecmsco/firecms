@@ -4,7 +4,7 @@ import {
     useAuthController,
     useSnackbarController
 } from "@firecms/core";
-import { DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
+import { ContentCopyIcon, DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
@@ -13,7 +13,6 @@ export function HomePageEditorCollectionAction({
                                                    slug,
                                                    collection
                                                }: PluginHomePageActionsProps) {
-
 
     const snackbarController = useSnackbarController();
     const authController = useAuthController();
@@ -29,6 +28,17 @@ export function HomePageEditorCollectionAction({
         collectionEditorController?.editCollection({
             id: collection.slug,
             parentCollectionIds: []
+        });
+    };
+
+    const onDuplicateCollectionClicked = () => {
+        // Use copyFrom to duplicate the collection with all properties
+        // The editor will handle clearing name, path, and id
+        collectionEditorController?.createCollection({
+            copyFrom: collection,
+            parentCollectionIds: [],
+            redirect: true,
+            sourceClick: "home_page_duplicate"
         });
     };
 
@@ -53,6 +63,18 @@ export function HomePageEditorCollectionAction({
                         <MoreVertIcon size={"small"}/>
                     </IconButton>}
                 >
+                    {permissions.createCollections &&
+                        <MenuItem
+                            dense={true}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                onDuplicateCollectionClicked();
+                            }}>
+                            <ContentCopyIcon/>
+                            Duplicate
+                        </MenuItem>
+                    }
                     <MenuItem
                         dense={true}
                         onClick={(event) => {

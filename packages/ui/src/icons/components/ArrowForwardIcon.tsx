@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ArrowForwardIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"arrow_forward"}/>
-}
+export const ArrowForwardIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"arrow_forward"} ref={ref}/>
+});
+
+ArrowForwardIcon.displayName = "ArrowForwardIcon";

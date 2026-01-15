@@ -45,6 +45,8 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     onClickResizeColumn?: (columnIndex: number, column: VirtualTableColumn) => void;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
     AdditionalHeaderWidget?: (props: { onHover: boolean }) => React.ReactNode;
+    isDragging?: boolean;
+    isDraggable?: boolean;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -59,7 +61,9 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    column,
                                                                    onClickResizeColumn,
                                                                    createFilterField,
-                                                                   AdditionalHeaderWidget
+                                                                   AdditionalHeaderWidget,
+                                                                   isDragging,
+                                                                   isDraggable
                                                                }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
@@ -85,14 +89,16 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         return (
             <ErrorBoundary>
                 <div
-                    className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-surface-50 dark:bg-surface-900",
+                    className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center",
+                        isDragging
+                            ? "bg-primary-bg dark:bg-primary-bg-dark"
+                            : "bg-surface-50 dark:bg-surface-900",
                         "text-text-secondary hover:text-text-primary dark:text-text-secondary-dark dark:hover:text-text-primary-dark",
-                        "hover:bg-surface-100/50 dark:hover:bg-surface-800/50",
-                        column.frozen ? "sticky left-0 z-10" : "relative z-0"
+                        !isDragging && "hover:bg-surface-100 dark:hover:bg-surface-800 hover:bg-opacity-50 hover:bg-surface-100/50 dark:hover:bg-opacity-50 dark:hover:bg-surface-800/50",
+                        column.frozen ? "sticky left-0 z-10" : "relative z-0",
+                        isDraggable && "cursor-grab"
                     )}
                     style={{
-                        // transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                        // fontSize: "0.750rem",
                         left: column.frozen ? 0 : undefined,
                         minWidth: column.width,
                         maxWidth: column.width
@@ -179,11 +185,17 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
+                        data-no-dnd="true"
                         className={cls(
                             "absolute h-full w-[6px] top-0 right-0 cursor-col-resize",
                             hovered && "bg-surface-300 dark:bg-surface-700"
                         )}
-                        onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
+                        onPointerDown={(e) => {
+                            e.stopPropagation();
+                            if (onClickResizeColumn) {
+                                onClickResizeColumn(columnIndex, column);
+                            }
+                        }}
                     />}
                 </div>
 
@@ -243,7 +255,7 @@ function FilterForm<M>({
                 className={cls(defaultBorderMixin, "py-4 px-6 typography-label border-b")}>
                 {column.title ?? id}
             </div>
-            {filterField && <div className="m-4">
+            {filterField && <div className="m-4 w-[400px]">
                 {filterField}
             </div>}
             <div className="flex justify-end m-4">
@@ -251,13 +263,10 @@ function FilterForm<M>({
                     className="mr-4"
                     disabled={!filterIsSet}
                     variant={"text"}
-                    color="primary"
                     type="reset"
                     aria-label="filter clear"
                     onClick={reset}>Clear</Button>
                 <Button
-                    variant="outlined"
-                    color="primary"
                     type="submit">Filter</Button>
             </div>
         </form>

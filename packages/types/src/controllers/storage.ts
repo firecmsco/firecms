@@ -21,6 +21,15 @@ export interface UploadFileResult {
      * Bucket where the file was uploaded
      */
     bucket: string;
+
+    /**
+     * Fully qualified storage URL for the uploaded file.
+     *
+     * For example: `gs://my-bucket/path/to/file.png`.
+     *
+     * This is optional for backwards compatibility.
+     */
+    storageUrl?: string;
 }
 
 /**

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatTextdirectionRToLIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_textdirection_r_to_l"}/>
-}
+export const FormatTextdirectionRToLIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_textdirection_r_to_l"} ref={ref}/>
+});
+
+FormatTextdirectionRToLIcon.displayName = "FormatTextdirectionRToLIcon";

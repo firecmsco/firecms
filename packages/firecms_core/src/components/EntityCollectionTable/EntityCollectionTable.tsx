@@ -42,45 +42,46 @@ import { getRowHeight } from "../common/table_height";
  * @group Components
  */
 export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any> = any, USER extends User = any>
-({
-     className,
-     style,
-     forceFilter,
-     actionsStart,
-     actions,
-     title,
-     tableRowActionsBuilder,
-     uniqueFieldValidator,
-     getPropertyFor,
-     onValueChange,
-     selectionController,
-     highlightedEntities,
-     onEntityClick,
-     onColumnResize,
-     initialScroll,
-     onScroll,
-     onSizeChanged,
-     textSearchEnabled = false,
-     hoverRow = true,
-     inlineEditing = false,
-     additionalFields,
-     displayedColumnIds,
-     defaultSize,
-     properties,
-     tableController,
-     filterable = true,
-     sortable = true,
-     endAdornment,
-     AddColumnComponent,
-     AdditionalHeaderWidget,
-     additionalIDHeaderWidget,
-     emptyComponent,
-     getIdColumnWidth,
-     onTextSearchClick,
-     textSearchLoading,
-     enablePopupIcon,
-     openEntityMode = "side_panel"
- }: EntityCollectionTableProps<M>) {
+    ({
+        className,
+        style,
+        forceFilter,
+        actionsStart,
+        actions,
+        title,
+        tableRowActionsBuilder,
+        uniqueFieldValidator,
+        getPropertyFor,
+        onValueChange,
+        selectionController,
+        highlightedEntities,
+        onEntityClick,
+        onColumnResize,
+        initialScroll,
+        onScroll,
+        onSizeChanged,
+        textSearchEnabled = false,
+        hoverRow = true,
+        inlineEditing = false,
+        additionalFields,
+        displayedColumnIds,
+        defaultSize,
+        properties,
+        tableController,
+        filterable = true,
+        sortable = true,
+        endAdornment,
+        AddColumnComponent,
+        AdditionalHeaderWidget,
+        additionalIDHeaderWidget,
+        emptyComponent,
+        getIdColumnWidth,
+        onTextSearchClick,
+        textSearchLoading,
+        enablePopupIcon,
+        openEntityMode = "side_panel",
+        onColumnsOrderChange
+    }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -110,11 +111,17 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 
     const propertyCellRenderer = ({
-                                      column,
-                                      columnIndex,
-                                      rowData,
-                                      rowIndex
-                                  }: CellRendererParams<any>) => {
+        column,
+        columnIndex,
+        rowData,
+        rowIndex,
+        sortableNodeRef,
+        sortableStyle,
+        sortableAttributes,
+        isDragging,
+        isDraggable,
+        frozen
+    }: CellRendererParams<any>) => {
 
         const entity: Entity<M> = rowData;
 
@@ -150,7 +157,13 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                         entity={entity}
                         disabled={disabled}
                         enablePopupIcon={enablePopupIcon}
-                        path={entity.path}/>
+                        path={entity.path}
+                        sortableNodeRef={sortableNodeRef}
+                        sortableStyle={sortableStyle}
+                        sortableAttributes={sortableAttributes}
+                        isDragging={isDragging}
+                        isDraggable={isDraggable}
+                        frozen={frozen} />
                     : renderSkeletonText()
                 }
             </ErrorBoundary>);
@@ -158,10 +171,16 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     };
 
     const additionalCellRenderer = useCallback(({
-                                                    column,
-                                                    rowData,
-                                                    width
-                                                }: CellRendererParams<any>) => {
+        column,
+        rowData,
+        width,
+        sortableNodeRef,
+        sortableStyle,
+        sortableAttributes,
+        isDragging,
+        isDraggable,
+        frozen
+    }: CellRendererParams<any>) => {
 
         const entity: Entity<M> = rowData;
 
@@ -178,7 +197,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         }
 
         const child: React.ReactNode = Builder
-            ? <Builder entity={entity} context={context}/>
+            ? <Builder entity={entity} context={context} />
             : <>
                 {additionalField.value?.({
                     entity,
@@ -198,6 +217,12 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 allowScroll={false}
                 showExpandIcon={false}
                 disabledTooltip={"This column can't be edited directly"}
+                sortableNodeRef={sortableNodeRef}
+                sortableStyle={sortableStyle}
+                sortableAttributes={sortableAttributes}
+                isDragging={isDragging}
+                isDraggable={isDraggable}
+                frozen={frozen}
             >
                 <ErrorBoundary>
                     {child}
@@ -217,13 +242,13 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
         const additionalTableColumns: VirtualTableColumn[] = additionalFields
             ? additionalFields.map((additionalField) =>
-                ({
-                    key: additionalField.key,
-                    align: "left",
-                    sortable: false,
-                    title: additionalField.name,
-                    width: additionalField.width ?? 200
-                }))
+            ({
+                key: additionalField.key,
+                align: "left",
+                sortable: false,
+                title: additionalField.name,
+                width: additionalField.width ?? 200
+            }))
             : [];
         return [...columnsResult, ...additionalTableColumns];
     })();
@@ -265,11 +290,16 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                     });
                 else
                     return <EntityCollectionRowActions entity={props.rowData}
-                                                       width={column.width}
-                                                       frozen={column.frozen}
-                                                       isSelected={false}
-                                                       size={size}
-                                                       openEntityMode={openEntityMode}/>;
+                        width={column.width}
+                        frozen={column.frozen}
+                        isSelected={false}
+                        size={size}
+                        openEntityMode={openEntityMode}
+                        sortableNodeRef={props.sortableNodeRef}
+                        sortableStyle={props.sortableStyle}
+                        sortableAttributes={props.sortableAttributes}
+                        isDragging={props.isDragging}
+                        isDraggable={props.isDraggable} />;
             } else if (additionalFieldsMap[columnKey]) {
                 return additionalCellRenderer(props);
             } else if (props.columnIndex < columns.length + 1) {
@@ -286,8 +316,14 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 value={null}
                 align={"left"}
                 fullHeight={false}
-                disabled={true}>
-                <ErrorView error={e}/>
+                disabled={true}
+                sortableNodeRef={props.sortableNodeRef}
+                sortableStyle={props.sortableStyle}
+                sortableAttributes={props.sortableAttributes}
+                isDragging={props.isDragging}
+                isDraggable={props.isDraggable}
+                frozen={props.frozen}>
+                <ErrorView error={e} />
             </EntityTableCell>;
         }
     }, [tableRowActionsBuilder, additionalCellRenderer, propertyCellRenderer, size]);
@@ -295,8 +331,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     return (
 
         <div ref={ref}
-             style={style}
-             className={cls("h-full w-full flex flex-col bg-white dark:bg-surface-950", className)}>
+            style={style}
+            className={cls("h-full w-full flex flex-col bg-white dark:bg-surface-950", className)}>
 
             <CollectionTableToolbar
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
@@ -307,24 +343,25 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}
-                loading={tableController.dataLoading}/>
+                loading={tableController.dataLoading} />
 
             <SelectableTable columns={columns}
-                             size={size}
-                             inlineEditing={inlineEditing}
-                             cellRenderer={cellRenderer}
-                             onEntityClick={onEntityClick}
-                             highlightedRow={(entity: Entity<M>) => Boolean(selectedEntities?.find(e => e.id === entity.id && e.path === entity.path))}
-                             tableController={tableController}
-                             onValueChange={onValueChange}
-                             initialScroll={initialScroll}
-                             onScroll={onScroll}
-                             onColumnResize={onColumnResize}
-                             hoverRow={hoverRow}
-                             filterable={filterable}
-                             emptyComponent={emptyComponent}
-                             endAdornment={endAdornment}
-                             AddColumnComponent={AddColumnComponent}/>
+                size={size}
+                inlineEditing={inlineEditing}
+                cellRenderer={cellRenderer}
+                onEntityClick={onEntityClick}
+                highlightedRow={(entity: Entity<M>) => Boolean(selectedEntities?.find(e => e.id === entity.id && e.path === entity.path))}
+                tableController={tableController}
+                onValueChange={onValueChange}
+                initialScroll={initialScroll}
+                onScroll={onScroll}
+                onColumnResize={onColumnResize}
+                hoverRow={hoverRow}
+                filterable={filterable}
+                emptyComponent={emptyComponent}
+                endAdornment={endAdornment}
+                AddColumnComponent={AddColumnComponent}
+                onColumnsOrderChange={onColumnsOrderChange} />
 
         </div>
     );

@@ -3,6 +3,7 @@ import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export function Menubar({
                             children,
@@ -16,7 +17,7 @@ export function Menubar({
     return (
         <MenubarPrimitive.Root
             onSelect={onSelect}
-            className={cls("z-10 flex bg-white dark:bg-surface-950 p-[3px] rounded-xs shadow-2xs", className)}>
+            className={cls("z-10 flex bg-white dark:bg-surface-950 p-[3px] rounded-sm shadow-sm", className)}>
             {children}
         </MenubarPrimitive.Root>
     )
@@ -44,7 +45,7 @@ export function MenubarTrigger({
     return (
         <MenubarPrimitive.Trigger
             onSelect={onSelect}
-            className={cls("py-2 px-3 outline-hidden select-none font-medium leading-none rounded-xs text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-highlighted:bg-surface-accent-100 dark:data-highlighted:bg-surface-800 data-[state=open]:bg-surface-accent-100 dark:data-[state=open]:bg-surface-800 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
+            className={cls("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800 data-[state=open]:bg-surface-accent-100 data-[state=open]:dark:bg-surface-800 hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
                 className)}>
             {children}
         </MenubarPrimitive.Trigger>
@@ -53,9 +54,19 @@ export function MenubarTrigger({
 
 export function MenubarPortal({
                                   children,
-                              }: { children: React.ReactNode }) {
+                                  portalContainer,
+                              }: {
+    children: React.ReactNode;
+    portalContainer?: HTMLElement | null;
+}) {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     return (
-        <MenubarPrimitive.Portal>
+        <MenubarPrimitive.Portal container={finalContainer}>
             {children}
         </MenubarPrimitive.Portal>
     )
@@ -108,7 +119,7 @@ export function MenubarItem({
     return (
         <MenubarPrimitive.Item
             onSelect={onSelect}
-            className={cls("group text-[13px] leading-none rounded-xs flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-hidden data-[state=open]:bg-surface-accent-100 dark:data-[state=open]:bg-surface-800 data-[state=open]:text-text-primary dark:data-[state=open]:text-text-primary-dark data-highlighted:bg-surface-accent-100 dark:data-highlighted:bg-surface-800  data-disabled:text-text-disabled dark:data-disabled:text-text-disabled-dark data-disabled:pointer-events-none",
+            className={cls("group text-[13px] leading-none rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-surface-accent-100 data-[state=open]:dark:bg-surface-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 leftPadding ? "pl-5" : "",
                 disabled ? "pointer-events-none text-text-secondary dark:text-text-secondary-dark" : "text-text-primary dark:text-text-primary-dark",
                 className)}
@@ -166,7 +177,7 @@ export function MenubarSubTrigger({
     return (
         <MenubarPrimitive.SubTrigger
             onSelect={onSelect}
-            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded-xs flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-hidden data-[state=open]:bg-surface-accent-100 dark:data-[state=open]:bg-surface-800 data-[state=open]:text-text-primary dark:data-[state=open]:text-text-primary-dark data-highlighted:bg-surface-accent-100 dark:data-highlighted:bg-surface-800  data-disabled:text-text-disabled dark:data-disabled:text-text-disabled-dark data-disabled:pointer-events-none",
+            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-surface-accent-100 data-[state=open]:dark:bg-surface-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             {...rest}
         >
@@ -217,7 +228,7 @@ export function MenubarCheckboxItem({
     return (
         <MenubarPrimitive.CheckboxItem
             onSelect={onSelect}
-            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded-xs flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-hidden data-highlighted:bg-surface-accent-100 dark:data-highlighted:bg-surface-800 data-disabled:text-text-disabled dark:data-disabled:text-text-disabled-dark data-disabled:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             checked={checked}
             onCheckedChange={onCheckedChange}
@@ -286,7 +297,7 @@ export function MenubarRadioItem({
     return (
         <MenubarPrimitive.RadioItem
             onSelect={onSelect}
-            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded-xs flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-hidden data-highlighted:bg-surface-accent-100 dark:data-highlighted:bg-surface-800 data-disabled:text-text-disabled dark:data-disabled:text-text-disabled-dark data-disabled:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-surface-accent-100 data-[highlighted]:dark:bg-surface-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             value={value}
             {...rest}>
@@ -305,7 +316,7 @@ export function MenubarShortcut({
 }) {
     return (
         <div
-            className={cls("ml-auto pl-5 group-data-disabled:text-text-disabled dark:data-disabled:text-text-disabled-dark",
+            className={cls("ml-auto pl-5 group-data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark",
                 className)}
             {...rest}>
             {children}

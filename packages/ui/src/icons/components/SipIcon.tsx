@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SipIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"sip"}/>
-}
+export const SipIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sip"} ref={ref}/>
+});
+
+SipIcon.displayName = "SipIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ReduceCapacityIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"reduce_capacity"}/>
-}
+export const ReduceCapacityIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"reduce_capacity"} ref={ref}/>
+});
+
+ReduceCapacityIcon.displayName = "ReduceCapacityIcon";

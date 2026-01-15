@@ -14,10 +14,22 @@ create a web app and copy the configuration to the `firebase_config.ts`.
 Install the dependencies:
 
 ```bash
+npm install
+```
+
+or
+
+```bash
 yarn
 ```
 
 And run the project locally:
+
+```bash
+npm run dev
+```
+
+or
 
 ```bash
 yarn dev
@@ -27,6 +39,12 @@ yarn dev
 
 Make sure you update your `package.json` `build` script with the correct
 project name. Then run:
+
+```bash
+npm run build
+```
+
+or
 
 ```bash
 yarn build

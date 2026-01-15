@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LoopIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"loop"}/>
-}
+export const LoopIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"loop"} ref={ref}/>
+});
+
+LoopIcon.displayName = "LoopIcon";

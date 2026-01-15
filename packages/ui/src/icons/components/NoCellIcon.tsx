@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NoCellIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"no_cell"}/>
-}
+export const NoCellIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"no_cell"} ref={ref}/>
+});
+
+NoCellIcon.displayName = "NoCellIcon";

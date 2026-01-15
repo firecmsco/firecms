@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TouchAppIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"touch_app"}/>
-}
+export const TouchAppIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"touch_app"} ref={ref}/>
+});
+
+TouchAppIcon.displayName = "TouchAppIcon";

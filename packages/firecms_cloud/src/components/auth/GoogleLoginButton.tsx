@@ -17,7 +17,7 @@ export function GoogleLoginButton({
                         borderRadius: "4px",
                         fontSize: "14px"
                     }}
-                    variant="outlined"
+
                     disabled={disabled}
                     onClick={onClick}>
                 <div

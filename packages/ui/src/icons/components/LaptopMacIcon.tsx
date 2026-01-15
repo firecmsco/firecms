@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LaptopMacIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"laptop_mac"}/>
-}
+export const LaptopMacIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"laptop_mac"} ref={ref}/>
+});
+
+LaptopMacIcon.displayName = "LaptopMacIcon";

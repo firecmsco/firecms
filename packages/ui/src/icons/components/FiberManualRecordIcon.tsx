@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FiberManualRecordIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fiber_manual_record"}/>
-}
+export const FiberManualRecordIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fiber_manual_record"} ref={ref}/>
+});
+
+FiberManualRecordIcon.displayName = "FiberManualRecordIcon";

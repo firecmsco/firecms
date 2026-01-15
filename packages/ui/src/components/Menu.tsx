@@ -3,6 +3,7 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { focusedDisabled, paperMixin } from "../styles";
 import { cls } from "../util";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type MenuProps = {
     children: React.ReactNode;
@@ -34,27 +35,35 @@ const Menu = React.forwardRef<
        portalContainer,
        sideOffset = 4,
                                     className
-   }, ref) => (
-    <DropdownMenu.Root
-        open={open}
-        defaultOpen={defaultOpen}
-        onOpenChange={onOpenChange}>
-        <DropdownMenu.Trigger
-            ref={ref}
-            asChild>
-            {trigger}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal container={portalContainer}>
+   }, ref) => {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
+    return (
+        <DropdownMenu.Root
+            open={open}
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}>
+            <DropdownMenu.Trigger
+                ref={ref}
+                asChild>
+                {trigger}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal container={finalContainer}>
             <DropdownMenu.Content
                 side={side}
                 sideOffset={sideOffset}
                 align={align}
-                className={cls(paperMixin, focusedDisabled, "shadow-2xs py-2 z-30", className)}>
+                className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
                 {children}
             </DropdownMenu.Content>
         </DropdownMenu.Portal>
     </DropdownMenu.Root>
-))
+    );
+})
 Menu.displayName = "Menu"
 
 export { Menu }
@@ -66,17 +75,17 @@ export type MenuItemProps = {
     className?: string;
 };
 
-export function MenuItem({
+export const MenuItem = React.memo(({
                              children,
                              dense = false, // Default value is false if not provided
                              onClick,
                              className
-                         }: MenuItemProps) {
+                         }: MenuItemProps) => {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
         onClick && "cursor-pointer",
         "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900 flex items-center gap-4",
-        dense ? "px-3 py-1.5" : "px-4 py-2",
+        dense ? "px-4 py-1.5" : "px-4 py-2",
         className
     );
 
@@ -87,4 +96,4 @@ export function MenuItem({
             {children}
         </DropdownMenu.Item>
     );
-}
+});

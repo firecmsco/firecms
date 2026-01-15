@@ -229,7 +229,7 @@ function DrawerWrapper(props: {
                    open={props.open}
                    onOpenChange={props.setDrawerOpen}
                    title={"Navigation drawer"}
-                   overlayClassName={"bg-white/80"}
+                   overlayClassName={"bg-white/80 bg-white/80"}
             >
                 {innerDrawer}
             </Sheet>

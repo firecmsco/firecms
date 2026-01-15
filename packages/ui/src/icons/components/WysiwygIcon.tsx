@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function WysiwygIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"wysiwyg"}/>
-}
+export const WysiwygIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"wysiwyg"} ref={ref}/>
+});
+
+WysiwygIcon.displayName = "WysiwygIcon";

@@ -17,8 +17,7 @@ import {
     KeyboardArrowDownIcon,
     SearchIcon,
     Separator,
-    useInjectStyles,
-    useSheetPortalContainer
+    useInjectStyles
 } from "@firecms/ui";
 import { Entity, EntityRelation, FilterValues, Relation } from "@firecms/types";
 import { EntityPreviewData } from "./EntityPreview";
@@ -273,8 +272,7 @@ export const RelationSelector = React.forwardRef<
         const resolvedPlaceholder = placeholder || emptyPlaceholder || <EmptyValue className={"ml-2"}/>;
 
         // Use Sheet portal container if available, otherwise document.body
-        const sheetPortalContainer = useSheetPortalContainer();
-        const portalContainer = sheetPortalContainer || (typeof document !== "undefined" ? document.body : undefined);
+        const portalContainer =  (typeof document !== "undefined" ? document.body : undefined);
 
         return (
             <>

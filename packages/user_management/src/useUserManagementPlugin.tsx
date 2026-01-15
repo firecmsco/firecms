@@ -61,7 +61,7 @@ export function IntroWidget({
                 You have no users or roles defined. You can create default roles and add the current user as admin.
             </Typography>
             <Button
-                variant={"outlined"}
+
                 onClick={() => {
                 if (!authController.user?.uid) {
                     throw Error("UsersTable, authController misconfiguration");

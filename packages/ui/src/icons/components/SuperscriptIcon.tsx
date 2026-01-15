@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SuperscriptIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"superscript"}/>
-}
+export const SuperscriptIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"superscript"} ref={ref}/>
+});
+
+SuperscriptIcon.displayName = "SuperscriptIcon";

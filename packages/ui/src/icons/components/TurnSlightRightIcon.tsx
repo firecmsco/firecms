@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TurnSlightRightIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"turn_slight_right"}/>
-}
+export const TurnSlightRightIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"turn_slight_right"} ref={ref}/>
+});
+
+TurnSlightRightIcon.displayName = "TurnSlightRightIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function StayPrimaryLandscapeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"stay_primary_landscape"}/>
-}
+export const StayPrimaryLandscapeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"stay_primary_landscape"} ref={ref}/>
+});
+
+StayPrimaryLandscapeIcon.displayName = "StayPrimaryLandscapeIcon";

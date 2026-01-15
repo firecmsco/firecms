@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PivotTableChartIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pivot_table_chart"}/>
-}
+export const PivotTableChartIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pivot_table_chart"} ref={ref}/>
+});
+
+PivotTableChartIcon.displayName = "PivotTableChartIcon";

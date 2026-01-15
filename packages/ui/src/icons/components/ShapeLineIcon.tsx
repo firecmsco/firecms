@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ShapeLineIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"shape_line"}/>
-}
+export const ShapeLineIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"shape_line"} ref={ref}/>
+});
+
+ShapeLineIcon.displayName = "ShapeLineIcon";

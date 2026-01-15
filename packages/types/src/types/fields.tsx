@@ -111,6 +111,11 @@ export interface FieldProps<
     partOfArray?: boolean;
 
     /**
+     * Is this field part of a block
+     */
+    partOfBlock?: boolean;
+
+    /**
      * Display the child properties directly, without being wrapped in an
      * extendable panel. Note that this will also hide the title of this property.
      */
@@ -248,6 +253,11 @@ export interface PropertyFieldBindingProps<M extends Record<string, any> = any> 
      * Is this field part of an array
      */
     partOfArray?: boolean;
+
+    /**
+     * Is this field part of a block
+     */
+    partOfBlock?: boolean;
 
     /**
      * Display the child properties directly, without being wrapped in an

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function IsoIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"iso"}/>
-}
+export const IsoIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"iso"} ref={ref}/>
+});
+
+IsoIcon.displayName = "IsoIcon";

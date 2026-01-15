@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AccountBalanceWalletIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"account_balance_wallet"}/>
-}
+export const AccountBalanceWalletIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"account_balance_wallet"} ref={ref}/>
+});
+
+AccountBalanceWalletIcon.displayName = "AccountBalanceWalletIcon";

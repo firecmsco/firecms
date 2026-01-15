@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PublicOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"public_off"}/>
-}
+export const PublicOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"public_off"} ref={ref}/>
+});
+
+PublicOffIcon.displayName = "PublicOffIcon";

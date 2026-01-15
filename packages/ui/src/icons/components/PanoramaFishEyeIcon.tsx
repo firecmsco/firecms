@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PanoramaFisheyeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"panorama_fisheye"}/>
-}
+export const PanoramaFisheyeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"panorama_fisheye"} ref={ref}/>
+});
+
+PanoramaFisheyeIcon.displayName = "PanoramaFisheyeIcon";

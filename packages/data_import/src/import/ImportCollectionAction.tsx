@@ -94,7 +94,6 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
             onAnalyticsEvent?.("import_data_added");
             setStep("mapping");
         }, 100);
-        // setStep("mapping");
     };
 
     const properties = getPropertiesWithPropertiesOrder(collection.properties, collection.propertiesOrder as Extract<keyof M, string>[]);
@@ -122,9 +121,9 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                 fullHeight={step !== "initial"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}>
 
-            <DialogTitle variant={"h6"}>Import data</DialogTitle>
+            <DialogTitle variant={"h6"} hidden={step === "preview"}>Import data</DialogTitle>
 
-            <DialogContent className={"flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
+            <DialogContent className={"h-full flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
 
                 {step === "initial" && <>
                     <Typography variant={"body2"}>Upload a CSV, Excel or JSON file and map it to your existing
@@ -195,21 +194,18 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
             <DialogActions>
 
                 {step === "mapping" && <Button
-                    color={"primary"}
                     onClick={() => setStep("initial")}
                     variant={"text"}>
                     Back
                 </Button>}
 
                 {step === "preview" && <Button
-                    color={"primary"}
                     onClick={() => setStep("mapping")}
                     variant={"text"}>
                     Back
                 </Button>}
 
                 <Button onClick={handleClose}
-                        color={"primary"}
                         variant={"text"}>
                     Cancel
                 </Button>

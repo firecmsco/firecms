@@ -49,6 +49,8 @@ export interface ConfigControllerProviderProps {
         icon: React.ReactNode
     };
 
+    pathSuggestions?: string[];
+
     getUser?: (uid: string) => User | null;
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
@@ -68,6 +70,7 @@ export const ConfigControllerProvider = React.memo(
                                           getUser,
                                           getData,
                                           onAnalyticsEvent,
+                                          pathSuggestions
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -86,8 +89,10 @@ export const ConfigControllerProvider = React.memo(
                 group?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[],
+            pathSuggestions?: string[];
         }>();
 
         const [currentPropertyDialog, setCurrentPropertyDialog] = React.useState<{
@@ -134,7 +139,8 @@ export const ConfigControllerProvider = React.memo(
                 isNewCollection: false,
                 parentCollection,
                 redirect: false,
-                existingEntities
+                existingEntities,
+                pathSuggestions
             });
         };
 
@@ -174,7 +180,7 @@ export const ConfigControllerProvider = React.memo(
                 currentPropertiesOrder,
                 editedCollectionId,
                 parentCollectionIds,
-                collectionEditable: collection?.editable ?? false,
+                collectionEditable: collection?.editable === undefined || collection?.editable === true,
                 existingEntities
             });
         };
@@ -183,6 +189,7 @@ export const ConfigControllerProvider = React.memo(
                                       parentCollectionIds,
                                       parentCollection,
                                       initialValues,
+                                      copyFrom,
                                       redirect,
                                       sourceClick
                                   }: {
@@ -193,6 +200,7 @@ export const ConfigControllerProvider = React.memo(
                 path?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
             sourceClick?: string
         }) => {
@@ -200,10 +208,11 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
+                copyFrom,
                 redirect,
                 sourceClick
             });
-            onAnalyticsEvent?.("create_collection", {
+            onAnalyticsEvent?.(copyFrom ? "duplicate_collection" : "create_collection", {
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
@@ -215,7 +224,9 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
-                redirect
+                copyFrom,
+                redirect,
+                pathSuggestions
             });
         };
 
@@ -227,6 +238,7 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
+                        pathSuggestions
                     }}>
 
                     {children}

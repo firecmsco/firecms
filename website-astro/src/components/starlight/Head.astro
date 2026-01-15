@@ -1,0 +1,49 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Head.astro';
+---
+
+
+<!-- Google tag (gtag.js) - Load the library -->
+<script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"/>
+
+<script is:inline>
+
+    // Initialize dataLayer and gtag function
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    // Set default consents - only once
+    window.gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+    });
+
+
+    // Check if user has already consented
+    const cookieConsent = localStorage.getItem("cookie-consent");
+    if (cookieConsent === "accepted") {
+        window.gtag("consent", "update", {
+            ad_storage: "granted",
+            ad_user_data: "granted",
+            ad_personalization: "granted",
+            analytics_storage: "granted",
+        });
+    }
+
+    // Set timestamp - only once
+    window.gtag("js", new Date());
+
+    // Initialize GA4 and let Enhanced Measurement handle pageviews automatically
+    window.gtag("config", "G-NL75PPNYXD");
+
+</script>
+
+<script src="../../scripts/analytics.ts"/>
+
+<Default {...Astro.props}><slot /></Default>

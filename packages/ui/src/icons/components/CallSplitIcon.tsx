@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CallSplitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"call_split"}/>
-}
+export const CallSplitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"call_split"} ref={ref}/>
+});
+
+CallSplitIcon.displayName = "CallSplitIcon";

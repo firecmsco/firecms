@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function _7kIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"7k"}/>
-}
+export const _7kIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"7k"} ref={ref}/>
+});
+
+_7kIcon.displayName = "_7kIcon";

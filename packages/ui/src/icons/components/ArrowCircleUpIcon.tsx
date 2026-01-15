@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ArrowCircleUpIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"arrow_circle_up"}/>
-}
+export const ArrowCircleUpIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"arrow_circle_up"} ref={ref}/>
+});
+
+ArrowCircleUpIcon.displayName = "ArrowCircleUpIcon";

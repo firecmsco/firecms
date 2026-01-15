@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LensBlurIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"lens_blur"}/>
-}
+export const LensBlurIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"lens_blur"} ref={ref}/>
+});
+
+LensBlurIcon.displayName = "LensBlurIcon";

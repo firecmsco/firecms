@@ -119,7 +119,7 @@ export function AdvancedTextField({
             {
                 "min-h-[28px]": size === "smallest",
                 "min-h-[32px]": size === "small",
-                "min-h-[42px]": size === "medium",
+                "min-h-[44px]": size === "medium",
                 "min-h-[64px]": size === "large",
             },
             className)}>
@@ -146,7 +146,7 @@ export function AdvancedTextField({
                 {addLineBreaks(originalValue, !endsWithHighlight && multiline)}
 
                 {endsWithHighlight &&
-                    <span className="dark:bg-surface-accent-700 bg-surface-accent-300 p-px -m-px rounded-xs">
+                    <span className="dark:bg-surface-700 bg-surface-300 p-px -m-px rounded-xs">
                     {addLineBreaks(highlight, multiline)}
                 </span>}
 
@@ -157,12 +157,12 @@ export function AdvancedTextField({
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     "rounded-md resize-none w-full outline-hidden text-base bg-transparent ",
                     disabled && "border border-transparent outline-hidden opacity-50 text-surface-600 dark:text-surface-500",
-                    "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-surface-800 dark:caret-surface-200",
+                    "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-text-primary dark:caret-text-primary-dark",
                     "pt-8 pb-2 px-3",
                     label ? (size === "large" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2"
                 )}

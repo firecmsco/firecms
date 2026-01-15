@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RectangleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"rectangle"}/>
-}
+export const RectangleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"rectangle"} ref={ref}/>
+});
+
+RectangleIcon.displayName = "RectangleIcon";

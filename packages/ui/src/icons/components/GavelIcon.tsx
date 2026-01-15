@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GavelIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"gavel"}/>
-}
+export const GavelIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"gavel"} ref={ref}/>
+});
+
+GavelIcon.displayName = "GavelIcon";

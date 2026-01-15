@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SyncIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"sync"}/>
-}
+export const SyncIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sync"} ref={ref}/>
+});
+
+SyncIcon.displayName = "SyncIcon";

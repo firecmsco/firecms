@@ -32,11 +32,12 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const close = useCallback(() => {
 
-        if (sidePanels.length === 0)
+        const currentPanels = sidePanelsRef.current;
+        if (currentPanels.length === 0)
             return;
 
-        const lastSidePanel = sidePanels[sidePanels.length - 1];
-        const updatedPanels = [...sidePanels.slice(0, -1)];
+        const lastSidePanel = currentPanels[currentPanels.length - 1];
+        const updatedPanels = [...currentPanels.slice(0, -1)];
         updateSidePanels(updatedPanels);
 
         if (routesCount.current > 0) {
@@ -56,7 +57,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
                 }
             );
         }
-    }, [sidePanels, navigate, location]);
+    }, [navigate, location]);
 
     const open = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
@@ -69,7 +70,8 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
-        const updatedPanels = [...sidePanels, ...newPanels];
+        const currentPanels = sidePanelsRef.current;
+        const updatedPanels = [...currentPanels, ...newPanels];
         updateSidePanels(updatedPanels);
 
         newPanels.forEach((panel) => {
@@ -86,7 +88,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
             }
         });
 
-    }, [location, navigate, sidePanels]);
+    }, [location, navigate]);
 
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
@@ -97,7 +99,8 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
-        const updatedPanels = [...sidePanels.slice(0, -newPanels.length), ...newPanels];
+        const currentPanels = sidePanelsRef.current;
+        const updatedPanels = [...currentPanels.slice(0, -newPanels.length), ...newPanels];
         updateSidePanels(updatedPanels);
 
         newPanels.forEach((panel) => {
@@ -115,7 +118,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
             }
         });
 
-    }, [location, navigate, sidePanels]);
+    }, [location, navigate]);
 
     return {
         sidePanels,

@@ -128,6 +128,7 @@ export const productsCollection = buildCollection<Product>({
     includeJsonView: true,
     Actions: [SampleCollectionActions],
     subcollections: () => [localeCollection],
+    // localChangesBackup: false,
     // defaultSelectedView: "sample_custom_view",
     entityViews: [
         {

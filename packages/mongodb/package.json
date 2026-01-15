@@ -23,9 +23,9 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@types/node": "^20.17.14",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.17"
+    "@types/node": "^20.19.17",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -40,5 +40,5 @@
     "dist",
     "src"
   ],
-  "gitHead": "946e1f4f5695190e903af3a71dd7111accfc1efa"
+  "gitHead": "59205059d9ea7d36ca249d55e67b49fd01fac621"
 }

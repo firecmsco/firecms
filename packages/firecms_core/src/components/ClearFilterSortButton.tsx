@@ -1,10 +1,10 @@
-import { Button, FilterListOffIcon } from "@firecms/ui";
+import { FilterListOffIcon, Button, Tooltip } from "@firecms/ui";
 import { EntityTableController } from "@firecms/types";
 
 export function ClearFilterSortButton({
-                                          tableController,
-                                          enabled
-                                      }: {
+    tableController,
+    enabled
+}: {
     enabled: boolean;
     tableController: EntityTableController
 }) {
@@ -24,18 +24,21 @@ export function ClearFilterSortButton({
         } else {
             label = "Clear sort";
         }
-        return <Button
-            variant={"outlined"}
-            className="h-fit-content"
-            aria-label="filter clear"
-            onClick={() => {
-                tableController.clearFilter?.();
-                tableController.setSortBy?.(undefined);
-            }}
-            size={"small"}>
-            <FilterListOffIcon/>
-            {label}
-        </Button>
+        return (
+            <Tooltip title={label}>
+                <Button
+                    size={"small"}
+                    variant={"text"}
+                    aria-label={label}
+                    onClick={() => {
+                        tableController.clearFilter?.();
+                        tableController.setSortBy?.(undefined);
+                    }}
+                >
+                    <FilterListOffIcon size="small" />
+                </Button>
+            </Tooltip>
+        );
     }
     return null;
 }

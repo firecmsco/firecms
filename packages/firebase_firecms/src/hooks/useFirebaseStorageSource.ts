@@ -1,5 +1,13 @@
 import { FirebaseApp } from "@firebase/app";
-import { getDownloadURL, getMetadata, getStorage, list, ref, uploadBytes, deleteObject } from "@firebase/storage";
+import {
+    deleteObject,
+    getDownloadURL,
+    getMetadata,
+    getStorage,
+    list,
+    ref,
+    uploadBytesResumable
+} from "@firebase/storage";
 import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@firecms/core";
 
 /**
@@ -18,6 +26,7 @@ export function useFirebaseStorageSource({
                                              firebaseApp,
                                              bucketUrl
                                          }: FirebaseStorageSourceProps): StorageSource {
+    const projectId = firebaseApp?.options?.projectId;
     const urlsCache: Record<string, DownloadConfig> = {};
     return {
         uploadFile({
@@ -28,22 +37,91 @@ export function useFirebaseStorageSource({
                        bucket
                    }: UploadFileProps)
             : Promise<any> {
-            if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
-            const storageBucketUrl = bucket ?? bucketUrl;
-            const storage = getStorage(firebaseApp, storageBucketUrl);
-            if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
-            const usedFilename = fileName ?? file.name;
-            console.debug("Uploading file", {
-                firebaseApp,
-                storageBucketUrl,
-                usedFilename,
-                file,
-                path,
-                metadata
-            });
-            return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata).then(snapshot => ({
-                path: snapshot.ref.fullPath
-            }));
+            try {
+                if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+                const storageBucketUrl = bucket ?? bucketUrl;
+                const storage = getStorage(firebaseApp, storageBucketUrl);
+                if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
+                const usedFilename = fileName ?? file.name;
+
+                const storageRef = ref(storage, `${path}/${usedFilename}`);
+                const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+                return new Promise((resolve, reject) => {
+                    let lastProgress = 0;
+                    let timeoutId: NodeJS.Timeout | null = null;
+
+                    const clearTimeoutIfExists = () => {
+                        if (timeoutId) {
+                            clearTimeout(timeoutId);
+                            timeoutId = null;
+                        }
+                    };
+
+                    const setProgressTimeout = () => {
+                        clearTimeoutIfExists();
+                        timeoutId = setTimeout(() => {
+                            uploadTask.cancel();
+                            reject(new Error("Upload failed - This is likely a CORS configuration issue. " +
+                                "Make sure Firebase Storage is enabled in your project: " + `https://console.firebase.google.com/u/0/project/${projectId}/storage` + ". " +
+                                "If it is, check Firebase Storage CORS settings."));
+                        }, 5000);
+                    };
+
+                    setProgressTimeout();
+
+                    uploadTask.on("state_changed",
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                            if (progress > lastProgress) {
+                                lastProgress = progress;
+                                setProgressTimeout();
+                            }
+                        },
+                        (error) => {
+                            clearTimeoutIfExists();
+                            console.error("Firebase Storage upload error:", error);
+
+                            let errorMessage = "Unknown upload error";
+
+                            if (error?.message) {
+                                errorMessage = error.message;
+                            } else if (typeof error === "string") {
+                                errorMessage = error;
+                            } else if (error?.code) {
+                                errorMessage = error.code;
+                            }
+
+                            if (error?.code === "storage/unauthorized") {
+                                reject(new Error("Unauthorized: Check Firebase Storage security rules"));
+                            } else if (error?.code === "storage/canceled") {
+                                reject(new Error("Upload canceled"));
+                            } else if (error?.code === "storage/unknown" || !error?.code) {
+                                reject(new Error("Upload failed - Check Firebase Storage CORS configuration or network connection"));
+                            } else if (errorMessage.toLowerCase().includes("network")) {
+                                reject(new Error("Network error: Check your internet connection"));
+                            } else {
+                                const newError = new Error(errorMessage);
+                                (newError as any).code = error?.code;
+                                reject(newError);
+                            }
+                        },
+                        () => {
+                            clearTimeoutIfExists();
+                            const fullPath = uploadTask.snapshot.ref.fullPath;
+                            const bucketName = uploadTask.snapshot.ref.bucket;
+                            resolve({
+                                path: fullPath,
+                                bucket: bucketName,
+                                storageUrl: `gs://${bucketName}/${fullPath}`
+                            });
+                        }
+                    );
+                });
+            } catch (error) {
+                return Promise.reject(error);
+            }
         },
 
         async getFile(path: string, bucket?: string): Promise<File | null> {
@@ -65,13 +143,28 @@ export function useFirebaseStorageSource({
 
         async getDownloadURL(storagePathOrUrl: string, bucket?: string): Promise<DownloadConfig> {
             if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
-            const storageBucketUrl = bucket ?? bucketUrl;
+
+            // Support fully-qualified gs:// URLs
+            let resolvedPathOrUrl = storagePathOrUrl;
+            let resolvedBucket = bucket;
+            if (storagePathOrUrl.startsWith("gs://")) {
+                // Format: gs://<bucket>/<path>
+                const withoutProtocol = storagePathOrUrl.substring("gs://".length);
+                const firstSlash = withoutProtocol.indexOf("/");
+                if (firstSlash > 0) {
+                    resolvedBucket = withoutProtocol.substring(0, firstSlash);
+                    resolvedPathOrUrl = withoutProtocol.substring(firstSlash + 1);
+                }
+            }
+
+            const storageBucketUrl = resolvedBucket ?? bucketUrl;
             const storage = getStorage(firebaseApp, storageBucketUrl);
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
+
             if (urlsCache[storagePathOrUrl])
                 return urlsCache[storagePathOrUrl];
             try {
-                const fileRef = ref(storage, storagePathOrUrl);
+                const fileRef = ref(storage, resolvedPathOrUrl);
                 const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
                 const result: DownloadConfig = {
                     url,

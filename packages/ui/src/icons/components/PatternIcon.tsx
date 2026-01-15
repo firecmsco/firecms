@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PatternIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pattern"}/>
-}
+export const PatternIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pattern"} ref={ref}/>
+});
+
+PatternIcon.displayName = "PatternIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PermDeviceInformationIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"perm_device_information"}/>
-}
+export const PermDeviceInformationIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"perm_device_information"} ref={ref}/>
+});
+
+PermDeviceInformationIcon.displayName = "PermDeviceInformationIcon";

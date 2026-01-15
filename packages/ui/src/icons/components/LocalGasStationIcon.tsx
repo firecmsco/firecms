@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LocalGasStationIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"local_gas_station"}/>
-}
+export const LocalGasStationIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"local_gas_station"} ref={ref}/>
+});
+
+LocalGasStationIcon.displayName = "LocalGasStationIcon";

@@ -12,6 +12,16 @@ interface SearchBarProps {
     onTextSearch?: (searchString?: string) => void;
     placeholder?: string;
     expandable?: boolean;
+    /**
+     * Size of the search bar.
+     * - "small": 32px height (matches TextField small)
+     * - "medium": 44px height (matches TextField medium)
+     * @default "medium"
+     */
+    size?: "small" | "medium";
+    /**
+     * @deprecated Use size="medium" or size="small" instead. This prop will be removed in a future version.
+     */
     large?: boolean;
     innerClassName?: string;
     className?: string;
@@ -22,18 +32,19 @@ interface SearchBarProps {
 }
 
 export function SearchBar({
-                              onClick,
-                              onTextSearch,
-                              placeholder = "Search",
-                              expandable = false,
-                              large = false,
-                              innerClassName,
-                              className,
-                              autoFocus,
-                              disabled,
-                              loading,
-                              inputRef
-                          }: SearchBarProps) {
+    onClick,
+    onTextSearch,
+    placeholder = "Search",
+    expandable = false,
+    size = "medium",
+    large,
+    innerClassName,
+    className,
+    autoFocus,
+    disabled,
+    loading,
+    inputRef
+}: SearchBarProps) {
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
@@ -58,18 +69,23 @@ export function SearchBar({
         onTextSearch(undefined);
     }, [onTextSearch]);
 
+    // Height classes matching TextField sizes
+    const heightClass = size === "small" ? "h-[36px]" : "h-[44px]";
+    const iconPaddingClass = size === "small" ? "px-2" : "px-4";
+    const inputPaddingClass = size === "small" ? "pl-8" : "pl-12";
+
     return (
         <div
             onClick={onClick}
             className={cls("relative",
-                large ? "h-14" : "h-[42px]",
+                heightClass,
                 "bg-surface-accent-50 dark:bg-surface-800 border",
                 defaultBorderMixin,
                 "rounded-lg",
                 className)}>
             <div
-                className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0">
-                {loading ? <CircularProgress size={"smallest"}/> : <SearchIcon className={"text-text-disabled dark:text-text-disabled-dark"}/>}
+                className={cls("absolute p-0 h-full pointer-events-none flex items-center justify-center top-0", iconPaddingClass)}>
+                {loading ? <CircularProgress size={"smallest"} /> : <SearchIcon className={"text-text-disabled dark:text-text-disabled-dark"} size={size === "small" ? "small" : "medium"} />}
             </div>
             <input
                 value={searchText ?? ""}
@@ -88,19 +104,21 @@ export function SearchBar({
                 className={cls(
                     (disabled || loading) && "pointer-events-none",
                     "placeholder-text-disabled dark:placeholder-text-disabled-dark",
-                    "relative flex items-center rounded-lg transition-all bg-transparent outline-hidden appearance-none border-none",
-                    "pl-12 h-full text-current ",
+                    "relative flex items-center rounded-lg transition-all bg-transparent outline-none appearance-none border-none",
+                    inputPaddingClass, "h-full text-current",
+                    size === "small" ? "text-sm" : "",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
                     innerClassName
                 )}
             />
             {searchText
                 ? <IconButton
-                    className={`${large ? "mr-2 top-1" : "mr-1 top-0"} absolute right-0 z-10`}
+                    className={`${size === "small" ? "mr-0 top-0" : "mr-1 top-0"} absolute right-0 z-10`}
+                    size={"small"}
                     onClick={clearText}>
-                    <CloseIcon size={"small"}/>
+                    <CloseIcon size={"smallest"} />
                 </IconButton>
-                : <div style={{ width: 26 }}/>
+                : <div style={{ width: 26 }} />
             }
         </div>
     );

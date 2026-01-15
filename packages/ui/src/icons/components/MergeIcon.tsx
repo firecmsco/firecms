@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MergeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"merge"}/>
-}
+export const MergeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"merge"} ref={ref}/>
+});
+
+MergeIcon.displayName = "MergeIcon";

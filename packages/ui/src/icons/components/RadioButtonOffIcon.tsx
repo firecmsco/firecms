@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RadioButtonOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"radio_button_off"}/>
-}
+export const RadioButtonOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"radio_button_off"} ref={ref}/>
+});
+
+RadioButtonOffIcon.displayName = "RadioButtonOffIcon";

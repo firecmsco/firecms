@@ -1,10 +1,10 @@
 {
   "name": "@firecms/cli",
-  "version": "4.0.0-alpha.1",
+  "version": "3.0.0-canary.298",
   "description": "A CLI to perform FireCMS operations",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "source": "src/index.ts",
   "bin": "bin/firecms.js",
@@ -31,29 +31,29 @@
   "license": "MIT",
   "dependencies": {
     "arg": "^5.0.2",
-    "axios": "^0.28.1",
+    "axios": "^1.13.2",
     "chalk": "^4.1.2",
     "execa": "^4.1.0",
-    "form-data": "^4.0.1",
-    "googleapis": "^144.0.0",
-    "inquirer": "12.5.2",
+    "form-data": "^4.0.5",
+    "googleapis": "^166.0.0",
+    "inquirer": "12.11.1",
     "json5": "^2.2.3",
     "listr": "^0.14.3",
     "ncp": "^2.0.0",
     "nocache": "^4.0.0",
-    "open": "^10.1.0",
+    "open": "^10.2.0",
     "ora": "^8.2.0",
-    "pump": "^3.0.2",
-    "ws": "^8.18.1",
+    "pump": "^3.0.3",
+    "ws": "^8.18.3",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.14",
+    "@types/node": "^20.19.17",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.2",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.17"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "files": [
     "bin/",
@@ -63,7 +63,6 @@
   ],
   "exports": {
     ".": {
-      "development": "./src/index.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
@@ -73,5 +72,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "946e1f4f5695190e903af3a71dd7111accfc1efa"
+  "gitHead": "59205059d9ea7d36ca249d55e67b49fd01fac621"
 }

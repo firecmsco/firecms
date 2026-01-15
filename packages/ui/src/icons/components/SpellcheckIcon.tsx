@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SpellcheckIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"spellcheck"}/>
-}
+export const SpellcheckIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"spellcheck"} ref={ref}/>
+});
+
+SpellcheckIcon.displayName = "SpellcheckIcon";

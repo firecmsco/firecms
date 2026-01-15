@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MmsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mms"}/>
-}
+export const MmsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mms"} ref={ref}/>
+});
+
+MmsIcon.displayName = "MmsIcon";

@@ -146,7 +146,7 @@ export function UserDetailsForm({
                     </DialogTitle>
                     <DialogContent className="h-full grow">
 
-                        <div className={"grid grid-cols-12 gap-8"}>
+                        <div className={"grid grid-cols-12 gap-4"}>
 
                             <div className={"col-span-12"}>
                                 <TextField
@@ -205,7 +205,6 @@ export function UserDetailsForm({
                     <DialogActions>
 
                         <Button variant={"text"}
-                                color={"primary"}
                                 onClick={() => {
                                     handleClose();
                                 }}>
@@ -214,7 +213,6 @@ export function UserDetailsForm({
 
                         <LoadingButton
                             variant="filled"
-                            color="primary"
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}

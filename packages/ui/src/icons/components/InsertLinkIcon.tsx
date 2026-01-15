@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function InsertLinkIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"insert_link"}/>
-}
+export const InsertLinkIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"insert_link"} ref={ref}/>
+});
+
+InsertLinkIcon.displayName = "InsertLinkIcon";

@@ -1,0 +1,27 @@
+---
+slug: docs/components/avatar
+title: Avatar
+sidebar_label: Avatar
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Avatars are visual placeholders for representing users or entities. They can contain images or initials and are commonly used in headers, lists, and anywhere user information is presented.
+
+## Image Avatar
+
+The `src` prop specifies the image URL for the avatar.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/avatar_image.tsx"/>
+
+## Text Avatar
+
+When the `src` prop is not provided, the avatar can display text such as user initials.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/avatar_text.tsx"/>
+
+## Custom Styling
+
+The `className` prop allows you to pass custom CSS classes to the avatar component.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/custom_style_avatar.tsx"/>

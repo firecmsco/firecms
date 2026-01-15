@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RestoreIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"restore"}/>
-}
+export const RestoreIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"restore"} ref={ref}/>
+});
+
+RestoreIcon.displayName = "RestoreIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function CrueltyFreeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"cruelty_free"}/>
-}
+export const CrueltyFreeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"cruelty_free"} ref={ref}/>
+});
+
+CrueltyFreeIcon.displayName = "CrueltyFreeIcon";

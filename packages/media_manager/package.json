@@ -1,0 +1,57 @@
+{
+    "name": "@firecms/media_manager",
+    "type": "module",
+    "version": "3.0.0-canary.298",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "firebase",
+        "cms",
+        "media",
+        "media manager",
+        "asset manager",
+        "firecms",
+        "storage"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.umd.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "main": "./dist/index.umd.js",
+    "module": "./dist/index.es.js",
+    "types": "./dist/index.d.ts",
+    "source": "src/index.ts",
+    "dependencies": {
+        "@firecms/core": "^3.0.0-canary.298",
+        "@firecms/formex": "^3.0.0-canary.298",
+        "@firecms/ui": "^3.0.0-canary.298"
+    },
+    "peerDependencies": {
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.19.17",
+        "@types/react": "^18.3.24",
+        "@types/react-dom": "^18.3.7",
+        "@vitejs/plugin-react": "^4.7.0",
+        "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
+        "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    },
+    "files": [
+        "dist",
+        "src"
+    ]
+}

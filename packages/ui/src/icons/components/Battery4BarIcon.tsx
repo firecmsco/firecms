@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function Battery4BarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"battery_4_bar"}/>
-}
+export const Battery4BarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"battery_4_bar"} ref={ref}/>
+});
+
+Battery4BarIcon.displayName = "Battery4BarIcon";

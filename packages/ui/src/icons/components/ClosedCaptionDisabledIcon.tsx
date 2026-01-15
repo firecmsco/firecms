@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ClosedCaptionDisabledIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"closed_caption_disabled"}/>
-}
+export const ClosedCaptionDisabledIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"closed_caption_disabled"} ref={ref}/>
+});
+
+ClosedCaptionDisabledIcon.displayName = "ClosedCaptionDisabledIcon";

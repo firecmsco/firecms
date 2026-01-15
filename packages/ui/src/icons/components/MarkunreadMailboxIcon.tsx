@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MarkunreadMailboxIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"markunread_mailbox"}/>
-}
+export const MarkunreadMailboxIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"markunread_mailbox"} ref={ref}/>
+});
+
+MarkunreadMailboxIcon.displayName = "MarkunreadMailboxIcon";

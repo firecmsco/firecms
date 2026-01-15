@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function TabUnselectedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"tab_unselected"}/>
-}
+export const TabUnselectedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"tab_unselected"} ref={ref}/>
+});
+
+TabUnselectedIcon.displayName = "TabUnselectedIcon";

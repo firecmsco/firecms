@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ShareLocationIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"share_location"}/>
-}
+export const ShareLocationIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"share_location"} ref={ref}/>
+});
+
+ShareLocationIcon.displayName = "ShareLocationIcon";

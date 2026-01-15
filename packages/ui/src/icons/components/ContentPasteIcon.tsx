@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ContentPasteIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"content_paste"}/>
-}
+export const ContentPasteIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"content_paste"} ref={ref}/>
+});
+
+ContentPasteIcon.displayName = "ContentPasteIcon";

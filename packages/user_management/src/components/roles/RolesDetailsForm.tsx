@@ -148,7 +148,7 @@ export function RolesDetailsForm({
                     </DialogTitle>
                     <DialogContent className="grow">
 
-                        <div className={"grid grid-cols-12 gap-8"}>
+                        <div className={"grid grid-cols-12 gap-4"}>
 
                             <div className={"col-span-12 md:col-span-8"}>
                                 <TextField
@@ -425,7 +425,6 @@ export function RolesDetailsForm({
                             {savingError.message ?? "There was an error saving this role"}
                         </Typography>}
                         <Button variant={"text"}
-                                color={"primary"}
                                 onClick={() => {
                                     handleClose();
                                 }}>
@@ -433,7 +432,6 @@ export function RolesDetailsForm({
                         </Button>
                         <LoadingButton
                             variant="filled"
-                            color="primary"
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}

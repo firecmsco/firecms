@@ -104,7 +104,6 @@ export * from "./components/AddToDriveIcon";
 export * from "./components/AddToHomeScreenIcon";
 export * from "./components/AddToPhotosIcon";
 export * from "./components/AddToQueueIcon";
-export * from "./components/AddChartIcon";
 export * from "./components/AdfScannerIcon";
 export * from "./components/AdjustIcon";
 export * from "./components/AdminPanelSettingsIcon";

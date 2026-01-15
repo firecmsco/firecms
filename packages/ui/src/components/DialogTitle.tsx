@@ -26,7 +26,7 @@ export function DialogTitle({
 
     const title = <DialogPrimitive.Title asChild>
         <Typography variant={variant}
-                    className={cls({ "mt-6 mx-6": includeMargin }, className)}
+                    className={cls({ "mt-8 mx-8": includeMargin }, className)}
                     gutterBottom={gutterBottom}
                     {...props}>
             {children}

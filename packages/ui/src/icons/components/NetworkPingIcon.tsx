@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NetworkPingIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"network_ping"}/>
-}
+export const NetworkPingIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"network_ping"} ref={ref}/>
+});
+
+NetworkPingIcon.displayName = "NetworkPingIcon";

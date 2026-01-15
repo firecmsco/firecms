@@ -1,0 +1,16 @@
+---
+import { Code } from 'astro-expressive-code/components';
+
+interface Props {
+  code?: string;
+  language?: string;
+  className?: string;
+}
+
+const { code = '', language = 'javascript', className = '' } = Astro.props;
+---
+
+<div class={`code-block-wrapper ${className}`}>
+  <Code code={code} lang={language} />
+</div>
+

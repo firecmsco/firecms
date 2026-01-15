@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PanToolIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"pan_tool"}/>
-}
+export const PanToolIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"pan_tool"} ref={ref}/>
+});
+
+PanToolIcon.displayName = "PanToolIcon";

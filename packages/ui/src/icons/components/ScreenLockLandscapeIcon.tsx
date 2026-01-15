@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ScreenLockLandscapeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"screen_lock_landscape"}/>
-}
+export const ScreenLockLandscapeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"screen_lock_landscape"} ref={ref}/>
+});
+
+ScreenLockLandscapeIcon.displayName = "ScreenLockLandscapeIcon";

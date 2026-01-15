@@ -1,0 +1,94 @@
+---
+slug: docs/self/upgrade_tailwind_v4
+title: Upgrade to TailwindCSS v4
+sidebar_label: Upgrade to TailwindCSS v4
+---
+
+Migrating to FireCMS v3.1 involves a few key changes to ensure compatibility with the latest features and improvements.
+Below are the steps you need to follow to successfully migrate your project.
+
+The main change is the migration from TailwindCSS v3 to v4. This involves updating your TailwindCSS configuration and ensuring
+that your styles are compatible with the new version.
+
+Update FireCMS packages and tailwindcss:
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+## Add the vite plugin
+
+Update your `vite.config.ts` to include the new TailwindCSS v4 plugin.
+Your vite configuration should look something like this:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+## Changes to colors
+
+The variable names have been changed to follow the TW4 standard.
+Update your `index.css` file to reflect these changes:
+
+Before:
+```css
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+
+After:
+```css
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+Your index.css file should look like this:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}
+
+```
+
+## Clean up
+
+You should remove `tailwind.config.js` and `postcss.config.js` files.

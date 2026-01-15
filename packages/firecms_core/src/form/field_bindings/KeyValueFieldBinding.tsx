@@ -216,7 +216,6 @@ function MapEditView<T extends Record<string, any>>({
 
         <Button variant={"text"}
                 size={"small"}
-                color="primary"
                 className="w-full"
                 disabled={disabled}
                 startIcon={<AddIcon/>}

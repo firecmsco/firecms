@@ -184,7 +184,7 @@ function processValueForExport(inputValue: any,
         }
     } else if (property.type === "reference" && inputValue && inputValue.isEntityReference && inputValue.isEntityReference()) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
-        value = ref ? ref.pathWithId : null;
+        value = ref ? ref.pathWithIdAndDatabase : null;
     } else if (property.type === "date" && inputValue instanceof Date) {
         value = inputValue ? (dateExportType === "timestamp" ? inputValue.getTime() : inputValue.toISOString()) : null;
     } else {

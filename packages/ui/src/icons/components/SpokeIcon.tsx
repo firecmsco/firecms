@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SpokeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"spoke"}/>
-}
+export const SpokeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"spoke"} ref={ref}/>
+});
+
+SpokeIcon.displayName = "SpokeIcon";

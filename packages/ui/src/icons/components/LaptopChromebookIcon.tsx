@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LaptopChromebookIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"laptop_chromebook"}/>
-}
+export const LaptopChromebookIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"laptop_chromebook"} ref={ref}/>
+});
+
+LaptopChromebookIcon.displayName = "LaptopChromebookIcon";

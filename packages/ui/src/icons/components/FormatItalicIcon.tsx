@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FormatItalicIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"format_italic"}/>
-}
+export const FormatItalicIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"format_italic"} ref={ref}/>
+});
+
+FormatItalicIcon.displayName = "FormatItalicIcon";

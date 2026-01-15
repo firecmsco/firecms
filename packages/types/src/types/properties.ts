@@ -164,6 +164,27 @@ export interface BaseProperty<CustomProps = any> {
     Preview?: React.ComponentType<PropertyPreviewProps<any, CustomProps>>;
 
     /**
+     * Additional props that are passed to the components defined in `field`
+     * or in `preview`.
+     */
+    customProps?: CustomProps;
+
+    /**
+     * This value will be set by default for new entities.
+     */
+    defaultValue?: T | null;
+
+    /**
+     * Should this property be editable. If set to true, the user will be able to modify the property and
+     * save the new config. The saved config will then become the source of truth.
+     * Defaults to `true.
+     * This props is only useful when you are using the collection editor to modify collection
+     * configurations from the CMS itself. You can also use the `editable` prop in the
+     * `EntityCollection` interface to disable the edition of all properties in a collection.
+     */
+    editable?: boolean;
+
+    /**
      * Use this to define dynamic properties that change based on the
      * entity's values. For example, you can make a field read-only if
      * another field has a certain value.
@@ -699,8 +720,16 @@ export type StorageConfig = {
     /**
      * Use client side image compression and resizing
      * Will only be applied to these MIME types: image/jpeg, image/png and image/webp
+     * @deprecated Use `imageResize` instead
      */
-    imageCompression?: ImageCompression;
+    imageCompression?: ImageResize;
+
+    /**
+     * Advanced image resizing and cropping configuration.
+     * Applied before upload to optimize storage and bandwidth.
+     * Only applies to image MIME types: image/jpeg, image/png, image/webp
+     */
+    imageResize?: ImageResize;
 
     /**
      * Specific metadata set in your uploaded file.
@@ -739,6 +768,16 @@ export type StorageConfig = {
      * - `{path}` - Path of this entity
      */
     storagePath: string | ((context: UploadedFileContext) => string);
+
+    /**
+     * When set to true, this flag indicates that the bucket name will be
+     * included in the saved storage path.
+     *
+     * E.g. `gs://my-bucket/path/to/file.png` instead of just `path/to/file.png`
+     *
+     * Defaults to false.
+     */
+    includeBucketUrl?: boolean;
 
     /**
      * When set to true, this flag indicates that the download URL of the file
@@ -837,19 +876,36 @@ export type FileType =
     | "font/*"
     | string;
 
-export interface ImageCompression {
+export interface ImageResize {
     /**
-     * New image max height (ratio is preserved)
-     */
-    maxHeight?: number;
-
-    /**
-     * New image max width (ratio is preserved)
+     * Maximum width in pixels. Image will be scaled down proportionally if wider.
      */
     maxWidth?: number;
 
     /**
-     * A number between 0 and 100. Used for the JPEG compression.(if no compress is needed, just set it to 100)
+     * Maximum height in pixels. Image will be scaled down proportionally if taller.
+     */
+    maxHeight?: number;
+
+    /**
+     * Resize mode determines how the image fits within maxWidth/maxHeight bounds.
+     * - `contain`: Scale down to fit within bounds, preserving aspect ratio (default)
+     * - `cover`: Scale to fill bounds, preserving aspect ratio (may crop)
+     */
+    mode?: 'contain' | 'cover';
+
+    /**
+     * Output format for the resized image.
+     * - `original`: Keep the original format (default)
+     * - `jpeg`: Convert to JPEG
+     * - `png`: Convert to PNG
+     * - `webp`: Convert to WebP
+     */
+    format?: 'original' | 'jpeg' | 'png' | 'webp';
+
+    /**
+     * Quality for lossy formats (JPEG, WebP). Number between 0 and 100.
+     * Higher is better quality but larger file size. Defaults to 80.
      */
     quality?: number;
 }

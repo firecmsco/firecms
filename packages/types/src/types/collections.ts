@@ -363,7 +363,33 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * This prop has no effect if the history plugin is not enabled
      */
     history?: boolean;
+
+    /**
+     * Should local changes be backed up in local storage, to prevent data loss on
+     * accidental navigations.
+     * - `manual_apply`: When the user navigates back to an entity with local changes,
+     *   they will be prompted to restore the changes.
+     * - `auto_apply`: When the user navigates back to an entity with local changes,
+     *   the changes will be automatically applied.
+     * - `false`: Local changes will not be backed up.
+     * Defaults to `manual_apply`.
+     */
+    localChangesBackup?: "manual_apply" | "auto_apply" | false;
+
+    /**
+     * Default view mode for displaying this collection.
+     * - "table": Display entities in a spreadsheet-like table (default)
+     * - "cards": Display entities as a grid of cards with thumbnails
+     * Defaults to "table".
+     */
+    defaultViewMode?: ViewMode;
 }
+
+/**
+ * View mode for displaying a collection.
+ * @group Collections
+ */
+export type ViewMode = "table" | "cards";
 
 /**
  * Parameter passed to the `Actions` prop in the collection configuration.
@@ -645,7 +671,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     paginationEnabled?: boolean;
     pageSize?: number;
     checkFilterCombination?: (filterValues: FilterValues<any>,
-                              sortBy?: [string, "asc" | "desc"]) => boolean;
+        sortBy?: [string, "asc" | "desc"]) => boolean;
     popupCell?: SelectedCellProps<M>;
     setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
 

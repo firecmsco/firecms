@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function AutofpsSelectIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"autofps_select"}/>
-}
+export const AutofpsSelectIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"autofps_select"} ref={ref}/>
+});
+
+AutofpsSelectIcon.displayName = "AutofpsSelectIcon";

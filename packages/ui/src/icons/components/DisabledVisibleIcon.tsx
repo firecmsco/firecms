@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DisabledVisibleIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"disabled_visible"}/>
-}
+export const DisabledVisibleIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"disabled_visible"} ref={ref}/>
+});
+
+DisabledVisibleIcon.displayName = "DisabledVisibleIcon";

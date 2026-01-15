@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function LocalLibraryIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"local_library"}/>
-}
+export const LocalLibraryIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"local_library"} ref={ref}/>
+});
+
+LocalLibraryIcon.displayName = "LocalLibraryIcon";

@@ -70,7 +70,7 @@ export function DataTable({
                     <FileDownloadIcon/>
                 </IconButton>
             </div>
-            <div className="flex h-[360px] w-full flex-col bg-white dark:bg-surface-950"
+            <div className="flex h-[360px] w-full flex-col bg-surface dark:bg-surface-dark"
                  style={{
                      maxWidth
                  }}>

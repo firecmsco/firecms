@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RailwayAlertIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"railway_alert"}/>
-}
+export const RailwayAlertIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"railway_alert"} ref={ref}/>
+});
+
+RailwayAlertIcon.displayName = "RailwayAlertIcon";

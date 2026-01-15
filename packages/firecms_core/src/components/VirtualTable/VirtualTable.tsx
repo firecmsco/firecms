@@ -1,4 +1,4 @@
-import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { deepEqual as equal } from "fast-equals"
 
@@ -21,6 +21,16 @@ import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
 import { AssignmentIcon, CenteredView, cls, Typography } from "@firecms/ui";
 import { useDebounceCallback } from "../common/useDebouncedCallback";
+import {
+    closestCenter,
+    DndContext,
+    DragEndEvent,
+    DragStartEvent,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -56,7 +66,7 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                         minHeight: "100%",
                                         position: "relative"
                                     }}>
-                                    <VirtualTableHeaderRow {...virtualTableProps}/>
+                                    <VirtualTableHeaderRow {...virtualTableProps} />
                                     {!customView && children}
                                 </div>
 
@@ -115,6 +125,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              endAdornment,
                                                              AddColumnComponent,
                                                              initialScroll = 0,
+                                                             onColumnsOrderChange,
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -126,6 +137,44 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const endReachCallbackThreshold = useRef<number>(0);
 
         const debouncedScroll = useDebounceCallback(onScrollProp, 200);
+
+        // Drag and drop state
+        const [draggingColumnId, setDraggingColumnId] = useState<string | null>(null);
+
+        const sensors = useSensors(
+            useSensor(PointerSensor, {
+                activationConstraint: {
+                    distance: 5,
+                },
+            })
+        );
+
+        const handleDragStart = useCallback((event: DragStartEvent) => {
+            setDraggingColumnId(event.active.id as string);
+        }, []);
+
+        const handleDragEnd = useCallback((event: DragEndEvent) => {
+            const {
+                active,
+                over
+            } = event;
+            setDraggingColumnId(null);
+
+            if (over && active.id !== over.id && onColumnsOrderChange) {
+                const oldIndex = columns.findIndex((col) => col.key === active.id);
+                const newIndex = columns.findIndex((col) => col.key === over.id);
+
+                if (oldIndex !== -1 && newIndex !== -1) {
+                    const newColumns = arrayMove(columns, oldIndex, newIndex);
+                    setColumns(newColumns);
+                    onColumnsOrderChange(newColumns);
+                }
+            }
+        }, [columns, onColumnsOrderChange]);
+
+        const handleDragCancel = useCallback(() => {
+            setDraggingColumnId(null);
+        }, []);
 
         // Set initial scroll position
         useEffect(() => {
@@ -297,7 +346,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     </div>)
                 : undefined);
 
-        const virtualListController = {
+        const virtualListController = useMemo(() => ({
             data,
             rowHeight: rowHeight,
             cellRenderer,
@@ -315,14 +364,28 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             createFilterField,
             rowClassName,
             endAdornment,
-            AddColumnComponent
-        };
+            AddColumnComponent,
+            onColumnsOrderChange: onColumnsOrderChange ? (newColumns: VirtualTableColumn[]) => {
+                setColumns(newColumns);
+                onColumnsOrderChange(newColumns);
+            } : undefined,
+            draggingColumnId
+        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeInternal, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent, onColumnsOrderChange, draggingColumnId]);
 
-        return (
+        // Get sortable column keys (excluding frozen columns)
+        const sortableColumnKeys = columns
+            .filter(col => !col.frozen)
+            .map(col => col.key);
+
+        const tableContent = (
             <div
                 ref={measureRef}
                 style={style}
-                className={cls("h-full w-full", className)}>
+                className={cls(
+                    "h-full w-full",
+                    className,
+                    draggingColumnId && "overflow-hidden"
+                )}>
                 <VirtualListContext.Provider
                     value={virtualListController}>
 
@@ -332,16 +395,101 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         width={bounds.width}
                         height={bounds.height}
                         itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
-                        onScroll={onScroll}
+                        onScroll={draggingColumnId ? undefined : onScroll}
                         includeAddColumn={Boolean(AddColumnComponent)}
                         itemSize={rowHeight}/>
 
                 </VirtualListContext.Provider>
             </div>
         );
+
+        // Wrap with DndContext if column reorder is enabled
+        if (onColumnsOrderChange) {
+            return (
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragCancel={handleDragCancel}
+                >
+                    <SortableContext
+                        items={sortableColumnKeys}
+                        strategy={horizontalListSortingStrategy}
+                    >
+                        {tableContent}
+                    </SortableContext>
+                </DndContext>
+            );
+        }
+
+        return tableContent;
     },
     equal
 );
+
+// Cell component that computes sortable props and passes them to VirtualTableCell
+const SortableCell = ({
+                          column,
+                          columns,
+                          cellData,
+                          rowData,
+                          rowIndex,
+                          columnIndex,
+                          cellRenderer,
+                          isDragging,
+                          isDraggable
+                      }: {
+    column: VirtualTableColumn;
+    columns: VirtualTableColumn[];
+    cellData: any;
+    rowData: any;
+    rowIndex: number;
+    columnIndex: number;
+    cellRenderer: React.ComponentType<any>;
+    isDragging: boolean;
+    isDraggable: boolean;
+}) => {
+    const {
+        attributes,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({
+        id: column.key,
+        disabled: !isDraggable || column.frozen
+    });
+
+    const sortableStyle: React.CSSProperties = {
+        // Only use translate, ignore any scale transforms
+        transform: transform ? `translateX(${transform.x}px)` : undefined,
+        // Don't transition the dragged item - only other items should animate
+        transition: isDragging ? undefined : transition,
+        minWidth: column.width,
+        maxWidth: column.width,
+        width: column.width,
+    };
+
+    return (
+        <VirtualTableCell
+            key={`cell_${column.key}`}
+            dataKey={column.key}
+            cellRenderer={cellRenderer}
+            column={column}
+            columns={columns}
+            rowData={rowData}
+            cellData={cellData}
+            rowIndex={rowIndex}
+            columnIndex={columnIndex}
+            sortableNodeRef={setNodeRef}
+            sortableStyle={sortableStyle}
+            sortableAttributes={attributes}
+            isDragging={isDragging}
+            isDraggable={isDraggable}
+            frozen={column.frozen}
+        />
+    );
+};
 
 function MemoizedList({
                           outerRef,
@@ -356,7 +504,7 @@ function MemoizedList({
     width: number;
     height: number;
     itemCount: number;
-    onScroll: (params: {
+    onScroll?: (params: {
         scrollDirection: "forward" | "backward",
         scrollOffset: number,
         scrollUpdateWasRequested: boolean;
@@ -378,7 +526,9 @@ function MemoizedList({
                   cellRenderer,
                   hoverRow,
                   rowClassName,
-                  endAdornment
+                  endAdornment,
+                  draggingColumnId,
+                  onColumnsOrderChange
               }) => {
 
                 if (endAdornment && index === (data ?? []).length) {
@@ -411,16 +561,23 @@ function MemoizedList({
 
                         {columns.map((column: VirtualTableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
-                            return <VirtualTableCell
-                                key={`cell_${column.key}`}
-                                dataKey={column.key}
-                                cellRenderer={cellRenderer}
-                                column={column}
-                                columns={columns}
-                                rowData={rowData}
-                                cellData={cellData}
-                                rowIndex={index}
-                                columnIndex={columnIndex}/>;
+                            const isDragging = draggingColumnId === column.key;
+                            const isDraggable = !column.frozen && !!onColumnsOrderChange;
+
+                            return (
+                                <SortableCell
+                                    key={`cell_${column.key}`}
+                                    column={column}
+                                    columns={columns}
+                                    cellData={cellData}
+                                    rowData={rowData}
+                                    rowIndex={index}
+                                    columnIndex={columnIndex}
+                                    cellRenderer={cellRenderer}
+                                    isDragging={isDragging}
+                                    isDraggable={isDraggable}
+                                />
+                            );
                         })}
 
                         {includeAddColumn && <div className={"w-20"}/>}

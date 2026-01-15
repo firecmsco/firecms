@@ -39,10 +39,10 @@ export function DataTalkDrawer() {
                             className={({ isActive }: any) => cls("transition-opacity flex flex-col justify-between p-4",
                                 !drawerOpen ? "opacity-0" : "opacity-1",
                                 "rounded-r-lg truncate",
-                                "hover:bg-surface-accent-300/60 dark:hover:bg-surface-700/60 text-surface-800 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white",
+                                "hover:bg-surface-accent-300/60 hover:bg-surface-accent-300/60 dark:hover:bg-surface-700/60 dark:hover:bg-surface-700/60 text-surface-800 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white",
                                 "mr-8",
                                 "font-medium text-sm",
-                                isActive ? "bg-surface-accent-200/60 dark:bg-surface-800/30" : ""
+                                isActive ? "bg-surface-accent-200/60 bg-surface-accent-200/60 dark:bg-surface-800/30 dark:bg-surface-800/30" : ""
                             )}
                             to={navigation.homeUrl + "/datatalk/" + session.id}
                         >

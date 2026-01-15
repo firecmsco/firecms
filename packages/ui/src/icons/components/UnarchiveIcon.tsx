@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function UnarchiveIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"unarchive"}/>
-}
+export const UnarchiveIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"unarchive"} ref={ref}/>
+});
+
+UnarchiveIcon.displayName = "UnarchiveIcon";

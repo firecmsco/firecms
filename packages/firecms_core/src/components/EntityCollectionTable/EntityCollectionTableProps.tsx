@@ -10,6 +10,7 @@ import {
     User
 } from "@firecms/types";
 import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
+import { VirtualTableColumn } from "../VirtualTable";
 
 /**
  * @group Collection components
@@ -152,6 +153,11 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     enablePopupIcon: boolean;
 
     openEntityMode?: "side_panel" | "full_screen";
+
+    /**
+     * Callback when columns are reordered via drag-and-drop
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
 };
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

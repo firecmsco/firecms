@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VerticalShadesIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"vertical_shades"}/>
-}
+export const VerticalShadesIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"vertical_shades"} ref={ref}/>
+});
+
+VerticalShadesIcon.displayName = "VerticalShadesIcon";

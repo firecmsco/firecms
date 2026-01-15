@@ -1,252 +1,87 @@
+@layer base, starlight, theme, components, utilities;
+
 @import "tailwindcss";
+@import "@firecms/ui/index.css" layer(base);
+
+@import "@material-design-icons/font/filled.css";
+
 @plugin "@tailwindcss/typography";
-
-/* --- Tailwind CSS v4 migration (Astro site only) ---------------------------------
-   We moved the old JS config (fonts + colors) into CSS-based tokens.
-   No changes were made to the original Docusaurus project.
-   Add or adjust tokens here as needed.
-------------------------------------------------------------------------------- */
-
-/* Content sources (scan paths) */
-@source "./src/**/*.{astro,js,jsx,ts,tsx}";
-@source "./*.{astro,html}";
-
-/* Theme design tokens */
-@theme {
-  /* Fonts */
-  --font-sans: Rubik, Roboto, Helvetica, Arial, sans-serif;
-  --font-headers: Rubik, Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "Space Mono", "Lucida Console", monospace;
-
-  /* Brand indirection -> existing CSS custom properties (defined later in :root) */
-  --color-primary: var(--fcms-primary);
-  --color-primary-bg: var(--fcms-primary-bg);
-  --color-secondary: var(--fcms-secondary);
-
-  /* Field */
-  --color-field-disabled: #E0E0E2;
-  --color-field-disabled-dark: #232325;
-
-  /* Text (light + dark variants) */
-  --color-text-primary: #15151B;
-  --color-text-secondary: #51515d;
-  --color-text-disabled: rgba(0,0,0,0.32);
-  --color-text-primary-dark: #ffffff;
-  --color-text-secondary-dark: rgba(255,255,255,0.65);
-  --color-text-disabled-dark: rgba(255,255,255,0.43);
-
-  /* Surface (matches firecms UI preset) */
-  --color-surface-50: #f8f8fc;
-  --color-surface-100: #E7E7EB;
-  --color-surface-200: #CFCFD6;
-  --color-surface-300: #B7B7BF;
-  --color-surface-400: #A0A0A9;
-  --color-surface-500: #87878F;
-  --color-surface-600: #6B6B74;
-  --color-surface-700: #454552;
-  --color-surface-800: #292934;
-  --color-surface-900: #18181C;
-  --color-surface-950: #101013;
-
-  /* Gray (legacy palette retained) */
-  --color-gray-50: #fafafa;
-  --color-gray-100: #f5f5f1;
-  --color-gray-200: #ededed;
-  --color-gray-300: #E7E7EB;
-  --color-gray-400: #A0A0A9;
-  --color-gray-500: #87878F;
-  --color-gray-600: #6B6B74;
-  --color-gray-700: #414148;
-  --color-gray-800: #242430;
-  --color-gray-900: #18181C;
-  --color-gray-950: #101013;
-
-  /* Surface accent */
-  --color-surface-accent-50: #fcfcfc;
-  --color-surface-accent-100: #f1f5f9;
-  --color-surface-accent-200: #e3e7ee;
-  --color-surface-accent-300: #cfd5e4;
-  --color-surface-accent-400: #b3bbc8;
-  --color-surface-accent-500: #8f98b2;
-  --color-surface-accent-600: #606375;
-  --color-surface-accent-700: #38415c;
-  --color-surface-accent-800: #232336;
-  --color-surface-accent-900: #161624;
-  --color-surface-accent-950: #020617;
-}
-
-/* Optional: Dark mode variable overrides (uncomment to customize)
-html[data-theme='dark'] {
-  // --color-text-primary: #ffffff;
-  // --color-text-secondary: rgba(255,255,255,0.70);
-}
-*/
-
-.h1 {
-    @apply text-4xl font-semibold leading-tight tracking-tighter;
-}
-
-.h2 {
-    @apply text-3xl font-semibold leading-tight tracking-tighter;
-}
-
-.h3 {
-    @apply text-3xl font-bold leading-tight;
-}
-
-.h4 {
-    @apply text-2xl font-bold leading-snug tracking-tight;
-}
-
-.btn,
-.btn-sm {
-    @apply font-bold inline-flex items-center justify-center border border-transparent rounded leading-snug transition duration-150 ease-in-out;
-}
-
-.btn {
-    @apply px-8 py-3;
-}
-
-.btn-sm {
-    @apply px-4 py-2;
-}
+@custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
 
 
-
-html[data-theme=dark] body {
-    background-color: #101013;
-}
-
-body {
-    background-color: #FFFFFF;
-}
-
-.main-wrapper {
-    background-color: #FFFFFF;
-}
-
-html[data-theme=dark] .main-wrapper {
-    background-color: #101013;
-}
-
-.main-wrapper {
-    /*margin-top: calc(var(--ifm-navbar-height) * -1);*/
-    /*padding-top: calc(var(--ifm-navbar-height));*/
-}
-
-
-html,
-body {
-    height: auto;
-}
-
-h1 {
-    @apply text-6xl font-headers font-semibold tracking-tight
-}
-
-h2 {
-    @apply text-5xl font-headers font-semibold tracking-tight
-}
-
-h3 {
-    @apply text-4xl font-headers font-bold tracking-tight
-}
-
-h4 {
-    @apply text-3xl font-headers font-normal
-}
-
-h5 {
-    @apply text-2xl font-headers font-normal
-}
-
-h6 {
-    @apply text-xl font-headers font-normal
-}
-
-h1, .h1, h2, .h2 {
-    font-weight: 600;
-}
-
-h3, .h3 {
-    font-weight: 700;
-}
-
-.footer__title {
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-tr {
-    border-top: none;
-}
-
-.main-wrapper {
-    position: relative;
-}
-
-.theme-doc-sidebar-item-category-level-1, .theme-doc-sidebar-item-link-level-1 {
-    padding-top: .55rem;
-}
-
-.menu__link--sublist.menu__link {
-    font-weight: 500;
-}
-
-.theme-doc-sidebar-item-link-level-1 .menu__link {
-    font-weight: 500;
-}
-
-.menu__link {
-    font-size: 14px;
+/* Override font-display for Material Design Icons to ensure text is visible during font load */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
     font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
 
-.menu__caret:before {
-    transform: scale(0.75) rotate(180deg);
+/* Content sources (scan paths) - paths are relative to this file (src/styles/global.css) */
+@source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
+@source "../pages/**/*.{astro,md,mdx,ts,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+
+
+.material-icons {
+    font-family: "Material Icons";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "liga";
 }
 
-.menu__link--sublist-caret:after {
-    transform: scale(0.75);
+@view-transition {
+    navigation: auto;
 }
 
-.menu__list-item--collapsed .menu__link--sublist:after, .menu__list-item--collapsed .menu__caret:before {
-    transform: scale(0.75) rotateZ(90deg);
+/* View transition animations for logo */
+::view-transition-old(site-logo),
+::view-transition-new(site-logo) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.pro-sidebar-category > div:before {
-    content: "PRO";
-    padding-left: 12px;
-    margin: auto;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 500;
-    width: fit-content;
-    color: transparent;
-    background-clip: text;
-    background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
+::view-transition-old(logo-image),
+::view-transition-new(logo-image) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.pro-sidebar-item :before {
-    content: "PRO";
-    margin-right: 16px;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 500;
-    width: fit-content;
-    color: transparent;
-    background-clip: text;
-    background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
+::view-transition-old(logo-text),
+::view-transition-new(logo-text) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gradient-text {
-    width: fit-content;
-    color: transparent;
-    background-clip: text;
-    background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
+/* View transition animation for Start Building button */
+::view-transition-old(start-building-button),
+::view-transition-new(start-building-button) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
+@theme {
+    --color-primary: #0070f4; /* #0070f4 */
+    --color-primary-light: #359aff; /* #359aff */
+    --color-primary-dark: #0061c2; /* #0061c2 */
+    --font-sans: "Rubik", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* Font Face Declarations */
 /* latin-ext */
 @font-face {
     font-family: 'JetBrains Mono';
@@ -266,7 +101,6 @@ tr {
     src: url(https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbV2o-flEEny0FZhsfKu5WU4xD7OwGtT0rU.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 
 /* latin */
 @font-face {
@@ -298,355 +132,226 @@ tr {
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-:root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+/* Additional font weights for Rubik */
+/* latin */
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/rubik/v31/iJWKBXyIfDnIV7nBrXw.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* You can override the default Infima variables here. */
-:root {
-
-    --docsearch-primary-color: #0070f4;
-    --docsearch-modal-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
-    --docsearch-searchbox-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
-    --docsearch-muted-color: #7f8497;
-    --docsearch-hit-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
-    --docsearch-key-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
-    --docsearch-footer-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
-    --docsearch-logo-color: #0070f4;
+/* latin */
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/rubik/v31/iJWKBXyIfDnIV7nBrXw.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-.DocSearch-Button {
-    background: #FFFFFFCC;
+body {
+    overflow-x: hidden;
 }
 
-html[data-theme=dark] .DocSearch-Button {
-    background: rgba(59, 59, 59, 0.8);
+h1 {
+    @apply font-sans font-medium;
 }
 
-.DocSearch-Button:hover {
-    background: #FFFFFF;
+h2 {
+    @apply font-sans font-medium ;
 }
 
-html[data-theme=dark] .DocSearch-Button:hover {
-    background: rgba(59, 59, 59);
+h3 {
+    @apply font-sans font-medium;
 }
 
-[role="banner"] {
-    font-family: "JetBrains Mono";
+h4 {
+    @apply font-sans font-medium;
 }
 
-
-/*table tr:nth-child(2n) {*/
-/*    background-color: unset !important;*/
-/*}*/
-table th, table td {
-    border: unset;
+h5 {
+    @apply font-sans font-medium text-xl leading-7;
 }
 
-table thead tr {
-    border-top: unset;
+h6 {
+    @apply font-sans font-medium text-base leading-6;
 }
 
-
-article {
-    padding: 0 !important;
+/* Focus style matching app */
+:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px transparent, 0 0 0 4px rgba(0, 112, 244, 0.75), 0 0 0 6px transparent;
 }
 
-article ol, article ul, article menu {
-    padding: revert;
+/* Shared blob clip-path shape so we don't duplicate inline styles */
+.blob-shape {
+    clip-path: polygon(50% 0%, 78% 10%, 98% 40%, 90% 75%, 62% 100%, 32% 92%, 6% 62%, 10% 22%);
 }
 
-@media (min-width: 768px) {
-    article {
-        padding: 32px !important;
+/* Subtle scroll-based animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-@media (min-width: calc(84rem + 600px)) {
-
-    article {
-        padding: 64px !important;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
-
-    aside {
-        border: none !important;
-    }
-
-    .theme-doc-sidebar-container > div {
-        width: calc((100vw - 84rem) / 2);
-        display: flex;
-        flex-direction: column;
-        align-items: end;
-    }
-
-    .theme-doc-sidebar-container {
-        width: calc((100vw - 84rem) / 2) !important;
-    }
-
-    main .container {
-        margin-left: 0 !important;
+    to {
+        opacity: 1;
     }
 }
 
-
-.intro_video {
-    max-width: 960px;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-/* Name : VSCode Default Dark Plus Author: Fuyuno Mikazuki <https://mochizuki.moe> Original Color by Microsoft Visual Studio Code <https://github.com/microsoft/vscode> and dark-plus-syntax <https://github.com/dunstontc/dark-plus-syntax> */
-/* common tokens */
-.token.annotation, .token.builtin {
-    color: #4ec9b0;
+/* Animation utility classes */
+.animate-on-scroll {
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-play-state: paused;
 }
 
-.token.boolean {
-    color: #569cd6;
+.animate-on-scroll.fade-in-up {
+    animation-name: fadeInUp;
+    animation-duration: 0.4s;
 }
 
-.token.comment, .token.doctype {
-    color: #6a9955;
+.animate-on-scroll.fade-in {
+    animation-name: fadeIn;
+    animation-duration: 0.5s;
 }
 
-.token.constant, .token.class-name {
-    color: #4ec9b0;
+.animate-on-scroll.scale-in {
+    animation-name: scaleIn;
+    animation-duration: 0.4s;
 }
 
-.token.deleted {
-    color: #f44747;
+/* Staggered animation delays */
+.animate-on-scroll.delay-50 {
+    animation-delay: 0.05s;
 }
 
-.token.function {
-    color: #dcdcaa;
+.animate-on-scroll.delay-100 {
+    animation-delay: 0.1s;
 }
 
-.token.keyword {
-    color: #569cd6;
+.animate-on-scroll.delay-200 {
+    animation-delay: 0.2s;
 }
 
-.token.macro.property {
-    color: #569cd6;
+.animate-on-scroll.delay-300 {
+    animation-delay: 0.3s;
 }
 
-.token.number {
-    color: #b5cea8;
+.animate-on-scroll.delay-400 {
+    animation-delay: 0.4s;
 }
 
-.token.operator {
-    color: #d4d4d4;
+.animate-on-scroll.delay-500 {
+    animation-delay: 0.5s;
 }
 
-.token.tag .token.attr-name {
-    color: #9cdcfe;
+/* When element is in view */
+.animate-on-scroll.in-view {
+    animation-play-state: running;
 }
 
-.token.tag .token.attr-value {
-    color: #ce9178;
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
 }
 
-.token.tag .token.attr-value.punctuation {
-    color: #ce9178;
+.subtle-shimmer {
+    /* Set to inline-block for better compatibility with
+      background-clip and transforms.
+    */
+    display: inline-block;
+
+    /* The gradient for the shimmer (orange -> white -> orange) */
+    background-image: linear-gradient(
+            90deg,
+            #f97316, /* Tailwind orange-500 */
+            #ffffff, /* White glint */
+            #f97316  /* Tailwind orange-500 */
+    );
+
+    /* Make the gradient 2x width so it can slide across */
+    background-size: 200% auto;
+
+    /* Clip the background to the text shape */
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    /* Start with transparent text (will be filled by animation) */
+    color: transparent;
+
+    /* Apply the animation */
+    animation: shimmer-once 2s ease-in-out 1;
+
+    /* Delay the shimmer until *after* the fade-in-up (0.8s)
+      This makes it feel sequential and polished.
+    */
+    animation-delay: 0.8s;
+
+    /* Hold the final frame of the animation (solid color) */
+    animation-fill-mode: forwards;
 }
 
-.token.tag .token.class-name {
-    color: #4ec9b0;
-}
-
-.token.tag .token.punctuation {
-    color: #d4d4d4;
-    opacity: 0.7;
-}
-
-.token.tag .token.tag {
-    color: #569cd6;
-}
-
-.token.url {
-    /* text-decoration: underline */
-}
-
-.token.parent.important {
-    color: #569cd6;
-}
-
-.token.property {
-    color: #9cdcfe;
-}
-
-.token.regex {
-    color: #646695;
-}
-
-.token.rule {
-    color: #569cd6;
-}
-
-.token.selector {
-    color: #d7ba7d;
-}
-
-.token.string {
-    color: #ce9178;
-}
-
-.token.variable {
-    color: #9cdcfe;
-}
-
-/* JavaScript React, TypeScript React */
-code.language-tsx .token.interpolation .interpolation-punctuation, code.language-jsx .token.interpolation .interpolation-punctuation, pre.language-tsx .token.interpolation .interpolation-punctuation, pre.language-jsx .token.interpolation .interpolation-punctuation {
-    color: #569cd6;
-}
-
-code.language-tsx .token.tag .token.script .token.punctuation, code.language-jsx .token.tag .token.script .token.punctuation, pre.language-tsx .token.tag .token.script .token.punctuation, pre.language-jsx .token.tag .token.script .token.punctuation {
-    color: #569cd6;
-}
-
-code.language-tsx .token.tag .token.script .token.script-punctuation, code.language-jsx .token.tag .token.script .token.script-punctuation, pre.language-tsx .token.tag .token.script .token.script-punctuation, pre.language-jsx .token.tag .token.script .token.script-punctuation {
-    color: #d4d4d4;
-    opacity: 0.7;
-}
-
-/* SASS, SCSS */
-code.language-sass .token.property, code.language-scss .token.property {
-    color: #9cdcfe;
-}
-
-
-/* Container for the gradient effect - positioned absolutely within the parent */
-.gradient-background-container {
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    min-height: 1400px; /* Ensure it covers the entire viewport */
-    overflow: visible;
-    z-index: 0; /* Place behind content (which should have z-10 or higher) */
-}
-
-.blob {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px); /* Adjust blur */
-    opacity: 0.5; /* Base opacity */
-    will-change: transform, opacity;
-    z-index: -1; /* Ensure they are behind the container div itself */
-}
-
-/* Blob 1 (Bright Pink) */
-.blob-1 {
-    width: 45vw;
-    height: 45vw;
-    background: radial-gradient(circle at 40% 40%, rgba(255, 46, 138, 0.8), rgba(255, 46, 138, 0) 65%);
-    top: -2%;
-    left: 8%;
-    animation: moveBlob1 12s infinite alternate ease-in-out;
-    animation-delay: -2s;
-}
-
-/* Blob 2 (Bright Cyan) */
-.blob-2 {
-    width: 50vw;
-    height: 50vw;
-    background: radial-gradient(circle at 60% 60%, rgb(0, 112, 244), rgba(39, 212, 255, 0) 65%);
-    top: 5%;
-    left: 42%;
-    animation: moveBlob2 14s infinite alternate ease-in-out;
-    animation-delay: -1s;
-}
-
-/* Blob 3 (Orange) */
-.blob-3 {
-    width: 40vw;
-    height: 40vw;
-    background: radial-gradient(circle at 55% 45%, rgba(255, 138, 61, 0.78), rgba(255, 138, 61, 0) 67%);
-    top: 50%;
-    left: 50%;
-    animation: moveBlob3 16s infinite alternate ease-in-out;
-    animation-delay: -4s;
-}
-
-.blob-4 {
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle at 55% 45%, rgba(112, 15, 236, 0.78), rgba(255, 138, 61, 0) 67%);
-    top: 30%;
-    left: 15%;
-    animation: moveBlob4 10s infinite alternate ease-in-out;
-    animation-delay: -2s;
-}
-
-@keyframes moveBlob1 {
+@keyframes shimmer-once {
+    /* Start: Gradient is off-screen to the left.
+      Text is still transparent (letting fade-in-up handle opacity)
+    */
     0% {
-        transform: translate(10vmin, 10vmin) scale(1);
-        opacity: 0.55;
+        color: transparent;
+        background-position: -200% center;
     }
-    50% {
-        transform: translate(16vmin, 6vmin) scale(1.15);
-        opacity: 0.7;
-    }
-    100% {
-        transform: translate(14vmin, 12vmin) scale(1.0);
-        opacity: 0.6;
-    }
-}
 
-@keyframes moveBlob2 {
-    0% {
-        transform: translate(2vmin, 8vmin) scale(1.05);
-        opacity: 0.55;
-    }
-    50% {
-        transform: translate(-12vmin, -2vmin) scale(0.9);
-        opacity: 0.65;
-    }
-    100% {
-        transform: translate(-6vmin, -2vmin) scale(1.05);
-        opacity: 0.6;
-    }
-}
-
-@keyframes moveBlob3 {
-    0% {
-        transform: translate(0, 0) scale(1.0);
-        opacity: 0.5;
-    }
+    /* Mid-point: Gradient is centered, creating the "glint".
+      Text is transparent to show the gradient.
+    */
     40% {
-        transform: translate(10vmin, -6vmin) scale(1.12);
-        opacity: 0.65;
+        color: transparent;
+        background-position: 0% center;
     }
-    80% {
-        transform: translate(-8vmin, 9vmin) scale(0.9);
-        opacity: 0.55;
+
+    /* Move-off: Gradient moves off-screen to the right.
+    */
+    70% {
+        color: transparent;
+        background-position: 200% center;
     }
+
+    /* End state: Hold this frame.
+      We explicitly set the color to solid orange.
+    */
     100% {
-        transform: translate(4vmin, 2vmin) scale(1.0);
-        opacity: 0.58;
+        color: #f97316; /* text-orange-500 */
+        background-position: 200% center;
     }
 }
 
-@keyframes moveBlob4 {
-    0% {
-        transform: translate(0, 0) scale(1.0);
-        opacity: 0.5;
-    }
-    40% {
-        transform: translate(10vmin, -6vmin) scale(1.12);
-        opacity: 0.65;
-    }
-    80% {
-        transform: translate(-8vmin, 9vmin) scale(0.9);
-        opacity: 0.55;
-    }
-    100% {
-        transform: translate(4vmin, 2vmin) scale(1.0);
-        opacity: 0.58;
-    }
-}

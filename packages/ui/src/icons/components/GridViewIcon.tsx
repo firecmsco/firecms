@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GridViewIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"grid_view"}/>
-}
+export const GridViewIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"grid_view"} ref={ref}/>
+});
+
+GridViewIcon.displayName = "GridViewIcon";

@@ -1,8 +1,0 @@
-@import './additional-styles/utility-patterns.css' layer(base);
-
-@import 'tailwindcss';
-@import "@firecms/ui/index.css" layer(base);
-
-.navbar__items--left .navbar__item {
-    @apply font-mono font-bold uppercase;
-}

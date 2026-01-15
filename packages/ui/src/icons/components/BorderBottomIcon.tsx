@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BorderBottomIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"border_bottom"}/>
-}
+export const BorderBottomIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"border_bottom"} ref={ref}/>
+});
+
+BorderBottomIcon.displayName = "BorderBottomIcon";

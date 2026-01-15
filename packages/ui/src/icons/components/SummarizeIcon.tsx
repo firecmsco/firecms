@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SummarizeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"summarize"}/>
-}
+export const SummarizeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"summarize"} ref={ref}/>
+});
+
+SummarizeIcon.displayName = "SummarizeIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ColorLensIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"color_lens"}/>
-}
+export const ColorLensIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"color_lens"} ref={ref}/>
+});
+
+ColorLensIcon.displayName = "ColorLensIcon";

@@ -6,6 +6,9 @@ import react from "@vitejs/plugin-react"
 import federation from "@originjs/vite-plugin-federation"
 import tailwindcss from "@tailwindcss/vite";
 
+// @ts-ignore
+import tailwindcss from "@tailwindcss/vite";
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
     const build = command === "build";

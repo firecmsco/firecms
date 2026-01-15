@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function KeyboardArrowLeftIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"keyboard_arrow_left"}/>
-}
+export const KeyboardArrowLeftIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"keyboard_arrow_left"} ref={ref}/>
+});
+
+KeyboardArrowLeftIcon.displayName = "KeyboardArrowLeftIcon";

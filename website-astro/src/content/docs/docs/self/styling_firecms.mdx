@@ -1,0 +1,272 @@
+---
+slug: docs/self/styling_firecms
+title: Styling FireCMS
+description: FireCMS allows you to customize the look and feel of your admin panel. You can customize the theme, colors, and typography to match your brand.
+---
+
+FireCMS allows you to customize the look and feel of your admin panel. You can
+customize the theme, colors, and typography to match your brand.
+
+FireCMS uses tailwindcss for styling. FireCMS UI provides a default **preset** that
+can be extended or completely replaced.
+
+### Customizing the theme
+
+Your default `tailwind.config.js` file should look like this:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+    ]
+};
+```
+
+You may want to check the original [`tailwind.config.js`](https://github.com/firecmsco/firecms/blob/main/packages/ui/tailwind.config.js)
+file in the `@firecms/ui` package.
+
+You can extend the default theme by adding your customizations, including all supported
+tailwindcss features.
+
+### Customizing colors
+
+#### Primary and secondary colors
+
+FireCMS UI uses a primary color and a secondary color. You can customize these colors
+in your `index.css` file:
+
+```css
+@import "@firecms/ui/index.css" layer(base);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+}
+```
+
+These are the default values but you can change them to match your brand.
+
+Just like in the previous section, feel free to take a look at the original
+[`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css) file in the `@firecms/ui` package.
+
+#### Customizing colors in the tailwind config
+
+If you need a more complex color customization, you can modify the `tailwind.config.js` file, to override the default
+color used by FireCMS.
+
+FireCMS defines colors for all the surfaces (a light gray by default), surfaces accents (a bluish gray by default),
+typography colors (primary, secondary and disabled) as well as the field colors (background, hover, etc).
+
+All these colors can be overridden in the `tailwind.config.js` file. This is an example of a config file that overrides
+the default colors:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+    ],
+    theme: {
+        extend: {
+            colors: {
+                "primary": "var(--color-primary)",
+                "secondary": "var(--color-secondary)",
+                "field": {
+                    "disabled": "rgb(224 224 226)",
+                    "disabled-dark": "rgb(35 35 37)"
+                },
+                "text": {
+                    "primary": "rgba(0, 0, 0, 0.87)",
+                    "secondary": "rgba(0, 0, 0, 0.55)",
+                    "disabled": "rgba(0, 0, 0, 0.38)",
+                    "primary-dark": "#ffffff",
+                    "secondary-dark": "rgba(255, 255, 255, 0.60)",
+                    "disabled-dark": "rgba(255, 255, 255, 0.48)"
+                },
+                "surface": {
+                    "50": "#f8f8fc",
+                    "100": "#E7E7EB",
+                    "200": "#CFCFD6",
+                    "300": "#B7B7BF",
+                    "400": "#A0A0A9",
+                    "500": "#87878F",
+                    "600": "#6B6B74",
+                    "700": "#454552",
+                    "800": "#292934",
+                    "900": "#18181C",
+                    "950": "#101013"
+                },
+                "surface-accent": {
+                    "50": "#f8fafc",
+                    "100": "#f1f5f9",
+                    "200": "#e2e8f0",
+                    "300": "#cbd5e1",
+                    "400": "#94a3b8",
+                    "500": "#64748b",
+                    "600": "#475569",
+                    "700": "#334155",
+                    "800": "#1e293b",
+                    "900": "#0f172a",
+                    "950": "#020617"
+                }
+            }
+        }
+    }
+};
+```
+
+
+### Customizing typography
+
+FireCMS uses the `Rubik` font by default, both for headings and body text. It also uses the `JetBrains Mono` font
+for code blocks.
+
+#### Adding new fonts
+If you would like to add a new font, you can install it using `npm` or `yarn`.
+
+For example, to add the `Noto Serif` font:
+
+```bash
+npm install @fontsource/noto-serif
+```
+
+or
+
+```bash
+yarn add @fontsource/noto-serif
+```
+
+and import it in your `App.tsx` file:
+```tsx
+import "@fontsource/noto-serif";
+```
+
+In the FireCMS UI tailwind preset, we define 3 different font families: `font-headers`, `font-sans` and `font-mono`.
+
+You can override these font families in your `tailwind.config.js` file. Let's say you want to use `Noto Serif` for headers
+and `Roboto` for the rest of the text:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+    ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: [
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif"
+        ],
+        headers: [
+          "Noto Serif",
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif"
+        ],
+        mono: [
+          "JetBrains Mono",
+          "Space Mono",
+          "Lucida Console",
+          "monospace"
+        ]
+      }
+    }
+  }
+};
+```
+
+#### Customizing typography styles
+
+Each typography style is defined in the `index.css`, and can be customized. These are the default styles, but you can
+change them to match your brand. The `@apply` directive is a tailwindcss feature that allows you to apply a set of
+utilities to a class.
+
+Feel free to add any of this classes to your `index.css` file, to override the default styles:
+
+```css
+.typography-h1 {
+    @apply text-6xl font-headers font-light;
+}
+
+.typography-h2 {
+    @apply text-5xl font-headers font-light;
+}
+
+.typography-h3 {
+    @apply text-4xl font-headers font-normal;
+}
+
+.typography-h4 {
+    @apply text-3xl font-headers font-normal;
+}
+
+.typography-h5 {
+    @apply text-2xl font-headers font-normal;
+}
+
+.typography-h6 {
+    @apply text-xl font-headers font-medium;
+}
+
+.typography-subtitle1 {
+    @apply text-lg font-headers font-medium;
+}
+
+.typography-subtitle2 {
+    @apply text-base font-headers font-medium;
+}
+
+.typography-body1 {
+}
+
+.typography-body2 {
+    @apply text-sm;
+}
+
+.typography-caption {
+    @apply text-xs;
+}
+
+.typography-label {
+    @apply text-sm font-medium;
+}
+
+.typography-button {
+    @apply text-sm font-semibold uppercase;
+}
+```
+
+### Do you miss any customization?
+
+If you need to customize any other aspect of FireCMS, please [let us know](https://discord.gg/fxy7xsQm3m).
+
+
+
+
+

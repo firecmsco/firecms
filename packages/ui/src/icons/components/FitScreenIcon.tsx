@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FitScreenIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fit_screen"}/>
-}
+export const FitScreenIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fit_screen"} ref={ref}/>
+});
+
+FitScreenIcon.displayName = "FitScreenIcon";

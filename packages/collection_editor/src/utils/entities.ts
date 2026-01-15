@@ -7,9 +7,9 @@ export function editableProperty(property: Property): boolean {
         const eProperty = property as Property;
         if (eProperty.type === "array" && typeof eProperty.of === "function")
             return false;
-        else if (eProperty.type === "array" && Array.isArray(eProperty.of))
+        else if (property.type === "array" && Array.isArray(property.of))
             return false;
-        return Boolean(eProperty.editable);
+        return property.editable === undefined ? true : Boolean(property.editable);
     }
 }
 

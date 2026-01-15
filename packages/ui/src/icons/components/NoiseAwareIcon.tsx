@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function NoiseAwareIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"noise_aware"}/>
-}
+export const NoiseAwareIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"noise_aware"} ref={ref}/>
+});
+
+NoiseAwareIcon.displayName = "NoiseAwareIcon";

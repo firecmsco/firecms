@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function SportsBarIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"sports_bar"}/>
-}
+export const SportsBarIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"sports_bar"} ref={ref}/>
+});
+
+SportsBarIcon.displayName = "SportsBarIcon";

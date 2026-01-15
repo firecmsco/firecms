@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MarkChatReadIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mark_chat_read"}/>
-}
+export const MarkChatReadIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mark_chat_read"} ref={ref}/>
+});
+
+MarkChatReadIcon.displayName = "MarkChatReadIcon";

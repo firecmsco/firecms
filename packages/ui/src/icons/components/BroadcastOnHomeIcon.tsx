@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BroadcastOnHomeIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"broadcast_on_home"}/>
-}
+export const BroadcastOnHomeIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"broadcast_on_home"} ref={ref}/>
+});
+
+BroadcastOnHomeIcon.displayName = "BroadcastOnHomeIcon";

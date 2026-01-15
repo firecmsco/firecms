@@ -106,7 +106,7 @@ export function ExampleCMSView() {
                                 path <code>products</code> programmatically
                             </p>
                             <Button
-                                variant={"outlined"}
+
                                 size={"small"}
                                 onClick={referenceDialog.open}>
                                 Test reference dialog
@@ -118,7 +118,7 @@ export function ExampleCMSView() {
                                 Use this button to open a snackbar
                             </p>
                             <Button
-                                variant={"outlined"}
+
                                 size={"small"}
                                 onClick={() => snackbarController.open({
                                     type: "success",
@@ -134,7 +134,7 @@ export function ExampleCMSView() {
                             </p>
                             <Button
                                 size={"small"}
-                                variant={"outlined"}
+
                                 onClick={() => sideEntityController.open({
                                     entityId: "B003WT1622",
                                     path: "/products-test",

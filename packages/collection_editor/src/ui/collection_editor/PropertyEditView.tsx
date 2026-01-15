@@ -119,7 +119,7 @@ export const PropertyForm = React.memo(
             name: ""
         } as PropertyWithId;
 
-        const disabled = (Boolean(property && !editableProperty(property)) && !collectionEditable);
+        const disabled = (Boolean(property && !editableProperty(property)) || !collectionEditable);
 
         const lastSubmittedProperty = useRef<OnPropertyChangedParams | undefined>(property ? {
             id: propertyKey,
@@ -294,7 +294,6 @@ export function PropertyFormDialog({
 
                 {onCancel && <Button
                     variant={"text"}
-                    color={"primary"}
                     onClick={() => {
                         onCancel();
                         formexRef.current?.resetForm();
@@ -302,9 +301,7 @@ export function PropertyFormDialog({
                     Cancel
                 </Button>}
 
-                <Button variant="outlined"
-                        type={"submit"}
-                        color="primary">
+                <Button type={"submit"}>
                     Ok
                 </Button>
             </DialogActions>
@@ -499,7 +496,7 @@ function PropertyEditFormFields({
                 <Typography>This property can&apos;t be edited</Typography>
                 <Typography variant={"caption"}>
                     You may not have permission to
-                    edit it or it is defined in code with no <code>editable</code> flag
+                    edit it or it is defined in code with the <code>editable</code> flag set to <code>false</code>.
                 </Typography>
             </InfoLabel>}
 

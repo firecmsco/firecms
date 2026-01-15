@@ -13,6 +13,12 @@ Then simply run:
 ### Running the project
 
 ```bash
+npm run dev
+```
+
+or
+
+```bash
 yarn dev
 ```
 
@@ -20,6 +26,12 @@ yarn dev
 
 Make sure you update your `package.json` `build` script with the correct 
 project name. Then run:
+
+```bash
+npm run build
+```
+
+or
 
 ```bash
 yarn build

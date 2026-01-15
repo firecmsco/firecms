@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VerticalAlignTopIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"vertical_align_top"}/>
-}
+export const VerticalAlignTopIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"vertical_align_top"} ref={ref}/>
+});
+
+VerticalAlignTopIcon.displayName = "VerticalAlignTopIcon";

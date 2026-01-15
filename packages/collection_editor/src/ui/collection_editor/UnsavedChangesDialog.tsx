@@ -26,7 +26,7 @@ export function UnsavedChangesDialog({
         >
 
             <DialogTitle>{title ?? "Unsaved changes"}</DialogTitle>
-            <DialogContent>
+            <DialogContent className={"mt-4"}>
                 {body && <Typography>
                     {body}
                 </Typography>}
@@ -38,10 +38,8 @@ export function UnsavedChangesDialog({
 
             <DialogActions>
                 <Button variant="text"
-                        color={"primary"}
                         onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button
-                    color={"primary"}
                     onClick={handleOk}> Ok </Button>
             </DialogActions>
         </Dialog>

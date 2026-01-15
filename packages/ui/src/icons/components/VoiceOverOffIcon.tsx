@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function VoiceOverOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"voice_over_off"}/>
-}
+export const VoiceOverOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"voice_over_off"} ref={ref}/>
+});
+
+VoiceOverOffIcon.displayName = "VoiceOverOffIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function RunningWithErrorsIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"running_with_errors"}/>
-}
+export const RunningWithErrorsIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"running_with_errors"} ref={ref}/>
+});
+
+RunningWithErrorsIcon.displayName = "RunningWithErrorsIcon";

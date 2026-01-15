@@ -25,7 +25,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "algoliasearch": "^5.19.0",
     "bson-objectid": "^2.0.4",
-    "firebase": "^10.14.1",
+    "firebase": "^12.7.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router": "^6.30.0",

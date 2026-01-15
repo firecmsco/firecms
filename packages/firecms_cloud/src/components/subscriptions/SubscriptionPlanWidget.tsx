@@ -37,7 +37,6 @@ export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
             color={"info"}
             action={<Button
                 className={"dark:text-white! dark:border-white dark:hover:bg-white dark:hover:text-primary! min-w-content"}
-                variant={"outlined"}
                 onClick={() => setDialogOpen(true)}>
                 More info
             </Button>}>
@@ -73,7 +72,7 @@ function PastDueAlert({ subscription }: { subscription: Subscription }) {
                 target={"_blank"}
                 rel="noopener noreferrer"
                 className={"dark:text-white! dark:border-white dark:hover:bg-white dark:hover:text-primary! min-w-content"}
-                variant={"outlined"}>
+            >
                 Update
             </Button>
             : <CircularProgress size={"smallest"}/>}>

@@ -1,13 +1,9 @@
 "use client";
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-
-// Context to provide portal container to child components
-const SheetPortalContext = createContext<HTMLElement | null>(null);
-
-export const useSheetPortalContainer = () => useContext(SheetPortalContext);
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 interface SheetProps {
     children: React.ReactNode;
@@ -23,6 +19,7 @@ interface SheetProps {
     style?: React.CSSProperties;
     overlayClassName?: string;
     overlayStyle?: React.CSSProperties;
+    portalContainer?: HTMLElement | null;
 }
 
 export const Sheet: React.FC<SheetProps> = ({
@@ -38,10 +35,16 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 style,
                                                 overlayClassName,
                                                 overlayStyle,
+                                                portalContainer,
                                                 ...props
                                             }) => {
     const [displayed, setDisplayed] = useState(false);
-    const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
+
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -68,16 +71,16 @@ export const Sheet: React.FC<SheetProps> = ({
         <DialogPrimitive.Root open={displayed || open}
                               modal={modal}
                               onOpenChange={onOpenChange}>
-            <DialogPrimitive.Portal>
+            <DialogPrimitive.Portal container={finalContainer}>
                 <DialogPrimitive.Title autoFocus tabIndex={0}>
                     {title ?? "Sheet"}
                 </DialogPrimitive.Title>
                 {includeBackgroundOverlay && <DialogPrimitive.Overlay
                     className={cls(
-                        "outline-hidden",
-                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-xs",
-                        "bg-black/50",
-                        "dark:bg-surface-900/60",
+                        "outline-none",
+                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
+                        "bg-black bg-opacity-50 bg-black/50",
+                        "dark:bg-surface-900 dark:bg-opacity-60 dark:bg-surface-900/60",
                         displayed && open ? "opacity-100" : "opacity-0",
                         overlayClassName
                     )}
@@ -90,7 +93,7 @@ export const Sheet: React.FC<SheetProps> = ({
                     {...props}
                     onFocusCapture={(event) => event.preventDefault()}
                     className={cls(
-                        "outline-hidden",
+                        "outline-none",
                         borderClass[side],
                         defaultBorderMixin,
                         "transform-gpu",
@@ -98,7 +101,7 @@ export const Sheet: React.FC<SheetProps> = ({
                         "text-surface-accent-900 dark:text-white",
                         "fixed transform z-20 transition-all ease-in-out",
                         !displayed ? "duration-150" : "duration-100",
-                        "outline-hidden focus:outline-hidden",
+                        "outline-none focus:outline-none",
                         transparent ? "" : "shadow-md bg-white dark:bg-surface-950",
                         side === "top" || side === "bottom" ? "w-full" : "h-full",
                         side === "left" || side === "top" ? "left-0 top-0" : "right-0 bottom-0",
@@ -108,15 +111,7 @@ export const Sheet: React.FC<SheetProps> = ({
                     )}
                     style={style}
                 >
-                    <SheetPortalContext.Provider value={portalContainer}>
-                        {children}
-                    </SheetPortalContext.Provider>
-                    {/* Portal container for child components */}
-                    <div
-                        ref={setPortalContainer}
-                        className="fixed inset-0 pointer-events-none z-50"
-                        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-                    />
+                    {children}
                 </DialogPrimitive.Content>
             </DialogPrimitive.Portal>
         </DialogPrimitive.Root>

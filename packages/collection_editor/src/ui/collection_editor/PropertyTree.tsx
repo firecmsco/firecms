@@ -2,7 +2,18 @@ import React from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property } from "@firecms/core";
-import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
+import {
+    AutorenewIcon,
+    defaultBorderMixin,
+    DeleteIcon,
+    IconButton,
+    Menu,
+    MenuItem,
+    MoreVertIcon,
+    Tooltip,
+    VerticalAlignBottomIcon,
+    VerticalAlignTopIcon
+} from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import {
     closestCenter,
@@ -29,19 +40,19 @@ export const PropertyTree = React.memo(
     function PropertyTree<M extends {
         [Key: string]: any
     }>({
-           namespace,
-           selectedPropertyKey,
-           onPropertyClick,
-           properties,
-           propertiesOrder: propertiesOrderProp,
-           additionalFields,
-           errors,
-           onPropertyMove,
-           onPropertyRemove,
-           className,
-           inferredPropertyKeys,
-           collectionEditable
-       }: {
+        namespace,
+        selectedPropertyKey,
+        onPropertyClick,
+        properties,
+        propertiesOrder: propertiesOrderProp,
+        additionalFields,
+        errors,
+        onPropertyMove,
+        onPropertyRemove,
+        className,
+        inferredPropertyKeys,
+        collectionEditable
+    }: {
         namespace?: string;
         selectedPropertyKey?: string;
         onPropertyClick?: (propertyKey: string, namespace?: string) => void;
@@ -138,6 +149,7 @@ export const PropertyTree = React.memo(
                                         additionalField={additionalField}
                                         errors={errors}
                                         namespace={namespace}
+                                        propertiesOrder={propertiesOrder}
                                         inferredPropertyKeys={inferredPropertyKeys}
                                         onPropertyMove={onPropertyMove}
                                         onPropertyRemove={onPropertyRemove}
@@ -156,19 +168,20 @@ export const PropertyTree = React.memo(
 );
 
 export function PropertyTreeEntry({
-                                      id,
-                                      propertyKey,
-                                      namespace,
-                                      property,
-                                      additionalField,
-                                      selectedPropertyKey,
-                                      errors,
-                                      onPropertyClick,
-                                      onPropertyMove,
-                                      onPropertyRemove,
-                                      inferredPropertyKeys,
-                                      collectionEditable
-                                  }: {
+    id,
+    propertyKey,
+    namespace,
+    property,
+    additionalField,
+    selectedPropertyKey,
+    errors,
+    propertiesOrder,
+    onPropertyClick,
+    onPropertyMove,
+    onPropertyRemove,
+    inferredPropertyKeys,
+    collectionEditable
+}: {
     id: string;
     propertyKey: string;
     namespace?: string;
@@ -176,6 +189,7 @@ export function PropertyTreeEntry({
     additionalField?: AdditionalFieldDelegate<any>;
     selectedPropertyKey?: string;
     errors: Record<string, any>;
+    propertiesOrder: string[];
     onPropertyClick?: (propertyKey: string, namespace?: string) => void;
     onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
     onPropertyRemove?: (propertyKey: string, namespace?: string) => void;
@@ -219,6 +233,7 @@ export function PropertyTreeEntry({
                 onPropertyClick={onPropertyClick}
                 onPropertyMove={onPropertyMove}
                 onPropertyRemove={onPropertyRemove}
+                inferredPropertyKeys={inferredPropertyKeys}
                 collectionEditable={collectionEditable}
             />
         }
@@ -231,7 +246,9 @@ export function PropertyTreeEntry({
         <div
             ref={setNodeRef}
             style={style}
-            className="relative -ml-8"
+            className="relative -ml-8 cursor-grab"
+            {...attributes}
+            {...listeners}
         >
             <div className="relative">
                 {subtree && <div
@@ -240,7 +257,7 @@ export function PropertyTreeEntry({
                         left: "32px",
                         top: "64px",
                         bottom: "16px"
-                    }}/>}
+                    }} />}
 
                 <div>
                     {!isPropertyBuilder(property) && !additionalField && editable
@@ -249,38 +266,78 @@ export function PropertyTreeEntry({
                             onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                             includeName={true}
                             selected={selected}
-                            hasError={hasError}/>
+                            hasError={hasError} />
                         : <NonEditablePropertyPreview name={propertyKey}
-                                                      property={property}
-                                                      onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
-                                                      selected={selected}/>}
+                            property={property}
+                            onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
+                            selected={selected} />}
                 </div>
 
-                <div className="absolute top-2 right-2 flex flex-row">
-                    {isPropertyInferred && <Tooltip title={"Inferred property"}>
-                        <AutorenewIcon size="small" className={"p-2"}/>
-                    </Tooltip>}
+                <div className="absolute top-3 right-3 flex flex-row items-center">
+                    {isPropertyInferred && <>
+                        <Tooltip title={"Inferred property"} asChild={true}>
+                            <IconButton size="smallest" disabled>
+                                <AutorenewIcon size="smallest" />
+                            </IconButton>
+                        </Tooltip>
+                        {onPropertyRemove && <Tooltip title={"Remove inferred property"}
+                            asChild={true}>
+                            <IconButton size="smallest"
+                                color="inherit"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onPropertyRemove(propertyKey, namespace);
+                                }}>
+                                <DeleteIcon size={"smallest"} />
+                            </IconButton>
+                        </Tooltip>}
+                    </>}
 
-                    {onPropertyRemove && !isPropertyInferred && <Tooltip title={"Remove"}
-                                                                         asChild={true}>
-                        <IconButton size="small"
-                                    color="inherit"
-                                    onClick={() => onPropertyRemove(propertyKey, namespace)}>
-                            <RemoveIcon size={"small"}/>
-                        </IconButton>
-                    </Tooltip>}
-
-                    {onPropertyMove && <Tooltip title={"Move"}
-                                                asChild={true}>
-                        <IconButton
-                            component={"span"}
-                            size="small"
-                            {...attributes}
-                            {...listeners}
+                    <Menu
+                        trigger={
+                            <IconButton
+                                size="smallest"
+                            >
+                                <MoreVertIcon size={"smallest"} />
+                            </IconButton>
+                        }
+                    >
+                        <MenuItem
+                            dense
+                            onClick={() => {
+                                const currentIndex = propertiesOrder.indexOf(propertyKey);
+                                if (currentIndex > 0) {
+                                    const newOrder = propertiesOrder.filter(k => k !== propertyKey);
+                                    newOrder.unshift(propertyKey);
+                                    onPropertyMove?.(newOrder, namespace);
+                                }
+                            }}
                         >
-                            <DragHandleIcon size={"small"}/>
-                        </IconButton>
-                    </Tooltip>}
+                            <VerticalAlignTopIcon size="smallest" />
+                            Move to top
+                        </MenuItem>
+                        <MenuItem
+                            dense
+                            onClick={() => {
+                                const currentIndex = propertiesOrder.indexOf(propertyKey);
+                                if (currentIndex < propertiesOrder.length - 1) {
+                                    const newOrder = propertiesOrder.filter(k => k !== propertyKey);
+                                    newOrder.push(propertyKey);
+                                    onPropertyMove?.(newOrder, namespace);
+                                }
+                            }}
+                        >
+                            <VerticalAlignBottomIcon size="smallest" />
+                            Move to bottom
+                        </MenuItem>
+                        <MenuItem
+                            dense
+                            onClick={() => onPropertyRemove?.(propertyKey, namespace)}
+                        >
+                            <DeleteIcon size="smallest" />
+                            Delete
+                        </MenuItem>
+                    </Menu>
 
                 </div>
 

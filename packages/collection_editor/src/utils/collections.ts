@@ -1,5 +1,4 @@
 import {
-    EntityCallbacks,
     EntityCollection, getSubcollections,
     ModifyCollectionProps,
     Properties

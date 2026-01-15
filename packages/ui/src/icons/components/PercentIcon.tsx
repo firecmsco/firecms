@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function PercentIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"percent"}/>
-}
+export const PercentIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"percent"} ref={ref}/>
+});
+
+PercentIcon.displayName = "PercentIcon";

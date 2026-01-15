@@ -4,6 +4,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type TooltipProps = {
     open?: boolean,
@@ -43,6 +44,12 @@ export const Tooltip = ({
 
     useInjectStyles("Tooltip", styles);
 
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (container ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
     if (!title)
         return <>{children}</>;
 
@@ -60,11 +67,11 @@ export const Tooltip = ({
         <TooltipPrimitive.Provider delayDuration={delayDuration}>
             <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
                 {trigger}
-                <TooltipPrimitive.Portal container={container}>
+                <TooltipPrimitive.Portal container={finalContainer}>
                     <TooltipPrimitive.Content
-                        className={cls("TooltipContent dark",
+                        className={cls("TooltipContent",
                             "max-w-lg leading-relaxed",
-                            "z-50 rounded-xs px-3 py-2 text-xs leading-none bg-surface-accent-700 dark:bg-surface-accent-800/90 font-medium text-surface-accent-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
+                            "z-50 rounded px-3 py-2 text-xs leading-none bg-surface-accent-700 dark:bg-surface-accent-800 bg-opacity-90 bg-surface-accent-700/90 dark:bg-surface-accent-800/90 font-medium text-surface-accent-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
                         style={tooltipStyle}
                         sideOffset={sideOffset === undefined ? 4 : sideOffset}

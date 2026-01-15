@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MultipleStopIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"multiple_stop"}/>
-}
+export const MultipleStopIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"multiple_stop"} ref={ref}/>
+});
+
+MultipleStopIcon.displayName = "MultipleStopIcon";

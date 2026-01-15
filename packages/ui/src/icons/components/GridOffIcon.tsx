@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function GridOffIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"grid_off"}/>
-}
+export const GridOffIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"grid_off"} ref={ref}/>
+});
+
+GridOffIcon.displayName = "GridOffIcon";

@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function FitbitIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"fitbit"}/>
-}
+export const FitbitIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"fitbit"} ref={ref}/>
+});
+
+FitbitIcon.displayName = "FitbitIcon";

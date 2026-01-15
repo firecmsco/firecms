@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function MicIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"mic"}/>
-}
+export const MicIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"mic"} ref={ref}/>
+});
+
+MicIcon.displayName = "MicIcon";

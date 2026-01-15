@@ -1,5 +1,10 @@
-import { NavigationGroupMapping, Property } from "@firecms/core";
+import { NavigationGroupMapping, CMSType, EntityCollection, NavigationGroupMapping, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
+
+export interface CollectionsSetupInfo {
+    status: "ongoing" | "complete";
+    error: string | null;
+}
 
 /**
  * Use this controller to access the configuration that is stored externally,
@@ -11,6 +16,12 @@ export interface CollectionsConfigController {
 
     collections?: PersistedCollection[];
 
+    /**
+     * Status information about the automatic collections setup process.
+     * Stored in the project config document at `collectionsSetup`.
+     */
+    collectionsSetup?: CollectionsSetupInfo;
+
     getCollection: (id: string) => PersistedCollection;
 
     saveCollection: <M extends { [Key: string]: any }>(params: SaveCollectionParams<M>) => Promise<void>;
@@ -20,6 +31,11 @@ export interface CollectionsConfigController {
     deleteProperty: (params: DeletePropertyParams) => Promise<void>;
 
     deleteCollection: (props: DeleteCollectionParams) => Promise<void>;
+
+    /**
+     * Update the properties order of a collection (used for column reordering).
+     */
+    updatePropertiesOrder: (params: UpdatePropertiesOrderParams) => Promise<void>;
 
     navigationEntries: NavigationGroupMapping[];
     saveNavigationEntries: (entries: NavigationGroupMapping[]) => Promise<void>;
@@ -60,4 +76,11 @@ export type DeletePropertyParams = {
 export type DeleteCollectionParams = {
     id: string,
     parentCollectionIds?: string[]
+}
+
+export type UpdatePropertiesOrderParams = {
+    fullPath: string;
+    parentCollectionIds: string[];
+    collection: EntityCollection<any>;
+    newPropertiesOrder: string[];
 }

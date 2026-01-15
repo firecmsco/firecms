@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function BorderInnerIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"border_inner"}/>
-}
+export const BorderInnerIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"border_inner"} ref={ref}/>
+});
+
+BorderInnerIcon.displayName = "BorderInnerIcon";

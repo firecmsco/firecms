@@ -30,6 +30,7 @@
     "packages/common",
     "app/frontend",
     "app/backend",
+    "packages/media_manager",
     "examples/example_cloud",
     "examples/example",
     "examples/example_next",

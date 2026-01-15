@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function DatasetLinkedIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"dataset_linked"}/>
-}
+export const DatasetLinkedIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"dataset_linked"} ref={ref}/>
+});
+
+DatasetLinkedIcon.displayName = "DatasetLinkedIcon";

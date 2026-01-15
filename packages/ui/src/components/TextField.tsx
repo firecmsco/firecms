@@ -85,9 +85,15 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
 
         const inputRef = inputRefProp ?? useRef(null);
 
-        // @ts-ignore
-        const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
+        const [focused, setFocused] = React.useState(false);
         const hasValue = value !== undefined && value !== null && value !== "";
+
+        useEffect(() => {
+            // @ts-ignore
+            if (inputRef.current && document.activeElement === inputRef.current) {
+                setFocused(true);
+            }
+        }, []);
 
         useEffect(() => {
             if (type !== "number") return;
@@ -114,11 +120,13 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 maxRows={maxRows}
                 value={value ?? ""}
                 onChange={onChange}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
                 style={inputStyle}
                 className={cls(
                     invisible ? focusedInvisibleMixin : "",
-                    "rounded-md resize-none w-full outline-hidden p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
-                    disabled && "outline-hidden opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
+                    "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
+                    disabled && "outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
                     inputClassName
                 )}
             />
@@ -129,7 +137,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 disabled={disabled}
                 style={inputStyle}
                 className={cls(
-                    "w-full outline-hidden bg-transparent leading-normal px-3",
+                    "w-full outline-none bg-transparent leading-normal px-3",
                     "rounded-md",
                     "focused:text-text-primary focused:dark:text-text-primary-dark",
                     invisible ? focusedInvisibleMixin : "",
@@ -137,7 +145,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     label
@@ -147,7 +155,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         : "py-2",
                     endAdornment ? "pr-12" : "pr-3",
                     disabled &&
-                    "outline-hidden opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
+                    "outline-none opacity-65 dark:opacity-60 text-surface-accent-800 dark:text-white",
                     inputClassName
                 )}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
@@ -171,7 +179,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     {
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
-                        "min-h-[42px]": size === "medium",
+                        "min-h-[44px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
                     className

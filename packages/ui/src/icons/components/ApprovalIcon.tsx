@@ -3,6 +3,8 @@ import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */
-export function ApprovalIcon(props: IconProps) {
-    return <Icon {...props} iconKey={"approval"}/>
-}
+export const ApprovalIcon = React.forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+    return <Icon {...props} iconKey={"approval"} ref={ref}/>
+});
+
+ApprovalIcon.displayName = "ApprovalIcon";
