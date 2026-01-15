@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
@@ -15,100 +15,77 @@ import {
     SnackbarProvider,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
-    useValidateAuthenticator
+    useBuildNavigationController
 } from "@firecms/core";
-import {
-    FirebaseAuthController,
-    FirebaseLoginView,
-    FirebaseSignInProvider,
-    useFirebaseAuthController,
-    useFirebaseStorageSource,
-    useInitialiseFirebase
-} from "@firecms/firebase";
+import { StorageSource } from "@firecms/types";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
+import { useCustomAuthController, CustomLoginView } from "@firecms/auth";
 import { collections } from "shared";
 
-export const firebaseConfig = {
-    apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
-    authDomain: "demo.firecms.co",
-    databaseURL: "https://firecms-demo-27150.firebaseio.com",
-    projectId: "firecms-demo-27150",
-    storageBucket: "firecms-demo-27150.appspot.com",
-    messagingSenderId: "837544933711",
-    appId: "1:837544933711:web:75822ffc0840e3ae01ad3a",
-    measurementId: "G-8HRE8MVXZJ"
+// Configuration from environment
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+/**
+ * Stub storage source for PostgreSQL backend
+ * TODO: Implement actual file storage when needed
+ */
+const stubStorageSource: StorageSource = {
+    uploadFile: async () => { throw new Error("Storage not implemented"); },
+    getDownloadURL: async (path: string) => ({ url: path }),
+    getFile: async () => null,
+    deleteFile: async () => { },
+    list: async () => ({ items: [], prefixes: [] })
 };
 
 export function App() {
-
-    const {
-        firebaseApp,
-        firebaseConfigLoading,
-        configError
-    } = useInitialiseFirebase({
-        firebaseConfig
-    });
-
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
-    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
-
-    // Controller for saving some user preferences locally.
+    // Controller for saving some user preferences locally
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    // Replace Firestore delegate with PostgreSQL delegate
+    // Custom auth controller (replaces Firebase auth)
+    const authController = useCustomAuthController({
+        apiUrl: API_URL,
+        googleClientId: GOOGLE_CLIENT_ID
+    });
+
+    // PostgreSQL delegate with WebSocket connection - pass auth token getter
     const postgresDelegate = usePostgresClientDataSource({
-        websocketUrl: "ws://localhost:3001"
+        websocketUrl: API_URL.replace(/^http/, "ws"),
+        getAuthToken: authController.getAuthToken
     });
 
-    // Controller used for saving and fetching files in storage
-    const storageSource = useFirebaseStorageSource({
-        firebaseApp
-    });
-
-    // Controller for managing authentication
-    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions
-    });
-
-    const authController = firebaseAuthController;
+    // Authenticate WebSocket when user is available
+    useEffect(() => {
+        const authenticateWebSocket = async () => {
+            if (authController.user && postgresDelegate.client) {
+                try {
+                    const token = await authController.getAuthToken();
+                    await postgresDelegate.client.authenticate(token);
+                    console.log("WebSocket authenticated successfully");
+                } catch (error) {
+                    console.error("Failed to authenticate WebSocket:", error);
+                }
+            }
+        };
+        authenticateWebSocket();
+    }, [authController.user, postgresDelegate.client, authController.getAuthToken]);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
 
-    const {
-        authLoading,
-        canAccessMainView,
-        notAllowedError
-    } = useValidateAuthenticator({
-        authController,
-        dataSourceDelegate: postgresDelegate, // Use PostgreSQL delegate
-        storageSource
-    });
-
     const collectionsBuilder = useCallback(() => {
-        return [
-            ...collections // Use all shared collections
-        ];
+        return [...collections];
     }, []);
 
     const navigationController = useBuildNavigationController({
         plugins: [dataEnhancementPlugin],
         collections: collectionsBuilder,
         authController,
-        dataSourceDelegate: postgresDelegate // Use PostgreSQL delegate
+        dataSourceDelegate: postgresDelegate
     });
-
-    if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
-    }
-
-    if (configError) {
-        return <>{configError}</>;
-    }
 
     return (
         <SnackbarProvider>
@@ -117,34 +94,38 @@ export function App() {
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={postgresDelegate} // Use PostgreSQL delegate
-                    storageSource={storageSource}
+                    dataSourceDelegate={postgresDelegate}
+                    storageSource={stubStorageSource}
                 >
-                    {({
-                          loading
-                      }) => {
-
-                        if (loading || authLoading) {
-                            return <CircularProgressCenter size={"large"}/>;
-                        }
-                        if (!canAccessMainView) {
-                            return <FirebaseLoginView authController={authController}
-                                                      firebaseApp={firebaseApp}
-                                                      signInOptions={signInOptions}
-                                                      notAllowedError={notAllowedError}/>;
+                    {({ loading }) => {
+                        // Show loading while initializing
+                        if (loading || authController.initialLoading) {
+                            return <CircularProgressCenter size={"large"} />;
                         }
 
-                        return <Scaffold
-                            autoOpenDrawer={false}>
-                            <AppBar title={"PostgreSQL Backend Demo"}/>
-                            <Drawer/>
-                            <NavigationRoutes/>
-                            <SideDialogs/>
-                        </Scaffold>;
+                        // Show login if no user (backend handles auth validation)
+                        if (!authController.user) {
+                            return (
+                                <CustomLoginView
+                                    authController={authController}
+                                    googleEnabled={!!GOOGLE_CLIENT_ID}
+                                    googleClientId={GOOGLE_CLIENT_ID}
+                                />
+                            );
+                        }
+
+                        // User is authenticated - show main app
+                        return (
+                            <Scaffold autoOpenDrawer={false}>
+                                <AppBar title={"PostgreSQL Backend Demo"} />
+                                <Drawer />
+                                <NavigationRoutes />
+                                <SideDialogs />
+                            </Scaffold>
+                        );
                     }}
                 </FireCMS>
             </ModeControllerProvider>
         </SnackbarProvider>
     );
-
 }

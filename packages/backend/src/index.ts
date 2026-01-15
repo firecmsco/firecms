@@ -31,6 +31,11 @@ export * from "./api";
 export * from "./types";
 export * from "./types/index";
 
+// Auth module
+export * from "./auth";
+export * from "./db/auth-schema";
+
 // Utilities
 export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
+

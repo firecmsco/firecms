@@ -42,15 +42,15 @@ export type Properties = {
  */
 export type InferPropertyType<P extends Property> =
     P extends StringProperty ? string :
-        P extends NumberProperty ? number :
-            P extends BooleanProperty ? boolean :
-                P extends DateProperty ? Date :
-                    P extends GeopointProperty ? GeoPoint :
-                        P extends ReferenceProperty ? EntityReference :
-                            P extends RelationProperty ? EntityRelation | EntityRelation[] :
-                                P extends ArrayProperty ? (P["of"] extends Property ? InferPropertyType<P["of"]>[] : any[]) :
-                                    P extends MapProperty ? (P["properties"] extends Properties ? InferEntityType<P["properties"]> : Record<string, any>) :
-                                        never;
+    P extends NumberProperty ? number :
+    P extends BooleanProperty ? boolean :
+    P extends DateProperty ? Date :
+    P extends GeopointProperty ? GeoPoint :
+    P extends ReferenceProperty ? EntityReference :
+    P extends RelationProperty ? EntityRelation | EntityRelation[] :
+    P extends ArrayProperty ? (P["of"] extends Property ? InferPropertyType<P["of"]>[] : any[]) :
+    P extends MapProperty ? (P["properties"] extends Properties ? InferEntityType<P["properties"]> : Record<string, any>) :
+    never;
 
 /**
  * A generic type that converts a `Properties` schema definition into a corresponding
@@ -162,27 +162,6 @@ export interface BaseProperty<CustomProps = any> {
      * in the component.
      */
     Preview?: React.ComponentType<PropertyPreviewProps<any, CustomProps>>;
-
-    /**
-     * Additional props that are passed to the components defined in `field`
-     * or in `preview`.
-     */
-    customProps?: CustomProps;
-
-    /**
-     * This value will be set by default for new entities.
-     */
-    defaultValue?: T | null;
-
-    /**
-     * Should this property be editable. If set to true, the user will be able to modify the property and
-     * save the new config. The saved config will then become the source of truth.
-     * Defaults to `true.
-     * This props is only useful when you are using the collection editor to modify collection
-     * configurations from the CMS itself. You can also use the `editable` prop in the
-     * `EntityCollection` interface to disable the edition of all properties in a collection.
-     */
-    editable?: boolean;
 
     /**
      * Use this to define dynamic properties that change based on the

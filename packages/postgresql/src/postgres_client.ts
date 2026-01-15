@@ -9,6 +9,8 @@ import {
 
 export interface PostgresDataSourceConfig {
     websocketUrl: string;
+    /** Optional auth token getter for WebSocket authentication */
+    getAuthToken?: () => Promise<string>;
 }
 
 export interface WebSocketMessage {
@@ -103,9 +105,60 @@ export class PostgresDataSourceClient {
     private isConnected = false;
     private messageQueue: any[] = [];
 
+    // Auth support
+    private getAuthToken?: () => Promise<string>;
+    private isAuthenticated = false;
+    private authPromise: Promise<void> | null = null;
+
     constructor(config: PostgresDataSourceConfig) {
         this.websocketUrl = config.websocketUrl;
+        this.getAuthToken = config.getAuthToken;
         this.initWebSocket();
+    }
+
+    /**
+     * Authenticate the WebSocket connection
+     */
+    async authenticate(token: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const requestId = `auth_${Date.now()}`;
+
+            const timeout = setTimeout(() => {
+                this.pendingRequests.delete(requestId);
+                reject(new Error("Authentication timeout"));
+            }, 10000);
+
+            this.pendingRequests.set(requestId, {
+                resolve: () => {
+                    clearTimeout(timeout);
+                    this.isAuthenticated = true;
+                    resolve();
+                },
+                reject: (error) => {
+                    clearTimeout(timeout);
+                    reject(error);
+                }
+            });
+
+            const message = {
+                type: "AUTHENTICATE",
+                requestId,
+                payload: { token }
+            };
+
+            if (!this.isConnected || !this.ws) {
+                this.messageQueue.unshift(message); // Auth should be first
+            } else {
+                this.ws.send(JSON.stringify(message));
+            }
+        });
+    }
+
+    /**
+     * Set the auth token getter function
+     */
+    setAuthTokenGetter(getAuthToken: () => Promise<string>): void {
+        this.getAuthToken = getAuthToken;
     }
 
     // Initialize WebSocket connection
@@ -115,10 +168,22 @@ export class PostgresDataSourceClient {
         try {
             this.ws = new WebSocket(this.websocketUrl);
 
-            this.ws.onopen = () => {
+            this.ws.onopen = async () => {
                 console.log("Connected to PostgreSQL backend");
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
+
+                // Auto-authenticate if token getter is available
+                if (this.getAuthToken && !this.isAuthenticated) {
+                    try {
+                        const token = await this.getAuthToken();
+                        await this.authenticate(token);
+                        console.log("WebSocket auto-authenticated");
+                    } catch (error) {
+                        console.warn("WebSocket auto-auth failed, requests may fail:", error);
+                    }
+                }
+
                 this.processMessageQueue();
             };
 
@@ -184,8 +249,8 @@ export class PostgresDataSourceClient {
             } = this.pendingRequests.get(requestId)!;
             this.pendingRequests.delete(requestId);
 
-            if (type === "ERROR" || message.error) {
-                reject(new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
+            if (type === "ERROR" || type === "AUTH_ERROR" || message.error) {
+                reject(new ApiError(message.payload?.message || message.payload?.error || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
             } else {
                 resolve(message.payload || message);
             }

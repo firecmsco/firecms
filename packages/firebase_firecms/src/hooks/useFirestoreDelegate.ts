@@ -94,11 +94,11 @@ export type FirestoreDelegate = DataSourceDelegate & {
  * @group Firebase
  */
 export function useFirestoreDelegate({
-                                         firebaseApp,
-                                         textSearchControllerBuilder,
-                                         firestoreIndexesBuilder,
-                                         localTextSearchEnabled
-                                     }: FirestoreDataSourceProps): FirestoreDelegate {
+    firebaseApp,
+    textSearchControllerBuilder,
+    firestoreIndexesBuilder,
+    localTextSearchEnabled
+}: FirestoreDataSourceProps): FirestoreDelegate {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>();
 
@@ -115,13 +115,13 @@ export function useFirestoreDelegate({
     }, [firebaseApp, localTextSearchEnabled, textSearchControllerBuilder]);
 
     const buildQuery = useCallback(<M>(path: string,
-                                       filter: FilterValues<Extract<keyof M, string>> | undefined,
-                                       orderBy: string | undefined,
-                                       order: "desc" | "asc" | undefined,
-                                       startAfter: any[] | undefined,
-                                       limit: number | undefined,
-                                       collectionGroup = false,
-                                       databaseId?: string) => {
+        filter: FilterValues<Extract<keyof M, string>> | undefined,
+        orderBy: string | undefined,
+        order: "desc" | "asc" | undefined,
+        startAfter: any[] | undefined,
+        limit: number | undefined,
+        collectionGroup = false,
+        databaseId?: string) => {
 
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
@@ -154,8 +154,8 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
-                                                                          entityId: string | number,
-                                                                          databaseId?: string
+        entityId: string | number,
+        databaseId?: string
     ): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
@@ -197,12 +197,12 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const performTextSearch = useCallback(<M extends Record<string, any>>({
-                                                                              path,
-                                                                              databaseId,
-                                                                              searchString,
-                                                                              onUpdate,
-                                                                              navigationController
-                                                                          }: {
+        path,
+        databaseId,
+        searchString,
+        onUpdate,
+        navigationController
+    }: {
         path: string,
         databaseId?: string,
         searchString: string;
@@ -218,8 +218,9 @@ export function useFirestoreDelegate({
 
         let subscriptions: (() => void)[] = [];
 
+
         const auth = getAuth(firebaseApp);
-        const currentUser = auth.currentUser;
+        const currentUser = auth?.currentUser;
 
         const search = textSearchController.search({
             path,
@@ -242,24 +243,24 @@ export function useFirestoreDelegate({
             const addedEntitiesSet = new Set<string | number>();
             subscriptions = (ids ?? [])
                 .map((entityId) => {
-                        return listenEntity({
-                            path,
-                            entityId,
-                            navigationController,
-                            onUpdate: (entity: Entity<any> | null) => {
-                                if (entity?.values) {
-                                    if (entity.id && !addedEntitiesSet.has(entity.id)) {
-                                        addedEntitiesSet.add(entity.id);
-                                        entities.push(entity);
-                                        onUpdate(entities);
-                                    }
-                                } else if (entity?.id) {
-                                    addedEntitiesSet.delete(entity.id);
-                                    onUpdate([...entities.filter(e => e.id !== entityId)])
+                    return listenEntity({
+                        path,
+                        entityId,
+                        navigationController,
+                        onUpdate: (entity: Entity<any> | null) => {
+                            if (entity?.values) {
+                                if (entity.id && !addedEntitiesSet.has(entity.id)) {
+                                    addedEntitiesSet.add(entity.id);
+                                    entities.push(entity);
+                                    onUpdate(entities);
                                 }
+                            } else if (entity?.id) {
+                                addedEntitiesSet.delete(entity.id);
+                                onUpdate([...entities.filter(e => e.id !== entityId)])
                             }
-                        })
-                    }
+                        }
+                    })
+                }
                 );
         });
 
@@ -310,16 +311,16 @@ export function useFirestoreDelegate({
          * @group Firestore
          */
         fetchCollection: useCallback(async <M extends Record<string, any>>({
-                                                                               path,
-                                                                               filter,
-                                                                               limit,
-                                                                               startAfter,
-                                                                               searchString,
-                                                                               orderBy,
-                                                                               order,
-                                                                               collection,
-                                                                               navigationController
-                                                                           }: FetchCollectionDelegateProps<M>
+            path,
+            filter,
+            limit,
+            startAfter,
+            searchString,
+            orderBy,
+            order,
+            collection,
+            navigationController
+        }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
             const isCollectionGroup = collection?.collectionGroup ?? false;
@@ -429,11 +430,11 @@ export function useFirestoreDelegate({
          * @group Firestore
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
-                                                                     path,
-                                                                     entityId,
-                                                                     collection,
-                                                                     navigationController
-                                                                 }: FetchEntityDelegateProps<M>
+            path,
+            entityId,
+            collection,
+            navigationController
+        }: FetchEntityDelegateProps<M>
         ): Promise<Entity<M> | undefined> => {
             const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
             return getAndBuildEntity(resolvedPath, entityId, collection?.databaseId);
@@ -579,13 +580,13 @@ export function useFirestoreDelegate({
         }, [firebaseApp]),
 
         countEntities: useCallback(async ({
-                                              path,
-                                              filter,
-                                              order,
-                                              orderBy,
-                                              collection,
-                                              navigationController
-                                          }: FetchCollectionDelegateProps): Promise<number> => {
+            path,
+            filter,
+            order,
+            orderBy,
+            collection,
+            navigationController
+        }: FetchCollectionDelegateProps): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
@@ -596,12 +597,12 @@ export function useFirestoreDelegate({
         }, [firebaseApp]),
 
         isFilterCombinationValid: useCallback(({
-                                                   path,
-                                                   collection,
-                                                   filterValues,
-                                                   sortBy,
-                                                   navigationController
-                                               }: {
+            path,
+            collection,
+            filterValues,
+            sortBy,
+            navigationController
+        }: {
             path: string,
             collection: EntityCollection<any>,
             filterValues: FilterValues<any>,
@@ -771,10 +772,10 @@ function currentTime(): any {
 }
 
 function buildTextSearchControllerWithLocalSearch({
-                                                      textSearchControllerBuilder,
-                                                      firebaseApp,
-                                                      localTextSearchEnabled
-                                                  }: {
+    textSearchControllerBuilder,
+    firebaseApp,
+    localTextSearchEnabled
+}: {
     textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder,
     firebaseApp: FirebaseApp,
     localTextSearchEnabled: boolean

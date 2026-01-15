@@ -5,14 +5,13 @@ import {
     EntityCollection,
     EntityTableController,
     SelectionController
-} from "../../types";
+} from "@firecms/types";
 import { EntityCard } from "./EntityCard";
 import {
     cls,
     CircularProgress,
     Typography
 } from "@firecms/ui";
-import { resolveCollection } from "../../util";
 import { useAuthController, useCustomizationController } from "../../hooks";
 
 export type EntityCollectionCardViewProps<M extends Record<string, any> = any> = {

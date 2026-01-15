@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { useNavigate } from "react-router-dom";
+import { useBlocker, useNavigate } from "react-router-dom";
 
 import {
     AuthController,
@@ -193,7 +193,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             ...(views ?? []).reduce((acc, view) => {
                 if (view.hideFromNavigation) return acc;
 
-                const pathKey = view.path;
+                const pathKey = view.slug;
                 let groupName = getGroup(view); // Initial group
 
                 if (finalNavigationGroupMappings) {
@@ -210,7 +210,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     url: buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "view",
-                    path: view.path,
+                    slug: view.slug,
                     view,
                     description: view.description?.trim(),
                     group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
@@ -221,7 +221,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             ...(adminViews ?? []).reduce((acc, view) => {
                 if (view.hideFromNavigation) return acc;
 
-                const pathKey = view.path;
+                const pathKey = view.slug;
                 const groupName = NAVIGATION_ADMIN_GROUP_NAME;
 
                 acc.push({
@@ -229,7 +229,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     url: buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "admin",
-                    path: view.path,
+                    slug: view.slug,
                     view,
                     description: view.description?.trim(),
                     group: groupName
@@ -298,9 +298,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const filteredEntries = entries.filter(entry => entry.entries.length > 0);
 
         // Immediately update the local topLevelNavigation with new mappings
-        if (collectionsRef.current && viewsRef.current) {
+        if (collectionRegistryRef.current && viewsRef.current) {
             const updatedNav = computeTopNavigation(
-                collectionsRef.current,
+                collectionRegistryRef.current.getCollections(),
                 viewsRef.current,
                 adminViewsRef.current ?? [],
                 viewsOrder,
@@ -334,8 +334,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 [
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
-                resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
-            ]
+                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
+                ]
             );
 
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
@@ -703,8 +703,8 @@ function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
     }
     const aCopy = [...a];
     const bCopy = [...b];
-    const aSorted = aCopy.sort((x, y) => x.id.localeCompare(y.id));
-    const bSorted = bCopy.sort((x, y) => x.id.localeCompare(y.id));
+    const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
+    const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
     return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
 }
 
@@ -717,11 +717,24 @@ function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
         subcollections: subcollectionsB,
         ...restB
     } = b;
-    if (!areCollectionListsEqual(subcollectionsA ?? [], subcollectionsB ?? [])) {
+    if (!areCollectionListsEqual(getSubcollections(a), getSubcollections(b))) {
         return false;
     }
-    return equal(removeFunctions(restA), removeFunctions(restB));
+    const restAWithoutFunctions = Object.fromEntries(
+        Object.entries(restA).filter(([_, v]) => typeof v !== 'function')
+    );
+    const restBWithoutFunctions = Object.fromEntries(
+        Object.entries(restB).filter(([_, v]) => typeof v !== 'function')
+    );
+    return equal(restAWithoutFunctions, restBWithoutFunctions);
 }
+
+type NavigationBlocker = {
+    updateBlockListener: (path: string, block: boolean, basePath?: string) => () => void;
+    isBlocked: (path: string) => boolean;
+    proceed?: () => void;
+    reset?: () => void;
+};
 
 function useCustomBlocker(): NavigationBlocker {
     const [blockListeners, setBlockListeners] = useState<Record<string, {
@@ -824,7 +837,7 @@ function computeNavigationGroups({
 
     // Check collections
     (collections ?? []).forEach(collection => {
-        const entry = collection.id ?? collection.path;
+        const entry = collection.slug;
         if (!assignedEntries.has(entry)) {
             const groupName = getGroup(collection);
             if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
@@ -834,7 +847,7 @@ function computeNavigationGroups({
 
     // Check views
     (views ?? []).forEach(view => {
-        const entry = view.path;
+        const entry = view.slug;
         if (!assignedEntries.has(entry)) {
             const groupName = getGroup(view);
             if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];

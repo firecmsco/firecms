@@ -1,0 +1,47 @@
+{
+    "name": "@firecms/auth",
+    "type": "module",
+    "version": "4.0.0-alpha.1",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Custom JWT authentication for FireCMS with PostgreSQL backend",
+    "main": "./dist/index.umd.js",
+    "module": "./dist/index.es.js",
+    "types": "./dist/index.d.ts",
+    "source": "src/index.ts",
+    "dependencies": {
+        "@firecms/core": "4.0.0-alpha.1",
+        "@firecms/types": "4.0.0-alpha.1",
+        "@firecms/ui": "4.0.0-alpha.1"
+    },
+    "peerDependencies": {
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
+    },
+    "exports": {
+        ".": {
+            "development": "./src/index.ts",
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.umd.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "devDependencies": {
+        "@types/node": "^20.19.17",
+        "@types/react": "^18.3.24",
+        "@types/react-dom": "^18.3.7",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    },
+    "files": [
+        "dist",
+        "src"
+    ]
+}

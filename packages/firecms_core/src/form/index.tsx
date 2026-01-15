@@ -2,7 +2,7 @@ export {
     EntityForm,
     yupToFormErrors,
 } from "./EntityForm";
-export type { EntityFormProps } from "./EntityForm";
+// EntityFormProps is exported from @firecms/types
 
 export { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
 export { MultiSelectFieldBinding } from "./field_bindings/MultiSelectFieldBinding";

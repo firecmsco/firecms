@@ -1,8 +1,7 @@
-import React, { useMemo } from "react";
-import { Entity, EntityCollection, ResolvedEntityCollection, ResolvedProperties } from "../types";
-import { resolveCollection } from "../util";
+import React from "react";
+import { Entity, EntityCollection, Properties } from "@firecms/types";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon, Typography } from "@firecms/ui";
-import { CustomizationController } from "../types/customization_controller";
+import { CustomizationController } from "@firecms/types";
 import { useCustomizationController } from "../hooks/useCustomizationController";
 import { useAuthController } from "../hooks";
 import { PropertyCollectionView } from "./PropertyCollectionView";
@@ -36,9 +35,9 @@ export function EntityView<M extends Record<string, any>>(
                 <div className={`grid grid-cols-12 gap-x-4 py-4 items-start border-b ${defaultBorderMixin}`}>
                     <div className="col-span-4 pr-2">
                         <Typography variant="caption"
-                                    color={"secondary"}
-                                    component={"span"}
-                                    className="break-words">
+                            color={"secondary"}
+                            component={"span"}
+                            className="break-words">
                             Id
                         </Typography>
                     </div>
@@ -48,18 +47,18 @@ export function EntityView<M extends Record<string, any>>(
                             <span className="flex-grow mr-2">{entity.id}</span>
                             {customizationController?.entityLinkBuilder &&
                                 <a href={customizationController.entityLinkBuilder({ entity })}
-                                   rel="noopener noreferrer"
-                                   target="_blank">
+                                    rel="noopener noreferrer"
+                                    target="_blank">
                                     <IconButton>
                                         <OpenInNewIcon
-                                            size={"small"}/>
+                                            size={"small"} />
                                     </IconButton>
                                 </a>}
                         </div>
                     </div>
                 </div>
 
-                <PropertyCollectionView data={entity.values} properties={properties} size={"medium"}/>
+                <PropertyCollectionView data={entity.values} properties={properties} size={"medium"} />
 
             </div>
         </div>
