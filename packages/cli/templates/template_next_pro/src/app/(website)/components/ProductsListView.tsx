@@ -18,11 +18,11 @@ import { ProductCategory, ProductWithId } from "@/app/common/types";
 import { parseQuery } from "../products/url";
 
 export function ProductsListView({
-                                     initialProducts,
-                                     initialCategoryFilter,
-                                     initialPriceMin,
-                                     initialPriceMax
-                                 }: {
+    initialProducts,
+    initialCategoryFilter,
+    initialPriceMin,
+    initialPriceMax
+}: {
     initialProducts: ProductWithId[],
     initialCategoryFilter?: string,
     initialPriceMin?: number,
@@ -153,23 +153,23 @@ export function ProductsListView({
         <div className={"w-full min-h-[80dvh]"}>
 
             <Sheet side={"right"}
-                   open={filtersOpen}
-                   onOpenChange={setFiltersOpen}
-                   className={"p-4 py-12 flex flex-col gap-8 max-w-full w-[500px] overflow-auto z-20"}>
+                open={filtersOpen}
+                onOpenChange={setFiltersOpen}
+                className={"p-4 py-12 flex flex-col gap-8 max-w-full w-[500px] overflow-auto z-20"}>
                 <IconButton
                     className={"absolute top-4 right-4"}
                     onClick={() => setFiltersOpen(false)}>
-                    <CloseIcon/>
+                    <CloseIcon />
                 </IconButton>
                 <Typography variant={"h4"} gutterBottom={true}>Filters</Typography>
 
                 <CategoriesFilter value={categoryFilter}
-                                  setValue={updateCategoriesFilter}/>
+                    setValue={updateCategoriesFilter} />
 
                 <PriceFilter priceMin={priceMin}
-                             priceMax={priceMax}
-                             setPriceMin={updatePriceMinFilter}
-                             setPriceMax={updatePriceMaxFilter}/>
+                    priceMax={priceMax}
+                    setPriceMin={updatePriceMinFilter}
+                    setPriceMax={updatePriceMaxFilter} />
 
             </Sheet>
 
@@ -183,14 +183,13 @@ export function ProductsListView({
                 <div className={"flex flex-row my-4 w-full items-end gap-4"}>
 
                     <Tabs
-                        className={"flex-grow overflow-auto"}
-                        innerClassName={"items-end"}
+                        className={"flex-grow overflow-auto flex items-end"}
                         value={categoryFilter ?? "_all"}
                         onValueChange={(value) => updateCategoriesFilter(value === "_all" ? undefined : value)}
                     >
-                        <Tab value={"_all"} innerClassName={"p-1 m-1 mx-2"}>All</Tab>
+                        <Tab value={"_all"}>All</Tab>
                         {categories.map(category => (
-                            <Tab innerClassName={"p-1 m-1 mx-2"} key={category} value={category}>
+                            <Tab key={category} value={category}>
                                 {labels[category]}
                             </Tab>
                         ))}
@@ -212,11 +211,11 @@ export function ProductsListView({
                                 }}
                                 colorScheme={"grayLight"}
                                 size={"small"}
-                                icon={<CloseIcon size={"small"}/>}>
+                                icon={<CloseIcon size={"small"} />}>
                                 Clear filters
                             </Chip>}
                             <IconButton onClick={() => setFiltersOpen(true)}>
-                                <TuneIcon size={"large"}/>
+                                <TuneIcon size={"large"} />
                             </IconButton>
                         </div>
                     </div>
@@ -225,12 +224,12 @@ export function ProductsListView({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6">
                     {products.map((product) => (
-                        <ProductPreviewCard key={product.id} product={product}/>
+                        <ProductPreviewCard key={product.id} product={product} />
                     ))}
                 </div>
 
                 {loading && <div className="text-center my-32 min-h-full">
-                    <CircularProgress size={"large"}/>
+                    <CircularProgress size={"large"} />
                 </div>}
 
                 {!loading && products.length === 0 && <div className="text-center my-32 min-h-full">
@@ -300,13 +299,13 @@ function PriceFilter({ priceMin, priceMax, setPriceMin, setPriceMax }: {
                     onChange={(e) => setPriceMin(parseFloat(e.target.value))}
                     label={"Min"}
                     type={"number"}
-                    size={"small"}/>
+                    size={"small"} />
                 <TextField
                     value={priceMax}
                     onChange={(e) => setPriceMax(parseFloat(e.target.value))}
                     label={"Max"}
                     type={"number"}
-                    size={"small"}/>
+                    size={"small"} />
             </div>
         </div>
     );
