@@ -16,7 +16,7 @@ export * from "./icon_list";
 export * from "./icon_synonyms";
 export * from "./icons";
 export * from "./plurals";
-export * from "./references";
+export * from "./previews";
 export * from "./flatten_object";
 export * from "./make_properties_editable";
 export * from "./join_collections";
