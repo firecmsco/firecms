@@ -115,7 +115,7 @@
     "index.css",
     "tailwind.config.js"
   ],
-  "gitHead": "e249d1f2afcb3784cdf49109c80e34a53e58c670",
+  "gitHead": "638a510df0265dcc79542cb87f11fe04466523b5",
   "publishConfig": {
     "access": "public"
   }
