@@ -1,18 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    EntityTableController,
-    SelectionController
-} from "../../types";
+import { CollectionSize, Entity, EntityCollection, EntityTableController, SelectionController } from "../../types";
 import { EntityCard } from "./EntityCard";
-import {
-    cls,
-    CircularProgress,
-    Typography
-} from "@firecms/ui";
-import { resolveCollection } from "../../util";
+import { CircularProgress, cls, Typography } from "@firecms/ui";
 import { useAuthController, useCustomizationController } from "../../hooks";
 
 export type EntityCollectionCardViewProps<M extends Record<string, any> = any> = {
@@ -72,17 +61,17 @@ function getGridColumnsClass(size: CollectionSize): string {
  * Alternative to the EntityCollectionTable for visual browsing.
  */
 export function EntityCollectionCardView<M extends Record<string, any> = any>({
-    collection,
-    tableController,
-    onEntityClick,
-    selectionController,
-    selectionEnabled = true,
-    highlightedEntities,
-    emptyComponent,
-    onScroll,
-    initialScroll,
-    size = "m"
-}: EntityCollectionCardViewProps<M>) {
+                                                                                  collection,
+                                                                                  tableController,
+                                                                                  onEntityClick,
+                                                                                  selectionController,
+                                                                                  selectionEnabled = true,
+                                                                                  highlightedEntities,
+                                                                                  emptyComponent,
+                                                                                  onScroll,
+                                                                                  initialScroll,
+                                                                                  size = "m"
+                                                                              }: EntityCollectionCardViewProps<M>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
@@ -101,24 +90,31 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
         paginationEnabled
     } = tableController;
 
+    // Track if we're currently loading to prevent multiple simultaneous load requests
+    const isLoadingMore = useRef(false);
+
     // Infinite scroll with Intersection Observer
     useEffect(() => {
         if (!paginationEnabled || noMoreToLoad || dataLoading) {
-            console.log("Card view pagination: skipping", { paginationEnabled, noMoreToLoad, dataLoading });
             return;
+        }
+
+        // Reset loading flag when dataLoading becomes false
+        if (!dataLoading) {
+            isLoadingMore.current = false;
         }
 
         const observer = new IntersectionObserver(
             (entries) => {
-                console.log("Card view intersection:", entries[0].isIntersecting, { dataLoading, noMoreToLoad, itemCount });
-                if (entries[0].isIntersecting && !dataLoading && !noMoreToLoad) {
+                if (entries[0].isIntersecting && !dataLoading && !noMoreToLoad && !isLoadingMore.current) {
+                    // Prevent multiple load requests
+                    isLoadingMore.current = true;
                     // Load more items
-                    console.log("Card view: loading more items", (itemCount ?? pageSize) + pageSize);
                     setItemCount?.((itemCount ?? pageSize) + pageSize);
                 }
             },
             {
-                root: null, // Use viewport instead of container for better intersection detection
+                root: containerRef.current, // Use the scroll container, not viewport
                 rootMargin: "400px",
                 threshold: 0
             }
@@ -234,7 +230,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
                     className="flex items-center justify-center py-8"
                 >
                     {dataLoading && (
-                        <CircularProgress size="small" />
+                        <CircularProgress size="small"/>
                     )}
                     {!dataLoading && noMoreToLoad && data.length > 0 && (
                         <Typography variant="caption" color="secondary">
