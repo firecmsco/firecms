@@ -260,11 +260,16 @@ collection("users")
                 a.addEventListener("click", (e) => {
                     e.preventDefault();
                     const target = document.getElementById(id);
-                    if (target) target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                        inline: "nearest"
-                    });
+                    if (target) {
+                        // Use scrollTo for vertical-only scrolling to prevent horizontal shift
+                        const targetRect = target.getBoundingClientRect();
+                        const scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+                        const targetY = window.scrollY + targetRect.top - scrollMargin;
+                        window.scrollTo({
+                            top: targetY,
+                            behavior: "smooth"
+                        });
+                    }
                 });
             });
 
