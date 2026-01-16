@@ -71,6 +71,11 @@ async function startServer() {
                     } : undefined
                 }
             } : undefined
+        },
+        // Storage configuration - local filesystem storage
+        storage: {
+            type: "local",
+            basePath: path.resolve(__dirname, "../../uploads")
         }
     });
 

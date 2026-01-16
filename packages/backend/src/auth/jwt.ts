@@ -44,6 +44,37 @@ export function generateAccessToken(userId: string, roles: string[]): string {
 }
 
 /**
+ * Get the expiration time of an access token in milliseconds from now
+ */
+export function getAccessTokenExpiryMs(): number {
+    const duration = jwtConfig.accessExpiresIn || "1h";
+    const match = duration.match(/^(\d+)([dhms])$/);
+
+    if (!match) {
+        // Default to 1 hour
+        return 60 * 60 * 1000;
+    }
+
+    const value = parseInt(match[1], 10);
+    const unit = match[2];
+
+    switch (unit) {
+        case "d": return value * 24 * 60 * 60 * 1000;
+        case "h": return value * 60 * 60 * 1000;
+        case "m": return value * 60 * 1000;
+        case "s": return value * 1000;
+        default: return 60 * 60 * 1000;
+    }
+}
+
+/**
+ * Get the expiration timestamp for an access token
+ */
+export function getAccessTokenExpiry(): number {
+    return Date.now() + getAccessTokenExpiryMs();
+}
+
+/**
  * Verify and decode an access token
  */
 export function verifyAccessToken(token: string): AccessTokenPayload | null {

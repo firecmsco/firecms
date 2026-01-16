@@ -45,6 +45,8 @@ export interface CustomAuthControllerProps {
 export interface AuthTokens {
     accessToken: string;
     refreshToken: string;
+    /** Unix timestamp (ms) when the access token expires */
+    accessTokenExpiresAt: number;
 }
 
 /**

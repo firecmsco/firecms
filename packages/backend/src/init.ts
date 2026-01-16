@@ -12,6 +12,7 @@ import { Express } from "express";
 import { configureLogLevel } from "./utils/logging";
 import { configureJwt, configureGoogleOAuth, createAuthRoutes, createAdminRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
 import { EmailConfig, EmailService, createEmailService } from "./email";
+import { StorageConfig, StorageController, createStorageController, createStorageRoutes } from "./storage";
 
 /**
  * Authentication configuration for FireCMS backend
@@ -49,6 +50,8 @@ export interface FireCMSBackendConfig {
     };
     /** Authentication configuration */
     auth?: AuthConfig;
+    /** Storage configuration */
+    storage?: StorageConfig;
 }
 
 export interface FireCMSBackendInstance {
@@ -57,6 +60,7 @@ export interface FireCMSBackendInstance {
     userService?: UserService;
     roleService?: RoleService;
     emailService?: EmailService;
+    storageController?: StorageController;
 }
 
 export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
@@ -127,6 +131,14 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
         console.log("✅ Authentication configured");
     }
 
+    // Initialize storage if configured
+    let storageController: StorageController | undefined;
+    if (config.storage) {
+        console.log("📁 Configuring storage...");
+        storageController = createStorageController(config.storage);
+        console.log(`✅ Storage configured (${config.storage.type})`);
+    }
+
     // Create WebSocket with auth support
     createPostgresWebSocket(config.server, realtimeService, dataSourceDelegate, config.auth);
 
@@ -137,7 +149,8 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
         realtimeService,
         userService,
         roleService,
-        emailService
+        emailService,
+        storageController
     };
 }
 
@@ -190,6 +203,17 @@ export function initializeFireCMSAPI(
         const adminRoutes = createAdminRoutes({ db: config.db });
         app.use(`${basePath}/admin`, adminRoutes);
         console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
+    }
+
+    // Mount storage routes if storage controller is available
+    if (backend.storageController) {
+        const basePath = config.basePath || "/api";
+        const storageRoutes = createStorageRoutes({
+            controller: backend.storageController,
+            requireAuth: config.auth?.enabled ?? true
+        });
+        app.use(`${basePath}/storage`, storageRoutes);
+        console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
     }
 
     const basePath = config.basePath || "/api";

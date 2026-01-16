@@ -360,7 +360,7 @@ export class PostgresDataSourceClient {
         }
     }
 
-    private async ensureAuthenticated(): Promise<void> {
+    private async ensureAuthenticated(retryCount: number = 3): Promise<void> {
         // If already authenticated or no token getter, skip
         if (this.isAuthenticated || !this.getAuthToken) return;
 
@@ -370,16 +370,53 @@ export class PostgresDataSourceClient {
             return;
         }
 
-        // Try to authenticate
+        // Try to authenticate with retries
+        let lastError: Error | null = null;
+
+        for (let attempt = 0; attempt < retryCount; attempt++) {
+            try {
+                const token = await this.getAuthToken();
+                this.authPromise = this.authenticate(token);
+                await this.authPromise;
+                this.authPromise = null;
+                console.log("WebSocket authenticated on demand");
+                return; // Success
+            } catch (error: any) {
+                this.authPromise = null;
+                lastError = error;
+
+                // Check if this is a "not logged in" error - don't retry, just fail
+                if (error?.message?.includes("not logged in") || error?.message?.includes("Session expired")) {
+                    console.warn("WebSocket auth failed: user not logged in");
+                    throw error;
+                }
+
+                // For other errors, retry with backoff
+                if (attempt < retryCount - 1) {
+                    const delay = Math.min(1000 * (attempt + 1), 3000);
+                    console.log(`WebSocket auth attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        console.warn("WebSocket on-demand auth failed after retries:", lastError);
+        throw lastError;
+    }
+
+    /**
+     * Force re-authentication (call after token refresh)
+     */
+    async reauthenticate(): Promise<void> {
+        if (!this.getAuthToken) return;
+
+        this.isAuthenticated = false;
         try {
             const token = await this.getAuthToken();
-            this.authPromise = this.authenticate(token);
-            await this.authPromise;
-            this.authPromise = null;
-            console.log("WebSocket authenticated on demand");
+            await this.authenticate(token);
+            console.log("WebSocket reauthenticated successfully");
         } catch (error) {
-            this.authPromise = null;
-            console.warn("WebSocket on-demand auth failed:", error);
+            console.error("WebSocket reauthentication failed:", error);
             throw error;
         }
     }
@@ -399,8 +436,10 @@ export class PostgresDataSourceClient {
             if (message.type !== "AUTHENTICATE" && this.getAuthToken && !this.isAuthenticated) {
                 try {
                     await this.ensureAuthenticated();
-                } catch (error) {
-                    reject(new ApiError("Authentication required", "Please login to continue"));
+                } catch (error: any) {
+                    // Pass through the actual error message (e.g., "User is not logged in" or "Session expired")
+                    const errorMessage = error?.message || "Authentication required";
+                    reject(new ApiError(errorMessage, errorMessage));
                     return;
                 }
             }

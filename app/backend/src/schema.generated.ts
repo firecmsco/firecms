@@ -7,7 +7,8 @@ import { relations as drizzleRelations } from 'drizzle-orm';
 export const authors = pgTable("authors", {
     id: serial("id").primaryKey(),
     name: varchar("name").notNull(),
-    email: varchar("email").notNull()
+    email: varchar("email").notNull(),
+    picture: varchar("picture")
 });
 
 export const profiles = pgTable("profiles", {

@@ -15,9 +15,9 @@ import {
     SnackbarProvider,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController
+    useBuildNavigationController,
+    useBackendStorageSource
 } from "@firecms/core";
-import { StorageSource } from "@firecms/types";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
 import {
@@ -32,18 +32,6 @@ import { collections } from "shared";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-/**
- * Stub storage source for PostgreSQL backend
- * TODO: Implement actual file storage when needed
- */
-const stubStorageSource: StorageSource = {
-    uploadFile: async () => { throw new Error("Storage not implemented"); },
-    getDownloadURL: async (path: string) => ({ url: path }),
-    getFile: async () => null,
-    deleteFile: async () => { },
-    list: async () => ({ items: [], prefixes: [] })
-};
-
 export function App() {
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
@@ -55,6 +43,12 @@ export function App() {
     const authController = useCustomAuthController({
         apiUrl: API_URL,
         googleClientId: GOOGLE_CLIENT_ID
+    });
+
+    // Backend storage source (replaces Firebase Storage)
+    const storageSource = useBackendStorageSource({
+        apiUrl: API_URL,
+        getAuthToken: authController.getAuthToken
     });
 
     // User management for admin views
@@ -75,15 +69,16 @@ export function App() {
     );
 
     // PostgreSQL delegate with WebSocket connection - pass auth token getter
+    // Only create with getAuthToken once auth is ready to prevent premature connections
     const postgresDelegate = usePostgresClientDataSource({
         websocketUrl: API_URL.replace(/^http/, "ws"),
-        getAuthToken: authController.getAuthToken
+        getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
     });
 
-    // Authenticate WebSocket when user is available
+    // Authenticate WebSocket when user is available (and auth loading is complete)
     useEffect(() => {
         const authenticateWebSocket = async () => {
-            if (authController.user && postgresDelegate.client) {
+            if (authController.user && !authController.initialLoading && postgresDelegate.client) {
                 try {
                     const token = await authController.getAuthToken();
                     await postgresDelegate.client.authenticate(token);
@@ -94,7 +89,7 @@ export function App() {
             }
         };
         authenticateWebSocket();
-    }, [authController.user, postgresDelegate.client, authController.getAuthToken]);
+    }, [authController.user, authController.initialLoading, postgresDelegate.client, authController.getAuthToken]);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
 
@@ -118,7 +113,7 @@ export function App() {
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={postgresDelegate}
-                    storageSource={stubStorageSource}
+                    storageSource={storageSource}
                 >
                     {({ loading }) => {
                         // Show loading while initializing

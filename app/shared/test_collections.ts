@@ -64,6 +64,14 @@ const authorsCollection: EntityCollection = {
             email: true,
             validation: { required: true }
         },
+        picture: {
+            name: "Picture",
+            type: "string",
+            validation: { required: false },
+            storage: {
+                storagePath: "author_pictures/",
+            }
+        },
         profile: {
             name: "Profile",
             type: "relation",

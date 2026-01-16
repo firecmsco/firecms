@@ -60,7 +60,9 @@ export type {
 // Email module
 export * from "./email";
 
+// Storage module
+export * from "./storage";
+
 // Utilities
 export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
-

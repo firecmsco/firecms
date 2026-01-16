@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { randomBytes, createHash } from "crypto";
 import { UserService, RoleService, RefreshTokenService, PasswordResetTokenService } from "./services";
-import { generateAccessToken, generateRefreshToken, hashRefreshToken, getRefreshTokenExpiry } from "./jwt";
+import { generateAccessToken, generateRefreshToken, hashRefreshToken, getRefreshTokenExpiry, getAccessTokenExpiry } from "./jwt";
 import { hashPassword, verifyPassword, validatePasswordStrength } from "./password";
 import { verifyGoogleIdToken, isGoogleOAuthConfigured } from "./google-oauth";
 import { requireAuth, AuthenticatedRequest } from "./middleware";
@@ -131,7 +131,8 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
                 },
                 tokens: {
                     accessToken,
-                    refreshToken
+                    refreshToken,
+                    accessTokenExpiresAt: getAccessTokenExpiry()
                 }
             });
         } catch (error: any) {
@@ -147,32 +148,48 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
     router.post("/login", async (req: Request, res: Response): Promise<void> => {
         try {
             const { email, password } = req.body;
+            console.log(`[AUTH] Login attempt for email: ${email}`);
 
             if (!email || !password) {
+                console.log("[AUTH] Login failed: Missing email or password");
                 res.status(400).json({ error: { message: "Email and password are required", code: "INVALID_INPUT" } });
                 return;
             }
 
             const user = await userService.getUserByEmail(email);
-            if (!user || !user.passwordHash) {
+            if (!user) {
+                console.log(`[AUTH] Login failed: No user found with email ${email}`);
                 res.status(401).json({ error: { message: "Invalid email or password", code: "INVALID_CREDENTIALS" } });
                 return;
             }
 
-            const isValidPassword = await verifyPassword(password, user.passwordHash);
-            if (!isValidPassword) {
+            if (!user.passwordHash) {
+                console.log(`[AUTH] Login failed: User ${email} has no password (provider: ${user.provider})`);
                 res.status(401).json({ error: { message: "Invalid email or password", code: "INVALID_CREDENTIALS" } });
                 return;
             }
+
+            console.log(`[AUTH] User found: ${user.id}, provider: ${user.provider}, verifying password...`);
+            const isValidPassword = await verifyPassword(password, user.passwordHash);
+            if (!isValidPassword) {
+                console.log(`[AUTH] Login failed: Invalid password for ${email}`);
+                res.status(401).json({ error: { message: "Invalid email or password", code: "INVALID_CREDENTIALS" } });
+                return;
+            }
+
+            console.log(`[AUTH] Password valid for ${email}, generating tokens...`);
 
             // Generate tokens
             const roles = await userService.getUserRoles(user.id);
             const roleIds = roles.map(r => r.id);
+            console.log(`[AUTH] User roles: ${roleIds.join(", ") || "(none)"}`);
+
             const accessToken = generateAccessToken(user.id, roleIds);
             const refreshToken = generateRefreshToken();
 
             // Store refresh token
             await refreshTokenService.createToken(user.id, hashRefreshToken(refreshToken), getRefreshTokenExpiry());
+            console.log(`[AUTH] Login successful for ${email}`);
 
             res.json({
                 user: {
@@ -184,11 +201,12 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
                 },
                 tokens: {
                     accessToken,
-                    refreshToken
+                    refreshToken,
+                    accessTokenExpiresAt: getAccessTokenExpiry()
                 }
             });
         } catch (error: any) {
-            console.error("Login error:", error);
+            console.error("[AUTH] Login error:", error.message, error.stack);
             res.status(500).json({ error: { message: "Login failed", code: "INTERNAL_ERROR" } });
         }
     });
@@ -269,7 +287,8 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
                 },
                 tokens: {
                     accessToken,
-                    refreshToken
+                    refreshToken,
+                    accessTokenExpiresAt: getAccessTokenExpiry()
                 }
             });
         } catch (error: any) {
@@ -552,21 +571,28 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
     router.post("/refresh", async (req: Request, res: Response): Promise<void> => {
         try {
             const { refreshToken } = req.body;
+            console.log("[AUTH] Token refresh request received");
 
             if (!refreshToken) {
+                console.log("[AUTH] Refresh failed: No refresh token provided");
                 res.status(400).json({ error: { message: "Refresh token is required", code: "INVALID_INPUT" } });
                 return;
             }
 
             const tokenHash = hashRefreshToken(refreshToken);
+            console.log("[AUTH] Looking up refresh token...");
             const storedToken = await refreshTokenService.findByHash(tokenHash);
 
             if (!storedToken) {
+                console.log("[AUTH] Refresh failed: Token not found in database (hash mismatch or deleted)");
                 res.status(401).json({ error: { message: "Invalid refresh token", code: "INVALID_TOKEN" } });
                 return;
             }
 
+            console.log(`[AUTH] Token found for user: ${storedToken.userId}, expires: ${storedToken.expiresAt}`);
+
             if (new Date() > storedToken.expiresAt) {
+                console.log("[AUTH] Refresh failed: Token expired at", storedToken.expiresAt);
                 await refreshTokenService.deleteByHash(tokenHash);
                 res.status(401).json({ error: { message: "Refresh token expired", code: "TOKEN_EXPIRED" } });
                 return;
@@ -575,21 +601,25 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             // Generate new tokens
             const roles = await userService.getUserRoles(storedToken.userId);
             const roleIds = roles.map(r => r.id);
+            console.log(`[AUTH] Generating new tokens for user ${storedToken.userId}, roles: ${roleIds.join(", ") || "(none)"}`);
+
             const newAccessToken = generateAccessToken(storedToken.userId, roleIds);
             const newRefreshToken = generateRefreshToken();
 
             // Rotate refresh token (delete old, create new)
             await refreshTokenService.deleteByHash(tokenHash);
             await refreshTokenService.createToken(storedToken.userId, hashRefreshToken(newRefreshToken), getRefreshTokenExpiry());
+            console.log("[AUTH] Token refresh successful, new tokens issued");
 
             res.json({
                 tokens: {
                     accessToken: newAccessToken,
-                    refreshToken: newRefreshToken
+                    refreshToken: newRefreshToken,
+                    accessTokenExpiresAt: getAccessTokenExpiry()
                 }
             });
         } catch (error: any) {
-            console.error("Token refresh error:", error);
+            console.error("[AUTH] Token refresh error:", error.message, error.stack);
             res.status(500).json({ error: { message: "Token refresh failed", code: "INTERNAL_ERROR" } });
         }
     });

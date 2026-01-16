@@ -30,7 +30,16 @@ class AuthApiError extends Error {
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {
-    const data = await response.json();
+    let data: any;
+    try {
+        data = await response.json();
+    } catch (parseError) {
+        // Response wasn't JSON - could be network error or server issue
+        throw new AuthApiError(
+            `Server returned non-JSON response (status: ${response.status})`,
+            "PARSE_ERROR"
+        );
+    }
 
     if (!response.ok) {
         throw new AuthApiError(
@@ -89,12 +98,21 @@ export async function googleLogin(idToken: string): Promise<AuthResponse> {
  * Refresh access token using refresh token
  */
 export async function refreshAccessToken(refreshToken: string): Promise<RefreshResponse> {
-    const response = await fetch(`${baseApiUrl}/api/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken })
-    });
+    console.log("[AUTH-API] Calling refresh endpoint...");
 
+    let response: Response;
+    try {
+        response = await fetch(`${baseApiUrl}/api/auth/refresh`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refreshToken })
+        });
+    } catch (networkError: any) {
+        console.error("[AUTH-API] Network error during refresh:", networkError.message);
+        throw new AuthApiError("Network error: " + networkError.message, "NETWORK_ERROR");
+    }
+
+    console.log("[AUTH-API] Refresh response status:", response.status);
     return handleResponse<RefreshResponse>(response);
 }
 

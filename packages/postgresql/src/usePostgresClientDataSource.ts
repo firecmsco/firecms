@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import {
     DataSourceDelegate,
     DeleteEntityProps,
@@ -80,6 +80,13 @@ function cmsToDelegateModel(data: any): any {
 
 export function usePostgresClientDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
     const client = useMemo(() => new PostgresDataSourceClient(config), [config.websocketUrl]);
+
+    // Update auth token getter when it changes (e.g., when auth loading completes)
+    useEffect(() => {
+        if (config.getAuthToken) {
+            client.setAuthTokenGetter(config.getAuthToken);
+        }
+    }, [client, config.getAuthToken]);
 
     return useMemo(() => ({
 
