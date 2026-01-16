@@ -17,6 +17,12 @@ export type CustomAuthController = AuthController & {
     loginSkipped: boolean;
     /** Error from auth provider (login failure details) */
     authProviderError: Error | null;
+    /** Request password reset email */
+    forgotPassword: (email: string) => Promise<void>;
+    /** Reset password using token from email */
+    resetPassword: (token: string, password: string) => Promise<void>;
+    /** Change password for authenticated user */
+    changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
 }
 
 /**
@@ -49,6 +55,7 @@ export interface UserInfo {
     email: string;
     displayName?: string | null;
     photoURL?: string | null;
+    emailVerified?: boolean;
     roles?: string[];
 }
 
@@ -66,3 +73,4 @@ export interface AuthResponse {
 export interface RefreshResponse {
     tokens: AuthTokens;
 }
+

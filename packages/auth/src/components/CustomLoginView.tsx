@@ -79,6 +79,7 @@ export function CustomLoginView({
 
     const [registrationSelected, setRegistrationSelected] = useState(false);
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
+    const [forgotPasswordSelected, setForgotPasswordSelected] = useState(false);
 
     function buildErrorView() {
         if (!authController.authProviderError) return null;
@@ -121,8 +122,8 @@ export function CustomLoginView({
                         <ErrorView error={notAllowedMessage} />
                     </div>
                 }
-                {buildErrorView()}
-                {(!passwordLoginSelected && !registrationSelected) && (
+                {!forgotPasswordSelected && buildErrorView()}
+                {(!passwordLoginSelected && !registrationSelected && !forgotPasswordSelected) && (
                     <>
                         <LoginButton
                             disabled={disabled}
@@ -131,6 +132,7 @@ export function CustomLoginView({
                             onClick={() => {
                                 setRegistrationSelected(false);
                                 setPasswordLoginSelected(true);
+                                setForgotPasswordSelected(false);
                             }}
                         />
                         {googleEnabled && googleClientId && (
@@ -148,12 +150,13 @@ export function CustomLoginView({
                                 onClick={() => {
                                     setRegistrationSelected(true);
                                     setPasswordLoginSelected(false);
+                                    setForgotPasswordSelected(false);
                                 }}
                             />
                         )}
                     </>
                 )}
-                {(passwordLoginSelected || registrationSelected) && (
+                {(passwordLoginSelected || registrationSelected) && !forgotPasswordSelected && (
                     <LoginForm
                         authController={authController}
                         registrationMode={registrationSelected}
@@ -161,9 +164,22 @@ export function CustomLoginView({
                             setRegistrationSelected(false);
                             setPasswordLoginSelected(false);
                         }}
+                        onForgotPassword={() => {
+                            setForgotPasswordSelected(true);
+                            setPasswordLoginSelected(false);
+                        }}
                         mode={modeState.mode}
                         noUserComponent={noUserComponent}
                         disableSignupScreen={disableSignupScreen}
+                    />
+                )}
+                {forgotPasswordSelected && (
+                    <ForgotPasswordForm
+                        authController={authController}
+                        onClose={() => {
+                            setForgotPasswordSelected(false);
+                            setPasswordLoginSelected(true);
+                        }}
                     />
                 )}
             </div>
@@ -260,6 +276,7 @@ function GoogleLoginButton({
 
 function LoginForm({
     onClose,
+    onForgotPassword,
     authController,
     mode,
     registrationMode,
@@ -267,6 +284,7 @@ function LoginForm({
     disableSignupScreen
 }: {
     onClose: () => void,
+    onForgotPassword: () => void,
     authController: CustomAuthController,
     mode: "light" | "dark",
     registrationMode: boolean,
@@ -377,6 +395,18 @@ function LoginForm({
                 </Typography>
             )}
 
+            {!registrationMode && (
+                <div className="w-full text-right">
+                    <button
+                        type="button"
+                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                        onClick={onForgotPassword}
+                    >
+                        Forgot password?
+                    </button>
+                </div>
+            )}
+
             <div className="flex justify-end items-center w-full gap-2">
                 {authController.authLoading && (
                     <CircularProgress />
@@ -388,3 +418,121 @@ function LoginForm({
         </form>
     );
 }
+
+function ForgotPasswordForm({
+    onClose,
+    authController
+}: {
+    onClose: () => void,
+    authController: CustomAuthController
+}) {
+    const [email, setEmail] = useState<string>("");
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!document) return;
+        const escFunction = (event: any) => {
+            if (event.keyCode === 27) {
+                onClose();
+            }
+        };
+        document.addEventListener("keydown", escFunction, false);
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    }, [onClose]);
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setError(null);
+
+        if (!email) {
+            setError("Please enter your email address");
+            return;
+        }
+
+        try {
+            await authController.forgotPassword(email);
+            setSubmitted(true);
+        } catch (err: any) {
+            // Check for EMAIL_NOT_CONFIGURED error
+            if (err.code === "EMAIL_NOT_CONFIGURED") {
+                setError("Password reset is not available. Please contact your administrator.");
+            } else {
+                // Still show success (security: don't reveal if email exists)
+                setSubmitted(true);
+            }
+        }
+    };
+
+    if (submitted) {
+        return (
+            <div className="flex flex-col items-center w-full max-w-[500px] gap-4 p-4">
+                <div className="w-full">
+                    <IconButton onClick={onClose}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </div>
+
+                <div className="text-center">
+                    <Typography variant="subtitle1" className="mb-4">
+                        Check your email
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                        If an account exists for <strong>{email}</strong>, you'll receive a password reset link shortly.
+                    </Typography>
+                </div>
+
+                <Button onClick={onClose} className="mt-4">
+                    Back to login
+                </Button>
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-[500px] gap-2">
+            <div className="w-full">
+                <IconButton onClick={onClose}>
+                    <ArrowBackIcon />
+                </IconButton>
+            </div>
+
+            <div className="flex justify-center w-full py-2">
+                <Typography align={"center"} variant={"subtitle2"}>Reset your password</Typography>
+            </div>
+
+            <Typography variant="body2" className="text-gray-600 text-center mb-2">
+                Enter your email address and we'll send you a link to reset your password.
+            </Typography>
+
+            {error && (
+                <div className="w-full">
+                    <ErrorView error={error} />
+                </div>
+            )}
+
+            <div className="w-full">
+                <TextField
+                    placeholder="Email"
+                    className={"w-full"}
+                    autoFocus
+                    value={email}
+                    type="email"
+                    onChange={(event) => setEmail(event.target.value)}
+                />
+            </div>
+
+            <div className="flex justify-end items-center w-full gap-2 mt-2">
+                {authController.authLoading && (
+                    <CircularProgress />
+                )}
+                <Button type="submit" disabled={authController.authLoading || !email}>
+                    Send reset link
+                </Button>
+            </div>
+        </form>
+    );
+}
+

@@ -33,7 +33,32 @@ export * from "./types/index";
 
 // Auth module
 export * from "./auth";
-export * from "./db/auth-schema";
+// Re-export schema types (excluding Role to avoid conflict with auth/services.ts Role interface)
+export {
+    users,
+    roles,
+    userRoles,
+    refreshTokens,
+    passwordResetTokens,
+    appConfig,
+    usersRelations,
+    rolesRelations,
+    userRolesRelations,
+    refreshTokensRelations,
+    passwordResetTokensRelations
+} from "./db/auth-schema";
+export type {
+    User,
+    NewUser,
+    NewRole,
+    UserRole,
+    RefreshToken,
+    PasswordResetToken,
+    AppConfig
+} from "./db/auth-schema";
+
+// Email module
+export * from "./email";
 
 // Utilities
 export * from "./generate-drizzle-schema";

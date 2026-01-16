@@ -124,4 +124,78 @@ export async function getCurrentUser(accessToken: string): Promise<{ user: UserI
     return handleResponse<{ user: UserInfo }>(response);
 }
 
+/**
+ * Request password reset email
+ */
+export async function forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
+/**
+ * Reset password using token from email
+ */
+export async function resetPassword(token: string, password: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password })
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
+/**
+ * Change password for authenticated user
+ */
+export async function changePassword(
+    accessToken: string,
+    oldPassword: string,
+    newPassword: string
+): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/change-password`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ oldPassword, newPassword })
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
+/**
+ * Send email verification link
+ */
+export async function sendVerificationEmail(accessToken: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/send-verification`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        }
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
+/**
+ * Verify email address using token
+ */
+export async function verifyEmail(token: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/verify-email?token=${encodeURIComponent(token)}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
 export { AuthApiError };
+

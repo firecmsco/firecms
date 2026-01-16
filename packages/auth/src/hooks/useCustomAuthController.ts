@@ -85,6 +85,10 @@ export function useCustomAuthController(
     // Store tokens in ref for quick access, but also persist to localStorage
     const tokensRef = useRef<AuthTokens | null>(null);
     const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // Track the last refresh time to throttle visibility change refreshes
+    const lastRefreshTimeRef = useRef<number>(0);
+    // Flag to prevent multiple simultaneous refresh calls
+    const isRefreshingRef = useRef<boolean>(false);
 
     // Configure API URL on mount
     useEffect(() => {
@@ -99,6 +103,9 @@ export function useCustomAuthController(
             clearTimeout(refreshTimeoutRef.current);
         }
 
+        // Track when this refresh happened
+        lastRefreshTimeRef.current = Date.now();
+
         // Refresh 5 minutes before expiry (assuming 1 hour access token)
         const refreshIn = 55 * 60 * 1000; // 55 minutes
 
@@ -106,6 +113,7 @@ export function useCustomAuthController(
             try {
                 const response = await authApi.refreshAccessToken(tokens.refreshToken);
                 tokensRef.current = response.tokens;
+                lastRefreshTimeRef.current = Date.now();
                 // Update storage with new tokens
                 const storedData = loadAuthFromStorage();
                 if (storedData) {
@@ -226,32 +234,184 @@ export function useCustomAuthController(
         setUser(null);
     }, []);
 
+    // Forgot password - request reset email
+    const forgotPassword = useCallback(async (email: string) => {
+        setAuthLoading(true);
+        setAuthProviderError(null);
+
+        try {
+            await authApi.forgotPassword(email);
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        } finally {
+            setAuthLoading(false);
+        }
+    }, []);
+
+    // Reset password using token
+    const resetPassword = useCallback(async (token: string, password: string) => {
+        setAuthLoading(true);
+        setAuthProviderError(null);
+
+        try {
+            await authApi.resetPassword(token, password);
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        } finally {
+            setAuthLoading(false);
+        }
+    }, []);
+
+    // Change password for authenticated user
+    const changePassword = useCallback(async (oldPassword: string, newPassword: string) => {
+        setAuthLoading(true);
+        setAuthProviderError(null);
+
+        try {
+            if (!tokensRef.current) {
+                throw new Error("User is not logged in");
+            }
+            await authApi.changePassword(tokensRef.current.accessToken, oldPassword, newPassword);
+            // After password change, user needs to log in again (all sessions invalidated)
+            tokensRef.current = null;
+            clearAuthFromStorage();
+            if (refreshTimeoutRef.current) {
+                clearTimeout(refreshTimeoutRef.current);
+            }
+            setUser(null);
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        } finally {
+            setAuthLoading(false);
+        }
+    }, []);
+
     // Restore auth state from localStorage on mount
     useEffect(() => {
         const restoreAuth = async () => {
             const stored = loadAuthFromStorage();
             if (stored) {
+                // Prevent duplicate calls
+                if (isRefreshingRef.current) {
+                    return;
+                }
+                isRefreshingRef.current = true;
+
+                // Set lastRefreshTime immediately to prevent visibility change handler from double-firing
+                lastRefreshTimeRef.current = Date.now();
+
                 try {
                     // Try to refresh the token to verify it's still valid
                     const response = await authApi.refreshAccessToken(stored.tokens.refreshToken);
                     tokensRef.current = response.tokens;
+                    lastRefreshTimeRef.current = Date.now();
 
-                    // Update stored tokens
-                    saveAuthToStorage(response.tokens, stored.user);
+                    // Fetch fresh user data from the server
+                    try {
+                        const meResponse = await authApi.getCurrentUser(response.tokens.accessToken);
+                        const freshUserInfo = meResponse.user;
 
-                    const convertedUser = convertToUser(stored.user);
-                    setUser(convertedUser);
+                        // Update stored data with fresh user info and new tokens
+                        saveAuthToStorage(response.tokens, freshUserInfo);
+
+                        let convertedUser = convertToUser(freshUserInfo);
+
+                        // Apply custom roles if defineRolesFor provided
+                        if (defineRolesFor) {
+                            const customRoles = await defineRolesFor(convertedUser);
+                            if (customRoles) {
+                                convertedUser = { ...convertedUser, roles: customRoles };
+                            }
+                        }
+
+                        setUser(convertedUser);
+                    } catch (meError) {
+                        // If fetching user data fails, fall back to stored user data
+                        console.warn("Failed to fetch fresh user data, using stored:", meError);
+                        saveAuthToStorage(response.tokens, stored.user);
+                        const convertedUser = convertToUser(stored.user);
+                        setUser(convertedUser);
+                    }
+
                     scheduleTokenRefresh(response.tokens);
                 } catch (error) {
                     console.warn("Stored auth invalid, clearing:", error);
                     clearAuthFromStorage();
+                } finally {
+                    isRefreshingRef.current = false;
                 }
             }
             setInitialLoading(false);
         };
 
         restoreAuth();
-    }, [scheduleTokenRefresh]);
+    }, [scheduleTokenRefresh, defineRolesFor]);
+
+    // Handle visibility change - refresh token when user returns to tab
+    // This is crucial for handling cases where user leaves for hours and comes back
+    useEffect(() => {
+        const handleVisibilityChange = async () => {
+            // Skip during initial loading - restoreAuth handles the initial refresh
+            if (initialLoading) {
+                return;
+            }
+
+            // Skip if already refreshing
+            if (isRefreshingRef.current) {
+                return;
+            }
+
+            if (document.visibilityState === "visible" && tokensRef.current) {
+                // Throttle: only refresh if at least 1 minute has passed since last refresh
+                const timeSinceLastRefresh = Date.now() - lastRefreshTimeRef.current;
+                const minRefreshInterval = 60 * 1000; // 1 minute
+
+                if (timeSinceLastRefresh < minRefreshInterval) {
+                    // Skip refresh - we recently refreshed
+                    return;
+                }
+
+                isRefreshingRef.current = true;
+
+                // User returned to the tab - proactively refresh the token
+                try {
+                    const response = await authApi.refreshAccessToken(tokensRef.current.refreshToken);
+                    tokensRef.current = response.tokens;
+                    lastRefreshTimeRef.current = Date.now();
+
+                    // Update storage with new tokens
+                    const storedData = loadAuthFromStorage();
+                    if (storedData) {
+                        saveAuthToStorage(response.tokens, storedData.user);
+                    }
+
+                    // Reschedule the refresh timer
+                    scheduleTokenRefresh(response.tokens);
+                } catch (error) {
+                    console.error("Token refresh on visibility change failed:", error);
+                    // Token is invalid or expired - clear auth and sign out
+                    setUser(null);
+                    tokensRef.current = null;
+                    clearAuthFromStorage();
+                    if (refreshTimeoutRef.current) {
+                        clearTimeout(refreshTimeoutRef.current);
+                    }
+                    onSignOut?.();
+                } finally {
+                    isRefreshingRef.current = false;
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, [initialLoading, scheduleTokenRefresh, onSignOut]);
 
     // Cleanup refresh timeout on unmount
     useEffect(() => {
@@ -275,7 +435,11 @@ export function useCustomAuthController(
         register,
         googleLogin,
         skipLogin,
+        forgotPassword,
+        resetPassword,
+        changePassword,
         extra,
         setExtra
     };
 }
+

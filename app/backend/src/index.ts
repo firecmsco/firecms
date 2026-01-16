@@ -54,7 +54,23 @@ async function startServer() {
             google: process.env.GOOGLE_CLIENT_ID ? {
                 clientId: process.env.GOOGLE_CLIENT_ID
             } : undefined,
-            seedDefaultRoles: true
+            seedDefaultRoles: true,
+            // Email configuration for password reset and email verification
+            email: process.env.SMTP_HOST ? {
+                from: process.env.SMTP_FROM || "noreply@firecms.co",
+                appName: process.env.APP_NAME || "FireCMS",
+                resetPasswordUrl: process.env.FRONTEND_URL || "http://localhost:5173",
+                verifyEmailUrl: process.env.FRONTEND_URL || "http://localhost:5173",
+                smtp: {
+                    host: process.env.SMTP_HOST,
+                    port: parseInt(process.env.SMTP_PORT || "587"),
+                    secure: process.env.SMTP_SECURE === "true",
+                    auth: process.env.SMTP_USER ? {
+                        user: process.env.SMTP_USER,
+                        pass: process.env.SMTP_PASS || ""
+                    } : undefined
+                }
+            } : undefined
         }
     });
 
@@ -67,7 +83,8 @@ async function startServer() {
             origin: true,
             credentials: true
         },
-        db // Pass db for auth routes
+        db, // Pass db for auth routes
+        allowRegistration: process.env.ALLOW_REGISTRATION === "true" // Default: false, first user can always register
     });
 
     // Serve static files from frontend build in production

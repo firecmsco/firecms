@@ -11,6 +11,7 @@ import { ApiConfig, FireCMSApiServer } from "./api";
 import { Express } from "express";
 import { configureLogLevel } from "./utils/logging";
 import { configureJwt, configureGoogleOAuth, createAuthRoutes, createAdminRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
+import { EmailConfig, EmailService, createEmailService } from "./email";
 
 /**
  * Authentication configuration for FireCMS backend
@@ -26,10 +27,14 @@ export interface AuthConfig {
     google?: {
         clientId: string;
     };
+    /** Email configuration for password reset and email verification (optional) */
+    email?: EmailConfig;
     /** Whether auth is required for all API requests (default: true) */
     requireAuth?: boolean;
     /** Seed default roles on startup (default: true on first run) */
     seedDefaultRoles?: boolean;
+    /** Allow new user registration (default: false). First user can always register for bootstrap. */
+    allowRegistration?: boolean;
 }
 
 export interface FireCMSBackendConfig {
@@ -51,6 +56,7 @@ export interface FireCMSBackendInstance {
     realtimeService: RealtimeService;
     userService?: UserService;
     roleService?: RoleService;
+    emailService?: EmailService;
 }
 
 export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
@@ -83,6 +89,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     // Initialize auth if configured
     let userService: UserService | undefined;
     let roleService: RoleService | undefined;
+    let emailService: EmailService | undefined;
 
     if (config.auth) {
         console.log("🔐 Configuring authentication...");
@@ -103,6 +110,16 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
             console.log("✅ Google OAuth configured");
         }
 
+        // Configure email service if provided
+        if (config.auth.email) {
+            emailService = createEmailService(config.auth.email);
+            if (emailService.isConfigured()) {
+                console.log("✅ Email service configured");
+            } else {
+                console.warn("⚠️ Email config provided but service not fully configured (missing SMTP or sendEmail)");
+            }
+        }
+
         // Create services
         userService = new UserService(config.db);
         roleService = new RoleService(config.db);
@@ -119,7 +136,8 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
         dataSourceDelegate,
         realtimeService,
         userService,
-        roleService
+        roleService,
+        emailService
     };
 }
 
@@ -134,7 +152,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 export function initializeFireCMSAPI(
     app: Express,
     backend: FireCMSBackendInstance,
-    config: Partial<ApiConfig> & { db?: NodePgDatabase } = {}
+    config: Partial<ApiConfig> & { db?: NodePgDatabase; emailConfig?: EmailConfig; allowRegistration?: boolean } = {}
 ): FireCMSApiServer {
     console.log("🚀 Initializing FireCMS API endpoints");
 
@@ -158,7 +176,12 @@ export function initializeFireCMSAPI(
 
     // Mount auth routes if db is provided
     if (config.db) {
-        const authRoutes = createAuthRoutes({ db: config.db });
+        const authRoutes = createAuthRoutes({
+            db: config.db,
+            emailService: backend.emailService,
+            emailConfig: config.emailConfig,
+            allowRegistration: config.allowRegistration ?? false
+        });
         const basePath = config.basePath || "/api";
         app.use(`${basePath}/auth`, authRoutes);
         console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
@@ -176,4 +199,3 @@ export function initializeFireCMSAPI(
 
     return apiServer;
 }
-
