@@ -58,10 +58,36 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     dbPath: string;
 
     /**
-     * Optional database id of this collection. If not specified, the default
-     * database id will be used.
+     * Which datasource handles this collection.
+     * Use this to route collections to different backends:
+     * - `"postgres"` - Route to PostgreSQL backend
+     * - `"firestore"` - Route to Firestore (client-side)
+     * - `"mongodb"` - Route to MongoDB backend
+     * - Custom IDs for your own datasource implementations
+     *
+     * If not specified, the default datasource `"(default)"` is used.
+     *
+     * @example
+     * // Simple - no datasource needed for default
+     * { slug: "products" }
+     *
+     * // Firestore collection (client-side real-time)
+     * { slug: "analytics", datasource: "firestore" }
+     *
+     * // Multiple databases within a datasource
+     * { slug: "orders", datasource: "postgres", database: "orders_db" }
      */
-    databaseId?: string;
+    datasource?: string;
+
+    /**
+     * Which database within the datasource.
+     * - For Firestore: The Firestore database ID (e.g., for multi-database projects)
+     * - For PostgreSQL: Schema or database name
+     * - For MongoDB: Database name
+     *
+     * If not specified, the default database of the datasource is used.
+     */
+    database?: string;
 
     /**
      * If this collection is a top level navigation entry, you can set this

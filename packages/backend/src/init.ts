@@ -40,18 +40,38 @@ export interface AuthConfig {
 }
 
 /**
- * Configuration for a single datasource (database)
+ * Configuration for a PostgreSQL datasource.
+ * Use with `createPostgresDelegate()` to create a DataSourceDelegate.
  */
-export interface DatasourceConfig {
-    /** Database connection */
-    db: NodePgDatabase;
-    /** Database tables (Drizzle schema) */
-    tables: Record<string, PgTable>;
-    /** Database enums (optional) */
-    enums?: Record<string, PgEnum<any>>;
-    /** Database relations (optional) */
-    relations?: Record<string, Relations>;
+export interface PostgresDatasourceConfig {
+    /** Drizzle database connection */
+    connection: NodePgDatabase;
+    /** Database schema */
+    schema: {
+        /** Database tables (Drizzle schema) */
+        tables: Record<string, PgTable>;
+        /** Database enums (optional) */
+        enums?: Record<string, PgEnum<any>>;
+        /** Database relations (optional) */
+        relations?: Record<string, Relations>;
+    };
 }
+
+/**
+ * Configuration for a single datasource.
+ * 
+ * You can provide either:
+ * - A `DataSourceDelegate` directly (for any database type)
+ * - A `PostgresDatasourceConfig` (convenience for PostgreSQL)
+ * 
+ * @example
+ * // PostgreSQL (using config object)
+ * { connection: db, schema: { tables, enums, relations } }
+ * 
+ * // Any database (using delegate directly)
+ * myFirestoreDelegate
+ */
+export type DatasourceConfig = DataSourceDelegate | PostgresDatasourceConfig;
 
 export interface FireCMSBackendConfig {
     collections: EntityCollection[];
@@ -60,40 +80,35 @@ export interface FireCMSBackendConfig {
     /**
      * Database configuration. Supports two formats:
      *
-     * 1. Single database (maps to "(default)"):
-     *    ```
-     *    datasources: { db, tables, enums, relations }
-     *    ```
+     * **Single database (most common):**
+     * ```typescript
+     * database: {
+     *     connection: db,
+     *     schema: { tables, enums, relations }
+     * }
+     * ```
      *
-     * 2. Multiple databases (keyed by databaseId):
-     *    ```
-     *    datasources: {
-     *        "(default)": { db, tables, ... },
-     *        "analytics": { db: analyticsDb, tables: analyticsTables, ... }
-     *    }
-     *    ```
+     * **Multiple databases:**
+     * ```typescript
+     * databases: {
+     *     "(default)": { connection: db, schema: { tables } },
+     *     "analytics": { connection: analyticsDb, schema: { analyticsTables } }
+     * }
+     * ```
+     * 
+     * **Using delegates directly (for non-PostgreSQL):**
+     * ```typescript
+     * databases: {
+     *     "(default)": postgresDelegate,
+     *     "firestore": firestoreDelegate
+     * }
+     * ```
      *
-     * Collections use `databaseId` property to specify which datasource.
-     * Collections without `databaseId` use "(default)".
+     * Collections use `datasource` property to specify which to use.
+     * Collections without `datasource` use "(default)".
      */
-    datasources: DatasourceConfig | Record<string, DatasourceConfig>;
-
-    /**
-     * @deprecated Use `datasources` instead. Single database config for backwards compatibility.
-     */
-    db?: NodePgDatabase;
-    /**
-     * @deprecated Use `datasources` instead.
-     */
-    tables?: Record<string, PgTable>;
-    /**
-     * @deprecated Use `datasources` instead.
-     */
-    enums?: Record<string, PgEnum<any>>;
-    /**
-     * @deprecated Use `datasources` instead.
-     */
-    relations?: Record<string, Relations>;
+    database?: DatasourceConfig;
+    databases?: Record<string, DatasourceConfig>;
 
     logging?: {
         level?: "error" | "warn" | "info" | "debug";
@@ -176,35 +191,18 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     console.log("🔥 Initializing FireCMS Backend");
 
     // ============ Parse datasources configuration ============
-    // Support both new `datasources` and deprecated `db`/`tables` fields
 
-    let datasourceConfigs: Record<string, DatasourceConfig>;
+    let rawDatasourceConfigs: Record<string, DatasourceConfig>;
 
-    if (config.datasources) {
-        // Check if it's a single DatasourceConfig or a map
-        if (isDatasourceConfig(config.datasources)) {
-            // Single datasource → map to "(default)"
-            datasourceConfigs = { [DEFAULT_DATASOURCE_ID]: config.datasources };
-        } else {
-            // Map of datasources
-            datasourceConfigs = config.datasources;
-        }
-    } else if (config.db && config.tables) {
-        // Backwards compatibility: use deprecated fields
-        console.warn(
-            "⚠️ Using deprecated `db`/`tables` fields. Please migrate to `datasources` config."
-        );
-        datasourceConfigs = {
-            [DEFAULT_DATASOURCE_ID]: {
-                db: config.db,
-                tables: config.tables,
-                enums: config.enums,
-                relations: config.relations
-            }
-        };
+    if (config.databases) {
+        // Multiple databases
+        rawDatasourceConfigs = config.databases;
+    } else if (config.database) {
+        // Single database (most common)
+        rawDatasourceConfigs = { [DEFAULT_DATASOURCE_ID]: config.database };
     } else {
         throw new Error(
-            "FireCMSBackendConfig requires either `datasources` or deprecated `db`/`tables` fields."
+            "FireCMSBackendConfig requires `database` (single) or `databases` (multiple)."
         );
     }
 
@@ -213,47 +211,65 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     const realtimeServices: Record<string, RealtimeService> = {};
     const delegates: Record<string, DataSourceDelegate> = {};
 
-    for (const [datasourceId, dsConfig] of Object.entries(datasourceConfigs)) {
+    for (const [datasourceId, dsConfig] of Object.entries(rawDatasourceConfigs)) {
         console.log(`📦 Initializing datasource: "${datasourceId}"`);
 
-        // Register tables for this datasource
-        Object.values(dsConfig.tables).forEach((table) => {
-            if (isTable(table)) {
-                const tableName = getTableName(table);
-                const matchingCollection = config.collections.find(
-                    c => c.dbPath === tableName && (c.databaseId === datasourceId || (!c.databaseId && datasourceId === DEFAULT_DATASOURCE_ID))
-                );
-                collectionRegistry.registerTable(table, matchingCollection?.dbPath ?? tableName);
-            }
-        });
+        // Resolve the DataSourceDelegate from the config
+        const { delegate, db, schema } = resolveDatasourceConfig(dsConfig);
 
-        if (dsConfig.enums) collectionRegistry.registerEnums(dsConfig.enums);
-        if (dsConfig.relations) collectionRegistry.registerRelations(dsConfig.relations);
+        if (delegate) {
+            // Direct delegate - just use it
+            delegates[datasourceId] = delegate;
 
-        // Create realtime service and datasource delegate
-        const realtimeService = new RealtimeService(dsConfig.db);
-        const dataSourceDelegate = new PostgresDataSourceDelegate(dsConfig.db, realtimeService);
+            // For non-Postgres delegates, we don't have a RealtimeService
+            // They handle their own real-time (e.g., Firestore)
+        } else if (db && schema) {
+            // PostgreSQL config - create delegate
 
-        realtimeServices[datasourceId] = realtimeService;
-        delegates[datasourceId] = dataSourceDelegate;
+            // Register tables for this datasource
+            Object.values(schema.tables).forEach((table) => {
+                if (isTable(table)) {
+                    const tableName = getTableName(table);
+                    const matchingCollection = config.collections.find(
+                        c => c.dbPath === tableName && (
+                            c.datasource === datasourceId ||
+                            (!c.datasource && datasourceId === DEFAULT_DATASOURCE_ID)
+                        )
+                    );
+                    collectionRegistry.registerTable(table, matchingCollection?.dbPath ?? tableName);
+                }
+            });
+
+            if (schema.enums) collectionRegistry.registerEnums(schema.enums);
+            if (schema.relations) collectionRegistry.registerRelations(schema.relations);
+
+            // Create realtime service and datasource delegate
+            const realtimeService = new RealtimeService(db);
+            const dataSourceDelegate = new PostgresDataSourceDelegate(db, realtimeService);
+
+            realtimeServices[datasourceId] = realtimeService;
+            delegates[datasourceId] = dataSourceDelegate;
+        } else {
+            console.warn(`⚠️ Skipping datasource "${datasourceId}" - invalid configuration`);
+        }
     }
 
     // Create the registry
     const datasourceRegistry = DefaultDatasourceRegistry.create(delegates);
 
-    console.log(`✅ Initialized ${Object.keys(datasourceConfigs).length} datasource(s): ${Object.keys(datasourceConfigs).join(", ")}`);
+    console.log(`✅ Initialized ${Object.keys(delegates).length} datasource(s): ${Object.keys(delegates).join(", ")}`);
 
     // Register collections
     config.collections.forEach(collection => collectionRegistry.register(collection));
 
     // ============ Get default datasource for auth ============
-    const defaultDatasourceConfig = datasourceConfigs[DEFAULT_DATASOURCE_ID];
-    if (!defaultDatasourceConfig) {
-        throw new Error(
-            `No "${DEFAULT_DATASOURCE_ID}" datasource configured. Auth and other core features require a default datasource.`
-        );
+    // Auth requires PostgreSQL, so we need to find the default db connection
+    let defaultDb: NodePgDatabase | undefined;
+    const defaultConfig = rawDatasourceConfigs[DEFAULT_DATASOURCE_ID];
+    if (defaultConfig) {
+        const resolved = resolveDatasourceConfig(defaultConfig);
+        defaultDb = resolved.db;
     }
-    const defaultDb = defaultDatasourceConfig.db;
 
     // ============ Initialize auth if configured ============
     let userService: UserService | undefined;
@@ -261,39 +277,46 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     let emailService: EmailService | undefined;
 
     if (config.auth) {
-        console.log("🔐 Configuring authentication...");
+        if (!defaultDb) {
+            console.warn(
+                "⚠️ Auth requires a PostgreSQL database. No default PostgreSQL datasource found. " +
+                "Auth will not be initialized. Make sure your default datasource uses PostgresDatasourceConfig."
+            );
+        } else {
+            console.log("🔐 Configuring authentication...");
 
-        // Ensure auth tables exist (auto-create if needed)
-        await ensureAuthTablesExist(defaultDb);
+            // Ensure auth tables exist (auto-create if needed)
+            await ensureAuthTablesExist(defaultDb);
 
-        // Configure JWT
-        configureJwt({
-            secret: config.auth.jwtSecret,
-            accessExpiresIn: config.auth.accessExpiresIn || "1h",
-            refreshExpiresIn: config.auth.refreshExpiresIn || "30d"
-        });
+            // Configure JWT
+            configureJwt({
+                secret: config.auth.jwtSecret,
+                accessExpiresIn: config.auth.accessExpiresIn || "1h",
+                refreshExpiresIn: config.auth.refreshExpiresIn || "30d"
+            });
 
-        // Configure Google OAuth if provided
-        if (config.auth.google?.clientId) {
-            configureGoogleOAuth(config.auth.google.clientId);
-            console.log("✅ Google OAuth configured");
-        }
-
-        // Configure email service if provided
-        if (config.auth.email) {
-            emailService = createEmailService(config.auth.email);
-            if (emailService.isConfigured()) {
-                console.log("✅ Email service configured");
-            } else {
-                console.warn("⚠️ Email config provided but service not fully configured (missing SMTP or sendEmail)");
+            // Configure Google OAuth if provided
+            if (config.auth.google?.clientId) {
+                configureGoogleOAuth(config.auth.google.clientId);
+                console.log("✅ Google OAuth configured");
             }
+
+            // Configure email service if provided
+            if (config.auth.email) {
+                emailService = createEmailService(config.auth.email);
+                if (emailService.isConfigured()) {
+                    console.log("✅ Email service configured");
+                } else {
+                    console.warn("⚠️ Email config provided but service not fully configured (missing SMTP or sendEmail)");
+                }
+            }
+
+            // Create services using default database
+            userService = new UserService(defaultDb);
+            roleService = new RoleService(defaultDb);
+
+            console.log("✅ Authentication configured");
         }
-
-        // Create services using default database
-        userService = new UserService(defaultDb);
-        roleService = new RoleService(defaultDb);
-
-        console.log("✅ Authentication configured");
     }
 
     // ============ Initialize storage if configured ============
@@ -356,20 +379,60 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 }
 
 /**
- * Type guard to check if an object is a DatasourceConfig (single datasource)
- * vs a Record<string, DatasourceConfig> (multiple datasources)
+ * Type guard to check if an object is a DataSourceDelegate
  */
-function isDatasourceConfig(obj: unknown): obj is DatasourceConfig {
+function isDataSourceDelegate(obj: unknown): obj is DataSourceDelegate {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const config = obj as DatasourceConfig;
-    // A DatasourceConfig has `db` and `tables` directly
+    const delegate = obj as DataSourceDelegate;
     return (
-        config.db !== undefined &&
-        typeof config.tables === "object" &&
-        config.tables !== null
+        typeof delegate.key === "string" &&
+        typeof delegate.fetchCollection === "function" &&
+        typeof delegate.fetchEntity === "function" &&
+        typeof delegate.saveEntity === "function" &&
+        typeof delegate.deleteEntity === "function"
     );
+}
+
+/**
+ * Type guard to check if an object is a PostgresDatasourceConfig (new format)
+ */
+function isPostgresDatasourceConfig(obj: unknown): obj is PostgresDatasourceConfig {
+    if (typeof obj !== "object" || obj === null) {
+        return false;
+    }
+    const config = obj as PostgresDatasourceConfig;
+    return (
+        config.connection !== undefined &&
+        typeof config.schema === "object" &&
+        config.schema !== null &&
+        typeof config.schema.tables === "object"
+    );
+}
+
+/**
+ * Resolve a DatasourceConfig into its components
+ */
+function resolveDatasourceConfig(config: DatasourceConfig): {
+    delegate?: DataSourceDelegate;
+    db?: NodePgDatabase;
+    schema?: PostgresDatasourceConfig["schema"];
+} {
+    // If it's a DataSourceDelegate directly
+    if (isDataSourceDelegate(config)) {
+        return { delegate: config };
+    }
+
+    // If it's a PostgresDatasourceConfig
+    if (isPostgresDatasourceConfig(config)) {
+        return {
+            db: config.connection,
+            schema: config.schema
+        };
+    }
+
+    return {};
 }
 
 /**

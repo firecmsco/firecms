@@ -79,19 +79,19 @@ export function getDefaultValueFortype(type: DataType) {
  * @group Datasource
  */
 export function updateDateAutoValues<M extends Record<string, any>>({
-                                                                        inputValues,
-                                                                        properties,
-                                                                        status,
-                                                                        timestampNowValue,
-                                                                        setDateToMidnight
-                                                                    }:
-                                                                    {
-                                                                        inputValues: Partial<EntityValues<M>>,
-                                                                        properties: Properties,
-                                                                        status: EntityStatus,
-                                                                        timestampNowValue: any,
-                                                                        setDateToMidnight: (input?: any) => any | undefined
-                                                                    }): EntityValues<M> {
+    inputValues,
+    properties,
+    status,
+    timestampNowValue,
+    setDateToMidnight
+}:
+    {
+        inputValues: Partial<EntityValues<M>>,
+        properties: Properties,
+        status: EntityStatus,
+        timestampNowValue: any,
+        setDateToMidnight: (input?: any) => any | undefined
+    }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
@@ -123,10 +123,10 @@ export function updateDateAutoValues<M extends Record<string, any>>({
  * @group Datasource
  */
 export function sanitizeData<M extends Record<string, any>>
-(
-    values: EntityValues<M>,
-    properties: Properties
-) {
+    (
+        values: EntityValues<M>,
+        properties: Properties
+    ) {
     const result: any = values;
     Object.entries(properties)
         .forEach(([key, property]) => {
@@ -139,7 +139,12 @@ export function sanitizeData<M extends Record<string, any>>
 export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M>): EntityReference {
     if (typeof entity.id !== "string")
         throw new Error("Only string IDs are supported in references");
-    return new EntityReference(entity.id, entity.path, entity.databaseId);
+    return new EntityReference({
+        id: entity.id,
+        path: entity.path,
+        datasource: entity.datasource,
+        database: entity.database
+    });
 }
 
 export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>): EntityRelation {
@@ -166,8 +171,8 @@ export function traverseValuesProperties<M extends Record<string, any>>(
 }
 
 export function traverseValueProperty(inputValue: any,
-                                      property: Property,
-                                      operation: (value: any, property: Property) => any): any {
+    property: Property,
+    operation: (value: any, property: Property) => any): any {
 
     let value;
     if (property.type === "map" && property.properties) {

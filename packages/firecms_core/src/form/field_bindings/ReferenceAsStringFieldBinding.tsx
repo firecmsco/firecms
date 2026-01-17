@@ -19,25 +19,25 @@ import { cls } from "@firecms/ui";
  */
 export function ReferenceAsStringFieldBinding(props: FieldProps<StringProperty>) {
     if (typeof props.property.reference?.path !== "string") {
-        return <ReadOnlyFieldBinding {...props as FieldProps<Property>}/>;
+        return <ReadOnlyFieldBinding {...props as FieldProps<Property>} />;
     }
 
-    return <ReferenceAsStringFieldBindingInternal {...props}/>;
+    return <ReferenceAsStringFieldBindingInternal {...props} />;
 }
 
 function ReferenceAsStringFieldBindingInternal({
-                                                   propertyKey,
-                                                   value,
-                                                   setValue,
-                                                   error,
-                                                   showError,
-                                                   isSubmitting,
-                                                   disabled,
-                                                   minimalistView,
-                                                   property,
-                                                   includeDescription,
-                                                   size = "medium"
-                                               }: FieldProps<StringProperty>) {
+    propertyKey,
+    value,
+    setValue,
+    error,
+    showError,
+    isSubmitting,
+    disabled,
+    minimalistView,
+    property,
+    includeDescription,
+    size = "medium"
+}: FieldProps<StringProperty>) {
     if (!property.reference?.path) {
         throw new Error("Property path is required for ReferenceAsStringFieldBinding");
     }
@@ -56,7 +56,7 @@ function ReferenceAsStringFieldBindingInternal({
 
     const referenceValue: EntityReference | undefined = useMemo(() => {
         if (value && path) {
-            return new EntityReference(value, path);
+            return new EntityReference({ id: value, path });
         }
         return undefined;
     }, [value, path]);
@@ -70,13 +70,13 @@ function ReferenceAsStringFieldBindingInternal({
     }, [setValue]);
 
     const referenceDialogController = useEntitySelectionDialog({
-            multiselect: false,
-            path,
-            collection,
-            onSingleEntitySelected,
-            selectedEntityIds: value ? [value] : undefined,
-            forceFilter: property.reference.forceFilter
-        }
+        multiselect: false,
+        path,
+        collection,
+        onSingleEntitySelected,
+        selectedEntityIds: value ? [value] : undefined,
+        forceFilter: property.reference.forceFilter
+    }
     );
 
     const onEntryClick = (e: React.SyntheticEvent) => {
@@ -91,10 +91,10 @@ function ReferenceAsStringFieldBindingInternal({
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
                 title={property.name ?? propertyKey}
-                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />}
 
             {!collection && <ErrorView
-                error={"The specified collection does not exist. Check console"}/>}
+                error={"The specified collection does not exist. Check console"} />}
 
             {collection && <>
 
@@ -118,17 +118,17 @@ function ReferenceAsStringFieldBindingInternal({
                         onClick={onEntryClick}
                         size={"medium"}>
                         <IconForView collectionOrView={collection}
-                                     className={"text-surface-300 dark:text-surface-600"}/>
+                            className={"text-surface-300 dark:text-surface-600"} />
                         {`Edit ${property.name}`.toUpperCase()}
                     </EntityPreviewContainer>
                 </div>}
             </>}
 
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             disabled={disabled}
-                             property={property}/>
+                showError={showError}
+                error={error}
+                disabled={disabled}
+                property={property} />
 
         </>
     );

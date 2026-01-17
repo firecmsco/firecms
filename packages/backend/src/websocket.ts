@@ -48,9 +48,7 @@ export function createPostgresWebSocket(
                 } = JSON.parse(message.toString());
                 requestId = reqId; // Capture requestId for use in catch block
 
-                console.debug("🚀 [WebSocket Server] Received message from client:", clientId);
-                console.debug("🚀 [WebSocket Server] Message type:", type);
-                console.debug("🚀 [WebSocket Server] Message payload:", payload);
+                console.debug(`[WS] ${clientId} → ${type}`, requestId ? `(${requestId})` : "");
 
                 // Handle authentication first
                 if (type === "AUTHENTICATE") {
@@ -206,16 +204,13 @@ export function createPostgresWebSocket(
                         break;
 
                     case "COUNT_ENTITIES": {
-                        console.debug("🔢 [WebSocket Server] Processing COUNT_ENTITIES request");
                         const request: FetchCollectionProps = payload;
                         const count = await dataSourceDelegate.countEntities!(request);
-                        console.debug("🔢 [WebSocket Server] COUNT_ENTITIES result:", count);
                         const response = {
                             type: "COUNT_ENTITIES_SUCCESS",
                             payload: { count },
                             requestId
                         };
-                        console.debug("🔢 [WebSocket Server] Sending COUNT_ENTITIES_SUCCESS response");
                         ws.send(JSON.stringify(response));
                     }
                         break;

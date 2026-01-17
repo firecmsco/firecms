@@ -118,7 +118,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
                         includeId={stringProperty.reference.includeId}
                         includeEntityLink={stringProperty.reference.includeEntityLink}
                         size={props.size}
-                        reference={new EntityReference(value, stringProperty.reference.path)}
+                        reference={new EntityReference({ id: value, path: stringProperty.reference.path })}
                     />;
                 } else {
                     content = <EmptyValue />;
@@ -188,7 +188,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             content =
                 <MapPropertyPreview {...props}
                     value={value}
-                                    property={property as MapProperty} />;
+                    property={property as MapProperty} />;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);
         }
@@ -218,7 +218,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
 
     } else if (property.type === "relation") {
         if (!value) {
-            content = <EmptyValue/>;
+            content = <EmptyValue />;
         }
         if (typeof value === "object" && "isEntityRelation" in value && value.isEntityRelation()) {
             content = <RelationPreview

@@ -51,10 +51,10 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
  *
  */
 export function useMongoDBDelegate({
-                                       app,
-                                       cluster,
-                                       database,
-                                   }: UseMongoDataSourceProps): DataSourceDelegate {
+    app,
+    cluster,
+    database,
+}: UseMongoDataSourceProps): DataSourceDelegate {
 
     const buildQuery = useCallback((
         filter: FilterValues<any> | undefined,
@@ -91,14 +91,14 @@ export function useMongoDBDelegate({
     }, []);
 
     const fetchCollection = useCallback(async <M extends Record<string, any>>({
-                                                                                  path,
-                                                                                  collection,
-                                                                                  filter,
-                                                                                  limit,
-                                                                                  searchString,
-                                                                                  orderBy,
-                                                                                  order
-                                                                              }: FetchCollectionProps<M>
+        path,
+        collection,
+        filter,
+        limit,
+        searchString,
+        orderBy,
+        order
+    }: FetchCollectionProps<M>
     ): Promise<Entity<M>[]> => {
 
         if (!app?.currentUser)
@@ -133,10 +133,10 @@ export function useMongoDBDelegate({
     }, [app, buildQuery, cluster, database]);
 
     const fetchEntity = useCallback(async <M extends Record<string, any>>({
-                                                                              path,
-                                                                              entityId,
-                                                                              collection
-                                                                          }: FetchEntityProps<M>
+        path,
+        entityId,
+        collection
+    }: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
@@ -418,7 +418,7 @@ function convertFromMongoValue(value: unknown): any {
             return value;
         }
         if ("path" in value && "id" in value && typeof value.path === "string") {
-            return new EntityReference((value.id as any).toString(), value.path);
+            return new EntityReference({ id: (value.id as any).toString(), path: value.path });
         }
         return convertFromMongoValues(value);
     }

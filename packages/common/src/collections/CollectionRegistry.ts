@@ -123,7 +123,12 @@ export class CollectionRegistry {
     }
 
     get(path: string): EntityCollection | undefined {
-        return this.collectionsBySlug.get(path);
+        // First try slug lookup
+        const bySlug = this.collectionsBySlug.get(path);
+        if (bySlug) return bySlug;
+
+        // Fallback to dbPath lookup
+        return this.collectionsByDbPath.get(path);
     }
 
     /**

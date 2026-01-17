@@ -26,7 +26,17 @@ export interface Entity<M extends object = object> {
      */
     values: EntityValues<M>;
 
-    databaseId?: string;
+    /**
+     * Which datasource this entity belongs to (e.g., 'postgres', 'firestore').
+     * If not specified, the default datasource is assumed.
+     */
+    datasource?: string;
+
+    /**
+     * Which database within the datasource (e.g., for Firestore multi-database).
+     * If not specified, the default database of the datasource is used.
+     */
+    database?: string;
 }
 
 /**
@@ -37,7 +47,31 @@ export interface Entity<M extends object = object> {
 export type EntityValues<M extends object> = M;
 
 /**
- * Class used to create a reference to an entity in a different path
+ * Props for creating an EntityReference
+ */
+export interface EntityReferenceProps {
+    /** ID of the entity */
+    id: string;
+    /** Path of the collection (relative to the root of the database) */
+    path: string;
+    /** Which datasource (e.g., 'postgres', 'firestore'). Defaults to "(default)" */
+    datasource?: string;
+    /** Which database within the datasource. Defaults to "(default)" */
+    database?: string;
+}
+
+/**
+ * Class used to create a reference to an entity in a different path.
+ * 
+ * @example
+ * // Simple reference (most common case - single datasource, single db)
+ * new EntityReference({ id: "123", path: "users" })
+ * 
+ * // Reference to a different datasource (e.g., Firestore)
+ * new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+ * 
+ * // Reference to a specific database within a datasource
+ * new EntityReference({ id: "123", path: "orders", datasource: "postgres", database: "orders_db" })
  */
 export class EntityReference {
 
@@ -53,26 +87,57 @@ export class EntityReference {
     readonly path: string;
 
     /**
-     * Optional database ID where the entity is stored (if multiple databases are used)
+     * Which datasource (e.g., 'postgres', 'firestore').
+     * Defaults to "(default)" if not specified.
      */
-    readonly databaseId?: string;
+    readonly datasource?: string;
 
-    constructor(id: string, path: string, databaseId?: string) {
-        this.id = id;
-        this.path = path;
-        this.databaseId = databaseId;
+    /**
+     * Which database within the datasource.
+     * Defaults to "(default)" if not specified.
+     */
+    readonly database?: string;
+
+    /**
+     * Create a reference to an entity.
+     * 
+     * @example
+     * // Simple reference (most common case)
+     * new EntityReference({ id: "123", path: "users" })
+     * 
+     * // With datasource
+     * new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+     */
+    constructor(props: EntityReferenceProps) {
+        this.id = props.id;
+        this.path = props.path;
+        this.datasource = props.datasource;
+        this.database = props.database;
     }
 
     get pathWithId() {
         return `${this.path}/${this.id}`;
     }
 
-    get pathWithIdAndDatabase() {
-        if (this.databaseId) {
-            if (this.databaseId === "(default)") {
-                return this.pathWithId;
-            }
-            return `${this.databaseId}:::${this.path}/${this.id}`;
+    /**
+     * Get the full path including datasource and database prefixes if specified.
+     * For the common case (single datasource, single db), this just returns pathWithId.
+     */
+    get fullPath() {
+        const parts: string[] = [];
+
+        // Add datasource prefix if not default
+        if (this.datasource && this.datasource !== "(default)") {
+            parts.push(this.datasource);
+        }
+
+        // Add database prefix if specified
+        if (this.database && this.database !== "(default)") {
+            parts.push(this.database);
+        }
+
+        if (parts.length > 0) {
+            return `${parts.join(":")}:::${this.path}/${this.id}`;
         }
         return this.pathWithId;
     }

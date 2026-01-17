@@ -6,7 +6,7 @@ export function getParentReferencesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
-}): EntityReference [] {
+}): EntityReference[] {
 
     const {
         path,
@@ -34,7 +34,7 @@ export function getParentReferencesFromPath(props: {
             if (nextSegments.length > 0) {
                 const entityId = nextSegments[0];
                 const path = collectionPath + "/" + entityId;
-                result.push(new EntityReference(entityId, collectionPath));
+                result.push(new EntityReference({ id: entityId, path: collectionPath }));
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
                     if (!collection) {

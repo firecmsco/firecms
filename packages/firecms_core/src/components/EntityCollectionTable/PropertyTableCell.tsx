@@ -78,19 +78,19 @@ function isStorageProperty(property: Property) {
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
     function PropertyTableCell<T, M extends Record<string, any>>({
-                                                                     propertyKey,
-                                                                     customFieldValidator,
-                                                                     value,
-                                                                     property,
-                                                                     align,
-                                                                     width,
-                                                                     height,
-                                                                     path,
-                                                                     entity,
-                                                                     readonly,
-                                                                     disabled: disabledProp,
-                                                                     enablePopupIcon = true,
-                                                             sortableNodeRef,
+        propertyKey,
+        customFieldValidator,
+        value,
+        property,
+        align,
+        width,
+        height,
+        path,
+        entity,
+        readonly,
+        disabled: disabledProp,
+        enablePopupIcon = true,
+        sortableNodeRef,
         sortableStyle,
         sortableAttributes,
         isDragging,
@@ -279,7 +279,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 const stringProperty = property as StringProperty;
                 const path = stringProperty.reference?.path as string;
                 const referenceProperty = stringProperty.reference as ReferenceProperty;
-                const referenceValue = internalValue ? new EntityReference(internalValue, path) : undefined;
+                const referenceValue = internalValue ? new EntityReference({ id: internalValue, path }) : undefined;
                 innerComponent =
                     <TableReferenceField name={propertyKey as string}
                         internalValue={referenceValue}
@@ -418,26 +418,26 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     if (property.widget === "dialog") {
                         innerComponent =
                             <TableRelationField name={propertyKey as string}
-                                                internalValue={internalValue as EntityRelation}
-                                                updateValue={updateValue}
-                                                disabled={disabled}
-                                                size={size}
-                                                multiselect={false}
-                                                relation={property.relation}
-                                                previewProperties={property.previewProperties}
-                                                includeId={property.includeId}
-                                                includeEntityLink={property.includeEntityLink}
-                                                title={property.name ?? propertyKey}
-                                                forceFilter={property.forceFilter}
+                                internalValue={internalValue as EntityRelation}
+                                updateValue={updateValue}
+                                disabled={disabled}
+                                size={size}
+                                multiselect={false}
+                                relation={property.relation}
+                                previewProperties={property.previewProperties}
+                                includeId={property.includeId}
+                                includeEntityLink={property.includeEntityLink}
+                                title={property.name ?? propertyKey}
+                                forceFilter={property.forceFilter}
                             />;
                     } else {
                         innerComponent = <TableRelationSelectorField name={propertyKey as string}
-                                                                     internalValue={internalValue as EntityRelation}
-                                                                     updateValue={updateValue}
-                                                                     disabled={disabled}
-                                                                     size={"small"}
-                                                                     relation={property.relation}
-                                                                     forceFilter={property.forceFilter}/>
+                            internalValue={internalValue as EntityRelation}
+                            updateValue={updateValue}
+                            disabled={disabled}
+                            size={"small"}
+                            relation={property.relation}
+                            forceFilter={property.forceFilter} />
                     }
                     allowScroll = false;
                 }

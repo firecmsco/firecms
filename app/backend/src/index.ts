@@ -43,12 +43,10 @@ async function startServer() {
     const backend = await initializeFireCMSBackend({
         collections,
         server,
-        // New datasources format: single config maps to "(default)"
-        datasources: {
-            db,
-            tables,
-            enums,
-            relations
+        // Database configuration
+        database: {
+            connection: db,
+            schema: { tables, enums, relations }
         },
         auth: {
             jwtSecret,

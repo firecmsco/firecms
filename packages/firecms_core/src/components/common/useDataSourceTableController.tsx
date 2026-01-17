@@ -92,7 +92,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [searchString, setSearchString] = React.useState<string | undefined>();
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                sortBy?: [string, "asc" | "desc"]) => {
+        sortBy?: [string, "asc" | "desc"]) => {
         if (!dataSource.isFilterCombinationValid)
             return true;
         return dataSource.isFilterCombinationValid({
@@ -104,8 +104,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     }, []);
 
     const onScroll = ({
-                          scrollOffset
-                      }: {
+        scrollOffset
+    }: {
         scrollOffset: number
     }) => {
         if (scrollRestoration) {
@@ -411,7 +411,7 @@ function decodeString(val: string): EntityReference | EntityRelation | Date | st
                 if (typeof value === "string") {
                     if (value.startsWith("ref::")) {
                         const [path, id] = value.substring(5).split("/");
-                        return new EntityReference(id, path);
+                        return new EntityReference({ id, path });
                     }
                     if (value.startsWith("rel::")) {
                         const [path, id] = value.substring(5).split("/");
@@ -428,7 +428,7 @@ function decodeString(val: string): EntityReference | EntityRelation | Date | st
     if (typeof parsedFilterVal === "string") {
         if (parsedFilterVal.startsWith("ref::")) {
             const [path, id] = parsedFilterVal.substring(5).split("/");
-            return new EntityReference(id, path);
+            return new EntityReference({ id, path });
         }
         if (parsedFilterVal.startsWith("rel::")) {
             const [path, id] = parsedFilterVal.substring(5).split("/");

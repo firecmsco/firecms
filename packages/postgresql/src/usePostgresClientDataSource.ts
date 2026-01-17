@@ -46,7 +46,7 @@ function delegateToCMSModel(data: any): any {
             return isNaN(date.getTime()) ? null : date;
         }
         if (value && value.__type === "reference" && value.id !== undefined && value.path !== undefined) {
-            return new EntityReference(value.id, value.path);
+            return new EntityReference({ id: value.id, path: value.path });
         }
         if (value && value.__type === "relation" && value.id !== undefined && value.path !== undefined) {
             return new EntityRelation(value.id, value.path);

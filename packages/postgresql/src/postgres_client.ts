@@ -422,43 +422,51 @@ export class PostgresDataSourceClient {
     }
 
     private sendMessage(message: any): Promise<any> {
+        // If already has a requestId (re-sending from queue), use the stored promise handlers
+        if (message._queuedResolve) {
+            return this.doSendMessage(message, message._queuedResolve, message._queuedReject);
+        }
+
         if (!this.isConnected || !this.ws) {
-            this.messageQueue.push(message);
-            // Return a promise that will be resolved when the message is actually sent
-            return new Promise((queueResolve, queueReject) => {
-                message._resolve = queueResolve;
-                message._reject = queueReject;
+            // Queue the message and return a promise that will be resolved when actually sent
+            return new Promise((resolve, reject) => {
+                message._queuedResolve = resolve;
+                message._queuedReject = reject;
+                this.messageQueue.push(message);
             });
         }
 
-        return new Promise(async (resolve, reject) => {
-            // Ensure authenticated before sending non-auth messages
-            if (message.type !== "AUTHENTICATE" && this.getAuthToken && !this.isAuthenticated) {
-                try {
-                    await this.ensureAuthenticated();
-                } catch (error: any) {
-                    // Pass through the actual error message (e.g., "User is not logged in" or "Session expired")
-                    const errorMessage = error?.message || "Authentication required";
-                    reject(new ApiError(errorMessage, errorMessage));
-                    return;
-                }
-            }
-
-            const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            message.requestId = requestId;
-
-            this.pendingRequests.set(requestId, {
-                resolve,
-                reject
-            });
-
-            try {
-                this.ws!.send(JSON.stringify(message));
-            } catch (error) {
-                this.pendingRequests.delete(requestId);
-                reject(new ApiError("Failed to send message", error instanceof Error ? error.message : "Unknown error"));
-            }
+        return new Promise((resolve, reject) => {
+            this.doSendMessage(message, resolve, reject);
         });
+    }
+
+    private async doSendMessage(message: any, resolve: (value: any) => void, reject: (error: any) => void): Promise<void> {
+        // Ensure authenticated before sending non-auth messages
+        if (message.type !== "AUTHENTICATE" && this.getAuthToken && !this.isAuthenticated) {
+            try {
+                await this.ensureAuthenticated();
+            } catch (error: any) {
+                const errorMessage = error?.message || "Authentication required";
+                reject(new ApiError(errorMessage, errorMessage));
+                return;
+            }
+        }
+
+        const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        message.requestId = requestId;
+
+        this.pendingRequests.set(requestId, {
+            resolve,
+            reject
+        });
+
+        try {
+            this.ws!.send(JSON.stringify(message));
+        } catch (error) {
+            this.pendingRequests.delete(requestId);
+            reject(new ApiError("Failed to send message", error instanceof Error ? error.message : "Unknown error"));
+        }
     }
 
     // Data source methods
