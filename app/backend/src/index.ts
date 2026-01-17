@@ -43,8 +43,8 @@ async function startServer() {
     const backend = await initializeFireCMSBackend({
         collections,
         server,
-        // Database configuration
-        database: {
+        // Datasource configuration
+        datasource: {
             connection: db,
             schema: { tables, enums, relations }
         },

@@ -5,15 +5,31 @@ import { getTableName, isTable, Relations } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
 import { RealtimeService } from "./services/realtimeService";
-import { DatasourceRegistry, DefaultDatasourceRegistry, DEFAULT_DATASOURCE_ID } from "./services/datasource-registry";
+import { DatasourceRegistry, DEFAULT_DATASOURCE_ID, DefaultDatasourceRegistry } from "./services/datasource-registry";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, FireCMSApiServer } from "./api";
 import { Express } from "express";
 import { configureLogLevel } from "./utils/logging";
-import { configureJwt, configureGoogleOAuth, createAuthRoutes, createAdminRoutes, RoleService, UserService, RefreshTokenService, ensureAuthTablesExist } from "./auth";
-import { EmailConfig, EmailService, createEmailService } from "./email";
-import { StorageConfig, StorageController, createStorageController, createStorageRoutes, StorageRegistry, DefaultStorageRegistry, DEFAULT_STORAGE_ID } from "./storage";
+import {
+    configureGoogleOAuth,
+    configureJwt,
+    createAdminRoutes,
+    createAuthRoutes,
+    ensureAuthTablesExist,
+    RoleService,
+    UserService
+} from "./auth";
+import { createEmailService, EmailConfig, EmailService } from "./email";
+import {
+    createStorageController,
+    createStorageRoutes,
+    DEFAULT_STORAGE_ID,
+    DefaultStorageRegistry,
+    StorageConfig,
+    StorageController,
+    StorageRegistry
+} from "./storage";
 
 /**
  * Authentication configuration for FireCMS backend
@@ -59,15 +75,15 @@ export interface PostgresDatasourceConfig {
 
 /**
  * Configuration for a single datasource.
- * 
+ *
  * You can provide either:
  * - A `DataSourceDelegate` directly (for any database type)
  * - A `PostgresDatasourceConfig` (convenience for PostgreSQL)
- * 
+ *
  * @example
  * // PostgreSQL (using config object)
  * { connection: db, schema: { tables, enums, relations } }
- * 
+ *
  * // Any database (using delegate directly)
  * myFirestoreDelegate
  */
@@ -78,27 +94,27 @@ export interface FireCMSBackendConfig {
     server: Server;
 
     /**
-     * Database configuration. Supports two formats:
+     * Datasource configuration. Supports two formats:
      *
-     * **Single database (most common):**
+     * **Single datasource (most common):**
      * ```typescript
-     * database: {
+     * datasource: {
      *     connection: db,
      *     schema: { tables, enums, relations }
      * }
      * ```
      *
-     * **Multiple databases:**
+     * **Multiple datasources:**
      * ```typescript
-     * databases: {
+     * datasource: {
      *     "(default)": { connection: db, schema: { tables } },
      *     "analytics": { connection: analyticsDb, schema: { analyticsTables } }
      * }
      * ```
-     * 
+     *
      * **Using delegates directly (for non-PostgreSQL):**
      * ```typescript
-     * databases: {
+     * datasource: {
      *     "(default)": postgresDelegate,
      *     "firestore": firestoreDelegate
      * }
@@ -107,8 +123,7 @@ export interface FireCMSBackendConfig {
      * Collections use `datasource` property to specify which to use.
      * Collections without `datasource` use "(default)".
      */
-    database?: DatasourceConfig;
-    databases?: Record<string, DatasourceConfig>;
+    datasource: DatasourceConfig | Record<string, DatasourceConfig>;
 
     logging?: {
         level?: "error" | "warn" | "info" | "debug";
@@ -190,20 +205,16 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 
     console.log("🔥 Initializing FireCMS Backend");
 
-    // ============ Parse datasources configuration ============
+    // ============ Parse datasource configuration ============
 
     let rawDatasourceConfigs: Record<string, DatasourceConfig>;
 
-    if (config.databases) {
-        // Multiple databases
-        rawDatasourceConfigs = config.databases;
-    } else if (config.database) {
-        // Single database (most common)
-        rawDatasourceConfigs = { [DEFAULT_DATASOURCE_ID]: config.database };
+    if (isDatasourceConfig(config.datasource)) {
+        // Single datasource (most common)
+        rawDatasourceConfigs = { [DEFAULT_DATASOURCE_ID]: config.datasource };
     } else {
-        throw new Error(
-            "FireCMSBackendConfig requires `database` (single) or `databases` (multiple)."
-        );
+        // Record of datasources
+        rawDatasourceConfigs = config.datasource;
     }
 
     // ============ Initialize datasources ============
@@ -215,7 +226,11 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
         console.log(`📦 Initializing datasource: "${datasourceId}"`);
 
         // Resolve the DataSourceDelegate from the config
-        const { delegate, db, schema } = resolveDatasourceConfig(dsConfig);
+        const {
+            delegate,
+            db,
+            schema
+        } = resolveDatasourceConfig(dsConfig);
 
         if (delegate) {
             // Direct delegate - just use it
@@ -412,6 +427,15 @@ function isPostgresDatasourceConfig(obj: unknown): obj is PostgresDatasourceConf
 }
 
 /**
+ * Type guard to check if a value is a single DatasourceConfig
+ * (either a DataSourceDelegate or PostgresDatasourceConfig)
+ * vs a Record<string, DatasourceConfig>
+ */
+function isDatasourceConfig(obj: unknown): obj is DatasourceConfig {
+    return isDataSourceDelegate(obj) || isPostgresDatasourceConfig(obj);
+}
+
+/**
  * Resolve a DatasourceConfig into its components
  */
 function resolveDatasourceConfig(config: DatasourceConfig): {
@@ -446,7 +470,7 @@ function isStorageConfig(obj: unknown): obj is StorageConfig {
     const config = obj as StorageConfig;
     // A StorageConfig has a `type` property that is 'local' or 's3'
     return (
-        config.type === 'local' || config.type === 's3'
+        config.type === "local" || config.type === "s3"
     );
 }
 
