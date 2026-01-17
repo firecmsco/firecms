@@ -1,4 +1,4 @@
-import { prettifyIdentifier } from "./strings";
+import { prettifyIdentifier } from "../src/util/strings";
 
 describe("prettifyIdentifier", () => {
     it("should return empty string for empty input", () => {

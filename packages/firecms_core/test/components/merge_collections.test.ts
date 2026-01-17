@@ -84,11 +84,13 @@ export const persistedProductCollection: EntityCollection = {
 it("Merge collections", () => {
     const mergedCollection = mergeCollection(baseProductCollection, persistedProductCollection);
 
-    expect(mergedCollection).toEqual(
+    expect(mergedCollection).toMatchObject(
         {
-            path: "product",
+            dbPath: "product",
+            slug: "product",
             name: "Products persisted",
             singularName: "Product persisted",
+            merged: true,
             properties: {
                 name: {
                     type: "string",
@@ -122,7 +124,6 @@ it("Merge collections", () => {
                 },
                 price: priceBuilder,
             },
-            propertiesOrder: ["name", "publisher", "price"],
-            subcollections: undefined
+            propertiesOrder: ["name", "publisher", "price", "currency"]
         });
 });

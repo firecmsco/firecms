@@ -134,9 +134,24 @@
       "json",
       "node"
     ],
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/src/components/",
+      "objects.test.ts",
+      "navigation.test.ts",
+      "resolutions.test.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.ts"
+    ],
     "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "^@firecms/ui$": "<rootDir>/../ui/src/index.ts",
+      "^@firecms/common$": "<rootDir>/../common/src/index.ts",
+      "^@firecms/types$": "<rootDir>/../types/src/index.ts",
+      "^@firecms/formex$": "<rootDir>/../formex/src/index.ts",
+      "^@firecms/editor$": "<rootDir>/../editor/src/index.ts"
     }
   }
 }

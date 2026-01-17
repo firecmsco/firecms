@@ -224,19 +224,18 @@ describe("EntityService", () => {
 
     describe("fetchCollectionFromPath", () => {
         it("should fetch related entities from a nested path", async () => {
-            const mockRelatedPosts = [{
-                posts: {
-                    id: 1,
-                    title: "Post by John"
-                }
-            }, {
-                posts: {
-                    id: 2,
-                    title: "Another Post by John"
-                }
-            }];
-            // The chain ends with orderBy, so we mock its resolved value for this specific test.
-            db.orderBy.mockResolvedValue(mockRelatedPosts);
+            const mockRelatedPosts = [
+                { id: 1, title: "Post by John", author_id: 1 },
+                { id: 2, title: "Another Post by John", author_id: 1 }
+            ];
+            // RelationService.fetchEntitiesUsingJoins ends query chain with where(), not orderBy()
+            // Make where() awaitable by returning a promise-like object
+            db.where.mockReturnValue({
+                then: (resolve: Function) => resolve(mockRelatedPosts),
+                limit: jest.fn().mockReturnValue({
+                    then: (resolve: Function) => resolve(mockRelatedPosts)
+                })
+            });
 
             const entities = await entityService.fetchCollection("authors/1/posts", {});
 
@@ -633,10 +632,17 @@ describe("EntityService - Comprehensive Tests", () => {
     describe("Nested Path Relations", () => {
         it("should handle deep nested paths", async () => {
             const mockTasks = [
-                { tasks: { id: 1, title: "Task 1" } },
-                { tasks: { id: 2, title: "Task 2" } }
+                { id: 1, title: "Task 1", project_id: 1 },
+                { id: 2, title: "Task 2", project_id: 1 }
             ];
-            db.orderBy.mockResolvedValue(mockTasks);
+            // RelationService.fetchEntitiesUsingJoins ends query chain with where(), not orderBy()
+            // Make where() awaitable by returning a promise-like object
+            db.where.mockReturnValue({
+                then: (resolve: Function) => resolve(mockTasks),
+                limit: jest.fn().mockReturnValue({
+                    then: (resolve: Function) => resolve(mockTasks)
+                })
+            });
 
             const entities = await entityService.fetchCollection("users/1/companies/1/projects/1/tasks", {});
 
@@ -646,10 +652,16 @@ describe("EntityService - Comprehensive Tests", () => {
 
         it("should handle self-referencing relations", async () => {
             const mockCategories = [
-                { categories: { id: 2, name: "Subcategory 1" } },
-                { categories: { id: 3, name: "Subcategory 2" } }
+                { id: 2, name: "Subcategory 1", parent_id: 1 },
+                { id: 3, name: "Subcategory 2", parent_id: 1 }
             ];
-            db.orderBy.mockResolvedValue(mockCategories);
+            // RelationService.fetchEntitiesUsingJoins ends query chain with where(), not orderBy()
+            db.where.mockReturnValue({
+                then: (resolve: Function) => resolve(mockCategories),
+                limit: jest.fn().mockReturnValue({
+                    then: (resolve: Function) => resolve(mockCategories)
+                })
+            });
 
             const entities = await entityService.fetchCollection("categories/1/children", {});
 
