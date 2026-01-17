@@ -42,11 +42,14 @@ async function startServer() {
     // Initialize FireCMS Backend with auth (now async)
     const backend = await initializeFireCMSBackend({
         collections,
-        tables,
-        enums,
-        relations,
-        db,
         server,
+        // New datasources format: single config maps to "(default)"
+        datasources: {
+            db,
+            tables,
+            enums,
+            relations
+        },
         auth: {
             jwtSecret,
             accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",

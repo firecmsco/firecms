@@ -28,10 +28,10 @@ import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 
 export function QueryTableResults({
-                                      querySnapshot,
-                                      priorityKeys,
-                                      collections
-                                  }: {
+    querySnapshot,
+    priorityKeys,
+    collections
+}: {
     querySnapshot: QuerySnapshot,
     priorityKeys?: string[],
     collections?: EntityCollection[]
@@ -89,11 +89,11 @@ export function QueryTableResults({
 
     const resolvedCollection = useMemo(() => {
         return collection && path ? resolveCollection<any>({
-                collection,
-                path: path,
-                propertyConfigs: customizationController.propertyConfigs,
-                authController
-            })
+            collection,
+            path: path,
+            propertyConfigs: customizationController.propertyConfigs,
+            authController
+        })
             : undefined;
     }, [collection, path]);
 
@@ -105,18 +105,18 @@ export function QueryTableResults({
         }));
 
     const onValueChange: OnCellValueChange<any, any> = ({
-                                                            value,
-                                                            propertyKey,
-                                                            onValueUpdated,
-                                                            setError,
-                                                            data: entity
-                                                        }) => {
+        value,
+        propertyKey,
+        onValueUpdated,
+        setError,
+        data: entity
+    }) => {
 
         const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
         const firestore = getFirestore();
         const firebaseValues = cmsToFirestoreModel(updatedValues, firestore);
-        const documentReference: DocumentReference = doc(firestore, entity.slug);
+        const documentReference: DocumentReference = doc(firestore, entity.path);
         return setDoc(documentReference, firebaseValues, { merge: true })
             .then((res) => {
                 onValueUpdated();
@@ -131,9 +131,9 @@ export function QueryTableResults({
     if (!queryResults || !properties) return null;
 
     const getActionsForEntity = ({
-                                     entity,
-                                     customEntityActions
-                                 }: {
+        entity,
+        customEntityActions
+    }: {
         entity?: Entity<any>,
         customEntityActions?: EntityAction[]
     }): EntityAction[] => {
@@ -146,11 +146,11 @@ export function QueryTableResults({
     };
 
     const tableRowActionsBuilder = ({
-                                        entity,
-                                        size,
-                                        width,
-                                        frozen
-                                    }: {
+        entity,
+        size,
+        width,
+        frozen
+    }: {
         entity: Entity<any>,
         size: CollectionSize,
         width: number,
@@ -208,5 +208,5 @@ export function QueryTableResults({
             noMoreToLoad: true
         }}
         displayedColumnIds={displayedColumnIds}
-        properties={properties}/>;
+        properties={properties} />;
 }

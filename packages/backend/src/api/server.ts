@@ -3,7 +3,7 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { PostgresDataSourceDelegate } from "../services/dataSourceDelegate";
+import { DataSourceDelegate } from "@firecms/types";
 import { ApiConfig } from "./types";
 
 /**
@@ -14,9 +14,9 @@ export class FireCMSApiServer {
     private app: Express;
     private router: Router;
     private config: ApiConfig;
-    private dataSource: PostgresDataSourceDelegate;
+    private dataSource: DataSourceDelegate;
 
-    constructor(config: ApiConfig & { dataSource: PostgresDataSourceDelegate }) {
+    constructor(config: ApiConfig & { dataSource: DataSourceDelegate }) {
         this.config = {
             basePath: "/api",
             enableGraphQL: true,

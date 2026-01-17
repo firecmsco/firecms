@@ -1,18 +1,17 @@
 import { Router, Request, Response } from "express";
-import { EntityCollection } from "@firecms/types";
-import { PostgresDataSourceDelegate } from "../../services/dataSourceDelegate";
+import { DataSourceDelegate, EntityCollection } from "@firecms/types";
 import { ApiResponse, QueryOptions } from "../types";
 
 /**
  * Lightweight REST API generator that leverages existing FireCMS DataSourceDelegate
- * No duplication - uses your existing PostgresDataSourceDelegate and EntityService
+ * No duplication - uses your existing DataSourceDelegate implementation
  */
 export class RestApiGenerator {
     private collections: EntityCollection[];
     private router: Router;
-    private dataSource: PostgresDataSourceDelegate;
+    private dataSource: DataSourceDelegate;
 
-    constructor(collections: EntityCollection[], dataSource: PostgresDataSourceDelegate) {
+    constructor(collections: EntityCollection[], dataSource: DataSourceDelegate) {
         this.collections = collections;
         this.dataSource = dataSource;
         this.router = Router();
@@ -83,10 +82,12 @@ export class RestApiGenerator {
         // POST /collection - Create entity (uses existing saveEntity)
         this.router.post(basePath, async (req: Request, res: Response): Promise<void> => {
             try {
+                const path = collection.dbPath || collection.slug;
+                const entityId = this.dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
                 // Use existing saveEntity from DataSourceDelegate
                 const entity = await this.dataSource.saveEntity({
-                    path: collection.dbPath || collection.slug,
-                    entityId: this.dataSource.generateEntityId(collection.dbPath || collection.slug, collection),
+                    path,
+                    entityId,
                     values: req.body,
                     collection,
                     status: "new"

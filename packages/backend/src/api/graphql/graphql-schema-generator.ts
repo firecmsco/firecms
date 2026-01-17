@@ -10,20 +10,19 @@ import {
     GraphQLFieldConfig,
     GraphQLInputObjectType,
 } from "graphql";
-import { EntityCollection, Property } from "@firecms/types";
-import { PostgresDataSourceDelegate } from "../../services/dataSourceDelegate";
+import { DataSourceDelegate, EntityCollection, Property } from "@firecms/types";
 
 /**
- * Lightweight GraphQL schema generator that leverages existing PostgresDataSourceDelegate
+ * Lightweight GraphQL schema generator that leverages existing DataSourceDelegate
  * No duplication - uses your existing data layer and services
  */
 export class GraphQLSchemaGenerator {
     private collections: EntityCollection[];
-    private dataSource: PostgresDataSourceDelegate;
+    private dataSource: DataSourceDelegate;
     private typeRegistry = new Map<string, GraphQLObjectType>();
     private inputTypeRegistry = new Map<string, GraphQLInputObjectType>();
 
-    constructor(collections: EntityCollection[], dataSource: PostgresDataSourceDelegate) {
+    constructor(collections: EntityCollection[], dataSource: DataSourceDelegate) {
         this.collections = collections;
         this.dataSource = dataSource;
     }
@@ -232,9 +231,11 @@ export class GraphQLSchemaGenerator {
                     input: { type: new GraphQLNonNull(inputType) }
                 },
                 resolve: async (_, args) => {
+                    const path = collection.dbPath || collection.slug;
+                    const entityId = this.dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
                     const entity = await this.dataSource.saveEntity({
-                        path: collection.dbPath || collection.slug,
-                        entityId: this.dataSource.generateEntityId(collection.dbPath || collection.slug, collection),
+                        path,
+                        entityId,
                         values: args.input,
                         collection,
                         status: "new"

@@ -16,6 +16,7 @@ export * from "./websocket";
 // Services
 export * from "./services/dataSourceDelegate";
 export * from "./services/realtimeService";
+export * from "./services/datasource-registry";
 
 // Collections
 export * from "./collections/registry";

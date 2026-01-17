@@ -11,6 +11,7 @@ export { LocalStorageController } from './LocalStorageController';
 export { S3StorageController } from './S3StorageController';
 export { createStorageRoutes } from './routes';
 export type { StorageRoutesConfig } from './routes';
+export * from './storage-registry';
 
 import { StorageConfig, StorageController } from './types';
 import { LocalStorageController } from './LocalStorageController';
