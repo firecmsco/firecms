@@ -26,7 +26,13 @@ import {
     useBackendUserManagement,
     createUserManagementAdminViews
 } from "@firecms/auth";
+import {
+    useFirestoreDelegate,
+    useInitialiseFirebase
+} from "@firecms/firebase";
 import { collections } from "shared";
+import { firestoreCollections } from "./collections";
+import { firebaseConfig } from "./firebase_config";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -68,6 +74,17 @@ export function App() {
         [userManagement, authController.getAuthToken]
     );
 
+    // Initialize Firebase for Firestore
+    const { firebaseApp, firebaseConfigLoading } = useInitialiseFirebase({
+        firebaseConfig
+    });
+
+    // Firestore delegate for Firestore collections
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp,
+        localTextSearchEnabled: true
+    });
+
     // PostgreSQL delegate with WebSocket connection - pass auth token getter
     // Only create with getAuthToken once auth is ready to prevent premature connections
     const postgresDelegate = usePostgresClientDataSource({
@@ -93,9 +110,22 @@ export function App() {
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
 
+    // Build collections from both PostgreSQL and Firestore sources
     const collectionsBuilder = useCallback(() => {
-        return [...collections];
-    }, []);
+        // PostgreSQL collections (default datasource)
+        const postgresCollections = [...collections];
+
+        // Firestore collections with datasource override
+        const firestoreCollectionsWithOverride = firestoreCollections.map(c => ({
+            ...c,
+            overrides: { dataSourceDelegate: firestoreDelegate }
+        }));
+
+        return [
+            ...postgresCollections,
+            ...firestoreCollectionsWithOverride
+        ];
+    }, [firestoreDelegate]);
 
     const navigationController = useBuildNavigationController({
         plugins: [dataEnhancementPlugin],
@@ -117,7 +147,7 @@ export function App() {
                 >
                     {({ loading }) => {
                         // Show loading while initializing
-                        if (loading || authController.initialLoading) {
+                        if (loading || authController.initialLoading || firebaseConfigLoading) {
                             return <CircularProgressCenter size={"large"} />;
                         }
 
