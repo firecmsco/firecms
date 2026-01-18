@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Entity,
     EntityCollection,
@@ -110,24 +110,43 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return { enumColumns: cols, columnLabels: labels };
     }, [resolvedCollection, columnProperty]);
 
-    // Determine columns order - use collection.kanban.columnsOrder if available, otherwise enum order
+    // Track if user has manually reordered columns in this session
+    const [hasUserReordered, setHasUserReordered] = useState(false);
+
+    // Determine columns order - use local state if user reordered, otherwise collection config
     const [localColumnsOrder, setLocalColumnsOrder] = useState<string[]>(() => {
         // Start with collection config, fallback to enum order
-        return collection.kanban?.columnsOrder?.filter(c => enumColumns.includes(c)) ?? enumColumns;
-    });
-
-    // Sync local columns order when collection config or enum columns change
-    const columns = useMemo(() => {
         const configOrder = collection.kanban?.columnsOrder;
         if (configOrder && configOrder.length > 0) {
-            // Filter to only include valid columns from enum
             const validConfigOrder = configOrder.filter(c => enumColumns.includes(c));
-            // Add any missing columns from enum at the end
             const missingColumns = enumColumns.filter(c => !validConfigOrder.includes(c));
             return [...validConfigOrder, ...missingColumns];
         }
-        return localColumnsOrder.length > 0 ? localColumnsOrder : enumColumns;
-    }, [collection.kanban?.columnsOrder, enumColumns, localColumnsOrder]);
+        return enumColumns;
+    });
+
+    // Update local columns order when enumColumns change (e.g., new enum values added)
+    useEffect(() => {
+        if (!hasUserReordered) {
+            const configOrder = collection.kanban?.columnsOrder;
+            if (configOrder && configOrder.length > 0) {
+                const validConfigOrder = configOrder.filter(c => enumColumns.includes(c));
+                const missingColumns = enumColumns.filter(c => !validConfigOrder.includes(c));
+                setLocalColumnsOrder([...validConfigOrder, ...missingColumns]);
+            } else {
+                setLocalColumnsOrder(enumColumns);
+            }
+        } else {
+            // User has reordered, just add any missing columns
+            const missingColumns = enumColumns.filter(c => !localColumnsOrder.includes(c));
+            if (missingColumns.length > 0) {
+                setLocalColumnsOrder(prev => [...prev, ...missingColumns]);
+            }
+        }
+    }, [enumColumns, collection.kanban?.columnsOrder, hasUserReordered]);
+
+    // Use localColumnsOrder directly - it's the source of truth
+    const columns = localColumnsOrder;
 
     // Check if any plugin provides onKanbanColumnsReorder (enables column reordering)
     const allowColumnReorder = useMemo(() => {
@@ -136,7 +155,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     // Handle column reorder
     const handleColumnReorder = useCallback((newColumns: string[]) => {
-        // Update local state first for immediate UI feedback
+        // Mark that user has reordered, so we don't override with props
+        setHasUserReordered(true);
+        // Update local state for immediate UI feedback
         setLocalColumnsOrder(newColumns);
 
         // Call each plugin's onKanbanColumnsReorder callback
