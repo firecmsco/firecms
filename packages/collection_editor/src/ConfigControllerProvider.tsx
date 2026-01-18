@@ -93,6 +93,8 @@ export const ConfigControllerProvider = React.memo(
             redirect: boolean,
             existingEntities?: Entity<any>[],
             pathSuggestions?: string[];
+            initialView?: "details" | "properties";
+            expandKanban?: boolean;
         }>();
 
         const [currentPropertyDialog, setCurrentPropertyDialog] = React.useState<{
@@ -119,13 +121,17 @@ export const ConfigControllerProvider = React.memo(
                                     fullPath,
                                     parentCollectionIds,
                                     parentCollection,
-                                    existingEntities
+                                    existingEntities,
+                                    initialView,
+                                    expandKanban
                                 }: {
             id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[],
+            initialView?: "details" | "properties",
+            expandKanban?: boolean
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
             onAnalyticsEvent?.("edit_collection", {
@@ -140,7 +146,9 @@ export const ConfigControllerProvider = React.memo(
                 parentCollection,
                 redirect: false,
                 existingEntities,
-                pathSuggestions
+                pathSuggestions,
+                initialView,
+                expandKanban
             });
         };
 

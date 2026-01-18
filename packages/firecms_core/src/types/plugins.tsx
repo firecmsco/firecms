@@ -190,6 +190,16 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             kanbanColumnProperty: string;
             newColumnsOrder: string[];
         }) => void;
+
+        /**
+         * Component to render when Kanban view is missing configuration.
+         * Used to provide a CTA to open the collection editor to configure Kanban.
+         */
+        KanbanSetupComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+        }>;
     }
 
     form?: {

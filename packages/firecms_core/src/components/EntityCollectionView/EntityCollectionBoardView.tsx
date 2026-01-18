@@ -10,7 +10,7 @@ import {
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";
-import { Typography } from "@firecms/ui";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
 import {
     getPropertyInPath,
     resolveCollection,
@@ -23,18 +23,8 @@ import { setIn } from "@firecms/formex";
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;
     tableController: EntityTableController<M>;
-    /**
-     * Full path to the collection (for plugin callbacks)
-     */
     fullPath: string;
-    /**
-     * Parent collection IDs (for plugin callbacks)
-     */
     parentCollectionIds?: string[];
-    /**
-     * The property key to use for Kanban board columns.
-     * Must be a string property with enumValues defined.
-     */
     columnProperty: string;
     onEntityClick?: (entity: Entity<M>) => void;
     selectionController?: SelectionController<M>;
@@ -45,7 +35,6 @@ export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> 
 
 /**
  * Kanban board view for displaying entities grouped by a string enum property.
- * Entities can be dragged between columns to update the property value.
  */
 export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     collection,
@@ -65,17 +54,15 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const dataSource = useDataSource(collection);
     const plugins = customizationController.plugins ?? [];
 
-    const {
-        data,
-        dataLoading,
-        noMoreToLoad,
-        dataLoadingError
-    } = tableController;
+    const { data, dataLoading, dataLoadingError } = tableController;
 
-    // Get itemsPerColumn from collection.kanban config
     const itemsPerColumn = collection.kanban?.itemsPerColumn ?? 50;
+    const orderProperty = collection.kanban?.orderProperty;
 
-    // Resolve collection to get the property with enumValues
+    // State for backfill dialog
+    const [showBackfillDialog, setShowBackfillDialog] = useState(false);
+    const [backfillLoading, setBackfillLoading] = useState(false);
+
     const resolvedCollection = useMemo(() => resolveCollection({
         collection,
         path: collection.path,
@@ -86,36 +73,28 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Get columns from the property's enumValues
     const { enumColumns, columnLabels } = useMemo(() => {
         const property = getPropertyInPath(resolvedCollection.properties, columnProperty);
-        // Check if property exists and is a string property with enumValues
         if (!property || !('dataType' in property) || property.dataType !== "string") {
             return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
         }
-
         const stringProperty = property as ResolvedStringProperty;
         if (!stringProperty.enumValues) {
             return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
         }
-
         const enumValues = resolveEnumValues(stringProperty.enumValues);
         if (!enumValues) {
             return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
         }
-
         const cols = enumValues.map((ev: EnumValueConfig) => String(ev.id));
         const labels = enumValues.reduce((acc: Record<string, string>, ev: EnumValueConfig) => {
             acc[String(ev.id)] = ev.label;
             return acc;
         }, {});
-
         return { enumColumns: cols, columnLabels: labels };
     }, [resolvedCollection, columnProperty]);
 
     // Track if user has manually reordered columns in this session
     const [hasUserReordered, setHasUserReordered] = useState(false);
-
-    // Determine columns order - use local state if user reordered, otherwise collection config
     const [localColumnsOrder, setLocalColumnsOrder] = useState<string[]>(() => {
-        // Start with collection config, fallback to enum order
         const configOrder = collection.kanban?.columnsOrder;
         if (configOrder && configOrder.length > 0) {
             const validConfigOrder = configOrder.filter(c => enumColumns.includes(c));
@@ -125,7 +104,6 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return enumColumns;
     });
 
-    // Update local columns order when enumColumns change (e.g., new enum values added)
     useEffect(() => {
         if (!hasUserReordered) {
             const configOrder = collection.kanban?.columnsOrder;
@@ -137,7 +115,6 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 setLocalColumnsOrder(enumColumns);
             }
         } else {
-            // User has reordered, just add any missing columns
             const missingColumns = enumColumns.filter(c => !localColumnsOrder.includes(c));
             if (missingColumns.length > 0) {
                 setLocalColumnsOrder(prev => [...prev, ...missingColumns]);
@@ -145,22 +122,15 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         }
     }, [enumColumns, collection.kanban?.columnsOrder, hasUserReordered]);
 
-    // Use localColumnsOrder directly - it's the source of truth
     const columns = localColumnsOrder;
 
-    // Check if any plugin provides onKanbanColumnsReorder (enables column reordering)
     const allowColumnReorder = useMemo(() => {
         return plugins.some(plugin => plugin.collectionView?.onKanbanColumnsReorder);
     }, [plugins]);
 
-    // Handle column reorder
     const handleColumnReorder = useCallback((newColumns: string[]) => {
-        // Mark that user has reordered, so we don't override with props
         setHasUserReordered(true);
-        // Update local state for immediate UI feedback
         setLocalColumnsOrder(newColumns);
-
-        // Call each plugin's onKanbanColumnsReorder callback
         plugins
             .filter(plugin => plugin.collectionView?.onKanbanColumnsReorder)
             .forEach(plugin => {
@@ -174,33 +144,47 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             });
     }, [plugins, fullPath, parentCollectionIds, collection, columnProperty]);
 
-    // Convert entities to board items and limit per column
+    // Check if items need backfill (have no orderProperty values)
+    const itemsNeedBackfill = useMemo(() => {
+        if (!orderProperty || dataLoading) return false;
+        // Check if any items have undefined/null order values
+        return data.some(entity => {
+            const orderValue = entity.values?.[orderProperty];
+            return orderValue === undefined || orderValue === null;
+        });
+    }, [data, orderProperty, dataLoading]);
+
+    // Convert entities to board items, sorted by orderProperty
     const boardItems: BoardItem<M>[] = useMemo(() => {
-        return data.map(entity => ({
+        const items = data.map(entity => ({
             id: entity.id,
             entity
         }));
-    }, [data]);
+
+        // Sort by orderProperty if configured
+        if (orderProperty) {
+            items.sort((a, b) => {
+                const orderA = a.entity.values?.[orderProperty] ?? Infinity;
+                const orderB = b.entity.values?.[orderProperty] ?? Infinity;
+                return orderA - orderB;
+            });
+        }
+
+        return items;
+    }, [data, orderProperty]);
 
     // Group items by column for pagination tracking
     const itemsByColumn = useMemo(() => {
         const grouped: Record<string, BoardItem<M>[]> = {};
-        columns.forEach(col => {
-            grouped[col] = [];
-        });
-
+        columns.forEach(col => { grouped[col] = []; });
         boardItems.forEach(item => {
             const value = item.entity.values?.[columnProperty];
             const col = value && columns.includes(String(value)) ? String(value) : columns[0];
-            if (grouped[col]) {
-                grouped[col].push(item);
-            }
+            if (grouped[col]) grouped[col].push(item);
         });
-
         return grouped;
     }, [boardItems, columns, columnProperty]);
 
-    // Create column loading state (limited to itemsPerColumn)
     const columnLoadingState: ColumnLoadingState = useMemo(() => {
         const state: ColumnLoadingState = {};
         columns.forEach(col => {
@@ -214,83 +198,183 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return state;
     }, [columns, itemsByColumn, dataLoading, itemsPerColumn]);
 
-    // Items limited to itemsPerColumn per column
     const limitedBoardItems = useMemo(() => {
         const limited: BoardItem<M>[] = [];
         const columnCounts: Record<string, number> = {};
-
         boardItems.forEach(item => {
             const value = item.entity.values?.[columnProperty];
             const col = value && columns.includes(String(value)) ? String(value) : columns[0];
-
             if (!columnCounts[col]) columnCounts[col] = 0;
-
             if (columnCounts[col] < itemsPerColumn) {
                 limited.push(item);
                 columnCounts[col]++;
             }
         });
-
         return limited;
     }, [boardItems, columns, columnProperty, itemsPerColumn]);
 
-    // Assign items to columns based on their property value
     const assignColumn = useCallback((item: BoardItem<M>): string => {
         const value = item.entity.values?.[columnProperty];
-        // If value is not in columns, assign to first column
-        if (value && columns.includes(String(value))) {
-            return String(value);
-        }
+        if (value && columns.includes(String(value))) return String(value);
         return columns[0] || "";
     }, [columnProperty, columns]);
+
+    // Calculate new order value using fractional indexing
+    const calculateNewOrder = useCallback((
+        items: BoardItem<M>[],
+        movedItemId: string,
+        targetColumn: string
+    ): number => {
+        // Get items in target column (sorted by order)
+        const columnItems = items
+            .filter(item => {
+                const col = item.entity.values?.[columnProperty];
+                return col === targetColumn || (item.id === movedItemId);
+            })
+            .filter(item => item.id !== movedItemId)
+            .sort((a, b) => {
+                const orderA = a.entity.values?.[orderProperty!] ?? 0;
+                const orderB = b.entity.values?.[orderProperty!] ?? 0;
+                return orderA - orderB;
+            });
+
+        // Find the moved item's new position in the column
+        const movedItemIndex = items.findIndex(item => item.id === movedItemId);
+        const movedItem = items[movedItemIndex];
+
+        if (!movedItem) return 0;
+
+        // Find items before and after in the target column
+        let prevOrder: number | null = null;
+        let nextOrder: number | null = null;
+
+        // Simple approach: find the item at the new position
+        const newColumnItems = items.filter(item => {
+            if (item.id === movedItemId) return true;
+            const col = item.entity.values?.[columnProperty];
+            return col === targetColumn;
+        });
+
+        const newIndex = newColumnItems.findIndex(item => item.id === movedItemId);
+
+        if (newIndex > 0) {
+            const prevItem = newColumnItems[newIndex - 1];
+            prevOrder = prevItem?.entity.values?.[orderProperty!] ?? null;
+        }
+        if (newIndex < newColumnItems.length - 1) {
+            const nextItem = newColumnItems[newIndex + 1];
+            nextOrder = nextItem?.entity.values?.[orderProperty!] ?? null;
+        }
+
+        // Calculate new order using fractional indexing
+        if (prevOrder !== null && nextOrder !== null) {
+            return (prevOrder + nextOrder) / 2;
+        } else if (prevOrder !== null) {
+            return prevOrder + 1;
+        } else if (nextOrder !== null) {
+            return nextOrder - 1;
+        }
+        return 0;
+    }, [columnProperty, orderProperty]);
 
     // Handle item reorder and column changes
     const handleItemsReorder = useCallback(async (
         items: BoardItem<M>[],
-        moveInfo?: {
-            itemId: string;
-            sourceColumn: string;
-            targetColumn: string;
-        }
+        moveInfo?: { itemId: string; sourceColumn: string; targetColumn: string; }
     ) => {
-        if (moveInfo) {
-            // An item was moved between columns - update the entity
-            const entity = items.find(item => item.id === moveInfo.itemId)?.entity;
-            if (entity) {
-                const updatedValues = setIn({ ...entity.values }, columnProperty, moveInfo.targetColumn);
+        if (!orderProperty) return;
 
-                const saveProps: SaveEntityProps = {
-                    path: entity.path,
-                    entityId: entity.id,
-                    values: updatedValues as M,
-                    previousValues: entity.values,
-                    collection,
-                    status: "existing"
-                };
+        const entity = items.find(item => item.id === moveInfo?.itemId)?.entity;
+        if (!entity) return;
 
-                try {
-                    await saveEntityWithCallbacks({
-                        ...saveProps,
-                        collection,
-                        dataSource,
-                        context,
-                        onSaveSuccess: () => {
-                            // Entity saved successfully
-                        },
-                        onSaveFailure: (e: Error) => {
-                            console.error("Failed to save entity after column change:", e);
-                        },
-                        onPreSaveHookError: (e: Error) => {
-                            console.error("Pre-save hook error:", e);
-                        }
-                    });
-                } catch (e) {
-                    console.error("Error saving entity:", e);
-                }
-            }
+        // Calculate new order value
+        const newOrder = calculateNewOrder(items, moveInfo?.itemId ?? "", moveInfo?.targetColumn ?? "");
+
+        // Build updated values
+        let updatedValues = { ...entity.values };
+        updatedValues = setIn(updatedValues, orderProperty, newOrder);
+
+        // Also update column if it changed
+        if (moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn) {
+            updatedValues = setIn(updatedValues, columnProperty, moveInfo.targetColumn);
         }
-        // Note: We don't persist item order within columns currently
-    }, [collection, columnProperty, context, dataSource]);
+
+        const saveProps: SaveEntityProps = {
+            path: entity.path,
+            entityId: entity.id,
+            values: updatedValues as M,
+            previousValues: entity.values,
+            collection,
+            status: "existing"
+        };
+
+        try {
+            await saveEntityWithCallbacks({
+                ...saveProps,
+                collection,
+                dataSource,
+                context,
+                onSaveSuccess: () => { },
+                onSaveFailure: (e: Error) => console.error("Failed to save entity after reorder:", e),
+                onPreSaveHookError: (e: Error) => console.error("Pre-save hook error:", e)
+            });
+        } catch (e) {
+            console.error("Error saving entity:", e);
+        }
+    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder]);
+
+    // Backfill order values for all entities
+    const handleBackfill = useCallback(async () => {
+        if (!orderProperty) return;
+        setBackfillLoading(true);
+
+        try {
+            // Group entities by column and assign sequential order values
+            const updates: Promise<void>[] = [];
+
+            columns.forEach(col => {
+                const columnEntities = data.filter(entity => {
+                    const value = entity.values?.[columnProperty];
+                    return String(value) === col;
+                });
+
+                columnEntities.forEach((entity, index) => {
+                    const currentOrder = entity.values?.[orderProperty];
+                    if (currentOrder === undefined || currentOrder === null) {
+                        const updatedValues = setIn({ ...entity.values }, orderProperty, index);
+
+                        const saveProps: SaveEntityProps = {
+                            path: entity.path,
+                            entityId: entity.id,
+                            values: updatedValues as M,
+                            previousValues: entity.values,
+                            collection,
+                            status: "existing"
+                        };
+
+                        updates.push(
+                            saveEntityWithCallbacks({
+                                ...saveProps,
+                                collection,
+                                dataSource,
+                                context,
+                                onSaveSuccess: () => { },
+                                onSaveFailure: (e) => console.error("Backfill save failed:", e),
+                                onPreSaveHookError: (e) => console.error("Backfill pre-save error:", e)
+                            }).then(() => { })
+                        );
+                    }
+                });
+            });
+
+            await Promise.all(updates);
+            setShowBackfillDialog(false);
+        } catch (e) {
+            console.error("Backfill error:", e);
+        } finally {
+            setBackfillLoading(false);
+        }
+    }, [data, columns, columnProperty, orderProperty, collection, dataSource, context]);
 
     const handleEntityClick = useCallback((entity: Entity<M>) => {
         onEntityClick?.(entity);
@@ -304,7 +388,6 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return selectionController?.isEntitySelected(entity) ?? false;
     }, [selectionController]);
 
-    // Create the ItemComponent with collection context
     const ItemComponent = useCallback((props: BoardItemViewProps<M>) => {
         return (
             <EntityBoardCard
@@ -318,31 +401,60 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         );
     }, [collection, handleEntityClick, isEntitySelected, handleSelectionChange, selectionEnabled]);
 
-    // Show empty state
-    if (!dataLoading && data.length === 0 && !dataLoadingError) {
+    // Get KanbanSetupComponent from plugins
+    const KanbanSetupComponent = useMemo(() => {
+        for (const plugin of plugins) {
+            if (plugin.collectionView?.KanbanSetupComponent) {
+                return plugin.collectionView.KanbanSetupComponent;
+            }
+        }
+        return null;
+    }, [plugins]);
+
+    // Error: orderProperty not configured
+    if (!orderProperty) {
         return (
-            <div className="flex-1 flex items-center justify-center p-8">
-                {emptyComponent ?? (
-                    <Typography variant="label" color="secondary">
-                        No entries found
-                    </Typography>
+            <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
+                <Typography variant="h6">
+                    Kanban view requires an order property
+                </Typography>
+                <Typography variant="body2" color="secondary" className="text-center max-w-md">
+                    Please configure the <code className="bg-surface-200 dark:bg-surface-700 px-1 rounded">orderProperty</code> in
+                    your collection's <code className="bg-surface-200 dark:bg-surface-700 px-1 rounded">kanban</code> config.
+                    This should be a numeric property used to persist the order of items within columns.
+                </Typography>
+                {KanbanSetupComponent && (
+                    <KanbanSetupComponent
+                        collection={collection}
+                        fullPath={fullPath}
+                        parentCollectionIds={parentCollectionIds}
+                    />
                 )}
             </div>
         );
     }
 
-    // Show error state
-    if (dataLoadingError) {
+    // Empty state
+    if (!dataLoading && data.length === 0 && !dataLoadingError) {
         return (
             <div className="flex-1 flex items-center justify-center p-8">
-                <Typography className="text-red-500">
-                    Error loading data: {dataLoadingError.message}
-                </Typography>
+                {emptyComponent ?? (
+                    <Typography variant="label" color="secondary">No entries found</Typography>
+                )}
             </div>
         );
     }
 
-    // Show message if no columns configured
+    // Error state
+    if (dataLoadingError) {
+        return (
+            <div className="flex-1 flex items-center justify-center p-8">
+                <Typography className="text-red-500">Error loading data: {dataLoadingError.message}</Typography>
+            </div>
+        );
+    }
+
+    // No columns
     if (columns.length === 0) {
         return (
             <div className="flex-1 flex items-center justify-center p-8">
@@ -350,6 +462,42 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     No enum values configured for property "{columnProperty}"
                 </Typography>
             </div>
+        );
+    }
+
+    // Show backfill prompt if needed
+    if (itemsNeedBackfill && !dataLoading) {
+        return (
+            <>
+                <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
+                    <Typography variant="h6">Initialize Kanban Order</Typography>
+                    <Typography variant="body2" color="secondary" className="text-center max-w-md">
+                        Some items don't have order values set. Initialize order values to enable
+                        drag-and-drop reordering in the Kanban view.
+                    </Typography>
+                    <Button onClick={() => setShowBackfillDialog(true)}>
+                        Initialize Order
+                    </Button>
+                </div>
+
+                <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
+                    <DialogContent>
+                        <Typography variant="h6" className="mb-4">Initialize Kanban Order</Typography>
+                        <Typography variant="body2">
+                            This will assign sequential order values to all items that don't have one.
+                            Items will maintain their current order within each column.
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="text" onClick={() => setShowBackfillDialog(false)} disabled={backfillLoading}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleBackfill} disabled={backfillLoading}>
+                            {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
         );
     }
 

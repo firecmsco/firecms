@@ -404,6 +404,15 @@ export interface KanbanConfig<M extends Record<string, any> = any> {
      * Defaults to 50.
      */
     itemsPerColumn?: number;
+
+    /**
+     * Property key to use for ordering items within columns.
+     * Must reference a number property. When items are reordered,
+     * this property will be updated to reflect the new order using
+     * fractional indexing. If not set, an error will be displayed
+     * instead of the Kanban view.
+     */
+    orderProperty: Extract<keyof M, string>;
 }
 
 /**

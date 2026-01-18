@@ -239,9 +239,13 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
                     sourceColumn: originalColumn,
                     targetColumn: currentColumn
                 });
-            } else {
-                // Just a reordering within the same column
-                onItemsReorder(allItems);
+            } else if (currentColumn) {
+                // Reordering within the same column - still need to provide moveInfo
+                onItemsReorder(allItems, {
+                    itemId: activeId,
+                    sourceColumn: currentColumn,
+                    targetColumn: currentColumn
+                });
             }
         }
     };

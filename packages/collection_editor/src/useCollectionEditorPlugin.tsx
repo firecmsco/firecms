@@ -15,6 +15,7 @@ import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { EditorEntityAction } from "./ui/EditorEntityAction";
+import { KanbanSetupAction } from "./ui/KanbanSetupAction";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -68,18 +69,18 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
  * @param collectionInference
  */
 export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, USER extends User = User>
-    ({
-        collectionConfigController,
-        configPermissions,
-        reservedGroups,
-        extraView,
-        getUser,
-        collectionInference,
-        getData,
-        onAnalyticsEvent,
-        includeIntroView = true,
-        pathSuggestions
-    }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
+({
+     collectionConfigController,
+     configPermissions,
+     reservedGroups,
+     extraView,
+     getUser,
+     collectionInference,
+     getData,
+     onAnalyticsEvent,
+     includeIntroView = true,
+     pathSuggestions
+ }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
         key: "collection_editor",
@@ -99,8 +100,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             }
         },
         homePage: {
-            additionalActions: <NewCollectionButton />,
-            additionalChildrenStart: includeIntroView ? <IntroWidget /> : undefined,
+            additionalActions: <NewCollectionButton/>,
+            additionalChildrenStart: includeIntroView ? <IntroWidget/> : undefined,
             CollectionActions: HomePageEditorCollectionAction,
             AdditionalCards: NewCollectionCard,
             allowDragAndDrop: true,
@@ -113,7 +114,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent,
             onColumnsReorder: collectionConfigController.updatePropertiesOrder,
-            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder
+            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder,
+            KanbanSetupComponent: KanbanSetupAction
         },
         form: {
             ActionsTop: EditorEntityAction,
@@ -156,7 +158,7 @@ export function IntroWidget() {
                         sourceClick: "new_collection_card"
                     })
                     : undefined}>
-                <AddIcon />Create your first collection
+                <AddIcon/>Create your first collection
             </Button>}
             <Typography color={"secondary"}>
                 You can also define collections programmatically.
