@@ -43,7 +43,7 @@ default, configurations are managed internally, but you can customize paths and 
 Ensure that your Firestore security rules allow the plugin to read and write to the configuration paths. Below is an
 example of security rules that permit authenticated users to access the collection configurations:
 
-```firestore
+```txt
 match /{document=**} {
   allow read: if isFireCMSUser();
   allow write: if isFireCMSUser();
