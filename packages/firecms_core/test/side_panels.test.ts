@@ -41,21 +41,25 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                fullIdPath: "products",
                 entityId: "entityA",
-                copy: false
+                copy: false,
+                width: undefined
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA", mockCollections, false);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test("should return side panels based on given path", () => {
+    test("should return side panels based on given path with subcollection", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                fullIdPath: "products",
                 entityId: "entityA",
                 copy: false,
-                selectedTab: "locales"
+                selectedTab: "locales",
+                width: undefined
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA/locales", mockCollections, false);
@@ -66,6 +70,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                fullIdPath: "products",
                 copy: false,
             }
         ];
@@ -77,9 +82,11 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                fullIdPath: "products",
                 entityId: "entityA",
                 copy: false,
-                selectedTab: "custom_view"
+                selectedTab: "custom_view",
+                width: undefined
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA/custom_view", mockCollections, false);
@@ -90,6 +97,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
+                fullIdPath: "experiences",
                 entityId: "pUAGjOQALls5wTwKq0sF",
                 copy: false,
                 selectedTab: "editor",

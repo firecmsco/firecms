@@ -9,7 +9,8 @@ import {
     PersistedCollection,
     SaveCollectionParams,
     UpdateCollectionParams,
-    UpdatePropertiesOrderParams
+    UpdatePropertiesOrderParams,
+    UpdateKanbanColumnsOrderParams
 } from "@firecms/collection_editor";
 import {
     applyPermissionsFunctionIfEmpty,
@@ -375,6 +376,31 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         });
     }, [collectionsConfigPath, firebaseApp]);
 
+    const updateKanbanColumnsOrder = useCallback(({
+        collection,
+        newColumnsOrder,
+        parentCollectionIds
+    }: UpdateKanbanColumnsOrderParams): Promise<void> => {
+        // Only update if the collection is editable
+        if (collection.editable === false) {
+            return Promise.resolve();
+        }
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
+        const collectionPath = buildCollectionId(collection.id, parentCollectionIds);
+        const ref = doc(firestore, collectionsConfigPath, collectionPath);
+        // Store Kanban columns order in kanban.columnsOrder
+        return runTransaction(firestore, async (transaction) => {
+            transaction.set(ref, {
+                id: collection.id,
+                kanban: {
+                    ...(collection.kanban || {}),
+                    columnsOrder: newColumnsOrder
+                }
+            }, { merge: true });
+        });
+    }, [collectionsConfigPath, firebaseApp]);
+
     return {
         loading: collectionsLoading || configLoading,
         collections,
@@ -385,6 +411,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         saveProperty,
         deleteProperty,
         updatePropertiesOrder,
+        updateKanbanColumnsOrder,
         navigationEntries,
         saveNavigationEntries,
         collectionsSetup

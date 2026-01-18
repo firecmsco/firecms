@@ -369,16 +369,48 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Default view mode for displaying this collection.
      * - "table": Display entities in a spreadsheet-like table (default)
      * - "cards": Display entities as a grid of cards with thumbnails
+     * - "kanban": Display entities in a Kanban board grouped by a property
      * Defaults to "table".
      */
     defaultViewMode?: ViewMode;
+
+    /**
+     * Configuration for Kanban board view mode.
+     * When set, the Kanban view mode becomes available.
+     */
+    kanban?: KanbanConfig<M>;
+}
+
+/**
+ * Configuration for Kanban board view mode.
+ * @group Collections
+ */
+export interface KanbanConfig<M extends Record<string, any> = any> {
+    /**
+     * Property key to use for Kanban board columns.
+     * Must reference a string property with enumValues defined.
+     * Entities will be grouped into columns based on this property's value.
+     */
+    columnProperty: Extract<keyof M, string>;
+
+    /**
+     * Explicit order of columns. If not set, uses the enum property's
+     * enumValues order. Can be persisted by plugins like collection_editor.
+     */
+    columnsOrder?: string[];
+
+    /**
+     * Maximum number of items to load per column.
+     * Defaults to 50.
+     */
+    itemsPerColumn?: number;
 }
 
 /**
  * View mode for displaying a collection.
  * @group Collections
  */
-export type ViewMode = "table" | "cards";
+export type ViewMode = "table" | "cards" | "kanban";
 
 /**
  * Parameter passed to the `Actions` prop in the collection configuration.

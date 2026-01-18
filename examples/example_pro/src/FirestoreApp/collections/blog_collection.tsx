@@ -28,6 +28,9 @@ export const blogCollection = buildCollection<BlogEntry>({
         name: "Preview",
         Builder: BlogEntryPreview
     }],
+    kanban: {
+        columnProperty: "status"
+    },
     properties: {
         name: buildProperty({
             name: "Name",

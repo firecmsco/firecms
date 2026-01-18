@@ -112,7 +112,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent,
-            onColumnsReorder: collectionConfigController.updatePropertiesOrder
+            onColumnsReorder: collectionConfigController.updatePropertiesOrder,
+            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder
         },
         form: {
             ActionsTop: EditorEntityAction,

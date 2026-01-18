@@ -134,7 +134,8 @@
     ],
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "^@firecms/editor$": "<rootDir>/test/__mocks__/editorMock.js"
     }
   }
 }

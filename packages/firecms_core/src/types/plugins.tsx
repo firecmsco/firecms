@@ -178,6 +178,18 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             collection: EC;
             newPropertiesOrder: string[];
         }) => void;
+
+        /**
+         * Callback called when Kanban board columns are reordered via drag and drop.
+         * Used by plugins to persist the new Kanban column order.
+         */
+        onKanbanColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            kanbanColumnProperty: string;
+            newColumnsOrder: string[];
+        }) => void;
     }
 
     form?: {
