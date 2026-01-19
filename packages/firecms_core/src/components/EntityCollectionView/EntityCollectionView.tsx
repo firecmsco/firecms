@@ -277,14 +277,19 @@ export const EntityCollectionView = React.memo(
         useEffect(() => {
             const handlePopState = () => {
                 const urlView = getViewFromUrl();
-                // On back/forward, URL is source of truth
-                // No __view param means table (base state)
-                setViewModeState(urlView ?? "table");
+                if (urlView) {
+                    // URL has explicit view - use it
+                    setViewModeState(urlView);
+                } else {
+                    // No URL param - fallback to saved config or collection default
+                    const savedView = getSavedView();
+                    setViewModeState(savedView ?? defaultViewMode);
+                }
             };
 
             window.addEventListener("popstate", handlePopState);
             return () => window.removeEventListener("popstate", handlePopState);
-        }, [getViewFromUrl]);
+        }, [getViewFromUrl, getSavedView, defaultViewMode]);
 
         // Card view size state - controls the grid column count
         const [cardSize, setCardSize] = useState<CollectionSize>(collection.defaultSize ?? "m");

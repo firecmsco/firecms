@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { cls } from "@firecms/ui";
+import { CircularProgress, cls } from "@firecms/ui";
 import { BoardItem, BoardItemViewProps } from "./board_types";
 
 interface BoardSortableListProps<M extends Record<string, any>> {
@@ -11,6 +11,9 @@ interface BoardSortableListProps<M extends Record<string, any>> {
     ItemComponent: React.ComponentType<BoardItemViewProps<M>>;
     isDragging: boolean;
     isDragOverColumn: boolean;
+    loading?: boolean;
+    hasMore?: boolean;
+    onLoadMore?: () => void;
 }
 
 export function BoardSortableList<M extends Record<string, any>>({
@@ -19,6 +22,9 @@ export function BoardSortableList<M extends Record<string, any>>({
     ItemComponent,
     isDragging,
     isDragOverColumn,
+    loading = false,
+    hasMore = false,
+    onLoadMore,
 }: BoardSortableListProps<M>) {
     const {
         setNodeRef,
@@ -26,6 +32,36 @@ export function BoardSortableList<M extends Record<string, any>>({
         id: columnId,
         data: { type: "ITEM-LIST" }
     });
+
+    // Infinite scroll sentinel ref - must be inside scrollable container
+    const sentinelRef = useRef<HTMLDivElement>(null);
+    const isLoadingRef = useRef(false);
+    isLoadingRef.current = loading;
+    const lastLoadTimeRef = useRef(0);
+
+    // Set up IntersectionObserver for infinite scroll
+    useEffect(() => {
+        if (!sentinelRef.current || !hasMore || !onLoadMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const now = Date.now();
+                if (
+                    entries[0].isIntersecting &&
+                    hasMore &&
+                    !isLoadingRef.current &&
+                    now - lastLoadTimeRef.current > 500
+                ) {
+                    lastLoadTimeRef.current = now;
+                    onLoadMore();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(sentinelRef.current);
+        return () => observer.disconnect();
+    }, [hasMore, onLoadMore]);
 
     return (
         <div
@@ -40,22 +76,30 @@ export function BoardSortableList<M extends Record<string, any>>({
             )}
             style={{ minHeight: 80 }}
         >
-            {items.length === 0 ? (
+            {items.length === 0 && !loading ? (
                 <div className="flex-1 flex items-center justify-center">
                     <span className="text-xs text-surface-400 dark:text-surface-500">
                         No items
                     </span>
                 </div>
             ) : (
-                items.map((item, index) => (
-                    <SortableItem
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        columnId={columnId}
-                        ItemComponent={ItemComponent}
-                    />
-                ))
+                <>
+                    {items.map((item, index) => (
+                        <SortableItem
+                            key={item.id}
+                            item={item}
+                            index={index}
+                            columnId={columnId}
+                            ItemComponent={ItemComponent}
+                        />
+                    ))}
+                    {/* Infinite scroll sentinel - inside scrollable container */}
+                    {(loading || hasMore) && (
+                        <div ref={sentinelRef} className="flex items-center justify-center py-2 min-h-6">
+                            {loading && <CircularProgress size="smallest" />}
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );

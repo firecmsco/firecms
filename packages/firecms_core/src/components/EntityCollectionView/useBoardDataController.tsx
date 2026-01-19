@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Entity, EntityCollection, FilterValues } from "../../types";
 import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
 
-const DEFAULT_PAGE_SIZE = 30;
+const DEFAULT_PAGE_SIZE = 20;
 
 /**
  * Data state for a single board column
@@ -16,7 +16,7 @@ export interface BoardColumnData<M extends Record<string, any> = any> {
     hasMore: boolean;
     /** Error if loading failed */
     error?: Error;
-    /** Total count of entities in this column (may differ from entities.length if some lack orderProperty) */
+    /** Total count of entities in this column */
     totalCount?: number;
 }
 
@@ -62,22 +62,22 @@ export interface UseBoardDataControllerProps<M extends Record<string, any> = any
  * Each column gets its own independent query to the data source.
  */
 export function useBoardDataController<M extends Record<string, any> = any, COLUMN extends string = string>({
-                                                                                                                fullPath,
-                                                                                                                collection,
-                                                                                                                columnProperty,
-                                                                                                                columns,
-                                                                                                                orderProperty,
-                                                                                                                pageSize = DEFAULT_PAGE_SIZE,
-                                                                                                                searchString,
-                                                                                                                filterValues
-                                                                                                            }: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
+    fullPath,
+    collection,
+    columnProperty,
+    columns,
+    orderProperty,
+    pageSize = DEFAULT_PAGE_SIZE,
+    searchString,
+    filterValues
+}: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
 
-    // Use refs for objects that change identity frequently but we don't want to trigger re-subscriptions
+    // Stable refs for objects that shouldn't trigger re-subscriptions
     const dataSourceRef = useRef(dataSource);
     const collectionRef = useRef(collection);
     const contextRef = useRef(context);
@@ -88,9 +88,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     // Track item count per column for pagination
     const [columnItemCounts, setColumnItemCounts] = useState<Record<string, number>>(() => {
         const initial: Record<string, number> = {};
-        columns.forEach(col => {
-            initial[col] = pageSize;
-        });
+        columns.forEach(col => { initial[col] = pageSize; });
         return initial;
     });
 
@@ -112,12 +110,10 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     // Track cleanup functions for subscriptions
     const unsubscribersRef = useRef<Record<string, () => void>>({});
 
-    // Refresh counter to force re-subscription
-    const [refreshCounter, setRefreshCounter] = useState(0);
-
-    // Stable key for columns
+    // Stable keys for dependency comparison
     const columnsKey = useMemo(() => [...columns].sort().join(","), [columns]);
     const filterKey = useMemo(() => JSON.stringify(filterValues), [filterValues]);
+    const itemCountsKey = useMemo(() => JSON.stringify(columnItemCounts), [columnItemCounts]);
 
     // Cleanup subscriptions on unmount
     useEffect(() => {
@@ -126,13 +122,13 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         };
     }, []);
 
-    // Create subscription/fetch for each column - SIMPLE version
+    // Single effect for all column subscriptions
+    // Only re-runs when query parameters actually change
     useEffect(() => {
-        // Clean up all existing subscriptions first
+        // Clean up all existing subscriptions
         Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
         unsubscribersRef.current = {};
 
-        // Get current values from refs
         const currentDataSource = dataSourceRef.current;
         const currentCollection = collectionRef.current;
         const currentContext = contextRef.current;
@@ -140,7 +136,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         columns.forEach(column => {
             const itemCount = columnItemCounts[column] ?? pageSize;
 
-            // Build filter
+            // Build filter for this column
             const columnFilter: FilterValues<string> = {
                 ...filterValues,
                 [columnProperty]: ["==", column]
@@ -156,11 +152,13 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 }
             }));
 
-            // Helper to apply onFetch callbacks
-            const applyOnFetch = async (entities: Entity<M>[]): Promise<Entity<M>[]> => {
+            // onUpdate callback
+            const onUpdate = async (entities: Entity<M>[]) => {
+                // Apply onFetch callbacks if any
+                let processed = entities;
                 if (currentCollection.callbacks?.onFetch) {
                     try {
-                        return await Promise.all(
+                        processed = await Promise.all(
                             entities.map(entity =>
                                 currentCollection.callbacks!.onFetch!({
                                     collection: currentCollection,
@@ -174,14 +172,17 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                         console.error("Error in onFetch callback:", e);
                     }
                 }
-                return entities;
-            };
 
-            // Merge entities from two queries
-            const mergeEntities = (orderedEntities: Entity<M>[], allEntities: Entity<M>[]): Entity<M>[] => {
-                const orderedIds = new Set(orderedEntities.map(e => e.id));
-                const unorderedEntities = allEntities.filter(e => !orderedIds.has(e.id));
-                return [...orderedEntities, ...unorderedEntities];
+                setColumnData(prev => ({
+                    ...prev,
+                    [column]: {
+                        entities: processed,
+                        loading: false,
+                        hasMore: entities.length >= itemCount,
+                        error: undefined,
+                        totalCount: prev[column]?.totalCount // Keep existing count
+                    }
+                }));
             };
 
             const onError = (error: Error) => {
@@ -198,156 +199,37 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 }));
             };
 
-            // Set up queries
-            if (orderProperty && currentDataSource.listenCollection) {
-                // Real-time with dual queries
-                let orderedEntities: Entity<M>[] = [];
-                let allEntities: Entity<M>[] = [];
-                let orderedLoaded = false;
-                let allLoaded = false;
-
-                const updateColumnData = async () => {
-                    if (!orderedLoaded || !allLoaded) return;
-                    const merged = mergeEntities(orderedEntities, allEntities);
-                    const processed = await applyOnFetch(merged);
-
-                    setColumnData(prev => ({
-                        ...prev,
-                        [column]: {
-                            entities: processed,
-                            loading: false,
-                            hasMore: processed.length >= itemCount,
-                            error: undefined,
-                            totalCount: allEntities.length
-                        }
-                    }));
-                };
-
-                const unsubOrdered = currentDataSource.listenCollection<M>({
+            // Set up listener or fetch
+            if (currentDataSource.listenCollection) {
+                const unsubscribe = currentDataSource.listenCollection<M>({
                     path: resolvedPath,
                     collection: currentCollection,
-                    onUpdate: (entities) => {
-                        orderedEntities = entities;
-                        orderedLoaded = true;
-                        updateColumnData();
-                    },
+                    onUpdate,
                     onError,
                     searchString,
                     filter: columnFilter,
                     limit: itemCount,
                     startAfter: undefined,
                     orderBy: orderProperty,
-                    order: "asc"
+                    order: orderProperty ? "asc" : undefined
                 });
-
-                const unsubAll = currentDataSource.listenCollection<M>({
+                unsubscribersRef.current[column] = unsubscribe;
+            } else {
+                currentDataSource.fetchCollection<M>({
                     path: resolvedPath,
                     collection: currentCollection,
-                    onUpdate: (entities) => {
-                        allEntities = entities;
-                        allLoaded = true;
-                        updateColumnData();
-                    },
-                    onError,
                     searchString,
                     filter: columnFilter,
                     limit: itemCount,
-                    startAfter: undefined
-                });
-
-                unsubscribersRef.current[column] = () => {
-                    unsubOrdered();
-                    unsubAll();
-                };
-            } else if (orderProperty) {
-                // Fetch mode with dual queries
-                Promise.all([
-                    currentDataSource.fetchCollection<M>({
-                        path: resolvedPath,
-                        collection: currentCollection,
-                        searchString,
-                        filter: columnFilter,
-                        limit: itemCount,
-                        startAfter: undefined,
-                        orderBy: orderProperty,
-                        order: "asc"
-                    }),
-                    currentDataSource.fetchCollection<M>({
-                        path: resolvedPath,
-                        collection: currentCollection,
-                        searchString,
-                        filter: columnFilter,
-                        limit: itemCount,
-                        startAfter: undefined
-                    })
-                ]).then(async ([orderedEntities, allEntities]) => {
-                    const merged = mergeEntities(orderedEntities, allEntities);
-                    const processed = await applyOnFetch(merged);
-
-                    setColumnData(prev => ({
-                        ...prev,
-                        [column]: {
-                            entities: processed,
-                            loading: false,
-                            hasMore: processed.length >= itemCount,
-                            error: undefined,
-                            totalCount: allEntities.length
-                        }
-                    }));
-                }).catch(onError);
-            } else {
-                // No order property - simple query
-                if (currentDataSource.listenCollection) {
-                    const unsubscribe = currentDataSource.listenCollection<M>({
-                        path: resolvedPath,
-                        collection: currentCollection,
-                        onUpdate: async (entities) => {
-                            const processed = await applyOnFetch(entities);
-                            setColumnData(prev => ({
-                                ...prev,
-                                [column]: {
-                                    entities: processed,
-                                    loading: false,
-                                    hasMore: entities.length >= itemCount,
-                                    error: undefined,
-                                    totalCount: entities.length
-                                }
-                            }));
-                        },
-                        onError,
-                        searchString,
-                        filter: columnFilter,
-                        limit: itemCount,
-                        startAfter: undefined
-                    });
-                    unsubscribersRef.current[column] = unsubscribe;
-                } else {
-                    currentDataSource.fetchCollection<M>({
-                        path: resolvedPath,
-                        collection: currentCollection,
-                        searchString,
-                        filter: columnFilter,
-                        limit: itemCount,
-                        startAfter: undefined
-                    })
-                        .then(async (entities) => {
-                            const processed = await applyOnFetch(entities);
-                            setColumnData(prev => ({
-                                ...prev,
-                                [column]: {
-                                    entities: processed,
-                                    loading: false,
-                                    hasMore: entities.length >= itemCount,
-                                    error: undefined,
-                                    totalCount: entities.length
-                                }
-                            }));
-                        })
-                        .catch(onError);
-                }
+                    startAfter: undefined,
+                    orderBy: orderProperty,
+                    order: orderProperty ? "asc" : undefined
+                })
+                    .then(onUpdate)
+                    .catch(onError);
             }
 
-            // Count query
+            // Count query for column (for display in column header)
             if (currentDataSource.countEntities) {
                 currentDataSource.countEntities({
                     path: resolvedPath,
@@ -379,16 +261,9 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         orderProperty,
         searchString,
         filterKey,
-        refreshCounter,
+        itemCountsKey, // This includes pagination - only changes when user loads more
         pageSize
-        // dataSource, collection, context accessed via refs
     ]);
-
-    // Re-run effect when columnItemCounts changes (pagination)
-    useEffect(() => {
-        // Trigger refresh when item counts change
-        setRefreshCounter(c => c + 1);
-    }, [JSON.stringify(columnItemCounts)]);
 
     const loadMoreColumn = useCallback((column: COLUMN) => {
         setColumnItemCounts(prev => ({
@@ -398,12 +273,18 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     }, [pageSize]);
 
     const refreshColumn = useCallback((column: COLUMN) => {
-        setRefreshCounter(c => c + 1);
-    }, []);
+        // Force re-subscribe by resetting to initial count
+        setColumnItemCounts(prev => ({
+            ...prev,
+            [column]: pageSize
+        }));
+    }, [pageSize]);
 
     const refreshAll = useCallback(() => {
-        setRefreshCounter(c => c + 1);
-    }, []);
+        const reset: Record<string, number> = {};
+        columns.forEach(col => { reset[col] = pageSize; });
+        setColumnItemCounts(reset);
+    }, [columns, pageSize]);
 
     // Aggregate loading and error state
     const loading = useMemo(() => {

@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { BoardSortableList } from "./BoardSortableList";
 import { BoardColumnTitle } from "./BoardColumnTitle";
 import { BoardItem, BoardItemViewProps } from "./board_types";
-import { AddIcon, Button, CircularProgress, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
+import { AddIcon, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
 
 export interface BoardColumnProps<M extends Record<string, any>> {
     id: string;
@@ -133,26 +133,11 @@ export function BoardColumn<M extends Record<string, any>>({
                     ItemComponent={ItemComponent}
                     isDragging={isDragging}
                     isDragOverColumn={isDragOverColumn}
+                    loading={loading}
+                    hasMore={hasMore}
+                    onLoadMore={onLoadMore}
                 />
             </SortableContext>
-
-            {/* Load more / Loading indicator */}
-            {(loading || hasMore) && (
-                <div className="flex items-center justify-center py-2 px-2 border-t border-surface-200 dark:border-surface-700">
-                    {loading ? (
-                        <CircularProgress size="smallest" />
-                    ) : hasMore && onLoadMore ? (
-                        <Button
-                            size="small"
-                            variant="text"
-                            onClick={onLoadMore}
-                            className="text-xs w-full"
-                        >
-                            Load more
-                        </Button>
-                    ) : null}
-                </div>
-            )}
         </div>
     );
 }

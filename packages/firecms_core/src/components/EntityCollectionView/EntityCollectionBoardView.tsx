@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     Entity,
     EntityCollection,
     EntityTableController,
     EnumValueConfig,
+    FilterValues,
     ResolvedStringProperty,
     SelectionController
 } from "../../types";
@@ -170,14 +171,66 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             });
     }, [plugins, fullPath, parentCollectionIds, collection, columnProperty]);
 
+    // Collection-level count queries to detect missing order property
+    // Just TWO counts: total and ordered (for the entire collection, not per column)
+    const [missingOrderCount, setMissingOrderCount] = useState<number>(0);
+
+    // Use refs for objects that shouldn't trigger re-runs
+    const dataSourceRef = useRef(dataSource);
+    const collectionRef = useRef(collection);
+    dataSourceRef.current = dataSource;
+    collectionRef.current = collection;
+
+    useEffect(() => {
+        const currentDataSource = dataSourceRef.current;
+        const currentCollection = collectionRef.current;
+
+        if (!orderProperty || !currentDataSource.countEntities) {
+            setMissingOrderCount(0);
+            return;
+        }
+
+        // Count 1: Total documents in collection
+        // Count 2: Documents with orderProperty != null
+        let totalCount = 0;
+        let orderedCount = 0;
+        let completed = 0;
+
+        currentDataSource.countEntities({
+            path: fullPath,
+            collection: currentCollection
+        }).then(count => {
+            totalCount = count;
+            completed++;
+            if (completed === 2) {
+                setMissingOrderCount(Math.max(0, totalCount - orderedCount));
+            }
+        }).catch(e => console.warn("Failed to get total count:", e));
+
+        currentDataSource.countEntities({
+            path: fullPath,
+            collection: currentCollection,
+            filter: { [orderProperty]: ["!=", null] } as FilterValues<string>
+        }).then(count => {
+            orderedCount = count;
+            completed++;
+            if (completed === 2) {
+                setMissingOrderCount(Math.max(0, totalCount - orderedCount));
+            }
+        }).catch(e => console.warn("Failed to get ordered count:", e));
+    }, [orderProperty, fullPath]); // Only re-run when these primitives change
+
     // Check if items need backfill (have no orderProperty values)
     const itemsNeedBackfill = useMemo(() => {
         if (!orderProperty || dataLoading) return false;
+        // Use collection-level count detection
+        if (missingOrderCount > 0) return true;
+        // Fallback to checking loaded entities
         return allEntities.some((entity: Entity<M>) => {
             const orderValue = entity.values?.[orderProperty];
             return orderValue === undefined || orderValue === null;
         });
-    }, [allEntities, orderProperty, dataLoading]);
+    }, [allEntities, orderProperty, dataLoading, missingOrderCount]);
 
     // Convert entities to board items per column (data already sorted by orderProperty from controller)
     const boardItems: BoardItem<M>[] = useMemo(() => {
@@ -314,56 +367,74 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     // Backfill order values for all entities
     const handleBackfill = useCallback(async () => {
-        if (!orderProperty) return;
+        console.log("handleBackfill called", { orderProperty });
+        if (!orderProperty) {
+            console.log("No orderProperty, returning");
+            return;
+        }
         setBackfillLoading(true);
 
         try {
-            // Group entities by column and assign sequential order values
+            // Fetch ALL documents from collection (not relying on loaded entities)
+            console.log("Fetching all documents from collection...");
+            const allDocs = await dataSource.fetchCollection<M>({
+                path: fullPath,
+                collection,
+                limit: 10000 // Fetch all
+            });
+            console.log(`Fetched ${allDocs.length} documents`);
+
+            // Find entities missing order property
+            const entitiesToUpdate = allDocs.filter((entity: Entity<M>) => {
+                const orderValue = entity.values?.[orderProperty];
+                return orderValue === undefined || orderValue === null;
+            });
+            console.log(`${entitiesToUpdate.length} entities need order values`);
+
+            // Assign sequential order values
             const updates: Promise<void>[] = [];
+            entitiesToUpdate.forEach((entity: Entity<M>, index: number) => {
+                console.log(`Updating entity ${entity.id} with order ${index}`);
+                const updatedValues = setIn({ ...entity.values }, orderProperty, index);
 
-            columns.forEach(col => {
-                const columnEntities = allEntities.filter((entity: Entity<M>) => {
-                    const value = entity.values?.[columnProperty];
-                    return String(value) === col;
-                });
+                const saveProps: SaveEntityProps = {
+                    path: entity.path,
+                    entityId: entity.id,
+                    values: updatedValues as M,
+                    previousValues: entity.values,
+                    collection,
+                    status: "existing"
+                };
 
-                columnEntities.forEach((entity: Entity<M>, index: number) => {
-                    const currentOrder = entity.values?.[orderProperty];
-                    if (currentOrder === undefined || currentOrder === null) {
-                        const updatedValues = setIn({ ...entity.values }, orderProperty, index);
-
-                        const saveProps: SaveEntityProps = {
-                            path: entity.path,
-                            entityId: entity.id,
-                            values: updatedValues as M,
-                            previousValues: entity.values,
-                            collection,
-                            status: "existing"
-                        };
-
-                        updates.push(
-                            saveEntityWithCallbacks({
-                                ...saveProps,
-                                collection,
-                                dataSource,
-                                context,
-                                onSaveSuccess: () => { },
-                                onSaveFailure: (e) => console.error("Backfill save failed:", e),
-                                onPreSaveHookError: (e) => console.error("Backfill pre-save error:", e)
-                            }).then(() => { })
-                        );
-                    }
-                });
+                updates.push(
+                    saveEntityWithCallbacks({
+                        ...saveProps,
+                        collection,
+                        dataSource,
+                        context,
+                        onSaveSuccess: () => { console.log(`Saved entity ${entity.id}`); },
+                        onSaveFailure: (e) => console.error("Backfill save failed:", e),
+                        onPreSaveHookError: (e) => console.error("Backfill pre-save error:", e)
+                    }).then(() => { })
+                );
             });
 
+            console.log(`Total updates to run: ${updates.length}`);
             await Promise.all(updates);
+            console.log("All updates complete");
             setShowBackfillDialog(false);
+
+            // Reset missing count to hide banner
+            setMissingOrderCount(0);
+
+            // Refresh the board data
+            boardDataController.refreshAll();
         } catch (e) {
             console.error("Backfill error:", e);
         } finally {
             setBackfillLoading(false);
         }
-    }, [allEntities, columns, columnProperty, orderProperty, collection, dataSource, context]);
+    }, [orderProperty, fullPath, collection, dataSource, context, boardDataController]);
 
     const handleEntityClick = useCallback((entity: Entity<M>) => {
         onEntityClick?.(entity);
