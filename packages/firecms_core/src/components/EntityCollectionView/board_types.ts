@@ -95,4 +95,12 @@ export interface BoardProps<M extends Record<string, any>, COLUMN extends string
      * Callback to load more items for a column
      */
     onLoadMoreColumn?: (column: COLUMN) => void;
+    /**
+     * Callback to add a new item to a specific column
+     */
+    onAddItemToColumn?: (column: COLUMN) => void;
+    /**
+     * Optional component to render at the end of the board for adding new columns
+     */
+    AddColumnComponent?: React.ReactNode;
 }

@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { BoardSortableList } from "./BoardSortableList";
 import { BoardColumnTitle } from "./BoardColumnTitle";
 import { BoardItem, BoardItemViewProps } from "./board_types";
-import { Button, CircularProgress, cls, defaultBorderMixin } from "@firecms/ui";
+import { AddIcon, Button, CircularProgress, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
 
 export interface BoardColumnProps<M extends Record<string, any>> {
     id: string;
@@ -30,6 +30,10 @@ export interface BoardColumnProps<M extends Record<string, any>> {
      * Callback to load more items
      */
     onLoadMore?: () => void;
+    /**
+     * Callback to add a new item to this column
+     */
+    onAddItem?: () => void;
     style?: React.CSSProperties;
 }
 
@@ -44,6 +48,7 @@ export function BoardColumn<M extends Record<string, any>>({
     loading = false,
     hasMore = false,
     onLoadMore,
+    onAddItem,
     style
 }: BoardColumnProps<M>) {
     const {
@@ -83,7 +88,7 @@ export function BoardColumn<M extends Record<string, any>>({
             <div
                 {...dragListeners}
                 className={cls(
-                    "flex items-center justify-center rounded-t-md transition-colors duration-200 ease-in-out",
+                    "flex items-center justify-between px-2 rounded-t-md transition-colors duration-200 ease-in-out",
                     isColumnBeingDragged
                         ? "bg-surface-100 dark:bg-surface-900"
                         : "bg-surface-50 hover:bg-surface-100 dark:bg-surface-950 dark:hover:bg-surface-900",
@@ -93,6 +98,18 @@ export function BoardColumn<M extends Record<string, any>>({
                 <BoardColumnTitle aria-label={`${title} item list`}>
                     {title}
                 </BoardColumnTitle>
+                {onAddItem && (
+                    <IconButton
+                        size="small"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAddItem();
+                        }}
+                        className="opacity-60 hover:opacity-100"
+                    >
+                        <AddIcon size="small" />
+                    </IconButton>
+                )}
             </div>
             <SortableContext
                 items={items.map(i => i.id)}

@@ -2,7 +2,13 @@ import React from "react";
 
 import { canCreateEntity, canDeleteEntity } from "../../util";
 import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController, ViewMode } from "../../types";
+import {
+    CollectionActionsProps,
+    EntityCollection,
+    EntityTableController,
+    SelectionController,
+    ViewMode
+} from "../../types";
 import {
     AddIcon,
     AppsIcon,
@@ -17,8 +23,6 @@ import {
 } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
-
-
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -38,6 +42,12 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
      * Should be true when collection.kanban is set with a valid enum property.
      */
     kanbanEnabled?: boolean;
+    /**
+     * Whether a plugin exists that can configure Kanban (e.g., collection editor).
+     * When true, Kanban option is always shown (enabled or not based on kanbanEnabled).
+     * When false, Kanban option is shown but disabled.
+     */
+    hasKanbanConfigPlugin?: boolean;
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
@@ -53,7 +63,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     collectionEntitiesCount,
     viewMode = "table",
     onViewModeChange,
-    kanbanEnabled = false
+    kanbanEnabled = false,
+    hasKanbanConfigPlugin = false
 }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -122,39 +133,47 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         return <ListIcon size="small" />;
     };
 
-    // View mode toggle menu
+    // View mode toggle menu - manage tooltip/menu state coordination
+    const [menuOpen, setMenuOpen] = React.useState(false);
     const viewModeToggle = onViewModeChange && (
-        <Menu
-            trigger={
-                <IconButton size="small">
-                    {getViewModeIcon()}
-                </IconButton>
-            }
-        >
-            <MenuItem
-                dense={true}
-                onClick={() => onViewModeChange("table")}
+        <Tooltip title="Change view mode" open={menuOpen ? false : undefined}>
+            <Menu
+                open={menuOpen}
+                onOpenChange={setMenuOpen}
+                trigger={
+                    <IconButton size="small">
+                        {getViewModeIcon()}
+                    </IconButton>
+                }
             >
-                <ListIcon size="smallest" className="mr-1" />
-                Table view
-            </MenuItem>
-            <MenuItem
-                dense={true}
-                onClick={() => onViewModeChange("cards")}
-            >
-                <AppsIcon size="smallest" className="mr-1" />
-                Card view
-            </MenuItem>
-            {kanbanEnabled && (
                 <MenuItem
                     dense={true}
-                    onClick={() => onViewModeChange("kanban")}
+                    onClick={() => onViewModeChange("table")}
+                >
+                    <ListIcon size="smallest" className="mr-1" />
+                    Table view
+                </MenuItem>
+                <MenuItem
+                    dense={true}
+                    onClick={() => onViewModeChange("cards")}
+                >
+                    <AppsIcon size="smallest" className="mr-1" />
+                    Card view
+                </MenuItem>
+                <MenuItem
+                    dense={true}
+                    disabled={!hasKanbanConfigPlugin && !kanbanEnabled}
+                    onClick={() => {
+                        if (kanbanEnabled || hasKanbanConfigPlugin) {
+                            onViewModeChange("kanban");
+                        }
+                    }}
                 >
                     <ViewKanbanIcon size="smallest" className="mr-1" />
                     Kanban view
                 </MenuItem>
-            )}
-        </Menu>
+            </Menu>
+        </Tooltip>
     );
 
     const actionProps: CollectionActionsProps = {

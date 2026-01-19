@@ -200,6 +200,17 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             fullPath: string;
             parentCollectionIds: string[];
         }>;
+
+        /**
+         * Component to render an "Add Column" button at the end of the Kanban board.
+         * Used to allow adding new enum values to the column property.
+         */
+        AddKanbanColumnComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+            columnProperty: string;
+        }>;
     }
 
     form?: {

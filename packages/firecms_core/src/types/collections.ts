@@ -379,6 +379,15 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * When set, the Kanban view mode becomes available.
      */
     kanban?: KanbanConfig<M>;
+
+    /**
+     * Property key to use for ordering items.
+     * Must reference a number property. When items are reordered,
+     * this property will be updated to reflect the new order using
+     * fractional indexing. Used by Kanban view for ordering within columns
+     * and can be used for general ordering purposes.
+     */
+    orderProperty?: Extract<keyof M, string>;
 }
 
 /**
@@ -398,21 +407,6 @@ export interface KanbanConfig<M extends Record<string, any> = any> {
      * enumValues order. Can be persisted by plugins like collection_editor.
      */
     columnsOrder?: string[];
-
-    /**
-     * Maximum number of items to load per column.
-     * Defaults to 50.
-     */
-    itemsPerColumn?: number;
-
-    /**
-     * Property key to use for ordering items within columns.
-     * Must reference a number property. When items are reordered,
-     * this property will be updated to reflect the new order using
-     * fractional indexing. If not set, an error will be displayed
-     * instead of the Kanban view.
-     */
-    orderProperty: Extract<keyof M, string>;
 }
 
 /**

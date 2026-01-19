@@ -100,7 +100,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             dataType: "date",
             autoValue: "on_create"
         },
-        status: buildProperty(({ values }) => ({
+        status: {
             name: "Status",
             validation: { required: true },
             dataType: "string",
@@ -108,13 +108,12 @@ export const blogCollection = buildCollection<BlogEntry>({
             enumValues: {
                 published: {
                     id: "published",
-                    label: "Published",
-                    disabled: !values.header_image
+                    label: "Published"
                 },
                 draft: "Draft"
             },
             defaultValue: "draft"
-        })),
+        },
         publish_date: buildProperty({
             name: "Publish date",
             dataType: "date",

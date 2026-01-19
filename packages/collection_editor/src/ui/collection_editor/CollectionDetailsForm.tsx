@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { EntityCollection, FieldCaption, IconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
+import React, { useEffect, useMemo, useState } from "react";
+import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, resolveCollection, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -24,17 +24,18 @@ import { useCollectionEditorController } from "../../useCollectionEditorControll
 import { LayoutModeSwitch } from "./LayoutModeSwitch";
 import { ViewModeSwitch } from "./ViewModeSwitch";
 import { KanbanConfigSection } from "./KanbanConfigSection";
+import { PropertyFormDialog } from "./PropertyEditView";
 
 export function CollectionDetailsForm({
-                                          isNewCollection,
-                                          reservedGroups,
-                                          existingPaths,
-                                          existingIds,
-                                          groups,
-                                          parentCollection,
-                                          children,
-                                          expandKanban
-                                      }: {
+    isNewCollection,
+    reservedGroups,
+    existingPaths,
+    existingIds,
+    groups,
+    parentCollection,
+    children,
+    expandKanban
+}: {
     isNewCollection: boolean,
     reservedGroups?: string[];
     existingPaths?: string[];
@@ -62,6 +63,35 @@ export function CollectionDetailsForm({
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);
+    const [orderPropertyDialogOpen, setOrderPropertyDialogOpen] = useState(false);
+
+    const authController = useAuthController();
+    const customizationController = useCustomizationController();
+
+    // Resolve collection to get properties for order property select
+    const resolvedCollection = useMemo(() => resolveCollection({
+        collection: values,
+        path: values.path,
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
+    }), [values, customizationController.propertyConfigs, authController]);
+
+    // Get number properties (for orderProperty)
+    const numberProperties = useMemo(() => {
+        const result: { key: string; label: string; property: Property; }[] = [];
+        if (!resolvedCollection.properties) return result;
+
+        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
+            if (prop && 'dataType' in prop && prop.dataType === 'number') {
+                result.push({
+                    key,
+                    label: (prop as Property).name || key,
+                    property: prop as Property
+                });
+            }
+        });
+        return result;
+    }, [resolvedCollection.properties]);
 
     const updateDatabaseId = (databaseId: string) => {
         setFieldValue("databaseId", databaseId ?? undefined);
@@ -93,7 +123,7 @@ export function CollectionDetailsForm({
         }
     }, [errors.id]);
 
-    const collectionIcon = <IconForView collectionOrView={values}/>;
+    const collectionIcon = <IconForView collectionOrView={values} />;
 
     const groupOptions = groups?.filter((group) => !reservedGroups?.includes(group));
 
@@ -131,10 +161,10 @@ export function CollectionDetailsForm({
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
                         <DefaultDatabaseField databaseId={values.databaseId}
-                                              onDatabaseIdUpdate={updateDatabaseId}/>
+                            onDatabaseIdUpdate={updateDatabaseId} />
 
                         <Tooltip title={"Change icon"}
-                                 asChild={true}>
+                            asChild={true}>
                             <IconButton
                                 shape={"square"}
                                 onClick={() => setIconDialogOpen(true)}>
@@ -159,7 +189,7 @@ export function CollectionDetailsForm({
                             label={"Name"}
                             autoFocus={true}
                             required
-                            error={showErrors && Boolean(errors.name)}/>
+                            error={showErrors && Boolean(errors.name)} />
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
                             {touched.name && Boolean(errors.name) ? errors.name : "Name of this collection, usually a plural name (e.g. Products)"}
                         </FieldCaption>
@@ -167,10 +197,10 @@ export function CollectionDetailsForm({
 
                     <div className={cls("col-span-12 ")}>
                         <Field name={"path"}
-                               as={DebouncedTextField}
-                               label={"Path"}
-                               required
-                               error={showErrors && Boolean(errors.path)}/>
+                            as={DebouncedTextField}
+                            label={"Path"}
+                            required
+                            error={showErrors && Boolean(errors.path)} />
 
                         <FieldCaption error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
@@ -218,14 +248,149 @@ export function CollectionDetailsForm({
                     <LayoutModeSwitch
                         className={"col-span-12"}
                         value={values.openEntityMode ?? "side_panel"}
-                        onChange={(value) => setFieldValue("openEntityMode", value)}/>
+                        onChange={(value) => setFieldValue("openEntityMode", value)} />
 
                     <ViewModeSwitch
                         className={"col-span-12"}
                         value={values.defaultViewMode ?? "table"}
-                        onChange={(value) => setFieldValue("defaultViewMode", value)}/>
+                        onChange={(value) => setFieldValue("defaultViewMode", value)} />
 
-                    <KanbanConfigSection className={"col-span-12 mt-4"} forceExpanded={expandKanban}/>
+                    <KanbanConfigSection className={"col-span-12"} forceExpanded={expandKanban} />
+
+                    <div className={"col-span-12 mt-4"}>
+                        {(() => {
+                            // Check if orderProperty references a non-existent property
+                            const orderPropertyMissing = Boolean(values.orderProperty) &&
+                                !numberProperties.some(p => p.key === values.orderProperty);
+
+                            return (
+                                <>
+                                    <Select
+                                        key={`order-select-${numberProperties.length}`}
+                                        name="orderProperty"
+                                        label="Order Property"
+                                        size={"large"}
+                                        fullWidth={true}
+                                        position={"item-aligned"}
+                                        disabled={numberProperties.length === 0}
+                                        error={orderPropertyMissing}
+                                        value={values.orderProperty ?? ""}
+                                        onValueChange={(v) => {
+                                            setFieldValue("orderProperty", v || undefined);
+                                        }}
+                                        renderValue={(value) => {
+                                            if (orderPropertyMissing) {
+                                                return <span className="text-red-500">{value} (not found)</span>;
+                                            }
+                                            const prop = numberProperties.find(p => p.key === value);
+                                            if (!prop) return "Select a property";
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <div className="flex items-center gap-2">
+                                                    <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                    <span>{prop.label}</span>
+                                                </div>
+                                            );
+                                        }}
+                                        endAdornment={values.orderProperty ? (
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFieldValue("orderProperty", undefined);
+                                                }}
+                                            >
+                                                <CloseIcon size="small" />
+                                            </IconButton>
+                                        ) : undefined}
+                                    >
+                                        {numberProperties.map((prop) => {
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <SelectItem key={prop.key} value={prop.key}>
+                                                    <div className="flex items-center gap-3">
+                                                        <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                        <div>
+                                                            <div>{prop.label}</div>
+                                                            <Typography variant="caption" color="secondary">
+                                                                {fieldConfig?.name || "Number"}
+                                                            </Typography>
+                                                        </div>
+                                                    </div>
+                                                </SelectItem>
+                                            );
+                                        })}
+                                    </Select>
+                                    <FieldCaption error={orderPropertyMissing}>
+                                        {orderPropertyMissing
+                                            ? `Property "${values.orderProperty}" does not exist or is not a number property. Please select a valid property or clear the selection.`
+                                            : numberProperties.length === 0
+                                                ? "No number properties found. Add a number property to enable ordering."
+                                                : "Select a number property to persist the order of items"
+                                        }
+                                    </FieldCaption>
+                                </>
+                            );
+                        })()}
+                        {(() => {
+                            // Check if orderProperty references a non-existent property
+                            const orderPropertyMissing = Boolean(values.orderProperty) &&
+                                !numberProperties.some(p => p.key === values.orderProperty);
+                            const showCreateButton = !values.orderProperty || orderPropertyMissing;
+
+                            // Pre-fill with missing property id or default "__order"
+                            const dialogPropertyKey = orderPropertyMissing && values.orderProperty
+                                ? values.orderProperty
+                                : "__order";
+                            const dialogPropertyName = orderPropertyMissing && values.orderProperty
+                                ? unslugify(values.orderProperty)
+                                : "Order";
+
+                            if (!showCreateButton) return null;
+
+                            return (
+                                <>
+                                    <button
+                                        type="button"
+                                        className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
+                                        onClick={() => setOrderPropertyDialogOpen(true)}
+                                    >
+                                        + Create "{dialogPropertyKey}" property
+                                    </button>
+                                    <PropertyFormDialog
+                                        open={orderPropertyDialogOpen}
+                                        onCancel={() => setOrderPropertyDialogOpen(false)}
+                                        property={{
+                                            dataType: "number",
+                                            name: dialogPropertyName,
+                                            disabled: true,
+                                            hideFromCollection: true
+                                        }}
+                                        propertyKey={dialogPropertyKey}
+                                        existingProperty={false}
+                                        autoOpenTypeSelect={false}
+                                        autoUpdateId={false}
+                                        inArray={false}
+                                        allowDataInference={false}
+                                        propertyConfigs={customizationController.propertyConfigs}
+                                        collectionEditable={true}
+                                        existingPropertyKeys={Object.keys(values.properties ?? {})}
+                                        onPropertyChanged={({ id, property }) => {
+                                            const newProperties = {
+                                                ...values.properties,
+                                                [id!]: property
+                                            };
+                                            const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id];
+                                            setFieldValue("properties", newProperties);
+                                            setFieldValue("propertiesOrder", newPropertiesOrder);
+                                            setFieldValue("orderProperty", id);
+                                            setOrderPropertyDialogOpen(false);
+                                        }}
+                                    />
+                                </>
+                            );
+                        })()}
+                    </div>
 
                     <div className={"col-span-12"}>
                         <BooleanSwitchWithLabel
@@ -253,9 +418,9 @@ export function CollectionDetailsForm({
                             title={
                                 <div
                                     className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
-                                    <SettingsIcon/>
+                                    <SettingsIcon />
                                     <Typography variant={"subtitle2"}
-                                                className="ml-2">
+                                        className="ml-2">
                                         Advanced
                                     </Typography>
                                 </div>}
@@ -264,10 +429,10 @@ export function CollectionDetailsForm({
 
                                 <div className={"col-span-12"}>
                                     <Field name={"id"}
-                                           as={DebouncedTextField}
-                                           disabled={!isNewCollection}
-                                           label={"Collection id"}
-                                           error={showErrors && Boolean(errors.id)}/>
+                                        as={DebouncedTextField}
+                                        disabled={!isNewCollection}
+                                        label={"Collection id"}
+                                        error={showErrors && Boolean(errors.id)} />
                                     <FieldCaption error={touched.id && Boolean(errors.id)}>
                                         {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection. Typically the same as the path."}
                                     </FieldCaption>
@@ -283,7 +448,7 @@ export function CollectionDetailsForm({
                                             return handleChange(e);
                                         }}
                                         value={values.singularName ?? ""}
-                                        label={"Singular name"}/>
+                                        label={"Singular name"} />
                                     <FieldCaption error={showErrors && Boolean(errors.singularName)}>
                                         {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
                                     </FieldCaption>
@@ -309,10 +474,10 @@ export function CollectionDetailsForm({
                                                 setFieldValue("sideDialogWidth", null);
                                             }}
                                             disabled={!values.sideDialogWidth}>
-                                            <CloseIcon size={"small"}/>
+                                            <CloseIcon size={"small"} />
                                         </IconButton>}
                                         value={values.sideDialogWidth ?? ""}
-                                        label={"Side dialog width"}/>
+                                        label={"Side dialog width"} />
                                     <FieldCaption error={showErrors && Boolean(errors.singularName)}>
                                         {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define the width (in pixels) of entities side dialog. Default is 768px"}
                                     </FieldCaption>
@@ -455,7 +620,7 @@ export function CollectionDetailsForm({
 
                 </div>
 
-                <div style={{ height: "52px" }}/>
+                <div style={{ height: "52px" }} />
 
                 <Dialog
                     open={iconDialogOpen}
@@ -465,10 +630,10 @@ export function CollectionDetailsForm({
                 >
                     <div className={"p-4 overflow-auto min-h-[200px]"}>
                         <SearchIconsView selectedIcon={typeof values.icon === "string" ? values.icon : undefined}
-                                         onIconSelected={(icon: string) => {
-                                             setIconDialogOpen(false);
-                                             setFieldValue("icon", icon);
-                                         }}/>
+                            onIconSelected={(icon: string) => {
+                                setIconDialogOpen(false);
+                                setFieldValue("icon", icon);
+                            }} />
                     </div>
 
                 </Dialog>
@@ -479,18 +644,18 @@ export function CollectionDetailsForm({
 }
 
 function DefaultDatabaseField({
-                                  databaseId,
-                                  onDatabaseIdUpdate
-                              }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
+    databaseId,
+    onDatabaseIdUpdate
+}: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
 
     return <Tooltip title={"Database ID"}
-                    side={"top"}
-                    align={"start"}>
+        side={"top"}
+        align={"start"}>
         <TextField size={"small"}
-                   invisible={true}
-                   inputClassName={"text-end"}
-                   value={databaseId ?? ""}
-                   onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
-                   placeholder={"(default)"}></TextField>
+            invisible={true}
+            inputClassName={"text-end"}
+            value={databaseId ?? ""}
+            onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
+            placeholder={"(default)"}></TextField>
     </Tooltip>
 }

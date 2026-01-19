@@ -27,6 +27,8 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
     ItemComponent,
     columnLoadingState,
     onLoadMoreColumn,
+    onAddItemToColumn,
+    AddColumnComponent,
 }: BoardProps<M, COLUMN>) {
 
     const [activeItem, setActiveItem] = useState<BoardItem<M> | null>(null);
@@ -305,11 +307,13 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
                             loading={columnLoadingState?.[String(key)]?.loading}
                             hasMore={columnLoadingState?.[String(key)]?.hasMore}
                             onLoadMore={onLoadMoreColumn ? () => onLoadMoreColumn(key) : undefined}
+                            onAddItem={onAddItemToColumn ? () => onAddItemToColumn(key) : undefined}
                             style={{
                                 opacity: activeColumn === key ? 0 : 1
                             }}
                         />
                     ))}
+                    {AddColumnComponent}
                 </div>
             </SortableContext>
         </DndContext>

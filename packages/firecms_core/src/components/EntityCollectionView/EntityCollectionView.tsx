@@ -220,12 +220,71 @@ export const EntityCollectionView = React.memo(
 
         const [popOverOpen, setPopOverOpen] = useState(false);
 
-        // View mode state - initialize from collection prop or user config
+        // View mode priority: URL > saved user config > collection.defaultViewMode
         const defaultViewMode = collection.defaultViewMode ?? "table";
-        const [viewMode, setViewMode] = useState<ViewMode>(() => {
-            const savedViewMode = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
-            return (savedViewMode as ViewMode) ?? defaultViewMode;
+
+        // Parse view from URL
+        const getViewFromUrl = useCallback((): ViewMode | null => {
+            const params = new URLSearchParams(window.location.search);
+            const urlView = params.get("__view");
+            if (urlView && ["table", "kanban", "cards"].includes(urlView)) {
+                return urlView as ViewMode;
+            }
+            return null;
+        }, []);
+
+        // Get saved view from local persistence
+        const getSavedView = useCallback((): ViewMode | null => {
+            const saved = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
+            return (saved as ViewMode) ?? null;
+        }, [userConfigPersistence, fullPath]);
+
+        const [viewMode, setViewModeState] = useState<ViewMode>(() => {
+            // Priority: URL > saved config > collection default
+            const urlView = getViewFromUrl();
+            if (urlView) return urlView;
+            const savedView = getSavedView();
+            if (savedView) return savedView;
+            return defaultViewMode;
         });
+
+        // Sync URL with current view on init (if view came from saved config)
+        useEffect(() => {
+            const urlView = getViewFromUrl();
+            if (!urlView && viewMode !== "table") {
+                // View came from saved config but URL doesn't have it - update URL without push
+                const url = new URL(window.location.href);
+                url.searchParams.set("__view", viewMode);
+                window.history.replaceState({}, "", url.toString());
+            }
+        }, []); // Only on mount
+
+        // Update URL when view mode changes (user action)
+        const setViewMode = useCallback((newMode: ViewMode) => {
+            setViewModeState(newMode);
+
+            // Update URL with __view param
+            const url = new URL(window.location.href);
+            if (newMode === "table") {
+                url.searchParams.delete("__view");
+            } else {
+                url.searchParams.set("__view", newMode);
+            }
+            window.history.pushState({}, "", url.toString());
+        }, []);
+
+        // Listen for browser back/forward
+        useEffect(() => {
+            const handlePopState = () => {
+                const urlView = getViewFromUrl();
+                // On back/forward, URL is source of truth
+                // No __view param means table (base state)
+                setViewModeState(urlView ?? "table");
+            };
+
+            window.addEventListener("popstate", handlePopState);
+            return () => window.removeEventListener("popstate", handlePopState);
+        }, [getViewFromUrl]);
 
         // Card view size state - controls the grid column count
         const [cardSize, setCardSize] = useState<CollectionSize>(collection.defaultSize ?? "m");
@@ -355,12 +414,14 @@ export const EntityCollectionView = React.memo(
                 onCollectionModifiedForUser(fullPath, { defaultSize: size })
         }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
 
+        // View mode change: update URL + save to local persistence
         const onViewModeChange = useCallback((mode: ViewMode) => {
             setViewMode(mode);
+            // Save to local persistence for next visit
             if (userConfigPersistence) {
                 onCollectionModifiedForUser(fullPath, { defaultViewMode: mode } as PartialEntityCollection<M>);
             }
-        }, [fullPath, userConfigPersistence, onCollectionModifiedForUser]);
+        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, fullPath]);
 
         const createEnabled = canCreateEntity(collection, authController, fullPath, null);
 
@@ -430,6 +491,11 @@ export const EntityCollectionView = React.memo(
             if (!property || !("dataType" in property) || property.dataType !== "string") return false;
             return Boolean(property.enumValues);
         }, [collection.kanban?.columnProperty, resolvedCollection.properties]);
+
+        // Check if a plugin can configure Kanban (has KanbanSetupComponent)
+        const hasKanbanConfigPlugin = useMemo(() => {
+            return customizationController.plugins?.some(plugin => plugin.collectionView?.KanbanSetupComponent) ?? false;
+        }, [customizationController.plugins]);
 
         const getPropertyFor = useCallback(({
             propertyKey,
@@ -694,7 +760,7 @@ export const EntityCollectionView = React.memo(
             <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
                 ref={containerRef}>
                 {/* View mode rendering */}
-                {viewMode === "kanban" && kanbanEnabled && collection.kanban?.columnProperty ? (
+                {viewMode === "kanban" && (kanbanEnabled || hasKanbanConfigPlugin) ? (
                     <>
                         {/* Kanban View Toolbar */}
                         <CollectionTableToolbar
@@ -726,6 +792,7 @@ export const EntityCollectionView = React.memo(
                                 viewMode={viewMode}
                                 onViewModeChange={onViewModeChange}
                                 kanbanEnabled={kanbanEnabled}
+                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
                             />}
                         />
                         {/* Kanban Board View */}
@@ -734,7 +801,7 @@ export const EntityCollectionView = React.memo(
                             tableController={tableController}
                             fullPath={fullPath}
                             parentCollectionIds={parentCollectionIds}
-                            columnProperty={collection.kanban.columnProperty}
+                            columnProperty={collection.kanban?.columnProperty ?? ""}
                             onEntityClick={onEntityClick}
                             selectionController={usedSelectionController}
                             selectionEnabled={selectionEnabled}
@@ -788,6 +855,7 @@ export const EntityCollectionView = React.memo(
                                 viewMode={viewMode}
                                 onViewModeChange={onViewModeChange}
                                 kanbanEnabled={kanbanEnabled}
+                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
                             />}
                         />
                         {/* Card Grid View */}
@@ -860,7 +928,8 @@ export const EntityCollectionView = React.memo(
                         collectionEntitiesCount={docsCount}
                         viewMode={viewMode}
                         onViewModeChange={onViewModeChange}
-                        kanbanEnabled={kanbanEnabled} />}
+                        kanbanEnabled={kanbanEnabled}
+                        hasKanbanConfigPlugin={hasKanbanConfigPlugin} />}
                     emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                         ? <div className="flex flex-col items-center justify-center">
                             <Typography variant={"subtitle2"}>So empty...</Typography>

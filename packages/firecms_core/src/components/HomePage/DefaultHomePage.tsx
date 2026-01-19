@@ -35,10 +35,10 @@ export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";
 
 export function DefaultHomePage({
-                                    additionalActions,
-                                    additionalChildrenStart,
-                                    additionalChildrenEnd
-                                }: {
+    additionalActions,
+    additionalChildrenStart,
+    additionalChildrenEnd
+}: {
     additionalActions?: React.ReactNode;
     additionalChildrenStart?: React.ReactNode;
     additionalChildrenEnd?: React.ReactNode;
@@ -171,8 +171,8 @@ export function DefaultHomePage({
         updater:
             | { name: string; entries: NavigationEntry[] }[]
             | ((
-            prev: { name: string; entries: NavigationEntry[] }[]
-        ) => { name: string; entries: NavigationEntry[] }[])
+                prev: { name: string; entries: NavigationEntry[] }[]
+            ) => { name: string; entries: NavigationEntry[] }[])
     ) => {
         setItems(updater); // local only
     };
@@ -264,6 +264,7 @@ export function DefaultHomePage({
     let additionalPluginChildrenStart: React.ReactNode | undefined;
     let additionalPluginChildrenEnd: React.ReactNode | undefined;
     let additionalPluginSections: React.ReactNode | undefined;
+    let additionalPluginActions: React.ReactNode | undefined;
 
     if (customizationController.plugins) {
         const sectionProps: PluginGenericProps = { context };
@@ -311,6 +312,19 @@ export function DefaultHomePage({
                     ))}
             </div>
         );
+
+        // Collect additionalActions from plugins
+        additionalPluginActions = (
+            <>
+                {customizationController.plugins
+                    .filter((p) => p.homePage?.additionalActions)
+                    .map((plugin, i) => (
+                        <React.Fragment key={`plugin_actions_${i}`}>
+                            {plugin.homePage!.additionalActions}
+                        </React.Fragment>
+                    ))}
+            </>
+        );
     }
 
     /* ───────────────────────────────────────────────────────────────
@@ -332,9 +346,10 @@ export function DefaultHomePage({
                         className="w-full flex-grow"
                     />
                     {additionalActions}
+                    {additionalPluginActions}
                 </div>
 
-                <FavouritesView hidden={performingSearch}/>
+                <FavouritesView hidden={performingSearch} />
 
                 {additionalChildrenStart}
                 {additionalPluginChildrenStart}
@@ -487,7 +502,7 @@ export function DefaultHomePage({
 
                     <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
                         {activeGroupData &&
-                        draggingGroupId === activeGroupData.name ? (
+                            draggingGroupId === activeGroupData.name ? (
                             <div
                                 className="rounded-lg bg-transparent"
                                 style={{
@@ -498,7 +513,7 @@ export function DefaultHomePage({
                                 <NavigationGroup
                                     group={
                                         activeGroupData.name ===
-                                        DEFAULT_GROUP_NAME
+                                            DEFAULT_GROUP_NAME
                                             ? undefined
                                             : activeGroupData.name
                                     }

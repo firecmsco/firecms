@@ -16,7 +16,7 @@ import {
     resolveCollection,
     resolveEnumValues
 } from "../../util";
-import { saveEntityWithCallbacks, useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks";
+import { saveEntityWithCallbacks, useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useSideEntityController } from "../../hooks";
 import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 
@@ -52,12 +52,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const customizationController = useCustomizationController();
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
+    const sideEntityController = useSideEntityController();
     const plugins = customizationController.plugins ?? [];
-
-    const { data, dataLoading, dataLoadingError } = tableController;
-
-    const itemsPerColumn = collection.kanban?.itemsPerColumn ?? 50;
-    const orderProperty = collection.kanban?.orderProperty;
+    const orderProperty = collection.orderProperty;
 
     // State for backfill dialog
     const [showBackfillDialog, setShowBackfillDialog] = useState(false);
@@ -124,6 +121,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     const columns = localColumnsOrder;
 
+    // Use tableController data directly
+    const { data, dataLoading, dataLoadingError } = tableController;
+
     const allowColumnReorder = useMemo(() => {
         return plugins.some(plugin => plugin.collectionView?.onKanbanColumnsReorder);
     }, [plugins]);
@@ -147,8 +147,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Check if items need backfill (have no orderProperty values)
     const itemsNeedBackfill = useMemo(() => {
         if (!orderProperty || dataLoading) return false;
-        // Check if any items have undefined/null order values
-        return data.some(entity => {
+        return data.some((entity: Entity<M>) => {
             const orderValue = entity.values?.[orderProperty];
             return orderValue === undefined || orderValue === null;
         });
@@ -156,7 +155,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     // Convert entities to board items, sorted by orderProperty
     const boardItems: BoardItem<M>[] = useMemo(() => {
-        const items = data.map(entity => ({
+        const items = data.map((entity: Entity<M>) => ({
             id: entity.id,
             entity
         }));
@@ -185,33 +184,19 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return grouped;
     }, [boardItems, columns, columnProperty]);
 
+    // Column loading state
     const columnLoadingState: ColumnLoadingState = useMemo(() => {
         const state: ColumnLoadingState = {};
         columns.forEach(col => {
             const columnItems = itemsByColumn[col] || [];
             state[col] = {
                 loading: dataLoading,
-                hasMore: columnItems.length >= itemsPerColumn,
+                hasMore: false, // No pagination - all data loaded
                 itemCount: columnItems.length
             };
         });
         return state;
-    }, [columns, itemsByColumn, dataLoading, itemsPerColumn]);
-
-    const limitedBoardItems = useMemo(() => {
-        const limited: BoardItem<M>[] = [];
-        const columnCounts: Record<string, number> = {};
-        boardItems.forEach(item => {
-            const value = item.entity.values?.[columnProperty];
-            const col = value && columns.includes(String(value)) ? String(value) : columns[0];
-            if (!columnCounts[col]) columnCounts[col] = 0;
-            if (columnCounts[col] < itemsPerColumn) {
-                limited.push(item);
-                columnCounts[col]++;
-            }
-        });
-        return limited;
-    }, [boardItems, columns, columnProperty, itemsPerColumn]);
+    }, [columns, itemsByColumn, dataLoading]);
 
     const assignColumn = useCallback((item: BoardItem<M>): string => {
         const value = item.entity.values?.[columnProperty];
@@ -333,12 +318,12 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             const updates: Promise<void>[] = [];
 
             columns.forEach(col => {
-                const columnEntities = data.filter(entity => {
+                const columnEntities = data.filter((entity: Entity<M>) => {
                     const value = entity.values?.[columnProperty];
                     return String(value) === col;
                 });
 
-                columnEntities.forEach((entity, index) => {
+                columnEntities.forEach((entity: Entity<M>, index: number) => {
                     const currentOrder = entity.values?.[orderProperty];
                     if (currentOrder === undefined || currentOrder === null) {
                         const updatedValues = setIn({ ...entity.values }, orderProperty, index);
@@ -411,6 +396,45 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return null;
     }, [plugins]);
 
+    // Get AddKanbanColumnComponent from plugins
+    const AddKanbanColumnComponent = useMemo(() => {
+        for (const plugin of plugins) {
+            if (plugin.collectionView?.AddKanbanColumnComponent) {
+                return plugin.collectionView.AddKanbanColumnComponent;
+            }
+        }
+        return null;
+    }, [plugins]);
+
+    // Check for loading error
+    const hasError = Boolean(dataLoadingError);
+    const errorMessage = dataLoadingError?.message || "";
+    const indexUrl = errorMessage.match(/https:\/\/console\.firebase\.google\.com[^\s]+/)?.[0];
+
+    // Error: columnProperty not configured or invalid
+    if (!columnProperty || enumColumns.length === 0) {
+        return (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
+                <Typography variant="h6">
+                    Kanban view needs configuration
+                </Typography>
+                <Typography variant="body2" color="secondary" className="text-center max-w-md">
+                    {!columnProperty
+                        ? "Please select a column property to group entities into columns."
+                        : "The selected column property doesn't have enum values or doesn't exist."
+                    }
+                </Typography>
+                {KanbanSetupComponent && (
+                    <KanbanSetupComponent
+                        collection={collection}
+                        fullPath={fullPath}
+                        parentCollectionIds={parentCollectionIds}
+                    />
+                )}
+            </div>
+        );
+    }
+
     // Error: orderProperty not configured
     if (!orderProperty) {
         return (
@@ -420,8 +444,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 </Typography>
                 <Typography variant="body2" color="secondary" className="text-center max-w-md">
                     Please configure the <code className="bg-surface-200 dark:bg-surface-700 px-1 rounded">orderProperty</code> in
-                    your collection's <code className="bg-surface-200 dark:bg-surface-700 px-1 rounded">kanban</code> config.
-                    This should be a numeric property used to persist the order of items within columns.
+                    your collection config. This should be a numeric property used to persist the order of items.
                 </Typography>
                 {KanbanSetupComponent && (
                     <KanbanSetupComponent
@@ -435,21 +458,12 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     }
 
     // Empty state
-    if (!dataLoading && data.length === 0 && !dataLoadingError) {
+    if (!dataLoading && data.length === 0 && !hasError) {
         return (
             <div className="flex-1 flex items-center justify-center p-8">
                 {emptyComponent ?? (
                     <Typography variant="label" color="secondary">No entries found</Typography>
                 )}
-            </div>
-        );
-    }
-
-    // Error state
-    if (dataLoadingError) {
-        return (
-            <div className="flex-1 flex items-center justify-center p-8">
-                <Typography className="text-red-500">Error loading data: {dataLoadingError.message}</Typography>
             </div>
         );
     }
@@ -465,55 +479,100 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         );
     }
 
-    // Show backfill prompt if needed
-    if (itemsNeedBackfill && !dataLoading) {
-        return (
-            <>
-                <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
-                    <Typography variant="h6">Initialize Kanban Order</Typography>
-                    <Typography variant="body2" color="secondary" className="text-center max-w-md">
-                        Some items don't have order values set. Initialize order values to enable
-                        drag-and-drop reordering in the Kanban view.
+    return (
+        <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Error banner - only show when no data loaded */}
+            {hasError && data.length === 0 && (
+                <div className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
+                    <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1">
+                        <strong>Error loading data:</strong>{" "}
+                        {indexUrl
+                            ? "A Firestore index is required for this query."
+                            : errorMessage}
                     </Typography>
-                    <Button onClick={() => setShowBackfillDialog(true)}>
+                    {indexUrl && (
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            onClick={() => window.open(indexUrl, "_blank")}
+                        >
+                            Create Index
+                        </Button>
+                    )}
+                </div>
+            )}
+
+            {/* Backfill info bar - non-blocking */}
+            {itemsNeedBackfill && !dataLoading && (
+                <div className="flex items-center justify-between gap-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800">
+                    <Typography variant="body2" color="secondary">
+                        Some items don't have order values. Initialize to enable drag-and-drop reordering.
+                    </Typography>
+                    <Button
+                        size="small"
+                        variant="text"
+                        onClick={() => setShowBackfillDialog(true)}
+                    >
                         Initialize Order
                     </Button>
                 </div>
+            )}
 
-                <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
-                    <DialogContent>
-                        <Typography variant="h6" className="mb-4">Initialize Kanban Order</Typography>
-                        <Typography variant="body2">
-                            This will assign sequential order values to all items that don't have one.
-                            Items will maintain their current order within each column.
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="text" onClick={() => setShowBackfillDialog(false)} disabled={backfillLoading}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleBackfill} disabled={backfillLoading}>
-                            {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        );
-    }
+            {/* Main board */}
+            <div className="flex-1 overflow-auto">
+                <Board
+                    data={boardItems}
+                    columns={columns}
+                    columnLabels={columnLabels}
+                    assignColumn={assignColumn}
+                    allowColumnReorder={allowColumnReorder}
+                    onColumnReorder={handleColumnReorder}
+                    onItemsReorder={handleItemsReorder}
+                    ItemComponent={ItemComponent}
+                    columnLoadingState={columnLoadingState}
+                    onAddItemToColumn={(column) => {
+                        sideEntityController.open({
+                            path: fullPath,
+                            collection,
+                            entityId: undefined,
+                            updateUrl: true,
+                            formProps: {
+                                initialDirtyValues: {
+                                    [columnProperty]: column
+                                } as Partial<M>
+                            }
+                        });
+                    }}
+                    AddColumnComponent={AddKanbanColumnComponent && (
+                        <AddKanbanColumnComponent
+                            collection={collection}
+                            fullPath={fullPath}
+                            parentCollectionIds={parentCollectionIds}
+                            columnProperty={columnProperty}
+                        />
+                    )}
+                />
+            </div>
 
-    return (
-        <div className="flex-1 overflow-auto">
-            <Board
-                data={limitedBoardItems}
-                columns={columns}
-                columnLabels={columnLabels}
-                assignColumn={assignColumn}
-                allowColumnReorder={allowColumnReorder}
-                onColumnReorder={handleColumnReorder}
-                onItemsReorder={handleItemsReorder}
-                ItemComponent={ItemComponent}
-                columnLoadingState={columnLoadingState}
-            />
+            {/* Backfill dialog */}
+            <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
+                <DialogContent>
+                    <Typography variant="h6" className="mb-4">Initialize Kanban Order</Typography>
+                    <Typography variant="body2">
+                        This will assign sequential order values to all items that don't have one.
+                        Items will maintain their current order within each column.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="text" onClick={() => setShowBackfillDialog(false)} disabled={backfillLoading}>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleBackfill} disabled={backfillLoading}>
+                        {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
