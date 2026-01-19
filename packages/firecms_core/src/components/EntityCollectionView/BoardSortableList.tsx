@@ -40,15 +40,23 @@ export function BoardSortableList<M extends Record<string, any>>({
             )}
             style={{ minHeight: 80 }}
         >
-            {items.map((item, index) => (
-                <SortableItem
-                    key={item.id}
-                    item={item}
-                    index={index}
-                    columnId={columnId}
-                    ItemComponent={ItemComponent}
-                />
-            ))}
+            {items.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center">
+                    <span className="text-xs text-surface-400 dark:text-surface-500">
+                        No items
+                    </span>
+                </div>
+            ) : (
+                items.map((item, index) => (
+                    <SortableItem
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        columnId={columnId}
+                        ItemComponent={ItemComponent}
+                    />
+                ))
+            )}
         </div>
     );
 }

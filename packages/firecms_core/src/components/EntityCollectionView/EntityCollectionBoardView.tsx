@@ -19,6 +19,7 @@ import {
 import { saveEntityWithCallbacks, useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useSideEntityController } from "../../hooks";
 import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
+import { useBoardDataController } from "./useBoardDataController";
 
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;
@@ -121,8 +122,33 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     const columns = localColumnsOrder;
 
-    // Use tableController data directly
-    const { data, dataLoading, dataLoadingError } = tableController;
+    // Use the new per-column data controller
+    const boardDataController = useBoardDataController<M>({
+        fullPath,
+        collection,
+        columnProperty,
+        columns,
+        orderProperty,
+        pageSize: 30,
+        searchString: tableController.searchString,
+        filterValues: tableController.filterValues
+    });
+
+    // Aggregate loading and error state
+    const dataLoading = boardDataController.loading;
+    const dataLoadingError = boardDataController.error;
+
+    // Build all entities from all columns for operations that need the full list
+    const allEntities = useMemo(() => {
+        const entities: Entity<M>[] = [];
+        columns.forEach(col => {
+            const colData = boardDataController.columnData[col];
+            if (colData?.entities) {
+                entities.push(...colData.entities);
+            }
+        });
+        return entities;
+    }, [boardDataController.columnData, columns]);
 
     const allowColumnReorder = useMemo(() => {
         return plugins.some(plugin => plugin.collectionView?.onKanbanColumnsReorder);
@@ -147,56 +173,33 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Check if items need backfill (have no orderProperty values)
     const itemsNeedBackfill = useMemo(() => {
         if (!orderProperty || dataLoading) return false;
-        return data.some((entity: Entity<M>) => {
+        return allEntities.some((entity: Entity<M>) => {
             const orderValue = entity.values?.[orderProperty];
             return orderValue === undefined || orderValue === null;
         });
-    }, [data, orderProperty, dataLoading]);
+    }, [allEntities, orderProperty, dataLoading]);
 
-    // Convert entities to board items, sorted by orderProperty
+    // Convert entities to board items per column (data already sorted by orderProperty from controller)
     const boardItems: BoardItem<M>[] = useMemo(() => {
-        const items = data.map((entity: Entity<M>) => ({
+        return allEntities.map((entity: Entity<M>) => ({
             id: entity.id,
             entity
         }));
+    }, [allEntities]);
 
-        // Sort by orderProperty if configured
-        if (orderProperty) {
-            items.sort((a, b) => {
-                const orderA = a.entity.values?.[orderProperty] ?? Infinity;
-                const orderB = b.entity.values?.[orderProperty] ?? Infinity;
-                return orderA - orderB;
-            });
-        }
-
-        return items;
-    }, [data, orderProperty]);
-
-    // Group items by column for pagination tracking
-    const itemsByColumn = useMemo(() => {
-        const grouped: Record<string, BoardItem<M>[]> = {};
-        columns.forEach(col => { grouped[col] = []; });
-        boardItems.forEach(item => {
-            const value = item.entity.values?.[columnProperty];
-            const col = value && columns.includes(String(value)) ? String(value) : columns[0];
-            if (grouped[col]) grouped[col].push(item);
-        });
-        return grouped;
-    }, [boardItems, columns, columnProperty]);
-
-    // Column loading state
+    // Column loading state from the board data controller
     const columnLoadingState: ColumnLoadingState = useMemo(() => {
         const state: ColumnLoadingState = {};
         columns.forEach(col => {
-            const columnItems = itemsByColumn[col] || [];
+            const colData = boardDataController.columnData[col];
             state[col] = {
-                loading: dataLoading,
-                hasMore: false, // No pagination - all data loaded
-                itemCount: columnItems.length
+                loading: colData?.loading ?? true,
+                hasMore: colData?.hasMore ?? false,
+                itemCount: colData?.entities?.length ?? 0
             };
         });
         return state;
-    }, [columns, itemsByColumn, dataLoading]);
+    }, [columns, boardDataController.columnData]);
 
     const assignColumn = useCallback((item: BoardItem<M>): string => {
         const value = item.entity.values?.[columnProperty];
@@ -318,7 +321,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             const updates: Promise<void>[] = [];
 
             columns.forEach(col => {
-                const columnEntities = data.filter((entity: Entity<M>) => {
+                const columnEntities = allEntities.filter((entity: Entity<M>) => {
                     const value = entity.values?.[columnProperty];
                     return String(value) === col;
                 });
@@ -359,7 +362,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } finally {
             setBackfillLoading(false);
         }
-    }, [data, columns, columnProperty, orderProperty, collection, dataSource, context]);
+    }, [allEntities, columns, columnProperty, orderProperty, collection, dataSource, context]);
 
     const handleEntityClick = useCallback((entity: Entity<M>) => {
         onEntityClick?.(entity);
@@ -457,16 +460,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         );
     }
 
-    // Empty state
-    if (!dataLoading && data.length === 0 && !hasError) {
-        return (
-            <div className="flex-1 flex items-center justify-center p-8">
-                {emptyComponent ?? (
-                    <Typography variant="label" color="secondary">No entries found</Typography>
-                )}
-            </div>
-        );
-    }
+    // Note: Empty state is not shown for Kanban view - we show the board with empty columns instead
+    // The emptyComponent is handled per-column in BoardColumn
 
     // No columns
     if (columns.length === 0) {
@@ -482,7 +477,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
             {/* Error banner - only show when no data loaded */}
-            {hasError && data.length === 0 && (
+            {hasError && allEntities.length === 0 && (
                 <div className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
                     <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1">
                         <strong>Error loading data:</strong>{" "}
@@ -531,6 +526,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     onItemsReorder={handleItemsReorder}
                     ItemComponent={ItemComponent}
                     columnLoadingState={columnLoadingState}
+                    onLoadMoreColumn={(column) => boardDataController.loadMoreColumn(column)}
                     onAddItemToColumn={(column) => {
                         sideEntityController.open({
                             path: fullPath,
