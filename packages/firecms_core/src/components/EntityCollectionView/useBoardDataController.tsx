@@ -16,6 +16,8 @@ export interface BoardColumnData<M extends Record<string, any> = any> {
     hasMore: boolean;
     /** Error if loading failed */
     error?: Error;
+    /** Total count of entities in this column (may differ from entities.length if some lack orderProperty) */
+    totalCount?: number;
 }
 
 /**
@@ -60,25 +62,35 @@ export interface UseBoardDataControllerProps<M extends Record<string, any> = any
  * Each column gets its own independent query to the data source.
  */
 export function useBoardDataController<M extends Record<string, any> = any, COLUMN extends string = string>({
-    fullPath,
-    collection,
-    columnProperty,
-    columns,
-    orderProperty,
-    pageSize = DEFAULT_PAGE_SIZE,
-    searchString,
-    filterValues
-}: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
+                                                                                                                fullPath,
+                                                                                                                collection,
+                                                                                                                columnProperty,
+                                                                                                                columns,
+                                                                                                                orderProperty,
+                                                                                                                pageSize = DEFAULT_PAGE_SIZE,
+                                                                                                                searchString,
+                                                                                                                filterValues
+                                                                                                            }: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
 
+    // Use refs for objects that change identity frequently but we don't want to trigger re-subscriptions
+    const dataSourceRef = useRef(dataSource);
+    const collectionRef = useRef(collection);
+    const contextRef = useRef(context);
+    dataSourceRef.current = dataSource;
+    collectionRef.current = collection;
+    contextRef.current = context;
+
     // Track item count per column for pagination
     const [columnItemCounts, setColumnItemCounts] = useState<Record<string, number>>(() => {
         const initial: Record<string, number> = {};
-        columns.forEach(col => { initial[col] = pageSize; });
+        columns.forEach(col => {
+            initial[col] = pageSize;
+        });
         return initial;
     });
 
@@ -90,7 +102,8 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 entities: [],
                 loading: true,
                 hasMore: true,
-                error: undefined
+                error: undefined,
+                totalCount: undefined
             };
         });
         return initial;
@@ -100,75 +113,34 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const unsubscribersRef = useRef<Record<string, () => void>>({});
 
     // Refresh counter to force re-subscription
-    const [refreshCounters, setRefreshCounters] = useState<Record<string, number>>(() => {
-        const initial: Record<string, number> = {};
-        columns.forEach(col => { initial[col] = 0; });
-        return initial;
-    });
+    const [refreshCounter, setRefreshCounter] = useState(0);
 
-    // Initialize new columns if columns array changes
-    useEffect(() => {
-        setColumnItemCounts(prev => {
-            const updated = { ...prev };
-            columns.forEach(col => {
-                if (!(col in updated)) {
-                    updated[col] = pageSize;
-                }
-            });
-            return updated;
-        });
-
-        setColumnData(prev => {
-            const updated = { ...prev };
-            columns.forEach(col => {
-                if (!(col in updated)) {
-                    updated[col] = {
-                        entities: [],
-                        loading: true,
-                        hasMore: true,
-                        error: undefined
-                    };
-                }
-            });
-            return updated;
-        });
-
-        setRefreshCounters(prev => {
-            const updated = { ...prev };
-            columns.forEach(col => {
-                if (!(col in updated)) {
-                    updated[col] = 0;
-                }
-            });
-            return updated;
-        });
-    }, [columns, pageSize]);
+    // Stable key for columns
+    const columnsKey = useMemo(() => [...columns].sort().join(","), [columns]);
+    const filterKey = useMemo(() => JSON.stringify(filterValues), [filterValues]);
 
     // Cleanup subscriptions on unmount
     useEffect(() => {
         return () => {
-            Object.values(unsubscribersRef.current).forEach(unsub => unsub());
+            Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
         };
     }, []);
 
-    // Create subscription/fetch for each column
+    // Create subscription/fetch for each column - SIMPLE version
     useEffect(() => {
-        // Clean up existing subscriptions for columns that are no longer present
-        Object.keys(unsubscribersRef.current).forEach(col => {
-            if (!columns.includes(col)) {
-                unsubscribersRef.current[col]?.();
-                delete unsubscribersRef.current[col];
-            }
-        });
+        // Clean up all existing subscriptions first
+        Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
+        unsubscribersRef.current = {};
 
-        // Set up subscription for each column
+        // Get current values from refs
+        const currentDataSource = dataSourceRef.current;
+        const currentCollection = collectionRef.current;
+        const currentContext = contextRef.current;
+
         columns.forEach(column => {
-            // Unsubscribe from previous subscription for this column
-            unsubscribersRef.current[column]?.();
-
             const itemCount = columnItemCounts[column] ?? pageSize;
 
-            // Build filter: columnProperty == column value + any additional filters
+            // Build filter
             const columnFilter: FilterValues<string> = {
                 ...filterValues,
                 [columnProperty]: ["==", column]
@@ -184,17 +156,17 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 }
             }));
 
-            const onEntitiesUpdate = async (entities: Entity<M>[]) => {
-                // Apply onFetch callbacks if defined
-                if (collection.callbacks?.onFetch) {
+            // Helper to apply onFetch callbacks
+            const applyOnFetch = async (entities: Entity<M>[]): Promise<Entity<M>[]> => {
+                if (currentCollection.callbacks?.onFetch) {
                     try {
-                        entities = await Promise.all(
+                        return await Promise.all(
                             entities.map(entity =>
-                                collection.callbacks!.onFetch!({
-                                    collection,
+                                currentCollection.callbacks!.onFetch!({
+                                    collection: currentCollection,
                                     path: resolvedPath,
                                     entity,
-                                    context
+                                    context: currentContext
                                 })
                             )
                         );
@@ -202,16 +174,14 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                         console.error("Error in onFetch callback:", e);
                     }
                 }
+                return entities;
+            };
 
-                setColumnData(prev => ({
-                    ...prev,
-                    [column]: {
-                        entities,
-                        loading: false,
-                        hasMore: entities.length >= itemCount,
-                        error: undefined
-                    }
-                }));
+            // Merge entities from two queries
+            const mergeEntities = (orderedEntities: Entity<M>[], allEntities: Entity<M>[]): Entity<M>[] => {
+                const orderedIds = new Set(orderedEntities.map(e => e.id));
+                const unorderedEntities = allEntities.filter(e => !orderedIds.has(e.id));
+                return [...orderedEntities, ...unorderedEntities];
             };
 
             const onError = (error: Error) => {
@@ -228,12 +198,39 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 }));
             };
 
-            // Use listenCollection for real-time updates if available
-            if (dataSource.listenCollection) {
-                const unsubscribe = dataSource.listenCollection<M>({
+            // Set up queries
+            if (orderProperty && currentDataSource.listenCollection) {
+                // Real-time with dual queries
+                let orderedEntities: Entity<M>[] = [];
+                let allEntities: Entity<M>[] = [];
+                let orderedLoaded = false;
+                let allLoaded = false;
+
+                const updateColumnData = async () => {
+                    if (!orderedLoaded || !allLoaded) return;
+                    const merged = mergeEntities(orderedEntities, allEntities);
+                    const processed = await applyOnFetch(merged);
+
+                    setColumnData(prev => ({
+                        ...prev,
+                        [column]: {
+                            entities: processed,
+                            loading: false,
+                            hasMore: processed.length >= itemCount,
+                            error: undefined,
+                            totalCount: allEntities.length
+                        }
+                    }));
+                };
+
+                const unsubOrdered = currentDataSource.listenCollection<M>({
                     path: resolvedPath,
-                    collection,
-                    onUpdate: onEntitiesUpdate,
+                    collection: currentCollection,
+                    onUpdate: (entities) => {
+                        orderedEntities = entities;
+                        orderedLoaded = true;
+                        updateColumnData();
+                    },
                     onError,
                     searchString,
                     filter: columnFilter,
@@ -242,43 +239,156 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                     orderBy: orderProperty,
                     order: "asc"
                 });
-                unsubscribersRef.current[column] = unsubscribe;
-            } else {
-                // Fallback to fetchCollection without real-time updates
-                dataSource.fetchCollection<M>({
+
+                const unsubAll = currentDataSource.listenCollection<M>({
                     path: resolvedPath,
-                    collection,
+                    collection: currentCollection,
+                    onUpdate: (entities) => {
+                        allEntities = entities;
+                        allLoaded = true;
+                        updateColumnData();
+                    },
+                    onError,
                     searchString,
                     filter: columnFilter,
                     limit: itemCount,
-                    startAfter: undefined,
-                    orderBy: orderProperty,
-                    order: "asc"
-                })
-                    .then(onEntitiesUpdate)
-                    .catch(onError);
+                    startAfter: undefined
+                });
+
+                unsubscribersRef.current[column] = () => {
+                    unsubOrdered();
+                    unsubAll();
+                };
+            } else if (orderProperty) {
+                // Fetch mode with dual queries
+                Promise.all([
+                    currentDataSource.fetchCollection<M>({
+                        path: resolvedPath,
+                        collection: currentCollection,
+                        searchString,
+                        filter: columnFilter,
+                        limit: itemCount,
+                        startAfter: undefined,
+                        orderBy: orderProperty,
+                        order: "asc"
+                    }),
+                    currentDataSource.fetchCollection<M>({
+                        path: resolvedPath,
+                        collection: currentCollection,
+                        searchString,
+                        filter: columnFilter,
+                        limit: itemCount,
+                        startAfter: undefined
+                    })
+                ]).then(async ([orderedEntities, allEntities]) => {
+                    const merged = mergeEntities(orderedEntities, allEntities);
+                    const processed = await applyOnFetch(merged);
+
+                    setColumnData(prev => ({
+                        ...prev,
+                        [column]: {
+                            entities: processed,
+                            loading: false,
+                            hasMore: processed.length >= itemCount,
+                            error: undefined,
+                            totalCount: allEntities.length
+                        }
+                    }));
+                }).catch(onError);
+            } else {
+                // No order property - simple query
+                if (currentDataSource.listenCollection) {
+                    const unsubscribe = currentDataSource.listenCollection<M>({
+                        path: resolvedPath,
+                        collection: currentCollection,
+                        onUpdate: async (entities) => {
+                            const processed = await applyOnFetch(entities);
+                            setColumnData(prev => ({
+                                ...prev,
+                                [column]: {
+                                    entities: processed,
+                                    loading: false,
+                                    hasMore: entities.length >= itemCount,
+                                    error: undefined,
+                                    totalCount: entities.length
+                                }
+                            }));
+                        },
+                        onError,
+                        searchString,
+                        filter: columnFilter,
+                        limit: itemCount,
+                        startAfter: undefined
+                    });
+                    unsubscribersRef.current[column] = unsubscribe;
+                } else {
+                    currentDataSource.fetchCollection<M>({
+                        path: resolvedPath,
+                        collection: currentCollection,
+                        searchString,
+                        filter: columnFilter,
+                        limit: itemCount,
+                        startAfter: undefined
+                    })
+                        .then(async (entities) => {
+                            const processed = await applyOnFetch(entities);
+                            setColumnData(prev => ({
+                                ...prev,
+                                [column]: {
+                                    entities: processed,
+                                    loading: false,
+                                    hasMore: entities.length >= itemCount,
+                                    error: undefined,
+                                    totalCount: entities.length
+                                }
+                            }));
+                        })
+                        .catch(onError);
+                }
+            }
+
+            // Count query
+            if (currentDataSource.countEntities) {
+                currentDataSource.countEntities({
+                    path: resolvedPath,
+                    collection: currentCollection,
+                    filter: columnFilter,
+                    searchString
+                }).then(count => {
+                    setColumnData(prev => ({
+                        ...prev,
+                        [column]: {
+                            ...prev[column],
+                            totalCount: count
+                        }
+                    }));
+                }).catch(e => {
+                    console.warn(`Failed to get count for column ${column}:`, e);
+                });
             }
         });
 
-        // Cleanup function to unsubscribe all current subscriptions
         return () => {
             Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
             unsubscribersRef.current = {};
         };
     }, [
-        columns.join(","), // Only re-run when columns change
+        columnsKey,
         resolvedPath,
         columnProperty,
         orderProperty,
         searchString,
-        JSON.stringify(filterValues),
-        JSON.stringify(columnItemCounts),
-        JSON.stringify(refreshCounters),
-        dataSource,
-        collection,
-        context,
+        filterKey,
+        refreshCounter,
         pageSize
+        // dataSource, collection, context accessed via refs
     ]);
+
+    // Re-run effect when columnItemCounts changes (pagination)
+    useEffect(() => {
+        // Trigger refresh when item counts change
+        setRefreshCounter(c => c + 1);
+    }, [JSON.stringify(columnItemCounts)]);
 
     const loadMoreColumn = useCallback((column: COLUMN) => {
         setColumnItemCounts(prev => ({
@@ -288,21 +398,12 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     }, [pageSize]);
 
     const refreshColumn = useCallback((column: COLUMN) => {
-        setRefreshCounters(prev => ({
-            ...prev,
-            [column]: (prev[column] ?? 0) + 1
-        }));
+        setRefreshCounter(c => c + 1);
     }, []);
 
     const refreshAll = useCallback(() => {
-        setRefreshCounters(prev => {
-            const updated = { ...prev };
-            columns.forEach(col => {
-                updated[col] = (updated[col] ?? 0) + 1;
-            });
-            return updated;
-        });
-    }, [columns]);
+        setRefreshCounter(c => c + 1);
+    }, []);
 
     // Aggregate loading and error state
     const loading = useMemo(() => {

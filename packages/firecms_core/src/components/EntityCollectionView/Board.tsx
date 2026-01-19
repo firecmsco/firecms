@@ -306,6 +306,7 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
                             allowReorder={allowColumnReorder}
                             loading={columnLoadingState?.[String(key)]?.loading}
                             hasMore={columnLoadingState?.[String(key)]?.hasMore}
+                            totalCount={columnLoadingState?.[String(key)]?.totalCount}
                             onLoadMore={onLoadMoreColumn ? () => onLoadMoreColumn(key) : undefined}
                             onAddItem={onAddItemToColumn ? () => onAddItemToColumn(key) : undefined}
                             style={{

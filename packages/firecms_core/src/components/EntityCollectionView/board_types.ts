@@ -36,6 +36,8 @@ export interface ColumnLoadingState {
         loading: boolean;
         hasMore: boolean;
         itemCount: number;
+        /** Total count of entities in column (may differ from itemCount if some lack orderProperty) */
+        totalCount?: number;
     };
 }
 

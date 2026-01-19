@@ -195,7 +195,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             state[col] = {
                 loading: colData?.loading ?? true,
                 hasMore: colData?.hasMore ?? false,
-                itemCount: colData?.entities?.length ?? 0
+                itemCount: colData?.entities?.length ?? 0,
+                totalCount: colData?.totalCount
             };
         });
         return state;

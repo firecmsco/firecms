@@ -34,6 +34,10 @@ export interface BoardColumnProps<M extends Record<string, any>> {
      * Callback to add a new item to this column
      */
     onAddItem?: () => void;
+    /**
+     * Total count of entities in this column
+     */
+    totalCount?: number;
     style?: React.CSSProperties;
 }
 
@@ -49,6 +53,7 @@ export function BoardColumn<M extends Record<string, any>>({
     hasMore = false,
     onLoadMore,
     onAddItem,
+    totalCount,
     style
 }: BoardColumnProps<M>) {
     const {
@@ -95,9 +100,16 @@ export function BoardColumn<M extends Record<string, any>>({
                     allowReorder ? "cursor-grab" : ""
                 )}
             >
-                <BoardColumnTitle aria-label={`${title} item list`}>
-                    {title}
-                </BoardColumnTitle>
+                <div className="flex items-center gap-2">
+                    <BoardColumnTitle aria-label={`${title} item list`}>
+                        {title}
+                    </BoardColumnTitle>
+                    {totalCount !== undefined && (
+                        <span className="text-xs text-surface-500 dark:text-surface-400">
+                            {totalCount}
+                        </span>
+                    )}
+                </div>
                 {onAddItem && (
                     <IconButton
                         size="small"
