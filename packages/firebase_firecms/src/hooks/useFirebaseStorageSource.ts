@@ -109,8 +109,12 @@ export function useFirebaseStorageSource({
                         },
                         () => {
                             clearTimeoutIfExists();
+                            const fullPath = uploadTask.snapshot.ref.fullPath;
+                            const bucketName = uploadTask.snapshot.ref.bucket;
                             resolve({
-                                path: uploadTask.snapshot.ref.fullPath
+                                path: fullPath,
+                                bucket: bucketName,
+                                storageUrl: `gs://${bucketName}/${fullPath}`
                             });
                         }
                     );
@@ -139,13 +143,28 @@ export function useFirebaseStorageSource({
 
         async getDownloadURL(storagePathOrUrl: string, bucket?: string): Promise<DownloadConfig> {
             if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
-            const storageBucketUrl = bucket ?? bucketUrl;
+
+            // Support fully-qualified gs:// URLs
+            let resolvedPathOrUrl = storagePathOrUrl;
+            let resolvedBucket = bucket;
+            if (storagePathOrUrl.startsWith("gs://")) {
+                // Format: gs://<bucket>/<path>
+                const withoutProtocol = storagePathOrUrl.substring("gs://".length);
+                const firstSlash = withoutProtocol.indexOf("/");
+                if (firstSlash > 0) {
+                    resolvedBucket = withoutProtocol.substring(0, firstSlash);
+                    resolvedPathOrUrl = withoutProtocol.substring(firstSlash + 1);
+                }
+            }
+
+            const storageBucketUrl = resolvedBucket ?? bucketUrl;
             const storage = getStorage(firebaseApp, storageBucketUrl);
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
+
             if (urlsCache[storagePathOrUrl])
                 return urlsCache[storagePathOrUrl];
             try {
-                const fileRef = ref(storage, storagePathOrUrl);
+                const fileRef = ref(storage, resolvedPathOrUrl);
                 const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
                 const result: DownloadConfig = {
                     url,

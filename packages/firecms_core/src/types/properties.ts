@@ -829,6 +829,16 @@ export type StorageConfig = {
     storagePath: string | ((context: UploadedFileContext) => string);
 
     /**
+     * When set to true, this flag indicates that the bucket name will be
+     * included in the saved storage path.
+     *
+     * E.g. `gs://my-bucket/path/to/file.png` instead of just `path/to/file.png`
+     *
+     * Defaults to false.
+     */
+    includeBucketUrl?: boolean;
+
+    /**
      * When set to true, this flag indicates that the download URL of the file
      * will be saved in the datasource, instead of the storage path.
      *

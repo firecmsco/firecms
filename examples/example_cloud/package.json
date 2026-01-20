@@ -2,7 +2,7 @@
   "name": "firecms-example-cloud",
   "private": true,
   "type": "module",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/cloud": "^3.0.0",
+    "@firecms/cloud": "^3.0.1",
     "@fontsource/jetbrains-mono": "^5.2.8",
-    "firebase": "^12.6.0",
+    "firebase": "^12.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typeface-rubik": "^1.1.13"

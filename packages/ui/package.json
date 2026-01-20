@@ -1,7 +1,7 @@
 {
   "name": "@firecms/ui",
   "type": "module",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -115,7 +115,7 @@
     "index.css",
     "tailwind.config.js"
   ],
-  "gitHead": "0f16c9b5332f70bbcad9eb4d249ba220964d4195",
+  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
   "publishConfig": {
     "access": "public"
   }

@@ -15,7 +15,7 @@
     "@firecms/ui": "^3.0.0",
     "@firecms/user_management": "^3.0.0",
     "@fontsource/jetbrains-mono": "^5.1.1",
-    "firebase": "^12.2.1",
+    "firebase": "^12.7.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^6.26.2",

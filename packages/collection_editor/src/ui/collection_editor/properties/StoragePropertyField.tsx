@@ -48,6 +48,7 @@ export function StoragePropertyField({
     const maxSize = `${baseStoragePath}.maxSize`;
     const storagePath = `${baseStoragePath}.storagePath`;
     const storeUrl = `${baseStoragePath}.storeUrl`;
+    const includeBucketUrl = `${baseStoragePath}.includeBucketUrl`;
 
     // Image resize config paths
     const imageResize = `${baseStoragePath}.imageResize`;
@@ -169,6 +170,26 @@ export function StoragePropertyField({
                                 </ul>
                             </Typography>
 
+                            <Field name={includeBucketUrl}
+                                   type="checkbox">
+                                {({
+                                      field,
+                                      form
+                                  }: FormexFieldProps) => {
+                                    return <SwitchControl
+                                        label={"Include bucket URL (gs://...) in saved value"}
+                                        disabled={existing || disabled}
+                                        form={form}
+                                        field={field}/>;
+                                }}
+                            </Field>
+
+                            <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
+                                Turn this setting on if you want to save a fully-qualified storage URL
+                                (e.g. <code>gs://my-bucket/path/to/file</code>) instead of just the storage path.
+                                You can only change this prop upon creation.
+                            </Typography>
+
                             <Field name={storeUrl}
                                    type="checkbox">
                                 {({
@@ -179,7 +200,7 @@ export function StoragePropertyField({
                                         label={"Save URL instead of storage path"}
                                         disabled={existing || disabled}
                                         form={form}
-                                        field={field}/>
+                                        field={field}/>;
                                 }}
                             </Field>
 
