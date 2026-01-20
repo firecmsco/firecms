@@ -13,7 +13,7 @@ export function isObject(item: any) {
 }
 
 
-export function isPlainObject(obj:any) {
+export function isPlainObject(obj: any) {
     // 1. Rule out non-objects, null, and arrays
     if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
         return false;
@@ -87,17 +87,20 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                     // overwrite with a shallow copy of the source array.
                     (output as any)[key] = [...sourceValue];
                 }
-            } else if (isObject(sourceValue)) {
-                // If source value is an object:
-                if (isObject(outputValue)) {
-                    // If the corresponding value in output (from target) is also an object, recurse.
+            } else if (isPlainObject(sourceValue)) {
+                // If source value is a plain object (not a class instance like EntityReference, GeoPoint, etc.):
+                if (isPlainObject(outputValue)) {
+                    // If the corresponding value in output (from target) is also a plain object, recurse.
                     // Ensure the ignoreUndefined flag is passed down.
                     (output as any)[key] = mergeDeep(outputValue, sourceValue, ignoreUndefined);
                 } else {
-                    // If output's value (from target) is not an object (e.g., null, primitive, or key didn't exist in original target),
+                    // If output's value (from target) is not a plain object (e.g., null, primitive, class instance, or key didn't exist in original target),
                     // overwrite with the source object.
                     (output as any)[key] = sourceValue;
                 }
+            } else if (isObject(sourceValue)) {
+                // If source value is a class instance (not a plain object), use it directly to preserve prototype
+                (output as any)[key] = sourceValue;
             } else {
                 // If source value is a primitive, null, or undefined (and not ignored).
                 (output as any)[key] = sourceValue;
