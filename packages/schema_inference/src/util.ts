@@ -7,14 +7,16 @@ export function extractEnumFromValues(values: unknown[]) {
     const enumValues = values
         .map((value) => {
             if (typeof value === "string") {
-                return ({ id: value, label: unslugify(value) });
+                return ({
+                    id: value,
+                    label: unslugify(value)
+                });
             } else
                 return null;
         }).filter(Boolean) as Array<{ id: string, label: string }>;
     enumValues.sort((a, b) => a.label.localeCompare(b.label));
     return enumValues;
 }
-
 
 export function prettifyIdentifier(input: string) {
     if (!input) return "";
@@ -33,10 +35,12 @@ export function prettifyIdentifier(input: string) {
     const s = text
         .trim()
         .replace(/\b\w/g, (char) => char.toUpperCase());
-    console.log("Prettified identifier:", { input,s });
+    console.log("Prettified identifier:", {
+        input,
+        s
+    });
     return s;
 }
-
 
 export function unslugify(slug?: string): string {
     if (!slug) return "";
@@ -79,11 +83,17 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
             if (sourceElement instanceof Date) {
                 // Assign a new Date instance with the same time value
                 Object.assign(output, { [key]: new Date(sourceElement.getTime()) });
-            } else if (isObject(sourceElement)) {
+            } else if (isPlainObject(sourceElement)) {
+                // Only recursively merge plain objects, not class instances
                 if (!(key in target))
                     Object.assign(output, { [key]: sourceElement });
-                else
+                else if (isPlainObject((target as any)[key]))
                     (output as any)[key] = mergeDeep((target as any)[key], sourceElement);
+                else
+                    Object.assign(output, { [key]: sourceElement });
+            } else if (isObject(sourceElement)) {
+                // For class instances (EntityReference, GeoPoint, etc.), assign directly to preserve prototype
+                Object.assign(output, { [key]: sourceElement });
             } else {
                 Object.assign(output, { [key]: sourceElement });
             }
@@ -96,4 +106,10 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
+export function isPlainObject(obj: any) {
+    if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
+        return false;
+    }
+    return Object.getPrototypeOf(obj) === Object.prototype;
+}
 

@@ -14,6 +14,7 @@ import {
     ResolvedProperty
 } from "../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
+import { mergeDeep } from "./objects";
 
 export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
     if (property.readOnly)
@@ -90,13 +91,13 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                         timestampNowValue,
                                                                         setDateToMidnight
                                                                     }:
-                                                                        {
-                                                                            inputValues: Partial<EntityValues<M>>,
-                                                                            properties: ResolvedProperties<M>,
-                                                                            status: EntityStatus,
-                                                                            timestampNowValue: any,
-                                                                            setDateToMidnight: (input?: any) => any | undefined
-                                                                        }): EntityValues<M> {
+                                                                    {
+                                                                        inputValues: Partial<EntityValues<M>>,
+                                                                        properties: ResolvedProperties<M>,
+                                                                        status: EntityStatus,
+                                                                        timestampNowValue: any,
+                                                                        setDateToMidnight: (input?: any) => any | undefined
+                                                                    }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
@@ -159,7 +160,8 @@ export function traverseValuesProperties<M extends Record<string, any>>(
             return ({ [key]: updatedValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
-    const result = { ...inputValues, ...updatedValues };
+    // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
+    const result = mergeDeep(inputValues, updatedValues);
     if (Object.keys(result).length === 0) return undefined;
     return result;
 }
