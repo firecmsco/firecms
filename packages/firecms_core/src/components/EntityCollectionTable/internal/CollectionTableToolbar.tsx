@@ -18,6 +18,10 @@ interface CollectionTableToolbarProps {
     loading: boolean;
     actionsStart?: React.ReactNode;
     actions?: React.ReactNode;
+    /**
+     * View mode toggle button, positioned left of the search bar.
+     */
+    viewModeToggle?: React.ReactNode;
     title?: React.ReactNode,
     onTextSearchClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
@@ -41,7 +45,8 @@ export function CollectionTableToolbar({
     onTextSearchClick,
     size,
     textSearchLoading,
-    title
+    title,
+    viewModeToggle
 }: CollectionTableToolbarProps) {
 
     const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -97,6 +102,8 @@ export function CollectionTableToolbar({
                     {loading &&
                         <CircularProgress size={"smallest"} />}
                 </div>}
+
+                {viewModeToggle}
 
                 {(onTextSearch || onTextSearchClick) &&
                     <SearchBar

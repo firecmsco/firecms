@@ -19,147 +19,152 @@ import { VirtualTableColumn } from "../VirtualTable";
 export type EntityCollectionTableProps<M extends Record<string, any>,
     USER extends User = User> = {
 
-    className?: string;
+        className?: string;
 
-    style?: React.CSSProperties;
+        style?: React.CSSProperties;
 
-    /**
-     * Display these entities as selected
-     */
-    selectionController: SelectionController<M>;
+        /**
+         * Display these entities as selected
+         */
+        selectionController: SelectionController<M>;
 
-    /**
-     * List of entities that will be displayed as selected;
-     */
-    highlightedEntities?: Entity<M>[];
+        /**
+         * List of entities that will be displayed as selected;
+         */
+        highlightedEntities?: Entity<M>[];
 
-    /**
-     * Override the title in the toolbar
-     */
-    title?: React.ReactNode;
+        /**
+         * Override the title in the toolbar
+         */
+        title?: React.ReactNode;
 
-    /**
-     * Additional component that renders actions such as buttons in the
-     * collection toolbar, displayed on the left side
-     */
-    actionsStart?: React.ReactNode;
+        /**
+         * Additional component that renders actions such as buttons in the
+         * collection toolbar, displayed on the left side
+         */
+        actionsStart?: React.ReactNode;
 
-    /**
-     * Callback when a cell value changes.
-     */
-    onValueChange?: OnCellValueChange<any, M>;
+        /**
+         * Callback when a cell value changes.
+         */
+        onValueChange?: OnCellValueChange<any, M>;
 
-    uniqueFieldValidator?: UniqueFieldValidator;
+        uniqueFieldValidator?: UniqueFieldValidator;
 
-    /**
-     * Builder for creating the buttons in each row
-     * @param entity
-     * @param size
-     */
-    tableRowActionsBuilder?: (params: {
-        entity: Entity<M>,
-        size: CollectionSize,
-        width: number,
-        frozen?: boolean
-    }) => React.ReactNode;
+        /**
+         * Builder for creating the buttons in each row
+         * @param entity
+         * @param size
+         */
+        tableRowActionsBuilder?: (params: {
+            entity: Entity<M>,
+            size: CollectionSize,
+            width: number,
+            frozen?: boolean
+        }) => React.ReactNode;
 
-    /**
-     * Callback when anywhere on the table is clicked
-     */
-    onEntityClick?(entity: Entity<M>): void;
+        /**
+         * Callback when anywhere on the table is clicked
+         */
+        onEntityClick?(entity: Entity<M>): void;
 
-    /**
-     * Callback when a column is resized
-     */
-    onColumnResize?(params: OnColumnResizeParams): void;
+        /**
+         * Callback when a column is resized
+         */
+        onColumnResize?(params: OnColumnResizeParams): void;
 
-    /**
-     * Initial scroll position
-     */
-    initialScroll?: number;
+        /**
+         * Initial scroll position
+         */
+        initialScroll?: number;
 
-    /**
-     * Callback when the table is scrolled
-     * @param props
-     */
-    onScroll?: (props: {
-        scrollDirection: "forward" | "backward",
-        scrollOffset: number,
-        scrollUpdateWasRequested: boolean
-    }) => void;
+        /**
+         * Callback when the table is scrolled
+         * @param props
+         */
+        onScroll?: (props: {
+            scrollDirection: "forward" | "backward",
+            scrollOffset: number,
+            scrollUpdateWasRequested: boolean
+        }) => void;
 
-    /**
-     * Callback when the selected size of the table is changed
-     */
-    onSizeChanged?(size: CollectionSize): void;
+        /**
+         * Callback when the selected size of the table is changed
+         */
+        onSizeChanged?(size: CollectionSize): void;
 
-    /**
-     * Should apply a different style to a row when hovering
-     */
-    hoverRow?: boolean;
+        /**
+         * Should apply a different style to a row when hovering
+         */
+        hoverRow?: boolean;
 
-    /**
-     * Additional component that renders actions such as buttons in the
-     * collection toolbar, displayed on the right side
-     */
-    actions?: React.ReactNode;
+        /**
+         * Additional component that renders actions such as buttons in the
+         * collection toolbar, displayed on the right side
+         */
+        actions?: React.ReactNode;
 
-    /**
-     * Controller holding the logic for the table
-     * {@link useDataSourceTableController}
-     * {@link EntityTableController}
-     */
-    tableController: EntityTableController<M>;
+        /**
+         * View mode toggle button, positioned left of the search bar.
+         */
+        viewModeToggle?: React.ReactNode;
 
-    displayedColumnIds?: PropertyColumnConfig[];
+        /**
+         * Controller holding the logic for the table
+         * {@link useDataSourceTableController}
+         * {@link EntityTableController}
+         */
+        tableController: EntityTableController<M>;
 
-    forceFilter?: FilterValues<Extract<keyof M, string>>;
+        displayedColumnIds?: PropertyColumnConfig[];
 
-    textSearchEnabled?: boolean;
+        forceFilter?: FilterValues<Extract<keyof M, string>>;
 
-    inlineEditing?: boolean;
+        textSearchEnabled?: boolean;
 
-    additionalFields?: AdditionalFieldDelegate<M, USER>[];
+        inlineEditing?: boolean;
 
-    defaultSize?: CollectionSize;
+        additionalFields?: AdditionalFieldDelegate<M, USER>[];
 
-    properties: ResolvedProperties<M>;
+        defaultSize?: CollectionSize;
 
-    getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties<M>[string];
+        properties: ResolvedProperties<M>;
 
-    filterable?: boolean;
+        getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties<M>[string];
 
-    sortable?: boolean;
+        filterable?: boolean;
 
-    endAdornment?: React.ReactNode;
+        sortable?: boolean;
 
-    AdditionalHeaderWidget?: React.ComponentType<{
-        property: ResolvedProperty,
-        propertyKey: string,
-        onHover: boolean,
-    }>;
+        endAdornment?: React.ReactNode;
 
-    AddColumnComponent?: React.ComponentType;
+        AdditionalHeaderWidget?: React.ComponentType<{
+            property: ResolvedProperty,
+            propertyKey: string,
+            onHover: boolean,
+        }>;
 
-    additionalIDHeaderWidget?: React.ReactNode;
+        AddColumnComponent?: React.ComponentType;
 
-    emptyComponent?: React.ReactNode;
+        additionalIDHeaderWidget?: React.ReactNode;
 
-    getIdColumnWidth?: () => number;
+        emptyComponent?: React.ReactNode;
 
-    onTextSearchClick?: () => void;
+        getIdColumnWidth?: () => number;
 
-    textSearchLoading?: boolean;
+        onTextSearchClick?: () => void;
 
-    enablePopupIcon: boolean;
+        textSearchLoading?: boolean;
 
-    openEntityMode?: "side_panel" | "full_screen";
+        enablePopupIcon: boolean;
 
-    /**
-     * Callback when columns are reordered via drag-and-drop
-     */
-    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
-};
+        openEntityMode?: "side_panel" | "full_screen";
+
+        /**
+         * Callback when columns are reordered via drag-and-drop
+         */
+        onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+    };
 
 export type GetPropertyForProps<M extends Record<string, any>> = {
     propertyKey: string,

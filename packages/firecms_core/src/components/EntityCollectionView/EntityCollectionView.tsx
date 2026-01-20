@@ -51,6 +51,7 @@ import { useUserConfigurationPersistence } from "../../hooks/useUserConfiguratio
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { EntityCollectionCardView } from "./EntityCollectionCardView";
 import { EntityCollectionBoardView } from "./EntityCollectionBoardView";
+import { ViewModeToggle } from "./ViewModeToggle";
 import {
     AddIcon,
     Button,
@@ -774,6 +775,12 @@ export const EntityCollectionView = React.memo(
                             onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
                             onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
                             textSearchLoading={textSearchLoading}
+                            viewModeToggle={<ViewModeToggle
+                                viewMode={viewMode}
+                                onViewModeChange={onViewModeChange}
+                                kanbanEnabled={kanbanEnabled}
+                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
+                            />}
                             actionsStart={<EntityCollectionViewStartActions
                                 parentCollectionIds={parentCollectionIds ?? []}
                                 collection={collection}
@@ -794,10 +801,6 @@ export const EntityCollectionView = React.memo(
                                 selectionController={usedSelectionController}
                                 selectionEnabled={selectionEnabled}
                                 collectionEntitiesCount={docsCount}
-                                viewMode={viewMode}
-                                onViewModeChange={onViewModeChange}
-                                kanbanEnabled={kanbanEnabled}
-                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
                             />}
                         />
                         {/* Kanban Board View */}
@@ -837,6 +840,12 @@ export const EntityCollectionView = React.memo(
                             onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
                             onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
                             textSearchLoading={textSearchLoading}
+                            viewModeToggle={<ViewModeToggle
+                                viewMode={viewMode}
+                                onViewModeChange={onViewModeChange}
+                                kanbanEnabled={kanbanEnabled}
+                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
+                            />}
                             actionsStart={<EntityCollectionViewStartActions
                                 parentCollectionIds={parentCollectionIds ?? []}
                                 collection={collection}
@@ -857,10 +866,6 @@ export const EntityCollectionView = React.memo(
                                 selectionController={usedSelectionController}
                                 selectionEnabled={selectionEnabled}
                                 collectionEntitiesCount={docsCount}
-                                viewMode={viewMode}
-                                onViewModeChange={onViewModeChange}
-                                kanbanEnabled={kanbanEnabled}
-                                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
                             />}
                         />
                         {/* Card Grid View */}
@@ -920,6 +925,12 @@ export const EntityCollectionView = React.memo(
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
                         collectionEntitiesCount={docsCount} resolvedProperties={resolvedCollection.properties} />}
+                    viewModeToggle={<ViewModeToggle
+                        viewMode={viewMode}
+                        onViewModeChange={onViewModeChange}
+                        kanbanEnabled={kanbanEnabled}
+                        hasKanbanConfigPlugin={hasKanbanConfigPlugin}
+                    />}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -930,11 +941,7 @@ export const EntityCollectionView = React.memo(
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}
-                        collectionEntitiesCount={docsCount}
-                        viewMode={viewMode}
-                        onViewModeChange={onViewModeChange}
-                        kanbanEnabled={kanbanEnabled}
-                        hasKanbanConfigPlugin={hasKanbanConfigPlugin} />}
+                        collectionEntitiesCount={docsCount} />}
                     emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                         ? <div className="flex flex-col items-center justify-center">
                             <Typography variant={"subtitle2"}>So empty...</Typography>

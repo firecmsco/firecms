@@ -11,7 +11,7 @@ import {
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, RefreshIcon, Tooltip, Typography } from "@firecms/ui";
 import {
     getPropertyInPath,
     resolveCollection,
@@ -56,7 +56,6 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const dataSource = useDataSource(collection);
     const sideEntityController = useSideEntityController();
     const plugins = customizationController.plugins ?? [];
-    const orderProperty = collection.orderProperty;
 
     // State for backfill dialog
     const [showBackfillDialog, setShowBackfillDialog] = useState(false);
@@ -68,6 +67,19 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         propertyConfigs: customizationController.propertyConfigs,
         authController
     }), [collection, customizationController.propertyConfigs, authController]);
+
+    // Get orderProperty from collection config, but validate it exists as a real property
+    const rawOrderProperty = collection.orderProperty;
+    const orderProperty = useMemo(() => {
+        if (!rawOrderProperty) return undefined;
+        // Check if the property actually exists in the resolved collection
+        const property = getPropertyInPath(resolvedCollection.properties, rawOrderProperty);
+        if (!property) {
+            console.warn(`orderProperty "${rawOrderProperty}" is defined but does not exist in the collection properties. Treating as unconfigured.`);
+            return undefined;
+        }
+        return rawOrderProperty;
+    }, [rawOrderProperty, resolvedCollection.properties]);
 
     // Get columns from the property's enumValues
     const { enumColumns, columnLabels } = useMemo(() => {
@@ -557,6 +569,14 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                             ? "A Firestore index is required for this query."
                             : errorMessage}
                     </Typography>
+                    <Tooltip title="Refresh data">
+                        <IconButton
+                            size="small"
+                            onClick={() => boardDataController.refreshAll()}
+                        >
+                            <RefreshIcon size="small" />
+                        </IconButton>
+                    </Tooltip>
                     {indexUrl && (
                         <Button
                             size="small"

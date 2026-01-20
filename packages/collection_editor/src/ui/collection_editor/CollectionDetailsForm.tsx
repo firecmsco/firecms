@@ -419,7 +419,7 @@ export function CollectionDetailsForm({
                                 <div
                                     className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
                                     <SettingsIcon />
-                                    <Typography variant={"subtitle2"}
+                                    <Typography
                                         className="ml-2">
                                         Advanced
                                     </Typography>

@@ -48,6 +48,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         forceFilter,
         actionsStart,
         actions,
+        viewModeToggle,
         title,
         tableRowActionsBuilder,
         uniqueFieldValidator,
@@ -343,6 +344,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}
+                viewModeToggle={viewModeToggle}
                 loading={tableController.dataLoading} />
 
             <SelectableTable columns={columns}

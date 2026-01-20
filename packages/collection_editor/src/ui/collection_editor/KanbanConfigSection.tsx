@@ -92,7 +92,7 @@ export function KanbanConfigSection({
                 title={
                     <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
                         <ViewKanbanIcon />
-                        <Typography variant={"subtitle2"} className="ml-2">
+                        <Typography className="ml-2">
                             Kanban Configuration
                         </Typography>
                     </div>
