@@ -11,6 +11,7 @@ export * from "./Collapse";
 export * from "./CircularProgress";
 export * from "./Checkbox";
 export * from "./Chip";
+export * from "./ColorPicker";
 export * from "./DateTimeField";
 export * from "./Dialog";
 export * from "./DialogActions";

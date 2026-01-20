@@ -6,12 +6,16 @@ import {
     AutorenewIcon,
     Badge,
     Button,
+    ChipColorKey,
     CircularProgress,
+    ColorPicker,
     DebouncedTextField,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    getColorSchemeForKey,
+    getColorSchemeForSeed,
     IconButton,
     ListIcon,
     Paper,
@@ -68,7 +72,10 @@ export function EnumForm({
         }
     });
 
-    const { values, errors } = formex;
+    const {
+        values,
+        errors
+    } = formex;
 
     useEffect(() => {
         if (onValuesChanged) {
@@ -125,7 +132,7 @@ function EnumFormFields({
     const buildEntry = ({
                             index,
                             internalId
-                        }:ArrayEntryParams) => {
+                        }: ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
         const entryError = errors?.enumValues && errors?.enumValues[index];
         return <EnumEntry index={index}
@@ -140,8 +147,10 @@ function EnumFormFields({
     };
 
     const inferValues = async () => {
-        if (!getData)
+        if (!getData) {
+            console.warn("INTERNAL: No getData function provided for data inference");
             return;
+        }
         setInferring(true);
         getData?.().then((data) => {
             if (!data)
@@ -199,7 +208,10 @@ function EnumFormFields({
                                 onInternalIdAdded={setLastInternalIdAdded}
                                 canAddElements={true}
                                 onValueChange={(value) => setFieldValue(enumValuesPath, value)}
-                                newDefaultEntry={{ id: "", label: "" }}/>
+                                newDefaultEntry={{
+                                    id: "",
+                                    label: ""
+                                }}/>
 
                 <EnumEntryDialog index={editDialogIndex}
                                  open={editDialogIndex !== undefined}
@@ -256,6 +268,13 @@ const EnumEntry = React.memo(
             currentLabelRef.current = labelValue;
         }, [labelValue]);
 
+        const colorValue = getIn(values, `${enumValuesPath}[${index}].color`) as ChipColorKey | undefined;
+        const colorScheme = colorValue
+            ? getColorSchemeForKey(colorValue)
+            : idValue
+                ? getColorSchemeForSeed(String(idValue))
+                : undefined;
+
         return (
             <>
                 <div className={"flex w-full align-center justify-center"}>
@@ -270,7 +289,18 @@ const EnumEntry = React.memo(
                            endAdornment={inferredEntry && <AutorenewIcon size={"small"}/>}
                            error={Boolean(entryError?.label)}/>
 
-                    {!disabled &&
+                    {!disabled && <>
+                        {/* Color indicator - clickable to open settings */}
+                        <button
+                            type="button"
+                            onClick={() => onDialogOpen()}
+                            className="w-5 h-5 rounded-full flex-shrink-0 self-center border border-surface-accent-200 dark:border-surface-accent-700 hover:scale-110 transition-transform cursor-pointer ml-3"
+                            style={{
+                                backgroundColor: colorScheme?.color ?? "#ccc"
+                            }}
+                            title={colorValue ? `Color: ${colorValue}` : "Auto color - Click to change"}
+                            aria-label="Edit enum color"
+                        />
                         <Badge color={"error"} invisible={!entryError?.id}>
                             <IconButton
                                 size="small"
@@ -279,7 +309,8 @@ const EnumEntry = React.memo(
                                 onClick={() => onDialogOpen()}>
                                 <SettingsIcon size={"small"}/>
                             </IconButton>
-                        </Badge>}
+                        </Badge>
+                    </>}
 
                 </div>
 
@@ -319,9 +350,13 @@ function EnumEntryDialog({
 
     const {
         errors,
+        values,
+        setFieldValue
     } = useFormex<EnumValues>();
 
     const idError = index !== undefined ? getIn(errors, `${enumValuesPath}[${index}].id`) : undefined;
+    const colorValue = index !== undefined ? getIn(values, `${enumValuesPath}[${index}].color`) as ChipColorKey | undefined : undefined;
+
     return <Dialog
         maxWidth="md"
         aria-labelledby="enum-edit-dialog"
@@ -331,18 +366,32 @@ function EnumEntryDialog({
         <DialogTitle hidden>Enum form dialog</DialogTitle>
         <DialogContent>
             {index !== undefined &&
-                <div>
-                    <Field name={`${enumValuesPath}[${index}].id`}
-                           as={DebouncedTextField}
-                           required
-                           label={"ID"}
-                           size="small"
-                           autoComplete="off"
-                           error={Boolean(idError)}/>
+                <div className="flex flex-col gap-4">
+                    <div>
+                        <Field name={`${enumValuesPath}[${index}].id`}
+                               as={DebouncedTextField}
+                               required
+                               label={"ID"}
+                               size="small"
+                               autoComplete="off"
+                               error={Boolean(idError)}/>
 
-                    <FieldCaption error={Boolean(idError)}>
-                        {idError ?? "Value saved in the data source"}
-                    </FieldCaption>
+                        <FieldCaption error={Boolean(idError)}>
+                            {idError ?? "Value saved in the data source"}
+                        </FieldCaption>
+                    </div>
+
+                    <div>
+                        <Typography variant="body2" className="font-medium mb-2">
+                            Chip color
+                        </Typography>
+                        <ColorPicker
+                            value={colorValue}
+                            onChange={(color) => setFieldValue(`${enumValuesPath}[${index}].color`, color)}
+                            size="small"
+                            allowClear={true}
+                        />
+                    </div>
                 </div>}
         </DialogContent>
 
