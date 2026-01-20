@@ -37,7 +37,8 @@ import {
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase
+    useInitialiseFirebase,
+    getFirestoreDataInPath
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
@@ -309,6 +310,7 @@ export function App() {
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
         collectionInference: buildCollectionInference(firebaseApp),
+        getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths),
     });
 
     const importPlugin = useImportPlugin();

@@ -11,7 +11,7 @@ import {
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, IconButton, RefreshIcon, Tooltip, Typography } from "@firecms/ui";
+import { Button, ChipColorKey, ChipColorScheme, CircularProgress, Dialog, DialogActions, DialogContent, getColorSchemeForSeed, IconButton, RefreshIcon, Tooltip, Typography } from "@firecms/ui";
 import {
     getPropertyInPath,
     resolveCollection,
@@ -82,7 +82,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     }, [rawOrderProperty, resolvedCollection.properties]);
 
     // Get columns from the property's enumValues
-    const { enumColumns, columnLabels } = useMemo(() => {
+    const { enumColumns, columnLabels, columnColors } = useMemo(() => {
         const property = getPropertyInPath(resolvedCollection.properties, columnProperty);
         if (!property || !('dataType' in property) || property.dataType !== "string") {
             return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
@@ -100,7 +100,11 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             acc[String(ev.id)] = ev.label;
             return acc;
         }, {});
-        return { enumColumns: cols, columnLabels: labels };
+        const colors = enumValues.reduce((acc: Record<string, ChipColorKey | ChipColorScheme | undefined>, ev: EnumValueConfig) => {
+            acc[String(ev.id)] = ev.color ?? getColorSchemeForSeed(String(ev.id));
+            return acc;
+        }, {});
+        return { enumColumns: cols, columnLabels: labels, columnColors: colors };
     }, [resolvedCollection, columnProperty]);
 
     // Track if user has manually reordered columns in this session
@@ -612,6 +616,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     data={boardItems}
                     columns={columns}
                     columnLabels={columnLabels}
+                    columnColors={columnColors}
                     assignColumn={assignColumn}
                     allowColumnReorder={allowColumnReorder}
                     onColumnReorder={handleColumnReorder}

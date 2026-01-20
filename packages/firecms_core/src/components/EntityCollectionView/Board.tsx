@@ -19,6 +19,7 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
     data,
     columns: columnsProp,
     columnLabels,
+    columnColors,
     className,
     assignColumn,
     allowColumnReorder = false,
@@ -299,6 +300,7 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
                             index={index}
                             id={String(key)}
                             title={columnLabels?.[key] ?? String(key)}
+                            color={columnColors?.[key]}
                             items={itemMapState[String(key)] || []}
                             ItemComponent={ItemComponent}
                             isDragging={isDragging}

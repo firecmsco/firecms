@@ -9,13 +9,13 @@ import { ValidationPanel } from "./validation/ValidationPanel";
 import { PropertyWithId } from "../PropertyEditView";
 
 export function EnumPropertyField({
-                                      multiselect,
-                                      updateIds,
-                                      disabled,
-                                      showErrors,
-                                      allowDataInference,
-                                      getData
-                                  }: {
+    multiselect,
+    updateIds,
+    disabled,
+    showErrors,
+    allowDataInference,
+    getData
+}: {
     multiselect: boolean;
     updateIds: boolean;
     disabled: boolean;
@@ -63,17 +63,17 @@ export function EnumPropertyField({
         <>
             <div className={"col-span-12"}>
                 <EnumForm enumValues={enumValues}
-                          updateIds={updateIds}
-                          disabled={disabled}
-                          allowDataInference={allowDataInference}
-                          onError={(hasError) => {
-                              setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
-                          }}
-                          getData={getData
-                              ? () => getData()
-                                  .then(res => res.map(entry => values.id && getIn(entry, values.id)).filter(Boolean))
-                              : undefined}
-                          onValuesChanged={onValuesChanged}/>
+                    updateIds={updateIds}
+                    disabled={disabled}
+                    allowDataInference={allowDataInference}
+                    onError={(hasError) => {
+                        setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
+                    }}
+                    getData={getData && values.id
+                        ? () => getData()
+                            .then(res => res.map(entry => getIn(entry, values.id!)).filter(Boolean))
+                        : undefined}
+                    onValuesChanged={onValuesChanged} />
             </div>
 
             <div className={"col-span-12"}>
@@ -81,9 +81,9 @@ export function EnumPropertyField({
                 <ValidationPanel>
                     {!multiselect &&
                         <StringPropertyValidation disabled={disabled}
-                                                  showErrors={showErrors}/>}
+                            showErrors={showErrors} />}
                     {multiselect &&
-                        <ArrayPropertyValidation disabled={disabled}/>}
+                        <ArrayPropertyValidation disabled={disabled} />}
                 </ValidationPanel>
 
             </div>
@@ -104,7 +104,7 @@ export function EnumPropertyField({
                         .filter((enumValue) => Boolean(enumValue?.id))
                         .map((enumValue) => (
                             <SelectItem key={enumValue.id}
-                                        value={enumValue.id?.toString()}>
+                                value={enumValue.id?.toString()}>
                                 {enumValue.label}
                             </SelectItem>
                         ))}

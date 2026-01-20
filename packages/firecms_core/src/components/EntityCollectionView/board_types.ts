@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
 import { Entity } from "../../types";
 
 /**
@@ -57,6 +58,10 @@ export interface BoardProps<M extends Record<string, any>, COLUMN extends string
      * Labels for each column (optional, uses column key if not provided)
      */
     columnLabels?: Record<COLUMN, string>;
+    /**
+     * Colors for each column from enum values (optional)
+     */
+    columnColors?: Record<COLUMN, ChipColorKey | ChipColorScheme | undefined>;
     /**
      * CSS class name for the board container
      */

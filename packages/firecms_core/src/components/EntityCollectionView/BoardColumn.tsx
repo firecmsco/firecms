@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { BoardSortableList } from "./BoardSortableList";
 import { BoardColumnTitle } from "./BoardColumnTitle";
 import { BoardItem, BoardItemViewProps } from "./board_types";
-import { AddIcon, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
+import { AddIcon, ChipColorKey, ChipColorScheme, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
 
 export interface BoardColumnProps<M extends Record<string, any>> {
     id: string;
@@ -38,6 +38,10 @@ export interface BoardColumnProps<M extends Record<string, any>> {
      * Total count of entities in this column
      */
     totalCount?: number;
+    /**
+     * Color of the column header indicator
+     */
+    color?: ChipColorKey | ChipColorScheme;
     style?: React.CSSProperties;
 }
 
@@ -54,6 +58,7 @@ export function BoardColumn<M extends Record<string, any>>({
     onLoadMore,
     onAddItem,
     totalCount,
+    color,
     style
 }: BoardColumnProps<M>) {
     const {
@@ -101,7 +106,7 @@ export function BoardColumn<M extends Record<string, any>>({
                 )}
             >
                 <div className="flex items-center gap-2">
-                    <BoardColumnTitle aria-label={`${title} item list`}>
+                    <BoardColumnTitle aria-label={`${title} item list`} color={color}>
                         {title}
                     </BoardColumnTitle>
                     {totalCount !== undefined && (
@@ -113,7 +118,7 @@ export function BoardColumn<M extends Record<string, any>>({
                 {onAddItem && (
                     <IconButton
                         size="small"
-                        onClick={(e) => {
+                        onClick={(e: React.MouseEvent) => {
                             e.stopPropagation();
                             onAddItem();
                         }}
