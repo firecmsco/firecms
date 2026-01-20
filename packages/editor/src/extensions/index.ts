@@ -13,7 +13,7 @@ const PlaceholderExtension = Placeholder.configure({
     placeholder: ({
                       node,
                       editor
-                  }: { node: any; editor: Editor }) => {
+                  }) => {
         const {
             from,
             to

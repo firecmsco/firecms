@@ -60,19 +60,19 @@ const items: SelectorItem[] = [
     {
         name: "To-do List",
         icon: CheckBoxIcon,
-        command: (editor) => editor ? (editor.chain() as any).focus().toggleTaskList().run() : undefined,
+        command: (editor) => editor?.chain().focus().toggleTaskList().run(),
         isActive: (editor) => editor?.isActive("taskItem") ?? false,
     },
     {
         name: "Bullet List",
         icon: FormatListBulletedIcon,
-        command: (editor) => editor ? (editor.chain() as any).focus().toggleBulletList().run() : undefined,
+        command: (editor) => editor?.chain().focus().toggleBulletList().run(),
         isActive: (editor) => editor?.isActive("bulletList") ?? false,
     },
     {
         name: "Numbered List",
         icon: FormatListNumberedIcon,
-        command: (editor) => editor ? (editor.chain() as any).focus().toggleOrderedList().run() : undefined,
+        command: (editor) => editor?.chain().focus().toggleOrderedList().run(),
         isActive: (editor) => editor?.isActive("orderedList") ?? false,
     },
     {
