@@ -1,5 +1,5 @@
 import { ViewMode } from "@firecms/core";
-import { cls, GridViewIcon, TableViewIcon, ToggleButtonGroup, Typography, ViewKanbanIcon } from "@firecms/ui";
+import { AppsIcon, cls, ListIcon, ToggleButtonGroup, Typography, ViewKanbanIcon } from "@firecms/ui";
 
 export function ViewModeSwitch({
     value,
@@ -21,12 +21,12 @@ export function ViewModeSwitch({
                     {
                         value: "table",
                         label: "Table",
-                        icon: <TableViewIcon />
+                        icon: <ListIcon />
                     },
                     {
                         value: "cards",
                         label: "Cards",
-                        icon: <GridViewIcon />
+                        icon: <AppsIcon />
                     },
                     {
                         value: "kanban",
