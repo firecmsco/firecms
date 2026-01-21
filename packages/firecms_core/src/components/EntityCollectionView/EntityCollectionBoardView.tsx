@@ -334,6 +334,11 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         const entity = items.find(item => item.id === moveInfo?.itemId)?.entity;
         if (!entity) return;
 
+        // Optimistic update: update column counts immediately when moving between columns
+        if (moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn) {
+            boardDataController.updateColumnCounts(moveInfo.sourceColumn, moveInfo.targetColumn);
+        }
+
         // Calculate new order value
         const newOrder = calculateNewOrder(items, moveInfo?.itemId ?? "", moveInfo?.targetColumn ?? "");
 
@@ -368,7 +373,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } catch (e) {
             console.error("Error saving entity:", e);
         }
-    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder]);
+    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder, boardDataController]);
 
     // Backfill order values for all entities
     const handleBackfill = useCallback(async () => {

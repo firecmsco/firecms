@@ -52,7 +52,7 @@ import { useUserConfigurationPersistence } from "../../hooks/useUserConfiguratio
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { EntityCollectionCardView } from "./EntityCollectionCardView";
 import { EntityCollectionBoardView } from "./EntityCollectionBoardView";
-import { ViewModeToggle } from "./ViewModeToggle";
+import { ViewModeToggle, KanbanPropertyOption } from "./ViewModeToggle";
 import {
     AddIcon,
     Button,
@@ -509,6 +509,61 @@ export const EntityCollectionView = React.memo(
             return customizationController.plugins?.some(plugin => plugin.collectionView?.KanbanSetupComponent) ?? false;
         }, [customizationController.plugins]);
 
+        // Compute available enum properties for kanban column selection
+        const kanbanPropertyOptions: KanbanPropertyOption[] = useMemo(() => {
+            const options: KanbanPropertyOption[] = [];
+            const properties = resolvedCollection.properties;
+
+            for (const [key, property] of Object.entries(properties)) {
+                const prop = property as any;
+                if (prop && prop.dataType === "string" && prop.enumValues) {
+                    options.push({
+                        key,
+                        label: prop.name || key
+                    });
+                }
+            }
+
+            return options;
+        }, [resolvedCollection.properties]);
+
+        // Get saved kanban property from user config
+        const getSavedKanbanProperty = useCallback((): string | undefined => {
+            const saved = userConfigPersistence?.getCollectionConfig<M>(fullPath);
+            return (saved as any)?.kanbanColumnProperty;
+        }, [userConfigPersistence, fullPath]);
+
+        // Selected kanban property state - priority: saved config > collection default > first available
+        const [selectedKanbanProperty, setSelectedKanbanProperty] = useState<string>(() => {
+            const saved = getSavedKanbanProperty();
+            if (saved && kanbanPropertyOptions.some(o => o.key === saved)) return saved;
+            if (collection.kanban?.columnProperty) return collection.kanban.columnProperty;
+            return kanbanPropertyOptions[0]?.key ?? "";
+        });
+
+        // Update selected property if options change and current selection is no longer valid
+        useEffect(() => {
+            if (kanbanPropertyOptions.length > 0 && !kanbanPropertyOptions.some(o => o.key === selectedKanbanProperty)) {
+                const saved = getSavedKanbanProperty();
+                if (saved && kanbanPropertyOptions.some(o => o.key === saved)) {
+                    setSelectedKanbanProperty(saved);
+                } else if (collection.kanban?.columnProperty && kanbanPropertyOptions.some(o => o.key === collection.kanban?.columnProperty)) {
+                    setSelectedKanbanProperty(collection.kanban.columnProperty);
+                } else {
+                    setSelectedKanbanProperty(kanbanPropertyOptions[0]?.key ?? "");
+                }
+            }
+        }, [kanbanPropertyOptions, selectedKanbanProperty, getSavedKanbanProperty, collection.kanban?.columnProperty]);
+
+        // Handle kanban property change
+        const onKanbanPropertyChange = useCallback((property: string) => {
+            setSelectedKanbanProperty(property);
+            // Save to local persistence
+            if (userConfigPersistence) {
+                onCollectionModifiedForUser(fullPath, { kanbanColumnProperty: property } as any);
+            }
+        }, [userConfigPersistence, onCollectionModifiedForUser, fullPath]);
+
         const getPropertyFor = useCallback(({
             propertyKey,
             entity
@@ -763,6 +818,9 @@ export const EntityCollectionView = React.memo(
                 onSizeChanged={viewMode === "table" ? onTableSizeChanged : viewMode === "cards" ? setCardSize : undefined}
                 open={viewModePopoverOpen}
                 onOpenChange={setViewModePopoverOpen}
+                kanbanPropertyOptions={kanbanPropertyOptions}
+                selectedKanbanProperty={selectedKanbanProperty}
+                onKanbanPropertyChange={onKanbanPropertyChange}
             />
         );
 
@@ -804,12 +862,12 @@ export const EntityCollectionView = React.memo(
                 {/* View content - only the view-specific content changes */}
                 {viewMode === "kanban" && (kanbanEnabled || hasKanbanConfigPlugin) ? (
                     <EntityCollectionBoardView
-                        key={`kanban-view-${fullPath}`}
+                        key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
                         collection={collection}
                         tableController={tableController}
                         fullPath={fullPath}
                         parentCollectionIds={parentCollectionIds}
-                        columnProperty={collection.kanban?.columnProperty ?? ""}
+                        columnProperty={selectedKanbanProperty}
                         onEntityClick={onEntityClick}
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}

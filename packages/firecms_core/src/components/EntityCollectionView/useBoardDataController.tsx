@@ -32,6 +32,8 @@ export interface BoardDataController<M extends Record<string, any> = any, COLUMN
     refreshColumn: (column: COLUMN) => void;
     /** Refresh all columns */
     refreshAll: () => void;
+    /** Update counts for columns (for optimistic updates when moving items) */
+    updateColumnCounts: (sourceColumn: COLUMN, targetColumn: COLUMN) => void;
     /** Whether any column is loading */
     loading: boolean;
     /** Any error from any column */
@@ -154,12 +156,18 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
 
             // onUpdate callback
             const onUpdate = async (entities: Entity<M>[]) => {
+                // When text search is active, the data source returns ALL matching entities
+                // regardless of the column filter. We need to filter in memory to only show
+                // entities that belong to this specific column.
+                let processed = searchString
+                    ? entities.filter(e => e.values?.[columnProperty] === column)
+                    : entities;
+
                 // Apply onFetch callbacks if any
-                let processed = entities;
                 if (currentCollection.callbacks?.onFetch) {
                     try {
                         processed = await Promise.all(
-                            entities.map(entity =>
+                            processed.map(entity =>
                                 currentCollection.callbacks!.onFetch!({
                                     collection: currentCollection,
                                     path: resolvedPath,
@@ -286,6 +294,33 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         setColumnItemCounts(reset);
     }, [columns, pageSize]);
 
+    // Optimistic update for column counts when moving an item between columns
+    const updateColumnCounts = useCallback((sourceColumn: COLUMN, targetColumn: COLUMN) => {
+        if (sourceColumn === targetColumn) return;
+
+        setColumnData(prev => {
+            const updated = { ...prev };
+
+            // Decrease source column count
+            if (updated[sourceColumn]?.totalCount !== undefined) {
+                updated[sourceColumn] = {
+                    ...updated[sourceColumn],
+                    totalCount: Math.max(0, (updated[sourceColumn].totalCount ?? 0) - 1)
+                };
+            }
+
+            // Increase target column count
+            if (updated[targetColumn]?.totalCount !== undefined) {
+                updated[targetColumn] = {
+                    ...updated[targetColumn],
+                    totalCount: (updated[targetColumn].totalCount ?? 0) + 1
+                };
+            }
+
+            return updated;
+        });
+    }, []);
+
     // Aggregate loading and error state
     const loading = useMemo(() => {
         return Object.values(columnData).some((col) => col.loading);
@@ -303,6 +338,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         loadMoreColumn,
         refreshColumn,
         refreshAll,
+        updateColumnCounts,
         loading,
         error
     };

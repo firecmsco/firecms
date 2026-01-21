@@ -13,6 +13,11 @@ import {
     ViewKanbanIcon
 } from "@firecms/ui";
 
+export type KanbanPropertyOption = {
+    key: string;
+    label: string;
+};
+
 export type ViewModeToggleProps = {
     viewMode?: ViewMode;
     onViewModeChange?: (mode: ViewMode) => void;
@@ -43,6 +48,18 @@ export type ViewModeToggleProps = {
      * Callback when popover open state changes
      */
     onOpenChange?: (open: boolean) => void;
+    /**
+     * Available properties that can be used for kanban columns (enum properties)
+     */
+    kanbanPropertyOptions?: KanbanPropertyOption[];
+    /**
+     * Currently selected property for kanban columns
+     */
+    selectedKanbanProperty?: string;
+    /**
+     * Callback when the kanban column property changes
+     */
+    onKanbanPropertyChange?: (property: string) => void;
 }
 
 export function ViewModeToggle({
@@ -53,7 +70,10 @@ export function ViewModeToggle({
     size,
     onSizeChanged,
     open,
-    onOpenChange
+    onOpenChange,
+    kanbanPropertyOptions,
+    selectedKanbanProperty,
+    onKanbanPropertyChange
 }: ViewModeToggleProps) {
 
     if (!onViewModeChange) {
@@ -75,6 +95,10 @@ export function ViewModeToggle({
 
     const showKanban = kanbanEnabled || hasKanbanConfigPlugin;
     const showSizeSelector = size && onSizeChanged && (viewMode === "table" || viewMode === "cards");
+    const showKanbanPropertySelector = viewMode === "kanban" &&
+        kanbanPropertyOptions &&
+        kanbanPropertyOptions.length > 0 &&
+        onKanbanPropertyChange;
 
     // Build toggle options dynamically based on kanban availability
     const viewModeOptions: ToggleButtonOption<ViewMode>[] = useMemo(() => {
@@ -140,6 +164,32 @@ export function ViewModeToggle({
                             {["xs", "s", "m", "l", "xl"].map((s) => (
                                 <SelectItem key={s} value={s} className="font-medium text-center">
                                     {s.toUpperCase()}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                    </div>
+                )}
+
+                {/* Kanban column property selector */}
+                {showKanbanPropertySelector && (
+                    <div className="flex flex-row items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-300">
+                            <ViewKanbanIcon size="small" />
+                            <span>Group by</span>
+                        </div>
+                        <Select
+                            value={selectedKanbanProperty}
+                            size="small"
+                            className="w-32"
+                            onValueChange={(v) => onKanbanPropertyChange?.(v)}
+                            renderValue={(v) => {
+                                const option = kanbanPropertyOptions?.find(o => o.key === v);
+                                return <span className="font-medium truncate">{option?.label ?? v}</span>;
+                            }}
+                        >
+                            {kanbanPropertyOptions?.map((option) => (
+                                <SelectItem key={option.key} value={option.key}>
+                                    {option.label}
                                 </SelectItem>
                             ))}
                         </Select>
