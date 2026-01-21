@@ -364,9 +364,12 @@ export const productsCollection = buildCollection<Product>({
             dataType: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                dataType: "string",
+                validation: {
+                    uniqueInArray: true
+                }
 
-            }
+            },
         }
     }
 

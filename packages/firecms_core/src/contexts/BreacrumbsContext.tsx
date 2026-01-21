@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { BreadcrumbEntry, BreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
-const DEFAULT_BREADCRUMBS_CONTROLLER = {
+const DEFAULT_BREADCRUMBS_CONTROLLER: BreadcrumbsController = {
     breadcrumbs: [],
-    set: (props: {
-        breadcrumbs: BreadcrumbEntry[];
-    }) => {
+    set: () => {
+    },
+    updateCount: () => {
     }
 };
 
@@ -19,17 +19,24 @@ export const BreadcrumbsProvider: React.FC<BreadcrumbsProviderProps> = ({ childr
 
     const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbEntry[]>([]);
 
-    const set = (props: {
+    const set = useCallback((props: {
         breadcrumbs: BreadcrumbEntry[];
     }) => {
         setBreadcrumbs(props.breadcrumbs);
-    };
+    }, []);
+
+    const updateCount = useCallback((id: string, count: number | null | undefined) => {
+        setBreadcrumbs(prev => prev.map(entry =>
+            entry.id === id ? { ...entry, count } : entry
+        ));
+    }, []);
 
     return (
         <BreadcrumbContext.Provider
             value={{
                 breadcrumbs,
-                set
+                set,
+                updateCount
             }}
         >
             {children}

@@ -75,21 +75,21 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
 }) as typeof PropertyFieldBindingInternal;
 
 function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Record<string, any> = any>
-({
-     propertyKey,
-     property,
-     context,
-     includeDescription,
-     underlyingValueHasChanged,
-     disabled: disabledProp,
-     partOfArray,
-     partOfBlock,
-     minimalistView,
-     autoFocus,
-     index,
-     size,
-     onPropertyChange,
- }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
+    ({
+        propertyKey,
+        property,
+        context,
+        includeDescription,
+        underlyingValueHasChanged,
+        disabled: disabledProp,
+        partOfArray,
+        partOfBlock,
+        minimalistView,
+        autoFocus,
+        index,
+        size,
+        onPropertyChange,
+    }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -175,7 +175,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                 return <FieldInternal
                     Component={Component as ComponentType<FieldProps>}
                     componentProps={componentProps}
-                    formexFieldProps={fieldProps}/>;
+                    formexFieldProps={fieldProps} />;
             }}
         </Field>
     );
@@ -185,39 +185,54 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
 type ResolvedPropertyFieldBindingProps<T extends CMSType = CMSType, M extends Record<string, any> = any> =
     Omit<PropertyFieldBindingProps<T, M>, "property">
     & {
-    property: ResolvedProperty<T>
-};
+        property: ResolvedProperty<T>
+    };
 
 function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, any>>
-({
-     Component,
-     componentProps: {
-         propertyKey,
-         property,
-         includeDescription,
-         underlyingValueHasChanged,
-         partOfArray,
-         partOfBlock,
-         minimalistView,
-         autoFocus,
-         context,
-         disabled,
-         size,
-         onPropertyChange
-     },
-     formexFieldProps
- }:
- {
-     Component: ComponentType<FieldProps<T, any, M>>,
-     componentProps: ResolvedPropertyFieldBindingProps<T, M>,
-     formexFieldProps: FormexFieldProps<T, any>
- }) {
+    ({
+        Component,
+        componentProps: {
+            propertyKey,
+            property,
+            includeDescription,
+            underlyingValueHasChanged,
+            partOfArray,
+            partOfBlock,
+            minimalistView,
+            autoFocus,
+            context,
+            disabled,
+            size,
+            onPropertyChange
+        },
+        formexFieldProps
+    }:
+        {
+            Component: ComponentType<FieldProps<T, any, M>>,
+            componentProps: ResolvedPropertyFieldBindingProps<T, M>,
+            formexFieldProps: FormexFieldProps<T, any>
+        }) {
 
     const { plugins } = useCustomizationController();
 
     const customFieldProps: any = property.customProps;
     const value = formexFieldProps.field.value;
-    const error = getIn(formexFieldProps.form.errors, propertyKey);
+
+    // Get error for this field path, but avoid string indexing issues
+    // When an array has a string error like "Tags should have unique values",
+    // accessing errors["tags"]["0"] returns "T" (string indexing).
+    // We traverse the path manually and stop if we hit a string.
+    let error: any = formexFieldProps.form.errors;
+    for (const part of propertyKey.split(".")) {
+        if (error === undefined || error === null) break;
+        if (typeof error === "string") {
+            // Parent is a string error, children shouldn't inherit individual characters
+            error = undefined;
+            break;
+        }
+        error = error[part];
+    }
+
     const touched = getIn(formexFieldProps.form.touched, propertyKey);
 
     const showError: boolean = error &&
@@ -272,7 +287,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     return (
         <ErrorBoundary>
 
-            <UsedComponent {...cmsFieldProps}/>
+            <UsedComponent {...cmsFieldProps} />
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <Typography variant={"caption"} className={"ml-3.5"}>

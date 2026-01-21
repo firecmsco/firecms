@@ -93,6 +93,13 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
+    // Sync internal size with defaultSize prop when it changes
+    React.useEffect(() => {
+        if (defaultSize) {
+            setSize(defaultSize);
+        }
+    }, [defaultSize]);
+
     const updateSize = useCallback((size: CollectionSize) => {
         if (onSizeChanged)
             onSizeChanged(size);
@@ -339,8 +346,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                 textSearchLoading={textSearchLoading}
                 onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
-                size={size}
-                onSizeChanged={updateSize}
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}

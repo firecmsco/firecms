@@ -40,17 +40,21 @@ export function FireCMSRoute() {
                 if (entry.type === "entity") {
                     return ({
                         title: entry.entityId,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.fullPath),
+                        count: null // Not applicable for entities
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.fullPath),
+                        count: null // Not applicable for custom views
                     });
                 } else if (entry.type === "collection") {
                     return ({
                         title: entry.collection.name,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.fullPath),
+                        id: entry.fullPath,
+                        count: undefined // Loading
                     });
                 } else {
                     throw new Error("Unexpected navigation entry type");
@@ -58,6 +62,7 @@ export function FireCMSRoute() {
             })
         });
     }, [navigationEntries.map(entry => entry.path).join(",")]);
+
 
     if (isNew) {
         return <EntityFullScreenRoute
@@ -83,7 +88,7 @@ export function FireCMSRoute() {
             fullIdPath={collection.id}
             updateUrl={true}
             {...collection}
-            Actions={toArray(collection.Actions)}/>
+            Actions={toArray(collection.Actions)} />
     }
 
     if (isSidePanel) {
@@ -104,7 +109,7 @@ export function FireCMSRoute() {
                 fullPath={collection.path}
                 updateUrl={true}
                 {...collection}
-                Actions={toArray(collection.Actions)}/>;
+                Actions={toArray(collection.Actions)} />;
         }
     }
 
@@ -131,11 +136,11 @@ function getSelectedTabFromUrl(isNew: boolean, lastCustomView: NavigationViewCol
 }
 
 function EntityFullScreenRoute({
-                                   pathname,
-                                   navigationEntries,
-                                   isNew,
-                                   isCopy
-                               }: {
+    pathname,
+    navigationEntries,
+    isNew,
+    isCopy
+}: {
     pathname: string;
     navigationEntries: NavigationViewInternal[],
     isNew: boolean,
@@ -178,8 +183,8 @@ function EntityFullScreenRoute({
     let blocker: Blocker | undefined = undefined;
     try {
         blocker = useBlocker(({
-                                  nextLocation
-                              }) => {
+            nextLocation
+        }) => {
             if (nextLocation.pathname.startsWith(entityPath))
                 return false;
             return blocked.current;
@@ -195,7 +200,7 @@ function EntityFullScreenRoute({
     }
 
     if (!isNew && !lastEntityEntry) {
-        return <NotFoundPage/>;
+        return <NotFoundPage />;
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
@@ -240,7 +245,7 @@ function EntityFullScreenRoute({
             open={blocker?.state === "blocked"}
             handleOk={() => blocker?.proceed?.()}
             handleCancel={() => blocker?.reset?.()}
-            body={"You have unsaved changes in this entity."}/>
+            body={"You have unsaved changes in this entity."} />
 
     </>;
 }
