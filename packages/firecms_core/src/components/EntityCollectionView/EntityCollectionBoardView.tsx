@@ -109,33 +109,22 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     // Track if user has manually reordered columns in this session
     const [hasUserReordered, setHasUserReordered] = useState(false);
-    const [localColumnsOrder, setLocalColumnsOrder] = useState<string[]>(() => {
-        const configOrder = collection.kanban?.columnsOrder;
-        if (configOrder && configOrder.length > 0) {
-            const validConfigOrder = configOrder.filter(c => enumColumns.includes(c));
-            const missingColumns = enumColumns.filter(c => !validConfigOrder.includes(c));
-            return [...validConfigOrder, ...missingColumns];
-        }
-        return enumColumns;
-    });
+    // Column order is derived from the property's enumValues order
+    // Local state tracks session reordering before it's persisted
+    const [localColumnsOrder, setLocalColumnsOrder] = useState<string[]>(enumColumns);
 
     useEffect(() => {
         if (!hasUserReordered) {
-            const configOrder = collection.kanban?.columnsOrder;
-            if (configOrder && configOrder.length > 0) {
-                const validConfigOrder = configOrder.filter(c => enumColumns.includes(c));
-                const missingColumns = enumColumns.filter(c => !validConfigOrder.includes(c));
-                setLocalColumnsOrder([...validConfigOrder, ...missingColumns]);
-            } else {
-                setLocalColumnsOrder(enumColumns);
-            }
+            // Sync with enumColumns when property changes
+            setLocalColumnsOrder(enumColumns);
         } else {
+            // User has reordered - only add any missing columns
             const missingColumns = enumColumns.filter(c => !localColumnsOrder.includes(c));
             if (missingColumns.length > 0) {
                 setLocalColumnsOrder(prev => [...prev, ...missingColumns]);
             }
         }
-    }, [enumColumns, collection.kanban?.columnsOrder, hasUserReordered]);
+    }, [enumColumns, hasUserReordered]);
 
     const columns = localColumnsOrder;
 

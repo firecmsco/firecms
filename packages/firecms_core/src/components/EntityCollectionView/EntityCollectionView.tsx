@@ -769,127 +769,95 @@ export const EntityCollectionView = React.memo(
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
                 ref={containerRef}>
-                {/* View mode rendering */}
+
+                {/* Unified toolbar - rendered once, outside view conditionals */}
+                {countFetcher}
+                <CollectionTableToolbar
+                    loading={tableController.dataLoading}
+                    onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
+                    onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
+                    textSearchLoading={textSearchLoading}
+                    viewModeToggle={viewModeToggleElement}
+                    actionsStart={<EntityCollectionViewStartActions
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController}
+                        path={fullPath}
+                        relativePath={collection.path}
+                        selectionController={usedSelectionController}
+                        collectionEntitiesCount={docsCount}
+                        resolvedProperties={resolvedCollection.properties} />}
+                    actions={<EntityCollectionViewActions
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController}
+                        onMultipleDeleteClick={onMultipleDeleteClick}
+                        onNewClick={onNewClick}
+                        path={fullPath}
+                        relativePath={collection.path}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}
+                        collectionEntitiesCount={docsCount}
+                    />}
+                />
+
+                {/* View content - only the view-specific content changes */}
                 {viewMode === "kanban" && (kanbanEnabled || hasKanbanConfigPlugin) ? (
-                    <React.Fragment key={`kanban-view-${fullPath}`}>
-                        {/* Kanban View Toolbar */}
-                        {countFetcher}
-                        <CollectionTableToolbar
-                            loading={tableController.dataLoading}
-                            onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
-                            onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
-                            textSearchLoading={textSearchLoading}
-                            viewModeToggle={viewModeToggleElement}
-                            actionsStart={<EntityCollectionViewStartActions
-                                parentCollectionIds={parentCollectionIds ?? []}
-                                collection={collection}
-                                tableController={tableController}
-                                path={fullPath}
-                                relativePath={collection.path}
-                                selectionController={usedSelectionController}
-                                collectionEntitiesCount={docsCount}
-                                resolvedProperties={resolvedCollection.properties} />}
-                            actions={<EntityCollectionViewActions
-                                parentCollectionIds={parentCollectionIds ?? []}
-                                collection={collection}
-                                tableController={tableController}
-                                onMultipleDeleteClick={onMultipleDeleteClick}
-                                onNewClick={onNewClick}
-                                path={fullPath}
-                                relativePath={collection.path}
-                                selectionController={usedSelectionController}
-                                selectionEnabled={selectionEnabled}
-                                collectionEntitiesCount={docsCount}
-                            />}
-                        />
-                        {/* Kanban Board View */}
-                        <EntityCollectionBoardView
-                            collection={collection}
-                            tableController={tableController}
-                            fullPath={fullPath}
-                            parentCollectionIds={parentCollectionIds}
-                            columnProperty={collection.kanban?.columnProperty ?? ""}
-                            onEntityClick={onEntityClick}
-                            selectionController={usedSelectionController}
-                            selectionEnabled={selectionEnabled}
-                            highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
-                            emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                                ? <div className="flex flex-col items-center justify-center">
-                                    <Typography variant={"subtitle2"}>So empty...</Typography>
-                                    <Button
-                                        onClick={onNewClick}
-                                        className="mt-4"
-                                    >
-                                        <AddIcon />
-                                        Create your first entry
-                                    </Button>
-                                </div>
-                                : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
-                            }
-                        />
-                    </React.Fragment>
+                    <EntityCollectionBoardView
+                        key={`kanban-view-${fullPath}`}
+                        collection={collection}
+                        tableController={tableController}
+                        fullPath={fullPath}
+                        parentCollectionIds={parentCollectionIds}
+                        columnProperty={collection.kanban?.columnProperty ?? ""}
+                        onEntityClick={onEntityClick}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}
+                        highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                            ? <div className="flex flex-col items-center justify-center">
+                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Button
+                                    onClick={onNewClick}
+                                    className="mt-4"
+                                >
+                                    <AddIcon />
+                                    Create your first entry
+                                </Button>
+                            </div>
+                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                        }
+                    />
                 ) : viewMode === "cards" ? (
-                    <React.Fragment key={`cards-view-${fullPath}`}>
-                        {/* Card View Toolbar - reusing CollectionTableToolbar */}
-                        {countFetcher}
-                        <CollectionTableToolbar
-                            loading={tableController.dataLoading}
-                            onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
-                            onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
-                            textSearchLoading={textSearchLoading}
-                            viewModeToggle={viewModeToggleElement}
-                            actionsStart={<EntityCollectionViewStartActions
-                                parentCollectionIds={parentCollectionIds ?? []}
-                                collection={collection}
-                                tableController={tableController}
-                                path={fullPath}
-                                relativePath={collection.path}
-                                selectionController={usedSelectionController}
-                                collectionEntitiesCount={docsCount}
-                                resolvedProperties={resolvedCollection.properties} />}
-                            actions={<EntityCollectionViewActions
-                                parentCollectionIds={parentCollectionIds ?? []}
-                                collection={collection}
-                                tableController={tableController}
-                                onMultipleDeleteClick={onMultipleDeleteClick}
-                                onNewClick={onNewClick}
-                                path={fullPath}
-                                relativePath={collection.path}
-                                selectionController={usedSelectionController}
-                                selectionEnabled={selectionEnabled}
-                                collectionEntitiesCount={docsCount}
-                            />}
-                        />
-                        {/* Card Grid View */}
-                        <EntityCollectionCardView
-                            collection={collection}
-                            tableController={tableController}
-                            onEntityClick={onEntityClick}
-                            selectionController={usedSelectionController}
-                            selectionEnabled={selectionEnabled}
-                            highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
-                            onScroll={tableController.onScroll}
-                            initialScroll={tableController.initialScroll}
-                            size={cardSize}
-                            emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                                ? <div className="flex flex-col items-center justify-center">
-                                    <Typography variant={"subtitle2"}>So empty...</Typography>
-                                    <Button
-                                        onClick={onNewClick}
-                                        className="mt-4"
-                                    >
-                                        <AddIcon />
-                                        Create your first entry
-                                    </Button>
-                                </div>
-                                : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
-                            }
-                        />
-                    </React.Fragment>
-                ) : (<React.Fragment key={`table-view-${fullPath}`}>
-                    {countFetcher}
+                    <EntityCollectionCardView
+                        key={`cards-view-${fullPath}`}
+                        collection={collection}
+                        tableController={tableController}
+                        onEntityClick={onEntityClick}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}
+                        highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        onScroll={tableController.onScroll}
+                        initialScroll={tableController.initialScroll}
+                        size={cardSize}
+                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                            ? <div className="flex flex-col items-center justify-center">
+                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Button
+                                    onClick={onNewClick}
+                                    className="mt-4"
+                                >
+                                    <AddIcon />
+                                    Create your first entry
+                                </Button>
+                            </div>
+                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                        }
+                    />
+                ) : (
                     <EntityCollectionTable
                         key={`collection_table_${fullPath}`}
+                        hideToolbar={true}
                         additionalFields={additionalFields}
                         tableController={tableController}
                         enablePopupIcon={true}
@@ -910,26 +878,6 @@ export const EntityCollectionView = React.memo(
                         initialScroll={tableController.initialScroll}
                         textSearchLoading={textSearchLoading}
                         textSearchEnabled={textSearchEnabled}
-                        actionsStart={<EntityCollectionViewStartActions
-                            parentCollectionIds={parentCollectionIds ?? []}
-                            collection={collection}
-                            tableController={tableController}
-                            path={fullPath}
-                            relativePath={collection.path}
-                            selectionController={usedSelectionController}
-                            collectionEntitiesCount={docsCount} resolvedProperties={resolvedCollection.properties} />}
-                        viewModeToggle={viewModeToggleElement}
-                        actions={<EntityCollectionViewActions
-                            parentCollectionIds={parentCollectionIds ?? []}
-                            collection={collection}
-                            tableController={tableController}
-                            onMultipleDeleteClick={onMultipleDeleteClick}
-                            onNewClick={onNewClick}
-                            path={fullPath}
-                            relativePath={collection.path}
-                            selectionController={usedSelectionController}
-                            selectionEnabled={selectionEnabled}
-                            collectionEntitiesCount={docsCount} />}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
                                 <Typography variant={"subtitle2"}>So empty...</Typography>
@@ -978,7 +926,7 @@ export const EntityCollectionView = React.memo(
                             }
                         }}
                     />
-                </React.Fragment>)}
+                )}
 
                 {popupCell && <PopupFormField
                     key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entityId}`}

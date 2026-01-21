@@ -399,14 +399,9 @@ export interface KanbanConfig<M extends Record<string, any> = any> {
      * Property key to use for Kanban board columns.
      * Must reference a string property with enumValues defined.
      * Entities will be grouped into columns based on this property's value.
+     * The column order is determined by the order of enumValues in the property.
      */
     columnProperty: Extract<keyof M, string>;
-
-    /**
-     * Explicit order of columns. If not set, uses the enum property's
-     * enumValues order. Can be persisted by plugins like collection_editor.
-     */
-    columnsOrder?: string[];
 }
 
 /**

@@ -378,6 +378,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
 
     const updateKanbanColumnsOrder = useCallback(({
         collection,
+        kanbanColumnProperty,
         newColumnsOrder,
         parentCollectionIds
     }: UpdateKanbanColumnsOrderParams): Promise<void> => {
@@ -389,13 +390,46 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(collection.id, parentCollectionIds);
         const ref = doc(firestore, collectionsConfigPath, collectionPath);
-        // Store Kanban columns order in kanban.columnsOrder
+
+        // Get the current property and its enumValues
+        const currentProperty = collection.properties?.[kanbanColumnProperty];
+        if (!currentProperty || !('enumValues' in currentProperty) || !currentProperty.enumValues) {
+            console.warn("Cannot update Kanban column order: property not found or has no enumValues");
+            return Promise.resolve();
+        }
+
+        const currentEnumValues = Array.isArray(currentProperty.enumValues)
+            ? currentProperty.enumValues
+            : Object.entries(currentProperty.enumValues).map(([enumId, value]) =>
+                typeof value === 'string' ? { id: enumId, label: value } : { ...value, id: enumId }
+            );
+
+        // Reorder enumValues to match newColumnsOrder
+        const reorderedEnumValues = newColumnsOrder
+            .map(columnId => currentEnumValues.find(ev => String(ev.id) === columnId))
+            .filter(Boolean);
+
+        // Add any enum values that weren't in the new order (shouldn't happen, but be safe)
+        const missingEnumValues = currentEnumValues.filter(
+            ev => !newColumnsOrder.includes(String(ev.id))
+        );
+        const finalEnumValues = [...reorderedEnumValues, ...missingEnumValues];
+
+        console.debug("Updating Kanban column order by reordering enumValues", {
+            kanbanColumnProperty,
+            newColumnsOrder,
+            finalEnumValues
+        });
+
+        // Persist by updating the property's enumValues in the correct order
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, {
                 id: collection.id,
-                kanban: {
-                    ...(collection.kanban || {}),
-                    columnsOrder: newColumnsOrder
+                properties: {
+                    [kanbanColumnProperty]: {
+                        ...setUndefinedToDelete(removeFunctions(removeUndefined(currentProperty))),
+                        enumValues: finalEnumValues
+                    }
                 }
             }, { merge: true });
         });

@@ -48,7 +48,7 @@ export function ToggleButtonGroup<T extends string = string>({
                         "flex flex-row items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors",
                         value === option.value
                             ? "bg-white dark:bg-surface-950 shadow-sm text-primary dark:text-primary-300"
-                            : "text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700",
+                            : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700",
                         option.disabled && "opacity-50 cursor-not-allowed"
                     )}
                 >

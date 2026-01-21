@@ -96,7 +96,7 @@ export function ViewModeToggle({
                             "flex-1 flex flex-col items-center gap-1 py-2 px-8 rounded-md transition-colors",
                             viewMode === "table"
                                 ? "bg-white dark:bg-surface-950 shadow-sm text-primary dark:text-primary-300"
-                                : "text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700"
+                                : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700"
                         )}
                     >
                         <ListIcon size="small" />
@@ -108,7 +108,7 @@ export function ViewModeToggle({
                             "flex-1 flex flex-col items-center gap-1 py-2 px-8 rounded-md transition-colors",
                             viewMode === "cards"
                                 ? "bg-white dark:bg-surface-950 shadow-sm text-primary dark:text-primary-300"
-                                : "text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700"
+                                : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700"
                         )}
                     >
                         <AppsIcon size="small" />
@@ -126,7 +126,7 @@ export function ViewModeToggle({
                                 "flex-1 flex flex-col items-center gap-1 py-2 px-8 rounded-md transition-colors",
                                 viewMode === "kanban"
                                     ? "bg-white dark:bg-surface-950 shadow-sm text-primary dark:text-primary-300"
-                                    : "text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700",
+                                    : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700",
                                 !kanbanEnabled && !hasKanbanConfigPlugin && "opacity-50 cursor-not-allowed"
                             )}
                         >

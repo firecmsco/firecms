@@ -164,6 +164,12 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
          * Callback when columns are reordered via drag-and-drop
          */
         onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+
+        /**
+         * If true, the internal toolbar will not be rendered.
+         * Used when the parent component renders its own toolbar.
+         */
+        hideToolbar?: boolean;
     };
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

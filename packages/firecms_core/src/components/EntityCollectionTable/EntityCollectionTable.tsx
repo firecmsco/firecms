@@ -81,7 +81,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         textSearchLoading,
         enablePopupIcon,
         openEntityMode = "side_panel",
-        onColumnsOrderChange
+        onColumnsOrderChange,
+        hideToolbar = false
     }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -342,7 +343,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             style={style}
             className={cls("h-full w-full flex flex-col bg-white dark:bg-surface-950", className)}>
 
-            <CollectionTableToolbar
+            {!hideToolbar && <CollectionTableToolbar
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                 textSearchLoading={textSearchLoading}
                 onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
@@ -350,7 +351,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 actionsStart={actionsStart}
                 actions={actions}
                 viewModeToggle={viewModeToggle}
-                loading={tableController.dataLoading} />
+                loading={tableController.dataLoading} />}
 
             <SelectableTable columns={columns}
                 size={size}
