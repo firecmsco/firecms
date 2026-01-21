@@ -24,14 +24,14 @@ import { PropertyCollectionView } from "../../components/PropertyCollectionView"
 
 interface LocalChangesMenuProps<M extends object> {
     cacheKey: string;
-    localChangesData: Partial<M>;
+    cachedData: Partial<M>;
     formex: FormexController<M>;
     onClearLocalChanges?: () => void;
     properties: ResolvedProperties<M>;
 }
 
 export function LocalChangesMenu<M extends object>({
-                                                       localChangesData,
+                                                       cachedData,
                                                        formex,
                                                        onClearLocalChanges,
                                                        cacheKey,
@@ -51,10 +51,10 @@ export function LocalChangesMenu<M extends object>({
     };
 
     const handleApply = () => {
-        const mergedValues = mergeDeep(formex.values, localChangesData);
+        const mergedValues = mergeDeep(formex.values, cachedData);
         const touched = { ...formex.touched };
-        const previewKeys = flattenKeys(localChangesData);
-        previewKeys.forEach((key) => {
+        const cachedKeys = flattenKeys(cachedData);
+        cachedKeys.forEach((key) => {
             touched[key] = true;
         });
 
@@ -121,7 +121,7 @@ export function LocalChangesMenu<M extends object>({
                         overflow: "auto"
                     }}>
                         <div className="p-4">
-                            <PropertyCollectionView data={localChangesData}
+                            <PropertyCollectionView data={cachedData}
                                                     properties={properties as ResolvedProperties}/>
                         </div>
                     </div>
