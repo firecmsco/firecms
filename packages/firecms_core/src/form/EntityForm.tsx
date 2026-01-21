@@ -328,14 +328,7 @@ export function EntityForm<M extends Record<string, any>>({
         return [initialValues, initialDirty];
     }, [autoApplyLocalChanges, localChangesDataRaw, baseInitialValues, initialDirtyValues]);
 
-    const localChangesData = useMemo(() => {
-        if (!localChangesDataRaw) {
-            return undefined;
-        }
-        return getChanges(localChangesDataRaw, initialValues);
-    }, [localChangesDataRaw, initialValues]);
-
-    const hasLocalChanges = !localChangesCleared && localChangesData && Object.keys(localChangesData).length > 0;
+    const hasLocalChanges = !localChangesCleared && localChangesDataRaw && Object.keys(localChangesDataRaw).length > 0;
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
         initialValues: initialValues as M,
@@ -851,7 +844,7 @@ export function EntityForm<M extends Record<string, any>>({
                                 <LocalChangesMenu
                                     cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
                                     properties={resolvedCollection.properties}
-                                    localChangesData={localChangesData as Partial<M>}
+                                    cachedData={localChangesDataRaw as Partial<M>}
                                     formex={formex}
                                     onClearLocalChanges={() => setLocalChangesCleared(true)}
                                 />}
@@ -863,7 +856,7 @@ export function EntityForm<M extends Record<string, any>>({
                                     </Chip>
                                 </Tooltip>
                                 : <Tooltip title={"The current form is in sync with the database"}>
-                                    <Chip size={"small"} className={"py-1"} >
+                                    <Chip size={"small"} className={"py-1"}>
                                         <CheckIcon size={"smallest"}/>
                                     </Chip>
                                 </Tooltip>}
