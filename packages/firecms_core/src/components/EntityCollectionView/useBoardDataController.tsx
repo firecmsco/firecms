@@ -34,6 +34,8 @@ export interface BoardDataController<M extends Record<string, any> = any, COLUMN
     refreshAll: () => void;
     /** Update counts for columns (for optimistic updates when moving items) */
     updateColumnCounts: (sourceColumn: COLUMN, targetColumn: COLUMN) => void;
+    /** Decrement column counts (for optimistic updates when deleting items) */
+    decrementColumnCounts: (columnDeltas: Record<COLUMN, number>) => void;
     /** Whether any column is loading */
     loading: boolean;
     /** Any error from any column */
@@ -321,6 +323,24 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         });
     }, []);
 
+    // Optimistic update for column counts when deleting items
+    const decrementColumnCounts = useCallback((columnDeltas: Record<COLUMN, number>) => {
+        setColumnData(prev => {
+            const updated = { ...prev };
+
+            for (const [column, delta] of Object.entries(columnDeltas) as [COLUMN, number][]) {
+                if (updated[column]?.totalCount !== undefined) {
+                    updated[column] = {
+                        ...updated[column],
+                        totalCount: Math.max(0, (updated[column].totalCount ?? 0) - delta)
+                    };
+                }
+            }
+
+            return updated;
+        });
+    }, []);
+
     // Aggregate loading and error state
     const loading = useMemo(() => {
         return Object.values(columnData).some((col) => col.loading);
@@ -339,6 +359,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         refreshColumn,
         refreshAll,
         updateColumnCounts,
+        decrementColumnCounts,
         loading,
         error
     };

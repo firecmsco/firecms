@@ -233,7 +233,7 @@ function getYupGeoPointSchema({
     name,
     entityId
 }: PropertyContext<GeoPoint>): AnySchema {
-    let schema: ObjectSchema<any> = yup.object().nullable();
+    let schema: ObjectSchema<any> = yup.object().nullable() as ObjectSchema<any>;
     const validation = property.validation;
 
     if (validation?.unique && customFieldValidator && name)
@@ -300,7 +300,7 @@ function getYupReferenceSchema({
     name,
     entityId
 }: PropertyContext<EntityReference>): AnySchema {
-    let schema: ObjectSchema<any> = yup.object().nullable();
+    let schema: ObjectSchema<any> = yup.object().nullable() as ObjectSchema<any>;
     const validation = property.validation;
 
     if (validation) {

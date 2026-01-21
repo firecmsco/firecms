@@ -33,6 +33,8 @@ export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> 
     selectionEnabled?: boolean;
     highlightedEntities?: Entity<M>[];
     emptyComponent?: React.ReactNode;
+    /** Called when entities are deleted - used for optimistic count updates */
+    deletedEntities?: Entity<M>[];
 };
 
 /**
@@ -48,7 +50,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     selectionController,
     selectionEnabled = true,
     highlightedEntities,
-    emptyComponent
+    emptyComponent,
+    deletedEntities
 }: EntityCollectionBoardViewProps<M>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -143,6 +146,31 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Aggregate loading and error state
     const dataLoading = boardDataController.loading;
     const dataLoadingError = boardDataController.error;
+
+    // Track previously processed deleted entities to avoid double-counting
+    const processedDeletedRef = useRef<Set<string>>(new Set());
+
+    // Optimistic update for column counts when entities are deleted
+    useEffect(() => {
+        if (!deletedEntities || deletedEntities.length === 0) return;
+
+        // Calculate column deltas from deleted entities
+        const deltas: Record<string, number> = {};
+        deletedEntities.forEach(entity => {
+            // Skip if we've already processed this entity
+            if (processedDeletedRef.current.has(entity.id)) return;
+            processedDeletedRef.current.add(entity.id);
+
+            const col = entity.values?.[columnProperty];
+            if (col && typeof col === "string") {
+                deltas[col] = (deltas[col] ?? 0) + 1;
+            }
+        });
+
+        if (Object.keys(deltas).length > 0) {
+            boardDataController.decrementColumnCounts(deltas);
+        }
+    }, [deletedEntities, columnProperty, boardDataController]);
 
     // Build all entities from all columns for operations that need the full list
     const allEntities = useMemo(() => {
@@ -496,40 +524,16 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const errorMessage = dataLoadingError?.message || "";
     const indexUrl = errorMessage.match(/https:\/\/console\.firebase\.google\.com[^\s]+/)?.[0];
 
-    // Error: columnProperty not configured or invalid
+    // Error: no enum properties available for Kanban columns
     if (!columnProperty || enumColumns.length === 0) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
                 <Typography variant="h6">
-                    Kanban view needs configuration
+                    Kanban view is not available
                 </Typography>
                 <Typography variant="body2" color="secondary" className="text-center max-w-md">
-                    {!columnProperty
-                        ? "Please select a column property to group entities into columns."
-                        : "The selected column property doesn't have enum values or doesn't exist."
-                    }
-                </Typography>
-                {KanbanSetupComponent && (
-                    <KanbanSetupComponent
-                        collection={collection}
-                        fullPath={fullPath}
-                        parentCollectionIds={parentCollectionIds}
-                    />
-                )}
-            </div>
-        );
-    }
-
-    // Error: orderProperty not configured
-    if (!orderProperty) {
-        return (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
-                <Typography variant="h6">
-                    Kanban view requires an order property
-                </Typography>
-                <Typography variant="body2" color="secondary" className="text-center max-w-md">
-                    Please configure the <code className="bg-surface-200 dark:bg-surface-700 px-1 rounded">orderProperty</code> in
-                    your collection config. This should be a numeric property used to persist the order of items.
+                    Kanban view requires a string property with enum values to group entities into columns.
+                    Please add an enum property to your collection schema to use this view.
                 </Typography>
                 {KanbanSetupComponent && (
                     <KanbanSetupComponent
@@ -562,7 +566,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             {hasError && allEntities.length === 0 && (
                 <div className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
                     <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1">
-                        <strong>Error loading data:</strong>{" "}
+                        <strong>Error:</strong>{" "}
                         {indexUrl
                             ? "A Firestore index is required for this query."
                             : errorMessage}

@@ -191,6 +191,9 @@ export const EntityCollectionView = React.memo(
 
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
 
+        // Track recently deleted entities for optimistic Kanban count updates
+        const [deletedEntities, setDeletedEntities] = React.useState<Entity<M>[]>([]);
+
         // number of entities in the collection
         const [docsCount, setDocsCount] = useState<number>(0);
 
@@ -376,6 +379,7 @@ export const EntityCollectionView = React.memo(
                 path: fullPath
             });
             setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
+            setDeletedEntities(prev => [...prev, entity]);
             setLastDeleteTimestamp(Date.now());
         };
 
@@ -385,6 +389,7 @@ export const EntityCollectionView = React.memo(
             });
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
+            setDeletedEntities(prev => [...prev, ...entities]);
             setLastDeleteTimestamp(Date.now());
         };
 
@@ -872,6 +877,7 @@ export const EntityCollectionView = React.memo(
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}
                         highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        deletedEntities={deletedEntities}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
                                 <Typography variant={"subtitle2"}>So empty...</Typography>
