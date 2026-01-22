@@ -3,9 +3,16 @@ import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
 import { getColumnName, resolveCollectionRelations } from "@firecms/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
+import { ConditionBuilderStatic } from "../db/interfaces";
 
 /**
- * Unified condition builder for drizzle queries
+ * Unified condition builder for Drizzle/PostgreSQL queries.
+ * 
+ * This class uses static methods and satisfies the ConditionBuilderStatic<SQL> type.
+ * It translates FireCMS filter conditions to Drizzle SQL conditions.
+ * 
+ * @example
+ * const builder: ConditionBuilderStatic<SQL> = DrizzleConditionBuilder;
  */
 export class DrizzleConditionBuilder {
 
@@ -264,26 +271,26 @@ export class DrizzleConditionBuilder {
             if (currentTable && typeof currentTable === "object") {
                 // Check common Drizzle table name properties
                 currentTableName = (currentTable as any)[Symbol.for("drizzle:Name")] ||
-                                  (currentTable as any)._.name ||
-                                  (currentTable as any).tableName ||
-                                  (currentTable as any).name ||
-                                  "unknown";
+                    (currentTable as any)._.name ||
+                    (currentTable as any).tableName ||
+                    (currentTable as any).name ||
+                    "unknown";
             }
 
             if (parentTable && typeof parentTable === "object") {
                 parentTableName = (parentTable as any)[Symbol.for("drizzle:Name")] ||
-                                 (parentTable as any)._.name ||
-                                 (parentTable as any).tableName ||
-                                 (parentTable as any).name ||
-                                 "unknown";
+                    (parentTable as any)._.name ||
+                    (parentTable as any).tableName ||
+                    (parentTable as any).name ||
+                    "unknown";
             }
 
             // For junction table scenarios, be more lenient with validation
             // If we can't determine table names reliably, or if this looks like a junction table scenario,
             // we'll allow it and let the SQL execution validate the correctness
             const couldBeJunctionScenario = currentTableName.includes("_") ||
-                                          currentTableName === "unknown" ||
-                                          parentTableName === "unknown";
+                currentTableName === "unknown" ||
+                parentTableName === "unknown";
 
             if (!couldBeJunctionScenario) {
                 throw new Error(`Join path did not result in connecting to parent table. Current: ${currentTableName}, Parent: ${parentTableName}`);
@@ -974,3 +981,9 @@ export class DrizzleConditionBuilder {
         }
     }
 }
+
+/**
+ * Alias for DrizzleConditionBuilder for consistent naming with other database implementations.
+ * This allows code to use PostgresConditionBuilder alongside future MongoConditionBuilder, etc.
+ */
+export const PostgresConditionBuilder = DrizzleConditionBuilder;

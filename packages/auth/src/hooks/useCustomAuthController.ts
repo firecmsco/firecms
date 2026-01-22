@@ -43,7 +43,9 @@ function saveAuthToStorage(tokens: AuthTokens, user: UserInfo): void {
     try {
         const data: StoredAuthData = { tokens, user };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        console.log("[AUTH] Saved auth to storage for user:", user.email, "expires:", new Date(tokens.accessTokenExpiresAt).toISOString());
+        const expiryDate = new Date(tokens.accessTokenExpiresAt);
+        const expiryStr = Number.isFinite(tokens.accessTokenExpiresAt) ? expiryDate.toISOString() : "invalid";
+        console.log("[AUTH] Saved auth to storage for user:", user.email, "expires:", expiryStr);
     } catch (e) {
         console.warn("[AUTH] Failed to save auth to storage:", e);
     }
@@ -167,7 +169,8 @@ export function useCustomAuthController(
                 saveAuthToStorage(newTokens, storedData.user);
             }
 
-            console.log("[AUTH] Token refresh successful, new expiry:", new Date(newTokens.accessTokenExpiresAt).toISOString());
+            const newExpiryStr = Number.isFinite(newTokens.accessTokenExpiresAt) ? new Date(newTokens.accessTokenExpiresAt).toISOString() : "invalid";
+            console.log("[AUTH] Token refresh successful, new expiry:", newExpiryStr);
             isRefreshingRef.current = false;
             return newTokens;
         } catch (error: any) {
@@ -406,7 +409,17 @@ export function useCustomAuthController(
             }
 
             console.log("[AUTH] Found stored auth for user:", stored.user?.email);
-            console.log("[AUTH] Token expires at:", new Date(stored.tokens.accessTokenExpiresAt).toISOString());
+
+            // Validate accessTokenExpiresAt is a valid number
+            const expiresAt = stored.tokens.accessTokenExpiresAt;
+            if (typeof expiresAt !== "number" || !Number.isFinite(expiresAt)) {
+                console.log("[AUTH] Invalid token expiry value, clearing auth");
+                clearAuthFromStorage();
+                setInitialLoading(false);
+                return;
+            }
+
+            console.log("[AUTH] Token expires at:", new Date(expiresAt).toISOString());
 
             // Check if access token is still valid
             if (!isTokenExpiredOrNearExpiry(stored.tokens.accessTokenExpiresAt)) {

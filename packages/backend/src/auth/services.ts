@@ -1,7 +1,18 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { users, refreshTokens, passwordResetTokens, User, NewUser } from "../db/auth-schema";
-import { sql } from "drizzle-orm";
+import {
+    UserRepository,
+    RoleRepository,
+    TokenRepository,
+    AuthRepository,
+    UserData,
+    CreateUserData,
+    RoleData,
+    CreateRoleData,
+    RefreshTokenInfo,
+    PasswordResetTokenInfo
+} from "./interfaces";
 
 /**
  * Role type from database
@@ -25,7 +36,11 @@ export interface Role {
     config: Record<string, any> | null;
 }
 
-export class UserService {
+/**
+ * PostgreSQL implementation of UserRepository.
+ * Handles all user-related database operations using Drizzle ORM.
+ */
+export class UserService implements UserRepository {
     constructor(private db: NodePgDatabase) { }
 
     async createUser(data: NewUser): Promise<User> {
@@ -184,9 +199,10 @@ export class UserService {
 }
 
 /**
- * Role service - queries roles from database
+ * PostgreSQL implementation of RoleRepository.
+ * Handles all role-related database operations using Drizzle ORM.
  */
-export class RoleService {
+export class RoleService implements RoleRepository {
     constructor(private db: NodePgDatabase) { }
 
     async getRoleById(id: string): Promise<Role | null> {
@@ -386,4 +402,217 @@ export class PasswordResetTokenService {
         `);
     }
 }
+
+/**
+ * PostgreSQL implementation of TokenRepository.
+ * Combines refresh token and password reset token operations.
+ */
+export class PostgresTokenRepository implements TokenRepository {
+    private refreshTokenService: RefreshTokenService;
+    private passwordResetTokenService: PasswordResetTokenService;
+
+    constructor(private db: NodePgDatabase) {
+        this.refreshTokenService = new RefreshTokenService(db);
+        this.passwordResetTokenService = new PasswordResetTokenService(db);
+    }
+
+    // Refresh token operations
+
+    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
+        await this.refreshTokenService.createToken(userId, tokenHash, expiresAt);
+    }
+
+    async findRefreshTokenByHash(tokenHash: string): Promise<RefreshTokenInfo | null> {
+        return this.refreshTokenService.findByHash(tokenHash);
+    }
+
+    async deleteRefreshToken(tokenHash: string): Promise<void> {
+        await this.refreshTokenService.deleteByHash(tokenHash);
+    }
+
+    async deleteAllRefreshTokensForUser(userId: string): Promise<void> {
+        await this.refreshTokenService.deleteAllForUser(userId);
+    }
+
+    // Password reset token operations
+
+    async createPasswordResetToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
+        await this.passwordResetTokenService.createToken(userId, tokenHash, expiresAt);
+    }
+
+    async findValidPasswordResetToken(tokenHash: string): Promise<PasswordResetTokenInfo | null> {
+        return this.passwordResetTokenService.findValidByHash(tokenHash);
+    }
+
+    async markPasswordResetTokenUsed(tokenHash: string): Promise<void> {
+        await this.passwordResetTokenService.markAsUsed(tokenHash);
+    }
+
+    async deleteAllPasswordResetTokensForUser(userId: string): Promise<void> {
+        await this.passwordResetTokenService.deleteAllForUser(userId);
+    }
+
+    async deleteExpiredTokens(): Promise<void> {
+        await this.passwordResetTokenService.deleteExpired();
+    }
+}
+
+/**
+ * PostgreSQL implementation of AuthRepository.
+ * Combines user, role, and token repository operations.
+ * This provides a convenient single-class interface for all auth operations.
+ */
+export class PostgresAuthRepository implements AuthRepository {
+    private userService: UserService;
+    private roleService: RoleService;
+    private tokenRepository: PostgresTokenRepository;
+
+    constructor(private db: NodePgDatabase) {
+        this.userService = new UserService(db);
+        this.roleService = new RoleService(db);
+        this.tokenRepository = new PostgresTokenRepository(db);
+    }
+
+    // User operations (delegate to UserService)
+
+    async createUser(data: CreateUserData): Promise<UserData> {
+        return this.userService.createUser(data as NewUser) as Promise<UserData>;
+    }
+
+    async getUserById(id: string): Promise<UserData | null> {
+        return this.userService.getUserById(id) as Promise<UserData | null>;
+    }
+
+    async getUserByEmail(email: string): Promise<UserData | null> {
+        return this.userService.getUserByEmail(email) as Promise<UserData | null>;
+    }
+
+    async getUserByGoogleId(googleId: string): Promise<UserData | null> {
+        return this.userService.getUserByGoogleId(googleId) as Promise<UserData | null>;
+    }
+
+    async updateUser(id: string, data: Partial<Omit<CreateUserData, "id">>): Promise<UserData | null> {
+        return this.userService.updateUser(id, data) as Promise<UserData | null>;
+    }
+
+    async deleteUser(id: string): Promise<void> {
+        await this.userService.deleteUser(id);
+    }
+
+    async listUsers(): Promise<UserData[]> {
+        return this.userService.listUsers() as Promise<UserData[]>;
+    }
+
+    async updatePassword(id: string, passwordHash: string): Promise<void> {
+        await this.userService.updatePassword(id, passwordHash);
+    }
+
+    async setEmailVerified(id: string, verified: boolean): Promise<void> {
+        await this.userService.setEmailVerified(id, verified);
+    }
+
+    async setVerificationToken(id: string, token: string | null): Promise<void> {
+        await this.userService.setVerificationToken(id, token);
+    }
+
+    async getUserByVerificationToken(token: string): Promise<UserData | null> {
+        return this.userService.getUserByVerificationToken(token) as Promise<UserData | null>;
+    }
+
+    async getUserRoles(userId: string): Promise<RoleData[]> {
+        return this.userService.getUserRoles(userId);
+    }
+
+    async getUserRoleIds(userId: string): Promise<string[]> {
+        return this.userService.getUserRoleIds(userId);
+    }
+
+    async setUserRoles(userId: string, roleIds: string[]): Promise<void> {
+        await this.userService.setUserRoles(userId, roleIds);
+    }
+
+    async assignDefaultRole(userId: string, roleId?: string): Promise<void> {
+        await this.userService.assignDefaultRole(userId, roleId);
+    }
+
+    async getUserWithRoles(userId: string): Promise<{ user: UserData; roles: RoleData[] } | null> {
+        const result = await this.userService.getUserWithRoles(userId);
+        return result as { user: UserData; roles: RoleData[] } | null;
+    }
+
+    // Role operations (delegate to RoleService)
+
+    async getRoleById(id: string): Promise<RoleData | null> {
+        return this.roleService.getRoleById(id);
+    }
+
+    async listRoles(): Promise<RoleData[]> {
+        return this.roleService.listRoles();
+    }
+
+    async createRole(data: CreateRoleData): Promise<RoleData> {
+        return this.roleService.createRole({
+            ...data,
+            defaultPermissions: data.defaultPermissions ?? null,
+            collectionPermissions: data.collectionPermissions ?? null,
+            config: data.config ?? null
+        });
+    }
+
+    async updateRole(id: string, data: Partial<Omit<RoleData, "id">>): Promise<RoleData | null> {
+        return this.roleService.updateRole(id, data);
+    }
+
+    async deleteRole(id: string): Promise<void> {
+        await this.roleService.deleteRole(id);
+    }
+
+    // Token operations (delegate to PostgresTokenRepository)
+
+    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
+        await this.tokenRepository.createRefreshToken(userId, tokenHash, expiresAt);
+    }
+
+    async findRefreshTokenByHash(tokenHash: string): Promise<RefreshTokenInfo | null> {
+        return this.tokenRepository.findRefreshTokenByHash(tokenHash);
+    }
+
+    async deleteRefreshToken(tokenHash: string): Promise<void> {
+        await this.tokenRepository.deleteRefreshToken(tokenHash);
+    }
+
+    async deleteAllRefreshTokensForUser(userId: string): Promise<void> {
+        await this.tokenRepository.deleteAllRefreshTokensForUser(userId);
+    }
+
+    async createPasswordResetToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
+        await this.tokenRepository.createPasswordResetToken(userId, tokenHash, expiresAt);
+    }
+
+    async findValidPasswordResetToken(tokenHash: string): Promise<PasswordResetTokenInfo | null> {
+        return this.tokenRepository.findValidPasswordResetToken(tokenHash);
+    }
+
+    async markPasswordResetTokenUsed(tokenHash: string): Promise<void> {
+        await this.tokenRepository.markPasswordResetTokenUsed(tokenHash);
+    }
+
+    async deleteAllPasswordResetTokensForUser(userId: string): Promise<void> {
+        await this.tokenRepository.deleteAllPasswordResetTokensForUser(userId);
+    }
+
+    async deleteExpiredTokens(): Promise<void> {
+        await this.tokenRepository.deleteExpiredTokens();
+    }
+}
+
+// =============================================================================
+// PostgreSQL Type Aliases (for consistent naming with other implementations)
+// =============================================================================
+
+/** PostgreSQL user repository implementation */
+export type PostgresUserRepository = UserService;
+
+/** PostgreSQL role repository implementation */
+export type PostgresRoleRepository = RoleService;
 

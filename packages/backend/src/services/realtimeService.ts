@@ -5,6 +5,7 @@ import { EntityService } from "../db/entityService";
 import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
 import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
 
 type RealTimeListenCollectionProps = ListenCollectionProps & {
     subscriptionId: string
@@ -12,7 +13,13 @@ type RealTimeListenCollectionProps = ListenCollectionProps & {
 
 type RealTimeListenEntityProps = ListenEntityProps & { subscriptionId: string };
 
-export class RealtimeService extends EventEmitter {
+/**
+ * PostgreSQL-specific realtime service.
+ * Handles WebSocket connections and subscriptions for real-time entity updates.
+ * 
+ * Implements the RealtimeProvider interface for database abstraction.
+ */
+export class RealtimeService extends EventEmitter implements RealtimeProvider {
     private clients = new Map<string, WebSocket>();
     private entityService: EntityService;
     // Enhanced subscriptions storage with full request parameters
@@ -76,6 +83,70 @@ export class RealtimeService extends EventEmitter {
         console.debug("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.delete(subscriptionId);
     }
+
+    // =============================================================================
+    // RealtimeProvider Interface Methods
+    // =============================================================================
+
+    /**
+     * Subscribe to collection changes (RealtimeProvider interface)
+     */
+    subscribeToCollection(
+        subscriptionId: string,
+        config: CollectionSubscriptionConfig,
+        callback?: (entities: Entity[]) => void
+    ): void {
+        this._subscriptions.set(subscriptionId, {
+            clientId: config.clientId,
+            type: "collection",
+            path: config.path,
+            collectionRequest: {
+                filter: config.filter,
+                orderBy: config.orderBy,
+                order: config.order,
+                limit: config.limit,
+                startAfter: config.startAfter,
+                databaseId: config.databaseId,
+                searchString: config.searchString
+            }
+        });
+
+        if (callback) {
+            this.subscriptionCallbacks.set(subscriptionId, callback);
+        }
+    }
+
+    /**
+     * Subscribe to single entity changes (RealtimeProvider interface)
+     */
+    subscribeToEntity(
+        subscriptionId: string,
+        config: EntitySubscriptionConfig,
+        callback?: (entity: Entity | null) => void
+    ): void {
+        this._subscriptions.set(subscriptionId, {
+            clientId: config.clientId,
+            type: "entity",
+            path: config.path,
+            entityId: config.entityId
+        });
+
+        if (callback) {
+            this.subscriptionCallbacks.set(subscriptionId, callback);
+        }
+    }
+
+    /**
+     * Unsubscribe from a subscription (RealtimeProvider interface)
+     */
+    unsubscribe(subscriptionId: string): void {
+        this._subscriptions.delete(subscriptionId);
+        this.subscriptionCallbacks.delete(subscriptionId);
+    }
+
+    // =============================================================================
+    // WebSocket Client Management
+    // =============================================================================
 
     addClient(clientId: string, ws: WebSocket) {
         this.clients.set(clientId, ws);
@@ -406,3 +477,9 @@ export class RealtimeService extends EventEmitter {
         return parentPaths;
     }
 }
+
+/**
+ * Alias for RealtimeService for consistent naming with other database implementations.
+ * This allows code to use PostgresRealtimeProvider alongside future MongoRealtimeProvider, etc.
+ */
+export const PostgresRealtimeProvider = RealtimeService;

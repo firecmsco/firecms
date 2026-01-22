@@ -1,12 +1,16 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, FilterValues } from "@firecms/types";
 import { EntityFetchService, EntityPersistService, RelationService } from "./services";
+import { EntityRepository, FetchCollectionOptions, SearchOptions, CountOptions } from "./interfaces";
 
 // Re-export data transformer functions for external use
 export { sanitizeAndConvertDates, serializeDataToServer, parseDataFromServer } from "./data-transformer";
 
 // Re-export service classes for direct use
 export { EntityFetchService, EntityPersistService, RelationService } from "./services";
+
+// Re-export interfaces
+export * from "./interfaces";
 
 /**
  * EntityService - Facade for entity operations.
@@ -16,8 +20,10 @@ export { EntityFetchService, EntityPersistService, RelationService } from "./ser
  * - EntityFetchService: Read operations (fetch, search, count)
  * - EntityPersistService: Write operations (save, delete)
  * - RelationService: Relation operations (fetch related, update relations)
+ * 
+ * Implements the EntityRepository interface for database abstraction.
  */
-export class EntityService {
+export class EntityService implements EntityRepository {
     private fetchService: EntityFetchService;
     private persistService: EntityPersistService;
 

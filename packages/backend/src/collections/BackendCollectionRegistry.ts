@@ -1,8 +1,15 @@
 import { CollectionRegistry } from "@firecms/common";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { Relations } from "drizzle-orm";
+import { CollectionRegistryInterface } from "../db/interfaces";
 
-export class BackendCollectionRegistry extends CollectionRegistry {
+/**
+ * PostgreSQL-specific collection registry.
+ * Extends the base CollectionRegistry with support for Drizzle ORM tables, enums, and relations.
+ * 
+ * Satisfies CollectionRegistryInterface through inheritance from CollectionRegistry.
+ */
+export class BackendCollectionRegistry extends CollectionRegistry implements CollectionRegistryInterface {
 
     private tables = new Map<string, PgTable>();
     private enums = new Map<string, PgEnum<any>>();
@@ -41,3 +48,9 @@ export class BackendCollectionRegistry extends CollectionRegistry {
     }
 
 }
+
+/**
+ * Alias for BackendCollectionRegistry for consistent naming with other database implementations.
+ * This allows code to use PostgresCollectionRegistry alongside future MongoCollectionRegistry, etc.
+ */
+export const PostgresCollectionRegistry = BackendCollectionRegistry;
