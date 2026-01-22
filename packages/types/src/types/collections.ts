@@ -75,7 +75,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * { slug: "analytics", datasource: "firestore" }
      *
      * // Multiple databases within a datasource
-     * { slug: "orders", datasource: "postgres", database: "orders_db" }
+     * { slug: "orders", datasource: "postgres", databaseId: "orders_db" }
      */
     datasource?: string;
 
@@ -87,7 +87,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *
      * If not specified, the default database of the datasource is used.
      */
-    database?: string;
+    databaseId?: string;
 
     /**
      * If this collection is a top level navigation entry, you can set this

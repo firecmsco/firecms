@@ -143,7 +143,7 @@ export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M
         id: entity.id,
         path: entity.path,
         datasource: entity.datasource,
-        database: entity.database
+        databaseId: entity.databaseId
     });
 }
 

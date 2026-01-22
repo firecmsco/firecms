@@ -36,7 +36,7 @@ export interface Entity<M extends object = object> {
      * Which database within the datasource (e.g., for Firestore multi-database).
      * If not specified, the default database of the datasource is used.
      */
-    database?: string;
+    databaseId?: string;
 }
 
 /**
@@ -57,7 +57,7 @@ export interface EntityReferenceProps {
     /** Which datasource (e.g., 'postgres', 'firestore'). Defaults to "(default)" */
     datasource?: string;
     /** Which database within the datasource. Defaults to "(default)" */
-    database?: string;
+    databaseId?: string;
 }
 
 /**
@@ -71,7 +71,7 @@ export interface EntityReferenceProps {
  * new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
  * 
  * // Reference to a specific database within a datasource
- * new EntityReference({ id: "123", path: "orders", datasource: "postgres", database: "orders_db" })
+ * new EntityReference({ id: "123", path: "orders", datasource: "postgres", databaseId: "orders_db" })
  */
 export class EntityReference {
 
@@ -96,7 +96,7 @@ export class EntityReference {
      * Which database within the datasource.
      * Defaults to "(default)" if not specified.
      */
-    readonly database?: string;
+    readonly databaseId?: string;
 
     /**
      * Create a reference to an entity.
@@ -112,7 +112,7 @@ export class EntityReference {
         this.id = props.id;
         this.path = props.path;
         this.datasource = props.datasource;
-        this.database = props.database;
+        this.databaseId = props.databaseId;
     }
 
     get pathWithId() {
@@ -132,8 +132,8 @@ export class EntityReference {
         }
 
         // Add database prefix if specified
-        if (this.database && this.database !== "(default)") {
-            parts.push(this.database);
+        if (this.databaseId && this.databaseId !== "(default)") {
+            parts.push(this.databaseId);
         }
 
         if (parts.length > 0) {

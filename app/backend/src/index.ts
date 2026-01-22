@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
-import { createPostgresDatabaseConnection, initializeFireCMSAPI, initializeFireCMSBackend } from "@firecms/backend";
+import { createPostgresDatabaseConnection, initializeFireCMSAPI, initializeFireCMSBackend, serveSPA } from "@firecms/backend";
 
 import { enums, relations, tables } from "./schema.generated";
 import { collections } from "shared";
@@ -40,9 +40,11 @@ async function startServer() {
     }
 
     // Initialize FireCMS Backend with auth (now async)
+    // Auth, admin, and storage routes are automatically mounted
     const backend = await initializeFireCMSBackend({
         collections,
         server,
+        app, // Express app for mounting auth/storage routes
         // Datasource configuration
         datasource: {
             connection: db,
@@ -56,6 +58,7 @@ async function startServer() {
                 clientId: process.env.GOOGLE_CLIENT_ID
             } : undefined,
             seedDefaultRoles: true,
+            allowRegistration: process.env.ALLOW_REGISTRATION === "true",
             // Email configuration for password reset and email verification
             email: process.env.SMTP_HOST ? {
                 from: process.env.SMTP_FROM || "noreply@firecms.co",
@@ -80,7 +83,7 @@ async function startServer() {
         }
     });
 
-    // Initialize FireCMS API endpoints with auth routes
+    // OPTIONAL: Initialize REST/GraphQL API for external integrations
     initializeFireCMSAPI(app, backend, {
         basePath: "/api",
         enableGraphQL: true,
@@ -88,23 +91,14 @@ async function startServer() {
         cors: {
             origin: true,
             credentials: true
-        },
-        db, // Pass db for auth routes
-        allowRegistration: process.env.ALLOW_REGISTRATION === "true" // Default: false, first user can always register
+        }
     });
 
-    // Serve static files from frontend build in production
+    // Serve SPA in production
     if (process.env.NODE_ENV === "production") {
-        const frontendBuildPath = path.join(__dirname, "../../frontend/dist");
-        app.use(express.static(frontendBuildPath));
-
-        // Serve index.html for all non-API routes (SPA support)
-        app.get("*", (req, res, next) => {
-            // Skip API routes
-            if (req.path.startsWith("/api") || req.path.startsWith("/health")) {
-                return next();
-            }
-            res.sendFile(path.join(frontendBuildPath, "index.html"));
+        serveSPA(app, {
+            frontendPath: path.join(__dirname, "../../frontend/dist"),
+            excludePaths: ["/health"]
         });
     }
 

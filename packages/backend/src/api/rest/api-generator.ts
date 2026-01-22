@@ -65,7 +65,7 @@ export class RestApiGenerator {
                 const { id } = req.params;
 
                 // Fetch raw data directly from EntityService without Entity wrapper
-                const entity = await this.fetchRawEntity(collection, id);
+                const entity = await this.fetchRawEntity(collection, String(id));
 
                 if (!entity) {
                     res.status(404).json(this.formatError(new Error("Entity not found")));
@@ -108,7 +108,7 @@ export class RestApiGenerator {
                 // Check if entity exists first
                 const existingEntity = await this.dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
-                    entityId: id,
+                    entityId: String(id),
                     collection
                 });
 
@@ -120,7 +120,7 @@ export class RestApiGenerator {
                 // Use existing saveEntity from DataSourceDelegate
                 const entity = await this.dataSource.saveEntity({
                     path: collection.dbPath || collection.slug,
-                    entityId: id,
+                    entityId: String(id),
                     values: req.body,
                     collection,
                     status: "existing"
@@ -141,7 +141,7 @@ export class RestApiGenerator {
                 // Check if entity exists first
                 const existingEntity = await this.dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
-                    entityId: id,
+                    entityId: String(id),
                     collection
                 });
 

@@ -92,6 +92,10 @@ export type DatasourceConfig = DataSourceDelegate | PostgresDatasourceConfig;
 export interface FireCMSBackendConfig {
     collections: EntityCollection[];
     server: Server;
+    /** Express app for mounting auth/storage routes */
+    app: Express;
+    /** Base path for API routes (default: '/api') */
+    basePath?: string;
 
     /**
      * Datasource configuration. Supports two formats:
@@ -366,6 +370,33 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
         }
     }
 
+    // ============ Mount core routes (auth, admin, storage) ============
+    const basePath = config.basePath || "/api";
+
+    if (config.auth && defaultDb && userService && roleService) {
+        const authRoutes = createAuthRoutes({
+            db: defaultDb,
+            emailService,
+            emailConfig: config.auth.email,
+            allowRegistration: config.auth.allowRegistration ?? false
+        });
+        config.app.use(`${basePath}/auth`, authRoutes);
+        console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
+
+        const adminRoutes = createAdminRoutes({ db: defaultDb });
+        config.app.use(`${basePath}/admin`, adminRoutes);
+        console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
+    }
+
+    if (storageController) {
+        const storageRoutes = createStorageRoutes({
+            controller: storageController,
+            requireAuth: config.auth?.requireAuth ?? true
+        });
+        config.app.use(`${basePath}/storage`, storageRoutes);
+        console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
+    }
+
     // ============ Create WebSocket with auth support ============
     // Use the default realtime service and datasource delegate
     const defaultRealtimeService = realtimeServices[DEFAULT_DATASOURCE_ID];
@@ -475,19 +506,23 @@ function isStorageConfig(obj: unknown): obj is StorageConfig {
 }
 
 /**
- * Initialize FireCMS API endpoints on an Express app
+ * Initialize optional REST/GraphQL API endpoints on an Express app.
+ * 
+ * NOTE: Auth, admin, and storage routes are automatically mounted by
+ * initializeFireCMSBackend(). This function is only needed if you want
+ * to expose REST/GraphQL APIs for external integrations.
+ * 
  * @param app Express application instance
  * @param backend FireCMS backend instance from initializeFireCMSBackend
  * @param config API configuration options
- * @param db Database connection for auth routes
  * @returns API server instance
  */
 export function initializeFireCMSAPI(
     app: Express,
     backend: FireCMSBackendInstance,
-    config: Partial<ApiConfig> & { db?: NodePgDatabase; emailConfig?: EmailConfig; allowRegistration?: boolean } = {}
+    config: Partial<ApiConfig> = {}
 ): FireCMSApiServer {
-    console.log("🚀 Initializing FireCMS API endpoints");
+    console.log("🚀 Initializing FireCMS REST/GraphQL API (optional for external integrations)");
 
     // Get collections from the registry using the correct method
     const collections = collectionRegistry.getCollections();
@@ -507,35 +542,6 @@ export function initializeFireCMSAPI(
     const apiRouter = apiServer.getRouter();
     app.use(apiRouter);
 
-    // Mount auth routes if db is provided
-    if (config.db) {
-        const authRoutes = createAuthRoutes({
-            db: config.db,
-            emailService: backend.emailService,
-            emailConfig: config.emailConfig,
-            allowRegistration: config.allowRegistration ?? false
-        });
-        const basePath = config.basePath || "/api";
-        app.use(`${basePath}/auth`, authRoutes);
-        console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
-
-        // Mount admin routes (for user/role management)
-        const adminRoutes = createAdminRoutes({ db: config.db });
-        app.use(`${basePath}/admin`, adminRoutes);
-        console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
-    }
-
-    // Mount storage routes if storage controller is available
-    if (backend.storageController) {
-        const basePath = config.basePath || "/api";
-        const storageRoutes = createStorageRoutes({
-            controller: backend.storageController,
-            requireAuth: config.auth?.enabled ?? true
-        });
-        app.use(`${basePath}/storage`, storageRoutes);
-        console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
-    }
-
     const basePath = config.basePath || "/api";
     console.log(`✅ GraphQL endpoint: ${basePath}/graphql`);
     console.log(`✅ REST API: ${basePath}/`);
@@ -543,3 +549,4 @@ export function initializeFireCMSAPI(
 
     return apiServer;
 }
+

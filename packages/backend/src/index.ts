@@ -67,3 +67,6 @@ export * from "./storage";
 // Utilities
 export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
+
+// SPA serving helper
+export * from "./serve-spa";
