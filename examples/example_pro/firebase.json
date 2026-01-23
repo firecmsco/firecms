@@ -1,29 +1,32 @@
 {
-    "hosting": {
-        "public": "build",
-        "site": "firecms-demo-27150",
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**"
-        ],
-        "rewrites": [
-            {
-                "source": "**",
-                "destination": "/index.html"
-            }
-        ]
+  "hosting": {
+    "public": "build",
+    "site": "firecms-demo-27150",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8080
     },
-    "emulators": {
-        "firestore": {
-            "port": 8080
-        },
-        "auth": {
-            "port": 9099
-        },
-        "ui": {
-            "enabled": true,
-            "port": 4000
-        }
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
     }
+  },
+  "extensions": {
+    "typesense-search": "../../typesense_firestore_extension"
+  }
 }

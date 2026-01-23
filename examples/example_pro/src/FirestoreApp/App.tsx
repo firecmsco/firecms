@@ -31,6 +31,7 @@ import {
     useValidateAuthenticator
 } from "@firecms/core";
 import {
+    buildFireCMSSearchController,
     FirebaseAuthController,
     FirebaseSignInProvider,
     FirebaseUserWrapper,
@@ -69,6 +70,11 @@ import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useMediaManagerPlugin } from "@firecms/media_manager";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
+
+
+const textSearchControllerBuilder = buildFireCMSSearchController({
+    region: "europe-west3"  // Match your extension's region
+});
 
 export function App() {
 
@@ -208,7 +214,7 @@ export function App() {
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         localTextSearchEnabled: true,
-        textSearchControllerBuilder: algoliaSearchControllerBuilder
+        textSearchControllerBuilder: textSearchControllerBuilder
     });
 
     const {

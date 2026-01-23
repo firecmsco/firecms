@@ -1,7 +1,7 @@
 import { algoliasearch, SearchClient } from "algoliasearch";
 
 import {
-    buildExternalSearchController,
+    buildExternalSearchController, buildFireCMSSearchController,
     buildPineconeSearchController,
     performAlgoliaTextSearch,
     performPineconeTextSearch
