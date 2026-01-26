@@ -1,7 +1,7 @@
 ---
 slug: docs/collections/text_search
 title: Text search
-description: Enhance your FireCMS experience with integrated text search capabilities, despite Firestore's lack of native support for this feature. By setting the `textSearchEnabled` flag on your collection, you activate a search bar within the collection view, powered by a `FirestoreTextSearchController`. Integrate with external platforms like Algolia for indexing and provide seamless search functionality through our provided utility method for Algolia searches. Configure your custom FirestoreTextSearchController, link it with your Algolia account, and enable advanced text search across your collections for a more robust and intuitive content management system.
+description: Add full-text search to FireCMS with Typesense or Algolia. Use our Firebase Extension for typo-tolerant search at ~$7/month, or integrate with Algolia for enterprise needs.
 ---
 
 :::note[The solution described here is specific for Firestore]
@@ -13,17 +13,136 @@ Firestore does not support native text search, so we need to rely on external
 solutions. If you specify a `textSearchEnabled` flag to the **collection**, you
 will see a search bar on top of the collection view.
 
+## Search Options
+
+| Option | Cost | Setup | Best For |
+|--------|------|-------|----------|
+| **Typesense Extension** (Recommended) | ~$7-14/month flat | 5 min | Most projects |
+| **Algolia** | Per-query pricing | 15 min | Enterprise, geo-search |
+| **Local Text Search** | Free | 1 min | Small collections (<1000 docs) |
+
+---
+
+## Using Typesense (Recommended)
+
+The **FireCMS Typesense Extension** deploys a Typesense search server on a Compute Engine VM and automatically syncs your Firestore data. Features:
+
+- 🔍 **Typo-tolerant search** - "headphnes" matches "headphones"
+- ⚡ **Sub-millisecond responses**
+- 💰 **Flat monthly cost** - No per-query charges
+- 🔄 **Real-time sync** - Documents auto-index on create/update/delete
+
+### Installation
+
+**Prerequisites:**
+- Firebase project with Firestore
+- GCP billing enabled
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) installed
+
+**Step 1: Install the extension**
+
+```bash
+firebase ext:install https://github.com/firecmsco/typesense-extension --project=YOUR_PROJECT_ID
+```
+
+**Step 2: Grant permissions**
+
+```bash
+export PROJECT_ID=your-project-id
+export EXT_INSTANCE_ID=typesense-search  # Default extension name
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:ext-${EXT_INSTANCE_ID}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role="roles/compute.admin" --condition=None
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:ext-${EXT_INSTANCE_ID}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.admin" --condition=None
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:ext-${EXT_INSTANCE_ID}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role="roles/datastore.user" --condition=None
+```
+
+**Step 3: Provision the search server**
+
+```bash
+curl "https://REGION-PROJECT_ID.cloudfunctions.net/ext-typesense-search-provisionSearchNode"
+```
+
+Replace `REGION` with your functions region (e.g., `us-central1`) and `PROJECT_ID` with your project.
+
+Wait ~2 minutes. Existing documents are automatically indexed.
+
+**Step 4: (Optional) Enable public search access**
+
+```bash
+gcloud functions add-iam-policy-binding ext-${EXT_INSTANCE_ID}-api \
+  --member="allUsers" \
+  --role="roles/cloudfunctions.invoker" \
+  --region=REGION \
+  --project=${PROJECT_ID}
+```
+
+### Using Typesense in FireCMS Cloud
+
+Navigate to **Project Settings** and configure:
+
+| Setting | Value |
+|---------|-------|
+| **Region** | Your extension's region (e.g., `us-central1`) |
+| **Extension Instance ID** | Default: `typesense-search` |
+
+That's it! FireCMS Cloud automatically connects to your Typesense instance.
+
+### Using Typesense in Self-Hosted FireCMS
+
+```typescript
+import { buildFireCMSSearchController, useFirestoreDelegate } from "@firecms/firebase";
+
+const textSearchControllerBuilder = buildFireCMSSearchController({
+  region: "us-central1",  // Your extension's region
+  extensionInstanceId: "typesense-search"  // Default name
+});
+
+export function App() {
+  const firestoreDelegate = useFirestoreDelegate({
+    firebaseApp,
+    textSearchControllerBuilder
+  });
+  // ... rest of your app
+}
+```
+
+### Using Typesense Directly (Without FireCMS)
+
+Search via the API proxy endpoint:
+
+```typescript
+const response = await fetch(
+  "https://REGION-PROJECT_ID.cloudfunctions.net/ext-typesense-search-api/collections/products/documents/search",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      q: "blue wireless headphones",
+      query_by: "name,description"
+    })
+  }
+);
+const results = await response.json();
+```
+
+See [Typesense API docs](https://typesense.org/docs/latest/api/) for all available endpoints.
+
+---
+
+## Using Algolia
+
+Algolia is a managed search service with per-query pricing. Best for enterprise needs or advanced features like geo-search.
+
 You need to define a `FirestoreTextSearchControllerBuilder` and add it to your config.
-Typically, you will want to index your entities in some external
-solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
-account and manage the indexing of your documents.
-
-You can achieve this by implementing a Google Cloud Function that listens to
-Firestore changes and updates the Algolia index.
-There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search) 
-for the very same purpose.
-
-The examples below show how to use Algolia as an external search provider, using the `algoliasearch` library version 5.
+Set up an Algolia account and sync documents using their [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search).
 
 
 ### Using Algolia in FireCMS Cloud

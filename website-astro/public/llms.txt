@@ -3351,7 +3351,7 @@ default, configurations are managed internally, but you can customize paths and 
 Ensure that your Firestore security rules allow the plugin to read and write to the configuration paths. Below is an
 example of security rules that permit authenticated users to access the collection configurations:
 
-```firestore
+```txt
 match /{document=**} {
   allow read: if isFireCMSUser();
   allow write: if isFireCMSUser();
@@ -4731,129 +4731,164 @@ type `ExtraData`.
 **setRoles**: A method to set roles for the logged-in user. Takes an array of `Role` objects as a parameter.
 
 
-## Migrating from FireCMS 2.0 to FireCMS 3.0
+## Migrating from v3.0 to v3.1
 
-FireCMS 3.0 is a major release that introduces a lot of changes. This page
-describes the main changes and how to migrate from FireCMS 2.0.
+This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
+FireCMS v3.1 introduces important updates that require configuration changes and offers exciting new features.
 
-FireCMS Community and PRO are the self-hosted versions of FireCMS. It allows you to host your own backend and use FireCMS without any restrictions.
-It is the most similar version to FireCMS 2.0, but with a lot of improvements and new features.
+### TailwindCSS v4 Migration
 
-### Migrating to FireCMS PRO
+The most significant change in v3.1 is the migration from **TailwindCSS v3 to v4**. This involves updating your 
+TailwindCSS configuration and ensuring that your styles are compatible with the new version.
 
-Most of the concepts are the same as in FireCMS 2.0, but there are some changes that you need to be aware of.
-We recommend starting a new project with:
+#### Update Dependencies
 
-```bash
-npx create-firecms-app --pro
-```
-
-or
+Update your FireCMS packages and install TailwindCSS v4:
 
 ```bash
-yarn create firecms-app --pro
+npm i tailwindcss@4 @tailwindcss/vite
 ```
 
-This will create a new project with the latest version of FireCMS PRO.
+#### Add the Vite Plugin
 
-### Updating the imports
+Update your `vite.config.ts` to include the new TailwindCSS v4 plugin:
 
-The main change is that the imports have changed. You need to update the imports in your project.
-Before you would import everything from `firecms` (or even `@camberi/firecms`). Now you need to import from
-different packages.
-- All UI components are now in `@firecms/ui`. Everything including buttons, textfields, layouts, etc.
-- The core of FireCMS is in `@firecms/core`. This includes the `FireCMSApp`, `FireCMSContext`, etc.
-- All Firebase related code is in `@firecms/firebase`, including `useFirebaseAuthController`, `use` etc.
-Most of the imports can be found in `@firecms/core`, so we recommend starting there.
+```typescript
 
-### Collection configuration
-
-Collections have suffered minimal changes. If you don't have any custom components defined, it should be
-easy to adapt your collections to the new format.
-
-- You need to define an `id` for each collection, which typically can be the same as the `path`. Make sure the
-`id` is unique.
-
-- The prop `views` has been renamed to `entityViews`, since they are applied to entities.
-  - Within `entityViews` the prop `path` has been renamed to `key`.
-
-- For `AdditionalFieldDelegate`:
-  - The prop `id` has been renamed to `key`.
-  - The prop `builder` has been renamed to `Builder`.
-
-### Authenticator
-
-- The authenticator now returns a `dataSourceDelegate` instead of a `dataSource`. The difference is that you do
-not pass the `collection` prop anymore.
-
-### Other
-
-- `useNavigationContext` has been renamed to `useNavigationController`.
-- `FieldDescription` has been renamed to `FieldCaption`.
-- `PropertyPreview` no longer need an `entity` prop.
-
-### Migrating custom components (MUI)
-
-FireCMS 3.0 is based on `tailwindcss` instead of `mui`.
-
-Mui was great for the initial versions of FireCMS, but it was being a big performance bottleneck
-and it was hard to customize.
-
-The new version of FireCMS has built in almost 50 new components implemented with tailwindcss, that
-mimic in a good way the material-ui components. You are encouraged to migrate your custom components
-to the new format.
-
-You can try replacing imports from `@mui/material` to `@firecms/ui` and will see that many things work out of the box.
-
-#### Icons
-
-Icons in FireCMS are based on the material icons. You can use all the material icons importing them just like in MUI.
-
-```tsx
-
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
 ```
 
-The prop `fontSize` is called `size` in FireCMS (because it just makes more sense, MUI).
+#### Color Variable Changes
 
-#### Components that have no equivalent:
-- `Box`: The box component is just a wrapper used by mui to apply styles. You can use a `div` instead, with some
-tailwind classes.
-Tip: ChatGPT is great at converting Box components to div with tailwind classes.
-- `Link`: Use `a` instead.
-- `FormControl`
+The CSS variable names have been updated to follow the TailwindCSS v4 standard.
+Update your `index.css` file to reflect these changes:
 
-#### Components that change behaviour (from MUI to FireCMS UI)
-- `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
-- `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
-- `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
-- `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
-
-#### Continue using MUI
-
-```bash
-npm install @mui/material @emotion/react @emotion/styled
-However, if you want to keep using mui: you can still use the old components, but you will need to
-
-or
-
-```bash
-install the `mui` package manually.
-
-```
-yarn add @mui/material @emotion/react @emotion/styled
-```
-```bash
-npm install @mui/icons-material
-
-or
-
-```bash
-If you need MUI icons, run:
-
-```
-yarn add @mui/icons-material
+**Before (v3.0):**
+```css
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
 ```
 
+**After (v3.1):**
+```css
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+#### Updated index.css Structure
+
+Your `index.css` file should now look like this:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}
+```
+
+#### Clean Up Old Config Files
+
+Remove the following files from your project as they are no longer needed:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+### New Collection View Modes
+
+FireCMS v3.1 introduces new ways to visualize your collection data beyond the traditional table view.
+
+#### Cards View
+
+The **Cards view** displays your entities as visual cards, making it easier to browse content-heavy collections 
+such as blog posts, products, or media libraries. Each card shows a preview of the entity with its key fields.
+
+#### Kanban/Board View
+
+The **Kanban view** (also called Board view) allows you to organize entities into columns based on an enum property.
+This is perfect for:
+- Workflow management (e.g., Draft → Review → Published)
+- Task tracking (e.g., Todo → In Progress → Done)
+- Status-based organization
+
+To use the Kanban view, your collection needs an **enum property** that defines the columns. You can:
+- Drag and drop entities between columns to update their status
+- Reorder columns by dragging their headers
+- Configure which property to use for column grouping
+
+Both views can be enabled in your collection configuration or switched at runtime using the view toggle in the collection toolbar.
+
+---
+
+### Bug Fixes and Improvements
+
+FireCMS v3.1 includes numerous bug fixes and improvements:
+
+#### Editor & UI
+- Improved escape key behavior in editor slash command
+- Enhanced suggestion menu behavior
+- Small UI adjustments and visual update to dialogs
+- Removed font-mono from map preview
+
+#### Collection Editor
+- Added inline editing for property editing
+- Fixes for collection editor property saving
+- Consistent behavior for `editable` props in collections and properties
+
+#### Form Handling
+- Displaying pre-save errors in table view
+- Improved error focus when saving forms with errors
+- Debouncing on values change in Formex
+- Changed how dirty values are persisted in local storage
+
+#### Local Changes
+- Added `enableLocalChangesBackup` to collections for controlling local copy of unsaved entities
+- Local changes can now be applied manually
+- Clearing unsaved changes indicator when feature is not enabled
+
+#### Storage & Images
+- New image resizing capabilities
+- Replaced internal compressing library with compressor.js
+- Improved error message when Firebase Storage is not enabled
+
+#### Data & Performance
+- Fixed dates losing focus while typing
+- Fixed select enum filters UI glitch
+- Fixed full screen entity views with encoded characters in their ID
+- TipTap V3 migration for improved markdown editor performance
 
 ## Migrating from previous beta versions
 
@@ -5072,6 +5107,130 @@ export default defineConfig({
       ],
   };
   ```
+
+
+## Migrating from FireCMS 2.0 to FireCMS 3.0
+
+FireCMS 3.0 is a major release that introduces a lot of changes. This page
+describes the main changes and how to migrate from FireCMS 2.0.
+
+FireCMS Community and PRO are the self-hosted versions of FireCMS. It allows you to host your own backend and use FireCMS without any restrictions.
+It is the most similar version to FireCMS 2.0, but with a lot of improvements and new features.
+
+### Migrating to FireCMS PRO
+
+Most of the concepts are the same as in FireCMS 2.0, but there are some changes that you need to be aware of.
+We recommend starting a new project with:
+
+```bash
+npx create-firecms-app --pro
+```
+
+or
+
+```bash
+yarn create firecms-app --pro
+```
+
+This will create a new project with the latest version of FireCMS PRO.
+
+### Updating the imports
+
+The main change is that the imports have changed. You need to update the imports in your project.
+Before you would import everything from `firecms` (or even `@camberi/firecms`). Now you need to import from
+different packages.
+- All UI components are now in `@firecms/ui`. Everything including buttons, textfields, layouts, etc.
+- The core of FireCMS is in `@firecms/core`. This includes the `FireCMSApp`, `FireCMSContext`, etc.
+- All Firebase related code is in `@firecms/firebase`, including `useFirebaseAuthController`, `use` etc.
+Most of the imports can be found in `@firecms/core`, so we recommend starting there.
+
+### Collection configuration
+
+Collections have suffered minimal changes. If you don't have any custom components defined, it should be
+easy to adapt your collections to the new format.
+
+- You need to define an `id` for each collection, which typically can be the same as the `path`. Make sure the
+`id` is unique.
+
+- The prop `views` has been renamed to `entityViews`, since they are applied to entities.
+  - Within `entityViews` the prop `path` has been renamed to `key`.
+
+- For `AdditionalFieldDelegate`:
+  - The prop `id` has been renamed to `key`.
+  - The prop `builder` has been renamed to `Builder`.
+
+### Authenticator
+
+- The authenticator now returns a `dataSourceDelegate` instead of a `dataSource`. The difference is that you do
+not pass the `collection` prop anymore.
+
+### Other
+
+- `useNavigationContext` has been renamed to `useNavigationController`.
+- `FieldDescription` has been renamed to `FieldCaption`.
+- `PropertyPreview` no longer need an `entity` prop.
+
+### Migrating custom components (MUI)
+
+FireCMS 3.0 is based on `tailwindcss` instead of `mui`.
+
+Mui was great for the initial versions of FireCMS, but it was being a big performance bottleneck
+and it was hard to customize.
+
+The new version of FireCMS has built in almost 50 new components implemented with tailwindcss, that
+mimic in a good way the material-ui components. You are encouraged to migrate your custom components
+to the new format.
+
+You can try replacing imports from `@mui/material` to `@firecms/ui` and will see that many things work out of the box.
+
+#### Icons
+
+Icons in FireCMS are based on the material icons. You can use all the material icons importing them just like in MUI.
+
+```tsx
+
+```
+
+The prop `fontSize` is called `size` in FireCMS (because it just makes more sense, MUI).
+
+#### Components that have no equivalent:
+- `Box`: The box component is just a wrapper used by mui to apply styles. You can use a `div` instead, with some
+tailwind classes.
+Tip: ChatGPT is great at converting Box components to div with tailwind classes.
+- `Link`: Use `a` instead.
+- `FormControl`
+
+#### Components that change behaviour (from MUI to FireCMS UI)
+- `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
+- `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
+- `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
+- `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
+
+#### Continue using MUI
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+However, if you want to keep using mui: you can still use the old components, but you will need to
+
+or
+
+```bash
+install the `mui` package manually.
+
+```
+yarn add @mui/material @emotion/react @emotion/styled
+```
+```bash
+npm install @mui/icons-material
+
+or
+
+```bash
+If you need MUI icons, run:
+
+```
+yarn add @mui/icons-material
+```
 
 
 ## Collections

@@ -4,7 +4,7 @@ title: Building a smarter React Select that reads its value from its children
 description: How we designed a Select component in @firecms/ui that derives its label from its children instead of duplicating value/label data.
 pubDate: 2025-12-09
 authors: francesco
-image: /img/blog/select_children.png
+image: /img/multi_select.png
 ---
 
 When you build a select input in React, you almost always end up doing some version of the same thing:
@@ -23,6 +23,8 @@ In FireCMS, we wanted something slightly different for our `Select` component in
 In this post we’ll look at how you would usually do this in React, and why our solution is a bit smarter by leaning on the React APIs.
 
 <!-- truncate -->
+
+![text_search_dialog.png](/img/multi_select.png)
 
 ## How we usually build selects in React
 
