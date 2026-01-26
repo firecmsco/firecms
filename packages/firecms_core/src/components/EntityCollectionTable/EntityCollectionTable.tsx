@@ -249,15 +249,21 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             AdditionalHeaderWidget
         });
 
+        // Get keys from property columns to filter out duplicate additional fields
+        const propertyColumnKeys = new Set(columnsResult.map(col => col.key));
+
         const additionalTableColumns: VirtualTableColumn[] = additionalFields
-            ? additionalFields.map((additionalField) =>
-            ({
-                key: additionalField.key,
-                align: "left",
-                sortable: false,
-                title: additionalField.name,
-                width: additionalField.width ?? 200
-            }))
+            // Filter out additional fields whose key already exists in property columns
+            ? additionalFields
+                .filter((additionalField) => !propertyColumnKeys.has(additionalField.key))
+                .map((additionalField) =>
+                ({
+                    key: additionalField.key,
+                    align: "left",
+                    sortable: false,
+                    title: additionalField.name,
+                    width: additionalField.width ?? 200
+                }))
             : [];
         return [...columnsResult, ...additionalTableColumns];
     })();

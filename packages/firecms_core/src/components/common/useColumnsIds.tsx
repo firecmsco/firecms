@@ -69,7 +69,8 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
 
     const columnIds: string[] = [
         ...propertyKeys,
-        ...additionalFields.map((field) => field.key)
+        // Filter out additional fields whose key already exists in propertyKeys to avoid duplicate column keys
+        ...additionalFields.filter((field) => !propertyKeys.includes(field.key)).map((field) => field.key)
     ];
 
     if (includeSubCollections) {

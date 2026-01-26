@@ -42,10 +42,11 @@ import {
     Typography
 } from "@firecms/ui";
 import { YupSchema } from "./CollectionYupValidation";
-import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { GeneralSettingsForm } from "./GeneralSettingsForm";
+import { DisplaySettingsForm } from "./DisplaySettingsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
-import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
+import { ExtendSettingsForm } from "./ExtendSettingsForm";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
@@ -57,7 +58,6 @@ import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
-import { EntityActionsEditTab } from "./EntityActionsEditTab";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -90,10 +90,10 @@ export interface CollectionEditorDialogProps {
     parentCollection?: PersistedCollection;
     existingEntities?: Entity<any>[];
     /**
-     * Initial view to open when editing: "details" or "properties".
+     * Initial view to open when editing: "general" or "properties".
      * For new collections, this is ignored.
      */
-    initialView?: "details" | "properties";
+    initialView?: "general" | "properties";
     /**
      * If true, auto-expand the Kanban configuration section.
      */
@@ -147,15 +147,15 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
 }
 
 type EditorView = "welcome"
-    | "details"
+    | "general"
+    | "display"
     | "import_data_mapping"
     | "import_data_preview"
     | "import_data_saving"
     | "properties"
     | "loading"
     | "extra_view"
-    | "subcollections"
-    | "custom_actions";
+    | "extend";
 
 export function CollectionEditor(props: CollectionEditorDialogProps & {
     handleCancel: () => void,
@@ -303,7 +303,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const propertyErrorsRef = useRef({});
 
     const initialView = isNewCollection
-        ? (includeTemplates ? "welcome" : "details")
+        ? (includeTemplates ? "welcome" : "general")
         : (initialViewProp ?? "properties");
     const [currentView, setCurrentView] = useState<EditorView>(initialView); // this view can edit either the details view or the properties one
 
@@ -334,7 +334,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     const setNextMode = () => {
-        if (currentView === "details") {
+        if (currentView === "general") {
             if (importConfig.inUse) {
                 setCurrentView("import_data_saving");
             } else if (extraView) {
@@ -343,15 +343,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 setCurrentView("properties");
             }
         } else if (currentView === "welcome") {
-            setCurrentView("details");
+            setCurrentView("general");
         } else if (currentView === "import_data_mapping") {
             setCurrentView("import_data_preview");
         } else if (currentView === "import_data_preview") {
-            setCurrentView("details");
+            setCurrentView("general");
         } else if (currentView === "extra_view") {
             setCurrentView("properties");
         } else {
-            setCurrentView("details");
+            setCurrentView("general");
         }
 
     };
@@ -429,7 +429,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             if (currentView === "welcome") {
                 setNextMode();
                 formexController.resetForm({ values: newCollectionState });
-            } else if (currentView === "details") {
+            } else if (currentView === "general") {
                 if (extraView || importConfig.inUse) {
                     formexController.resetForm({ values: newCollectionState });
                     setNextMode();
@@ -480,7 +480,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const validation = (col: PersistedCollection) => {
 
         let errors: Record<string, any> = {};
-        const schema = (currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema;
+        const schema = (currentView === "properties" || currentView === "extend" || currentView === "general") && YupSchema;
         if (schema) {
             try {
                 schema.validateSync(col, { abortEarly: false });
@@ -493,7 +493,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         if (currentView === "properties") {
             errors = { ...errors, ...propertyErrorsRef.current };
         }
-        if (currentView === "details") {
+        if (currentView === "general") {
             const pathError = validatePath(col.path, isNewCollection, existingPaths, col.id);
             if (pathError) {
                 errors.path = pathError;
@@ -597,7 +597,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             onImportDataSet(importData, propertiesOrder);
             setCurrentView("import_data_mapping");
         } else {
-            setCurrentView("details");
+            setCurrentView("general");
         }
     };
 
@@ -608,17 +608,17 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 {!isNewCollection && <Tabs value={currentView}
                     className={cls("px-4 py-2 w-full flex justify-end bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}
                     onValueChange={(v) => setCurrentView(v as EditorView)}>
-                    <Tab value={"details"}>
-                        Details
+                    <Tab value={"general"}>
+                        General
+                    </Tab>
+                    <Tab value={"display"}>
+                        Display
                     </Tab>
                     <Tab value={"properties"}>
                         Properties
                     </Tab>
-                    <Tab value={"subcollections"}>
-                        Additional views
-                    </Tab>
-                    <Tab value={"custom_actions"}>
-                        Custom actions
+                    <Tab value={"extend"}>
+                        Extend
                     </Tab>
                 </Tabs>}
 
@@ -667,38 +667,29 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             }}
                         />}
 
-                    {currentView === "details" &&
-                        <CollectionDetailsForm
+                    {currentView === "general" &&
+                        <GeneralSettingsForm
                             existingPaths={existingPaths}
                             existingIds={existingIds}
-                            groups={groups}
-                            parentCollectionIds={parentCollectionIds}
                             parentCollection={parentCollection}
-                            isNewCollection={isNewCollection}
-                            expandKanban={expandKanban}>
-                            {!isNewCollection && isMergedCollection && <div className={"flex flex-col gap-4 mt-8"}>
-                                <Typography variant={"body2"} color={"secondary"}>This collection is defined in code.
-                                    The changes done in this editor will override the properties defined in code.
-                                    You can delete the overridden values to revert to the state defined in code.
-                                </Typography>
-                                <Button color={"neutral"}
-                                    onClick={() => {
-                                        setDeleteRequested(true);
-                                    }}>Reset to code</Button>
-                            </div>}
-                        </CollectionDetailsForm>}
+                            isNewCollection={isNewCollection} />
+                    }
 
-                    {currentView === "custom_actions" && collection &&
-                        <EntityActionsEditTab collection={collection} />}
+                    {currentView === "display" &&
+                        <DisplaySettingsForm expandKanban={expandKanban} />
+                    }
 
-                    {currentView === "subcollections" && collection &&
-                        <SubcollectionsEditTab
+                    {currentView === "extend" && collection &&
+                        <ExtendSettingsForm
+                            collection={collection}
                             parentCollection={parentCollection}
                             configController={configController}
-                            getUser={getUser}
                             collectionInference={collectionInference}
+                            getUser={getUser}
                             parentCollectionIds={parentCollectionIds}
-                            collection={collection} />}
+                            isMergedCollection={!isNewCollection && isMergedCollection}
+                            onResetToCode={() => setDeleteRequested(true)} />
+                    }
 
                     {currentView === "properties" &&
                         <CollectionPropertiesEditorForm
@@ -749,7 +740,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 Back
                             </Button>}
 
-                        {isNewCollection && includeTemplates && currentView === "details" &&
+                        {isNewCollection && includeTemplates && currentView === "general" &&
                             <Button variant={"text"}
                                 type="button"
                                 onClick={() => setCurrentView("welcome")}>
@@ -759,7 +750,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
                             type="button"
                             color={"neutral"}
-                            onClick={() => setCurrentView("details")}>
+                            onClick={() => setCurrentView("general")}>
                             <ArrowBackIcon />
                             Back
                         </Button>}
@@ -797,18 +788,18 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 Next
                             </Button>}
 
-                        {isNewCollection && (currentView === "details" || currentView === "properties") &&
+                        {isNewCollection && (currentView === "general" || currentView === "properties") &&
                             <LoadingButton
                                 variant={"filled"}
                                 color="primary"
                                 type="submit"
                                 loading={isSubmitting}
-                                disabled={isSubmitting || (currentView === "details" && !validValues)}
+                                disabled={isSubmitting || (currentView === "general" && !validValues)}
                                 startIcon={currentView === "properties"
                                     ? <CheckIcon />
                                     : undefined}
                             >
-                                {currentView === "details" && "Next"}
+                                {currentView === "general" && "Next"}
                                 {currentView === "properties" && "Create collection"}
                             </LoadingButton>}
 

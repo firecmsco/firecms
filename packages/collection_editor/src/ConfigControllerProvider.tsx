@@ -61,17 +61,17 @@ export interface ConfigControllerProviderProps {
 
 export const ConfigControllerProvider = React.memo(
     function ConfigControllerProvider({
-                                          children,
-                                          collectionConfigController,
-                                          configPermissions,
-                                          reservedGroups,
-                                          collectionInference,
-                                          extraView,
-                                          getUser,
-                                          getData,
-                                          onAnalyticsEvent,
-                                          pathSuggestions
-                                      }: PropsWithChildren<ConfigControllerProviderProps>) {
+        children,
+        collectionConfigController,
+        configPermissions,
+        reservedGroups,
+        collectionInference,
+        extraView,
+        getUser,
+        getData,
+        onAnalyticsEvent,
+        pathSuggestions
+    }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
         const navigate = useNavigate();
@@ -93,7 +93,7 @@ export const ConfigControllerProvider = React.memo(
             redirect: boolean,
             existingEntities?: Entity<any>[],
             pathSuggestions?: string[];
-            initialView?: "details" | "properties";
+            initialView?: "general" | "properties";
             expandKanban?: boolean;
         }>();
 
@@ -107,7 +107,8 @@ export const ConfigControllerProvider = React.memo(
             fullPath?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[];
+            collection?: PersistedCollection;
         }>();
 
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
@@ -117,20 +118,20 @@ export const ConfigControllerProvider = React.memo(
         }), []);
 
         const editCollection = ({
-                                    id,
-                                    fullPath,
-                                    parentCollectionIds,
-                                    parentCollection,
-                                    existingEntities,
-                                    initialView,
-                                    expandKanban
-                                }: {
+            id,
+            fullPath,
+            parentCollectionIds,
+            parentCollection,
+            existingEntities,
+            initialView,
+            expandKanban
+        }: {
             id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
             existingEntities?: Entity<any>[],
-            initialView?: "details" | "properties",
+            initialView?: "general" | "properties",
             expandKanban?: boolean
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
@@ -153,14 +154,14 @@ export const ConfigControllerProvider = React.memo(
         };
 
         const editProperty = ({
-                                  propertyKey,
-                                  property,
-                                  editedCollectionId,
-                                  currentPropertiesOrder,
-                                  parentCollectionIds,
-                                  collection,
-                                  existingEntities
-                              }: {
+            propertyKey,
+            property,
+            editedCollectionId,
+            currentPropertiesOrder,
+            parentCollectionIds,
+            collection,
+            existingEntities
+        }: {
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
@@ -189,18 +190,19 @@ export const ConfigControllerProvider = React.memo(
                 editedCollectionId,
                 parentCollectionIds,
                 collectionEditable: collection?.editable === undefined || collection?.editable === true,
-                existingEntities
+                existingEntities,
+                collection
             });
         };
 
         const createCollection = ({
-                                      parentCollectionIds,
-                                      parentCollection,
-                                      initialValues,
-                                      copyFrom,
-                                      redirect,
-                                      sourceClick
-                                  }: {
+            parentCollectionIds,
+            parentCollection,
+            initialValues,
+            copyFrom,
+            redirect,
+            sourceClick
+        }: {
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
             initialValues?: {
@@ -269,7 +271,7 @@ export const ConfigControllerProvider = React.memo(
                                 }
                             }
                             setCurrentDialog(undefined);
-                        }}/>
+                        }} />
 
                     {/* Used for editing properties*/}
                     <PropertyFormDialog
@@ -288,9 +290,9 @@ export const ConfigControllerProvider = React.memo(
                             }
                             : undefined}
                         onPropertyChanged={({
-                                                id,
-                                                property
-                                            }) => {
+                            id,
+                            property
+                        }) => {
                             if (!currentPropertyDialog) return;
                             if (!id) return;
                             const newProperty = !(currentPropertyDialog.propertyKey);
@@ -343,11 +345,11 @@ export const ConfigControllerProvider = React.memo(
                         }}
                         initialErrors={{}}
                         forceShowErrors={false}
-                        existingPropertyKeys={[]}
+                        existingPropertyKeys={currentPropertyDialog?.collection?.properties ? Object.keys(currentPropertyDialog.collection.properties) : []}
                         allowDataInference={true}
                         propertyConfigs={propertyConfigs}
                         property={currentPropertyDialog?.property}
-                        propertyKey={currentPropertyDialog?.propertyKey}/>
+                        propertyKey={currentPropertyDialog?.propertyKey} />
 
                 </CollectionEditorContext.Provider>
 

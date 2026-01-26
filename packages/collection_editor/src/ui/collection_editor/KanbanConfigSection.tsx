@@ -12,13 +12,10 @@ import {
 } from "@firecms/core";
 import {
     CloseIcon,
-    ExpandablePanel,
     IconButton,
     Select,
     SelectItem,
-    TextField,
-    Typography,
-    ViewKanbanIcon
+    Typography
 } from "@firecms/ui";
 import { useFormex } from "@firecms/formex";
 import { PropertyFormDialog } from "./PropertyEditView";
@@ -62,7 +59,6 @@ export function KanbanConfigSection({
     }, [resolvedCollection.properties]);
 
     const kanbanConfig = values.kanban;
-    const hasKanbanConfig = Boolean(kanbanConfig?.columnProperty);
 
     // Check if columnProperty references a non-existent property
     const columnPropertyMissing = Boolean(kanbanConfig?.columnProperty) &&
@@ -87,141 +83,125 @@ export function KanbanConfigSection({
 
     return (
         <div className={className} ref={panelRef}>
-            <ExpandablePanel
-                initiallyExpanded={forceExpanded || hasKanbanConfig}
-                title={
-                    <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
-                        <ViewKanbanIcon />
-                        <Typography className="ml-2">
-                            Kanban Configuration
-                        </Typography>
-                    </div>
-                }
+            <Select
+                key={`column-select-${enumStringProperties.length}`}
+                name="kanban.columnProperty"
+                label="Kanban Column Property"
+                size={"large"}
+                fullWidth={true}
+                position={"item-aligned"}
+                disabled={enumStringProperties.length === 0}
+                error={columnPropertyMissing}
+                value={kanbanConfig?.columnProperty ?? ""}
+                onValueChange={(v) => {
+                    if (v) {
+                        setFieldValue("kanban", {
+                            ...kanbanConfig,
+                            columnProperty: v
+                        });
+                    } else {
+                        setFieldValue("kanban", undefined);
+                    }
+                }}
+                renderValue={(value) => {
+                    if (columnPropertyMissing) {
+                        return <span className="text-red-500">{value} (not found)</span>;
+                    }
+                    const prop = enumStringProperties.find(p => p.key === value);
+                    if (!prop) return "Select a property";
+                    const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                    return (
+                        <div className="flex items-center gap-2">
+                            <PropertyConfigBadge propertyConfig={fieldConfig} />
+                            <span>{prop.label}</span>
+                        </div>
+                    );
+                }}
+                endAdornment={kanbanConfig?.columnProperty ? (
+                    <IconButton
+                        size="small"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setFieldValue("kanban", undefined);
+                        }}
+                    >
+                        <CloseIcon size="small" />
+                    </IconButton>
+                ) : undefined}
             >
-                <div className={"grid grid-cols-12 gap-4 p-4"}>
-                    <div className={"col-span-12"}>
-                        <Select
-                            key={`column-select-${enumStringProperties.length}`}
-                            name="kanban.columnProperty"
-                            label="Column Property"
-                            size={"large"}
-                            fullWidth={true}
-                            position={"item-aligned"}
-                            disabled={enumStringProperties.length === 0}
-                            error={columnPropertyMissing}
-                            value={kanbanConfig?.columnProperty ?? ""}
-                            onValueChange={(v) => {
-                                if (v) {
-                                    setFieldValue("kanban", {
-                                        ...kanbanConfig,
-                                        columnProperty: v
-                                    });
-                                } else {
-                                    setFieldValue("kanban", undefined);
-                                }
-                            }}
-                            renderValue={(value) => {
-                                if (columnPropertyMissing) {
-                                    return <span className="text-red-500">{value} (not found)</span>;
-                                }
-                                const prop = enumStringProperties.find(p => p.key === value);
-                                if (!prop) return "Select a property";
-                                const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
-                                return (
-                                    <div className="flex items-center gap-2">
-                                        <PropertyConfigBadge propertyConfig={fieldConfig} />
-                                        <span>{prop.label}</span>
-                                    </div>
-                                );
-                            }}
-                            endAdornment={kanbanConfig?.columnProperty ? (
-                                <IconButton
-                                    size="small"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setFieldValue("kanban", undefined);
-                                    }}
-                                >
-                                    <CloseIcon size="small" />
-                                </IconButton>
-                            ) : undefined}
-                        >
-                            {enumStringProperties.map((prop) => {
-                                const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
-                                return (
-                                    <SelectItem key={prop.key} value={prop.key}>
-                                        <div className="flex items-center gap-3">
-                                            <PropertyConfigBadge propertyConfig={fieldConfig} />
-                                            <div>
-                                                <div>{prop.label}</div>
-                                                <Typography variant="caption" color="secondary">
-                                                    {fieldConfig?.name || "Enum"}
-                                                </Typography>
-                                            </div>
-                                        </div>
-                                    </SelectItem>
-                                );
-                            })}
-                        </Select>
-                        <FieldCaption error={columnPropertyMissing}>
-                            {columnPropertyMissing
-                                ? `Property "${kanbanConfig?.columnProperty}" does not exist or is not an enum string property. Please select a valid property or clear the selection.`
-                                : enumStringProperties.length === 0
-                                    ? "No enum string properties found. Add a string property with enumValues to use Kanban view."
-                                    : "Select a string property with enum values to group entities into columns"
-                            }
-                        </FieldCaption>
+                {enumStringProperties.map((prop) => {
+                    const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                    return (
+                        <SelectItem key={prop.key} value={prop.key}>
+                            <div className="flex items-center gap-3">
+                                <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                <div>
+                                    <div>{prop.label}</div>
+                                    <Typography variant="caption" color="secondary">
+                                        {fieldConfig?.name || "Enum"}
+                                    </Typography>
+                                </div>
+                            </div>
+                        </SelectItem>
+                    );
+                })}
+            </Select>
+            <FieldCaption error={columnPropertyMissing}>
+                {columnPropertyMissing
+                    ? `Property "${kanbanConfig?.columnProperty}" does not exist or is not an enum string property. Please select a valid property or clear the selection.`
+                    : enumStringProperties.length === 0
+                        ? "No enum string properties found. Add a string property with enumValues to use Kanban view."
+                        : "Select a string property with enum values to group entities into columns"
+                }
+            </FieldCaption>
 
-                        {showCreateButton && (
-                            <>
-                                <button
-                                    type="button"
-                                    className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
-                                    onClick={() => setColumnPropertyDialogOpen(true)}
-                                >
-                                    + Create "{dialogPropertyKey}" property
-                                </button>
-                                <PropertyFormDialog
-                                    open={columnPropertyDialogOpen}
-                                    onCancel={() => setColumnPropertyDialogOpen(false)}
-                                    property={{
-                                        dataType: "string",
-                                        name: dialogPropertyName,
-                                        enumValues: [
-                                            { id: "todo", label: "To Do" },
-                                            { id: "in_progress", label: "In Progress" },
-                                            { id: "done", label: "Done" }
-                                        ]
-                                    }}
-                                    propertyKey={dialogPropertyKey}
-                                    existingProperty={false}
-                                    autoOpenTypeSelect={false}
-                                    autoUpdateId={false}
-                                    inArray={false}
-                                    allowDataInference={false}
-                                    propertyConfigs={customizationController.propertyConfigs}
-                                    collectionEditable={true}
-                                    existingPropertyKeys={Object.keys(values.properties ?? {})}
-                                    onPropertyChanged={({ id, property }) => {
-                                        const newProperties = {
-                                            ...values.properties,
-                                            [id!]: property
-                                        };
-                                        const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id];
-                                        setFieldValue("properties", newProperties);
-                                        setFieldValue("propertiesOrder", newPropertiesOrder);
-                                        setFieldValue("kanban", {
-                                            ...kanbanConfig,
-                                            columnProperty: id
-                                        });
-                                        setColumnPropertyDialogOpen(false);
-                                    }}
-                                />
-                            </>
-                        )}
-                    </div>
-                </div>
-            </ExpandablePanel>
+            {showCreateButton && (
+                <>
+                    <button
+                        type="button"
+                        className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
+                        onClick={() => setColumnPropertyDialogOpen(true)}
+                    >
+                        + Create "{dialogPropertyKey}" property
+                    </button>
+                    <PropertyFormDialog
+                        open={columnPropertyDialogOpen}
+                        onCancel={() => setColumnPropertyDialogOpen(false)}
+                        property={{
+                            dataType: "string",
+                            name: dialogPropertyName,
+                            enumValues: [
+                                { id: "todo", label: "To Do" },
+                                { id: "in_progress", label: "In Progress" },
+                                { id: "done", label: "Done" }
+                            ]
+                        }}
+                        propertyKey={dialogPropertyKey}
+                        existingProperty={false}
+                        autoOpenTypeSelect={false}
+                        autoUpdateId={false}
+                        inArray={false}
+                        allowDataInference={false}
+                        propertyConfigs={customizationController.propertyConfigs}
+                        collectionEditable={true}
+                        existingPropertyKeys={Object.keys(values.properties ?? {})}
+                        onPropertyChanged={({ id, property }) => {
+                            const newProperties = {
+                                ...values.properties,
+                                [id!]: property
+                            };
+                            const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id];
+                            setFieldValue("properties", newProperties);
+                            setFieldValue("propertiesOrder", newPropertiesOrder);
+                            setFieldValue("kanban", {
+                                ...kanbanConfig,
+                                columnProperty: id
+                            });
+                            setColumnPropertyDialogOpen(false);
+                        }}
+                    />
+                </>
+            )}
         </div>
     );
 }

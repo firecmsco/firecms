@@ -17,7 +17,7 @@ export interface CollectionEditorController {
         /**
          * Initial view to open: "details" or "properties"
          */
-        initialView?: "details" | "properties",
+        initialView?: "general" | "properties",
         /**
          * If true, expand the Kanban configuration section
          */

@@ -12,17 +12,22 @@ interface SearchConfig {
     protocol: "http" | "https";
     apiKey: string;
     collectionsToIndex: string[];
+    path?: string;
 }
-
 /**
  * Options for building the FireCMS Search Controller
  */
 export interface FireCMSSearchControllerOptions {
     /**
      * The Firebase region where the extension is deployed.
-     * Defaults to "us-central1".
      */
-    region?: string;
+    region: string;
+
+    /**
+     * The extension instance ID. Defaults to "firecms-search".
+     * Use this if you installed the extension with a custom instance ID.
+     */
+    extensionInstanceId?: string;
 
     /**
      * Custom Typesense configuration. If provided, skips fetching from extension.
@@ -33,23 +38,24 @@ export interface FireCMSSearchControllerOptions {
         port?: number;
         protocol?: "http" | "https";
         apiKey: string;
+        path?: string;
     };
 }
 
 /**
  * Creates a text search controller that uses the FireCMS Search Extension.
- * 
+ *
  * This requires the `firecms-search` extension to be installed in the user's
  * Firebase project. The extension automatically deploys Typesense to Cloud Run
  * and syncs Firestore data.
- * 
+ *
  * @example
  * ```typescript
  * import { buildFireCMSSearchController } from "@firecms/firebase";
- * 
+ *
  * // Using the extension (recommended)
  * const textSearchControllerBuilder = buildFireCMSSearchController();
- * 
+ *
  * // Or with custom Typesense instance
  * const textSearchControllerBuilder = buildFireCMSSearchController({
  *   customConfig: {
@@ -57,7 +63,7 @@ export interface FireCMSSearchControllerOptions {
  *     apiKey: "your-api-key"
  *   }
  * });
- * 
+ *
  * <FireCMSApp
  *   textSearchControllerBuilder={textSearchControllerBuilder}
  *   collections={[
@@ -70,16 +76,17 @@ export interface FireCMSSearchControllerOptions {
  *   ]}
  * />
  * ```
- * 
+ *
  * @param options - Configuration options
  * @returns A FirestoreTextSearchControllerBuilder
- * 
+ *
  * @group Firebase
  */
 export function buildFireCMSSearchController(
     options?: FireCMSSearchControllerOptions
 ): FirestoreTextSearchControllerBuilder {
     const region = options?.region || "us-central1";
+    const extensionInstanceId = options?.extensionInstanceId || "firecms-search";
 
     let searchConfig: SearchConfig | null = null;
     let typesenseClient: any = null;
@@ -100,6 +107,7 @@ export function buildFireCMSSearchController(
                     port: options.customConfig.port || 443,
                     protocol: options.customConfig.protocol || "https",
                     apiKey: options.customConfig.apiKey,
+                    path: options.customConfig.path,
                     collectionsToIndex: ["*"],
                 };
             } else {
@@ -107,7 +115,7 @@ export function buildFireCMSSearchController(
                 const functions = getFunctions(firebaseApp, region);
                 const getConfig = httpsCallable<void, SearchConfig>(
                     functions,
-                    "ext-firecms-search-getSearchConfig"
+                    `ext-${extensionInstanceId}-getSearchConfig`
                 );
 
                 try {
@@ -123,6 +131,10 @@ export function buildFireCMSSearchController(
                 }
             }
 
+            if (!searchConfig) {
+                throw new Error("Search config not available");
+            }
+
             // Dynamically import Typesense client to avoid bundling if not used
             const Typesense = (await import("typesense")).default;
 
@@ -131,6 +143,7 @@ export function buildFireCMSSearchController(
                     host: searchConfig.host,
                     port: searchConfig.port,
                     protocol: searchConfig.protocol,
+                    path: searchConfig.path || "",
                 }],
                 apiKey: searchConfig.apiKey,
                 connectionTimeoutSeconds: 5,
