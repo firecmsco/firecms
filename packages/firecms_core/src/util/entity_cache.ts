@@ -87,8 +87,9 @@ export function saveEntityToCache(path: string, data: object): void {
     if (isLocalStorageAvailable) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
+
             const entityString = JSON.stringify(data, customReplacer);
-            console.log("Saving entity to localStorage:", {
+            console.debug("Saving entity to localStorage:", {
                 key,
                 entityString
             });

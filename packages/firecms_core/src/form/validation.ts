@@ -264,7 +264,7 @@ function getYupDateSchema({
     entityId
 }: PropertyContext<Date>): AnySchema | DateSchema {
     if (property.autoValue) {
-        return yup.object().nullable();
+        return yup.date().nullable();
     }
     let schema: DateSchema<any> = yup.date().nullable();
     const validation = property.validation;

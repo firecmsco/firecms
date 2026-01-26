@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { useAuthController, useCustomizationController, useFireCMSContext } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, ResolvedProperty, SelectionController } from "../../types";
+import { useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
+import {
+    CollectionActionsProps,
+    EntityCollection,
+    EntityTableController,
+    ResolvedProperty,
+    SelectionController
+} from "../../types";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
 import { FiltersDialog } from "./FiltersDialog";
-import {
-    Badge,
-    Button,
-    cls,
-    FilterListIcon,
-    IconButton,
-    Tooltip
-} from "@firecms/ui";
-import { useLargeLayout } from "../../hooks";
+import { Badge, Button, cls, FilterListIcon, IconButton, Tooltip } from "@firecms/ui";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -30,15 +28,15 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
 }
 
 export function EntityCollectionViewStartActions<M extends Record<string, any>>({
-    collection,
-    relativePath,
-    parentCollectionIds,
-    path,
-    selectionController,
-    tableController,
-    collectionEntitiesCount,
-    resolvedProperties
-}: EntityCollectionViewStartActionsProps<M>) {
+                                                                                    collection,
+                                                                                    relativePath,
+                                                                                    parentCollectionIds,
+                                                                                    path,
+                                                                                    selectionController,
+                                                                                    tableController,
+                                                                                    collectionEntitiesCount,
+                                                                                    resolvedProperties
+                                                                                }: EntityCollectionViewStartActionsProps<M>) {
 
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
@@ -68,7 +66,8 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && (
-        <Tooltip title="Filters">
+        <Tooltip title="Filters"
+                 key={"filters_tooltip"}>
             <Badge
                 color="primary"
                 invisible={activeFilterCount === 0}
@@ -78,7 +77,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         variant="text"
                         size="small"
                         onClick={() => setFiltersDialogOpen(true)}
-                        startIcon={<FilterListIcon size="small" />}
+                        startIcon={<FilterListIcon size="small"/>}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
                         Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
@@ -89,7 +88,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         onClick={() => setFiltersDialogOpen(true)}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
-                        <FilterListIcon size="small" />
+                        <FilterListIcon size="small"/>
                     </IconButton>
                 )}
             </Badge>
@@ -101,7 +100,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
         <ClearFilterSortButton
             key={"clear_filter"}
             tableController={tableController}
-            enabled={!collection.forceFilter} />
+            enabled={!collection.forceFilter}/>
     ];
 
     if (plugins) {
