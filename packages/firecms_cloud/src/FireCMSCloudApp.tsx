@@ -50,6 +50,7 @@ import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components";
 import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
 import {
+    buildFireCMSSearchController,
     FirebaseAuthController,
     getFirestoreDataInPath,
     useAppCheck,
@@ -266,7 +267,7 @@ function ErrorDelegatingLoginView({
                                                                                    target="_blank">
             hello@firecms.co</a>
         </div>
-        <Button  size="small" onClick={onLogout}>Sign out</Button>
+        <Button size="small" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -282,7 +283,7 @@ function NoAccessErrorView(props: { projectId: string, configError: Error, onLog
             registered in the project <code>{props.projectId}</code>.
             You can ask the project owner to add you to the project.
         </Typography>
-        <Button  onClick={props.onLogout}>Sign out</Button>
+        <Button onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -420,7 +421,7 @@ export function FireCMSClientWithController({
                 logo={projectConfig?.logo ?? props.logo}>
                 {props.FireCMSAppBarComponent &&
                     <props.FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                  {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                                  {...appConfig?.fireCMSAppBarComponentProps} />}
             </AppBar>
             {loadingOrErrorComponent}
         </Scaffold>;
@@ -551,7 +552,21 @@ function FireCMSAppAuthenticated({
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
+        textSearchControllerBuilder: useMemo(() => projectConfig.typesenseSearchConfig?.enabled
+            ? (props: any) => {
+                if (!projectConfig.typesenseSearchConfig?.region) {
+                    throw new Error("Typesense config missing region");
+                }
+                const builder = buildFireCMSSearchController({
+                    region: projectConfig.typesenseSearchConfig?.region,
+                    extensionInstanceId: projectConfig.typesenseSearchConfig?.extensionInstanceId === "firestore-typesense-search"
+                        ? "typesense-search"
+                        : (projectConfig.typesenseSearchConfig?.extensionInstanceId || "typesense-search"),
+                    collections: projectConfig.typesenseSearchConfig?.collections
+                });
+                return builder(props);
+            }
+            : appConfig?.textSearchControllerBuilder, [projectConfig.typesenseSearchConfig, appConfig?.textSearchControllerBuilder]),
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder,
         localTextSearchEnabled: projectConfig.localTextSearchEnabled
     });
@@ -663,7 +678,7 @@ function FireCMSAppAuthenticated({
                                                 logo={projectConfig.logo ?? logo}>
                                                 {FireCMSAppBarComponent &&
                                                     <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                                                            {...appConfig?.fireCMSAppBarComponentProps} />}
                                             </AppBar>
                                             <CircularProgressCenter text={"Almost there"}/>
                                         </Scaffold>;
@@ -676,7 +691,7 @@ function FireCMSAppAuthenticated({
                                             <AppBar>
                                                 {FireCMSAppBarComponent &&
                                                     <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                                                            {...appConfig?.fireCMSAppBarComponentProps} />}
                                             </AppBar>
                                             <Drawer>
                                                 {dataTalkMode

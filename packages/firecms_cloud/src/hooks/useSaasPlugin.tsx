@@ -12,17 +12,17 @@ import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
 import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel";
 
 export function useSaasPlugin({
-                                  projectConfig,
-                                  collectionConfigController,
-                                  appConfig,
-                                  dataTalkSuggestions,
-                                  userManagement,
-                                  introMode,
-                                  fireCMSBackend,
-                                  onAnalyticsEvent,
-                                  historyDefaultEnabled,
-                                  rootPathSuggestions
-                              }: {
+    projectConfig,
+    collectionConfigController,
+    appConfig,
+    dataTalkSuggestions,
+    userManagement,
+    introMode,
+    fireCMSBackend,
+    onAnalyticsEvent,
+    historyDefaultEnabled,
+    rootPathSuggestions
+}: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
     userManagement: InternalUserManagement;
@@ -38,21 +38,21 @@ export function useSaasPlugin({
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
     const additionalChildrenStart = <>
-        <CollectionsSetupLoadingLabel/>
+        <CollectionsSetupLoadingLabel />
         <IntroWidget
             fireCMSBackend={fireCMSBackend}
             onAnalyticsEvent={onAnalyticsEvent}
             introMode={introMode}
-            projectConfig={projectConfig}/>
+            projectConfig={projectConfig} />
     </>;
 
     const additionalChildrenEnd = <>
         <DataTalkSuggestions
             suggestions={dataTalkSuggestions}
-            onAnalyticsEvent={onAnalyticsEvent}/>
+            onAnalyticsEvent={onAnalyticsEvent} />
         <RootCollectionSuggestions introMode={introMode}
-                                   onAnalyticsEvent={onAnalyticsEvent}
-                                   rootPathSuggestions={rootPathSuggestions}
+            onAnalyticsEvent={onAnalyticsEvent}
+            rootPathSuggestions={rootPathSuggestions}
         />
     </>;
 
@@ -65,7 +65,7 @@ export function useSaasPlugin({
                     {
                         key: "__history",
                         name: "History",
-                        tabComponent: <HistoryIcon size={"small"}/>,
+                        tabComponent: <HistoryIcon size={"small"} />,
                         Builder: EnableEntityHistoryView,
                         position: "start"
                     }
@@ -97,32 +97,32 @@ export function useSaasPlugin({
         collectionView: {
 
             blockSearch: ({
-                              context,
-                              path,
-                              collection,
-                              parentCollectionIds
-                          }) => {
-                return !(projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
+                context,
+                path,
+                collection,
+                parentCollectionIds
+            }) => {
+                return !(projectConfig.typesenseSearchConfig?.enabled || (projectConfig.localTextSearchEnabled && collection.textSearchEnabled));
             },
 
             showTextSearchBar: ({
-                                    context,
-                                    path,
-                                    collection
-                                }) => {
+                context,
+                path,
+                collection
+            }) => {
                 if (collection.textSearchEnabled === false) {
                     return false;
                 }
                 return true;
             },
             onTextSearchClick: ({
-                                    context,
-                                    path,
-                                    collection,
-                                    parentCollectionIds
-                                }) => {
+                context,
+                path,
+                collection,
+                parentCollectionIds
+            }) => {
 
-                const canSearch = projectConfig.localTextSearchEnabled && collection.textSearchEnabled;
+                const canSearch = projectConfig.typesenseSearchConfig?.enabled || (projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
                 if (!canSearch) {
                     if (parentCollectionIds === undefined) {
                         console.warn("Enabling text search: Parent collection ids are undefined")
@@ -130,11 +130,11 @@ export function useSaasPlugin({
                         context.dialogsController.open({
                             key: "text_search_info",
                             Component: (props) => <TextSearchInfoDialog {...props}
-                                                                        hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
-                                                                        collectionConfigController={collectionConfigController}
-                                                                        parentCollectionIds={parentCollectionIds}
-                                                                        path={path}
-                                                                        collection={collection}/>
+                                hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
+                                collectionConfigController={collectionConfigController}
+                                parentCollectionIds={parentCollectionIds}
+                                path={path}
+                                collection={collection} />
                         });
                     }
                 }
@@ -145,11 +145,11 @@ export function useSaasPlugin({
 }
 
 export function IntroWidget({
-                                introMode,
-                                fireCMSBackend,
-                                projectConfig,
-                                onAnalyticsEvent
-                            }: {
+    introMode,
+    fireCMSBackend,
+    projectConfig,
+    onAnalyticsEvent
+}: {
     introMode?: "new_project" | "existing_project";
     fireCMSBackend: FireCMSBackend;
     projectConfig: ProjectConfig;
@@ -182,11 +182,11 @@ export function IntroWidget({
                 </Typography>
 
                 <AutoSetUpCollectionsButton projectId={projectConfig.projectId}
-                                            projectsApi={fireCMSBackend.projectsApi}
-                                            onClick={() => onAnalyticsEvent?.("intro_cols_setup_click")}
-                                            onSuccess={() => onAnalyticsEvent?.("intro_cols_setup_success")}
-                                            onNoCollections={() => onAnalyticsEvent?.("intro_cols_setup_no_cols")}
-                                            onError={() => onAnalyticsEvent?.("intro_cols_setup_error")}
+                    projectsApi={fireCMSBackend.projectsApi}
+                    onClick={() => onAnalyticsEvent?.("intro_cols_setup_click")}
+                    onSuccess={() => onAnalyticsEvent?.("intro_cols_setup_success")}
+                    onNoCollections={() => onAnalyticsEvent?.("intro_cols_setup_no_cols")}
+                    onError={() => onAnalyticsEvent?.("intro_cols_setup_error")}
                 />
             </>}
 
@@ -194,9 +194,9 @@ export function IntroWidget({
                 FireCMS can be used as a standalone admin panel but it shines when you add your own custom
                 functionality. Including your own custom components, fields, actions, views, and more.
                 More info in the <a
-                href={"https://firecms.co/docs/cloud/quickstart"}
-                rel="noopener noreferrer"
-                target="_blank">docs</a>
+                    href={"https://firecms.co/docs/cloud/quickstart"}
+                    rel="noopener noreferrer"
+                    target="_blank">docs</a>
             </Typography>
             <div className={"mb-8"}>
                 <Typography className={"inline"}>Start customizing with:</Typography>

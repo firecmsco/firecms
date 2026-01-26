@@ -27,6 +27,6 @@
     }
   },
   "extensions": {
-    "typesense-search": "../../typesense_firestore_extension"
+    "typesense-search": "/Users/francesco/firecms/typesense_firestore_extension"
   }
 }

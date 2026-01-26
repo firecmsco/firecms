@@ -17,6 +17,7 @@ import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 import { AppCheckSettingsView } from "./AppCheckSettingsView";
+import { TypesenseSettingsView } from "./TypesenseSettingsView";
 
 export function ProjectSettings() {
 
@@ -32,15 +33,15 @@ export function ProjectSettings() {
 
     return (
         <Container maxWidth={"6xl"}
-                   className={"w-full flex flex-col gap-16 px-4 py-16"}>
+            className={"w-full flex flex-col gap-16 px-4 py-16"}>
 
-            <ProjectSubscriptionPlans/>
+            <ProjectSubscriptionPlans />
 
             <div className={"flex flex-col gap-4"}>
 
                 <Typography variant={"h4"} className="mt-4 mb-2">Settings</Typography>
 
-                <ProjectNameTextField/>
+                <ProjectNameTextField />
 
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
@@ -57,6 +58,9 @@ export function ProjectSettings() {
                         collections.
                     </FieldCaption>
                 </div>
+
+                <TypesenseSettingsView />
+
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
                         position={"start"}
@@ -72,15 +76,15 @@ export function ProjectSettings() {
                     </FieldCaption>
                 </div>
 
-                <ThemeColors/>
+                <ThemeColors />
 
             </div>
 
             <div className={"flex flex-col gap-2"}>
-                <SecurityRulesInstructions/>
+                <SecurityRulesInstructions />
             </div>
 
-            <AppCheckSettingsView/>
+            <AppCheckSettingsView />
 
             {/*<AutoSetupCollectionsSettings/>*/}
 
@@ -99,11 +103,11 @@ function ProjectNameTextField() {
     }, [deferredName]);
 
     return <TextField value={name}
-                      label={"Project name"}
-                      onChange={e => setName(e.target.value)}
-                      onBlur={() => {
-                          if (name) projectConfig.updateProjectName(name);
-                      }}/>;
+        label={"Project name"}
+        onChange={e => setName(e.target.value)}
+        onBlur={() => {
+            if (name) projectConfig.updateProjectName(name);
+        }} />;
 
 }
 
@@ -144,10 +148,10 @@ function LogoUploadField() {
     >
         {logo && <img
             className={"w-40 h-40 p-4"}
-            src={logo}/>}
+            src={logo} />}
 
         {!logo && <FireCMSLogo
-            className={"w-40 h-40 p-4"}/>}
+            className={"w-40 h-40 p-4"} />}
     </FileUpload>;
 
 }
@@ -159,9 +163,9 @@ function SampleComponents() {
         <div className={"flex flex-row gap-4 items-center justify-center"}>
             <Button color={"primary"}> Button </Button>
             <Button> Button </Button>
-            <BooleanSwitch value={checked} onValueChange={setChecked}/>
-            <Checkbox checked={checked} onCheckedChange={setChecked}/>
-            <Checkbox color={"secondary"} checked={checked} onCheckedChange={setChecked}/>
+            <BooleanSwitch value={checked} onValueChange={setChecked} />
+            <Checkbox checked={checked} onCheckedChange={setChecked} />
+            <Checkbox color={"secondary"} checked={checked} onCheckedChange={setChecked} />
         </div>
     </div>;
 }
@@ -175,7 +179,7 @@ function ThemeColors() {
         <div className={"grid grid-cols-12 gap-4"}>
 
             <div className={"col-span-12 md:col-span-6"}>
-                <LogoUploadField/>
+                <LogoUploadField />
             </div>
 
             <div className={"col-span-12 md:col-span-6"}>
@@ -203,7 +207,7 @@ function ThemeColors() {
                             <Typography variant={"subtitle2"}>Secondary color</Typography>
                         </div>
                     </div>
-                    <SampleComponents/>
+                    <SampleComponents />
                 </Paper>
             </div>
         </div>

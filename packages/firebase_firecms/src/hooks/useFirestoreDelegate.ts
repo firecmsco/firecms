@@ -13,6 +13,7 @@ import {
     ListenEntityProps,
     ResolvedEntityCollection,
     SaveEntityDelegateProps,
+    useSnackbarController,
     WhereFilterOp
 } from "@firecms/core";
 import {
@@ -95,34 +96,33 @@ export type FirestoreDelegate = DataSourceDelegate & {
  * @group Firebase
  */
 export function useFirestoreDelegate({
-                                         firebaseApp,
-                                         textSearchControllerBuilder,
-                                         firestoreIndexesBuilder,
-                                         localTextSearchEnabled
-                                     }: FirestoreDataSourceProps): FirestoreDelegate {
+    firebaseApp,
+    textSearchControllerBuilder,
+    firestoreIndexesBuilder,
+    localTextSearchEnabled
+}: FirestoreDataSourceProps): FirestoreDelegate {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>();
+    const snackbarController = useSnackbarController();
 
     useEffect(() => {
-        if (!searchControllerRef.current && firebaseApp) {
-            if ((textSearchControllerBuilder || localTextSearchEnabled) && !searchControllerRef.current) {
-                searchControllerRef.current = buildTextSearchControllerWithLocalSearch({
-                    firebaseApp,
-                    textSearchControllerBuilder,
-                    localTextSearchEnabled: localTextSearchEnabled ?? false
-                });
-            }
+        if (firebaseApp) {
+            searchControllerRef.current = buildTextSearchControllerWithLocalSearch({
+                firebaseApp,
+                textSearchControllerBuilder,
+                localTextSearchEnabled: localTextSearchEnabled ?? false
+            });
         }
     }, [firebaseApp, localTextSearchEnabled, textSearchControllerBuilder]);
 
     const buildQuery = useCallback(<M>(path: string,
-                                       filter: FilterValues<Extract<keyof M, string>> | undefined,
-                                       orderBy: string | undefined,
-                                       order: "desc" | "asc" | undefined,
-                                       startAfter: any[] | undefined,
-                                       limit: number | undefined,
-                                       collectionGroup = false,
-                                       databaseId?: string) => {
+        filter: FilterValues<Extract<keyof M, string>> | undefined,
+        orderBy: string | undefined,
+        order: "desc" | "asc" | undefined,
+        startAfter: any[] | undefined,
+        limit: number | undefined,
+        collectionGroup = false,
+        databaseId?: string) => {
 
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
@@ -155,8 +155,8 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
-                                                                          entityId: string,
-                                                                          databaseId?: string
+        entityId: string,
+        databaseId?: string
     ): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
@@ -196,11 +196,11 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const performTextSearch = useCallback(<M extends Record<string, any>>({
-                                                                              path,
-                                                                              databaseId,
-                                                                              searchString,
-                                                                              onUpdate
-                                                                          }: {
+        path,
+        databaseId,
+        searchString,
+        onUpdate
+    }: {
         path: string,
         databaseId?: string,
         searchString: string;
@@ -239,23 +239,23 @@ export function useFirestoreDelegate({
             const addedEntitiesSet = new Set<string>();
             subscriptions = (ids ?? [])
                 .map((entityId) => {
-                        return listenEntity({
-                            path,
-                            entityId,
-                            onUpdate: (entity: Entity<any>) => {
-                                if (entity.values) {
-                                    if (!addedEntitiesSet.has(entity.id)) {
-                                        addedEntitiesSet.add(entity.id);
-                                        entities.push(entity);
-                                        onUpdate(entities);
-                                    }
-                                } else {
-                                    addedEntitiesSet.delete(entity.id);
-                                    onUpdate([...entities.filter(e => e.id !== entityId)])
+                    return listenEntity({
+                        path,
+                        entityId,
+                        onUpdate: (entity: Entity<any>) => {
+                            if (entity.values) {
+                                if (!addedEntitiesSet.has(entity.id)) {
+                                    addedEntitiesSet.add(entity.id);
+                                    entities.push(entity);
+                                    onUpdate(entities);
                                 }
+                            } else {
+                                addedEntitiesSet.delete(entity.id);
+                                onUpdate([...entities.filter(e => e.id !== entityId)])
                             }
-                        })
-                    }
+                        }
+                    })
+                }
                 );
         });
 
@@ -291,8 +291,12 @@ export function useFirestoreDelegate({
             }
             try {
                 return searchControllerRef.current.init(props);
-            } catch (e) {
+            } catch (e: any) {
                 console.error("Error initializing text search controller", e);
+                snackbarController.open({
+                    type: "error",
+                    message: "Error initializing text search: " + e.message
+                });
                 return false;
             }
         }, []),
@@ -312,15 +316,15 @@ export function useFirestoreDelegate({
          * @group Firestore
          */
         fetchCollection: useCallback(async <M extends Record<string, any>>({
-                                                                               path,
-                                                                               filter,
-                                                                               limit,
-                                                                               startAfter,
-                                                                               searchString,
-                                                                               orderBy,
-                                                                               order,
-                                                                               collection,
-                                                                           }: FetchCollectionDelegateProps<M>
+            path,
+            filter,
+            limit,
+            startAfter,
+            searchString,
+            orderBy,
+            order,
+            collection,
+        }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
             const isCollectionGroup = collection?.collectionGroup ?? false;
@@ -419,10 +423,10 @@ export function useFirestoreDelegate({
          * @group Firestore
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
-                                                                     path,
-                                                                     entityId,
-                                                                     collection
-                                                                 }: FetchEntityProps<M>
+            path,
+            entityId,
+            collection
+        }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => getAndBuildEntity(path, entityId, collection?.databaseId), [getAndBuildEntity]),
 
         /**
@@ -548,12 +552,12 @@ export function useFirestoreDelegate({
         }, [firebaseApp]),
 
         countEntities: useCallback(async ({
-                                              path,
-                                              filter,
-                                              order,
-                                              orderBy,
-                                              collection
-                                          }: FetchCollectionDelegateProps): Promise<number> => {
+            path,
+            filter,
+            order,
+            orderBy,
+            collection
+        }: FetchCollectionDelegateProps): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
@@ -563,11 +567,11 @@ export function useFirestoreDelegate({
         }, [firebaseApp]),
 
         isFilterCombinationValid: useCallback(({
-                                                   path,
-                                                   collection,
-                                                   filterValues,
-                                                   sortBy
-                                               }: {
+            path,
+            collection,
+            filterValues,
+            sortBy
+        }: {
             path: string,
             collection: EntityCollection<any>,
             filterValues: FilterValues<any>,
@@ -735,10 +739,10 @@ function currentTime(): any {
 }
 
 function buildTextSearchControllerWithLocalSearch({
-                                                      textSearchControllerBuilder,
-                                                      firebaseApp,
-                                                      localTextSearchEnabled
-                                                  }: {
+    textSearchControllerBuilder,
+    firebaseApp,
+    localTextSearchEnabled
+}: {
     textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder,
     firebaseApp: FirebaseApp,
     localTextSearchEnabled: boolean

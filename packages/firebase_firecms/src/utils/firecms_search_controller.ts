@@ -40,6 +40,13 @@ export interface FireCMSSearchControllerOptions {
         apiKey: string;
         path?: string;
     };
+
+    /**
+     * Override the collections to index returned by the extension.
+     * Use this if you want to restrict search to specific collections on the client side,
+     * regardless of what is configured in the extension.
+     */
+    collections?: string[];
 }
 
 /**
@@ -86,7 +93,7 @@ export function buildFireCMSSearchController(
     options?: FireCMSSearchControllerOptions
 ): FirestoreTextSearchControllerBuilder {
     const region = options?.region || "us-central1";
-    const extensionInstanceId = options?.extensionInstanceId || "firecms-search";
+    const extensionInstanceId = options?.extensionInstanceId || "typesense-search";
 
     let searchConfig: SearchConfig | null = null;
     let typesenseClient: any = null;
@@ -121,6 +128,9 @@ export function buildFireCMSSearchController(
                 try {
                     const result = await getConfig();
                     searchConfig = result.data;
+                    if (options?.collections && options.collections.length > 0) {
+                        searchConfig.collectionsToIndex = options.collections;
+                    }
                 } catch (error: any) {
                     console.error("Failed to get search config from extension:", error);
                     throw new Error(

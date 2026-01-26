@@ -73,7 +73,8 @@ const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
 
 const textSearchControllerBuilder = buildFireCMSSearchController({
-    region: "europe-west3"  // Match your extension's region
+    region: "europe-west3",
+    extensionInstanceId: "typesense-search"
 });
 
 export function App() {
