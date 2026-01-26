@@ -85,19 +85,19 @@ export function getDefaultValueForDataType(dataType: DataType) {
  * @group Datasource
  */
 export function updateDateAutoValues<M extends Record<string, any>>({
-                                                                        inputValues,
-                                                                        properties,
-                                                                        status,
-                                                                        timestampNowValue,
-                                                                        setDateToMidnight
-                                                                    }:
-                                                                    {
-                                                                        inputValues: Partial<EntityValues<M>>,
-                                                                        properties: ResolvedProperties<M>,
-                                                                        status: EntityStatus,
-                                                                        timestampNowValue: any,
-                                                                        setDateToMidnight: (input?: any) => any | undefined
-                                                                    }): EntityValues<M> {
+    inputValues,
+    properties,
+    status,
+    timestampNowValue,
+    setDateToMidnight
+}:
+    {
+        inputValues: Partial<EntityValues<M>>,
+        properties: ResolvedProperties<M>,
+        status: EntityStatus,
+        timestampNowValue: any,
+        setDateToMidnight: (input?: any) => any | undefined
+    }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
@@ -129,10 +129,10 @@ export function updateDateAutoValues<M extends Record<string, any>>({
  * @group Datasource
  */
 export function sanitizeData<M extends Record<string, any>>
-(
-    values: EntityValues<M>,
-    properties: ResolvedProperties<M>
-) {
+    (
+        values: EntityValues<M>,
+        properties: ResolvedProperties<M>
+    ) {
     const result: any = values;
     Object.entries(properties)
         .forEach(([key, property]) => {
@@ -151,9 +151,12 @@ export function traverseValuesProperties<M extends Record<string, any>>(
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> | undefined {
+    // Handle null/undefined inputValues - use empty object as base for mergeDeep
+    const safeInputValues = inputValues ?? {};
+
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues)[key];
+            const inputValue = safeInputValues && (safeInputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === null) return null;
             if (updatedValue === undefined) return undefined;
@@ -161,14 +164,14 @@ export function traverseValuesProperties<M extends Record<string, any>>(
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
     // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
-    const result = mergeDeep(inputValues, updatedValues);
-    if (Object.keys(result).length === 0) return undefined;
+    const result = mergeDeep(safeInputValues, updatedValues);
+    if (!result || Object.keys(result).length === 0) return undefined;
     return result;
 }
 
 export function traverseValueProperty(inputValue: any,
-                                      property: Property,
-                                      operation: (value: any, property: Property) => any): any {
+    property: Property,
+    operation: (value: any, property: Property) => any): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {
