@@ -199,12 +199,14 @@ export function useFirestoreDelegate({
         path,
         databaseId,
         searchString,
-        onUpdate
+        onUpdate,
+        collection
     }: {
         path: string,
         databaseId?: string,
         searchString: string;
-        onUpdate: (entities: Entity<M>[]) => void
+        onUpdate: (entities: Entity<M>[]) => void,
+        collection?: EntityCollection | ResolvedEntityCollection
     }): () => void => {
 
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
@@ -222,7 +224,8 @@ export function useFirestoreDelegate({
             path,
             searchString,
             currentUser: currentUser ?? undefined,
-            databaseId
+            databaseId,
+            collection
         });
 
         if (!search) {
@@ -233,6 +236,7 @@ export function useFirestoreDelegate({
             if (!ids || ids.length === 0) {
                 subscriptions = [];
                 onUpdate([]);
+                return;
             }
 
             const entities: Entity<M>[] = [];
@@ -257,13 +261,20 @@ export function useFirestoreDelegate({
                     })
                 }
                 );
+        }).catch((error: Error) => {
+            console.error("Text search error:", error);
+            snackbarController.open({
+                type: "error",
+                message: error.message || "Search failed"
+            });
+            onUpdate([]);
         });
 
         return () => {
             subscriptions.forEach((p) => p());
         }
 
-    }, [firebaseApp, listenEntity]);
+    }, [firebaseApp, listenEntity, snackbarController]);
 
     const cmsToDelegateModel = useCallback((values: any) => {
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
@@ -398,7 +409,8 @@ export function useFirestoreDelegate({
                     path,
                     searchString,
                     onUpdate,
-                    databaseId
+                    databaseId,
+                    collection
                 });
             }
 
@@ -780,7 +792,8 @@ function buildTextSearchControllerWithLocalSearch({
             searchString: string,
             path: string,
             currentUser?: any,
-            databaseId?: string
+            databaseId?: string,
+            collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             const search = await textSearchController.search(props);
             return search ?? await localSearchController.search(props);

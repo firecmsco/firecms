@@ -239,6 +239,48 @@ export function buildFireCMSSearchController(
             }
         };
 
+        // Cache for Typesense collection schemas (field names)
+        const schemaCache: Map<string, string[]> = new Map();
+
+        /**
+         * Fetches the Typesense collection schema and returns searchable string field names.
+         * Results are cached to avoid repeated API calls.
+         */
+        const getSearchableFieldsFromSchema = async (collectionName: string): Promise<string[]> => {
+            // Check cache first
+            if (schemaCache.has(collectionName)) {
+                return schemaCache.get(collectionName)!;
+            }
+
+            try {
+                const collection = await typesenseClient.collections(collectionName).retrieve();
+
+                // Extract string fields from the schema
+                const stringFields = collection.fields
+                    .filter((f: any) => {
+                        // Include string and string[] types, exclude internal fields
+                        const isStringType = f.type === "string" ||
+                            f.type === "string[]" ||
+                            f.type === "string*" ||
+                            f.type === "auto";
+                        const isNotInternal = !f.name.startsWith("_") && f.name !== ".*";
+                        return isStringType && isNotInternal;
+                    })
+                    .map((f: any) => f.name);
+
+                schemaCache.set(collectionName, stringFields);
+                return stringFields;
+            } catch (error: any) {
+                if (error.httpStatus === 404) {
+                    throw new Error(
+                        `Collection "${collectionName}" not found in Typesense. ` +
+                        "Make sure the collection has been indexed. Try running the backfill function."
+                    );
+                }
+                throw error;
+            }
+        };
+
         /**
          * Performs a search and returns document IDs
          * Supports subcollections by filtering on parent IDs
@@ -247,6 +289,7 @@ export function buildFireCMSSearchController(
             searchString: string;
             path: string;
             databaseId?: string;
+            collection?: EntityCollection | ResolvedEntityCollection;
         }): Promise<readonly string[] | undefined> => {
             if (!typesenseClient) {
                 // Ensure client is initialized
@@ -257,8 +300,7 @@ export function buildFireCMSSearchController(
             }
 
             if (!typesenseClient) {
-                console.error("Typesense client not initialized");
-                return undefined;
+                throw new Error("Typesense client not initialized. Check extension configuration.");
             }
 
             // Convert path to Typesense collection name
@@ -267,10 +309,22 @@ export function buildFireCMSSearchController(
             // Get parent filter for subcollections
             const parentFilter = getParentFilter(props.path);
 
+            // Get searchable fields from the actual Typesense schema
+            const searchableFields = await getSearchableFieldsFromSchema(collectionName);
+
+            if (searchableFields.length === 0) {
+                throw new Error(
+                    `No searchable string fields found in Typesense collection "${collectionName}". ` +
+                    "Make sure some documents have been indexed with string fields."
+                );
+            }
+
+            const queryBy = searchableFields.join(",");
+
             try {
                 const searchParams: any = {
                     q: props.searchString,
-                    query_by: "*", // Search all fields
+                    query_by: queryBy,
                     per_page: 100,
                     prefix: true, // Enable prefix matching
                     typo_tokens_threshold: 1, // Allow some typos
@@ -291,15 +345,9 @@ export function buildFireCMSSearchController(
 
                 return ids as readonly string[];
             } catch (error: any) {
-                // Handle collection not found - might not be indexed yet
-                if (error.httpStatus === 404) {
-                    console.warn(`Collection "${collectionName}" not found in Typesense. ` +
-                        "It may not be indexed yet. Try running the backfill function.");
-                    return [];
-                }
-
-                console.error("Search error:", error);
-                return undefined;
+                // Parse error message for user-friendly display
+                const message = error.message || error.toString();
+                throw new Error(`Search failed: ${message}`);
             }
         };
 
