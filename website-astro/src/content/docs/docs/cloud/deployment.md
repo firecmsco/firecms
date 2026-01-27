@@ -1,8 +1,8 @@
 ---
 slug: docs/cloud/deployment
-title: Deploying your Firebase CMS & Admin UI
+title: "Deploying your Firebase CMS and Admin UI"
 sidebar_label: Deployment
-description: Deploy your custom **React CMS** and admin panel code to FireCMS Cloud. Fully managed hosting for your Firestore content management system.
+description: "Deploy your custom React CMS and admin panel code to FireCMS Cloud. Fully managed hosting for your Firestore content management system."
 ---
 
 ## Deployment to FireCMS Cloud
@@ -39,7 +39,6 @@ The FireCMS CLI is a tool that allows you to deploy your CMS to FireCMS Cloud
 with a single command. In your project, you should have `firecms` as a dev
 dependency. This package was previously `@firecms/cli`.
 
-
 The available commands are:
 
 ```bash
@@ -58,7 +57,7 @@ firecms deploy --project=your-project-id
 
 ## Deployment
 
-FireCMS Cloud projects can only be deployed to FireCMS Cloud. 
+FireCMS Cloud projects can only be deployed to FireCMS Cloud.
 
 If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
 Since the APIs are the same for all versions, you can easily switch between them.
