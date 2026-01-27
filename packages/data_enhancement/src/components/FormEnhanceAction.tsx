@@ -171,13 +171,11 @@ export function FormEnhanceAction({
 
             <div
                 className={cls(
-                    // defaultBorderMixin,
-                    // "border-b",
-                    "my-2 w-[500px] max-w-full flex items-center text-surface-700 dark:text-surface-200"
+                    "my-2 w-[500px] max-w-full flex items-start text-surface-700 dark:text-surface-200"
                 )}>
 
                 <TextareaAutosize
-                    className={cls("p-4 rounded-lg resize-none bg-surface-100 dark:bg-surface-800 mx-2 w-full flex-grow outline-none", focusedDisabled)}
+                    className={cls("p-4 rounded-lg resize-none bg-surface-100 dark:bg-surface-800 mx-2 w-full flex-grow outline-none max-h-[300px] overflow-auto", focusedDisabled)}
                     value={instructions}
                     autoFocus={status === "new"}
                     disabled={loading || noIdSet}
@@ -211,7 +209,7 @@ export function FormEnhanceAction({
 
                 <IconButton
                     onClick={() => enhance(instructions)}
-                    size={"large"}
+                    size={"small"}
                     color={!instructions ? "primary" : undefined}
                     disabled={loading || !instructions}>
                     {loading &&
@@ -219,7 +217,6 @@ export function FormEnhanceAction({
                     {!loading &&
                         <SendIcon color={"primary"}/>}
                 </IconButton>
-
 
             </div>
 
