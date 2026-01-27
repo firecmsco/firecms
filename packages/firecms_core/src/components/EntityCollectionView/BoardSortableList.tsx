@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -43,6 +43,8 @@ export function BoardSortableList<M extends Record<string, any>>({
     useEffect(() => {
         if (!sentinelRef.current || !hasMore || !onLoadMore) return;
 
+        const sentinel = sentinelRef.current;
+
         const observer = new IntersectionObserver(
             (entries) => {
                 const now = Date.now();
@@ -59,21 +61,37 @@ export function BoardSortableList<M extends Record<string, any>>({
             { threshold: 0.1 }
         );
 
-        observer.observe(sentinelRef.current);
+        observer.observe(sentinel);
+
+        // Check if sentinel is already visible when effect runs
+        // This handles the case where the sentinel was visible before the observer was created
+        const rect = sentinel.getBoundingClientRect();
+        const containerRect = sentinel.parentElement?.getBoundingClientRect();
+        if (containerRect && rect.top < containerRect.bottom && rect.bottom > containerRect.top) {
+            const now = Date.now();
+            if (hasMore && !isLoadingRef.current && now - lastLoadTimeRef.current > 500) {
+                lastLoadTimeRef.current = now;
+                onLoadMore();
+            }
+        }
+
         return () => observer.disconnect();
     }, [hasMore, onLoadMore]);
+
+    // Memoize className to avoid recomputation on every render
+    const containerClassName = useMemo(() => cls(
+        "flex flex-col p-2 transition-opacity duration-100 transition-bg ease-linear w-full overflow-y-auto no-scrollbar flex-1 rounded-md",
+        isDragging && isDragOverColumn
+            ? "bg-surface-accent-200 dark:bg-surface-800"
+            : isDragging
+                ? "bg-surface-50 dark:bg-surface-950 hover:bg-surface-accent-100 dark:hover:bg-surface-800"
+                : "bg-surface-50 dark:bg-surface-950"
+    ), [isDragging, isDragOverColumn]);
 
     return (
         <div
             ref={setNodeRef}
-            className={cls(
-                "flex flex-col p-4 transition-opacity duration-100 transition-bg ease-linear w-full overflow-y-auto flex-1 rounded-md",
-                isDragging && isDragOverColumn
-                    ? "bg-surface-accent-200 dark:bg-surface-800"
-                    : isDragging
-                        ? "bg-surface-50 dark:bg-surface-950 hover:bg-surface-accent-100 dark:hover:bg-surface-800"
-                        : "bg-surface-50 dark:bg-surface-950"
-            )}
+            className={containerClassName}
             style={{ minHeight: 80 }}
         >
             {items.length === 0 && !loading ? (
@@ -112,7 +130,8 @@ interface SortableItemProps<M extends Record<string, any>> {
     ItemComponent: React.ComponentType<BoardItemViewProps<M>>;
 }
 
-function SortableItem<M extends Record<string, any>>({
+// Memoized to prevent unnecessary re-renders when other items in the list change
+const SortableItem = memo(function SortableItem<M extends Record<string, any>>({
     item,
     index,
     columnId,
@@ -133,12 +152,13 @@ function SortableItem<M extends Record<string, any>>({
         }
     });
 
-    const sortableStyle = {
+    // Memoize style object to prevent object recreation on each render
+    const sortableStyle = useMemo(() => ({
         transform: CSS.Transform.toString(transform),
         transition,
         zIndex: isItemBeingDragged ? 2 : 1,
         opacity: isItemBeingDragged ? 0 : 1,
-    };
+    }), [transform, transition, isItemBeingDragged]);
 
     return (
         <div ref={setNodeRef} style={sortableStyle} {...attributes} {...listeners}>
@@ -149,4 +169,4 @@ function SortableItem<M extends Record<string, any>>({
             />
         </div>
     );
-}
+}) as <M extends Record<string, any>>(props: SortableItemProps<M>) => React.ReactElement;

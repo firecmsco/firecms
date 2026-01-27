@@ -149,7 +149,7 @@ export function AddKanbanColumnAction({
         <>
             <div
                 className={cls(
-                    "border h-full w-80 min-w-80 m-2 flex flex-col items-center justify-center rounded-md",
+                    "border h-full w-80 min-w-80 mx-2 flex flex-col items-center justify-center rounded-md",
                     "bg-surface-50 dark:bg-surface-950 hover:bg-surface-100 dark:hover:bg-surface-900",
                     "cursor-pointer transition-colors duration-200 ease-in-out",
                     defaultBorderMixin

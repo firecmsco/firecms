@@ -1,9 +1,5 @@
-import React, { useMemo } from "react";
-import {
-    Entity,
-    EntityCollection,
-    ResolvedProperty
-} from "../../types";
+import React, { memo, useCallback, useMemo } from "react";
+import { Entity, EntityCollection, ResolvedProperty } from "../../types";
 import {
     getEntityImagePreviewPropertyKey,
     getEntityTitlePropertyKey,
@@ -11,17 +7,10 @@ import {
     IconForView,
     resolveCollection
 } from "../../util";
-import {
-    Checkbox,
-    cls,
-    defaultBorderMixin
-} from "@firecms/ui";
+import { Checkbox, cls, defaultBorderMixin } from "@firecms/ui";
 import { PropertyPreview } from "../../preview";
-import {
-    useAuthController,
-    useCustomizationController
-} from "../../hooks";
-import { BoardItem, BoardItemViewProps } from "./board_types";
+import { useAuthController, useCustomizationController } from "../../hooks";
+import { BoardItemViewProps } from "./board_types";
 
 export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardItemViewProps<M> & {
     collection: EntityCollection<M>;
@@ -35,17 +24,17 @@ export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardIte
  * Compact card component for displaying an entity in a Kanban board.
  * Shows thumbnail, title, and optional selection checkbox.
  */
-export function EntityBoardCard<M extends Record<string, any> = any>({
-    item,
-    isDragging,
-    isGroupedOver,
-    style,
-    collection,
-    onClick,
-    selected,
-    onSelectionChange,
-    selectionEnabled = false
-}: EntityBoardCardProps<M>) {
+function EntityBoardCardInner<M extends Record<string, any> = any>({
+                                                                       item,
+                                                                       isDragging,
+                                                                       isGroupedOver,
+                                                                       style,
+                                                                       collection,
+                                                                       onClick,
+                                                                       selected,
+                                                                       onSelectionChange,
+                                                                       selectionEnabled = false
+                                                                   }: EntityBoardCardProps<M>) {
     const entity = item.entity;
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -81,7 +70,7 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
     const titleValue = titlePropertyKey ? getValueInPath(entity.values, titlePropertyKey) : undefined;
     const titleProperty = titlePropertyKey ? resolvedCollection.properties[titlePropertyKey] as ResolvedProperty : undefined;
 
-    const handleClick = (e: React.MouseEvent) => {
+    const handleClick = useCallback((e: React.MouseEvent) => {
         // Cmd+click (Mac) or Ctrl+click (Windows) toggles selection
         if ((e.metaKey || e.ctrlKey) && selectionEnabled) {
             e.preventDefault();
@@ -93,17 +82,18 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
             e.stopPropagation();
             onClick(entity);
         }
-    };
+    }, [entity, onClick, onSelectionChange, selected, selectionEnabled]);
 
-    const handleCheckboxClick = (e: React.MouseEvent) => {
+    const handleCheckboxClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
-    };
+    }, []);
 
-    const handleSelectionChange = (checked: boolean) => {
+    const handleSelectionChange = useCallback((checked: boolean) => {
         onSelectionChange?.(entity, checked);
-    };
+    }, [entity, onSelectionChange]);
 
-    const getBackgroundColor = (): string => {
+    // Memoize className computations
+    const backgroundColor = useMemo((): string => {
         if (isDragging) {
             return "bg-surface-100 dark:bg-surface-800";
         }
@@ -111,10 +101,19 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
             return "bg-surface-200";
         }
         return "bg-white dark:bg-surface-900 hover:bg-surface-100 dark:hover:bg-surface-800";
-    };
+    }, [isDragging, isGroupedOver]);
 
-    const getBorderColor = (): string =>
-        isDragging ? "ring-2 ring-primary" : "";
+    const borderColor = useMemo((): string =>
+        isDragging ? "ring-2 ring-primary" : "", [isDragging]);
+
+    // Memoize the card className
+    const cardClassName = useMemo(() => cls(
+        "p-2 flex items-start border rounded-lg cursor-pointer transition-colors",
+        defaultBorderMixin,
+        borderColor,
+        backgroundColor,
+        selected && "ring-2 ring-primary"
+    ), [borderColor, backgroundColor, selected]);
 
     return (
         <div
@@ -124,15 +123,7 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
             data-testid={item.id}
             onClick={handleClick}
         >
-            <div
-                className={cls(
-                    "p-2 flex items-start border rounded-lg cursor-pointer transition-colors",
-                    defaultBorderMixin,
-                    getBorderColor(),
-                    getBackgroundColor(),
-                    selected && "ring-2 ring-primary"
-                )}
-            >
+            <div className={cardClassName}>
                 {/* Thumbnail */}
                 {usedImageProperty && usedImageValue ? (
                     <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 mr-2">
@@ -145,7 +136,8 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
                         />
                     </div>
                 ) : (
-                    <div className="w-10 h-10 rounded-md bg-surface-100 dark:bg-surface-800 shrink-0 mr-2 flex items-center justify-center">
+                    <div
+                        className="w-10 h-10 rounded-md bg-surface-100 dark:bg-surface-800 shrink-0 mr-2 flex items-center justify-center">
                         <IconForView
                             collectionOrView={collection}
                             color="disabled"
@@ -189,6 +181,9 @@ export function EntityBoardCard<M extends Record<string, any> = any>({
         </div>
     );
 }
+
+// Memoized to prevent unnecessary re-renders when other cards in the board change
+export const EntityBoardCard = memo(EntityBoardCardInner) as typeof EntityBoardCardInner;
 
 /**
  * Wrapper component that adapts EntityBoardCard to BoardItemViewProps interface

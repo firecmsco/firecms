@@ -293,7 +293,7 @@ export function Board<M extends Record<string, any>, COLUMN extends string>({
                 items={columnsProp.map(String)}
                 strategy={horizontalListSortingStrategy}
             >
-                <div className={cls("md:p-4 h-full min-w-full inline-flex", className)}>
+                <div className={cls("p-2 md:p-3 lg:p-4 h-full min-w-full inline-flex", className)}>
                     {columnsProp.map((key: COLUMN, index: number) => (
                         <BoardColumn
                             key={String(key)}

@@ -11,13 +11,29 @@ import {
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";
-import { Button, ChipColorKey, ChipColorScheme, CircularProgress, Dialog, DialogActions, DialogContent, getColorSchemeForSeed, IconButton, RefreshIcon, Tooltip, Typography } from "@firecms/ui";
 import {
-    getPropertyInPath,
-    resolveCollection,
-    resolveEnumValues
-} from "../../util";
-import { saveEntityWithCallbacks, useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useSideEntityController } from "../../hooks";
+    Button,
+    ChipColorKey,
+    ChipColorScheme,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    getColorSchemeForSeed,
+    IconButton,
+    RefreshIcon,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
+import { getPropertyInPath, resolveCollection, resolveEnumValues } from "../../util";
+import {
+    saveEntityWithCallbacks,
+    useAuthController,
+    useCustomizationController,
+    useDataSource,
+    useFireCMSContext,
+    useSideEntityController
+} from "../../hooks";
 import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 import { useBoardDataController } from "./useBoardDataController";
@@ -41,18 +57,18 @@ export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> 
  * Kanban board view for displaying entities grouped by a string enum property.
  */
 export function EntityCollectionBoardView<M extends Record<string, any> = any>({
-    collection,
-    tableController,
-    fullPath,
-    parentCollectionIds = [],
-    columnProperty,
-    onEntityClick,
-    selectionController,
-    selectionEnabled = true,
-    highlightedEntities,
-    emptyComponent,
-    deletedEntities
-}: EntityCollectionBoardViewProps<M>) {
+                                                                                   collection,
+                                                                                   tableController,
+                                                                                   fullPath,
+                                                                                   parentCollectionIds = [],
+                                                                                   columnProperty,
+                                                                                   onEntityClick,
+                                                                                   selectionController,
+                                                                                   selectionEnabled = true,
+                                                                                   highlightedEntities,
+                                                                                   emptyComponent,
+                                                                                   deletedEntities
+                                                                               }: EntityCollectionBoardViewProps<M>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const context = useFireCMSContext();
@@ -85,18 +101,31 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     }, [rawOrderProperty, resolvedCollection.properties]);
 
     // Get columns from the property's enumValues
-    const { enumColumns, columnLabels, columnColors } = useMemo(() => {
+    const {
+        enumColumns,
+        columnLabels,
+        columnColors
+    } = useMemo(() => {
         const property = getPropertyInPath(resolvedCollection.properties, columnProperty);
-        if (!property || !('dataType' in property) || property.dataType !== "string") {
-            return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
+        if (!property || !("dataType" in property) || property.dataType !== "string") {
+            return {
+                enumColumns: [] as string[],
+                columnLabels: {} as Record<string, string>
+            };
         }
         const stringProperty = property as ResolvedStringProperty;
         if (!stringProperty.enumValues) {
-            return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
+            return {
+                enumColumns: [] as string[],
+                columnLabels: {} as Record<string, string>
+            };
         }
         const enumValues = resolveEnumValues(stringProperty.enumValues);
         if (!enumValues) {
-            return { enumColumns: [] as string[], columnLabels: {} as Record<string, string> };
+            return {
+                enumColumns: [] as string[],
+                columnLabels: {} as Record<string, string>
+            };
         }
         const cols = enumValues.map((ev: EnumValueConfig) => String(ev.id));
         const labels = enumValues.reduce((acc: Record<string, string>, ev: EnumValueConfig) => {
@@ -107,7 +136,11 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             acc[String(ev.id)] = ev.color ?? getColorSchemeForSeed(String(ev.id));
             return acc;
         }, {});
-        return { enumColumns: cols, columnLabels: labels, columnColors: colors };
+        return {
+            enumColumns: cols,
+            columnLabels: labels,
+            columnColors: colors
+        };
     }, [resolvedCollection, columnProperty]);
 
     // Track if user has manually reordered columns in this session
@@ -394,7 +427,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 collection,
                 dataSource,
                 context,
-                onSaveSuccess: () => { },
+                onSaveSuccess: () => {
+                },
                 onSaveFailure: (e: Error) => console.error("Failed to save entity after reorder:", e),
                 onPreSaveHookError: (e: Error) => console.error("Pre-save hook error:", e)
             });
@@ -450,10 +484,13 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         collection,
                         dataSource,
                         context,
-                        onSaveSuccess: () => { console.log(`Saved entity ${entity.id}`); },
+                        onSaveSuccess: () => {
+                            console.log(`Saved entity ${entity.id}`);
+                        },
                         onSaveFailure: (e) => console.error("Backfill save failed:", e),
                         onPreSaveHookError: (e) => console.error("Backfill pre-save error:", e)
-                    }).then(() => { })
+                    }).then(() => {
+                    })
                 );
             });
 
@@ -564,7 +601,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         <div className="flex-1 flex flex-col overflow-hidden">
             {/* Error banner - only show when no data loaded */}
             {hasError && allEntities.length === 0 && (
-                <div className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
+                <div
+                    className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
                     <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1">
                         <strong>Error:</strong>{" "}
                         {indexUrl
@@ -576,7 +614,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                             size="small"
                             onClick={() => boardDataController.refreshAll()}
                         >
-                            <RefreshIcon size="small" />
+                            <RefreshIcon size="small"/>
                         </IconButton>
                     </Tooltip>
                     {indexUrl && (
@@ -594,7 +632,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
             {/* Backfill info bar - non-blocking */}
             {itemsNeedBackfill && !dataLoading && (
-                <div className="flex items-center justify-between gap-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800">
+                <div
+                    className="flex items-center justify-between gap-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800">
                     <Typography variant="body2" color="secondary">
                         Some items don't have order values. Initialize to enable drag-and-drop reordering.
                     </Typography>
@@ -609,7 +648,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             )}
 
             {/* Main board */}
-            <div className="flex-1 overflow-auto">
+            <>
                 <Board
                     data={boardItems}
                     columns={columns}
@@ -644,7 +683,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         />
                     )}
                 />
-            </div>
+            </>
 
             {/* Backfill dialog */}
             <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
@@ -660,7 +699,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         Cancel
                     </Button>
                     <Button onClick={handleBackfill} disabled={backfillLoading}>
-                        {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
+                        {backfillLoading ? <CircularProgress size="smallest"/> : "Initialize"}
                     </Button>
                 </DialogActions>
             </Dialog>
