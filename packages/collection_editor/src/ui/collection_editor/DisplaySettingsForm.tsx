@@ -99,14 +99,8 @@ export function DisplaySettingsForm({
                     {/* Layout Mode (Side dialog vs Full screen) */}
                     <LayoutModeSwitch
                         className={"col-span-12"}
-                        value={values.sideDialogWidth !== undefined ? "side_panel" : "full_screen"}
-                        onChange={(value) => {
-                            if (value === "full_screen") {
-                                setFieldValue("sideDialogWidth", undefined);
-                            } else {
-                                setFieldValue("sideDialogWidth", 768);
-                            }
-                        }} />
+                        value={values.openEntityMode ?? "side_panel"}
+                        onChange={(value) => setFieldValue("openEntityMode", value)} />
 
                     {/* View Mode (Table/Cards/Kanban) */}
                     <ViewModeSwitch

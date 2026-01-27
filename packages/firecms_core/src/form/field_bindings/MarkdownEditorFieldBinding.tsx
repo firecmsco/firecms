@@ -21,19 +21,19 @@ interface MarkdownEditorFieldProps {
 }
 
 export function MarkdownEditorFieldBinding({
-                                               property,
-                                               propertyKey,
-                                               value,
-                                               setValue,
-                                               includeDescription,
-                                               showError,
-                                               error,
-                                               minimalistView,
-                                               disabled: disabledProp,
-                                               isSubmitting,
-                                               context,
-                                               customProps,
-                                           }: FieldProps<string, MarkdownEditorFieldProps>) {
+    property,
+    propertyKey,
+    value,
+    setValue,
+    includeDescription,
+    showError,
+    error,
+    minimalistView,
+    disabled: disabledProp,
+    isSubmitting,
+    context,
+    customProps,
+}: FieldProps<string, MarkdownEditorFieldProps>) {
 
     const authController = useAuthController();
     const disabled = disabledProp || isSubmitting;
@@ -109,12 +109,16 @@ export function MarkdownEditorFieldBinding({
         }) ?? "/";
     }, [entityId, entityValues, path, property, propertyKey, storage]);
 
+    // Extract markdown config from property - can be boolean or object
+    const markdownConfig = typeof property.markdown === 'object' ? property.markdown : undefined;
+
     const editor = <FireCMSEditor
         content={value}
         onMarkdownContentChange={onContentChange}
         version={context.formex.version + fieldVersion}
         highlight={highlight}
         disabled={disabled}
+        markdownConfig={markdownConfig}
         handleImageUpload={async (file: File) => {
             const storagePath = storagePathBuilder(file);
             const fileName = await fileNameBuilder(file);
@@ -143,15 +147,15 @@ export function MarkdownEditorFieldBinding({
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
                 title={property.name}
-                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />
             <div
                 className={cls("rounded-md", fieldBackgroundMixin, disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin)}>
                 {editor}
             </div>
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             property={property}/>
+                showError={showError}
+                error={error}
+                property={property} />
         </>
 
     );

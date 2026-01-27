@@ -354,6 +354,27 @@ export interface BooleanProperty extends BaseProperty<boolean> {
 }
 
 /**
+ * Configuration options for the markdown editor.
+ * @group Entity properties
+ */
+export interface MarkdownConfig {
+    /**
+     * Allow HTML input/output. When set to false, HTML tags in pasted content
+     * will be stripped and only markdown-compatible formatting will be preserved.
+     * Defaults to true for backwards compatibility.
+     */
+    html?: boolean;
+
+    /**
+     * Convert pasted text to markdown format. When enabled, rich text pasted
+     * from external sources (like Google Docs or Word) will be converted to
+     * clean markdown instead of preserving HTML styles.
+     * Defaults to false.
+     */
+    transformPastedText?: boolean;
+}
+
+/**
  * @group Entity properties
  */
 export interface StringProperty extends BaseProperty<string> {
@@ -369,10 +390,13 @@ export interface StringProperty extends BaseProperty<string> {
 
     /**
      * Should this string property be displayed as a markdown field. If true,
-     * the field is rendered as a text editors that supports markdown highlight
+     * the field is rendered as a text editor that supports markdown highlight
      * syntax. It also includes a preview of the result.
+     *
+     * You can also pass a configuration object to customize the markdown editor
+     * behavior, particularly how HTML content is handled during paste operations.
      */
-    markdown?: boolean;
+    markdown?: boolean | MarkdownConfig;
 
     /**
      * You can use the enum values providing a map of possible
@@ -951,7 +975,7 @@ export interface ImageResize {
      * - `contain`: Scale down to fit within bounds, preserving aspect ratio (default)
      * - `cover`: Scale to fill bounds, preserving aspect ratio (may crop)
      */
-    mode?: 'contain' | 'cover';
+    mode?: "contain" | "cover";
 
     /**
      * Output format for the resized image.
@@ -960,7 +984,7 @@ export interface ImageResize {
      * - `png`: Convert to PNG
      * - `webp`: Convert to WebP
      */
-    format?: 'original' | 'jpeg' | 'png' | 'webp';
+    format?: "original" | "jpeg" | "png" | "webp";
 
     /**
      * Quality for lossy formats (JPEG, WebP). Number between 0 and 100.
