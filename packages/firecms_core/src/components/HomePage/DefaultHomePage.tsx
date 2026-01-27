@@ -95,6 +95,10 @@ export function DefaultHomePage({
         entries: NavigationEntry[];
     } | null>(null);
 
+    // Flag to prevent useEffect from overwriting local DnD state
+    const isDndDirtyRef = useRef(false);
+    const dndDirtyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
     // Memoize the processed groups to avoid unnecessary recalculations
     const processedGroups = useMemo(() => {
         const src = filteredNavigationEntries;
@@ -159,7 +163,12 @@ export function DefaultHomePage({
     }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins]);
 
     // Update state only when processedGroups actually changes
+    // Skip update if DnD just made a local change (dirty flag is set)
     useEffect(() => {
+        if (isDndDirtyRef.current) {
+            // DnD just updated the state, skip this sync
+            return;
+        }
         setAdminGroupData(processedGroups.adminGroupData);
         setItems(processedGroups.items);
     }, [processedGroups]);
@@ -180,6 +189,19 @@ export function DefaultHomePage({
     const persistNavigationGroups = (
         latest: { name: string; entries: NavigationEntry[] }[]
     ) => {
+        // Set dirty flag to prevent useEffect from overwriting local state
+        isDndDirtyRef.current = true;
+
+        // Clear any existing timeout
+        if (dndDirtyTimeoutRef.current) {
+            clearTimeout(dndDirtyTimeoutRef.current);
+        }
+
+        // Clear dirty flag after a delay to allow navigation to update
+        dndDirtyTimeoutRef.current = setTimeout(() => {
+            isDndDirtyRef.current = false;
+        }, 1000);
+
         // Map ALL groups including "Views"
         const draggable: NavigationGroupMapping[] = latest.map((g) => ({
             name: g.name,

@@ -331,10 +331,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         try {
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
-                resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
-                resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
-                resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
-            ]
+                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
+                    resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
+                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
+                ]
             );
 
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
@@ -597,10 +597,10 @@ function applyPluginModifyCollection(resolvedCollections: EntityCollection[], mo
 }
 
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
-    collectionPermissions: PermissionsBuilder | undefined,
-    authController: AuthController,
-    dataSource: DataSourceDelegate,
-    plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
+                                  collectionPermissions: PermissionsBuilder | undefined,
+                                  authController: AuthController,
+                                  dataSource: DataSourceDelegate,
+                                  plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -703,8 +703,8 @@ function useCustomBlocker(): NavigationBlocker {
     let blocker: any;
     try {
         blocker = useBlocker(({
-            nextLocation
-        }) => {
+                                  nextLocation
+                              }) => {
             const allBasePaths = Object.values(blockListeners).map(b => b.basePath).filter(Boolean) as string[];
             if (allBasePaths && allBasePaths.some(path => nextLocation.pathname.startsWith(path)))
                 return false;
@@ -744,11 +744,11 @@ function useCustomBlocker(): NavigationBlocker {
 }
 
 function computeNavigationGroups({
-    navigationGroupMappings,
-    collections,
-    views,
-    plugins
-}: {
+                                     navigationGroupMappings,
+                                     collections,
+                                     views,
+                                     plugins
+                                 }: {
     navigationGroupMappings?: NavigationGroupMapping[],
     collections?: EntityCollection[],
     views?: CMSView[],
@@ -758,6 +758,7 @@ function computeNavigationGroups({
     let result = navigationGroupMappings;
 
     // Merge plugin navigation entries
+    // IMPORTANT: Deep clone the groups to avoid mutating the original input
     result = plugins ? plugins?.reduce((acc, plugin) => {
         if (plugin.homePage?.navigationEntries) {
             plugin.homePage.navigationEntries.forEach((entry) => {
@@ -778,7 +779,10 @@ function computeNavigationGroups({
 
         }
         return acc;
-    }, [...(result ?? [])] as NavigationGroupMapping[]) : result;
+    }, (result ?? []).map(g => ({
+        name: g.name,
+        entries: [...g.entries]
+    }))) : result;
 
     // Track all entries that are already assigned to groups
     const assignedEntries = new Set<string>();
