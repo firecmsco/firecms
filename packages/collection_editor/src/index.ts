@@ -13,6 +13,11 @@ export {
     editableProperty, removeNonEditableProperties
 } from "./utils/entities";
 export * from "./utils/collections";
+export {
+    validateCollectionJson,
+    type CollectionValidationError,
+    type CollectionValidationResult
+} from "./utils/validateCollectionJson";
 
 export type {
     CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams, UpdateCollectionParams, CollectionsSetupInfo, UpdatePropertiesOrderParams, UpdateKanbanColumnsOrderParams
