@@ -1,6 +1,7 @@
 ---
 slug: docs/self/controllers
 title: Building a custom backend
+description: Learn how to implement custom DataSourceDelegate, StorageSource, and AuthController for FireCMS with your own backend.
 ---
 
 FireCMS internally uses 3 main controllers to manage the data, file storage and authentication.

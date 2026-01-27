@@ -2,6 +2,7 @@
 slug: docs/properties/config/array
 title: Array
 sidebar_label: Array
+description: Configuration for array properties in FireCMS, including typed arrays, tuples, blocks (oneOf), and validation.
 ---
 
 ###  `of`

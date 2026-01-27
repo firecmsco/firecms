@@ -2,6 +2,7 @@
 slug: docs/pro/firestore_rules
 title: Firestore Rules
 sidebar_label: Firestore Rules
+description: Configure Firestore security rules for FireCMS PRO to protect user management and collection configuration data.
 ---
 
 :::note

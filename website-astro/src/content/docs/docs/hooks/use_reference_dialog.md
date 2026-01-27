@@ -53,7 +53,13 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthController } from "@firecms/core";
+import { useReferenceDialog, useSnackbarController, Entity } from "@firecms/core";
+import { Button } from "@firecms/ui";
+
+type Product = {
+    name: string;
+    price: number;
+};
 
 export function ExampleCMSView() {
 

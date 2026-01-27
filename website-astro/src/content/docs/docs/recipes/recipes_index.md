@@ -2,6 +2,7 @@
 slug: docs/recipes/recipes_index
 title: Recipes
 sidebar_label: Recipes
+description: Advanced FireCMS tutorials and recipes covering blogs, localizations, entity copying, and dynamic navigation.
 ---
 
 In this section we will demonstrate some advanced use cases that can be solved

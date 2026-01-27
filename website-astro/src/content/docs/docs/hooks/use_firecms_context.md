@@ -10,12 +10,7 @@ directly from their respective hooks.
 
 The props provided by this hook are:
 
-* `dateTimeFormat`?: Format of the dates in the CMS.
-  Defaults to 'MMMM dd, yyyy, HH:mm:ss'
-
-* `locale`?: Locale of the CMS, currently only affecting dates
-
-* `dataSource`:Connector to your database, e.g. your Firestore database
+* `dataSource`: Connector to your database, e.g. your Firestore database
 
 * `storageSource`: Used storage implementation
 
@@ -24,10 +19,43 @@ The props provided by this hook are:
 
 * `sideEntityController`: Controller to open the side dialog displaying entity forms
 
+* `sideDialogsController`: Controller used to open side dialogs (used internally by
+  side entity dialogs or reference dialogs)
+
+* `dialogsController`: Controller used to open regular dialogs
+
 * `authController`: Used auth controller
 
-* `entityLinkBuilder`?: Builder for generating utility links for entities
+* `customizationController`: Controller holding the customization options for the CMS
+
+* `snackbarController`: Use this controller to display snackbars
 
 * `userConfigPersistence`: Use this controller to access data stored in the browser for the user
 
-* `snackbarController`: Use this controller to display snackbars
+* `analyticsController`: Callback to send analytics events (optional)
+
+* `userManagement`: Section used to manage users in the CMS. Used to show user info
+  in various places and assign entity ownership.
+
+Example:
+
+```tsx
+import React from "react";
+import { useFireCMSContext } from "@firecms/core";
+
+export function ExampleCMSView() {
+
+    const context = useFireCMSContext();
+
+    // Access the data source
+    const dataSource = context.dataSource;
+
+    // Open a snackbar
+    context.snackbarController.open({
+        type: "success",
+        message: "Example message"
+    });
+
+    return <div>Example view</div>;
+}
+```

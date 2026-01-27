@@ -129,7 +129,7 @@ const blogCollection = buildCollection({
     name: "Blog",
     entityViews: [
         {
-            path: "preview",
+            key: "preview",
             name: "Blog entry preview",
             Builder: ({
                           collection,

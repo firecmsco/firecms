@@ -35,6 +35,8 @@ import {
     buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps,
+    EntityOnFetchProps,
+    EntityIdUpdateProps,
     toSnakeCase
 } from "@firecms/core";
 
@@ -127,7 +129,9 @@ const productCollection = buildCollection<Product>({
 
 * `collection`: Resolved collection of the entity
 
-* `path`: string Full path where this entity is being saved
+* `path`: string Full path where this entity is being saved (may contain unresolved aliases)
+
+* `resolvedPath`: string Full path with alias resolved
 
 * `entityId`: string ID of the entity
 
