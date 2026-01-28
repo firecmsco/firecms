@@ -9,7 +9,7 @@ import {
     PropertyOrBuilder
 } from "@firecms/core";
 import {
-    AutorenewIcon,
+    FindInPageIcon,
     defaultBorderMixin,
     DeleteIcon,
     IconButton,
@@ -284,7 +284,7 @@ export function PropertyTreeEntry({
                     {isPropertyInferred && <>
                         <Tooltip title={"Inferred property"} asChild={true}>
                             <IconButton size="smallest" disabled>
-                                <AutorenewIcon size="smallest" />
+                                <FindInPageIcon size="smallest" />
                             </IconButton>
                         </Tooltip>
                         {onPropertyRemove && <Tooltip title={"Remove inferred property"}
