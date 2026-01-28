@@ -55,7 +55,10 @@ export function unslugify(slug?: string): string {
 }
 
 export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
-    if (typeof input === "object") {
+    // Check Array.isArray first since typeof [] === "object" is true in JavaScript
+    if (Array.isArray(input)) {
+        return input as EnumValueConfig[];
+    } else if (typeof input === "object" && input !== null) {
         return Object.entries(input).map(([id, value]) =>
             (typeof value === "string"
                 ? {
@@ -63,8 +66,6 @@ export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefi
                     label: value
                 }
                 : value));
-    } else if (Array.isArray(input)) {
-        return input as EnumValueConfig[];
     } else {
         return undefined;
     }

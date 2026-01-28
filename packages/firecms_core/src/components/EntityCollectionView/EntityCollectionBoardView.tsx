@@ -648,7 +648,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             )}
 
             {/* Main board */}
-            <>
+            <div className="flex-1 overflow-auto no-scrollbar">
                 <Board
                     data={boardItems}
                     columns={columns}
@@ -683,7 +683,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         />
                     )}
                 />
-            </>
+            </div>
 
             {/* Backfill dialog */}
             <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
