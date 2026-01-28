@@ -372,7 +372,7 @@ export function App() {
         // importPlugin,
         exportPlugin,
         entityHistoryPlugin,
-        mediaManagerPlugin,
+        // mediaManagerPlugin,
         demoPlugin,
         collectionEditorPlugin
     ];

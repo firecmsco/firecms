@@ -58,6 +58,9 @@ import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
+import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
+import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
+import { CollectionOperation } from "../../api/generateCollectionApi";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -98,6 +101,14 @@ export interface CollectionEditorDialogProps {
      * If true, auto-expand the Kanban configuration section.
      */
     expandKanban?: boolean;
+    /**
+     * Function to get the auth token for AI collection generation API calls.
+     */
+    getAuthToken?: () => Promise<string>;
+    /**
+     * API endpoint for AI collection generation.
+     */
+    apiEndpoint?: string;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -132,16 +143,17 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
             onOpenChange={(open) => !open ? handleCancel() : undefined}
         >
             <DialogTitle hidden>Collection editor</DialogTitle>
-            {open && <CollectionEditor {...props}
-                handleCancel={handleCancel}
-                setFormDirty={setFormDirty} />}
+            <AIModifiedPathsProvider>
+                {open && <CollectionEditor {...props}
+                    handleCancel={handleCancel}
+                    setFormDirty={setFormDirty} />}
 
-            <UnsavedChangesDialog
-                open={unsavedChangesDialogOpen}
-                handleOk={() => props.handleClose(undefined)}
-                handleCancel={() => setUnsavedChangesDialogOpen(false)}
-                body={"There are unsaved changes in this collection"} />
-
+                <UnsavedChangesDialog
+                    open={unsavedChangesDialogOpen}
+                    handleOk={() => props.handleClose(undefined)}
+                    handleCancel={() => setUnsavedChangesDialogOpen(false)}
+                    body={"There are unsaved changes in this collection"} />
+            </AIModifiedPathsProvider>
         </Dialog>
     );
 }
@@ -280,7 +292,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     groups,
     existingEntities,
     initialView: initialViewProp,
-    expandKanban
+    expandKanban,
+    getAuthToken,
+    apiEndpoint
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -420,6 +434,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             if (!isNewCollection) {
                 saveCollection(newCollectionState).then(() => {
+                    aiModifiedPaths?.clearAllPaths();
                     formexController.resetForm();
                     handleClose(newCollectionState);
                 });
@@ -521,7 +536,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    // TODO: getting data is only working in root collections with this code
     const path = values.path;
     const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
     const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
@@ -530,7 +544,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const resolvedPath = !pathError ? navigation.resolveIdsFrom(updatedFullPath) : undefined;
 
     const getDataWithPath = resolvedPath && getData ? async () => {
-        const data = await getData(resolvedPath, parentPaths ?? []);
+        const data = await getData!(resolvedPath, parentPaths ?? []);
         if (existingEntities) {
             const existingData = existingEntities.map(e => e.values);
             data.push(...existingData);
@@ -601,26 +615,44 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     };
 
+    const aiModifiedPaths = useAIModifiedPaths();
+
+    const handleAIGenerated = (generatedCollection: EntityCollection, operations?: CollectionOperation[]) => {
+        formController.setValues(generatedCollection as PersistedCollection<M>);
+        if (operations && aiModifiedPaths) {
+            aiModifiedPaths.addModifiedPaths(operations);
+        }
+    };
+
     return <DialogContent fullHeight={true}>
         <Formex value={formController}>
 
             <>
-                {!isNewCollection && <Tabs value={currentView}
-                    className={cls("px-4 py-2 w-full flex justify-end bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}
-                    onValueChange={(v) => setCurrentView(v as EditorView)}>
-                    <Tab value={"general"}>
-                        General
-                    </Tab>
-                    <Tab value={"display"}>
-                        Display
-                    </Tab>
-                    <Tab value={"properties"}>
-                        Properties
-                    </Tab>
-                    <Tab value={"extend"}>
-                        Extend
-                    </Tab>
-                </Tabs>}
+                {!isNewCollection && <div className={cls("px-4 py-2 w-full flex items-center justify-end gap-2 bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}>
+                    {getAuthToken && apiEndpoint && (
+                        <AICollectionGeneratorPopover
+                            existingCollection={values}
+                            onGenerated={handleAIGenerated}
+                            getAuthToken={getAuthToken}
+                            apiEndpoint={apiEndpoint}
+                        />
+                    )}
+                    <Tabs value={currentView}
+                        onValueChange={(v) => setCurrentView(v as EditorView)}>
+                        <Tab value={"general"}>
+                            General
+                        </Tab>
+                        <Tab value={"display"}>
+                            Display
+                        </Tab>
+                        <Tab value={"properties"}>
+                            Properties
+                        </Tab>
+                        <Tab value={"extend"}>
+                            Extend
+                        </Tab>
+                    </Tabs>
+                </div>}
 
                 <form noValidate
                     onSubmit={formController.handleSubmit}
@@ -641,7 +673,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             path={path}
                             onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
-                            parentCollection={parentCollection} />}
+                            parentCollection={parentCollection}
+                            getAuthToken={getAuthToken}
+                            apiEndpoint={apiEndpoint} />}
 
                     {currentView === "import_data_mapping" && importConfig &&
                         <CollectionEditorImportMapping importConfig={importConfig}

@@ -241,7 +241,8 @@ export const PropertyForm = React.memo(
     a.autoOpenTypeSelect === b.autoOpenTypeSelect &&
     a.autoUpdateId === b.autoUpdateId &&
     a.existingPropertyKeys === b.existingPropertyKeys &&
-    a.existingProperty === b.existingProperty
+    a.existingProperty === b.existingProperty &&
+    equal(a.property, b.property)
 );
 
 export function PropertyFormDialog({

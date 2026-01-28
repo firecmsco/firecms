@@ -157,13 +157,13 @@ export const DefaultAppBar = function DefaultAppBar({
                                 className="visited:text-inherit visited:dark:text-inherit block"
                                 to={breadcrumb.url}
                             >
-                                <div className="flex flex-row items-center gap-2">
+                                <div className="flex flex-row items-center gap-2 whitespace-nowrap">
                                     <Typography variant={"body2"}>
                                         {breadcrumb.title}
                                     </Typography>
-                                    {/* Show count badge for collection breadcrumbs */}
-                                    {breadcrumb.count !== null && (
-                                        breadcrumb.count !== undefined ? (
+                                    {/* Show count badge for collection breadcrumbs: undefined = not applicable, null = loading, number = count */}
+                                    {breadcrumb.count !== undefined && (
+                                        breadcrumb.count !== null ? (
                                             <span className="text-xs text-surface-accent-500 dark:text-surface-accent-400 bg-surface-100 dark:bg-surface-700 px-1 py-0 rounded">
                                                 {breadcrumb.count}
                                             </span>

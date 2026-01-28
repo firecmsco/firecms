@@ -24,9 +24,9 @@ export interface BreadcrumbEntry {
     url: string;
     /**
      * Optional entity count for collection breadcrumbs.
-     * - undefined: loading
+     * - undefined: not applicable (e.g., entity breadcrumb, custom view)
+     * - null: loading
      * - number: loaded count
-     * - null: not applicable (e.g., entity breadcrumb)
      */
     count?: number | null;
     /**

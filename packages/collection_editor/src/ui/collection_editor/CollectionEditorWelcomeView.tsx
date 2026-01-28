@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EntityCollection, prettifyIdentifier, } from "@firecms/core";
-import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 
 import { productsCollectionTemplate } from "./templates/products_template";
@@ -10,17 +10,22 @@ import { ImportFileUpload } from "@firecms/data_import";
 import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@firecms/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
+import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 
 export function CollectionEditorWelcomeView({
     path,
     parentCollection,
     onContinue,
-    existingCollectionPaths
+    existingCollectionPaths,
+    getAuthToken,
+    apiEndpoint
 }: {
     path: string;
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
+    getAuthToken?: () => Promise<string>;
+    apiEndpoint?: string;
 }) {
 
     const { pathSuggestions } = useCollectionEditorController();
@@ -119,6 +124,33 @@ export function CollectionEditorWelcomeView({
                     </div>
 
                 </div>
+
+                {getAuthToken && apiEndpoint && (
+                    <div className={"my-2"}>
+                        <Typography variant={"caption"}
+                            color={"secondary"}
+                            className={"mb-2"}>
+                            ● Describe your collection to AI:
+                        </Typography>
+
+                        <AICollectionGeneratorPopover
+                            onGenerated={(generatedCollection) => {
+                                setValues(generatedCollection);
+                                onContinue();
+                            }}
+                            getAuthToken={getAuthToken}
+                            apiEndpoint={apiEndpoint}
+                            trigger={
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<AutoAwesomeIcon size="small" />}
+                                >
+                                    Generate with AI
+                                </Button>
+                            }
+                        />
+                    </div>
+                )}
 
                 {!parentCollection && <div>
 

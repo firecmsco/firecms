@@ -57,6 +57,16 @@ export interface ConfigControllerProviderProps {
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
+    /**
+     * Function to get the auth token for AI collection generation API calls.
+     */
+    getAuthToken?: () => Promise<string>;
+
+    /**
+     * API endpoint for AI collection generation.
+     */
+    apiEndpoint?: string;
+
 }
 
 export const ConfigControllerProvider = React.memo(
@@ -70,7 +80,9 @@ export const ConfigControllerProvider = React.memo(
         getUser,
         getData,
         onAnalyticsEvent,
-        pathSuggestions
+        pathSuggestions,
+        getAuthToken,
+        apiEndpoint
     }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -263,6 +275,8 @@ export const ConfigControllerProvider = React.memo(
                         reservedGroups={reservedGroups}
                         extraView={extraView}
                         getUser={getUser}
+                        getAuthToken={getAuthToken}
+                        apiEndpoint={apiEndpoint}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {

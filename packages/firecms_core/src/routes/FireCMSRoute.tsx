@@ -40,21 +40,21 @@ export function FireCMSRoute() {
                 if (entry.type === "entity") {
                     return ({
                         title: entry.entityId,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath),
-                        count: null // Not applicable for entities
+                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        // count: undefined (not applicable for entities)
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath),
-                        count: null // Not applicable for custom views
+                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        // count: undefined (not applicable for custom views)
                     });
                 } else if (entry.type === "collection") {
                     return ({
                         title: entry.collection.name,
                         url: navigation.buildUrlCollectionPath(entry.fullPath),
                         id: entry.fullPath,
-                        count: undefined // Loading
+                        count: null // Loading
                     });
                 } else {
                     throw new Error("Unexpected navigation entry type");

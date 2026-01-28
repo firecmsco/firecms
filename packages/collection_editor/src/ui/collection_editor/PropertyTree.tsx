@@ -41,6 +41,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { getFullId, getFullIdPath } from "./util";
 import { editableProperty } from "../../utils/entities";
+import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 
 export const PropertyTree = React.memo(
     function PropertyTree<M extends {
@@ -249,6 +250,10 @@ export function PropertyTreeEntry({
     const selected = selectedPropertyKey === fullId;
     const editable = propertyOrBuilder && ((collectionEditable && !isPropertyBuilder(propertyOrBuilder)) || editableProperty(propertyOrBuilder));
 
+    // Check if this property was AI-modified
+    const aiModifiedPaths = useAIModifiedPaths();
+    const isAIModified = aiModifiedPaths?.isPathModified(`properties.${propertyKey}`) ?? false;
+
     return (
         <div
             ref={setNodeRef}
@@ -280,7 +285,11 @@ export function PropertyTreeEntry({
                             selected={selected} />}
                 </div>
 
-                <div className="absolute top-3 right-3 flex flex-row items-center">
+                <div className="absolute top-3 right-3 flex flex-row items-center gap-1">
+                    {isAIModified && (
+                        <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-secondary animate-pulse"
+                            title="AI modified" />
+                    )}
                     {isPropertyInferred && <>
                         <Tooltip title={"Inferred property"} asChild={true}>
                             <IconButton size="smallest" disabled>

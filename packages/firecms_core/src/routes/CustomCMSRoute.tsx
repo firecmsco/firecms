@@ -13,6 +13,7 @@ export function CustomCMSRoute({ cmsView }: {
             breadcrumbs: [{
                 title: cmsView.name,
                 url: cmsView.path
+                // count: undefined (not applicable for custom views)
             }]
         });
     }, [cmsView.path]);

@@ -56,6 +56,18 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     includeIntroView?: boolean;
 
+    /**
+     * Function to get the auth token for AI collection generation API calls.
+     * Required for AI collection generation feature.
+     */
+    getAuthToken?: () => Promise<string>;
+
+    /**
+     * API endpoint for AI collection generation.
+     * e.g., "https://api.firecms.co/projects/my-project"
+     */
+    apiEndpoint?: string;
+
 }
 
 /**
@@ -80,7 +92,9 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         getData,
         onAnalyticsEvent,
         includeIntroView = true,
-        pathSuggestions
+        pathSuggestions,
+        getAuthToken,
+        apiEndpoint
     }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -97,7 +111,9 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getUser,
                 getData,
                 onAnalyticsEvent,
-                pathSuggestions
+                pathSuggestions,
+                getAuthToken,
+                apiEndpoint
             }
         },
         homePage: {

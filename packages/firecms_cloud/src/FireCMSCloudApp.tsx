@@ -366,34 +366,50 @@ export function FireCMSClientWithController({
         propertyConfigs: appConfig?.propertyConfigs
     });
 
-    // Update user's photoURL if it has changed (e.g., from Google profile)
-    const photoURLUpdateRef = React.useRef<string | null>(null);
+    // Sync user profile data (photoURL, displayName) from Google sign-in if missing or changed
+    const profileSyncRef = React.useRef<{ photoURL?: string | null, displayName?: string | null }>({});
     useEffect(() => {
         const backendUser = fireCMSBackend.user;
         if (!backendUser || !fireCMSUser || userManagement.loading) return;
         if (!fireCMSUser.saas_uid) return;
 
         const backendPhotoURL = backendUser.photoURL;
+        const backendDisplayName = backendUser.displayName;
         const storedPhotoURL = fireCMSUser.photoURL;
+        const storedDisplayName = fireCMSUser.displayName;
 
-        // Only update if there's a new photo URL from the auth provider and it differs from stored
-        if (backendPhotoURL && backendPhotoURL !== storedPhotoURL && backendPhotoURL !== photoURLUpdateRef.current) {
-            photoURLUpdateRef.current = backendPhotoURL;
-            console.debug("User photoURL has changed, updating directly in Firestore", {
+        // Check what needs to be updated
+        const needsPhotoUpdate = backendPhotoURL &&
+            backendPhotoURL !== storedPhotoURL &&
+            backendPhotoURL !== profileSyncRef.current.photoURL;
+        const needsNameUpdate = backendDisplayName &&
+            (!storedDisplayName || storedDisplayName === "") &&
+            backendDisplayName !== profileSyncRef.current.displayName;
+
+        if (needsPhotoUpdate || needsNameUpdate) {
+            // Track what we're updating to prevent duplicate calls
+            if (needsPhotoUpdate) profileSyncRef.current.photoURL = backendPhotoURL;
+            if (needsNameUpdate) profileSyncRef.current.displayName = backendDisplayName;
+
+            const updates: Partial<typeof fireCMSUser> = {};
+            if (needsPhotoUpdate) updates.photoURL = backendPhotoURL;
+            if (needsNameUpdate) updates.displayName = backendDisplayName;
+
+            console.debug("Syncing user profile from Google", {
                 saas_uid: fireCMSUser.saas_uid,
-                from: storedPhotoURL,
-                to: backendPhotoURL
+                updates
             });
-            // Use updateUserFields to write directly to Firestore, bypassing the API
-            userManagement.updateUserFields(fireCMSUser.saas_uid, {
-                photoURL: backendPhotoURL
+
+            userManagement.saveUser({
+                ...fireCMSUser,
+                ...updates
             }).then(() => {
-                console.debug("User photoURL updated successfully");
+                console.debug("User profile synced successfully");
             }).catch((e) => {
-                console.error("Error updating user photoURL", e);
+                console.error("Error syncing user profile", e);
             });
         }
-    }, [fireCMSBackend.user?.photoURL, fireCMSUser, userManagement.loading]);
+    }, [fireCMSBackend.user?.photoURL, fireCMSBackend.user?.displayName, fireCMSUser, userManagement.loading]);
 
     let loadingOrErrorComponent;
     if (userManagement.loading) {
@@ -648,7 +664,9 @@ function FireCMSAppAuthenticated({
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
         includeIntroView: false,
-        pathSuggestions: rootPathSuggestions
+        pathSuggestions: rootPathSuggestions,
+        getAuthToken: fireCMSBackend.getBackendAuthToken,
+        apiEndpoint: fireCMSBackend.backendApiHost
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [
