@@ -28,7 +28,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
     tableController: EntityTableController<M>;
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({

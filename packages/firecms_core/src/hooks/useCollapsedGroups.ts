@@ -1,15 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 
+const STORAGE_KEY_PREFIX = "firecms-collapsed-groups";
+
 /**
  * Custom hook for managing collapsed/expanded state of navigation groups
  * with localStorage persistence. Automatically cleans up stale group entries
  * when groups are removed from the navigation.
+ * 
+ * @param groupNames - Array of group names to track
+ * @param namespace - Namespace for localStorage key (e.g., "home", "drawer") to allow independent state
  */
-export function useCollapsedGroups(groupNames: string[]) {
+export function useCollapsedGroups(groupNames: string[], namespace: string = "default") {
+    const storageKey = `${STORAGE_KEY_PREFIX}-${namespace}`;
+
     // Load collapsed groups from localStorage on mount
     const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => {
         try {
-            const stored = localStorage.getItem('firecms-collapsed-groups');
+            const stored = localStorage.getItem(storageKey);
             return stored ? JSON.parse(stored) : {};
         } catch {
             return {};
@@ -19,11 +26,11 @@ export function useCollapsedGroups(groupNames: string[]) {
     // Save to localStorage whenever collapsedGroups changes
     useEffect(() => {
         try {
-            localStorage.setItem('firecms-collapsed-groups', JSON.stringify(collapsedGroups));
+            localStorage.setItem(storageKey, JSON.stringify(collapsedGroups));
         } catch {
             // Silently fail if localStorage is not available
         }
-    }, [collapsedGroups]);
+    }, [collapsedGroups, storageKey]);
 
     // Clean up collapsed groups state when groups change - remove entries for groups that no longer exist
     useEffect(() => {
@@ -62,3 +69,4 @@ export function useCollapsedGroups(groupNames: string[]) {
         toggleGroupCollapsed
     };
 }
+

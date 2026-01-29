@@ -457,9 +457,10 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, USE
     context: FireCMSContext<USER>;
 
     /**
-     * Count of the entities in this collection
+     * Count of the entities in this collection.
+     * undefined means the count is still loading.
      */
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
 
 }
 

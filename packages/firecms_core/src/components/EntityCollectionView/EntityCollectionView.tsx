@@ -194,8 +194,8 @@ export const EntityCollectionView = React.memo(
         // Track recently deleted entities for optimistic Kanban count updates
         const [deletedEntities, setDeletedEntities] = React.useState<Entity<M>[]>([]);
 
-        // number of entities in the collection
-        const [docsCount, setDocsCount] = useState<number>(0);
+        // number of entities in the collection (undefined = loading)
+        const [docsCount, setDocsCount] = useState<number | undefined>(undefined);
 
         // Optimistic state for column order to prevent UI flickering during persistence
         const [localPropertiesOrder, setLocalPropertiesOrder] = useState<string[] | undefined>(collection.propertiesOrder);
@@ -743,9 +743,11 @@ export const EntityCollectionView = React.memo(
 
         }, [updateLastDeleteTimestamp, usedSelectionController]);
 
-        // Update breadcrumb count when count changes
+        // Update breadcrumb count when count changes (only if loaded)
         useEffect(() => {
-            breadcrumbs.updateCount(fullPath, docsCount);
+            if (docsCount !== undefined) {
+                breadcrumbs.updateCount(fullPath, docsCount);
+            }
         }, [docsCount, fullPath, breadcrumbs.updateCount]);
 
         // EntitiesCount fetches count and updates breadcrumb - no visual rendering needed here
@@ -1079,9 +1081,9 @@ function EntitiesCount({
     }, [fullPath, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
 
     useEffect(() => {
-        if (onCountChange) {
+        if (onCountChange && count !== undefined) {
             setError(undefined);
-            onCountChange(count ?? 0);
+            onCountChange(count);
         }
     }, [onCountChange, count]);
 

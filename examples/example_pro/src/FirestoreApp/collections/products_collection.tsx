@@ -323,11 +323,13 @@ export const productsCollection = buildCollection<Product>({
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    dataType: "string",
+                    widthPercentage: 50
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    dataType: "string",
+                    widthPercentage: 50
                 }
             }
         },

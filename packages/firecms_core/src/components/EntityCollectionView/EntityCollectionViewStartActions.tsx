@@ -20,7 +20,7 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
     parentCollectionIds: string[];
     selectionController: SelectionController<M>;
     tableController: EntityTableController<M>;
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
     /**
      * Resolved properties from the collection for the filters dialog
      */
@@ -28,15 +28,15 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
 }
 
 export function EntityCollectionViewStartActions<M extends Record<string, any>>({
-                                                                                    collection,
-                                                                                    relativePath,
-                                                                                    parentCollectionIds,
-                                                                                    path,
-                                                                                    selectionController,
-                                                                                    tableController,
-                                                                                    collectionEntitiesCount,
-                                                                                    resolvedProperties
-                                                                                }: EntityCollectionViewStartActionsProps<M>) {
+    collection,
+    relativePath,
+    parentCollectionIds,
+    path,
+    selectionController,
+    tableController,
+    collectionEntitiesCount,
+    resolvedProperties
+}: EntityCollectionViewStartActionsProps<M>) {
 
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
@@ -67,7 +67,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && (
         <Tooltip title="Filters"
-                 key={"filters_tooltip"}>
+            key={"filters_tooltip"}>
             <Badge
                 color="primary"
                 invisible={activeFilterCount === 0}
@@ -77,7 +77,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         variant="text"
                         size="small"
                         onClick={() => setFiltersDialogOpen(true)}
-                        startIcon={<FilterListIcon size="small"/>}
+                        startIcon={<FilterListIcon size="small" />}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
                         Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
@@ -88,7 +88,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         onClick={() => setFiltersDialogOpen(true)}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
-                        <FilterListIcon size="small"/>
+                        <FilterListIcon size="small" />
                     </IconButton>
                 )}
             </Badge>
@@ -100,7 +100,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
         <ClearFilterSortButton
             key={"clear_filter"}
             tableController={tableController}
-            enabled={!collection.forceFilter}/>
+            enabled={!collection.forceFilter} />
     ];
 
     if (plugins) {

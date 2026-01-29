@@ -227,7 +227,7 @@ export function DefaultHomePage({
         ...(adminGroupData ? [adminGroupData.name] : [])
     ], [items, adminGroupData]);
 
-    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames);
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames, "home");
 
 
     const {

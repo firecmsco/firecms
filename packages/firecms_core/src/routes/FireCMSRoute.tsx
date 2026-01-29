@@ -35,8 +35,13 @@ export function FireCMSRoute() {
     });
 
     useEffect(() => {
+        const lastEntry = navigationEntries[navigationEntries.length - 1];
+        const isViewingCollection = lastEntry?.type === "collection";
+
         breadcrumbs.set({
-            breadcrumbs: navigationEntries.map(entry => {
+            breadcrumbs: navigationEntries.map((entry, index) => {
+                const isLastEntry = index === navigationEntries.length - 1;
+
                 if (entry.type === "entity") {
                     return ({
                         title: entry.entityId,
@@ -50,11 +55,14 @@ export function FireCMSRoute() {
                         // count: undefined (not applicable for custom views)
                     });
                 } else if (entry.type === "collection") {
+                    // Only show count badge (loading state) when viewing this collection directly
+                    // Don't show count for parent collections when viewing an entity
+                    const showCount = isLastEntry && isViewingCollection;
                     return ({
                         title: entry.collection.name,
                         url: navigation.buildUrlCollectionPath(entry.fullPath),
                         id: entry.fullPath,
-                        count: null // Loading
+                        ...(showCount ? { count: null } : {}) // null = loading, undefined = no badge
                     });
                 } else {
                     throw new Error("Unexpected navigation entry type");
