@@ -3,6 +3,7 @@ import equal from "react-fast-compare"
 
 import {
     AdditionalFieldDelegate,
+    AIModifiedIndicator,
     CMSType,
     isPropertyBuilder,
     PropertiesOrBuilders,
@@ -286,10 +287,7 @@ export function PropertyTreeEntry({
                 </div>
 
                 <div className="absolute top-3 right-3 flex flex-row items-center gap-1">
-                    {isAIModified && (
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-secondary animate-pulse"
-                            title="AI modified" />
-                    )}
+                    {isAIModified && <AIModifiedIndicator />}
                     {isPropertyInferred && <>
                         <Tooltip title={"Inferred property"} asChild={true}>
                             <IconButton size="smallest" disabled>

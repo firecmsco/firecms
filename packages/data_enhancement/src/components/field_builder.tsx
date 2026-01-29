@@ -22,7 +22,7 @@ import { countStringCharacters } from "../utils/strings_counter";
 import { EditorAIController } from "@firecms/editor";
 
 export function fieldBuilder<T extends CMSType = CMSType>
-(params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {
+    (params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {
 
     const {
         fieldConfigId,
@@ -53,7 +53,7 @@ export function fieldBuilder<T extends CMSType = CMSType>
             enoughData={enoughData}
             Field={params.Field as React.ComponentType<FieldProps>}
             enhance={enhance}
-            editorAIController={editorAIController}/>
+            editorAIController={editorAIController} />
 
     }, []);
 
@@ -79,15 +79,15 @@ interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string,
 }
 
 const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M extends Record<string, any> = any>({
-                                                                                                                        loading,
-                                                                                                                        props,
-                                                                                                                        suggestedValue,
-                                                                                                                        enabled,
-                                                                                                                        enoughData,
-                                                                                                                        Field,
-                                                                                                                        enhance,
-                                                                                                                        editorAIController
-                                                                                                                    }: FieldInnerParams<T, M>) {
+    loading,
+    props,
+    suggestedValue,
+    enabled,
+    enoughData,
+    Field,
+    enhance,
+    editorAIController
+}: FieldInnerParams<T, M>) {
 
     const [dataLoading, setDataLoading] = useState(false);
 
@@ -133,15 +133,15 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     let fieldBinding: React.ReactElement;
     if (property.dataType === "string" && property.markdown) {
         fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
-                                                   customProps={{
-                                                       highlight: highlightRange,
-                                                       editorProps: {
-                                                           aiController: editorAIController,
-                                                       }
-                                                   }}/>;
+            customProps={{
+                highlight: highlightRange,
+                editorProps: {
+                    aiController: editorAIController,
+                }
+            }} />;
     } else if (property.dataType === "string" && !property.enumValues) {
         fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
-                                                highlight={suggestedValue as string}/>;
+            highlight={suggestedValue as string} />;
     } else {
         fieldBinding = <Field {...props} />;
     }
@@ -199,12 +199,12 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                 }).finally(() => setDataLoading(false));
                             }}>
                             {dataLoading || loading
-                                ? <CircularProgress size={"smallest"}/>
+                                ? <CircularProgress size={"smallest"} />
                                 : <AutoAwesomeIcon
-                                    size={"smallest"}/>}
+                                    size={"smallest"} />}
                         </IconButton>}>
                     <MenuItem onClick={() => enhanceData()}>
-                        <AutoAwesomeIcon size="small"/>
+                        <AutoAwesomeIcon size="small" />
                         <div className={"flex flex-col"}>
                             <Typography
                                 variant={"body2"}> {`Autofill ${property.name ?? "this field"}`}</Typography>
@@ -214,22 +214,22 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
                     {allowInstructions && <div className={"p-4"}>
                         <TextField label={"Ask AI to write"}
-                                   size={"small"}
-                                   className={"w-[400px] max-w-full text-text-primary dark:text-text-primary-dark"}
-                                   value={propertyInstructions ?? ""}
-                                   onKeyDown={(e) => {
-                                       if (e.key === "Enter") {
-                                           enhanceData(propertyInstructions);
-                                       }
-                                   }}
-                                   placeholder={"Instructions"}
-                                   onChange={(e) => setPropertyInstructions(e.target.value)}
-                                   endAdornment={<IconButton
-                                       size={"small"}
-                                       onClick={() => enhanceData(propertyInstructions)}
-                                       disabled={!propertyInstructions}>
-                                       <SendIcon size={"small"}/>
-                                   </IconButton>}>
+                            size={"small"}
+                            className={"w-[400px] max-w-full text-text-primary dark:text-text-primary-dark"}
+                            value={propertyInstructions ?? ""}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    enhanceData(propertyInstructions);
+                                }
+                            }}
+                            placeholder={"Instructions"}
+                            onChange={(e) => setPropertyInstructions(e.target.value)}
+                            endAdornment={<IconButton
+                                size={"small"}
+                                onClick={() => enhanceData(propertyInstructions)}
+                                disabled={!propertyInstructions}>
+                                <SendIcon size={"small"} />
+                            </IconButton>}>
                         </TextField>
                     </div>}
 

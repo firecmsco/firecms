@@ -1,7 +1,6 @@
 import React, { useCallback, useDeferredValue, useEffect, useRef } from "react";
 
 import {
-    AutoFixHighIcon,
     Button,
     CircularProgress,
     CloseIcon,
@@ -15,6 +14,7 @@ import {
     TextareaAutosize
 } from "@firecms/ui";
 import {
+    AIIcon,
     EntityStatus,
     isPropertyBuilder,
     PluginFormActionProps,
@@ -28,14 +28,14 @@ import { useDataEnhancementController } from "./DataEnhancementControllerProvide
 import { SamplePrompt } from "../types/data_enhancement_controller";
 
 export function FormEnhanceAction({
-                                      entityId,
-                                      path,
-                                      status,
-                                      collection,
-                                      disabled,
-                                      formContext,
-                                      openEntityMode
-                                  }: PluginFormActionProps) {
+    entityId,
+    path,
+    status,
+    collection,
+    disabled,
+    formContext,
+    openEntityMode
+}: PluginFormActionProps) {
 
     const largeLayout = useLargeLayout();
 
@@ -54,17 +54,17 @@ export function FormEnhanceAction({
 
     const loadingPrompts = useRef(false);
     const updateSuggestedPrompts = useCallback(async function updateSuggestedPrompts(instructions?: string) {
-            if (loadingPrompts.current) return;
-            loadingPrompts.current = true;
-            const prompts = status === "new"
-                ? (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts
-                : getPromptsForExistingEntities(collection.properties);
+        if (loadingPrompts.current) return;
+        loadingPrompts.current = true;
+        const prompts = status === "new"
+            ? (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts
+            : getPromptsForExistingEntities(collection.properties);
 
-            const recentPromptsFromStorage = getRecentPromptsFromStorage(storageKey);
-            const recentPrompts = recentPromptsFromStorage.map(prompt => prompt.prompt);
-            setSamplePrompts([...recentPromptsFromStorage, ...prompts.filter(p => !recentPrompts.includes(p.prompt))].slice(0, 5));
-            loadingPrompts.current = false;
-        },
+        const recentPromptsFromStorage = getRecentPromptsFromStorage(storageKey);
+        const recentPrompts = recentPromptsFromStorage.map(prompt => prompt.prompt);
+        setSamplePrompts([...recentPromptsFromStorage, ...prompts.filter(p => !recentPrompts.includes(p.prompt))].slice(0, 5));
+        loadingPrompts.current = false;
+    },
         [collection.name, collection.singularName, getSamplePrompts, status]);
 
     const deferredValues = useDeferredValue(formContext?.values);
@@ -121,24 +121,24 @@ export function FormEnhanceAction({
             sideOffset={8}
             className={"max-w-[100vw]"}
             trigger={<Button variant={"filled"}
-                             color={"neutral"}
-                             fullWidth={largeLayout && openEntityMode === "full_screen"}
-                             size={"small"}
-                             disabled={loading || disabled}>
-                {!loading && <AutoFixHighIcon size={"small"}/>}
-                {loading && <CircularProgress size={"small"}/>}
+                color={"neutral"}
+                fullWidth={largeLayout && openEntityMode === "full_screen"}
+                size={"small"}
+                disabled={loading || disabled}>
+                {!loading && <AIIcon size={"small"} />}
+                {loading && <CircularProgress size={"small"} />}
                 Autofill
             </Button>}>
 
             <MenuItem className={"py-4"}
-                      onClick={() => {
-                          enhance();
-                      }}>
-                <AutoFixHighIcon size={"small"}/>
+                onClick={() => {
+                    enhance();
+                }}>
+                <AIIcon size={"small"} />
                 Autofill based on the current content
             </MenuItem>
 
-            <Separator orientation={"horizontal"} className={"mt-2"}/>
+            <Separator orientation={"horizontal"} className={"mt-2"} />
 
             {samplePrompts?.map((samplePrompt, index) => {
                 return <MenuItem
@@ -161,13 +161,13 @@ export function FormEnhanceAction({
                         }}
                         size={"smallest"}
                     >
-                        <CloseIcon size="smallest"/>
+                        <CloseIcon size="smallest" />
                     </IconButton>
                     }
                 </MenuItem>;
             })}
 
-            <Separator orientation={"horizontal"}/>
+            <Separator orientation={"horizontal"} />
 
             <div
                 className={cls(
@@ -204,7 +204,7 @@ export function FormEnhanceAction({
                     }}
                     color={!instructions ? "primary" : undefined}
                     disabled={loading || !instructions}>
-                    <CloseIcon size={"small"}/>
+                    <CloseIcon size={"small"} />
                 </IconButton>
 
                 <IconButton
@@ -213,9 +213,9 @@ export function FormEnhanceAction({
                     color={!instructions ? "primary" : undefined}
                     disabled={loading || !instructions}>
                     {loading &&
-                        <CircularProgress size={"smallest"}/>}
+                        <CircularProgress size={"smallest"} />}
                     {!loading &&
-                        <SendIcon color={"primary"}/>}
+                        <SendIcon color={"primary"} />}
                 </IconButton>
 
             </div>

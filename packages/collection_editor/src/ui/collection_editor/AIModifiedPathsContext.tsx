@@ -4,6 +4,8 @@ import { CollectionOperation } from "../../api/generateCollectionApi";
 export interface AIModifiedPathsContextType {
     /** Set of paths that were modified by AI */
     modifiedPaths: Set<string>;
+    /** Counter that increments each time AI modifies the collection - use in keys to force remount */
+    generationCounter: number;
     /** Add paths from operations */
     addModifiedPaths: (operations: CollectionOperation[]) => void;
     /** Clear a specific path (when user edits that field) */
@@ -18,6 +20,7 @@ const AIModifiedPathsContext = createContext<AIModifiedPathsContextType | null>(
 
 export function AIModifiedPathsProvider({ children }: { children: React.ReactNode }) {
     const [modifiedPaths, setModifiedPaths] = useState<Set<string>>(new Set());
+    const [generationCounter, setGenerationCounter] = useState(0);
 
     const addModifiedPaths = useCallback((operations: CollectionOperation[]) => {
         setModifiedPaths(prev => {
@@ -34,6 +37,8 @@ export function AIModifiedPathsProvider({ children }: { children: React.ReactNod
             });
             return newSet;
         });
+        // Increment counter to force property form remount
+        setGenerationCounter(prev => prev + 1);
     }, []);
 
     const clearPath = useCallback((path: string) => {
@@ -66,6 +71,7 @@ export function AIModifiedPathsProvider({ children }: { children: React.ReactNod
     return (
         <AIModifiedPathsContext.Provider value={{
             modifiedPaths,
+            generationCounter,
             addModifiedPaths,
             clearPath,
             clearAllPaths,
@@ -79,3 +85,4 @@ export function AIModifiedPathsProvider({ children }: { children: React.ReactNod
 export function useAIModifiedPaths(): AIModifiedPathsContextType | null {
     return useContext(AIModifiedPathsContext);
 }
+

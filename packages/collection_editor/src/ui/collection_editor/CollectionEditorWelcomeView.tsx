@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { EntityCollection, prettifyIdentifier, } from "@firecms/core";
-import { AutoAwesomeIcon, Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import { AIIcon, EntityCollection, prettifyIdentifier, } from "@firecms/core";
+import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 
 import { productsCollectionTemplate } from "./templates/products_template";
@@ -84,6 +84,76 @@ export function CollectionEditorWelcomeView({
                     </div>
 
                 </div>}
+                <div className="flex flex-row gap-8">
+
+                    {getAuthToken && apiEndpoint && (
+                        <div className={"my-2"}>
+                            <Typography variant={"caption"}
+                                color={"secondary"}
+                                className={"mb-2"}>
+                                ● Describe your collection to AI:
+                            </Typography>
+
+                            <AICollectionGeneratorPopover
+                                onGenerated={(generatedCollection) => {
+                                    setValues(generatedCollection);
+                                    onContinue();
+                                }}
+                                getAuthToken={getAuthToken}
+                                apiEndpoint={apiEndpoint}
+                                trigger={
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<AIIcon size="small" />}
+                                    >
+                                        Generate with AI
+                                    </Button>
+                                }
+                            />
+                        </div>
+                    )}
+
+                    <div className={"my-2"}>
+                        <Typography variant={"caption"}
+                            color={"secondary"}
+                            className={"mb-2"}>
+                            ● Create from JSON configuration:
+                        </Typography>
+
+                        <Button
+                            variant={"outlined"}
+                            onClick={() => setJsonImportOpen(true)}
+                            startIcon={<CodeIcon size="small" />}
+                        >
+                            Paste JSON Configuration
+                        </Button>
+
+                        <CollectionJsonImportDialog
+                            open={jsonImportOpen}
+                            onClose={() => setJsonImportOpen(false)}
+                            onImport={(collection) => {
+                                setValues(collection);
+                                onContinue();
+                            }}
+                        />
+                    </div>
+
+
+
+                </div>
+
+
+                {!parentCollection && <div>
+
+                    <Typography variant={"caption"}
+                        color={"secondary"}
+                        className={"mb-2"}>
+                        ● Create a collection from a file (csv, json, xls, xslx...)
+                    </Typography>
+
+                    <ImportFileUpload onDataAdded={(data, propertiesOrder) => onContinue(data, propertiesOrder)} />
+
+                </div>}
 
                 <div className={"my-2"}>
                     <Typography variant={"caption"}
@@ -91,7 +161,7 @@ export function CollectionEditorWelcomeView({
                         ● Select a template:
                     </Typography>
 
-                    <div className={"flex gap-4"}>
+                    <div className={"flex gap-2"}>
                         <TemplateButton title={"Products"}
                             subtitle={"A collection of products with images, prices and stock"}
                             icon={<Icon size={"small"}
@@ -125,69 +195,7 @@ export function CollectionEditorWelcomeView({
 
                 </div>
 
-                {getAuthToken && apiEndpoint && (
-                    <div className={"my-2"}>
-                        <Typography variant={"caption"}
-                            color={"secondary"}
-                            className={"mb-2"}>
-                            ● Describe your collection to AI:
-                        </Typography>
 
-                        <AICollectionGeneratorPopover
-                            onGenerated={(generatedCollection) => {
-                                setValues(generatedCollection);
-                                onContinue();
-                            }}
-                            getAuthToken={getAuthToken}
-                            apiEndpoint={apiEndpoint}
-                            trigger={
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<AutoAwesomeIcon size="small" />}
-                                >
-                                    Generate with AI
-                                </Button>
-                            }
-                        />
-                    </div>
-                )}
-
-                {!parentCollection && <div>
-
-                    <Typography variant={"caption"}
-                        color={"secondary"}
-                        className={"mb-2"}>
-                        ● Create a collection from a file (csv, json, xls, xslx...)
-                    </Typography>
-
-                    <ImportFileUpload onDataAdded={(data, propertiesOrder) => onContinue(data, propertiesOrder)} />
-
-                </div>}
-
-                <div className={"my-2"}>
-                    <Typography variant={"caption"}
-                        color={"secondary"}
-                        className={"mb-2"}>
-                        ● Create from JSON configuration:
-                    </Typography>
-
-                    <Button
-                        variant={"outlined"}
-                        onClick={() => setJsonImportOpen(true)}
-                        startIcon={<CodeIcon size="small" />}
-                    >
-                        Paste JSON Configuration
-                    </Button>
-
-                    <CollectionJsonImportDialog
-                        open={jsonImportOpen}
-                        onClose={() => setJsonImportOpen(false)}
-                        onImport={(collection) => {
-                            setValues(collection);
-                            onContinue();
-                        }}
-                    />
-                </div>
 
             </Container>
         </div>
@@ -212,7 +220,7 @@ export function TemplateButton({
             <Card
                 onClick={onClick}
                 className={cls(
-                    "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
+                    "my-2 rounded-md border px-4 py-3 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-text-secondary dark:text-text-secondary-dark",
                     "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
                     "border-surface-400 dark:border-surface-600 "
@@ -221,7 +229,7 @@ export function TemplateButton({
                 {icon}
                 <div className={"flex flex-col items-start"}>
 
-                    <Typography variant={"subtitle1"}>
+                    <Typography variant={"subtitle2"}>
                         {title}
                     </Typography>
 

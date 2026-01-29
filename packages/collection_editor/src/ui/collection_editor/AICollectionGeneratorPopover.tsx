@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { EntityCollection, useNavigationController, useSnackbarController } from "@firecms/core";
+import { EntityCollection, useNavigationController, useSnackbarController, AIIcon } from "@firecms/core";
 import {
-    AutoAwesomeIcon,
     Button,
     CircularProgress,
     IconButton,
@@ -158,7 +157,7 @@ export function AICollectionGeneratorPopover({
             disabled={loading}
             startIcon={loading
                 ? <CircularProgress size="smallest" />
-                : <AutoAwesomeIcon size="small" />
+                : <AIIcon size="small" />
             }
         >
             AI Assist
@@ -171,7 +170,7 @@ export function AICollectionGeneratorPopover({
         >
             {loading
                 ? <CircularProgress size="smallest" />
-                : <AutoAwesomeIcon size="small" />
+                : <AIIcon size="small" />
             }
         </IconButton>
     );
@@ -189,7 +188,7 @@ export function AICollectionGeneratorPopover({
         >
             <div className="p-4 flex flex-col gap-3 min-w-[360px] max-w-[480px]">
                 <div className="flex items-center gap-2">
-                    <AutoAwesomeIcon size="small" className="text-primary" />
+                    <AIIcon size="small" />
                     <Typography variant="subtitle2">
                         {existingCollection ? "Modify Collection with AI" : "Generate Collection with AI"}
                     </Typography>
@@ -205,6 +204,7 @@ export function AICollectionGeneratorPopover({
                 <TextField
                     size="small"
                     multiline
+                    autoFocus
                     className="w-full text-text-primary dark:text-text-primary-dark"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
