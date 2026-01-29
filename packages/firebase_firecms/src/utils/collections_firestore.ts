@@ -157,24 +157,24 @@ function removeDuplicates<T>(array: T[]): T[] {
 /**
  * Converts enum values from object format to array format.
  * Firestore doesn't preserve object key order, so we must use arrays.
+ * When enum values are already stored as an array, their order is preserved
+ * (this is intentional - users can reorder columns in Kanban view).
+ * Only sort alphabetically when converting from legacy object format.
  * @param enumValues - The enum values (object or array format)
- * @param sortAlphabetically - If true, sort by id alphabetically (used when loading from DB)
+ * @param sortObjectFormat - If true, sort by id alphabetically when converting from object format
  * @returns Array of EnumValueConfig objects
  */
 function normalizeEnumValuesToArray(
     enumValues: any,
-    sortAlphabetically: boolean = false
+    sortObjectFormat: boolean = false
 ): any[] {
     if (Array.isArray(enumValues)) {
-        // Already an array, return as-is (or sorted if requested)
-        if (sortAlphabetically) {
-            return [...enumValues].sort((a, b) =>
-                String(a.id).localeCompare(String(b.id))
-            );
-        }
+        // Already an array - preserve order! This order is intentional
+        // (e.g., user reordered Kanban columns)
         return enumValues;
     } else if (typeof enumValues === "object" && enumValues !== null) {
         // Convert object to array format
+        // Object keys don't have guaranteed order in Firestore, so we sort alphabetically
         const entries = Object.entries(enumValues).map(([id, value]) =>
             typeof value === "string"
                 ? {
@@ -186,8 +186,9 @@ function normalizeEnumValuesToArray(
                     id
                 }
         );
-        // Sort alphabetically by id when loading from Firestore
-        if (sortAlphabetically) {
+        // Sort alphabetically by id when loading from Firestore object format
+        // This is the only case where sorting makes sense, since object key order is not preserved
+        if (sortObjectFormat) {
             entries.sort((a, b) => String(a.id).localeCompare(String(b.id)));
         }
         return entries;
@@ -198,12 +199,12 @@ function normalizeEnumValuesToArray(
 /**
  * Normalizes all enum values in a properties object.
  * @param properties - The properties object to normalize
- * @param sortAlphabetically - If true, sort enum values alphabetically by id
+ * @param sortObjectFormat - If true, sort enum values alphabetically when converting from object format
  * @returns Properties with normalized enum values
  */
 function normalizePropertiesEnumValues(
     properties: Properties,
-    sortAlphabetically: boolean = false
+    sortObjectFormat: boolean = false
 ): Properties {
     const result: Properties = {};
     Object.entries(properties).forEach(([key, property]) => {
@@ -214,7 +215,7 @@ function normalizePropertiesEnumValues(
             if (normalizedProperty.enumValues) {
                 normalizedProperty.enumValues = normalizeEnumValuesToArray(
                     normalizedProperty.enumValues,
-                    sortAlphabetically
+                    sortObjectFormat
                 );
             }
 
@@ -224,7 +225,7 @@ function normalizePropertiesEnumValues(
                     ...normalizedProperty.of,
                     enumValues: normalizeEnumValuesToArray(
                         normalizedProperty.of.enumValues,
-                        sortAlphabetically
+                        sortObjectFormat
                     )
                 };
             }
@@ -233,7 +234,7 @@ function normalizePropertiesEnumValues(
             if (normalizedProperty.dataType === "map" && normalizedProperty.properties) {
                 normalizedProperty.properties = normalizePropertiesEnumValues(
                     normalizedProperty.properties,
-                    sortAlphabetically
+                    sortObjectFormat
                 );
             }
 

@@ -10,8 +10,7 @@ import {
     Typography
 } from "@firecms/ui";
 import {
-    generateCollection,
-    modifyCollectionDelta,
+    CollectionGenerationCallback,
     CollectionGenerationApiError,
     CollectionOperation
 } from "../../api/generateCollectionApi";
@@ -25,19 +24,15 @@ export interface AICollectionGeneratorPopoverProps {
 
     /**
      * Callback when a collection is generated or modified.
-     * Includes the collection and optionally the operations that were applied (for modify_delta).
+     * Includes the collection and optionally the operations that were applied.
      */
     onGenerated: (collection: EntityCollection, operations?: CollectionOperation[]) => void;
 
     /**
-     * Function to get the auth token for API calls
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
      */
-    getAuthToken: () => Promise<string>;
-
-    /**
-     * API endpoint base URL (e.g., "https://api.firecms.co")
-     */
-    apiEndpoint: string;
+    generateCollection: CollectionGenerationCallback;
 
     /**
      * Optional custom trigger button. If not provided, a default AI button is used.
@@ -58,8 +53,7 @@ export interface AICollectionGeneratorPopoverProps {
 export function AICollectionGeneratorPopover({
     existingCollection,
     onGenerated,
-    getAuthToken,
-    apiEndpoint,
+    generateCollection,
     trigger,
     size = "small",
     showLabel = true
@@ -81,9 +75,6 @@ export function AICollectionGeneratorPopover({
         setError(null);
 
         try {
-            let resultCollection: EntityCollection;
-            let resultOperations: CollectionOperation[] | undefined;
-
             const collectionsContext = existingCollections.map(c => ({
                 path: c.path,
                 id: c.id,
@@ -92,34 +83,21 @@ export function AICollectionGeneratorPopover({
                 propertiesOrder: c.propertiesOrder
             }));
 
-            if (existingCollection) {
-                // Modify existing collection using delta endpoint (faster)
-                const result = await modifyCollectionDelta({
-                    prompt: prompt.trim(),
+            const result = await generateCollection({
+                prompt: prompt.trim(),
+                existingCollections: collectionsContext.slice(0, 30),
+                ...(existingCollection && {
                     existingCollection: {
                         path: existingCollection.path,
                         id: existingCollection.id,
                         name: existingCollection.name,
                         properties: existingCollection.properties,
                         propertiesOrder: existingCollection.propertiesOrder
-                    },
-                    existingCollections: collectionsContext,
-                    getAuthToken,
-                    apiEndpoint
-                });
-                resultCollection = result.collection;
-                resultOperations = result.operations;
-            } else {
-                // Generate new collection - returns full collection
-                resultCollection = await generateCollection({
-                    prompt: prompt.trim(),
-                    existingCollections: collectionsContext,
-                    getAuthToken,
-                    apiEndpoint
-                });
-            }
+                    }
+                })
+            });
 
-            onGenerated(resultCollection, resultOperations);
+            onGenerated(result.collection, result.operations);
             setMenuOpen(false);
             setPrompt("");
             snackbarController.open({

@@ -17,6 +17,7 @@ import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
 import { PropertyFormDialog } from "./ui/collection_editor/PropertyEditView";
 import { PersistedCollection } from "./types/persisted_collection";
+import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 
 export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as any);
 export const CollectionEditorContext = React.createContext<CollectionEditorController>({} as any);
@@ -58,14 +59,10 @@ export interface ConfigControllerProviderProps {
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
     /**
-     * Function to get the auth token for AI collection generation API calls.
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
      */
-    getAuthToken?: () => Promise<string>;
-
-    /**
-     * API endpoint for AI collection generation.
-     */
-    apiEndpoint?: string;
+    generateCollection?: CollectionGenerationCallback;
 
 }
 
@@ -81,8 +78,7 @@ export const ConfigControllerProvider = React.memo(
         getData,
         onAnalyticsEvent,
         pathSuggestions,
-        getAuthToken,
-        apiEndpoint
+        generateCollection
     }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -105,7 +101,7 @@ export const ConfigControllerProvider = React.memo(
             redirect: boolean,
             existingEntities?: Entity<any>[],
             pathSuggestions?: string[];
-            initialView?: "general" | "properties";
+            initialView?: "general" | "display" | "properties";
             expandKanban?: boolean;
         }>();
 
@@ -143,7 +139,7 @@ export const ConfigControllerProvider = React.memo(
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
             existingEntities?: Entity<any>[],
-            initialView?: "general" | "properties",
+            initialView?: "general" | "display" | "properties",
             expandKanban?: boolean
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
@@ -275,8 +271,7 @@ export const ConfigControllerProvider = React.memo(
                         reservedGroups={reservedGroups}
                         extraView={extraView}
                         getUser={getUser}
-                        getAuthToken={getAuthToken}
-                        apiEndpoint={apiEndpoint}
+                        generateCollection={generateCollection}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {

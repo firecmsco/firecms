@@ -665,8 +665,26 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent,
         includeIntroView: false,
         pathSuggestions: rootPathSuggestions,
-        getAuthToken: fireCMSBackend.getBackendAuthToken,
-        apiEndpoint: fireCMSBackend.backendApiHost
+        generateCollection: async (request) => {
+            const token = await fireCMSBackend.getBackendAuthToken();
+            const response = await fetch(`${fireCMSBackend.backendApiHost}/collections/generate`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(request)
+            });
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || "Failed to generate collection");
+            }
+            const data = await response.json();
+            return {
+                collection: data.data.collection,
+                operations: data.data.operations
+            };
+        }
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [

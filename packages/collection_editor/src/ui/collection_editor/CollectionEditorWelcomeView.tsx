@@ -11,21 +11,20 @@ import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@firecms/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
+import { CollectionGenerationCallback } from "../../api/generateCollectionApi";
 
 export function CollectionEditorWelcomeView({
     path,
     parentCollection,
     onContinue,
     existingCollectionPaths,
-    getAuthToken,
-    apiEndpoint
+    generateCollection
 }: {
     path: string;
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
-    getAuthToken?: () => Promise<string>;
-    apiEndpoint?: string;
+    generateCollection?: CollectionGenerationCallback;
 }) {
 
     const { pathSuggestions } = useCollectionEditorController();
@@ -86,7 +85,7 @@ export function CollectionEditorWelcomeView({
                 </div>}
                 <div className="flex flex-row gap-8">
 
-                    {getAuthToken && apiEndpoint && (
+                    {generateCollection && (
                         <div className={"my-2"}>
                             <Typography variant={"caption"}
                                 color={"secondary"}
@@ -99,8 +98,7 @@ export function CollectionEditorWelcomeView({
                                     setValues(generatedCollection);
                                     onContinue();
                                 }}
-                                getAuthToken={getAuthToken}
-                                apiEndpoint={apiEndpoint}
+                                generateCollection={generateCollection}
                                 trigger={
                                     <Button
                                         variant="outlined"

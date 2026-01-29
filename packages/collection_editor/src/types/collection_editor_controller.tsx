@@ -15,9 +15,9 @@ export interface CollectionEditorController {
         parentCollection?: PersistedCollection,
         existingEntities?: Entity<any>[],
         /**
-         * Initial view to open: "details" or "properties"
+         * Initial view to open: "general", "display", or "properties"
          */
-        initialView?: "general" | "properties",
+        initialView?: "general" | "display" | "properties",
         /**
          * If true, expand the Kanban configuration section
          */

@@ -22,7 +22,7 @@ export function KanbanSetupAction({
         collectionEditorController.editCollection({
             id: collection.id,
             parentCollectionIds,
-            initialView: "general",
+            initialView: "display",
             expandKanban: true
         });
     };

@@ -7,6 +7,7 @@ import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAct
 import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
+import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
@@ -57,16 +58,10 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
     includeIntroView?: boolean;
 
     /**
-     * Function to get the auth token for AI collection generation API calls.
-     * Required for AI collection generation feature.
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
      */
-    getAuthToken?: () => Promise<string>;
-
-    /**
-     * API endpoint for AI collection generation.
-     * e.g., "https://api.firecms.co/projects/my-project"
-     */
-    apiEndpoint?: string;
+    generateCollection?: CollectionGenerationCallback;
 
 }
 
@@ -93,8 +88,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         onAnalyticsEvent,
         includeIntroView = true,
         pathSuggestions,
-        getAuthToken,
-        apiEndpoint
+        generateCollection
     }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -112,8 +106,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getData,
                 onAnalyticsEvent,
                 pathSuggestions,
-                getAuthToken,
-                apiEndpoint
+                generateCollection
             }
         },
         homePage: {

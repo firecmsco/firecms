@@ -60,7 +60,7 @@ import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
-import { CollectionOperation } from "../../api/generateCollectionApi";
+import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -93,22 +93,19 @@ export interface CollectionEditorDialogProps {
     parentCollection?: PersistedCollection;
     existingEntities?: Entity<any>[];
     /**
-     * Initial view to open when editing: "general" or "properties".
+     * Initial view to open when editing: "general", "display", or "properties".
      * For new collections, this is ignored.
      */
-    initialView?: "general" | "properties";
+    initialView?: "general" | "display" | "properties";
     /**
      * If true, auto-expand the Kanban configuration section.
      */
     expandKanban?: boolean;
     /**
-     * Function to get the auth token for AI collection generation API calls.
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
      */
-    getAuthToken?: () => Promise<string>;
-    /**
-     * API endpoint for AI collection generation.
-     */
-    apiEndpoint?: string;
+    generateCollection?: CollectionGenerationCallback;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -293,8 +290,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     existingEntities,
     initialView: initialViewProp,
     expandKanban,
-    getAuthToken,
-    apiEndpoint
+    generateCollection
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -629,12 +625,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             <>
                 {!isNewCollection && <div className={cls("px-4 py-2 w-full flex items-center justify-end gap-2 bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}>
-                    {getAuthToken && apiEndpoint && (
+                    {generateCollection && (
                         <AICollectionGeneratorPopover
                             existingCollection={values}
                             onGenerated={handleAIGenerated}
-                            getAuthToken={getAuthToken}
-                            apiEndpoint={apiEndpoint}
+                            generateCollection={generateCollection}
                         />
                     )}
                     <Tabs value={currentView}
@@ -674,8 +669,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
                             parentCollection={parentCollection}
-                            getAuthToken={getAuthToken}
-                            apiEndpoint={apiEndpoint} />}
+                            generateCollection={generateCollection} />}
 
                     {currentView === "import_data_mapping" && importConfig &&
                         <CollectionEditorImportMapping importConfig={importConfig}

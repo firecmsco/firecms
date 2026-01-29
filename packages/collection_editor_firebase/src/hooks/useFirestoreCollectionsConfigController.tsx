@@ -415,12 +415,6 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         );
         const finalEnumValues = [...reorderedEnumValues, ...missingEnumValues];
 
-        console.debug("Updating Kanban column order by reordering enumValues", {
-            kanbanColumnProperty,
-            newColumnsOrder,
-            finalEnumValues
-        });
-
         // Persist by updating the property's enumValues in the correct order
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, {

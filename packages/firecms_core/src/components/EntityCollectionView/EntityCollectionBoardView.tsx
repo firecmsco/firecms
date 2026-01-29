@@ -57,18 +57,18 @@ export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> 
  * Kanban board view for displaying entities grouped by a string enum property.
  */
 export function EntityCollectionBoardView<M extends Record<string, any> = any>({
-                                                                                   collection,
-                                                                                   tableController,
-                                                                                   fullPath,
-                                                                                   parentCollectionIds = [],
-                                                                                   columnProperty,
-                                                                                   onEntityClick,
-                                                                                   selectionController,
-                                                                                   selectionEnabled = true,
-                                                                                   highlightedEntities,
-                                                                                   emptyComponent,
-                                                                                   deletedEntities
-                                                                               }: EntityCollectionBoardViewProps<M>) {
+    collection,
+    tableController,
+    fullPath,
+    parentCollectionIds = [],
+    columnProperty,
+    onEntityClick,
+    selectionController,
+    selectionEnabled = true,
+    highlightedEntities,
+    emptyComponent,
+    deletedEntities
+}: EntityCollectionBoardViewProps<M>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const context = useFireCMSContext();
@@ -390,25 +390,30 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         items: BoardItem<M>[],
         moveInfo?: { itemId: string; sourceColumn: string; targetColumn: string; }
     ) => {
-        if (!orderProperty) return;
-
         const entity = items.find(item => item.id === moveInfo?.itemId)?.entity;
         if (!entity) return;
 
+        const isColumnChange = moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn;
+
+        // If no orderProperty and not a column change, nothing to do
+        if (!orderProperty && !isColumnChange) return;
+
         // Optimistic update: update column counts immediately when moving between columns
-        if (moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn) {
+        if (isColumnChange) {
             boardDataController.updateColumnCounts(moveInfo.sourceColumn, moveInfo.targetColumn);
         }
 
-        // Calculate new order value
-        const newOrder = calculateNewOrder(items, moveInfo?.itemId ?? "", moveInfo?.targetColumn ?? "");
-
         // Build updated values
         let updatedValues = { ...entity.values };
-        updatedValues = setIn(updatedValues, orderProperty, newOrder);
 
-        // Also update column if it changed
-        if (moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn) {
+        // Calculate and set new order value (only if orderProperty is configured)
+        if (orderProperty) {
+            const newOrder = calculateNewOrder(items, moveInfo?.itemId ?? "", moveInfo?.targetColumn ?? "");
+            updatedValues = setIn(updatedValues, orderProperty, newOrder);
+        }
+
+        // Update column if it changed
+        if (isColumnChange) {
             updatedValues = setIn(updatedValues, columnProperty, moveInfo.targetColumn);
         }
 
@@ -614,7 +619,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                             size="small"
                             onClick={() => boardDataController.refreshAll()}
                         >
-                            <RefreshIcon size="small"/>
+                            <RefreshIcon size="small" />
                         </IconButton>
                     </Tooltip>
                     {indexUrl && (
@@ -699,7 +704,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         Cancel
                     </Button>
                     <Button onClick={handleBackfill} disabled={backfillLoading}>
-                        {backfillLoading ? <CircularProgress size="smallest"/> : "Initialize"}
+                        {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
                     </Button>
                 </DialogActions>
             </Dialog>
