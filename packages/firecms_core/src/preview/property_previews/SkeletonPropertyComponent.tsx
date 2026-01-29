@@ -19,9 +19,9 @@ export interface SkeletonPropertyComponentProps {
  * @group Preview components
  */
 export function SkeletonPropertyComponent({
-                                              property,
-                                              size
-                                          }: SkeletonPropertyComponentProps
+    property,
+    size
+}: SkeletonPropertyComponentProps
 ) {
 
     if (!property) {
@@ -101,7 +101,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                         {property.properties && property.properties[key] &&
                             <SkeletonPropertyComponent
                                 property={property.properties[key]}
-                                size={"medium"}/>}
+                                size={"medium"} />}
                     </div>
                 ))}
             </div>
@@ -110,29 +110,29 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
     return (
         <table className="table-auto">
             <tbody>
-            {mapPropertyKeys &&
-                mapPropertyKeys.map((key, index) => {
-                    return (
-                        <tr
-                            key={`map_preview_table__${index}`}
-                            className="border-b last:border-b-0">
-                            <th key={`table-cell-title--${key}`}
-                                className="align-top"
-                                style={{ width: "30%" }}>
-                                <p className="text-xs text-secondary">
-                                    {property.properties![key].name}
-                                </p>
-                            </th>
-                            <th key={`table-cell-${key}`}
-                                style={{ width: "70%" }}>
-                                {property.properties && property.properties[key] &&
-                                    <SkeletonPropertyComponent
-                                        property={property.properties[key]}
-                                        size={"medium"}/>}
-                            </th>
-                        </tr>
-                    );
-                })}
+                {mapPropertyKeys &&
+                    mapPropertyKeys.map((key, index) => {
+                        return (
+                            <tr
+                                key={`map_preview_table__${index}`}
+                                className="border-b last:border-b-0">
+                                <th key={`table-cell-title--${key}`}
+                                    className="align-top"
+                                    style={{ width: "30%" }}>
+                                    <p className="text-xs text-secondary">
+                                        {property.properties![key].name}
+                                    </p>
+                                </th>
+                                <th key={`table-cell-${key}`}
+                                    style={{ width: "70%" }}>
+                                    {property.properties && property.properties[key] &&
+                                        <SkeletonPropertyComponent
+                                            property={property.properties[key]}
+                                            size={"medium"} />}
+                                </th>
+                            </tr>
+                        );
+                    })}
             </tbody>
         </table>
     );
@@ -149,24 +149,24 @@ function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedPr
     return (
         <table className="table-auto">
             <tbody>
-            {
-                [0, 1, 2].map((value, index) => {
-                    return (
-                        <tr key={`table_${value}_${index}`}>
-                            {tableProperties && tableProperties.map(
-                                (key) => (
-                                    <th
-                                        key={`table-cell-${key}`}
-                                    >
-                                        <SkeletonPropertyComponent
-                                            property={(properties)[key]}
-                                            size={"medium"}/>
-                                    </th>
-                                )
-                            )}
-                        </tr>
-                    );
-                })}
+                {
+                    [0, 1, 2].map((value, index) => {
+                        return (
+                            <tr key={`table_${value}_${index}`}>
+                                {tableProperties && tableProperties.map(
+                                    (key) => (
+                                        <th
+                                            key={`table-cell-${key}`}
+                                        >
+                                            <SkeletonPropertyComponent
+                                                property={(properties)[key]}
+                                                size={"medium"} />
+                                        </th>
+                                    )
+                                )}
+                            </tr>
+                        );
+                    })}
             </tbody>
         </table>
     );
@@ -203,14 +203,14 @@ function renderGenericArrayCell(
     return (
 
         <div key={"array_index_" + index}
-             className={"flex flex-col gap-2"}>
+            className={"flex flex-col gap-2"}>
 
             {
                 [0, 1].map((value, index) =>
                     <>
                         <SkeletonPropertyComponent key={`i_${index}`}
-                                                   property={property}
-                                                   size={"medium"}/>
+                            property={property}
+                            size={"medium"} />
                     </>
                 )}
         </div>
@@ -220,16 +220,21 @@ function renderGenericArrayCell(
 function renderUrlAudioComponent() {
     return (
         <Skeleton width={300}
-                  height={100}/>
+            height={100} />
     );
 }
 
-export function renderSkeletonImageThumbnail(size: PreviewSize) {
+export function renderSkeletonImageThumbnail(size: PreviewSize, fill?: boolean) {
+    if (fill) {
+        return (
+            <Skeleton className="w-full h-full" />
+        );
+    }
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const imageSize = size === "small" ? 40 : size === "medium" ? 100 : 200;
     return (
         <Skeleton width={imageSize}
-                  height={imageSize}/>
+            height={imageSize} />
     );
 }
 
@@ -237,12 +242,12 @@ function renderUrlVideo(size: PreviewSize) {
 
     return (
         <Skeleton width={size !== "large" ? 300 : 500}
-                  height={size !== "large" ? 200 : 250}/>
+            height={size !== "large" ? 200 : 250} />
     );
 }
 
 function renderReference() {
-    return <Skeleton width={200} height={100}/>;
+    return <Skeleton width={200} height={100} />;
 }
 
 function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "large") {
@@ -270,14 +275,14 @@ function renderUrlFile(size: PreviewSize) {
 }
 
 export function renderSkeletonText(index?: number, width = 120) {
-    return <Skeleton width={width} key={`skeleton_${index}`}/>;
+    return <Skeleton width={width} key={`skeleton_${index}`} />;
 }
 
 export function renderSkeletonCaptionText(index?: number) {
     return <Skeleton
-        height={20}/>;
+        height={20} />;
 }
 
 export function renderSkeletonIcon() {
-    return <Skeleton width={24} height={24}/>;
+    return <Skeleton width={24} height={24} />;
 }
