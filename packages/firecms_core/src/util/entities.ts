@@ -88,33 +88,27 @@ export function updateDateAutoValues<M extends Record<string, any>>({
     inputValues,
     properties,
     status,
-    timestampNowValue,
-    setDateToMidnight
+    timestampNowValue
 }:
     {
         inputValues: Partial<EntityValues<M>>,
         properties: ResolvedProperties<M>,
         status: EntityStatus,
-        timestampNowValue: any,
-        setDateToMidnight: (input?: any) => any | undefined
+        timestampNowValue: any
     }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
         (inputValue, property) => {
             if (property.dataType === "date") {
-                let resultDate;
                 if (status === "existing" && property.autoValue === "on_update") {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else if ((status === "new" || status === "copy") &&
                     (property.autoValue === "on_update" || property.autoValue === "on_create")) {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else {
-                    resultDate = inputValue;
+                    return inputValue;
                 }
-                if (property.mode === "date")
-                    resultDate = setDateToMidnight(resultDate);
-                return resultDate;
             } else {
                 return inputValue;
             }

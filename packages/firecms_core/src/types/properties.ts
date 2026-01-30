@@ -12,14 +12,14 @@ import { AuthController } from "./auth";
  */
 export type DataType<T extends CMSType = CMSType> =
     T extends string ? "string" :
-        T extends number ? "number" :
-            T extends boolean ? "boolean" :
-                T extends Date ? "date" :
-                    T extends GeoPoint ? "geopoint" :
-                        T extends Vector ? "vector" :
-                            T extends EntityReference ? "reference" :
-                                T extends Array<any> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+    T extends number ? "number" :
+    T extends boolean ? "boolean" :
+    T extends Date ? "date" :
+    T extends GeoPoint ? "geopoint" :
+    T extends Vector ? "vector" :
+    T extends EntityReference ? "reference" :
+    T extends Array<any> ? "array" :
+    T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -52,13 +52,13 @@ export type AnyProperty =
  */
 export type Property<T extends CMSType = any> =
     T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? DateProperty :
-                    T extends GeoPoint ? GeopointProperty :
-                        T extends EntityReference ? ReferenceProperty :
-                            T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
+    T extends number ? NumberProperty :
+    T extends boolean ? BooleanProperty :
+    T extends Date ? DateProperty :
+    T extends GeoPoint ? GeopointProperty :
+    T extends EntityReference ? ReferenceProperty :
+    T extends Array<CMSType> ? ArrayProperty<T> :
+    T extends Record<string, any> ? MapProperty<T> : AnyProperty;
 
 /**
  * Interface including all common properties of a CMS property
@@ -290,14 +290,14 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
  */
 export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
     ({
-         values,
-         previousValues,
-         propertyValue,
-         index,
-         path,
-         entityId,
-         authController
-     }: PropertyBuilderProps<M>) => Property<T> | null;
+        values,
+        previousValues,
+        propertyValue,
+        index,
+        path,
+        entityId,
+        authController
+    }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**
  * @group Entity properties
@@ -644,6 +644,14 @@ export interface DateProperty extends BaseProperty<Date> {
      * Add an icon to clear the value and set it to `null`. Defaults to `false`
      */
     clearable?: boolean;
+
+    /**
+     * IANA timezone string (e.g., "America/New_York", "Europe/London").
+     * Used to display and input dates in the specified timezone.
+     * The value stored will always be in UTC.
+     * If not provided, uses the user's local timezone.
+     */
+    timezone?: string;
 }
 
 /**

@@ -283,7 +283,6 @@ export function useFirestoreDelegate({
 
     return {
         key: "firestore",
-        setDateToMidnight,
         delegateToCMSModel: firestoreToCMSModel,
         cmsToDelegateModel,
         currentTime,
@@ -706,14 +705,6 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     let to = fsPath.lastIndexOf("/");
     to = to === -1 ? fsPath.length : to;
     return fsPath.substring(0, to);
-}
-
-function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
-    if (!input) return input;
-    if (!(input instanceof Timestamp)) return input;
-    const date = input.toDate();
-    date.setHours(0, 0, 0, 0);
-    return Timestamp.fromDate(date);
 }
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = false): any {

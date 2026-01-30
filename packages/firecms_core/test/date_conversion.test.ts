@@ -46,8 +46,7 @@ describe("Date-to-String Conversion Bug", () => {
                 inputValues,
                 properties,
                 status: "new",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // Dates should be Date objects, not strings
@@ -81,8 +80,7 @@ describe("Date-to-String Conversion Bug", () => {
                 inputValues,
                 properties,
                 status: "existing",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // created_on should preserve original Date (on_create only sets on new)
@@ -183,8 +181,7 @@ describe("Date-to-String Conversion Bug", () => {
                 inputValues: formValues,
                 properties,
                 status: "new",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // Verify dates are Date objects at this point
@@ -235,8 +232,7 @@ describe("Date-to-String Conversion Bug", () => {
                 inputValues: formValues,
                 properties,
                 status: "existing",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // created_on should remain the original Date

@@ -229,8 +229,7 @@ export function useBuildDataSource({
                         inputValues: delegateValues,
                         properties,
                         status,
-                        timestampNowValue: usedDelegate.currentTime?.() ?? new Date(),
-                        setDateToMidnight: usedDelegate.setDateToMidnight
+                        timestampNowValue: usedDelegate.currentTime?.() ?? new Date()
                     })
                 : delegateValues;
 

@@ -29,14 +29,14 @@ import {
 export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataSourceDelegate {
 
     const fetchCollection = useCallback(async <M extends Record<string, any>>({
-                                                                                  path,
-                                                                                  filter,
-                                                                                  limit,
-                                                                                  startAfter,
-                                                                                  orderBy,
-                                                                                  order,
-                                                                                  searchString
-                                                                              }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]> => {
+        path,
+        filter,
+        limit,
+        startAfter,
+        orderBy,
+        order,
+        searchString
+    }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -64,10 +64,10 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const listenCollection = useCallback(<M extends Record<string, any>>({
-                                                                             path,
-                                                                             onUpdate,
-                                                                             // Realtime Database does not directly support onError in onValue
-                                                                         }: ListenCollectionDelegateProps<M>): () => void => {
+        path,
+        onUpdate,
+        // Realtime Database does not directly support onError in onValue
+    }: ListenCollectionDelegateProps<M>): () => void => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -91,9 +91,9 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const fetchEntity = useCallback(async <M extends Record<string, any>>({
-                                                                              path,
-                                                                              entityId,
-                                                                          }: FetchEntityProps<M>): Promise<Entity<M> | undefined> => {
+        path,
+        entityId,
+    }: FetchEntityProps<M>): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -111,11 +111,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const listenEntity = useCallback(<M extends Record<string, any>>({
-                                                                         path,
-                                                                         entityId,
-                                                                         onUpdate,
-                                                                         onError
-                                                                     }: ListenEntityProps<M>): () => void => {
+        path,
+        entityId,
+        onUpdate,
+        onError
+    }: ListenEntityProps<M>): () => void => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -138,10 +138,10 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const saveEntity = useCallback(async <M extends Record<string, any>>({
-                                                                             path,
-                                                                             entityId,
-                                                                             values,
-                                                                         }: SaveEntityProps<M>): Promise<Entity<M>> => {
+        path,
+        entityId,
+        values,
+    }: SaveEntityProps<M>): Promise<Entity<M>> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -161,8 +161,8 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const deleteEntity = useCallback(async <M extends Record<string, any>>({
-                                                                               entity,
-                                                                           }: DeleteEntityProps<M>): Promise<void> => {
+        entity,
+    }: DeleteEntityProps<M>): Promise<void> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -205,10 +205,10 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     const isFilterCombinationValid = useCallback(({
-                                                      path,
-                                                      filter,
-                                                      sortBy
-                                                  }: any): boolean => {
+        path,
+        filter,
+        sortBy
+    }: any): boolean => {
         return false;
     }, []);
 
@@ -231,15 +231,8 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
             return cmsToRTDBModel(data, database);
         },
         currentTime: () => new Date(),
-        delegateToCMSModel,
-        setDateToMidnight
+        delegateToCMSModel
     };
-}
-
-function setDateToMidnight(date: Date): Date {
-    const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0);
-    return newDate;
 }
 
 function delegateToCMSModel(data: any): any {

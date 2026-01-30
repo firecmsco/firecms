@@ -155,8 +155,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
                 inputValues,
                 properties,
                 status: "new",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // References should be preserved
@@ -192,8 +191,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
                 inputValues,
                 properties,
                 status: "existing",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             expect(result.location instanceof GeoPoint).toBe(true);
@@ -296,8 +294,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
                 inputValues: mergedValues,
                 properties,
                 status: "new",
-                timestampNowValue: timestampNow,
-                setDateToMidnight: (input) => input,
+                timestampNowValue: timestampNow
             });
 
             // All references should still be valid
@@ -341,8 +338,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
                 inputValues: formValues,
                 properties,
                 status: "new",
-                timestampNowValue: new Date(),
-                setDateToMidnight: (input) => input,
+                timestampNowValue: new Date()
             });
 
             // Array references should be preserved

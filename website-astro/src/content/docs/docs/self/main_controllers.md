@@ -56,8 +56,6 @@ subscription. If not implemented, the `fetchEntity` method will be used instead.
 
 **cmsToDelegateModel**: Convert data from the CMS model to the source model.
 
-**setDateToMidnight**: (Optional) Set the date to midnight.
-
 **initTextSearch**: (Optional) Initialize text search capabilities.
 
 ## StorageSource
