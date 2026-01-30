@@ -177,7 +177,9 @@ export const PropertyForm = React.memo(
                     if (!values.id) {
                         errors.id = "Required";
                     } else {
-                        const idError = validateId(values.id, existingPropertyKeys);
+                        // Exclude the current property key when editing to avoid false duplicate error
+                        const keysToCheck = existingPropertyKeys?.filter(key => key !== propertyKey);
+                        const idError = validateId(values.id, keysToCheck);
                         if (idError)
                             errors.id = idError;
                     }
