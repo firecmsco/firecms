@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@measured/puck": "^0.18.3",
     "@apollo/client": "^3.14.0",
     "@firecms/collection_editor": "^3.0.1",
     "@firecms/collection_editor_firebase": "^3.0.1",

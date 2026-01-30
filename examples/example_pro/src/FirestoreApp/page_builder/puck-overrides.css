@@ -1,0 +1,155 @@
+/* FireCMS Puck Editor Overrides */
+
+/* Make Puck fit within the FireCMS layout */
+.firecms-puck-editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.firecms-puck-editor > div:last-child {
+    flex: 1;
+    min-height: 0;
+}
+
+.firecms-puck-editor [class*="Puck"] {
+    height: 100%;
+}
+
+/* Override Puck's default colors to match FireCMS */
+.firecms-puck-editor {
+    --puck-color-azure-01: #3b82f6;
+    --puck-color-azure-02: #60a5fa;
+    --puck-color-azure-03: #93c5fd;
+    --puck-color-azure-04: #bfdbfe;
+    --puck-color-azure-05: #dbeafe;
+    --puck-color-azure-06: #eff6ff;
+    --puck-color-azure-07: #f8fafc;
+    
+    --puck-color-grey-01: #1e293b;
+    --puck-color-grey-02: #334155;
+    --puck-color-grey-03: #475569;
+    --puck-color-grey-04: #64748b;
+    --puck-color-grey-05: #94a3b8;
+    --puck-color-grey-06: #cbd5e1;
+    --puck-color-grey-07: #e2e8f0;
+    --puck-color-grey-08: #f1f5f9;
+    --puck-color-grey-09: #f8fafc;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .firecms-puck-editor {
+    --puck-color-grey-01: #f8fafc;
+    --puck-color-grey-02: #f1f5f9;
+    --puck-color-grey-03: #e2e8f0;
+    --puck-color-grey-04: #cbd5e1;
+    --puck-color-grey-05: #94a3b8;
+    --puck-color-grey-06: #64748b;
+    --puck-color-grey-07: #475569;
+    --puck-color-grey-08: #334155;
+    --puck-color-grey-09: #1e293b;
+}
+
+/* Style the left sidebar */
+.firecms-puck-editor [class*="ComponentList"] {
+    background: var(--puck-color-grey-09);
+}
+
+/* Style component cards in sidebar */
+.firecms-puck-editor [class*="ComponentCard"] {
+    border-radius: 8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.firecms-puck-editor [class*="ComponentCard"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the canvas area */
+.firecms-puck-editor [class*="Puck-frame"] {
+    background: #ffffff;
+}
+
+[data-theme="dark"] .firecms-puck-editor [class*="Puck-frame"] {
+    background: #0f172a;
+}
+
+/* Style the right sidebar (fields panel) */
+.firecms-puck-editor [class*="SidePanel"] {
+    background: var(--puck-color-grey-09);
+}
+
+/* Style form fields */
+.firecms-puck-editor input,
+.firecms-puck-editor textarea,
+.firecms-puck-editor select {
+    border-radius: 6px;
+    border-color: var(--puck-color-grey-06);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.firecms-puck-editor input:focus,
+.firecms-puck-editor textarea:focus,
+.firecms-puck-editor select:focus {
+    border-color: var(--puck-color-azure-02);
+    box-shadow: 0 0 0 3px var(--puck-color-azure-05);
+    outline: none;
+}
+
+/* Style buttons inside Puck */
+.firecms-puck-editor button[class*="Button"] {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+/* Improve drop zone visibility */
+.firecms-puck-editor [class*="DropZone--isActive"] {
+    border-color: var(--puck-color-azure-02);
+    background-color: var(--puck-color-azure-06);
+}
+
+/* Style selected component outline */
+.firecms-puck-editor [class*="DraggableComponent--isSelected"] {
+    outline-color: var(--puck-color-azure-02);
+}
+
+/* Style component actions toolbar */
+.firecms-puck-editor [class*="ComponentActions"] {
+    background: var(--puck-color-grey-01);
+    border-radius: 6px;
+}
+
+/* Make scrollbars match FireCMS style */
+.firecms-puck-editor ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.firecms-puck-editor ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.firecms-puck-editor ::-webkit-scrollbar-thumb {
+    background: var(--puck-color-grey-06);
+    border-radius: 4px;
+}
+
+.firecms-puck-editor ::-webkit-scrollbar-thumb:hover {
+    background: var(--puck-color-grey-05);
+}
+
+/* Animations */
+.firecms-puck-editor [class*="DraggableComponent"] {
+    transition: box-shadow 0.15s ease;
+}
+
+.firecms-puck-editor [class*="DraggableComponent"]:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Header styling */
+.firecms-puck-editor [class*="Puck-header"] {
+    display: none !important;
+}
