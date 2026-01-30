@@ -181,7 +181,7 @@ function CurrentCloudSubscriptionView({
                         colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
                         {statusText} </Chip>.
 
-                    {subscription.current_period_end && <> The next payment is
+                    {subscription.current_period_end && !subscription.canceled_at && <> The next payment is
                         on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
 
                     {isPerSeatBilling ? (
