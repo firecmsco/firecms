@@ -47,6 +47,6 @@ jobs:
           fi
 
       - name: Publish to npm
-        run: npx lerna publish from-package --yes --dist-tag ${{ steps.dist-tag.outputs.tag }}
+        run: npx lerna publish from-package --yes --no-verify-access --dist-tag ${{ steps.dist-tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

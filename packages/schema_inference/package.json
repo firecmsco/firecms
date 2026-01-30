@@ -1,8 +1,10 @@
 {
+  "name": "@firecms/schema_inference",
   "version": "3.0.1",
   "type": "module",
-  "name": "@firecms/schema_inference",
-  "access": "public",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
