@@ -30,8 +30,8 @@ firebase-debug.log*
 
 report.**.json
 
-saas
-./sass
+/saas
+/typesense_firestore_extension
 
 .pnp.*
 .yarn/*
