@@ -3,7 +3,7 @@ import { useBrowserTitleAndIcon } from "@firecms/core";
 import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
-import { getPriceString, getSubscriptionStatusText } from "../settings/common";
+import { formatPrice, getPriceString, getSubscriptionStatusText } from "../settings/common";
 import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
@@ -162,6 +162,12 @@ function CurrentCloudSubscriptionView({
         }
     }, []);
 
+    // Detect if this is a per-seat subscription vs legacy metered billing
+    const isPerSeatBilling = subscription.items?.[0]?.price?.lookup_key === "cloud_per_seat";
+    const seatCount = subscription.items?.[0]?.quantity ?? subscription.quantity;
+    const seatPrice = subscription.items?.[0]?.price?.unit_amount;
+    const seatCurrency = subscription.items?.[0]?.price?.currency ?? subscription.price?.currency ?? "eur";
+
     return (
         <div
             key={subscription.id}
@@ -178,15 +184,24 @@ function CurrentCloudSubscriptionView({
                     {subscription.current_period_end && <> The next payment is
                         on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
 
-                    <>
-                        The current price is <Chip
-                            size={"small"}>{getPriceString(subscription.price)}
-                        </Chip>per user.
-                    </>
+                    {isPerSeatBilling ? (
+                        <>
+                            You have <Chip size={"small"}>{seatCount} {seatCount === 1 ? "seat" : "seats"}</Chip>
+                            {seatPrice && <> at {formatPrice(seatPrice, seatCurrency)}/seat/{subscription.interval ?? "month"}</>}.
+                        </>
+                    ) : (
+                        <>
+                            The current price is <Chip
+                                size={"small"}>{getPriceString(subscription.price)}
+                            </Chip> per user (usage-based).
+                        </>
+                    )}
 
-                    {subscription.cancel_at && <> This subscription was <b>cancelled</b> and
-                        will be active
-                        until {subscription.cancel_at.toDate().toLocaleDateString()}. </>}
+                    {subscription.cancel_at && <>
+                        {" "}This subscription was <b>cancelled</b> and will be active
+                        until {subscription.cancel_at.toDate().toLocaleDateString()}.
+                        {isPerSeatBilling && <> No additional charges will apply after cancellation.</>}
+                    </>}
 
                     {!subscription.canceled_at && <a
                         className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}

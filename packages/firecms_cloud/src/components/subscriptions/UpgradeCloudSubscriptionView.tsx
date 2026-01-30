@@ -26,13 +26,13 @@ export function UpgradeCloudSubscriptionView({
         subscribeCloud,
     } = useSubscriptionsForUserController();
 
-    const productPrices: ProductPrice[] = product.prices.filter((p) => Boolean(p.recurring && p.currency_options));
+    // Filter for per-seat price with lookup_key = cloud_per_seat
+    const productPrice = product.prices.find((p) => p.lookup_key === "cloud_per_seat");
 
-    if (!productPrices) {
-        throw new Error("INTERNAL: No product prices found");
+    if (!productPrice) {
+        throw new Error("INTERNAL: No per-seat price found (lookup_key: cloud_per_seat)");
     }
 
-    const productPrice = productPrices[0];
     const [currency, setCurrency] = useState<string>(getDefaultCurrency(productPrice));
 
     if (product.metadata.type !== "pro" && product.metadata.type !== "cloud_plus") {

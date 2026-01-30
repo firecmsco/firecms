@@ -30,6 +30,7 @@ export type ProductPrice = {
     description: string;
     interval: "month";
     interval_count: number;
+    lookup_key?: string;
     metadata: {
         product: string;
         type: "per_user" | "per_project";
@@ -79,6 +80,7 @@ export type Subscription = {
     product: Product;
     stripeLink: string;
     status: SubscriptionStatus;
+    items?: SubscriptionItem[];
     metadata: {
         projectId?: string;
         licenseId?: string;
@@ -90,3 +92,12 @@ export type Subscription = {
     canceled_at: Timestamp;
     current_period_end?: Timestamp;
 }
+
+export type SubscriptionItem = {
+    quantity: number;
+    price?: {
+        lookup_key?: string;
+        unit_amount?: number;
+        currency?: string;
+    }
+};
