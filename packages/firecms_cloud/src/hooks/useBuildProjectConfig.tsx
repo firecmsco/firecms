@@ -142,10 +142,12 @@ export function useBuildProjectConfig({
     useEffect(() => {
         if (primaryColor) {
             document.documentElement.style.setProperty("--color-primary", primaryColor);
+            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(primaryColor, 10));
             document.documentElement.style.setProperty("--fcms-primary", primaryColor);
         } else {
-            document.documentElement.style.setProperty("--color-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--color-primary", DEFAULT_PRIMARY_COLOR);
+            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--fcms-primary", DEFAULT_PRIMARY_COLOR);
         }
         if (secondaryColor) {
             document.documentElement.style.setProperty("--color-secondary", secondaryColor);
