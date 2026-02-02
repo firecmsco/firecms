@@ -225,6 +225,10 @@ export default defineConfig({
                             slug: "docs/collections/index"
                         },
                         {
+                            label: "View Modes",
+                            slug: "docs/collections/view_modes"
+                        },
+                        {
                             label: "Callbacks",
                             slug: "docs/collections/callbacks"
                         },
