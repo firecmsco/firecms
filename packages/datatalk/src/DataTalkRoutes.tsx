@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { CircularProgressCenter, EntityCollection } from "@firecms/core";
+import { CircularProgressCenter, EntityCollection, useNavigationController } from "@firecms/core";
 import { DataTalkConfig, useDataTalk } from "./DataTalkProvider";
 import { DataTalkSession } from "./DataTalkSession";
 import { Session } from "./types";
 
 export function DataTalkRoutes({
-                                   apiEndpoint,
-                                   onAnalyticsEvent,
-                                   getAuthToken,
-                                   collections
-                               }: {
+    apiEndpoint,
+    onAnalyticsEvent,
+    getAuthToken,
+    collections: collectionsProp
+}: {
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
     getAuthToken: () => Promise<string>,
@@ -18,25 +18,29 @@ export function DataTalkRoutes({
 }) {
 
     const dataTalkConfig = useDataTalk();
+    const navigationController = useNavigationController();
+
+    // Use collections from prop or from navigation controller
+    const collections = collectionsProp ?? navigationController.collections;
 
     if (dataTalkConfig.loading) {
-        return <CircularProgressCenter/>
+        return <CircularProgressCenter />
     }
 
     return (
         <Routes>
             <Route path="/"
-                   element={
-                       <CreateSessionAdnRedirect dataTalkConfig={dataTalkConfig}/>
-                   }/>
+                element={
+                    <CreateSessionAdnRedirect dataTalkConfig={dataTalkConfig} />
+                } />
             <Route path="/:sessionId"
-                   element={
-                       <DataTalkSessionRoute dataTalkConfig={dataTalkConfig}
-                                             onAnalyticsEvent={onAnalyticsEvent}
-                                             apiEndpoint={apiEndpoint}
-                                             getAuthToken={getAuthToken}
-                                             collections={collections}/>
-                   }/>
+                element={
+                    <DataTalkSessionRoute dataTalkConfig={dataTalkConfig}
+                        onAnalyticsEvent={onAnalyticsEvent}
+                        apiEndpoint={apiEndpoint}
+                        getAuthToken={getAuthToken}
+                        collections={collections} />
+                } />
         </Routes>
     )
 }
@@ -58,16 +62,16 @@ function CreateSessionAdnRedirect({ dataTalkConfig }: { dataTalkConfig: DataTalk
         })
     }, []);
 
-    return <CircularProgressCenter/>;
+    return <CircularProgressCenter />;
 }
 
 function DataTalkSessionRoute({
-                                  dataTalkConfig,
-                                  onAnalyticsEvent,
-                                  apiEndpoint,
-                                  getAuthToken,
-                                  collections
-                              }: {
+    dataTalkConfig,
+    onAnalyticsEvent,
+    apiEndpoint,
+    getAuthToken,
+    collections
+}: {
     dataTalkConfig: DataTalkConfig,
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
@@ -89,7 +93,7 @@ function DataTalkSessionRoute({
         onAnalyticsEvent={onAnalyticsEvent}
         collections={collections}
         autoRunCode={autoRunCode}
-        setAutoRunCode={setAutoRunCode}/>
+        setAutoRunCode={setAutoRunCode} />
 }
 
 interface DataTalkRouteInnerProps {
@@ -104,15 +108,15 @@ interface DataTalkRouteInnerProps {
 }
 
 function DataTalkRouteInner({
-                                sessionId,
-                                dataTalkConfig,
-                                apiEndpoint,
-                                getAuthToken,
-                                onAnalyticsEvent,
-                                collections,
-                                autoRunCode,
-                                setAutoRunCode
-                            }: DataTalkRouteInnerProps) {
+    sessionId,
+    dataTalkConfig,
+    apiEndpoint,
+    getAuthToken,
+    onAnalyticsEvent,
+    collections,
+    autoRunCode,
+    setAutoRunCode
+}: DataTalkRouteInnerProps) {
 
     const location = useLocation();
 
@@ -132,7 +136,7 @@ function DataTalkRouteInner({
     }, [sessionId]);
 
     if (loading) {
-        return <CircularProgressCenter/>
+        return <CircularProgressCenter />
     }
 
     const usedSession = session ?? {
