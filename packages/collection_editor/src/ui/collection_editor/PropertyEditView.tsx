@@ -10,6 +10,7 @@ import {
     isPropertyBuilder,
     isValidRegExp,
     mergeDeep,
+    Properties,
     Property,
     PropertyConfig,
     PropertyConfigBadge,
@@ -45,6 +46,7 @@ import { NumberPropertyField } from "./properties/NumberPropertyField";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 import { DateTimePropertyField } from "./properties/DateTimePropertyField";
 import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedPropertyValidation";
+import { ConditionsPanel, ConditionsEditor, EnumConditionsEditor } from "./properties/conditions";
 import { editableProperty } from "../../utils/entities";
 import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
@@ -85,6 +87,11 @@ export type PropertyFormProps = {
     getController?: (formex: FormexController<PropertyWithId>) => void;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
+    /**
+     * Collection properties for populating the conditions field selector.
+     * Includes nested map properties.
+     */
+    collectionProperties?: Properties;
 };
 
 export const PropertyForm = React.memo(
@@ -108,10 +115,11 @@ export const PropertyForm = React.memo(
             initialErrors,
             forceShowErrors,
             allowDataInference,
-            getController,
             getData,
+            getController,
             propertyConfigs,
-            collectionEditable
+            collectionEditable,
+            collectionProperties
         } = props;
 
         const initialValue: PropertyWithId = {
@@ -205,6 +213,50 @@ export const PropertyForm = React.memo(
                         errors.oneOf = "You need to specify the properties of this block";
                     }
                 }
+
+                // Validate conditions - check for incomplete condition rules
+                const conditions = (values as any).conditions;
+                if (conditions) {
+                    const conditionErrors: Record<string, string> = {};
+                    const conditionTypes = ["disabled", "hidden", "required", "readOnly"];
+
+                    // Helper to check if a JSON Logic rule is incomplete (placeholder or empty keys)
+                    const isIncompleteRule = (rule: any): boolean => {
+                        if (!rule || typeof rule !== "object") return false;
+                        const ruleStr = JSON.stringify(rule);
+                        // Check for placeholder pattern used when field is not selected
+                        if (ruleStr.includes("values._placeholder")) return true;
+                        // Check for empty string keys (invalid operators)
+                        if (Object.keys(rule).some(k => k === "")) return true;
+                        // Recursively check nested objects
+                        for (const key of Object.keys(rule)) {
+                            if (typeof rule[key] === "object" && isIncompleteRule(rule[key])) return true;
+                        }
+                        return false;
+                    };
+
+                    for (const type of conditionTypes) {
+                        const rule = conditions[type];
+                        if (rule && isIncompleteRule(rule)) {
+                            conditionErrors[type] = "Incomplete condition - please select a field";
+                        }
+                    }
+
+                    // Validate enum conditions (allowedEnumValues, excludedEnumValues)
+                    for (const enumType of ["allowedEnumValues", "excludedEnumValues"]) {
+                        const rule = conditions[enumType];
+                        if (rule && typeof rule === "object" && rule.if) {
+                            if (isIncompleteRule(rule)) {
+                                conditionErrors[enumType] = "Incomplete condition - please select a field";
+                            }
+                        }
+                    }
+
+                    if (Object.keys(conditionErrors).length > 0) {
+                        errors.conditions = conditionErrors;
+                    }
+                }
+
                 return errors;
             }
         });
@@ -233,6 +285,7 @@ export const PropertyForm = React.memo(
                 allowDataInference={allowDataInference}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
+                collectionProperties={collectionProperties}
                 {...formexController} />
         </Formex>;
     }, (a, b) =>
@@ -332,7 +385,8 @@ function PropertyEditFormFields({
     getData,
     allowDataInference,
     propertyConfigs,
-    collectionEditable
+    collectionEditable,
+    collectionProperties
 }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -350,6 +404,7 @@ function PropertyEditFormFields({
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
+    collectionProperties?: Properties;
 } & FormexController<PropertyWithId>) {
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
@@ -555,6 +610,13 @@ function PropertyEditFormFields({
 
                 <div className={"col-span-12"}>
                     <AdvancedPropertyValidation disabled={disabled} />
+                </div>
+
+                <div className={"col-span-12"}>
+                    <ConditionsPanel>
+                        <ConditionsEditor disabled={disabled} collectionProperties={collectionProperties} />
+                        <EnumConditionsEditor disabled={disabled} collectionProperties={collectionProperties} />
+                    </ConditionsPanel>
                 </div>
             </div>
 

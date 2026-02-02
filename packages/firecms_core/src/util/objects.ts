@@ -153,8 +153,12 @@ export function removeFunctions(o: object | undefined): any {
     if (o === undefined) return undefined;
     if (o === null) return null;
     if (typeof o === "object") {
+        // Handle arrays first - map over them recursively
+        if (Array.isArray(o)) {
+            return o.map(v => removeFunctions(v));
+        }
         // Preserve class instances (EntityReference, GeoPoint, etc.) - don't recurse into them
-        if (!isPlainObject(o) && !Array.isArray(o)) {
+        if (!isPlainObject(o)) {
             return o;
         }
         return Object.entries(o)

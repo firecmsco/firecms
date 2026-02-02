@@ -151,7 +151,11 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         ? size === "large"
                             ? "pt-8 pb-2"
                             : "pt-4 pb-2"
-                        : "py-2",
+                        : size === "smallest"
+                            ? "py-0.5"
+                            : size === "small"
+                                ? "py-1"
+                                : "py-2",
                     endAdornment ? "pr-12" : "pr-3",
                     disabled &&
                     "outline-none opacity-65 dark:opacity-60 text-surface-accent-800 dark:text-white",

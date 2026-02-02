@@ -16,7 +16,7 @@ export function AIIcon({ size = "small", className }: AIIconProps) {
             size={size}
             className={className}
             style={{
-                background: "linear-gradient(to right, var(--fcms-primary), var(--fcms-secondary))",
+                background: "linear-gradient(to right, var(--color-primary), var(--color-secondary))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text"

@@ -66,15 +66,15 @@ export interface UseBoardDataControllerProps<M extends Record<string, any> = any
  * Each column gets its own independent query to the data source.
  */
 export function useBoardDataController<M extends Record<string, any> = any, COLUMN extends string = string>({
-                                                                                                                fullPath,
-                                                                                                                collection,
-                                                                                                                columnProperty,
-                                                                                                                columns,
-                                                                                                                orderProperty,
-                                                                                                                pageSize = DEFAULT_PAGE_SIZE,
-                                                                                                                searchString,
-                                                                                                                filterValues
-                                                                                                            }: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
+    fullPath,
+    collection,
+    columnProperty,
+    columns,
+    orderProperty,
+    pageSize = DEFAULT_PAGE_SIZE,
+    searchString,
+    filterValues
+}: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
@@ -88,6 +88,18 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     dataSourceRef.current = dataSource;
     collectionRef.current = collection;
     contextRef.current = context;
+
+    // Store filter/order params in refs so they're accessible without causing re-subscriptions
+    const filterValuesRef = useRef(filterValues);
+    const columnPropertyRef = useRef(columnProperty);
+    const orderPropertyRef = useRef(orderProperty);
+    const searchStringRef = useRef(searchString);
+    const resolvedPathRef = useRef(resolvedPath);
+    filterValuesRef.current = filterValues;
+    columnPropertyRef.current = columnProperty;
+    orderPropertyRef.current = orderProperty;
+    searchStringRef.current = searchString;
+    resolvedPathRef.current = resolvedPath;
 
     // Track item count per column for pagination
     const [columnItemCounts, setColumnItemCounts] = useState<Record<string, number>>(() => {
@@ -116,6 +128,9 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     // Track cleanup functions for subscriptions
     const unsubscribersRef = useRef<Record<string, () => void>>({});
 
+    // Flag to prevent race conditions during cleanup
+    const isCleaningUpRef = useRef(false);
+
     // Stable keys for dependency comparison
     const columnsKey = useMemo(() => [...columns].sort().join(","), [columns]);
     const filterKey = useMemo(() => JSON.stringify(filterValues), [filterValues]);
@@ -123,23 +138,41 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     // Track previous column item counts to detect which column changed
     const prevColumnItemCountsRef = useRef<Record<string, number>>(columnItemCounts);
 
+    // Version counter to trigger full re-subscription when params change (not just load-more)
+    const [subscriptionVersion, setSubscriptionVersion] = useState(0);
+
+    // Trigger full re-subscription when key params change
+    useEffect(() => {
+        setSubscriptionVersion(v => v + 1);
+    }, [columnsKey, resolvedPath, columnProperty, orderProperty, searchString, filterKey, pageSize]);
+
     // Cleanup subscriptions on unmount
     useEffect(() => {
         return () => {
+            isCleaningUpRef.current = true;
             Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
+            unsubscribersRef.current = {};
         };
     }, []);
 
-    // Helper function to subscribe to a single column
+    // Helper function to subscribe to a single column - uses refs to avoid dependency issues
     const subscribeToColumn = useCallback((column: string, itemCount: number) => {
+        // Skip if we're in the middle of cleanup
+        if (isCleaningUpRef.current) return;
+
         const currentDataSource = dataSourceRef.current;
         const currentCollection = collectionRef.current;
         const currentContext = contextRef.current;
+        const currentFilterValues = filterValuesRef.current;
+        const currentColumnProperty = columnPropertyRef.current;
+        const currentOrderProperty = orderPropertyRef.current;
+        const currentSearchString = searchStringRef.current;
+        const currentResolvedPath = resolvedPathRef.current;
 
         // Build filter for this column
         const columnFilter: FilterValues<string> = {
-            ...filterValues,
-            [columnProperty]: ["==", column]
+            ...currentFilterValues,
+            [currentColumnProperty]: ["==", column]
         };
 
         // Mark column as loading
@@ -154,11 +187,14 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
 
         // onUpdate callback
         const onUpdate = async (entities: Entity<M>[]) => {
+            // Skip updates if we're cleaning up
+            if (isCleaningUpRef.current) return;
+
             // When text search is active, the data source returns ALL matching entities
             // regardless of the column filter. We need to filter in memory to only show
             // entities that belong to this specific column.
-            let processed = searchString
-                ? entities.filter(e => e.values?.[columnProperty] === column)
+            let processed = currentSearchString
+                ? entities.filter(e => e.values?.[currentColumnProperty] === column)
                 : entities;
 
             // Apply onFetch callbacks if any
@@ -168,7 +204,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                         processed.map(entity =>
                             currentCollection.callbacks!.onFetch!({
                                 collection: currentCollection,
-                                path: resolvedPath,
+                                path: currentResolvedPath,
                                 entity,
                                 context: currentContext
                             })
@@ -192,6 +228,9 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         };
 
         const onError = (error: Error) => {
+            // Skip error handling if we're cleaning up
+            if (isCleaningUpRef.current) return;
+
             console.error(`Error loading column ${column}:`, error);
             setColumnData(prev => ({
                 ...prev,
@@ -208,93 +247,126 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         // Set up listener or fetch
         if (currentDataSource.listenCollection) {
             const unsubscribe = currentDataSource.listenCollection<M>({
-                path: resolvedPath,
+                path: currentResolvedPath,
                 collection: currentCollection,
                 onUpdate,
                 onError,
-                searchString,
+                searchString: currentSearchString,
                 filter: columnFilter,
                 limit: itemCount,
                 startAfter: undefined,
-                orderBy: orderProperty,
-                order: orderProperty ? "asc" : undefined
+                orderBy: currentOrderProperty,
+                order: currentOrderProperty ? "asc" : undefined
             });
             unsubscribersRef.current[column] = unsubscribe;
         } else {
             currentDataSource.fetchCollection<M>({
-                path: resolvedPath,
+                path: currentResolvedPath,
                 collection: currentCollection,
-                searchString,
+                searchString: currentSearchString,
                 filter: columnFilter,
                 limit: itemCount,
                 startAfter: undefined,
-                orderBy: orderProperty,
-                order: orderProperty ? "asc" : undefined
+                orderBy: currentOrderProperty,
+                order: currentOrderProperty ? "asc" : undefined
             })
                 .then(onUpdate)
                 .catch(onError);
         }
-    }, [columnProperty, filterValues, orderProperty, resolvedPath, searchString]);
+    }, []); // No dependencies - uses refs for all values
 
-    // Main effect for all column subscriptions - runs when common dependencies change
+    // Main effect for all column subscriptions - runs when subscriptionVersion changes (i.e., key params change)
     useEffect(() => {
-        // Clean up all existing subscriptions
-        Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
+        // Mark that we're setting up new subscriptions
+        isCleaningUpRef.current = false;
+
+        // Clean up all existing subscriptions synchronously
+        const existingUnsubscribers = { ...unsubscribersRef.current };
         unsubscribersRef.current = {};
-
-        const currentDataSource = dataSourceRef.current;
-        const currentCollection = collectionRef.current;
-
-        columns.forEach(column => {
-            const itemCount = columnItemCounts[column] ?? pageSize;
-            subscribeToColumn(column, itemCount);
-
-            // Count query for column (for display in column header)
-            if (currentDataSource.countEntities) {
-                const columnFilter: FilterValues<string> = {
-                    ...filterValues,
-                    [columnProperty]: ["==", column]
-                };
-                currentDataSource.countEntities({
-                    path: resolvedPath,
-                    collection: currentCollection,
-                    filter: columnFilter,
-                    searchString
-                }).then(count => {
-                    setColumnData(prev => ({
-                        ...prev,
-                        [column]: {
-                            ...prev[column],
-                            totalCount: count
-                        }
-                    }));
-                }).catch(e => {
-                    console.warn(`Failed to get count for column ${column}:`, e);
-                });
+        Object.values(existingUnsubscribers).forEach(unsub => {
+            try {
+                unsub?.();
+            } catch (e) {
+                // Ignore cleanup errors
             }
         });
 
-        // Update the ref after subscribing all
-        prevColumnItemCountsRef.current = columnItemCounts;
+        const currentDataSource = dataSourceRef.current;
+        const currentCollection = collectionRef.current;
+        const currentFilterValues = filterValuesRef.current;
+        const currentColumnProperty = columnPropertyRef.current;
+        const currentSearchString = searchStringRef.current;
+        const currentResolvedPath = resolvedPathRef.current;
+        const currentColumns = columns;
+        const currentColumnItemCounts = columnItemCounts;
+
+        // Small delay to ensure Firestore has cleaned up previous listeners
+        const timeoutId = setTimeout(() => {
+            if (isCleaningUpRef.current) return;
+
+            currentColumns.forEach(column => {
+                const itemCount = currentColumnItemCounts[column] ?? pageSize;
+                subscribeToColumn(column, itemCount);
+
+                // Count query for column (for display in column header)
+                if (currentDataSource.countEntities) {
+                    const columnFilter: FilterValues<string> = {
+                        ...currentFilterValues,
+                        [currentColumnProperty]: ["==", column]
+                    };
+                    currentDataSource.countEntities({
+                        path: currentResolvedPath,
+                        collection: currentCollection,
+                        filter: columnFilter,
+                        searchString: currentSearchString
+                    }).then(count => {
+                        if (isCleaningUpRef.current) return;
+                        setColumnData(prev => ({
+                            ...prev,
+                            [column]: {
+                                ...prev[column],
+                                totalCount: count
+                            }
+                        }));
+                    }).catch(e => {
+                        console.warn(`Failed to get count for column ${column}:`, e);
+                    });
+                }
+            });
+
+            // Update the ref after subscribing all
+            prevColumnItemCountsRef.current = { ...currentColumnItemCounts };
+        }, 0);
 
         return () => {
-            Object.values(unsubscribersRef.current).forEach(unsub => unsub?.());
+            clearTimeout(timeoutId);
+            isCleaningUpRef.current = true;
+            const unsubscribers = { ...unsubscribersRef.current };
             unsubscribersRef.current = {};
+            Object.values(unsubscribers).forEach(unsub => {
+                try {
+                    unsub?.();
+                } catch (e) {
+                    // Ignore cleanup errors
+                }
+            });
         };
-    }, [
-        columnsKey,
-        resolvedPath,
-        columnProperty,
-        orderProperty,
-        searchString,
-        filterKey,
-        pageSize,
-        subscribeToColumn
-        // Note: columnItemCounts is NOT a dependency here - handled separately below
-    ]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [subscriptionVersion, subscribeToColumn, pageSize]);
 
-    // Separate effect to handle individual column load-more without reloading all columns
+    // Track which subscription version last updated the counts
+    const lastProcessedVersionRef = useRef(subscriptionVersion);
+
+    // Separate effect to handle individual column load-more WITHOUT triggering full re-subscription
     useEffect(() => {
+        // If subscriptionVersion changed, the main effect will handle everything
+        // Skip this effect to avoid race conditions
+        if (subscriptionVersion !== lastProcessedVersionRef.current) {
+            lastProcessedVersionRef.current = subscriptionVersion;
+            prevColumnItemCountsRef.current = { ...columnItemCounts };
+            return;
+        }
+
         const prevCounts = prevColumnItemCountsRef.current;
 
         columns.forEach(column => {
@@ -302,20 +374,28 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
             const newCount = columnItemCounts[column] ?? pageSize;
 
             // Only re-subscribe if this specific column's count increased (load more)
-            if (newCount > prevCount) {
+            if (newCount > prevCount && !isCleaningUpRef.current) {
                 // Unsubscribe only this column
                 if (unsubscribersRef.current[column]) {
-                    unsubscribersRef.current[column]();
+                    try {
+                        unsubscribersRef.current[column]();
+                    } catch (e) {
+                        // Ignore cleanup errors  
+                    }
                     delete unsubscribersRef.current[column];
                 }
-                // Re-subscribe with new limit
-                subscribeToColumn(column, newCount);
+                // Re-subscribe with new limit after a small delay
+                setTimeout(() => {
+                    if (!isCleaningUpRef.current) {
+                        subscribeToColumn(column, newCount);
+                    }
+                }, 0);
             }
         });
 
         // Update the ref
-        prevColumnItemCountsRef.current = columnItemCounts;
-    }, [columnItemCounts, columns, pageSize, subscribeToColumn]);
+        prevColumnItemCountsRef.current = { ...columnItemCounts };
+    }, [columnItemCounts, columns, pageSize, subscribeToColumn, subscriptionVersion]);
 
     const loadMoreColumn = useCallback((column: COLUMN) => {
         setColumnItemCounts(prev => ({

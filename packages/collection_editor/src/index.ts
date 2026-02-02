@@ -36,6 +36,28 @@ export type {
     CollectionInference
 } from "./types/collection_inference";
 
+export {
+    buildCollectionGenerationCallback,
+    CollectionGenerationApiError,
+    DEFAULT_COLLECTION_GENERATION_ENDPOINT
+} from "./api/generateCollectionApi";
+
+export type {
+    CollectionGenerationCallback,
+    GenerateCollectionRequest,
+    GenerateCollectionResult,
+    CollectionOperation,
+    CollectionOperationType,
+    BuildCollectionGenerationCallbackProps
+} from "./api/generateCollectionApi";
+
 export { MissingReferenceWidget } from "./ui/MissingReferenceWidget";
 
 export * from "./ui/collection_editor/util";
+
+export {
+    PropertyForm,
+    PropertyFormDialog,
+    type PropertyFormProps,
+    type OnPropertyChangedParams
+} from "./ui/collection_editor/PropertyEditView";

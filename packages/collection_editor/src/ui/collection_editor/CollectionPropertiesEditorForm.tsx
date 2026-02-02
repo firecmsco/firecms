@@ -517,6 +517,7 @@ export function CollectionPropertiesEditorForm({
                                 getData={getData}
                                 propertyConfigs={propertyConfigs}
                                 collectionEditable={collectionEditable}
+                                collectionProperties={values.properties as Properties}
                             />}
 
                         {!selectedProperty &&
@@ -560,6 +561,7 @@ export function CollectionPropertiesEditorForm({
                 getData={getData}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
+                collectionProperties={values.properties as Properties}
                 onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -586,6 +588,7 @@ export function CollectionPropertiesEditorForm({
             allowDataInference={!isNewCollection}
             propertyConfigs={propertyConfigs}
             collectionEditable={collectionEditable}
+            collectionProperties={values.properties as Properties}
             existingPropertyKeys={values.propertiesOrder as string[]} />
 
         <ErrorBoundary>

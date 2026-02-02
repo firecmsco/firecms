@@ -29,7 +29,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { NavigationCardBinding } from "./NavigationCardBinding";
 import { NavigationEntry } from "../../types";
-import { cls } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({
@@ -705,7 +705,7 @@ export function NewGroupDropZone({
                 "fixed right-8 top-1/2 -translate-y-1/2 w-[200px] h-[120px] border border-dashed rounded-lg flex items-center justify-center transition-all",
                 isOver
                     ? "bg-surface-accent-100 dark:bg-surface-accent-800 border-surface-300 dark:border-surface-600"
-                    : "bg-surface-50 dark:bg-surface-900 border-surface-200 dark:border-surface-700"
+                    : "bg-surface-50 dark:bg-surface-900 " + defaultBorderMixin
             )}>
             <div className="text-center p-4">
                 <span className="block font-medium text-sm">
