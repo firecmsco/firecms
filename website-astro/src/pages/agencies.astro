@@ -7,9 +7,14 @@ import UsageExamples from "../components/UsageExamples.astro";
 
 const title = "FireCMS for Agencies: Deliver Faster, Impress Clients";
 const description = "Build custom admin panels & CMS for your clients efficiently with FireCMS. Reduce development time, enhance client satisfaction, and scale your agency's offerings.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Agencies", url: "https://firecms.co/agencies" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 
     <main class="flex-grow">
         <!-- Hero Section -->

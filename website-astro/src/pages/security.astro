@@ -4,9 +4,14 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 
 const title = "FireCMS Security - Security and Data Sovereignty by Design";
 const description = "FireCMS is engineered from the ground up to guarantee absolute data ownership, privacy, and security through a transparent, modern architecture.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Security", url: "https://firecms.co/security" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 
     <main>
         <!-- Hero Section -->

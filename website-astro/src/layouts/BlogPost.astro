@@ -9,9 +9,16 @@ type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage, authors } = Astro.props;
 const author = authors ? getAuthor(authors) : null;
+
+// Generate breadcrumbs for blog posts
+const breadcrumbs = [
+	{ name: "Home", url: "https://firecms.co" },
+	{ name: "Blog", url: "https://firecms.co/blog" },
+	{ name: title, url: `https://firecms.co${Astro.url.pathname}` }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 	<main class="min-h-screen py-24">
 		<article class="max-w-4xl mx-auto px-6">
 			{heroImage && (
@@ -60,3 +67,4 @@ const author = authors ? getAuthor(authors) : null;
 		</article>
 	</main>
 </Layout>
+

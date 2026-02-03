@@ -1,6 +1,53 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Head.astro';
+
+// Generate breadcrumb structured data from Starlight's entry data
+const { entry, slug } = Astro.props;
+const canonicalBase = "https://firecms.co";
+
+// Build breadcrumb items from the URL path
+function generateBreadcrumbs(slug: string, title: string) {
+    const items = [
+        { name: "Home", url: canonicalBase },
+        { name: "Docs", url: `${canonicalBase}/docs` }
+    ];
+    
+    // Split slug into parts and build breadcrumb hierarchy
+    const parts = slug.split('/').filter(Boolean);
+    let currentPath = '/docs';
+    
+    // Add intermediate segments (skip the last one, we'll add the title)
+    for (let i = 0; i < parts.length - 1; i++) {
+        currentPath += `/${parts[i]}`;
+        // Capitalize and format the segment name
+        const name = parts[i]
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+        items.push({ name, url: `${canonicalBase}${currentPath}` });
+    }
+    
+    // Add the current page with its actual title
+    if (title) {
+        items.push({ name: title, url: `${canonicalBase}/docs/${slug}` });
+    }
+    
+    return items;
+}
+
+const breadcrumbs = generateBreadcrumbs(slug || '', entry?.data?.title || '');
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.name,
+        "item": item.url
+    }))
+};
 ---
 
 
@@ -44,6 +91,10 @@ import Default from '@astrojs/starlight/components/Head.astro';
 
 </script>
 
+<!-- Breadcrumb Schema for SEO -->
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
 <script src="../../scripts/analytics.ts"/>
 
 <Default {...Astro.props}><slot /></Default>
+

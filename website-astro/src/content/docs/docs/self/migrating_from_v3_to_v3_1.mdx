@@ -163,3 +163,101 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Fixed select enum filters UI glitch
 - Fixed full screen entity views with encoded characters in their ID
 - TipTap V3 migration for improved markdown editor performance
+
+---
+
+## AI Features for Self-Hosted (PRO)
+
+FireCMS v3.1 brings AI-powered features to self-hosted PRO users that were previously only available in FireCMS Cloud.
+
+### AI Collection Generation
+
+You can now use AI to generate and modify collections directly in the collection editor. The AI can create collection schemas from natural language descriptions, add or modify properties, and understand relationships with your existing collections.
+
+Enable it by passing a `generateCollection` callback to the collection editor plugin:
+
+```typescript
+import { 
+    useCollectionEditorPlugin, 
+    buildCollectionGenerationCallback 
+} from "@firecms/collection_editor";
+import { useFirebaseAuthController } from "@firecms/firebase";
+
+const authController = useFirebaseAuthController({ firebaseApp });
+
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController,
+    collectionInference: buildCollectionInference(firebaseApp),
+    getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 200),
+    generateCollection: buildCollectionGenerationCallback({
+        getAuthToken: authController.getAuthToken
+    })
+});
+```
+
+The `buildCollectionGenerationCallback` helper uses the default FireCMS API endpoint. You can optionally provide a custom endpoint:
+
+```typescript
+generateCollection: buildCollectionGenerationCallback({
+    getAuthToken: authController.getAuthToken,
+    apiEndpoint: "https://your-custom-endpoint.com/collections/generate"
+})
+```
+
+### DataTalk AI Chat
+
+DataTalk allows you to query and update your Firestore data using natural language. You can ask questions about your data, create charts and visualizations, and even modify entities through conversation.
+
+Enable DataTalk in your self-hosted app:
+
+```typescript
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
+
+
+// Configure DataTalk - only enable when user is logged in
+const userEmail = authController.user?.email;
+const dataTalkConfig = useBuildDataTalkConfig({
+    enabled: Boolean(userEmail),
+    firebaseApp,
+    userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
+    getAuthToken: authController.getAuthToken,
+    loadSamplePrompts: true
+    // apiEndpoint defaults to https://api.firecms.co/datatalk
+});
+
+// Add DataTalk as a view in your navigation
+const navigationController = useBuildNavigationController({
+    collections,
+    views: [
+        ...yourViews,
+        {
+            path: "datatalk/*",
+            name: "DataTalk",
+            group: "AI",
+            view: <DataTalkRoutes
+                getAuthToken={authController.getAuthToken}
+            />
+        }
+    ],
+    // ... other config
+});
+
+// Wrap your app with the DataTalkProvider
+return (
+    <DataTalkProvider config={dataTalkConfig}>
+        <FireCMS navigationController={navigationController} /* ... */ >
+            {/* your app */}
+        </FireCMS>
+    </DataTalkProvider>
+);
+```
+
+DataTalk automatically reads your collection schema from the navigation controller to understand your data structure and provide more accurate responses.
+
+:::note
+AI features require a valid FireCMS PRO license. The API endpoints authenticate using your Firebase auth token.
+:::
