@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { createPostgresDatabaseConnection, initializeFireCMSAPI, initializeFireCMSBackend, serveSPA } from "@firecms/backend";
+import { createMongoDBConnection, createMongoDelegate } from "@firecms/mongodb";
 
 import { enums, relations, tables } from "./schema.generated";
 import { collections } from "shared";
@@ -20,11 +21,11 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 const app = express();
 const server = createServer(app);
 
+// PostgreSQL connection (required, default datasource)
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is not set");
 }
-
 const db = createPostgresDatabaseConnection(databaseUrl);
 
 // Middleware
@@ -39,17 +40,46 @@ async function startServer() {
         throw new Error("JWT_SECRET environment variable is not set");
     }
 
+    // ================================================================
+    // Multi-Datasource Configuration
+    // ================================================================
+
+    // Build datasource configuration
+    // Default datasource is always PostgreSQL (required for auth)
+    const datasources: Record<string, any> = {
+        "(default)": {
+            connection: db,
+            schema: { tables, enums, relations }
+        }
+    };
+
+    // Optional MongoDB connection
+    const mongoUrl = process.env.MONGODB_URL;
+    const mongoDatabase = process.env.MONGODB_DATABASE;
+
+    if (mongoUrl && mongoDatabase) {
+        console.log("🍃 Connecting to MongoDB...");
+        try {
+            const mongoConnection = await createMongoDBConnection(mongoUrl, mongoDatabase);
+            const mongoDelegate = createMongoDelegate(mongoConnection.db);
+            datasources["mongodb"] = mongoDelegate;
+            console.log(`✅ MongoDB connected: ${mongoDatabase}`);
+        } catch (error) {
+            console.error("❌ Failed to connect to MongoDB:", error);
+            // Continue without MongoDB - it's optional
+        }
+    } else {
+        console.log("ℹ️ MongoDB not configured (set MONGODB_URL and MONGODB_DATABASE to enable)");
+    }
+
     // Initialize FireCMS Backend with auth (now async)
     // Auth, admin, and storage routes are automatically mounted
     const backend = await initializeFireCMSBackend({
         collections,
         server,
         app, // Express app for mounting auth/storage routes
-        // Datasource configuration
-        datasource: {
-            connection: db,
-            schema: { tables, enums, relations }
-        },
+        // Multi-datasource configuration
+        datasource: datasources,
         auth: {
             jwtSecret,
             accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
@@ -103,11 +133,13 @@ async function startServer() {
     }
 
     app.get("/health", (req, res) => {
+        const datasourceList = Object.keys(datasources).join(", ");
         res.json({
             status: "ok",
             timestamp: new Date().toISOString(),
             environment: process.env.NODE_ENV,
-            authEnabled: true
+            authEnabled: true,
+            datasources: datasourceList
         });
     });
 
@@ -133,7 +165,7 @@ async function startServer() {
         console.log(`   • Health Check: http://localhost:${PORT}/health`);
         console.log("🔐 JWT Authentication enabled");
         console.log("📡 WebSocket server ready for all operations");
-        console.log("🗄️ PostgreSQL backend with Drizzle ORM initialized");
+        console.log(`🗄️ Datasources: ${Object.keys(datasources).join(", ")}`);
         console.log("🔄 Real-time sync enabled via WebSockets");
     });
 }

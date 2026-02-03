@@ -41,6 +41,7 @@ interface StoredAuthData {
  */
 function saveAuthToStorage(tokens: AuthTokens, user: UserInfo): void {
     try {
+        console.log("[AUTH] saveAuthToStorage - accessTokenExpiresAt value:", tokens.accessTokenExpiresAt, "type:", typeof tokens.accessTokenExpiresAt);
         const data: StoredAuthData = { tokens, user };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         const expiryDate = new Date(tokens.accessTokenExpiresAt);
@@ -58,7 +59,9 @@ function loadAuthFromStorage(): StoredAuthData | null {
     try {
         const data = localStorage.getItem(STORAGE_KEY);
         if (data) {
-            return JSON.parse(data);
+            const parsed = JSON.parse(data);
+            console.log("[AUTH] loadAuthFromStorage - accessTokenExpiresAt value:", parsed?.tokens?.accessTokenExpiresAt, "type:", typeof parsed?.tokens?.accessTokenExpiresAt);
+            return parsed;
         }
     } catch (e) {
         console.warn("Failed to load auth from storage:", e);

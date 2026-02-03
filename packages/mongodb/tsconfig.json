@@ -1,67 +1,45 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "module": "ESNEXT",
-    "target": "ESNEXT",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "ESNEXT",
+        "target": "ESNEXT",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "moduleResolution": "node",
+        "jsx": "react-jsx",
+        "noFallthroughCasesInSwitch": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "baseUrl": ".",
+        "paths": {
+            "@firecms/types": [
+                "../types/src"
+            ],
+            "@firecms/backend": [
+                "../backend/src"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
     ],
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "noFallthroughCasesInSwitch": true,
-
-    "declaration": true,
-    "esModuleInterop": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "types": [
-      "vite/client",
-      "node",
-      "jest"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@firecms/firebase": [
-        "../firebase_firecms/src"
-      ],
-      "@firecms/core": [
-        "../firecms_core/src"
-      ],
-      "@firecms/types": [
-        "../types/src"
-      ],
-      "@firecms/data_import": ["../../packages/data_import/src"],
-      "@firecms/data_export": ["../../packages/data_export/src"],
-      "@firecms/data_import_export": [
-        "../data_import_export/src"
-      ],
-      "@firecms/ui": [
-        "../ui/src"
-      ]
-    }
-  },
-  "include": [
-    "src",
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/test"
-  ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+    "exclude": [
+        "node_modules",
+        "dist",
+        "test"
+    ]
 }
