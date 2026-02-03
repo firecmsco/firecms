@@ -25,14 +25,17 @@ export type DataTalkConfig = {
     schemaContext?: SchemaContext;
 };
 
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+
 interface DataTalkConfigParams {
     enabled: boolean;
     firebaseApp?: FirebaseApp;
     userSessionsPath?: string;
     getAuthToken: () => Promise<string>;
-    apiEndpoint: string;
+    apiEndpoint?: string;
     loadSamplePrompts?: boolean;
     schemaContext?: SchemaContext;
+    projectId?: string;
 }
 
 const DataTalkConfigContext = React.createContext<DataTalkConfig>({
@@ -49,9 +52,10 @@ export function useBuildDataTalkConfig({
     firebaseApp,
     userSessionsPath,
     getAuthToken,
-    apiEndpoint,
+    apiEndpoint = DEFAULT_API_ENDPOINT,
     loadSamplePrompts = true,
-    schemaContext
+    schemaContext,
+    projectId
 }: DataTalkConfigParams): DataTalkConfig {
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -67,7 +71,7 @@ export function useBuildDataTalkConfig({
         samplePromptsRequested.current = true;
         getAuthToken()
             .then((firebaseToken) => {
-                getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
+                getDataTalkSamplePrompts(firebaseToken, apiEndpoint, undefined, undefined, projectId).then(setSamplePrompts);
             })
             .catch((e) => {
                 // User may not be logged in yet

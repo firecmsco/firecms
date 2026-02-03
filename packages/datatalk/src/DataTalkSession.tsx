@@ -7,26 +7,30 @@ import { ChatMessage, FeedbackSlug, Session } from "./types";
 import { buildSchemaContext } from "./utils/schemaContext";
 import { IntroComponent } from "./components/IntroComponent";
 
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+
 export function DataTalkSession({
     session,
     initialPrompt,
-    apiEndpoint,
+    apiEndpoint = DEFAULT_API_ENDPOINT,
     onAnalyticsEvent,
     getAuthToken,
     collections,
     onMessagesChange,
     autoRunCode,
-    setAutoRunCode
+    setAutoRunCode,
+    projectId
 }: {
     session: Session,
     initialPrompt?: string,
     onAnalyticsEvent?: (event: string, params?: any) => void,
-    apiEndpoint: string,
+    apiEndpoint?: string,
     getAuthToken: () => Promise<string>,
     collections?: EntityCollection[],
     onMessagesChange?: (messages: ChatMessage[]) => void,
     autoRunCode: boolean,
-    setAutoRunCode: (value: boolean) => void
+    setAutoRunCode: (value: boolean) => void,
+    projectId?: string
 }) {
 
     const [textInput, setTextInput] = useState<string>("");
@@ -159,7 +163,8 @@ export function DataTalkSession({
                     }
                 ]);
             },
-            schemaContext)
+            schemaContext,
+            projectId)
             .then((newMessage) => {
                 const updatedMessages: ChatMessage[] = [
                     ...newMessages,
@@ -250,7 +255,7 @@ export function DataTalkSession({
             <div className="h-full overflow-auto"
                 onScroll={handleScroll}
                 ref={scrollContainerRef}>
-                <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
+                <div className="max-w-4xl mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4 w-full">
 
                     <Tooltip
                         asChild={true}
@@ -294,7 +299,7 @@ export function DataTalkSession({
                 <div ref={messagesEndRef} />
             </div>
 
-            <div className="container sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">
+            <div className="max-w-4xl w-full sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">
                 <form
                     noValidate
                     onSubmit={(e: React.FormEvent) => {

@@ -353,18 +353,13 @@ export function App() {
     });
 
     // DataTalk configuration for self-hosted users
-    // Uses the __FIRECMS collection pattern for storing sessions
-    // Path must have odd number of segments (collection = 1 or 3 segments)
-    const userId = authController.user?.uid;
-    const dataTalkEndpoint = "http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/projects/fire-cms-devrel-demo";
-    // const dataTalkEndpoint = "https://api.firecms.co/projects/fire-cms-devrel-demo";
+    const userEmail = authController.user?.email;
 
     const dataTalkConfig = useBuildDataTalkConfig({
-        enabled: Boolean(userId), // Only enable when user is logged in
+        enabled: Boolean(userEmail), // Only enable when user is logged in
         firebaseApp,
-        userSessionsPath: userId ? `__FIRECMS/config/users/${userId}/datatalk_sessions` : undefined,
+        userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
         getAuthToken: authController.getAuthToken,
-        apiEndpoint: dataTalkEndpoint,
         loadSamplePrompts: true
     });
 
@@ -415,7 +410,6 @@ export function App() {
                 name: "DataTalk",
                 group: "AI",
                 view: <DataTalkRoutes
-                    apiEndpoint={dataTalkEndpoint}
                     getAuthToken={authController.getAuthToken}
                     onAnalyticsEvent={onAnalyticsEvent}
                 />

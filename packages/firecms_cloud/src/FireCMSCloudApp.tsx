@@ -72,8 +72,6 @@ import {
     UsersView
 } from "@firecms/user_management";
 import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
-import { useDataTalkMode } from "./hooks/useDataTalkMode";
-import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
 
@@ -539,15 +537,11 @@ function FireCMSAppAuthenticated({
     }
 
     const includeDataTalk = userManagement.isAdmin ?? false;
-    const dataTalkPath = useDataTalkMode();
-    const dataTalkMode = includeDataTalk && dataTalkPath;
-    const dataTalkEndpoint = fireCMSBackend.backendApiHost + "/projects/" + projectConfig.projectId;
 
     const adminRoutes = useMemo(() => buildAdminRoutes(
         includeDataTalk,
         fireCMSBackend,
         projectConfig,
-        dataTalkEndpoint,
         onAnalyticsEvent), [includeDataTalk, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
@@ -629,8 +623,8 @@ function FireCMSAppAuthenticated({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
         getAuthToken: fireCMSBackend.getBackendAuthToken,
-        apiEndpoint: dataTalkEndpoint,
-        loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0
+        loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0,
+        projectId: projectConfig.projectId
     });
 
     const { rootPathSuggestions } = useRootCollectionSuggestions({
@@ -744,9 +738,7 @@ function FireCMSAppAuthenticated({
                                                         {...appConfig?.fireCMSAppBarComponentProps} />}
                                             </AppBar>
                                             <Drawer>
-                                                {dataTalkMode
-                                                    ? <FireCMSCloudDataTalkDrawer />
-                                                    : <FireCMSCloudDrawer />}
+                                                <FireCMSCloudDrawer />
                                             </Drawer>
                                             <NavigationRoutes
                                                 homePage={appConfig?.HomePage
@@ -782,7 +774,6 @@ function FireCMSAppAuthenticated({
 function buildAdminRoutes(includeDataTalk: boolean,
     fireCMSBackend: FireCMSBackend,
     projectConfig: ProjectConfig,
-    dataTalkEndpoint: string,
     onAnalyticsEvent?: (event: string, data?: object) => void) {
 
     const views = [
@@ -823,8 +814,8 @@ function buildAdminRoutes(includeDataTalk: boolean,
                 onAnalyticsEvent={(event, params) => {
                     onAnalyticsEvent?.("datatalk:" + event, params);
                 }}
-                apiEndpoint={dataTalkEndpoint}
-                getAuthToken={fireCMSBackend.getBackendAuthToken} />
+                getAuthToken={fireCMSBackend.getBackendAuthToken}
+                projectId={projectConfig.projectId} />
         });
 
     }

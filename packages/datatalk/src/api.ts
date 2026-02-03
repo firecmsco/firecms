@@ -1,13 +1,16 @@
 import { ChatMessage } from "./types";
 import { SchemaContext } from "./utils/schemaContext";
 
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+
 export async function streamDataTalkCommand(firebaseAccessToken: string,
     command: string,
-    apiEndpoint: string,
+    apiEndpoint: string = DEFAULT_API_ENDPOINT,
     sessionId: string,
     messages: ChatMessage[],
     onDelta: (delta: string) => void,
-    schemaContext?: SchemaContext
+    schemaContext?: SchemaContext,
+    projectId?: string
 ): Promise<string> {
 
     // eslint-disable-next-line no-async-promise-executor
@@ -23,7 +26,8 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                     sessionId,
                     command,
                     history: messages,
-                    schemaContext
+                    schemaContext,
+                    ...(projectId && { projectId })
                 })
             });
 
@@ -91,9 +95,10 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
 }
 
 export function getDataTalkSamplePrompts(firebaseAccessToken: string,
-    apiEndpoint: string,
+    apiEndpoint: string = DEFAULT_API_ENDPOINT,
     messages?: ChatMessage[],
-    schemaContext?: SchemaContext
+    schemaContext?: SchemaContext,
+    projectId?: string
 ): Promise<string[]> {
     return fetch(apiEndpoint + "/datatalk/sample_prompts", {
         method: "POST",
@@ -103,7 +108,8 @@ export function getDataTalkSamplePrompts(firebaseAccessToken: string,
         },
         body: JSON.stringify({
             history: messages ?? [],
-            schemaContext
+            schemaContext,
+            ...(projectId && { projectId })
         })
     })
         .then(response => {
