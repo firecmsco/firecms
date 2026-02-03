@@ -623,6 +623,7 @@ function FireCMSAppAuthenticated({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
         getAuthToken: fireCMSBackend.getBackendAuthToken,
+        apiEndpoint: fireCMSBackend.backendApiHost,
         loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0,
         projectId: projectConfig.projectId
     });
@@ -814,6 +815,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
                 onAnalyticsEvent={(event, params) => {
                     onAnalyticsEvent?.("datatalk:" + event, params);
                 }}
+                apiEndpoint={fireCMSBackend.backendApiHost}
                 getAuthToken={fireCMSBackend.getBackendAuthToken}
                 projectId={projectConfig.projectId} />
         });

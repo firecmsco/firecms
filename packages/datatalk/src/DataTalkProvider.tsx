@@ -25,7 +25,7 @@ export type DataTalkConfig = {
     schemaContext?: SchemaContext;
 };
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 
 interface DataTalkConfigParams {
     enabled: boolean;

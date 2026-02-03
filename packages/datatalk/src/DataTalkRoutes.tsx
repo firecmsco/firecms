@@ -6,7 +6,7 @@ import { DataTalkSession } from "./DataTalkSession";
 import { Session } from "./types";
 import { DataTalkSessionsPanel } from "./components/DataTalkSessionsPanel";
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 
 export function DataTalkRoutes({
     apiEndpoint = DEFAULT_API_ENDPOINT,

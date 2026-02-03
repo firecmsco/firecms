@@ -7,7 +7,7 @@ import { ChatMessage, FeedbackSlug, Session } from "./types";
 import { buildSchemaContext } from "./utils/schemaContext";
 import { IntroComponent } from "./components/IntroComponent";
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co/datatalk";
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 
 export function DataTalkSession({
     session,
