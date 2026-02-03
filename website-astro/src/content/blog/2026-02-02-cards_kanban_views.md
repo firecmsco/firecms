@@ -1,7 +1,7 @@
 ---
 slug: beyond_table_cards_kanban_views
-title: "Beyond the Table: Revolutionizing Your Content with Cards and Kanban Views"
-description: FireCMS 3.0 introduces Cards and Kanban views - customize your collection interface to match your data and workflow
+title: "Beyond the Table: Cards and Kanban Views in FireCMS"
+description: FireCMS 3.0 introduces Cards and Kanban views - pick the interface that actually makes sense for your data
 pubDate: 2026-02-02
 authors: marian
 image: /img/blog/cards_view_plants.png
@@ -15,17 +15,17 @@ Browsing a products collection with images? Sure, we had thumbnails — but they
 
 We built these tools for our users, but we're users too. And honestly? **We got tired of only having the spreadsheet.**
 
-So we did something about it. My favorite feature in a long time.
+So we did something about it. Probably my favorite feature in a long time.
 
-FireCMS 3.0 introduces **Cards View** and **Kanban View** — two new ways to visualize your collections that we've wanted for a long time. The table view isn't going anywhere (it's still perfect for dense data operations), but now you have **options**.
+FireCMS 3.0 introduces **Cards View** and **Kanban View** — two new ways to visualize your collections that we've wanted for a long time. The table view isn't going anywhere (it's still the best choice for dense data), but now you have options.
 
-> **TL;DR**: Set `defaultViewMode: "cards"` for visual content or `defaultViewMode: "kanban"` for workflow management. One line of config, your CMS finally works the way your brain does.
+> **TL;DR**: Set `defaultViewMode: "cards"` for visual content or `defaultViewMode: "kanban"` for workflow management. One line of config.
 
 <!-- truncate -->
 
-## Choose Your View
+## The Three Views
 
-FireCMS now offers three distinct visualization modes. Pick the one that fits your data:
+FireCMS now has three visualization modes:
 
 | View | Best For | Think of it as... |
 |------|----------|-------------------|
@@ -33,17 +33,17 @@ FireCMS now offers three distinct visualization modes. Pick the one that fits yo
 | **Cards** | Visual content, galleries, catalogs | Pinterest for your CMS |
 | **Kanban** | Workflows, pipelines, status tracking | Trello built into FireCMS |
 
-Users can switch between views anytime using the view selector in the collection toolbar — but you control what they see first.
+Users can switch between views using the view selector in the toolbar — you just control the default.
 
 ---
 
 ## Cards View: See Your Content
 
-For collections with images — products, blog posts, user profiles — rows of text are useless. The **Cards View** transforms your collection into a responsive grid where visuals take center stage.
+For collections with images — products, blog posts, user profiles — rows of text don't cut it. The **Cards View** gives you a responsive grid where visuals are front and center.
 
 ![Cards View Example](/img/blog/cards_view_plants.png)
 
-Each entity becomes a card with thumbnails and key details at a glance. Content editors can finally browse visually instead of reading filenames.
+Each entity becomes a card with thumbnails and key details visible at a glance. Content editors can finally browse visually instead of squinting at filenames.
 
 ### Enable Cards View
 
@@ -64,15 +64,15 @@ const productsCollection = buildCollection({
 });
 ```
 
-**Use Cards for:** Product catalogs, blog posts, media libraries, team directories, portfolios — anything where you'd say "I need to *see* it."
+**Good for:** Product catalogs, blog posts, media libraries, team directories, portfolios — anything where you need to *see* it.
 
 ---
 
-## Kanban View: Manage Your Workflow
+## Kanban View: Track Your Workflow
 
-Stop filtering lists to find what's "In Progress." The **Kanban View** turns your collection into a visual workflow board where entities flow across columns as their status changes.
+No more filtering lists to find what's "In Progress." The **Kanban View** turns your collection into a workflow board where entities move across columns as their status changes.
 
-Drag a task from "To Do" to "Done." Watch an order move from "Processing" to "Shipped." This is project management built directly into your CMS.
+Drag a task from "To Do" to "Done." Watch an order move from "Processing" to "Shipped." Project management built into your CMS.
 
 ### Enable Kanban View
 
@@ -104,7 +104,7 @@ const tasksCollection = buildCollection({
 });
 ```
 
-### Enable Drag-and-Drop Reordering
+### Drag-and-Drop Reordering
 
 Want users to reorder cards within a column? Add an `orderProperty`:
 
@@ -131,13 +131,13 @@ The `orderProperty` must reference a number field. FireCMS uses fractional index
 
 > ⚠️ **Firestore Users:** Kanban view requires a composite index on your column property. Don't worry — Firestore will show you the exact index link when you first load the view.
 
-**Use Kanban for:** Task management, order fulfillment, content pipelines, support tickets, hiring workflows — anything with stages.
+**Good for:** Task management, order fulfillment, content pipelines, support tickets, hiring workflows — anything with stages.
 
 ---
 
 ## No Code? No Problem.
 
-If you're on **[FireCMS Cloud](https://app.firecms.co)**, you can configure everything through the UI. No TypeScript required.
+On **[FireCMS Cloud](https://app.firecms.co)**? You can configure all of this through the UI. No TypeScript needed.
 
 ![Kanban Settings in FireCMS Cloud](/img/blog/kanban_settings.png)
 
@@ -150,13 +150,13 @@ Once configured, your Kanban board is ready:
 
 ![Kanban View in Action](/img/blog/kanban_view.png)
 
-This "Plant Shop Tasks" board has columns for To Do, In Progress, Blocked, and Done. Drag cards between columns to update status. Drag within columns to reorder. It just works.
+This "Plant Shop Tasks" board has columns for To Do, In Progress, Blocked, and Done. Drag cards between columns to update status. Drag within columns to reorder.
 
 ---
 
-## Real-World Setups
+## Some Real Examples
 
-Here's how real teams are mixing views:
+Here's how different teams might set things up:
 
 **E-commerce:**
 - Products → **Cards** (visual browsing)
@@ -177,7 +177,7 @@ Here's how real teams are mixing views:
 
 ## Get Started
 
-Update to the latest FireCMS and try it today:
+Update to the latest FireCMS:
 
 ```bash
 npm install firecms@latest
