@@ -2,10 +2,11 @@
 slug: docs/properties/config/number
 title: Number
 sidebar_label: Number
+description: Configuration for number properties in FireCMS, including validation, enums, and integer constraints.
 ---
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const rangeProperty = buildProperty({
     name: "Range",
@@ -28,7 +29,7 @@ You can use the enum values providing a map of possible
 
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty, buildEnumValueConfig } from "@firecms/core";
 
 const property = buildProperty({
     name: "Status",

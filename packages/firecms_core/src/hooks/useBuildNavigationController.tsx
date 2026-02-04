@@ -140,8 +140,12 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
-    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
-        [cleanBasePath]);
+
+    const buildCMSUrlPath = useCallback((path: string): string => {
+        // Strip trailing /* wildcard from paths (used for nested routes in React Router)
+        const cleanPath = path.replace(/\/\*$/, "");
+        return cleanBasePath ? `/${cleanBasePath}/${encodePath(cleanPath)}` : `/${encodePath(cleanPath)}`;
+    }, [cleanBasePath]);
 
     const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
         [baseCollectionPath]);
@@ -802,6 +806,7 @@ function computeNavigationGroups({
     let result = navigationGroupMappings;
 
     // Merge plugin navigation entries
+    // IMPORTANT: Deep clone the groups to avoid mutating the original input
     result = plugins ? plugins?.reduce((acc, plugin) => {
         if (plugin.homePage?.navigationEntries) {
             plugin.homePage.navigationEntries.forEach((entry) => {
@@ -822,7 +827,10 @@ function computeNavigationGroups({
 
         }
         return acc;
-    }, [...(result ?? [])] as NavigationGroupMapping[]) : result;
+    }, (result ?? []).map(g => ({
+        name: g.name,
+        entries: [...g.entries]
+    }))) : result;
 
     // Track all entries that are already assigned to groups
     const assignedEntries = new Set<string>();

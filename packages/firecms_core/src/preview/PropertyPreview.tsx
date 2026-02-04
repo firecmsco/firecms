@@ -194,7 +194,11 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
         }
     } else if (property.type === "date") {
         if (value instanceof Date) {
-            content = <DatePreview date={value} />;
+            content = <DatePreview
+                date={value}
+                mode={property.mode}
+                timezone={property.timezone}
+            />;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);
         }

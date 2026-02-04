@@ -9,7 +9,8 @@ import {
     PersistedCollection,
     SaveCollectionParams,
     UpdateCollectionParams,
-    UpdatePropertiesOrderParams
+    UpdatePropertiesOrderParams,
+    UpdateKanbanColumnsOrderParams
 } from "@firecms/collection_editor";
 import {
     applyPermissionsFunctionIfEmpty,
@@ -375,6 +376,59 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         });
     }, [collectionsConfigPath, firebaseApp]);
 
+    const updateKanbanColumnsOrder = useCallback(({
+        collection,
+        kanbanColumnProperty,
+        newColumnsOrder,
+        parentCollectionIds
+    }: UpdateKanbanColumnsOrderParams): Promise<void> => {
+        // Only update if the collection is editable
+        if (collection.editable === false) {
+            return Promise.resolve();
+        }
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
+        const collectionPath = buildCollectionId(collection.id, parentCollectionIds);
+        const ref = doc(firestore, collectionsConfigPath, collectionPath);
+
+        // Get the current property and its enumValues
+        const currentProperty = collection.properties?.[kanbanColumnProperty];
+        if (!currentProperty || !('enumValues' in currentProperty) || !currentProperty.enumValues) {
+            console.warn("Cannot update Kanban column order: property not found or has no enumValues");
+            return Promise.resolve();
+        }
+
+        const currentEnumValues = Array.isArray(currentProperty.enumValues)
+            ? currentProperty.enumValues
+            : Object.entries(currentProperty.enumValues).map(([enumId, value]) =>
+                typeof value === 'string' ? { id: enumId, label: value } : { ...value, id: enumId }
+            );
+
+        // Reorder enumValues to match newColumnsOrder
+        const reorderedEnumValues = newColumnsOrder
+            .map(columnId => currentEnumValues.find(ev => String(ev.id) === columnId))
+            .filter(Boolean);
+
+        // Add any enum values that weren't in the new order (shouldn't happen, but be safe)
+        const missingEnumValues = currentEnumValues.filter(
+            ev => !newColumnsOrder.includes(String(ev.id))
+        );
+        const finalEnumValues = [...reorderedEnumValues, ...missingEnumValues];
+
+        // Persist by updating the property's enumValues in the correct order
+        return runTransaction(firestore, async (transaction) => {
+            transaction.set(ref, {
+                id: collection.id,
+                properties: {
+                    [kanbanColumnProperty]: {
+                        ...setUndefinedToDelete(removeFunctions(removeUndefined(currentProperty))),
+                        enumValues: finalEnumValues
+                    }
+                }
+            }, { merge: true });
+        });
+    }, [collectionsConfigPath, firebaseApp]);
+
     return {
         loading: collectionsLoading || configLoading,
         collections,
@@ -385,6 +439,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         saveProperty,
         deleteProperty,
         updatePropertiesOrder,
+        updateKanbanColumnsOrder,
         navigationEntries,
         saveNavigationEntries,
         collectionsSetup

@@ -2,14 +2,19 @@
 slug: docs/properties/config/string
 title: String
 sidebar_label: String
+description: Configuration for string properties in FireCMS, including storage, markdown, enums, and validation options.
 ---
 
-The string property can be used with many form fields, from
-simple text fields, to select fields, markdown or file uploads (the
-storage key, or the url gets saved).
+The **string property** is the most versatile field type in FireCMS. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Firebase** app, string properties let you create:
+
+- **Text fields**: Names, titles, descriptions
+- **Select dropdowns**: Status fields, categories, options
+- **File uploads**: Images, documents (stored in **Firebase Storage**)
+- **Markdown editors**: Rich content with formatting
+- **Email/URL fields**: Validated input types
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const nameProperty = buildProperty({
     name: "Name",
@@ -82,7 +87,7 @@ FireCMS supports client-side image optimization before upload:
 * `imageCompression` (deprecated) Legacy image resizing/compression.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     dataType: "string",
@@ -114,7 +119,7 @@ to `true` to add a link, or one of the supported media types to render a
 preview.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -126,12 +131,46 @@ const amazonLinkProperty = buildProperty({
 You can also define the preview type for the url: `image`, `video` or `audio`:
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     name: "Image",
     dataType: "string",
     url: "image",
+});
+```
+
+### `email`
+
+If set to `true`, this field will be validated as an email address and
+rendered with an email-specific input. This is useful for contact forms,
+user profiles, or any field that should contain a valid email.
+
+```tsx
+import { buildProperty } from "@firecms/core";
+
+const emailProperty = buildProperty({
+    name: "Email",
+    dataType: "string",
+    email: true
+});
+```
+
+### `userSelect`
+
+This property is used to indicate that the string is a **user ID**, and
+it will be rendered as a user picker. Note that the user ID needs to be the
+one used in your authentication provider, e.g. Firebase Auth.
+You can also use a property builder to specify the user path dynamically
+based on other values of the entity.
+
+```tsx
+import { buildProperty } from "@firecms/core";
+
+const assignedUserProperty = buildProperty({
+    name: "Assigned User",
+    dataType: "string",
+    userSelect: true
 });
 ```
 
@@ -147,7 +186,7 @@ need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -173,7 +212,7 @@ in a multiple line field. Defaults to false. If set to `true`, the number
 of lines adapts to the content.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Description",
@@ -193,7 +232,7 @@ If `true`, the field is rendered as a text editors that supports markdown
 highlight syntax. It also includes a preview of the result.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     dataType: "string",
@@ -207,7 +246,7 @@ const property = buildProperty({
 Should this string be rendered as a tag instead of just text.
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Tags",

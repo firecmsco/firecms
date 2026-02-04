@@ -2,13 +2,14 @@
 slug: docs/properties/config/map
 title: Map
 sidebar_label: Map
+description: Configuration for map properties (nested objects) in FireCMS, including child properties, previews, and key-value mode.
 ---
 
 In a map property you define child properties in the same way you define them
 at the entity schema level:
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const ctaProperty = buildProperty({
     dataType: "map",
@@ -43,16 +44,22 @@ List of properties rendered as this map preview. Defaults to first 3.
 Display the child properties as independent columns in the collection
 view. Defaults to `false`.
 
-### `expanded`
-Should the map be expanded by default in the form view. Defaults to `false`.
+### `pickOnlySomeKeys`
 
-### `keyValue`
-Render this map as a key-value table that allows to use
-arbitrary keys. You don't need to define the properties in this case.
+Allow the user to add only some keys in this map.
+By default, all properties of the map have the corresponding field in
+the form view. Setting this flag to true allows to pick only some.
+Useful for map that can have a lot of sub-properties that may not be
+needed.
 
 ### `expanded`
 
 Determines whether the field should be initially expanded. Defaults to `true`.
+
+### `keyValue`
+
+Render this map as a key-value table that allows to use
+arbitrary keys. You don't need to define the properties in this case.
 
 ### `minimalistView`
 

@@ -10,6 +10,7 @@ interface DateTimeFilterFieldProps {
     setValue: (value?: [op: VirtualTableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
     title?: string;
+    timezone?: string;
 }
 
 const operationLabels: Record<VirtualTableWhereFilterOp | "is-null", string> = {
@@ -34,7 +35,8 @@ export function DateTimeFilterField({
     mode,
     value,
     setValue,
-    title
+    title,
+    timezone
 }: DateTimeFilterFieldProps) {
 
     const { locale } = useCustomizationController();
@@ -107,6 +109,7 @@ export function DateTimeFilterField({
                     mode={mode}
                     size={"medium"}
                     locale={locale}
+                    timezone={timezone}
                     disabled={isNullOperation}
                     value={isNullOperation ? undefined : (internalValue ?? undefined)}
                     onChange={(dateValue: Date | null) => {

@@ -15,7 +15,7 @@ import {
 } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { getPropertyInPath, IconForView } from "../util";
-import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/references";
+import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/previews";
 
 export type EntityPreviewProps = {
     size?: PreviewSize,
@@ -51,17 +51,17 @@ export type EntityPreviewDataProps = {
  * without any container wrapper. Used internally by EntityPreview.
  */
 export function EntityPreviewData({
-                                      actions,
-                                      collection: collectionProp,
-                                      previewKeys,
-                                      size = "medium",
-                                      includeId = true,
-                                      onSideEntityClick,
-                                      includeTitle = true,
-                                      includeEntityLink = true,
-                                      includeImage = true,
-                                      entity
-                                  }: EntityPreviewDataProps) {
+    actions,
+    collection: collectionProp,
+    previewKeys,
+    size = "medium",
+    includeId = true,
+    onSideEntityClick,
+    includeTitle = true,
+    includeEntityLink = true,
+    includeImage = true,
+    entity
+}: EntityPreviewDataProps) {
 
     const authController = useAuthController();
     const analyticsController = useAnalyticsController();
@@ -87,9 +87,9 @@ export function EntityPreviewData({
 
     const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
     const usedImageValue = imageProperty !== undefined ? ("of" in imageProperty
-            ? ((imageValue ?? []).length > 0
-                ? imageValue[0] : undefined)
-            : imageValue)
+        ? ((imageValue ?? []).length > 0
+            ? imageValue[0] : undefined)
+        : imageValue)
         : undefined;
 
     return (
@@ -100,13 +100,13 @@ export function EntityPreviewData({
                 "w-10 h-10 ml-2 mr-2 m-2 self-start": size === "large"
             })}>
                 {usedImageProperty && usedImageValue && <PropertyPreview property={usedImageProperty}
-                                                                         propertyKey={imagePropertyKey as string}
-                                                                         size={"small"}
-                                                                         value={usedImageValue}/>}
+                    propertyKey={imagePropertyKey as string}
+                    size={"small"}
+                    value={usedImageValue} />}
                 {(!usedImageProperty || !usedImageValue) && <IconForView collectionOrView={collection}
-                                                                         color={"primary"}
-                                                                         size={size}
-                                                                         className={"m-auto p-1"}/>}
+                    color={"primary"}
+                    size={size}
+                    className={"m-auto p-1"} />}
             </div>
 
             <div
@@ -116,12 +116,12 @@ export function EntityPreviewData({
                     entity
                         ? <div className={"block whitespace-nowrap overflow-hidden truncate"}>
                             <Typography variant={"caption"}
-                                        color={"disabled"}
-                                        className={"font-mono"}>
+                                color={"disabled"}
+                                className={"font-mono"}>
                                 {entity.id}
                             </Typography>
                         </div>
-                        : <Skeleton/>)}
+                        : <Skeleton />)}
 
                 {titleProperty && (
                     <div
@@ -132,10 +132,10 @@ export function EntityPreviewData({
                                     propertyKey={titleProperty as string}
                                     value={getValueInPath(entity.values, titleProperty)}
                                     property={collection.properties[titleProperty as string] as Property}
-                                    size={"large"}/>
+                                    size={"large"} />
                                 : <SkeletonPropertyComponent
                                     property={collection.properties[titleProperty as string] as Property}
-                                    size={"large"}/>
+                                    size={"large"} />
                         }
                     </div>
                 )}
@@ -147,17 +147,17 @@ export function EntityPreviewData({
                     const valueInPath = getValueInPath(entity.values, key);
                     return (
                         <div key={"ref_prev_" + key}
-                             className={cls("truncate", restProperties.length > 1 ? "my-0.5" : "my-0")}>
+                            className={cls("truncate", restProperties.length > 1 ? "my-0.5" : "my-0")}>
                             {
                                 entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
                                         value={valueInPath}
                                         property={childProperty as Property}
-                                        size={"small"}/>
+                                        size={"small"} />
                                     : <SkeletonPropertyComponent
                                         property={childProperty as Property}
-                                        size={"small"}/>
+                                        size={"small"} />
                             }
                         </div>
                     );
@@ -187,7 +187,7 @@ export function EntityPreviewData({
                                     updateUrl: true
                                 });
                             }}>
-                            <KeyboardTabIcon size={"small"}/>
+                            <KeyboardTabIcon size={"small"} />
                         </IconButton>
                     </Tooltip>
                 </div>}
@@ -198,10 +198,10 @@ export function EntityPreviewData({
 }
 
 export function EntityPreviewWithId({
-                                        entityId,
-                                        path,
-                                        ...props
-                                    }: Omit<EntityPreviewProps, "entity"> & {
+    entityId,
+    path,
+    ...props
+}: Omit<EntityPreviewProps, "entity"> & {
     entityId: string | number;
     path: string;
     databaseId?: string;
@@ -252,7 +252,7 @@ export function EntityPreviewWithId({
             <EntityPreviewContainer
                 hover={props.hover}
                 size={props.size}>
-                <Skeleton/>
+                <Skeleton />
             </EntityPreviewContainer>
         );
     }
@@ -271,7 +271,7 @@ export function EntityPreviewWithId({
 
     return <EntityPreviewData
         {...props}
-        entity={entity}/>;
+        entity={entity} />;
 }
 
 /**
@@ -279,20 +279,20 @@ export function EntityPreviewWithId({
  * It is used by default in reference fields and whenever a reference is displayed.
  */
 export function EntityPreview({
-                                  actions,
-                                  disabled,
-                                  hover,
-                                  collection,
-                                  previewKeys,
-                                  onClick,
-                                  size = "medium",
-                                  includeId = true,
-                                  includeTitle = true,
-                                  includeEntityLink = true,
-                                  includeImage = true,
-                                  onSideEntityClick,
-                                  entity
-                              }: EntityPreviewProps) {
+    actions,
+    disabled,
+    hover,
+    collection,
+    previewKeys,
+    onClick,
+    size = "medium",
+    includeId = true,
+    includeTitle = true,
+    includeEntityLink = true,
+    includeImage = true,
+    onSideEntityClick,
+    entity
+}: EntityPreviewProps) {
 
     return (
         <EntityPreviewContainer
@@ -326,15 +326,15 @@ export type EntityPreviewContainerProps = {
 };
 
 export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPreviewContainerProps>(({
-                                                                                                         children,
-                                                                                                         hover,
-                                                                                                         onClick,
-                                                                                                         size = "medium",
-                                                                                                         style,
-                                                                                                         className,
-                                                                                                         fullwidth = true,
-                                                                                                         ...props
-                                                                                                     }, ref) => {
+    children,
+    hover,
+    onClick,
+    size = "medium",
+    style,
+    className,
+    fullwidth = true,
+    ...props
+}, ref) => {
     return <div
         ref={ref}
         style={{

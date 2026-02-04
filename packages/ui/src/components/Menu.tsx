@@ -34,7 +34,7 @@ const Menu = React.forwardRef<
        onOpenChange,
        portalContainer,
        sideOffset = 4,
-                                    className
+       className
    }, ref) => {
     // Get the portal container from context
     const contextContainer = usePortalContainer();
@@ -53,15 +53,15 @@ const Menu = React.forwardRef<
                 {trigger}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal container={finalContainer}>
-            <DropdownMenu.Content
-                side={side}
-                sideOffset={sideOffset}
-                align={align}
-                className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
-                {children}
-            </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+                <DropdownMenu.Content
+                    side={side}
+                    sideOffset={sideOffset}
+                    align={align}
+                    className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
+                    {children}
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
     );
 })
 Menu.displayName = "Menu"
@@ -71,20 +71,24 @@ export { Menu }
 export type MenuItemProps = {
     children: React.ReactNode;
     dense?: boolean;
+    disabled?: boolean;
     onClick?: (event: React.MouseEvent) => void;
     className?: string;
 };
 
 export const MenuItem = React.memo(({
-                             children,
-                             dense = false, // Default value is false if not provided
-                             onClick,
-                             className
-                         }: MenuItemProps) => {
+                                        children,
+                                        dense = false, // Default value is false if not provided
+                                        disabled = false,
+                                        onClick,
+                                        className
+                                    }: MenuItemProps) => {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
-        onClick && "cursor-pointer",
-        "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900 flex items-center gap-4",
+        onClick && !disabled && "cursor-pointer",
+        disabled && "opacity-50 cursor-not-allowed",
+        "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 flex items-center gap-4",
+        !disabled && "hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900",
         dense ? "px-4 py-1.5" : "px-4 py-2",
         className
     );
@@ -92,7 +96,8 @@ export const MenuItem = React.memo(({
     return (
         <DropdownMenu.Item
             className={classNames}
-            onClick={onClick}>
+            disabled={disabled}
+            onClick={disabled ? undefined : onClick}>
             {children}
         </DropdownMenu.Item>
     );

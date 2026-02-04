@@ -4,19 +4,13 @@ import { useAuthController, useCustomizationController, useFireCMSContext, useLa
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController, ViewMode } from "@firecms/types";
 import {
     AddIcon,
-    AppsIcon,
     Button,
     DeleteIcon,
     IconButton,
-    ListIcon,
-    Menu,
-    MenuItem,
     Tooltip
 } from "@firecms/ui";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { canCreateEntity, canDeleteEntity, toArray } from "@firecms/common";
-
-
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -28,9 +22,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
     tableController: EntityTableController<M>;
-    collectionEntitiesCount: number;
-    viewMode?: ViewMode;
-    onViewModeChange?: (mode: ViewMode) => void;
+    collectionEntitiesCount?: number;
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
@@ -44,8 +36,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     selectionController,
     tableController,
     collectionEntitiesCount,
-    viewMode = "table",
-    onViewModeChange
 }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -64,7 +54,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
-                startIcon={<AddIcon size={"small"}/>}
+                startIcon={<AddIcon size={"small"} />}
                 variant="filled"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
@@ -75,7 +65,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 variant="filled"
                 color="primary"
             >
-                <AddIcon size={"small"}/>
+                <AddIcon size={"small"} />
             </Button>);
 
     const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null);
@@ -107,31 +97,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </Tooltip>
     }
 
-    // View mode toggle menu
-    const viewModeToggle = onViewModeChange && (
-        <Menu
-            trigger={
-                <IconButton size="small">
-                    {viewMode === "cards" ? <AppsIcon size="small" /> : <ListIcon size="small" />}
-                </IconButton>
-            }
-        >
-            <MenuItem
-                dense={true}
-                onClick={() => onViewModeChange("table")}
-            >
-                <ListIcon size="smallest" className="mr-1" />
-                Table view
-            </MenuItem>
-            <MenuItem
-                dense={true}
-                onClick={() => onViewModeChange("cards")}
-            >
-                <AppsIcon size="smallest" className="mr-1" />
-                Card view
-            </MenuItem>
-        </Menu>
-    );
 
     const actionProps: CollectionActionsProps = {
         path,
@@ -169,7 +134,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             <ErrorBoundary>
                 {actions}
             </ErrorBoundary>
-            {viewModeToggle}
             {multipleDeleteButton}
             {addButton}
         </>

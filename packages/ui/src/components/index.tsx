@@ -12,6 +12,7 @@ export * from "./Collapse";
 export * from "./CircularProgress";
 export * from "./Checkbox";
 export * from "./Chip";
+export * from "./ColorPicker";
 export * from "./DateTimeField";
 export * from "./Dialog";
 export * from "./DialogActions";
@@ -45,3 +46,5 @@ export * from "./Popover";
 export * from "./Badge";
 export * from "./DebouncedTextField";
 export * from "./Skeleton";
+export * from "./ToggleButtonGroup";
+

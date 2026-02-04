@@ -1,31 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { EntityCollection, randomString } from "@firecms/core";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
 import { ChatMessage, FeedbackSlug, Session } from "./types";
+import { buildSchemaContext } from "./utils/schemaContext";
 import { IntroComponent } from "./components/IntroComponent";
 
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
+
 export function DataTalkSession({
-                                    session,
-                                    initialPrompt,
-                                    apiEndpoint,
-                                    onAnalyticsEvent,
-                                    getAuthToken,
-                                    collections,
-                                    onMessagesChange,
-                                    autoRunCode,
-                                    setAutoRunCode
-                                }: {
+    session,
+    initialPrompt,
+    apiEndpoint = DEFAULT_API_ENDPOINT,
+    onAnalyticsEvent,
+    getAuthToken,
+    collections,
+    onMessagesChange,
+    autoRunCode,
+    setAutoRunCode,
+    projectId
+}: {
     session: Session,
     initialPrompt?: string,
     onAnalyticsEvent?: (event: string, params?: any) => void,
-    apiEndpoint: string,
+    apiEndpoint?: string,
     getAuthToken: () => Promise<string>,
     collections?: EntityCollection[],
     onMessagesChange?: (messages: ChatMessage[]) => void,
     autoRunCode: boolean,
-    setAutoRunCode: (value: boolean) => void
+    setAutoRunCode: (value: boolean) => void,
+    projectId?: string
 }) {
 
     const [textInput, setTextInput] = useState<string>("");
@@ -40,6 +45,12 @@ export function DataTalkSession({
     const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollContainerRef = useRef(null);
+
+    // Build schemaContext from collections for API calls
+    const schemaContext = useMemo(() => {
+        if (!collections) return undefined;
+        return buildSchemaContext(collections);
+    }, [collections]);
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -151,7 +162,9 @@ export function DataTalkSession({
                         date: new Date()
                     }
                 ]);
-            })
+            },
+            schemaContext,
+            projectId)
             .then((newMessage) => {
                 const updatedMessages: ChatMessage[] = [
                     ...newMessages,
@@ -181,8 +194,8 @@ export function DataTalkSession({
                 setMessages(updatedMessages);
                 onMessagesChange?.(updatedMessages);
             }).finally(() => {
-            setMessageLoading(false);
-        });
+                setMessageLoading(false);
+            });
 
     };
 
@@ -240,9 +253,9 @@ export function DataTalkSession({
 
         <div className="h-full w-full flex flex-col bg-surface-50 dark:bg-surface-900">
             <div className="h-full overflow-auto"
-                 onScroll={handleScroll}
-                 ref={scrollContainerRef}>
-                <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
+                onScroll={handleScroll}
+                ref={scrollContainerRef}>
+                <div className="max-w-4xl mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4 w-full">
 
                     <Tooltip
                         asChild={true}
@@ -252,41 +265,41 @@ export function DataTalkSession({
                             className="self-end border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800 w-fit "
                             htmlFor="autoRunCode">
                             <Checkbox id="autoRunCode"
-                                      checked={autoRunCode}
-                                      size={"small"}
-                                      onCheckedChange={setAutoRunCode}/>
+                                checked={autoRunCode}
+                                size={"small"}
+                                onCheckedChange={setAutoRunCode} />
                             Run code automatically
                         </Label>
                     </Tooltip>
 
                     {(messages ?? []).length === 0 &&
-                        <IntroComponent onPromptSuggestionClick={(prompt) => submit(prompt)}/>}
+                        <IntroComponent onPromptSuggestionClick={(prompt) => submit(prompt)} />}
 
                     {messages.map((message, index) => {
                         return <MessageLayout key={message.date.toISOString() + index}
-                                              onRemove={() => {
-                                                  const newMessages = [...messages];
-                                                  newMessages.splice(index, 1);
-                                                  setMessages(newMessages);
-                                              }}
-                                              onFeedback={(reason, feedbackMessage) => {
-                                                  saveFeedback(message, reason, feedbackMessage, index);
-                                              }}
-                                              onUpdatedMessage={(message) => {
-                                                  updateMessage(message, index);
-                                              }}
-                                              collections={collections}
-                                              message={message}
-                                              canRegenerate={index === messages.length - 1 && message.user === "SYSTEM"}
-                                              onRegenerate={() => onRegenerate(message, index)}
-                                              autoRunCode={autoRunCode}/>;
+                            onRemove={() => {
+                                const newMessages = [...messages];
+                                newMessages.splice(index, 1);
+                                setMessages(newMessages);
+                            }}
+                            onFeedback={(reason, feedbackMessage) => {
+                                saveFeedback(message, reason, feedbackMessage, index);
+                            }}
+                            onUpdatedMessage={(message) => {
+                                updateMessage(message, index);
+                            }}
+                            collections={collections}
+                            message={message}
+                            canRegenerate={index === messages.length - 1 && message.user === "SYSTEM"}
+                            onRegenerate={() => onRegenerate(message, index)}
+                            autoRunCode={autoRunCode} />;
                     })}
 
                 </div>
-                <div ref={messagesEndRef}/>
+                <div ref={messagesEndRef} />
             </div>
 
-            <div className="container sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">
+            <div className="max-w-4xl w-full sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">
                 <form
                     noValidate
                     onSubmit={(e: React.FormEvent) => {
@@ -305,8 +318,8 @@ export function DataTalkSession({
                         placeholder="Type your message..."
                     />
                     <Button className={"absolute right-0 top-0 m-1.5"} variant="text" type={"submit"}
-                            disabled={!textInput || messageLoading}>
-                        <SendIcon color={"primary"}/>
+                        disabled={!textInput || messageLoading}>
+                        <SendIcon color={"primary"} />
                     </Button>
                 </form>
             </div>

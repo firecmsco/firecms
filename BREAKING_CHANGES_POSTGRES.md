@@ -7,3 +7,5 @@
 
 - Hooks:
   - `useReferenceDialog` is not called `useEntitySelectionDialog`
+
+- Types can be now imported from `@firecms/types`

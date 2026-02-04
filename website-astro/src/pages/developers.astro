@@ -12,9 +12,14 @@ import "../styles/editor.css";
 
 const title = "FireCMS for Developers - The Ultimate Back-Office Framework";
 const description = "Build powerful internal tools, CRUD interfaces, and custom admin panels without the frontend hassle. Built with React and TypeScript for ultimate flexibility and control.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Developers", url: "https://firecms.co/developers" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 
     <main>
         <section

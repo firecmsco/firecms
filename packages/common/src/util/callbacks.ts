@@ -1,4 +1,5 @@
 import { EntityCallbacks } from "@firecms/types";
+import { mergeDeep } from "./objects";
 
 export const mergeCallbacks = (
     baseCallbacks: EntityCallbacks = {},
@@ -55,17 +56,19 @@ export const mergeCallbacks = (
     // Handle onPreSave - returns Partial<EntityValues<M>> or Promise<Partial<EntityValues<M>>>
     if (baseCallbacks.onPreSave || pluginCallbacks.onPreSave) {
         mergedCallbacks.onPreSave = async (props) => {
-            let values = { ...props.values };
+            let values = props.values;
             if (baseCallbacks.onPreSave) {
                 const baseValues = await Promise.resolve(baseCallbacks.onPreSave(props));
-                values = { ...values, ...baseValues };
+                // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
+                values = mergeDeep(values, baseValues);
             }
             if (pluginCallbacks.onPreSave) {
                 const pluginValues = await Promise.resolve(pluginCallbacks.onPreSave({
                     ...props,
                     values
                 }));
-                values = { ...values, ...pluginValues };
+                // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
+                values = mergeDeep(values, pluginValues);
             }
             return values;
         };

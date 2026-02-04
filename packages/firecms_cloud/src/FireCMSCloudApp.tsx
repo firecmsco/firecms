@@ -29,7 +29,8 @@ import {
     CollectionsConfigController,
     MissingReferenceWidget,
     PersistedCollection,
-    useCollectionEditorPlugin
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
 } from "@firecms/collection_editor";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
@@ -50,6 +51,7 @@ import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components";
 import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
 import {
+    buildFireCMSSearchController,
     FirebaseAuthController,
     getFirestoreDataInPath,
     useAppCheck,
@@ -70,8 +72,6 @@ import {
     UsersView
 } from "@firecms/user_management";
 import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
-import { useDataTalkMode } from "./hooks/useDataTalkMode";
-import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
 
@@ -89,13 +89,13 @@ import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestio
  * @group Firebase
  */
 export function FireCMSCloudApp({
-                                    projectId,
-                                    appConfig,
-                                    backendApiHost = "https://api.firecms.co", // TODO
-                                    onAnalyticsEvent,
-                                    basePath,
-                                    baseCollectionPath
-                                }: FireCMSCloudAppProps) {
+    projectId,
+    appConfig,
+    backendApiHost = "https://api.firecms.co", // TODO
+    onAnalyticsEvent,
+    basePath,
+    baseCollectionPath
+}: FireCMSCloudAppProps) {
 
     const modeController = useBuildModeController();
 
@@ -117,15 +117,15 @@ export function FireCMSCloudApp({
     let component;
 
     if (backendConfigLoading || !backendFirebaseApp) {
-        component = <FullLoadingView projectId={projectId} text={"Backend loading"}/>;
+        component = <FullLoadingView projectId={projectId} text={"Backend loading"} />;
     } else if (backendFirebaseConfigError) {
         component = <ErrorView
-            error={backendFirebaseConfigError}/>
+            error={backendFirebaseConfigError} />
     } else if (configError) {
         component = <ErrorView
-            error={configError}/>
+            error={configError} />
     } else if (fireCMSBackend.authLoading) {
-        component = <FullLoadingView projectId={projectId} text={"Auth loading"}/>;
+        component = <FullLoadingView projectId={projectId} text={"Auth loading"} />;
     } else if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"}>
             <FireCMSCloudLoginView
@@ -181,17 +181,17 @@ function FullLoadingView(props: {
 
         <AppBar logo={props.projectConfig?.logo}>
             {props.FireCMSAppBarComponent &&
-                <props.FireCMSAppBarComponent title={props.projectConfig?.projectName ?? ""}/>}
+                <props.FireCMSAppBarComponent title={props.projectConfig?.projectName ?? ""} />}
         </AppBar>
-        <CircularProgressCenter text={props.text}/>
+        <CircularProgressCenter text={props.text} />
     </Scaffold>;
 }
 
 export const FireCMSClient = function FireCMSClient({
-                                                        projectId,
-                                                        fireCMSBackend,
-                                                        ...props
-                                                    }: FireCMSClientProps) {
+    projectId,
+    fireCMSBackend,
+    ...props
+}: FireCMSClientProps) {
 
     const projectConfig = useBuildProjectConfig({
         projectId,
@@ -207,9 +207,9 @@ export const FireCMSClient = function FireCMSClient({
 
     if (userManagement.loading || (!projectConfig.clientFirebaseConfig && !projectConfig.configError)) {
         return <FullLoadingView projectId={projectId}
-                                projectConfig={projectConfig}
-                                FireCMSAppBarComponent={props.FireCMSAppBarComponent}
-                                text={"Client loading"}/>;
+            projectConfig={projectConfig}
+            FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+            text={"Client loading"} />;
     }
 
     return <FireCMSClientWithController
@@ -223,11 +223,11 @@ export const FireCMSClient = function FireCMSClient({
 };
 
 function ErrorDelegatingLoginView({
-                                      configError,
-                                      onLogout,
-                                      fireCMSBackend,
-                                      onFixed
-                                  }: {
+    configError,
+    onLogout,
+    fireCMSBackend,
+    onFixed
+}: {
     configError: Error | ApiError,
     onLogout: () => void,
     fireCMSBackend: FireCMSBackend,
@@ -236,25 +236,25 @@ function ErrorDelegatingLoginView({
 
     const errorBody = "code" in configError
         ? <CloudErrorView error={configError}
-                          fireCMSBackend={fireCMSBackend}
-                          onFixed={onFixed}/>
+            fireCMSBackend={fireCMSBackend}
+            onFixed={onFixed} />
         : <>
             <Typography>{configError.message}</Typography>
             <Typography>
                 This error may be caused when a user has been deleted from the client project.
                 Make sure a user exists in the client project with the same email as the one trying to log in.
                 If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
-                                                        rel="noopener noreferrer"
-                                                        target="_blank"> hello@firecms.co </a>, or in our <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
+                    rel="noopener noreferrer"
+                    target="_blank"> hello@firecms.co </a>, or in our <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
             </Typography>
         </>;
 
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
         <div className={"flex gap-4 items-center"}>
-            <ErrorIcon color={"error"}/>
+            <ErrorIcon color={"error"} />
             <Typography variant={"h4"}>Error logging in</Typography>
         </div>
         <div>
@@ -262,18 +262,18 @@ function ErrorDelegatingLoginView({
         </div>
         <div>
             If you are experiencing issues logging in, feel free to reach us at <a href="mailto:hello@firecms.co"
-                                                                                   rel="noopener noreferrer"
-                                                                                   target="_blank">
-            hello@firecms.co</a>
+                rel="noopener noreferrer"
+                target="_blank">
+                hello@firecms.co</a>
         </div>
-        <Button  size="small" onClick={onLogout}>Sign out</Button>
+        <Button size="small" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
 function NoAccessErrorView(props: { projectId: string, configError: Error, onLogout: () => void }) {
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
         <div className={"flex gap-4 items-center"}>
-            <ErrorIcon color={"error"}/>
+            <ErrorIcon color={"error"} />
             <Typography variant={"h4"}>Error accessing project</Typography>
         </div>
         <Typography>{props.configError.message}</Typography>
@@ -282,19 +282,19 @@ function NoAccessErrorView(props: { projectId: string, configError: Error, onLog
             registered in the project <code>{props.projectId}</code>.
             You can ask the project owner to add you to the project.
         </Typography>
-        <Button  onClick={props.onLogout}>Sign out</Button>
+        <Button onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
 export function FireCMSClientWithController({
-                                                projectConfig,
-                                                userManagement,
-                                                projectId,
-                                                fireCMSBackend,
-                                                appConfig,
-                                                customizationLoading,
-                                                ...props
-                                            }: FireCMSClientProps & {
+    projectConfig,
+    userManagement,
+    projectId,
+    fireCMSBackend,
+    appConfig,
+    customizationLoading,
+    ...props
+}: FireCMSClientProps & {
     logo?: string;
     userManagement: CloudUserManagement;
     projectConfig: ProjectConfig;
@@ -325,11 +325,11 @@ export function FireCMSClientWithController({
     });
 
     const fireCMSUser = useMemo(() => {
-            if (userManagement.loading || authController.authLoading) return;
-            const user = authController.user;
-            if (!user) return;
-            return userManagement.users.find((fireCMSUser) => fireCMSUser.email?.toLowerCase() === user?.email?.toLowerCase());
-        },
+        if (userManagement.loading || authController.authLoading) return;
+        const user = authController.user;
+        if (!user) return;
+        return userManagement.users.find((fireCMSUser) => fireCMSUser.email?.toLowerCase() === user?.email?.toLowerCase());
+    },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
     const {
@@ -348,9 +348,9 @@ export function FireCMSClientWithController({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSCloudUserWithRoles> = useCallback(({
-                                                                                                             collection,
-                                                                                                             user,
-                                                                                                         }) => {
+        collection,
+        user,
+    }) => {
         return resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
             collection,
             user
@@ -365,45 +365,90 @@ export function FireCMSClientWithController({
         propertyConfigs: appConfig?.propertyConfigs
     });
 
+    // Sync user profile data (photoURL, displayName) from Google sign-in if missing or changed
+    const profileSyncRef = React.useRef<{ photoURL?: string | null, displayName?: string | null }>({});
+    useEffect(() => {
+        const backendUser = fireCMSBackend.user;
+        if (!backendUser || !fireCMSUser || userManagement.loading) return;
+        if (!fireCMSUser.saas_uid) return;
+
+        const backendPhotoURL = backendUser.photoURL;
+        const backendDisplayName = backendUser.displayName;
+        const storedPhotoURL = fireCMSUser.photoURL;
+        const storedDisplayName = fireCMSUser.displayName;
+
+        // Check what needs to be updated
+        const needsPhotoUpdate = backendPhotoURL &&
+            backendPhotoURL !== storedPhotoURL &&
+            backendPhotoURL !== profileSyncRef.current.photoURL;
+        const needsNameUpdate = backendDisplayName &&
+            (!storedDisplayName || storedDisplayName === "") &&
+            backendDisplayName !== profileSyncRef.current.displayName;
+
+        if (needsPhotoUpdate || needsNameUpdate) {
+            // Track what we're updating to prevent duplicate calls
+            if (needsPhotoUpdate) profileSyncRef.current.photoURL = backendPhotoURL;
+            if (needsNameUpdate) profileSyncRef.current.displayName = backendDisplayName;
+
+            const updates: Partial<typeof fireCMSUser> = {};
+            if (needsPhotoUpdate) updates.photoURL = backendPhotoURL;
+            if (needsNameUpdate) updates.displayName = backendDisplayName;
+
+            console.debug("Syncing user profile from Google", {
+                saas_uid: fireCMSUser.saas_uid,
+                updates
+            });
+
+            userManagement.saveUser({
+                ...fireCMSUser,
+                ...updates
+            }).then(() => {
+                console.debug("User profile synced successfully");
+            }).catch((e) => {
+                console.error("Error syncing user profile", e);
+            });
+        }
+    }, [fireCMSBackend.user?.photoURL, fireCMSBackend.user?.displayName, fireCMSUser, userManagement.loading]);
+
     let loadingOrErrorComponent;
     if (userManagement.loading) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"} />;
     } else if (appCheckResult.loading) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"AppCheck loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"AppCheck loading"} />;
     }
-        // else if (appCheckResult.error) {
-        //     loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
+    // else if (appCheckResult.error) {
+    //     loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
     // }
     else if (delegatedLoginError) {
         console.error("Delegated login error", delegatedLoginError)
         loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
-                                                            fireCMSBackend={fireCMSBackend}
-                                                            onLogout={fireCMSBackend.signOut}
-                                                            onFixed={() => checkLogin()}/>
+            fireCMSBackend={fireCMSBackend}
+            onLogout={fireCMSBackend.signOut}
+            onFixed={() => checkLogin()} />
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}
-                                                 projectId={projectId}/>
+            projectId={projectId} />
     } else if (projectConfig.configError) {
         loadingOrErrorComponent = <NoAccessErrorView configError={projectConfig.configError}
-                                                     projectId={projectId}
-                                                     onLogout={fireCMSBackend.signOut}/>
+            projectId={projectId}
+            onLogout={fireCMSBackend.signOut} />
     } else if (customizationLoading) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"} />;
     } else if (firebaseConfigLoading) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"Client config loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Client config loading"} />;
     } else if (firebaseConfigError) {
         loadingOrErrorComponent = <CenteredView>
-            <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
+            <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"} />
         </CenteredView>;
     } else if (delegatedLoginLoading) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"Logging in to " + projectId}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Logging in to " + projectId} />;
     } else if (!authController.user) {
-        loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"} />;
     } else if (!fireCMSUser) {
         loadingOrErrorComponent = <NoAccessError authController={authController}
-                                                 userManagement={userManagement}
-                                                 projectId={projectId}/>;
+            userManagement={userManagement}
+            projectId={projectId} />;
     } else if (projectConfig.blocked) {
         loadingOrErrorComponent = <CenteredView>
             <Typography variant={"h4"}>Project blocked</Typography>
@@ -420,7 +465,7 @@ export function FireCMSClientWithController({
                 logo={projectConfig?.logo ?? props.logo}>
                 {props.FireCMSAppBarComponent &&
                     <props.FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                  {...appConfig?.fireCMSAppBarComponentProps}/>}
+                        {...appConfig?.fireCMSAppBarComponentProps} />}
             </AppBar>
             {loadingOrErrorComponent}
         </Scaffold>;
@@ -442,10 +487,10 @@ export function FireCMSClientWithController({
 }
 
 function NoAccessError({
-                           authController,
-                           userManagement,
-                           projectId
-                       }: {
+    authController,
+    userManagement,
+    projectId
+}: {
     authController: FirebaseAuthController,
     userManagement?: CloudUserManagement,
     projectId: string
@@ -456,27 +501,27 @@ function NoAccessError({
     }
     return <CenteredView maxWidth={"lg"} className={"gap-4"}>
         <ErrorView title={"You don't have access to the project " + projectId}
-                   error={error}/>
+            error={error} />
         <Button variant="text" onClick={authController.signOut}>Sign out</Button>
     </CenteredView>;
 }
 
 function FireCMSAppAuthenticated({
-                                     fireCMSUser,
-                                     firebaseApp,
-                                     projectConfig,
-                                     userManagement,
-                                     collectionConfigController,
-                                     appConfig,
-                                     authController,
-                                     modeController,
-                                     fireCMSBackend,
-                                     FireCMSAppBarComponent,
-                                     onAnalyticsEvent,
-                                     basePath,
-                                     baseCollectionPath,
-                                     logo
-                                 }: Omit<FireCMSClientProps, "projectId"> & {
+    fireCMSUser,
+    firebaseApp,
+    projectConfig,
+    userManagement,
+    collectionConfigController,
+    appConfig,
+    authController,
+    modeController,
+    fireCMSBackend,
+    FireCMSAppBarComponent,
+    onAnalyticsEvent,
+    basePath,
+    baseCollectionPath,
+    logo
+}: Omit<FireCMSClientProps, "projectId"> & {
     fireCMSUser: FireCMSCloudUser;
     firebaseApp: FirebaseApp;
     projectConfig: ProjectConfig;
@@ -492,21 +537,17 @@ function FireCMSAppAuthenticated({
     }
 
     const includeDataTalk = userManagement.isAdmin ?? false;
-    const dataTalkPath = useDataTalkMode();
-    const dataTalkMode = includeDataTalk && dataTalkPath;
-    const dataTalkEndpoint = fireCMSBackend.backendApiHost + "/projects/" + projectConfig.projectId;
 
     const adminRoutes = useMemo(() => buildAdminRoutes(
         includeDataTalk,
         fireCMSBackend,
         projectConfig,
-        dataTalkEndpoint,
         onAnalyticsEvent), [includeDataTalk, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
-                                                                                                              user,
-                                                                                                              collection
-                                                                                                          }) => resolveCollectionConfigPermissions({
+        user,
+        collection
+    }) => resolveCollectionConfigPermissions({
         user: fireCMSUser,
         userManagement,
         collection
@@ -551,7 +592,21 @@ function FireCMSAppAuthenticated({
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
+        textSearchControllerBuilder: useMemo(() => projectConfig.typesenseSearchConfig?.enabled
+            ? (props: any) => {
+                if (!projectConfig.typesenseSearchConfig?.region) {
+                    throw new Error("Typesense config missing region");
+                }
+                const builder = buildFireCMSSearchController({
+                    region: projectConfig.typesenseSearchConfig?.region,
+                    extensionInstanceId: projectConfig.typesenseSearchConfig?.extensionInstanceId === "firestore-typesense-search"
+                        ? "typesense-search"
+                        : (projectConfig.typesenseSearchConfig?.extensionInstanceId || "typesense-search"),
+                    collections: projectConfig.typesenseSearchConfig?.collections
+                });
+                return builder(props);
+            }
+            : appConfig?.textSearchControllerBuilder, [projectConfig.typesenseSearchConfig, appConfig?.textSearchControllerBuilder]),
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder,
         localTextSearchEnabled: projectConfig.localTextSearchEnabled
     });
@@ -568,8 +623,9 @@ function FireCMSAppAuthenticated({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
         getAuthToken: fireCMSBackend.getBackendAuthToken,
-        apiEndpoint: dataTalkEndpoint,
-        loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0
+        apiEndpoint: fireCMSBackend.backendApiHost,
+        loadSamplePrompts: (collectionConfigController.collections ?? []).length > 0,
+        projectId: projectConfig.projectId
     });
 
     const { rootPathSuggestions } = useRootCollectionSuggestions({
@@ -604,7 +660,11 @@ function FireCMSAppAuthenticated({
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
         includeIntroView: false,
-        pathSuggestions: rootPathSuggestions
+        pathSuggestions: rootPathSuggestions,
+        generateCollection: buildCollectionGenerationCallback({
+            getAuthToken: fireCMSBackend.getBackendAuthToken,
+            apiEndpoint: `${fireCMSBackend.backendApiHost}/collections/generate`
+        })
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [
@@ -650,9 +710,9 @@ function FireCMSAppAuthenticated({
                             }}
                         >
                             {({
-                                  context,
-                                  loading
-                              }) => {
+                                context,
+                                loading
+                            }) => {
 
                                 let component;
                                 if (loading) {
@@ -663,9 +723,9 @@ function FireCMSAppAuthenticated({
                                                 logo={projectConfig.logo ?? logo}>
                                                 {FireCMSAppBarComponent &&
                                                     <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                                        {...appConfig?.fireCMSAppBarComponentProps} />}
                                             </AppBar>
-                                            <CircularProgressCenter text={"Almost there"}/>
+                                            <CircularProgressCenter text={"Almost there"} />
                                         </Scaffold>;
                                 } else {
                                     component = (
@@ -676,21 +736,19 @@ function FireCMSAppAuthenticated({
                                             <AppBar>
                                                 {FireCMSAppBarComponent &&
                                                     <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                                        {...appConfig?.fireCMSAppBarComponentProps} />}
                                             </AppBar>
                                             <Drawer>
-                                                {dataTalkMode
-                                                    ? <FireCMSCloudDataTalkDrawer/>
-                                                    : <FireCMSCloudDrawer/>}
+                                                <FireCMSCloudDrawer />
                                             </Drawer>
                                             <NavigationRoutes
                                                 homePage={appConfig?.HomePage
-                                                    ? <appConfig.HomePage/>
-                                                    : <FireCMSCloudHomePage/>}
+                                                    ? <appConfig.HomePage />
+                                                    : <FireCMSCloudHomePage />}
                                             >
                                                 {adminRoutes}
                                             </NavigationRoutes>
-                                            <SideDialogs/>
+                                            <SideDialogs />
                                         </Scaffold>
                                     );
                                 }
@@ -715,10 +773,9 @@ function FireCMSAppAuthenticated({
 }
 
 function buildAdminRoutes(includeDataTalk: boolean,
-                          fireCMSBackend: FireCMSBackend,
-                          projectConfig: ProjectConfig,
-                          dataTalkEndpoint: string,
-                          onAnalyticsEvent?: (event: string, data?: object) => void) {
+    fireCMSBackend: FireCMSBackend,
+    projectConfig: ProjectConfig,
+    onAnalyticsEvent?: (event: string, data?: object) => void) {
 
     const views = [
         {
@@ -727,7 +784,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
             group: "Admin",
             icon: "face",
             hideFromNavigation: true,
-            view: <UsersView/>
+            view: <UsersView />
         },
         {
             path: "roles",
@@ -735,7 +792,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
             group: "Admin",
             icon: "gpp_good",
             hideFromNavigation: true,
-            view: <RolesView/>
+            view: <RolesView />
         },
         {
             path: "settings",
@@ -743,7 +800,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
             group: "Admin",
             icon: "settings",
             hideFromNavigation: true,
-            view: <ProjectSettings/>
+            view: <ProjectSettings />
         }
     ];
 
@@ -758,18 +815,19 @@ function buildAdminRoutes(includeDataTalk: boolean,
                 onAnalyticsEvent={(event, params) => {
                     onAnalyticsEvent?.("datatalk:" + event, params);
                 }}
-                apiEndpoint={dataTalkEndpoint}
-                getAuthToken={fireCMSBackend.getBackendAuthToken}/>
+                apiEndpoint={fireCMSBackend.backendApiHost}
+                getAuthToken={fireCMSBackend.getBackendAuthToken}
+                projectId={projectConfig.projectId} />
         });
 
     }
     return views.map(({
-                          path,
-                          name,
-                          view
-                      }) => <Route
-        key={"navigation_admin_" + path}
-        path={path}
-        element={view}
-    />)
+        path,
+        name,
+        view
+    }) => <Route
+            key={"navigation_admin_" + path}
+            path={path}
+            element={view}
+        />)
 }

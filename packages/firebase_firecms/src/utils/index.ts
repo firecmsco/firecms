@@ -4,3 +4,4 @@ export * from "./algolia";
 export * from "./pinecone";
 export * from "./text_search_controller";
 export * from "./local_text_search_controller";
+export * from "./firecms_search_controller";

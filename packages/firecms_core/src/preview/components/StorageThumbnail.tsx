@@ -77,7 +77,7 @@ export function StorageThumbnailInternal({
             size={size}
             fill={fill}
             hint={storagePathOrDownloadUrl} />
-        : renderSkeletonImageThumbnail(size);
+        : renderSkeletonImageThumbnail(size, fill);
 }
 
 function getFiletype(input: string): FileType {

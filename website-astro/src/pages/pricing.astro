@@ -2,11 +2,17 @@
 // src/pages/pricing.astro
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Pricing", url: "https://firecms.co/pricing" }
+];
 ---
 
 <Layout
         title="FireCMS Pricing - Cloud Trial & Self-Hosted Options"
         description="Explore FireCMS plans: Start with our free Community version (self-hosted), try Cloud free for a month, or unlock PRO features."
+        breadcrumbs={breadcrumbs}
 >
     <main>
         {/* Hero Section */}

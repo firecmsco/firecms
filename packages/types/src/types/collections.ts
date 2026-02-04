@@ -406,16 +406,46 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Default view mode for displaying this collection.
      * - "table": Display entities in a spreadsheet-like table (default)
      * - "cards": Display entities as a grid of cards with thumbnails
+     * - "kanban": Display entities in a Kanban board grouped by a property
      * Defaults to "table".
      */
     defaultViewMode?: ViewMode;
+
+    /**
+     * Configuration for Kanban board view mode.
+     * When set, the Kanban view mode becomes available.
+     */
+    kanban?: KanbanConfig<M>;
+
+    /**
+     * Property key to use for ordering items.
+     * Must reference a number property. When items are reordered,
+     * this property will be updated to reflect the new order using
+     * fractional indexing. Used by Kanban view for ordering within columns
+     * and can be used for general ordering purposes.
+     */
+    orderProperty?: Extract<keyof M, string>;
+}
+
+/**
+ * Configuration for Kanban board view mode.
+ * @group Collections
+ */
+export interface KanbanConfig<M extends Record<string, any> = any> {
+    /**
+     * Property key to use for Kanban board columns.
+     * Must reference a string property with enumValues defined.
+     * Entities will be grouped into columns based on this property's value.
+     * The column order is determined by the order of enumValues in the property.
+     */
+    columnProperty: Extract<keyof M, string>;
 }
 
 /**
  * View mode for displaying a collection.
  * @group Collections
  */
-export type ViewMode = "table" | "cards";
+export type ViewMode = "table" | "cards" | "kanban";
 
 /**
  * Parameter passed to the `Actions` prop in the collection configuration.
@@ -464,9 +494,10 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, USE
     context: FireCMSContext<USER>;
 
     /**
-     * Count of the entities in this collection
+     * Count of the entities in this collection.
+     * undefined means the count is still loading.
      */
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
 
 }
 

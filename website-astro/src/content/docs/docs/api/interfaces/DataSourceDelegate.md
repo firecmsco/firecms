@@ -121,11 +121,6 @@ Key that identifies this data source delegate
 
 ***
 
-### setDateToMidnight()
-
-> **setDateToMidnight**: (`input?`) => `any`
-
-Defined in: [types/datasource.ts:398](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
 #### Parameters
 

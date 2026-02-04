@@ -427,67 +427,55 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
     },
     equal
 );
-
-// Cell component that computes sortable props and passes them to VirtualTableCell
-const SortableCell = ({
-                          column,
-                          columns,
-                          cellData,
-                          rowData,
-                          rowIndex,
-                          columnIndex,
-                          cellRenderer,
-                          isDragging,
-                          isDraggable
-                      }: {
-    column: VirtualTableColumn;
-    columns: VirtualTableColumn[];
-    cellData: any;
-    rowData: any;
-    rowIndex: number;
-    columnIndex: number;
-    cellRenderer: React.ComponentType<any>;
+// Wrapper that applies sortable transforms to cells
+const SortableCellWrapper = ({
+                                 columnKey,
+                                 width,
+                                 isDragging,
+                                 isDraggable,
+                                 frozen,
+                                 children
+                             }: {
+    columnKey: string;
+    width: number;
     isDragging: boolean;
     isDraggable: boolean;
+    frozen?: boolean;
+    children: React.ReactNode;
 }) => {
     const {
         attributes,
+        listeners,
         setNodeRef,
         transform,
         transition,
     } = useSortable({
-        id: column.key,
-        disabled: !isDraggable || column.frozen
+        id: columnKey,
+        disabled: !isDraggable || frozen
     });
 
-    const sortableStyle: React.CSSProperties = {
+    const style = {
         // Only use translate, ignore any scale transforms
         transform: transform ? `translateX(${transform.x}px)` : undefined,
         // Don't transition the dragged item - only other items should animate
         transition: isDragging ? undefined : transition,
-        minWidth: column.width,
-        maxWidth: column.width,
-        width: column.width,
+        minWidth: width,
+        maxWidth: width,
+        width: width,
     };
 
     return (
-        <VirtualTableCell
-            key={`cell_${column.key}`}
-            dataKey={column.key}
-            cellRenderer={cellRenderer}
-            column={column}
-            columns={columns}
-            rowData={rowData}
-            cellData={cellData}
-            rowIndex={rowIndex}
-            columnIndex={columnIndex}
-            sortableNodeRef={setNodeRef}
-            sortableStyle={sortableStyle}
-            sortableAttributes={attributes}
-            isDragging={isDragging}
-            isDraggable={isDraggable}
-            frozen={column.frozen}
-        />
+        <div
+            ref={setNodeRef}
+            style={style}
+            className={cls(
+                "flex-shrink-0",
+                frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+            )}
+            {...attributes}
+        >
+            {children}
+        </div>
     );
 };
 
@@ -565,18 +553,24 @@ function MemoizedList({
                             const isDraggable = !column.frozen && !!onColumnsOrderChange;
 
                             return (
-                                <SortableCell
-                                    key={`cell_${column.key}`}
-                                    column={column}
-                                    columns={columns}
-                                    cellData={cellData}
-                                    rowData={rowData}
-                                    rowIndex={index}
-                                    columnIndex={columnIndex}
-                                    cellRenderer={cellRenderer}
+                                <SortableCellWrapper
+                                    key={`cell_wrapper_${column.key}`}
+                                    columnKey={column.key}
+                                    width={column.width}
                                     isDragging={isDragging}
                                     isDraggable={isDraggable}
-                                />
+                                    frozen={column.frozen}
+                                >
+                                    <VirtualTableCell
+                                        dataKey={column.key}
+                                        cellRenderer={cellRenderer}
+                                        column={column}
+                                        columns={columns}
+                                        rowData={rowData}
+                                        cellData={cellData}
+                                        rowIndex={index}
+                                        columnIndex={columnIndex}/>
+                                </SortableCellWrapper>
                             );
                         })}
 

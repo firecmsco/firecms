@@ -48,6 +48,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         forceFilter,
         actionsStart,
         actions,
+        viewModeToggle,
         title,
         tableRowActionsBuilder,
         uniqueFieldValidator,
@@ -80,7 +81,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         textSearchLoading,
         enablePopupIcon,
         openEntityMode = "side_panel",
-        onColumnsOrderChange
+        onColumnsOrderChange,
+        hideToolbar = false
     }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -91,6 +93,13 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const context: FireCMSContext<USER> = useFireCMSContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
+
+    // Sync internal size with defaultSize prop when it changes
+    React.useEffect(() => {
+        if (defaultSize) {
+            setSize(defaultSize);
+        }
+    }, [defaultSize]);
 
     const updateSize = useCallback((size: CollectionSize) => {
         if (onSizeChanged)
@@ -240,15 +249,21 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             AdditionalHeaderWidget
         });
 
+        // Get keys from property columns to filter out duplicate additional fields
+        const propertyColumnKeys = new Set(columnsResult.map(col => col.key));
+
         const additionalTableColumns: VirtualTableColumn[] = additionalFields
-            ? additionalFields.map((additionalField) =>
-            ({
-                key: additionalField.key,
-                align: "left",
-                sortable: false,
-                title: additionalField.name,
-                width: additionalField.width ?? 200
-            }))
+            // Filter out additional fields whose key already exists in property columns
+            ? additionalFields
+                .filter((additionalField) => !propertyColumnKeys.has(additionalField.key))
+                .map((additionalField) =>
+                ({
+                    key: additionalField.key,
+                    align: "left",
+                    sortable: false,
+                    title: additionalField.name,
+                    width: additionalField.width ?? 200
+                }))
             : [];
         return [...columnsResult, ...additionalTableColumns];
     })();
@@ -334,16 +349,15 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             style={style}
             className={cls("h-full w-full flex flex-col bg-white dark:bg-surface-950", className)}>
 
-            <CollectionTableToolbar
+            {!hideToolbar && <CollectionTableToolbar
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                 textSearchLoading={textSearchLoading}
                 onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
-                size={size}
-                onSizeChanged={updateSize}
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}
-                loading={tableController.dataLoading} />
+                viewModeToggle={viewModeToggle}
+                loading={tableController.dataLoading} />}
 
             <SelectableTable columns={columns}
                 size={size}

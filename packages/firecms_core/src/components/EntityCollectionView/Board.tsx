@@ -11,53 +11,40 @@ import {
     useSensors
 } from "@dnd-kit/core";
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
-import Column from "./Column";
-import { Item, ItemMap, ItemViewProps } from "./types";
+import { BoardColumn } from "./BoardColumn";
+import { BoardItem, BoardItemMap, BoardItemViewProps, BoardProps } from "./board_types";
 import { cls } from "@firecms/ui";
 
-export interface BoardProps<T extends object, COLUMN extends string> {
-    data: Item<T>[];
-    columns: COLUMN[];
-    className?: string;
-    assignColumn: (item: Item<T>) => COLUMN;
-    isCombineEnabled?: boolean;
-    useClone?: boolean;
-    autoScrollerOptions?: any;
-    onColumnReorder?: (columns: COLUMN[]) => void;
-    onItemsReorder?: (
-        items: Item<T>[],
-        moveInfo?: {
-            itemId: string,
-            sourceColumn: COLUMN,
-            targetColumn: COLUMN
-        }
-    ) => void;
-    ItemComponent: React.ComponentType<ItemViewProps<T>>;
-}
+export function Board<M extends Record<string, any>, COLUMN extends string>({
+    data,
+    columns: columnsProp,
+    columnLabels,
+    columnColors,
+    className,
+    assignColumn,
+    allowColumnReorder = false,
+    onColumnReorder,
+    onItemsReorder,
+    ItemComponent,
+    columnLoadingState,
+    onLoadMoreColumn,
+    onAddItemToColumn,
+    AddColumnComponent,
+}: BoardProps<M, COLUMN>) {
 
-export const Board = <T extends object, COLUMN extends string>({
-                                                                   data,
-                                                                   columns: columnsProp,
-                                                                   className,
-                                                                   assignColumn,
-                                                                   onColumnReorder,
-                                                                   onItemsReorder,
-                                                                   ItemComponent,
-                                                               }: BoardProps<T, COLUMN>) => {
-
-    const [activeItem, setActiveItem] = useState<Item<T> | null>(null);
+    const [activeItem, setActiveItem] = useState<BoardItem<M> | null>(null);
     const [activeColumn, setActiveColumn] = useState<COLUMN | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
-    const [itemMapState, setItemMapState] = useState<ItemMap<T>>(() => {
-        const dataColumnMap: Record<string, COLUMN> = data.reduce((prev, item: Item<T>) => ({
+    const [itemMapState, setItemMapState] = useState<BoardItemMap<M>>(() => {
+        const dataColumnMap: Record<string, COLUMN> = data.reduce((prev, item: BoardItem<M>) => ({
             ...prev,
             [item.id]: assignColumn(item)
         }), {});
         return columnsProp.reduce(
-            (previous: ItemMap<T>, column: COLUMN) => ({
+            (previous: BoardItemMap<M>, column: COLUMN) => ({
                 ...previous,
-                [column]: data.filter((item: Item<T>) => dataColumnMap[item.id] === column)
+                [column]: data.filter((item: BoardItem<M>) => dataColumnMap[item.id] === column)
             }),
             {}
         );
@@ -78,9 +65,9 @@ export const Board = <T extends object, COLUMN extends string>({
         }), {});
 
         setItemMapState(() => columnsProp.reduce(
-            (previous: ItemMap<T>, column: COLUMN) => ({
+            (previous: BoardItemMap<M>, column: COLUMN) => ({
                 ...previous,
-                [column]: data.filter((item: Item<T>) => dataColumnMap[item.id] === column)
+                [column]: data.filter((item: BoardItem<M>) => dataColumnMap[item.id] === column)
             }),
             {}
         ));
@@ -224,44 +211,46 @@ export const Board = <T extends object, COLUMN extends string>({
             const oldIndex = columnsProp.findIndex(col => String(col) === activeId);
             const newIndex = columnsProp.findIndex(col => String(col) === overId);
 
-            if (oldIndex !== -1 && newIndex !== -1 && onColumnReorder) {
+            if (oldIndex !== -1 && newIndex !== -1 && onColumnReorder && allowColumnReorder) {
                 const newOrder = arrayMove([...columnsProp], oldIndex, newIndex);
                 onColumnReorder(newOrder);
             }
-       } else if (active.data.current?.type === "ITEM" && onItemsReorder) {
-           const activeId = active.id as string;
+        } else if (active.data.current?.type === "ITEM" && onItemsReorder) {
+            // Find the original column assignment from the input data
+            const originalColumn = data.find(item => item.id === activeId)
+                ? assignColumn(data.find(item => item.id === activeId)!)
+                : undefined;
 
-           // Find the original column assignment from the input data
-           const originalColumn = data.find(item => item.id === activeId)
-               ? assignColumn(data.find(item => item.id === activeId)!)
-               : undefined;
+            // Find the current column assignment from our internal state
+            const currentColumn = findColumnByItemId(activeId) as COLUMN | undefined;
 
-           // Find the current column assignment from our internal state
-           const currentColumn = findColumnByItemId(activeId) as COLUMN | undefined;
+            // When items have been reordered, convert itemMapState to a flat list
+            const allItems: BoardItem<M>[] = [];
 
-           // When items have been reordered, convert itemMapState to a flat list
-           const allItems: Item<T>[] = [];
+            // Collect all items from all columns in their current order
+            Object.entries(itemMapState).forEach(([, columnItems]) => {
+                if (columnItems && (columnItems as BoardItem<M>[]).length > 0) {
+                    allItems.push(...(columnItems as BoardItem<M>[]));
+                }
+            });
 
-           // Collect all items from all columns in their current order
-           Object.entries(itemMapState).forEach(([column, columnItems]) => {
-               if (columnItems && columnItems.length > 0) {
-                   allItems.push(...columnItems);
-               }
-           });
-
-           // Notify parent component of the change, including column movement information
-           if (originalColumn !== currentColumn && originalColumn && currentColumn) {
-               // Item has moved between columns - provide this context to parent
-               onItemsReorder(allItems, {
-                   itemId: activeId,
-                   sourceColumn: originalColumn,
-                   targetColumn: currentColumn
-               });
-           } else {
-               // Just a reordering within the same column
-               onItemsReorder(allItems);
-           }
-       }
+            // Notify parent component of the change, including column movement information
+            if (originalColumn !== currentColumn && originalColumn && currentColumn) {
+                // Item has moved between columns - provide this context to parent
+                onItemsReorder(allItems, {
+                    itemId: activeId,
+                    sourceColumn: originalColumn,
+                    targetColumn: currentColumn
+                });
+            } else if (currentColumn) {
+                // Reordering within the same column - still need to provide moveInfo
+                onItemsReorder(allItems, {
+                    itemId: activeId,
+                    sourceColumn: currentColumn,
+                    targetColumn: currentColumn
+                });
+            }
+        }
     };
 
     return (
@@ -287,11 +276,11 @@ export const Board = <T extends object, COLUMN extends string>({
                         }}
                     />
                 ) : activeColumn ? (
-                    <Column
+                    <BoardColumn
                         key={String(activeColumn)}
                         index={-1}
                         id={String(activeColumn)}
-                        title={String(activeColumn)}
+                        title={columnLabels?.[activeColumn] ?? String(activeColumn)}
                         items={itemMapState[String(activeColumn)] || []}
                         ItemComponent={ItemComponent}
                         isDragging={true}
@@ -304,24 +293,32 @@ export const Board = <T extends object, COLUMN extends string>({
                 items={columnsProp.map(String)}
                 strategy={horizontalListSortingStrategy}
             >
-                <div className={cls("md:p-4 h-full min-w-full inline-flex", className)}>
+                <div className={cls("p-2 md:p-3 lg:p-4 h-full min-w-full inline-flex", className)}>
                     {columnsProp.map((key: COLUMN, index: number) => (
-                        <Column
+                        <BoardColumn
                             key={String(key)}
                             index={index}
                             id={String(key)}
-                            title={String(key)}
+                            title={columnLabels?.[key] ?? String(key)}
+                            color={columnColors?.[key]}
                             items={itemMapState[String(key)] || []}
                             ItemComponent={ItemComponent}
                             isDragging={isDragging}
                             isDragOverColumn={String(key) === dragOverColumnId}
+                            allowReorder={allowColumnReorder}
+                            loading={columnLoadingState?.[String(key)]?.loading}
+                            hasMore={columnLoadingState?.[String(key)]?.hasMore}
+                            totalCount={columnLoadingState?.[String(key)]?.totalCount}
+                            onLoadMore={onLoadMoreColumn ? () => onLoadMoreColumn(key) : undefined}
+                            onAddItem={onAddItemToColumn ? () => onAddItemToColumn(key) : undefined}
                             style={{
                                 opacity: activeColumn === key ? 0 : 1
                             }}
                         />
                     ))}
+                    {AddColumnComponent}
                 </div>
             </SortableContext>
         </DndContext>
     );
-};
+}

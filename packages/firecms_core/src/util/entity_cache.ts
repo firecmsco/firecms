@@ -33,7 +33,7 @@ function customReplacer(key: string): any {
             id: value.id,
             path: value.path,
             datasource: value.datasource,
-            database: value.database
+            databaseId: value.databaseId
         };
     }
 
@@ -78,7 +78,7 @@ function customReviver(key: string, value: any): any {
                     id: value.id,
                     path: value.path,
                     datasource: value.datasource,
-                    database: value.database
+                    databaseId: value.databaseId
                 });
             case "EntityRelation":
                 return new EntityRelation(value.id, value.path);
@@ -130,6 +130,7 @@ export function saveEntityToCache(path: string, data: object): void {
     if (isSessionStorageAvailable) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
+
             const entityString = JSON.stringify(data, customReplacer);
             sessionStorage.setItem(key, entityString);
         } catch (error) {

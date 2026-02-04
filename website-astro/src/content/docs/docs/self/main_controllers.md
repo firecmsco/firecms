@@ -1,6 +1,7 @@
 ---
 slug: docs/self/controllers
 title: Building a custom backend
+description: Learn how to implement custom DataSourceDelegate, StorageSource, and AuthController for FireCMS with your own backend.
 ---
 
 FireCMS internally uses 3 main controllers to manage the data, file storage and authentication.
@@ -54,8 +55,6 @@ subscription. If not implemented, the `fetchEntity` method will be used instead.
 **delegateToCMSModel**: Convert data from the source model to CMS model.
 
 **cmsToDelegateModel**: Convert data from the CMS model to the source model.
-
-**setDateToMidnight**: (Optional) Set the date to midnight.
 
 **initTextSearch**: (Optional) Initialize text search capabilities.
 

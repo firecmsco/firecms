@@ -10,19 +10,25 @@ import { useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 
 export function HomePageEditorCollectionAction({
-                                                   slug,
-                                                   collection
-                                               }: PluginHomePageActionsProps) {
+    slug,
+    collection
+}: PluginHomePageActionsProps) {
 
     const snackbarController = useSnackbarController();
     const authController = useAuthController();
     const configController = useCollectionsConfigController();
     const collectionEditorController = useCollectionEditorController();
 
-    const permissions = collectionEditorController.configPermissions({
-        user: authController.user,
-        collection
-    });
+    const permissions = collectionEditorController?.configPermissions
+        ? collectionEditorController.configPermissions({
+            user: authController.user,
+            collection
+        })
+        : {
+            createCollections: false,
+            editCollections: false,
+            deleteCollections: false
+        };
 
     const onEditCollectionClicked = () => {
         collectionEditorController?.editCollection({
@@ -60,7 +66,7 @@ export function HomePageEditorCollectionAction({
             {permissions.deleteCollections &&
                 <Menu
                     trigger={<IconButton size={"small"}>
-                        <MoreVertIcon size={"small"}/>
+                        <MoreVertIcon size={"small"} />
                     </IconButton>}
                 >
                     {permissions.createCollections &&
@@ -71,7 +77,7 @@ export function HomePageEditorCollectionAction({
                                 event.stopPropagation();
                                 onDuplicateCollectionClicked();
                             }}>
-                            <ContentCopyIcon/>
+                            <ContentCopyIcon />
                             Duplicate
                         </MenuItem>
                     }
@@ -82,7 +88,7 @@ export function HomePageEditorCollectionAction({
                             event.stopPropagation();
                             setDeleteRequested(true);
                         }}>
-                        <DeleteIcon/>
+                        <DeleteIcon />
                         Delete
                     </MenuItem>
 
@@ -96,7 +102,7 @@ export function HomePageEditorCollectionAction({
                     onClick={(event) => {
                         onEditCollectionClicked();
                     }}>
-                    <SettingsIcon size={"small"}/>
+                    <SettingsIcon size={"small"} />
                 </IconButton>}
         </div>
 
@@ -107,7 +113,7 @@ export function HomePageEditorCollectionAction({
             title={<>Delete this collection?</>}
             body={<> This will <b>not
                 delete any data</b>, only
-                the collection in the CMS</>}/>
+                the collection in the CMS</>} />
     </>;
 
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property } from "@firecms/core";
+import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property, AIModifiedIndicator } from "@firecms/core";
 import {
-    AutorenewIcon,
+    FindInPageIcon,
     defaultBorderMixin,
     DeleteIcon,
     IconButton,
@@ -35,6 +35,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { getFullId, getFullIdPath } from "./util";
 import { editableProperty } from "../../utils/entities";
+import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 
 export const PropertyTree = React.memo(
     function PropertyTree<M extends {
@@ -242,6 +243,10 @@ export function PropertyTreeEntry({
     const selected = selectedPropertyKey === fullId;
     const editable = property && ((collectionEditable && !isPropertyBuilder(property)) || editableProperty(property));
 
+    // Check if this property was AI-modified
+    const aiModifiedPaths = useAIModifiedPaths();
+    const isAIModified = aiModifiedPaths?.isPathModified(`properties.${propertyKey}`) ?? false;
+
     return (
         <div
             ref={setNodeRef}
@@ -273,11 +278,12 @@ export function PropertyTreeEntry({
                             selected={selected} />}
                 </div>
 
-                <div className="absolute top-3 right-3 flex flex-row items-center">
+                <div className="absolute top-3 right-3 flex flex-row items-center gap-1">
+                    {isAIModified && <AIModifiedIndicator />}
                     {isPropertyInferred && <>
                         <Tooltip title={"Inferred property"} asChild={true}>
                             <IconButton size="smallest" disabled>
-                                <AutorenewIcon size="smallest" />
+                                <FindInPageIcon size="smallest" />
                             </IconButton>
                         </Tooltip>
                         {onPropertyRemove && <Tooltip title={"Remove inferred property"}

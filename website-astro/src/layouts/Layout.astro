@@ -1,7 +1,13 @@
 ---
+export interface BreadcrumbItem {
+    name: string;
+    url: string;
+}
+
 export interface Props {
     title?: string;
     description?: string;
+    breadcrumbs?: BreadcrumbItem[];
 }
 
 import { ViewTransitions } from "astro:transitions";
@@ -12,12 +18,25 @@ import CookieBanner from "../components/CookieBanner.astro";
 
 const {
     title = "FireCMS - The Headless CMS for Firebase and MongoDB",
-    description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface."
+    description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
+    breadcrumbs
 } = Astro.props;
 
 const canonicalBase = "https://firecms.co";
 const path = Astro.url.pathname;
 const canonical = path === "/" ? canonicalBase : `${canonicalBase}${path}`;
+
+// Generate breadcrumb structured data
+const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.name,
+        "item": item.url
+    }))
+} : null;
 ---
 
 <!DOCTYPE html>
@@ -115,6 +134,10 @@ const canonical = path === "/" ? canonicalBase : `${canonicalBase}${path}`;
             ]
         }
     </script>
+
+    {breadcrumbSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
 
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">

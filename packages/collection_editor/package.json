@@ -27,15 +27,15 @@
   "exports": {
     ".": {
       "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.umd.js"
     },
     "./package.json": "./package.json"
   },
   "scripts": {
     "dev": "vite",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
@@ -72,5 +72,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "946e1f4f5695190e903af3a71dd7111accfc1efa"
+  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
 }

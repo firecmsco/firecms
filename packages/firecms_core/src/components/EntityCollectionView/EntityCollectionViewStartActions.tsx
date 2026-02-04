@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import { useAuthController, useCustomizationController, useFireCMSContext } from "../../hooks";
+import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, Properties, SelectionController } from "@firecms/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
 import { toArray } from "@firecms/common";
 import { FiltersDialog } from "./FiltersDialog";
-import {
-    Badge,
-    Button,
-    cls,
-    FilterListIcon,
-    IconButton,
-    Tooltip
-} from "@firecms/ui";
-import { useLargeLayout } from "../../hooks";
+import { Badge, Button, cls, FilterListIcon, IconButton, Tooltip } from "@firecms/ui";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -22,7 +14,7 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
     parentCollectionIds: string[];
     selectionController: SelectionController<M>;
     tableController: EntityTableController<M>;
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
     /**
      * Resolved properties from the collection for the filters dialog
      */
@@ -68,7 +60,8 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && (
-        <Tooltip title="Filters">
+        <Tooltip title="Filters"
+            key={"filters_tooltip"}>
             <Badge
                 color="primary"
                 invisible={activeFilterCount === 0}

@@ -15,7 +15,7 @@
     "@firecms/schema_inference": "4.0.0-alpha.1",
     "@firecms/ui": "4.0.0-alpha.1",
     "@firecms/user_management": "4.0.0-alpha.1",
-    "@fontsource/jetbrains-mono": "^5.2.5",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "clsx": "^2.1.1",
     "firebase": "^12.7.0",
     "react": "18.3.1",

@@ -1,6 +1,7 @@
 ---
 slug: docs/pro/licensing
 title: Licensing
+description: FireCMS PRO licensing information, including how to purchase and configure your license for deployment.
 ---
 
 :::tip

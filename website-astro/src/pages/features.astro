@@ -10,6 +10,11 @@ import UsageExamples from "../components/UsageExamples.astro";
 const title = "FireCMS Features - A Powerful, Intuitive Experience for Your Entire Team";
 const description = "From the end-user to the developer, FireCMS is designed to make building and managing back-office applications a seamless experience.";
 
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Features", url: "https://firecms.co/features" }
+];
+
 const dataTalkExchanges = [
     {
         query: "Show me all products with price greater than 100",
@@ -30,7 +35,7 @@ const dataTalkExchanges = [
 ];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 
     <main>
         <!-- Hero Section -->

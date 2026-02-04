@@ -57,16 +57,16 @@ export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
  */
 export const DefaultAppBar = function DefaultAppBar({
-                                                        title,
-                                                        endAdornment,
-                                                        startAdornment,
-                                                        dropDownActions,
-                                                        includeModeToggle = true,
-                                                        className,
-                                                        style,
-                                                        user: userProp,
-                                                        logo: logoProp,
-                                                    }: DefaultAppBarProps) {
+    title,
+    endAdornment,
+    startAdornment,
+    dropDownActions,
+    includeModeToggle = true,
+    className,
+    style,
+    user: userProp,
+    logo: logoProp,
+}: DefaultAppBarProps) {
 
     const {
         hasDrawer,
@@ -103,7 +103,7 @@ export const DefaultAppBar = function DefaultAppBar({
         </Avatar>;
     } else if (user === undefined || authController.initialLoading) {
         avatarComponent = <div className={"p-1 flex justify-center"}>
-            <Skeleton className={"w-10 h-10 rounded-full"}/>
+            <Skeleton className={"w-10 h-10 rounded-full"} />
         </div>;
     } else {
         avatarComponent = null;
@@ -131,13 +131,13 @@ export const DefaultAppBar = function DefaultAppBar({
                     <div className={"flex flex-row gap-4"}>
                         {!hasDrawer && (logo
                             ? <img src={logo}
-                                   alt="Logo"
-                                   className={cls("w-[32px] h-[32px] object-contain")}/>
-                            : <FireCMSLogo width={"32px"} height={"32px"}/>)}
+                                alt="Logo"
+                                className={cls("w-[32px] h-[32px] object-contain")} />
+                            : <FireCMSLogo width={"32px"} height={"32px"} />)}
 
                         {typeof title === "string"
                             ? <Typography variant="subtitle1"
-                                          noWrap>
+                                noWrap>
                                 {title}
                             </Typography>
                             : title}
@@ -146,7 +146,7 @@ export const DefaultAppBar = function DefaultAppBar({
             </div>}
 
             {(breadcrumbs.breadcrumbs ?? []).length > 0 && <div className="mr-8 hidden lg:block">
-                <div className={"flex flex-row gap-2"}>
+                <div className={"flex flex-row gap-2 items-center"}>
                     {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
                         return <React.Fragment key={breadcrumb.url + "_" + index}>
                             <Typography variant={"caption"} color={"secondary"}>
@@ -157,18 +157,31 @@ export const DefaultAppBar = function DefaultAppBar({
                                 className="visited:text-inherit dark:visited:text-inherit block"
                                 to={breadcrumb.url}
                             >
-                                <Typography variant={"caption"} color={"secondary"}>
-                                    {breadcrumb.title}
-                                </Typography>
+                                <div className="flex flex-row items-center gap-2 whitespace-nowrap">
+                                    <Typography variant={"body2"}>
+                                        {breadcrumb.title}
+                                    </Typography>
+                                    {/* Show count badge for collection breadcrumbs: undefined = not applicable, null = loading, number = count */}
+                                    {breadcrumb.count !== undefined && (
+                                        breadcrumb.count !== null ? (
+                                            <span className="text-xs text-surface-accent-500 dark:text-surface-accent-400 bg-surface-100 dark:bg-surface-700 px-1 py-0 rounded">
+                                                {breadcrumb.count}
+                                            </span>
+                                        ) : (
+                                            <Skeleton className="w-8 h-4 rounded-md" />
+                                        )
+                                    )}
+                                </div>
                             </Link>
                         </React.Fragment>;
                     })}
                 </div>
             </div>}
 
+
             {startAdornment}
 
-            <div className={"grow"}/>
+            <div className={"grow"} />
 
             {endAdornment &&
                 <ErrorBoundary>
@@ -182,13 +195,13 @@ export const DefaultAppBar = function DefaultAppBar({
                         aria-label="Open drawer"
                         size="large">
                         {mode === "dark"
-                            ? <DarkModeIcon/>
-                            : <LightModeIcon/>}
+                            ? <DarkModeIcon />
+                            : <LightModeIcon />}
                     </IconButton>}>
-                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"}/> Dark</MenuItem>
-                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"}/> Light </MenuItem>
+                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> Dark</MenuItem>
+                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> Light </MenuItem>
                     <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
-                        size={"smallest"}/>System</MenuItem>
+                        size={"smallest"} />System</MenuItem>
                 </Menu>}
 
             <Menu trigger={avatarComponent}>
@@ -208,7 +221,7 @@ export const DefaultAppBar = function DefaultAppBar({
                     // replace current route with home
                     navigate("/");
                 }}>
-                    <LogoutIcon/>
+                    <LogoutIcon />
                     Log Out
                 </MenuItem>}
 

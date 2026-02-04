@@ -177,6 +177,39 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             collection: EC;
             newPropertiesOrder: string[];
         }) => void;
+
+        /**
+         * Callback called when Kanban board columns are reordered via drag and drop.
+         * Used by plugins to persist the new Kanban column order.
+         */
+        onKanbanColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            kanbanColumnProperty: string;
+            newColumnsOrder: string[];
+        }) => void;
+
+        /**
+         * Component to render when Kanban view is missing configuration.
+         * Used to provide a CTA to open the collection editor to configure Kanban.
+         */
+        KanbanSetupComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+        }>;
+
+        /**
+         * Component to render an "Add Column" button at the end of the Kanban board.
+         * Used to allow adding new enum values to the column property.
+         */
+        AddKanbanColumnComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+            columnProperty: string;
+        }>;
     }
 
     form?: {

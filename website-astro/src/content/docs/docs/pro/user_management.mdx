@@ -1,19 +1,20 @@
 ---
 slug: docs/pro/user_management
 title: User Management
+description: Add role-based access control to your Firebase admin panel with the FireCMS User Management plugin. Manage users, roles, and permissions in Firestore.
 ---
 
 ![user_management.png](/img/user_management.png)
 
-This document provides an overview of how to use the User Management Plugin with FireCMS to manage
-users and roles.
+Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
 
-The User Management Plugin allows you to create, edit, and delete users and roles within your FireCMS project.
-It ensures that users have the appropriate permissions based on their roles and integrates this authentication
-and permissions system directly into your backend. This plugin allows you to control which users can access
-your application and what actions they can perform over what specific collections.
-
-In this document, we will cover how to set up and use this plugin in your FireCMS application.
+:::tip Why use the User Management Plugin?
+Building authentication and permissions from scratch is time-consuming and error-prone. This plugin gives you:
+- **User CRUD**: Create, edit, and delete CMS users directly in the UI
+- **Role definitions**: Define granular permissions (Admin, Editor, Viewer, or custom)
+- **Per-collection permissions**: Control who can read, create, edit, or delete in each collection
+- **Firestore integration**: All user/role data stored securely in your **Firestore** database
+:::
 
 
 ## Installation

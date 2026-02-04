@@ -9,6 +9,7 @@ import {
     Property,
 } from "@firecms/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
+import { mergeDeep } from "./objects";
 
 export function isReadOnly(property: Property): boolean {
     if (property.readOnly)
@@ -90,25 +91,21 @@ export function updateDateAutoValues<M extends Record<string, any>>({
         properties: Properties,
         status: EntityStatus,
         timestampNowValue: any,
-        setDateToMidnight: (input?: any) => any | undefined
+        setDateToMidnight?: (input?: any) => any | undefined
     }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
         (inputValue, property) => {
             if (property.type === "date") {
-                let resultDate;
                 if (status === "existing" && property.autoValue === "on_update") {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else if ((status === "new" || status === "copy") &&
                     (property.autoValue === "on_update" || property.autoValue === "on_create")) {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else {
-                    resultDate = inputValue;
+                    return inputValue;
                 }
-                if (property.mode === "date")
-                    resultDate = setDateToMidnight(resultDate);
-                return resultDate;
             } else {
                 return inputValue;
             }
@@ -156,17 +153,21 @@ export function traverseValuesProperties<M extends Record<string, any>>(
     properties: Properties,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> | undefined {
+    // Handle null/undefined inputValues - use empty object as base for mergeDeep
+    const safeInputValues = inputValues ?? {};
+
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues)[key];
+            const inputValue = safeInputValues && (safeInputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === null) return null;
             if (updatedValue === undefined) return undefined;
             return ({ [key]: updatedValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
-    const result = { ...inputValues, ...updatedValues };
-    if (Object.keys(result).length === 0) return undefined;
+    // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
+    const result = mergeDeep(safeInputValues, updatedValues);
+    if (!result || Object.keys(result).length === 0) return undefined;
     return result;
 }
 

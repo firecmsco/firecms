@@ -40,3 +40,5 @@ export * from "./SearchIconsView";
 export * from "./FieldCaption";
 
 export * from "./EntityPreview";
+
+export * from "./AIIcon";

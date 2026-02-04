@@ -487,7 +487,6 @@ export function ArrayContainer<T>({
                                 disabled={disabled || (value?.length ?? 0) >= max}
                                 startIcon={<AddIcon/>}
                                 onClick={insertInEnd}
-                                className={"ml-3.5"}
                             >
                                 {addLabel ?? "Add"}
                             </Button>

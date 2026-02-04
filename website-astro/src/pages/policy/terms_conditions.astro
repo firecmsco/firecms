@@ -3,9 +3,14 @@ import Layout from "../../layouts/Layout.astro";
 
 const title = "FireCMS Terms of Service";
 const description = "Terms and conditions for using FireCMS services.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Terms and Conditions", url: "https://firecms.co/policy/terms_conditions" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
     <div class="mx-auto max-w-7xl p-8">
         <div align="center" style="text-align: left; line-height: 1;">
             <div align="center" class="MsoNormal" style="text-align: left; line-height: 150%;">

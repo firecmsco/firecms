@@ -2,10 +2,11 @@
 slug: docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
+description: Configuration for reference properties in FireCMS, linking entities to other collections with previews and filters.
 ---
 
 ```tsx
-import { buildProperty } from "./builders";
+import { buildProperty } from "@firecms/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",
@@ -38,6 +39,14 @@ e.g. `forceFilter: { age: [">=", 18] }`
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.
 
+### `includeId`
+
+Should the reference include the ID of the entity. Defaults to `true`.
+
+### `includeEntityLink`
+
+Should the reference include a link to the entity (open the entity details). Defaults to `true`.
+
 ### `defaultValue`
 
 Default value for this property.
@@ -45,7 +54,7 @@ You can set the default value by defining an EntityReference:
 
 ```tsx
 
-import { buildProperty } from "./builders";
+import { buildProperty, EntityReference } from "@firecms/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",

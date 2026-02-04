@@ -24,19 +24,19 @@ import { PropertyCollectionView } from "../../components/PropertyCollectionView"
 
 interface LocalChangesMenuProps<M extends object> {
     cacheKey: string;
-    localChangesData: Partial<M>;
+    cachedData: Partial<M>;
     formex: FormexController<M>;
     onClearLocalChanges?: () => void;
     properties: Properties;
 }
 
 export function LocalChangesMenu<M extends object>({
-                                                       localChangesData,
-                                                       formex,
-                                                       onClearLocalChanges,
-                                                       cacheKey,
-                                                       properties
-                                                   }: LocalChangesMenuProps<M>) {
+    cachedData,
+    formex,
+    onClearLocalChanges,
+    cacheKey,
+    properties
+}: LocalChangesMenuProps<M>) {
 
     const snackbarController = useSnackbarController();
     const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
@@ -51,10 +51,10 @@ export function LocalChangesMenu<M extends object>({
     };
 
     const handleApply = () => {
-        const mergedValues = mergeDeep(formex.values, localChangesData);
+        const mergedValues = mergeDeep(formex.values, cachedData);
         const touched = { ...formex.touched };
-        const previewKeys = flattenKeys(localChangesData);
-        previewKeys.forEach((key) => {
+        const cachedKeys = flattenKeys(cachedData);
+        cachedKeys.forEach((key) => {
             touched[key] = true;
         });
 
@@ -89,9 +89,9 @@ export function LocalChangesMenu<M extends object>({
                         }
                         onClick={handleOpenMenu}
                     >
-                        <WarningIcon size={"smallest"} className={"mr-1 text-yellow-600 dark:text-yellow-400"}/>
+                        <WarningIcon size={"smallest"} className={"mr-1 text-yellow-600 dark:text-yellow-400"} />
                         Unsaved Local changes
-                        <KeyboardArrowDownIcon size={"smallest"}/>
+                        <KeyboardArrowDownIcon size={"smallest"} />
                     </Button>
                 }
                 open={open}
@@ -101,9 +101,9 @@ export function LocalChangesMenu<M extends object>({
                     This document was edited locally and has unsaved changes. These local changes will be lost if you
                     don't apply them.
                 </div>
-                <MenuItem dense onClick={handlePreview}><VisibilityIcon size={"small"}/>Preview Changes</MenuItem>
-                <MenuItem dense onClick={handleApply}><CheckIcon size={"small"}/>Apply Changes</MenuItem>
-                <MenuItem dense onClick={handleDiscard}><CancelIcon size={"small"}/>Discard Local Changes</MenuItem>
+                <MenuItem dense onClick={handlePreview}><VisibilityIcon size={"small"} />Preview Changes</MenuItem>
+                <MenuItem dense onClick={handleApply}><CheckIcon size={"small"} />Apply Changes</MenuItem>
+                <MenuItem dense onClick={handleDiscard}><CancelIcon size={"small"} />Discard Local Changes</MenuItem>
             </Menu>
 
             <Dialog
@@ -121,8 +121,8 @@ export function LocalChangesMenu<M extends object>({
                         overflow: "auto"
                     }}>
                         <div className="p-4">
-                            <PropertyCollectionView data={localChangesData}
-                                                    properties={properties as Properties}/>
+                            <PropertyCollectionView data={cachedData}
+                                properties={properties as Properties} />
                         </div>
                     </div>
                 </DialogContent>

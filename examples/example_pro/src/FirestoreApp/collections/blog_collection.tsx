@@ -28,6 +28,9 @@ export const blogCollection = buildCollection<BlogEntry>({
         name: "Preview",
         Builder: BlogEntryPreview
     }],
+    kanban: {
+        columnProperty: "status"
+    },
     properties: {
         name: buildProperty({
             name: "Name",
@@ -97,7 +100,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             type: "date",
             autoValue: "on_create"
         },
-        status: buildProperty(({ values }) => ({
+        status: {
             name: "Status",
             validation: { required: true },
             type: "string",
@@ -105,13 +108,12 @@ export const blogCollection = buildCollection<BlogEntry>({
             enum: {
                 published: {
                     id: "published",
-                    label: "Published",
-                    disabled: !values.header_image
+                    label: "Published"
                 },
                 draft: "Draft"
             },
             defaultValue: "draft"
-        })),
+        },
         publish_date: buildProperty({
             name: "Publish date",
             type: "date",

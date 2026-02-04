@@ -3,9 +3,14 @@ import Layout from '../../layouts/Layout.astro';
 
 const title = "FireCMS Privacy Policy";
 const description = "Learn how FireCMS handles your data and protects your privacy.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Privacy Policy", url: "https://firecms.co/policy/privacy_policy" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
 
 
     <div class="mx-auto max-w-7xl">

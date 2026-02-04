@@ -9,10 +9,10 @@ export type SmallNavigationCardProps = {
 };
 
 export function SmallNavigationCard({
-                                 name,
-                                 url,
-                                 icon,
-                             }: SmallNavigationCardProps) {
+    name,
+    url,
+    icon,
+}: SmallNavigationCardProps) {
 
     return (
         <>
@@ -28,17 +28,18 @@ export function SmallNavigationCard({
                 <div className="flex flex-row items-center grow gap-2 ">
                     {icon}
 
-                    <Typography gutterBottom variant="h5"
-                                component="h2"
-                                className="mb-0 ml-4">
+                    <Typography gutterBottom variant="subtitle1"
+                        component="h2"
+                        className="mb-0 ml-3 font-medium">
                         {name}
                     </Typography>
                 </div>
 
-                <div className={"p-4"}>
-                    <ArrowForwardIcon color="primary"/>
+                <div className={"p-2"}>
+                    <ArrowForwardIcon color="primary" size={"small"} />
                 </div>
             </Link>
 
         </>);
 }
+

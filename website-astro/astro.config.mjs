@@ -203,12 +203,16 @@ export default defineConfig({
                             slug: "docs/self/controllers"
                         },
                         {
-                            label: "Migrating from v2 to v3",
-                            slug: "docs/self/migrating_from_v2_to_v3"
+                            label: "Migrating from v3.0 to v3.1",
+                            slug: "docs/self/migrating_from_v3_to_v3_1"
                         },
                         {
                             label: "Migrating from v3 Beta",
                             slug: "docs/self/migrating_from_v3_beta"
+                        },
+                        {
+                            label: "Migrating from v2 to v3",
+                            slug: "docs/self/migrating_from_v2_to_v3"
                         },
                     ],
                 },
@@ -219,6 +223,10 @@ export default defineConfig({
                         {
                             label: "Collections",
                             slug: "docs/collections/index"
+                        },
+                        {
+                            label: "View Modes",
+                            slug: "docs/collections/view_modes"
                         },
                         {
                             label: "Callbacks",

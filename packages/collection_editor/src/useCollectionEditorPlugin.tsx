@@ -7,6 +7,7 @@ import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAct
 import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
+import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
@@ -15,6 +16,8 @@ import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { EditorEntityAction } from "./ui/EditorEntityAction";
+import { KanbanSetupAction } from "./ui/KanbanSetupAction";
+import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -54,6 +57,12 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     includeIntroView?: boolean;
 
+    /**
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
+     */
+    generateCollection?: CollectionGenerationCallback;
+
 }
 
 /**
@@ -78,7 +87,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         getData,
         onAnalyticsEvent,
         includeIntroView = true,
-        pathSuggestions
+        pathSuggestions,
+        generateCollection
     }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -95,7 +105,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getUser,
                 getData,
                 onAnalyticsEvent,
-                pathSuggestions
+                pathSuggestions,
+                generateCollection
             }
         },
         homePage: {
@@ -112,7 +123,10 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent,
-            onColumnsReorder: collectionConfigController.updatePropertiesOrder
+            onColumnsReorder: collectionConfigController.updatePropertiesOrder,
+            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder,
+            KanbanSetupComponent: KanbanSetupAction,
+            AddKanbanColumnComponent: AddKanbanColumnAction
         },
         form: {
             ActionsTop: EditorEntityAction,

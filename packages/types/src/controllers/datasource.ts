@@ -18,16 +18,16 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
     & {
-    onUpdate: (entity: Entity<M> | null) => void,
-    onError?: (error: Error) => void,
-}
+        onUpdate: (entity: Entity<M> | null) => void,
+        onError?: (error: Error) => void,
+    }
 
 /**
  * @group Datasource
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
-    collection?: EntityCollection<M> ;
+    collection?: EntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
     startAfter?: any;
@@ -54,7 +54,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
     values: Partial<EntityValues<M>>;
     entityId?: string | number; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
-    collection?: EntityCollection<M> ;
+    collection?: EntityCollection<M>;
     status: EntityStatus;
 }
 
@@ -63,7 +63,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
-    collection?: EntityCollection<M> ;
+    collection?: EntityCollection<M>;
 }
 
 /**
@@ -87,15 +87,15 @@ export interface DataSource {
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
     fetchCollection<M extends Record<string, any> = any>({
-                                                             path,
-                                                             collection,
-                                                             filter,
-                                                             limit,
-                                                             startAfter,
-                                                             orderBy,
-                                                             order,
-                                                             searchString
-                                                         }: FetchCollectionProps<M>
+        path,
+        collection,
+        filter,
+        limit,
+        startAfter,
+        orderBy,
+        order,
+        searchString
+    }: FetchCollectionProps<M>
     ): Promise<Entity<M>[]>;
 
     /**
@@ -136,11 +136,11 @@ export interface DataSource {
      * @param collection
      */
     fetchEntity<M extends Record<string, any> = any>({
-                                                         path,
-                                                         entityId,
-                                                         databaseId,
-                                                         collection
-                                                     }: FetchEntityProps<M>
+        path,
+        entityId,
+        databaseId,
+        collection
+    }: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined>;
 
     /**
@@ -153,12 +153,12 @@ export interface DataSource {
      * @return Function to cancel subscription
      */
     listenEntity?<M extends Record<string, any> = any>({
-                                                           path,
-                                                           entityId,
-                                                           collection,
-                                                           onUpdate,
-                                                           onError
-                                                       }: ListenEntityProps<M>): () => void;
+        path,
+        entityId,
+        collection,
+        onUpdate,
+        onError
+    }: ListenEntityProps<M>): () => void;
 
     /**
      * Save entity to the specified path
@@ -297,14 +297,14 @@ export interface DataSourceDelegate {
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
     fetchCollection<M extends Record<string, any> = any>({
-                                                             path,
-                                                             filter,
-                                                             limit,
-                                                             startAfter,
-                                                             orderBy,
-                                                             order,
-                                                             searchString
-                                                         }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]>;
+        path,
+        filter,
+        limit,
+        startAfter,
+        orderBy,
+        order,
+        searchString
+    }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]>;
 
     /**
      * Listen to a collection in a given path. If you don't implement this method
@@ -322,16 +322,16 @@ export interface DataSourceDelegate {
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
     listenCollection?<M extends Record<string, any> = any>({
-                                                               path,
-                                                               filter,
-                                                               limit,
-                                                               startAfter,
-                                                               searchString,
-                                                               orderBy,
-                                                               order,
-                                                               onUpdate,
-                                                               onError
-                                                           }: ListenCollectionDelegateProps<M>): () => void;
+        path,
+        filter,
+        limit,
+        startAfter,
+        searchString,
+        orderBy,
+        order,
+        onUpdate,
+        onError
+    }: ListenCollectionDelegateProps<M>): () => void;
 
     /**
      * Retrieve an entity given a path and a collection
@@ -339,9 +339,9 @@ export interface DataSourceDelegate {
      * @param entityId
      */
     fetchEntity<M extends Record<string, any> = any>({
-                                                         path,
-                                                         entityId,
-                                                     }: FetchEntityDelegateProps<M>): Promise<Entity<M> | undefined>;
+        path,
+        entityId,
+    }: FetchEntityDelegateProps<M>): Promise<Entity<M> | undefined>;
 
     /**
      * Get realtime updates on one entity.
@@ -353,11 +353,11 @@ export interface DataSourceDelegate {
      * @return Function to cancel subscription
      */
     listenEntity?<M extends Record<string, any> = any>({
-                                                           path,
-                                                           entityId,
-                                                           onUpdate,
-                                                           onError
-                                                       }: ListenEntityDelegateProps<M>): () => void;
+        path,
+        entityId,
+        onUpdate,
+        onError
+    }: ListenEntityDelegateProps<M>): () => void;
 
     /**
      * Save entity to the specified path
@@ -367,11 +367,11 @@ export interface DataSourceDelegate {
      * @param status
      */
     saveEntity<M extends Record<string, any> = any>({
-                                                        path,
-                                                        entityId,
-                                                        values,
-                                                        status
-                                                    }: SaveEntityDelegateProps<M>): Promise<Entity<M>>;
+        path,
+        entityId,
+        values,
+        status
+    }: SaveEntityDelegateProps<M>): Promise<Entity<M>>;
 
     /**
      * Delete an entity
@@ -415,7 +415,11 @@ export interface DataSourceDelegate {
      */
     currentTime?: () => any;
 
-    setDateToMidnight: (input?: any) => any;
+    setDateToMidnight?: (input?: any) => any;
+
+    delegateToCMSModel?: (data: any) => any;
+
+    cmsToDelegateModel?: (data: any) => any;
 
     initTextSearch?: (props: {
         context: FireCMSContext,

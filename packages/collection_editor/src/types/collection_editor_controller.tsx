@@ -1,4 +1,3 @@
-import React from "react";
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
 import { Entity, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
@@ -14,7 +13,15 @@ export interface CollectionEditorController {
         path?: string,
         parentCollectionIds: string[],
         parentCollection?: PersistedCollection,
-        existingEntities?: Entity<any>[]
+        existingEntities?: Entity<any>[],
+        /**
+         * Initial view to open: "general", "display", or "properties"
+         */
+        initialView?: "general" | "display" | "properties",
+        /**
+         * If true, expand the Kanban configuration section
+         */
+        expandKanban?: boolean
     }) => void;
 
     createCollection: (props: {

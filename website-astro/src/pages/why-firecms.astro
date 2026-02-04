@@ -5,9 +5,14 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 
 const title = "Why Choose FireCMS? - Speed, Flexibility, and Ownership";
 const description = "Discover why developers and businesses choose FireCMS over alternatives. Explore key benefits of our open‑source, developer‑first framework with optional managed Cloud.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Why FireCMS", url: "https://firecms.co/why-firecms" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
   <main>
     <!-- Hero (compact, harmonized) -->
     <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">

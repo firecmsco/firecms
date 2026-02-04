@@ -2,27 +2,26 @@
 slug: docs/collections/index
 title: Collections
 sidebar_label: Collections
-description: Discover how FireCMS Collections can streamline your data organization and management. Including features like top-level grouping and subcollections, define collections using UI or code, and implement advanced customizations, filtering, and permissions for optimized control over your CMS. Explore how to define, modify, and extend collections through intuitive UI interactions or detailed code customizations. Leverage FireCMS's robust entity and subcollection framework, with powerful filtering and sorting capabilities, for a seamless administrative experience. Learn more about collection configurations, entity actions, and inline editing options tailored to your needs. Whether you're managing products, articles, or custom data types, FireCMS Collections are the backbone of your efficient, scalable content management system.
+description: Define your Firestore data schema with FireCMS collections. Build type-safe admin panels for Firebase with React and TypeScript.
 ---
 
-In FireCMS, **collections** represent groups of entities. They map to your database collections and are used to define the
-schema of your entities. Collections are the backbone of your CMS, and they are used to define the fields of your entities,
-the permissions, the filters, and the actions that can be performed on them.
+**Collections** are the core building blocks of your FireCMS **admin panel**. They define how your **Firestore data** is displayed, edited, and managed in the CMS interface.
 
-You can find collections at the **top level** of the navigation tree (the entries displayed in the home page and the
-navigation drawer), or as **subcollections**.
+If you're building a **headless CMS** or **back-office** for your **Firebase** project, collections are where you define:
+- **What data** users can manage (products, users, articles, orders, etc.)
+- **How that data looks** in forms and tables (field types, validation, layout)
+- **Who can do what** (create, read, update, delete permissions)
+- **Custom logic** (callbacks on save, computed fields, side effects)
 
-Collections in FireCMS can be defined in two ways:
+:::tip Why use FireCMS collections?
+Unlike traditional CMSs that impose a rigid data model, FireCMS collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
+:::
 
-- Using the **Collection editor UI**.
-- Using **code**.
+Collections appear at the **top level** of the navigation (home page and drawer), or as **subcollections** nested under parent entities.
 
-If the logged-in user has the required permissions, they will be able to create collections using the UI. Collections
-defined by the UI have some limitations, such as not being able to define any callbacks.
-
-On the other hand, if you are using code, you can define your collections programmatically, and you can use all the
-features of FireCMS., including defining custom callbacks, customizing the permissions, and defining custom fields
-and components.
+You can define collections in two ways:
+- **No-code**: Use the built-in **Collection Editor UI** (requires appropriate permissions)
+- **Code-first**: Define collections programmatically with full **TypeScript** support and access to all advanced features (callbacks, custom fields, computed properties)
 
 ## Defining your collections
 
@@ -376,3 +375,34 @@ sort: ["price", "asc"]
 - **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
   to the entity every time the entity is updated (not only when created).
   Defaults to false.
+- **`databaseId`**: Optional database id of this collection. If not specified, the default database id will be used.
+  Useful when working with multiple databases.
+- **`previewProperties`**: Default preview properties displayed when this collection is referenced.
+- **`titleProperty`**: Title property of the entity. This property will be used as the title in entity views and
+  references. If not specified, the first simple text property will be used.
+- **`defaultSelectedView`**: If you want to open custom views or subcollections by default when opening an entity,
+  specify the path here. Can be a string or a builder function.
+- **`hideIdFromForm`**: Should the ID of this collection be hidden from the form view.
+- **`hideIdFromCollection`**: Should the ID of this collection be hidden from the grid view.
+- **`sideDialogWidth`**: Width of the side dialog (in pixels or string) when opening an entity in this collection.
+- **`editable`**: Can this collection configuration be edited by the end user. Defaults to `true`.
+  Has effect only if you are using the collection editor.
+- **`includeJsonView`**: If set to true, a tab with the JSON representation of the entity will be included.
+- **`history`**: If set to true, changes to the entity will be saved in a subcollection.
+  This prop has no effect if the history plugin is not enabled.
+- **`localChangesBackup`**: Should local changes be backed up in local storage to prevent data loss.
+  Options: `"manual_apply"` (prompt to restore), `"auto_apply"` (automatically restore), or `false`. Defaults to `"manual_apply"`.
+- **`defaultViewMode`**: Default view mode for displaying this collection.
+  Options: `"table"` (spreadsheet-like, default), `"cards"` (grid of cards with thumbnails), `"kanban"` (board grouped by property).
+- **`kanban`**: Configuration for Kanban board view mode. Requires a `columnProperty` referencing an enum property.
+  When set, the Kanban view mode becomes available.
+  
+```tsx
+kanban: {
+    columnProperty: "status" // Must reference a string property with enumValues
+}
+```
+
+- **`orderProperty`**: Property key to use for ordering items. Must reference a number property.
+  When items are reordered, this property will be updated to reflect the new order using fractional indexing.
+  Used by Kanban view for ordering within columns.

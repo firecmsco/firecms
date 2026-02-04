@@ -198,9 +198,9 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
                     .update(values)
                     .eq("id", entityId)
                     .then(({
-                               data,
-                               error
-                           }) => {
+                        data,
+                        error
+                    }) => {
                         if (error) {
                             reject(error);
                         }
@@ -319,9 +319,6 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
 
     return {
         key: "supabase",
-        setDateToMidnight: (date: Date) => {
-            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        },
         delegateToCMSModel: (data) => data,
         cmsToDelegateModel: (data) => data,
         currentTime: () => new Date(),

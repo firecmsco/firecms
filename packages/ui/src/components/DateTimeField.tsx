@@ -23,22 +23,30 @@ export type DateTimeFieldProps = {
     inputClassName?: string;
     invisible?: boolean;
     locale?: string;
+    /**
+     * IANA timezone string (e.g., "America/New_York", "Europe/London").
+     * Used to display and input dates in the specified timezone.
+     * The value passed to onChange will always be in UTC.
+     * If not provided, uses the user's local timezone.
+     */
+    timezone?: string;
 };
 
 export const DateTimeField: React.FC<DateTimeFieldProps> = ({
-                                                                value,
-                                                                label,
-                                                                onChange,
-                                                                disabled,
-                                                                clearable,
-                                                                mode = "date",
-                                                                error,
-                                                                size = "large",
-                                                                className,
-                                                                style,
-                                                                inputClassName,
-                                                                invisible,
-                                                            }) => {
+    value,
+    label,
+    onChange,
+    disabled,
+    clearable,
+    mode = "date",
+    error,
+    size = "large",
+    className,
+    style,
+    inputClassName,
+    invisible,
+    timezone,
+}) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [focused, setFocused] = useState(false);
     const [internalValue, setInternalValue] = useState<string>("");
@@ -54,7 +62,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         onChange?.(null);
     };
 
-    // Convert Date object to input value string
+    // Convert UTC Date to display string in the specified timezone
     const valueAsInputValue = (
         dateValue: Date | null,
         mode: "date" | "date_time"
@@ -63,20 +71,80 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
             return "";
         }
         const pad = (n: number) => n.toString().padStart(2, "0");
-        const year = dateValue.getFullYear();
-        const month = pad(dateValue.getMonth() + 1);
-        const day = pad(dateValue.getDate());
+
+        // Use Intl.DateTimeFormat to get date parts in the target timezone
+        const options: Intl.DateTimeFormatOptions = {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: timezone, // undefined = local timezone
+        };
+
+        const formatter = new Intl.DateTimeFormat("en-CA", options);
+        const parts = formatter.formatToParts(dateValue);
+
+        const getPart = (type: string) => parts.find(p => p.type === type)?.value ?? "";
+
+        const year = getPart("year");
+        const month = getPart("month");
+        const day = getPart("day");
 
         if (mode === "date") {
             return `${year}-${month}-${day}`;
         } else {
-            const hours = pad(dateValue.getHours());
-            const minutes = pad(dateValue.getMinutes());
+            const hours = getPart("hour");
+            const minutes = getPart("minute");
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
     };
 
-    // Handle input value change
+    // Get the UTC offset for a specific date in the target timezone (in minutes)
+    const getTimezoneOffsetMinutes = (date: Date, tz?: string): number => {
+        if (!tz) {
+            // Local timezone: use built-in getTimezoneOffset (returns offset in minutes, inverted sign)
+            return -date.getTimezoneOffset();
+        }
+        // For named timezones, calculate the offset by comparing formatted times
+        const utcFormatter = new Intl.DateTimeFormat("en-CA", {
+            year: "numeric", month: "2-digit", day: "2-digit",
+            hour: "2-digit", minute: "2-digit", hour12: false,
+            timeZone: "UTC"
+        });
+        const tzFormatter = new Intl.DateTimeFormat("en-CA", {
+            year: "numeric", month: "2-digit", day: "2-digit",
+            hour: "2-digit", minute: "2-digit", hour12: false,
+            timeZone: tz
+        });
+
+        const utcParts = utcFormatter.formatToParts(date);
+        const tzParts = tzFormatter.formatToParts(date);
+
+        const getPart = (parts: Intl.DateTimeFormatPart[], type: string) =>
+            parseInt(parts.find(p => p.type === type)?.value ?? "0", 10);
+
+        const utcDate = new Date(Date.UTC(
+            getPart(utcParts, "year"),
+            getPart(utcParts, "month") - 1,
+            getPart(utcParts, "day"),
+            getPart(utcParts, "hour"),
+            getPart(utcParts, "minute")
+        ));
+
+        const tzDate = new Date(Date.UTC(
+            getPart(tzParts, "year"),
+            getPart(tzParts, "month") - 1,
+            getPart(tzParts, "day"),
+            getPart(tzParts, "hour"),
+            getPart(tzParts, "minute")
+        ));
+
+        return (tzDate.getTime() - utcDate.getTime()) / 60000;
+    };
+
+    // Handle input value change - convert from display timezone to UTC
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
         setInternalValue(inputValue);
@@ -88,21 +156,42 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         }
 
         try {
-            const parsed = new Date(inputValue);
-            if (isNaN(parsed.getTime())) {
+            let year: number, month: number, day: number, hours = 0, minutes = 0;
+
+            if (mode === "date") {
+                // Parse date-only input: "YYYY-MM-DD"
+                [year, month, day] = inputValue.split("-").map(Number);
+            } else {
+                // Parse datetime-local input: "YYYY-MM-DDTHH:MM"
+                const [datePart, timePart] = inputValue.split("T");
+                [year, month, day] = datePart.split("-").map(Number);
+                [hours, minutes] = timePart.split(":").map(Number);
+            }
+
+            let resultDate: Date;
+
+            if (!timezone) {
+                // No timezone specified: interpret input as local time (backward compatible)
+                resultDate = new Date(year, month - 1, day, hours, minutes);
+            } else {
+                // Timezone specified: interpret input as that timezone and convert to UTC
+                // We need to find the UTC equivalent of the entered time in the target timezone
+
+                // Create a reference UTC date to calculate the offset for this moment
+                const refUtcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+                const offsetMinutes = getTimezoneOffsetMinutes(refUtcDate, timezone);
+
+                // Convert from target timezone to UTC:
+                // If user entered 00:00 in Mexico (UTC-6, offset=-360), we subtract the offset
+                // Date.UTC gives us 00:00 UTC, subtracting -360 minutes (= adding 360 min) gives 06:00 UTC
+                resultDate = new Date(Date.UTC(year, month - 1, day, hours, minutes) - offsetMinutes * 60000);
+            }
+
+            if (isNaN(resultDate.getTime())) {
                 throw new Error("Invalid date");
             }
 
-            let newDate: Date;
-            if (mode === "date") {
-                // Adjust for timezone offset for date-only inputs
-                const userTimezoneOffset = parsed.getTimezoneOffset() * 60000;
-                newDate = new Date(parsed.getTime() + userTimezoneOffset);
-            } else {
-                newDate = parsed;
-            }
-
-            onChange?.(newDate);
+            onChange?.(resultDate);
         } catch (e) {
             // Don't call onChange with null while typing
             return;
@@ -156,7 +245,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                             disabled ? "opacity-50" : ""
                         )}
                         shrink={true}
-                        // shrink={hasValue || focused}
+                    // shrink={hasValue || focused}
                     >
                         {label}
                     </InputLabel>
@@ -193,20 +282,20 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     }}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-accent-500!"
                 >
-                    <CalendarMonthIcon color={"disabled"}/>
+                    <CalendarMonthIcon color={"disabled"} />
                 </IconButton>
                 {clearable && value && (
                     <IconButton
                         onClick={handleClear}
                         className="absolute right-14 top-1/2 transform -translate-y-1/2 text-surface-accent-400 "
                     >
-                        <CloseIcon/>
+                        <CloseIcon />
                     </IconButton>
                 )}
             </div>
             {invalidValue && (
                 <div className="flex items-center m-2">
-                    <ErrorIcon size={"small"} color={"error"}/>
+                    <ErrorIcon size={"small"} color={"error"} />
                     <div className="pl-2">
                         <Typography variant={"body2"}>
                             Invalid date value for this field

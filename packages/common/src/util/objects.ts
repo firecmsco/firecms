@@ -106,10 +106,9 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
-
-export function isPlainObject(obj:any) {
+export function isPlainObject(obj: any) {
     // 1. Rule out non-objects, null, and arrays
-    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+    if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
         return false;
     }
 
@@ -119,7 +118,6 @@ export function isPlainObject(obj:any) {
     // 3. A plain object's direct prototype is Object.prototype
     return proto === Object.prototype;
 }
-
 
 export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(
     target: T,
@@ -169,9 +167,11 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                             newArray[i] = sourceItem;
                         } else if (sourceItem === null) {
                             newArray[i] = targetItem;
-                        } else if (isObject(sourceItem) && isObject(targetItem)) {
+                        } else if (isPlainObject(sourceItem) && isPlainObject(targetItem)) {
+                            // Only recursively merge plain objects, preserve class instances
                             newArray[i] = mergeDeep(targetItem, sourceItem, ignoreUndefined);
                         } else {
+                            // For class instances and primitives, use source directly
                             newArray[i] = sourceItem;
                         }
                     }
@@ -181,17 +181,20 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                     // overwrite with a shallow copy of the source array.
                     (output as any)[key] = [...sourceValue];
                 }
-            } else if (isObject(sourceValue)) {
-                // If source value is an object:
-                if (isObject(outputValue)) {
-                    // If the corresponding value in output (from target) is also an object, recurse.
+            } else if (isPlainObject(sourceValue)) {
+                // If source value is a plain object (not a class instance like EntityReference, GeoPoint, etc.):
+                if (isPlainObject(outputValue)) {
+                    // If the corresponding value in output (from target) is also a plain object, recurse.
                     // Ensure the ignoreUndefined flag is passed down.
                     (output as any)[key] = mergeDeep(outputValue, sourceValue, ignoreUndefined);
                 } else {
-                    // If output's value (from target) is not an object (e.g., null, primitive, or key didn't exist in original target),
+                    // If output's value (from target) is not a plain object (e.g., null, primitive, class instance, or key didn't exist in original target),
                     // overwrite with the source object.
                     (output as any)[key] = sourceValue;
                 }
+            } else if (isObject(sourceValue)) {
+                // If source value is a class instance (not a plain object), use it directly to preserve prototype
+                (output as any)[key] = sourceValue;
             } else {
                 // If source value is a primitive, null, or undefined (and not ignored).
                 (output as any)[key] = sourceValue;
@@ -201,7 +204,6 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
 
     return output as T & U;
 }
-
 
 export function getValueInPath(o: object | undefined, path: string): any {
     if (!o) return undefined;
@@ -245,6 +247,14 @@ export function removeFunctions(o: object | undefined): any {
     if (o === undefined) return undefined;
     if (o === null) return null;
     if (typeof o === "object") {
+        // Handle arrays first - map over them recursively
+        if (Array.isArray(o)) {
+            return o.map(v => removeFunctions(v));
+        }
+        // Preserve class instances (EntityReference, GeoPoint, etc.) - don't recurse into them
+        if (!isPlainObject(o)) {
+            return o;
+        }
         return Object.entries(o)
             .filter(([_, value]) => typeof value !== "function")
             .map(([key, value]) => {
@@ -280,9 +290,13 @@ export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
         return value.map((v: any) => removeUndefined(v, removeEmptyStrings));
     }
     if (typeof value === "object") {
-        const res: object = {};
         if (value === null)
             return value;
+        // Preserve class instances (EntityReference, GeoPoint, etc.) - don't recurse into them
+        if (!isPlainObject(value)) {
+            return value;
+        }
+        const res: object = {};
         Object.keys(value).forEach((key) => {
             if (!isEmptyObject(value)) {
                 const childRes = removeUndefined(value[key], removeEmptyStrings);
@@ -305,9 +319,13 @@ export function removeNulls(value: any): any {
         return value.map((v: any) => removeNulls(v));
     }
     if (typeof value === "object") {
-        const res: object = {};
         if (value === null)
             return value;
+        // Preserve class instances (EntityReference, GeoPoint, etc.) - don't recurse into them
+        if (!isPlainObject(value)) {
+            return value;
+        }
+        const res: object = {};
         Object.keys(value).forEach((key) => {
             if (value[key] !== null)
                 (res as any)[key] = removeNulls(value[key]);

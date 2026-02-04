@@ -37,6 +37,11 @@ export interface CollectionsConfigController {
      */
     updatePropertiesOrder: (params: UpdatePropertiesOrderParams) => Promise<void>;
 
+    /**
+     * Update the Kanban columns order for a collection.
+     */
+    updateKanbanColumnsOrder: (params: UpdateKanbanColumnsOrderParams) => Promise<void>;
+
     navigationEntries: NavigationGroupMapping[];
     saveNavigationEntries: (entries: NavigationGroupMapping[]) => Promise<void>;
 
@@ -83,4 +88,12 @@ export type UpdatePropertiesOrderParams = {
     parentCollectionIds: string[];
     collection: EntityCollection<any>;
     newPropertiesOrder: string[];
+}
+
+export type UpdateKanbanColumnsOrderParams = {
+    fullPath: string;
+    parentCollectionIds: string[];
+    collection: EntityCollection<any>;
+    kanbanColumnProperty: string;
+    newColumnsOrder: string[];
 }

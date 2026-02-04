@@ -100,24 +100,31 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
         paginationEnabled
     } = tableController;
 
+    // Track if we're currently loading to prevent multiple simultaneous load requests
+    const isLoadingMore = useRef(false);
+
     // Infinite scroll with Intersection Observer
     useEffect(() => {
         if (!paginationEnabled || noMoreToLoad || dataLoading) {
-            console.log("Card view pagination: skipping", { paginationEnabled, noMoreToLoad, dataLoading });
             return;
+        }
+
+        // Reset loading flag when dataLoading becomes false
+        if (!dataLoading) {
+            isLoadingMore.current = false;
         }
 
         const observer = new IntersectionObserver(
             (entries) => {
-                console.log("Card view intersection:", entries[0].isIntersecting, { dataLoading, noMoreToLoad, itemCount });
-                if (entries[0].isIntersecting && !dataLoading && !noMoreToLoad) {
+                if (entries[0].isIntersecting && !dataLoading && !noMoreToLoad && !isLoadingMore.current) {
+                    // Prevent multiple load requests
+                    isLoadingMore.current = true;
                     // Load more items
-                    console.log("Card view: loading more items", (itemCount ?? pageSize) + pageSize);
                     setItemCount?.((itemCount ?? pageSize) + pageSize);
                 }
             },
             {
-                root: null, // Use viewport instead of container for better intersection detection
+                root: containerRef.current, // Use the scroll container, not viewport
                 rootMargin: "400px",
                 threshold: 0
             }

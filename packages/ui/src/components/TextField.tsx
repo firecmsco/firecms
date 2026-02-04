@@ -1,7 +1,6 @@
 "use client";
 import React, { ForwardedRef, forwardRef, useEffect, useRef } from "react";
 
-import { TextareaAutosize } from "./TextareaAutosize";
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
@@ -111,13 +110,12 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
         }, [inputRef, type]);
 
         const input = multiline ? (
-            <TextareaAutosize
+            <textarea
                 {...(inputProps as any)}
                 ref={inputRef}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
                 autoFocus={autoFocus}
-                minRows={minRows}
-                maxRows={maxRows}
+                rows={typeof minRows === "string" ? parseInt(minRows) : (minRows ?? 3)}
                 value={value ?? ""}
                 onChange={onChange}
                 onFocus={() => setFocused(true)}
@@ -125,7 +123,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 style={inputStyle}
                 className={cls(
                     invisible ? focusedInvisibleMixin : "",
-                    "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
+                    "rounded-md resize-none w-full outline-none text-base bg-transparent min-h-[64px] px-3",
+                    label ? "pt-8 pb-2" : "py-2",
                     disabled && "outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
                     inputClassName
                 )}
@@ -152,7 +151,11 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         ? size === "large"
                             ? "pt-8 pb-2"
                             : "pt-4 pb-2"
-                        : "py-2",
+                        : size === "smallest"
+                            ? "py-0.5"
+                            : size === "small"
+                                ? "py-1"
+                                : "py-2",
                     endAdornment ? "pr-12" : "pr-3",
                     disabled &&
                     "outline-none opacity-65 dark:opacity-60 text-surface-accent-800 dark:text-white",

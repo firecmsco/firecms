@@ -2,16 +2,16 @@ import React, { PropsWithChildren, useState } from "react";
 import { cls, EditIcon, IconButton, Typography, ExpandablePanel } from "@firecms/ui";
 
 export function NavigationGroup({
-                                    children,
-                                    group,
-                                    minimised,
-                                    isPreview,
-                                    isPotentialCardDropTarget,
-                                    onEditGroup,
-                                    dndDisabled,
-                                    collapsed,
-                                    onToggleCollapsed
-                                }: PropsWithChildren<{
+    children,
+    group,
+    minimised,
+    isPreview,
+    isPotentialCardDropTarget,
+    onEditGroup,
+    dndDisabled,
+    collapsed,
+    onToggleCollapsed
+}: PropsWithChildren<{
     group: string | undefined,
     minimised?: boolean,
     isPreview?: boolean,
@@ -52,7 +52,7 @@ export function NavigationGroup({
                     }}
                     className={cls("ml-2 ", isHovered ? "opacity-100" : "opacity-0", "transition-opacity duration-100")}
                 >
-                    <EditIcon size="smallest"/>
+                    <EditIcon size="smallest" />
                 </IconButton>
             )}
         </div>
@@ -70,7 +70,7 @@ export function NavigationGroup({
                     <div
                         className={cls(
                             "flex items-center justify-between w-full",
-                          "p-4 py-2"
+                            "p-4 py-2"
                         )}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
@@ -94,9 +94,10 @@ export function NavigationGroup({
                     className={cls("mt-6")}
                     titleClassName={cls(
                         "min-h-0 p-0 border-none",
-                        "rounded-t flex items-center justify-between w-full",
+                        "rounded flex items-center justify-between w-full",
                         "hover:bg-transparent",
-                        "cursor-pointer select-none"
+                        "cursor-pointer select-none",
+                        collapsed && "bg-surface-100 dark:bg-surface-800/50"
                     )}
                     innerClassName={cls("mt-4", !minimised ? "pt-0" : "")}
                     title={
@@ -111,7 +112,7 @@ export function NavigationGroup({
                 >
                     {minimised ? (
                         <div className={cls("mt-4 p-8 bg-surface-accent-200 dark:bg-surface-accent-800 rounded-lg")}
-                             style={{ minHeight: "50px" }}>
+                            style={{ minHeight: "50px" }}>
                         </div>
                     ) : (
                         <div className={cls("mt-4", !minimised ? "pt-0" : "")}>
@@ -138,7 +139,7 @@ export function NavigationGroup({
                     {!collapsed && (
                         minimised ? (
                             <div className={cls("mt-4 p-8 bg-surface-accent-200 dark:bg-surface-accent-800 rounded-lg")}
-                                 style={{ minHeight: "50px" }}>
+                                style={{ minHeight: "50px" }}>
                             </div>
                         ) : (
                             <div className={cls("mt-4", !minimised ? "pt-0" : "")}>

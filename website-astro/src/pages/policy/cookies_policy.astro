@@ -3,9 +3,14 @@ import Layout from "../../layouts/Layout.astro";
 
 const title = "FireCMS Cookie Policy";
 const description = "Cookie Policy for FireCMS - The Headless CMS for Firebase.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Cookie Policy", url: "https://firecms.co/policy/cookies_policy" }
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
     <div class="p-8 mx-auto max-w-7xl">
         <div><strong><span style="font-size: 26px;"><span data-custom-class="title">COOKIE POLICY</span></span></strong>
         </div>

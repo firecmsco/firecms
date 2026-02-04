@@ -18,7 +18,7 @@ export function ImportFileUpload({ onDataAdded }: {
             "application/json": [".json"],
         }}
         preventDropOnDocument={true}
-        size={"medium"}
+        size={"small"}
         maxFiles={1}
         uploadDescription={<><UploadIcon/>Drag and drop a file here or click to upload</>}
         onFilesAdded={(files: File[]) => {

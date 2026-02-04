@@ -26,7 +26,7 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { getEntityTitlePropertyKey , getEntityPreviewKeys} from "../../util/references";
+import { getEntityTitlePropertyKey, getEntityPreviewKeys } from "../../util/previews";
 import { IconForView } from "../../util";
 
 export type EntityCardProps<M extends Record<string, any> = any> = {

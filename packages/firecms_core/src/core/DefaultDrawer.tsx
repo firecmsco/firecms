@@ -1,12 +1,12 @@
-import React, { useCallback } from "react";
+import React from "react";
 
-import { useLargeLayout, useNavigationController } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
+import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { DrawerNavigationItem } from "./DrawerNavigationItem";
+import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { FireCMSLogo } from "../components";
 import { useApp } from "../app/useApp";
 import { IconForView } from "../util";
@@ -16,9 +16,9 @@ import { IconForView } from "../util";
  * @group Core
  */
 export function DefaultDrawer({
-                                  className,
-                                  style,
-                              }: {
+    className,
+    style,
+}: {
     className?: string
     style?: React.CSSProperties,
 }) {
@@ -50,20 +50,10 @@ export function DefaultDrawer({
     const adminViews = navigationEntries.filter(e => e.type === "admin") ?? [];
     const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
 
-    const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div className="w-full"/>;
-        return <div
-            className="pl-6 pr-8 py-4 flex flex-row items-center">
-            <Typography variant={"caption"}
-                        color={"secondary"}
-                        className="font-medium grow line-clamp-1">
-                {group ? group.toUpperCase() : "Views".toUpperCase()}
-            </Typography>
+    // Collapsible groups state - using "drawer" namespace for independent state from home page
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupsWithoutAdmin, "drawer");
 
-        </div>;
-    }, [drawerOpen]);
-
-    const onClick = (view: NavigationEntry) => {
+    const onItemClick = (view: NavigationEntry) => {
         const eventName: CMSAnalyticsEvent = view.type === "collection"
             ? "drawer_navigate_to_collection"
             : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
@@ -76,33 +66,29 @@ export function DefaultDrawer({
         <>
             <div className={cls("flex flex-col h-full relative grow w-full", className)} style={style}>
 
-                <DrawerLogo logo={logo}/>
+                <DrawerLogo logo={logo} />
 
-                <div className={"mt-4 grow overflow-scroll no-scrollbar"}
-                     style={{
-                         maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
-                     }}>
+                <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+                    style={{
+                        maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                    }}>
 
-                    {groupsWithoutAdmin.map((group) => (
-                        <div
-                            className={"bg-surface-50 dark:bg-surface-800/30 dark:bg-surface-800/30 bg-surface-50 dark:bg-surface-800/30  my-4 rounded-lg ml-3 mr-1"}
-                            key={`drawer_group_${group}`}>
-                            {buildGroupHeader(group)}
-                            {Object.values(navigationEntries)
-                                .filter(e => e.group === group)
-                                .map((view) =>
-                                    <DrawerNavigationItem
-                                        key={view.id}
-                                        icon={<IconForView collectionOrView={view.collection ?? view.view}
-                                                           size={"small"}/>}
-                                        tooltipsOpen={tooltipsOpen}
-                                        adminMenuOpen={adminMenuOpen}
-                                        drawerOpen={drawerOpen}
-                                        onClick={() => onClick(view)}
-                                        url={view.url}
-                                        name={view.name}/>)}
-                        </div>
-                    ))}
+                    {groupsWithoutAdmin.map((group) => {
+                        const entriesInGroup = Object.values(navigationEntries).filter(e => e.group === group);
+                        return (
+                            <DrawerNavigationGroup
+                                key={`drawer_group_${group}`}
+                                group={group}
+                                entries={entriesInGroup}
+                                collapsed={isGroupCollapsed(group)}
+                                onToggleCollapsed={() => toggleGroupCollapsed(group)}
+                                drawerOpen={drawerOpen}
+                                tooltipsOpen={tooltipsOpen}
+                                adminMenuOpen={adminMenuOpen}
+                                onItemClick={onItemClick}
+                            />
+                        );
+                    })}
 
                 </div>
 
@@ -115,9 +101,9 @@ export function DefaultDrawer({
                             shape={"square"}
                             className={"m-4 text-surface-900 dark:text-white w-fit"}>
                             <Tooltip title={"Admin"}
-                                     open={tooltipsOpen}
-                                     side={"right"} sideOffset={28}>
-                                <MoreVertIcon/>
+                                open={tooltipsOpen}
+                                side={"right"} sideOffset={28}>
+                                <MoreVertIcon />
                             </Tooltip>
                             {drawerOpen && <div
                                 className={cls(
@@ -132,10 +118,10 @@ export function DefaultDrawer({
                         <MenuItem
                             onClick={(event) => {
                                 event.preventDefault();
-                                navigate(entry.url); // Consistent use of entry.url for navigation
+                                navigate(entry.url);
                             }}
                             key={entry.id}>
-                            {<IconForView collectionOrView={entry.view}/>}
+                            {<IconForView collectionOrView={entry.view} />}
                             {entry.name}
                         </MenuItem>)}
 
@@ -167,17 +153,17 @@ export function DrawerLogo({ logo }: {
         className={cls("cursor-pointer rounded-xs ml-3 mr-1")}>
 
         <Tooltip title={"Home"}
-                 sideOffset={20}
-                 side="right">
+            sideOffset={20}
+            side="right">
             <Link
                 className={"block"}
                 to={navigation.basePath}>
                 {logo
                     ? <img src={logo}
-                           alt="Logo"
-                           className={cls("max-w-full max-h-full transition-all object-contain",
-                               drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")}/>
-                    : <FireCMSLogo/>}
+                        alt="Logo"
+                        className={cls("max-w-full max-h-full transition-all object-contain",
+                            drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")} />
+                    : <FireCMSLogo />}
 
             </Link>
         </Tooltip>

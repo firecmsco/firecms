@@ -95,7 +95,7 @@ export type EntityFormProps<M extends Record<string, any>> = {
     children?: React.ReactNode;
 };
 import { useDebouncedCallback } from "../util";
-import { getEntityTitlePropertyKey } from "../util/references";
+import { getEntityTitlePropertyKey } from "../util/previews";
 
 // extract touched values for nested touched trees and map to current values
 export function extractTouchedValues(values: any, touched: Record<string, boolean>): Record<string, any> {

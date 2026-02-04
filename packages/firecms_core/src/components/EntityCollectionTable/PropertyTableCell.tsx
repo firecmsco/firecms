@@ -388,6 +388,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     error={validationError ?? error}
                     disabled={disabled}
                     mode={property.mode}
+                    timezone={property.timezone}
                     focused={selected}
                     internalValue={internalValue as Date}
                     updateValue={updateValue}

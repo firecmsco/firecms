@@ -26,14 +26,16 @@ interface UserManagementParams {
     fireCMSBackend: FireCMSBackend
 }
 
-export type CloudUserManagement = UserManagement<FireCMSCloudUserWithRoles>;
+export type CloudUserManagement = UserManagement<FireCMSCloudUserWithRoles> & {
+    updateUserFields: (saas_uid: string, fields: Partial<FireCMSCloudUserWithRoles>) => Promise<void>;
+};
 
 export function useBuildCloudUserManagement({
-                                                backendFirebaseApp,
-                                                projectId,
-                                                projectsApi,
-                                                fireCMSBackend
-                                            }: UserManagementParams): CloudUserManagement {
+    backendFirebaseApp,
+    projectId,
+    projectsApi,
+    fireCMSBackend
+}: UserManagementParams): CloudUserManagement {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -124,6 +126,24 @@ export function useBuildCloudUserManagement({
         }
     }, [configPath, projectId]);
 
+    /**
+     * Update specific fields of a user directly in Firestore.
+     * This bypasses the API for simple field updates like photoURL.
+     */
+    const updateUserFields = useCallback(async (
+        saas_uid: string,
+        fields: Partial<FireCMSCloudUserWithRoles>
+    ): Promise<void> => {
+        const firestore = firestoreRef.current;
+        if (!firestore || !configPath) throw Error("Firestore not initialised");
+        console.debug("Updating user fields directly in Firestore", { saas_uid, fields });
+        const ref = doc(firestore, configPath, "users", saas_uid);
+        return setDoc(ref, {
+            ...fields,
+            updated_on: new Date()
+        }, { merge: true });
+    }, [configPath]);
+
     const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
@@ -157,8 +177,8 @@ export function useBuildCloudUserManagement({
     const loggedInUser = users.find((u) => u.email?.toLowerCase() === fireCMSBackend.user?.email?.toLowerCase());
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
-                                                                       collection,
-                                                                   }) => resolveUserRolePermissions({
+        collection,
+    }) => resolveUserRolePermissions({
         collection,
         user: loggedInUser ?? null
     }), [loggedInUser?.uid]);
@@ -185,6 +205,7 @@ export function useBuildCloudUserManagement({
         roles,
         users,
         saveUser,
+        updateUserFields,
         saveRole,
         defineRolesFor,
         deleteUser: removeUser,
@@ -198,6 +219,7 @@ export function useBuildCloudUserManagement({
 const docsToUsers = (docs: DocumentSnapshot[]): UserWithRoleIds[] => {
     return docs.map((doc) => ({
         ...doc.data(),
+        uid: doc.id, // Document ID is the saas_uid (used for API calls)
         created_on: doc.data()?.created_on?.toDate(),
         updated_on: doc.data()?.updated_on?.toDate()
     } as unknown as UserWithRoleIds));

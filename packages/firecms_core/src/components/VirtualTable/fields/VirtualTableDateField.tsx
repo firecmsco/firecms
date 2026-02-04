@@ -6,6 +6,7 @@ export function VirtualTableDateField(props: {
     name: string;
     error: Error | undefined;
     mode?: "date" | "date_time";
+    timezone?: string;
     internalValue: Date | undefined | null;
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
@@ -18,6 +19,7 @@ export function VirtualTableDateField(props: {
         disabled,
         error,
         mode,
+        timezone,
         internalValue,
         updateValue
     } = props;
@@ -31,6 +33,7 @@ export function VirtualTableDateField(props: {
             inputClassName={cls("w-full h-full", focusedDisabled)}
             className={cls("w-full h-full", focusedDisabled)}
             mode={mode}
+            timezone={timezone}
             locale={locale}
         />
     );

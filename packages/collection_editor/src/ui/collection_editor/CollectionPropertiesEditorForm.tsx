@@ -6,7 +6,7 @@ import {
     ErrorBoundary,
     isPropertyBuilder,
     makePropertiesEditable,
-    mergeDeep,
+    MapProperty,
     Properties,
     Property,
     PropertyConfig,
@@ -16,13 +16,13 @@ import {
 } from "@firecms/core";
 import {
     AddIcon,
-    AutorenewIcon,
     Button,
     CircularProgress,
     cls,
     CodeIcon,
     DebouncedTextField,
     defaultBorderMixin,
+    FindInPageIcon,
     IconButton,
     Tooltip,
     Typography,
@@ -33,6 +33,7 @@ import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./Pro
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
+import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
@@ -159,11 +160,57 @@ export function CollectionPropertiesEditorForm({
                         return keys;
                     };
 
-                    // Deep merge the inferred properties with existing ones
-                    // This ensures nested properties within maps are also merged
-                    const updatedProperties = mergeDeep(
+                    // Helper function to add only new properties without overwriting existing ones
+                    // This preserves existing property configurations while adding missing nested properties
+                    const addNewPropertiesOnly = (
+                        existingProps: Record<string, PropertyOrBuilder> | undefined,
+                        newProps: Record<string, PropertyOrBuilder> | undefined
+                    ): Record<string, PropertyOrBuilder> => {
+                        if (!newProps) return existingProps ?? {};
+                        if (!existingProps) return newProps;
+
+                        const result = { ...existingProps };
+
+                        for (const key of Object.keys(newProps)) {
+                            const existingProp = existingProps[key];
+                            const newProp = newProps[key];
+
+                            if (!existingProp) {
+                                // This property doesn't exist, add it
+                                result[key] = newProp;
+                            } else if (
+                                typeof existingProp === "object" &&
+                                "dataType" in existingProp &&
+                                existingProp.dataType === "map" &&
+                                typeof newProp === "object" &&
+                                "dataType" in newProp &&
+                                newProp.dataType === "map" &&
+                                newProp.properties
+                            ) {
+                                // Both are map properties, recursively add new nested properties
+                                // Only if the existing map has properties, merge them; otherwise keep existing as-is
+                                const existingMapProps = (existingProp as MapProperty).properties as Record<string, PropertyOrBuilder> | undefined;
+                                if (existingMapProps) {
+                                    result[key] = {
+                                        ...existingProp,
+                                        properties: addNewPropertiesOnly(
+                                            existingMapProps,
+                                            newProp.properties as Record<string, PropertyOrBuilder>
+                                        )
+                                    };
+                                }
+                                // If existingProp doesn't have properties, keep it as-is (don't overwrite with inferred)
+                            }
+                            // Otherwise, keep the existing property as-is (don't overwrite)
+                        }
+
+                        return result;
+                    };
+
+                    // Add only new properties from inferred collection without replacing existing ones
+                    const updatedProperties = addNewPropertiesOnly(
                         values.properties ?? {},
-                        newCollection.properties ?? {}
+                        newCollection.properties as Record<string, PropertyOrBuilder>
                     ) as { [key: string]: PropertyOrBuilder };
 
                     // Find all new property keys including nested ones
@@ -185,10 +232,12 @@ export function CollectionPropertiesEditorForm({
                         return;
                     }
 
-                    // Update properties order with new top-level keys
+                    // Update properties order: keep existing order and append new keys at the beginning
+                    // Use Object.keys from updatedProperties to ensure all properties are included
+                    const allExistingKeys = values.propertiesOrder ?? Object.keys(values.properties ?? {});
                     const updatedPropertiesOrder = [
                         ...newTopLevelPropertyKeys,
-                        ...(values.propertiesOrder ?? []).filter(key => !newTopLevelPropertyKeys.includes(key))
+                        ...allExistingKeys.filter(key => !newTopLevelPropertyKeys.includes(key))
                     ];
 
                     setFieldValue("properties", updatedProperties, false);
@@ -339,6 +388,10 @@ export function CollectionPropertiesEditorForm({
 
     const owner = useMemo(() => values.ownerId && getUser ? getUser(values.ownerId) : null, [getUser, values.ownerId]);
 
+    // Get AI generation counter for key to force remount on AI changes
+    const aiModifiedPaths = useAIModifiedPaths();
+    const generationCounter = aiModifiedPaths?.generationCounter ?? 0;
+
     const onPropertyClick = (propertyKey: string, namespace?: string) => {
         console.debug("CollectionEditor: onPropertyClick", {
             propertyKey,
@@ -401,7 +454,7 @@ export function CollectionPropertiesEditorForm({
                                 variant={"filled"}
                                 disabled={inferringProperties}
                                 onClick={inferPropertiesFromData}>
-                                {inferringProperties ? <CircularProgress size={"small"} /> : <AutorenewIcon />}
+                                {inferringProperties ? <CircularProgress size={"small"} /> : <FindInPageIcon />}
                             </IconButton>
                         </Tooltip>}
                         <Tooltip title={"Add new property"}
@@ -447,7 +500,7 @@ export function CollectionPropertiesEditorForm({
                             !isPropertyBuilder(selectedProperty) &&
                             <PropertyForm
                                 inArray={false}
-                                key={`edit_view_${selectedPropertyIndex}`}
+                                key={`edit_view_${selectedPropertyIndex}_${generationCounter}`}
                                 existingProperty={!isNewCollection}
                                 autoUpdateId={false}
                                 allowDataInference={!isNewCollection}
@@ -463,6 +516,7 @@ export function CollectionPropertiesEditorForm({
                                 getData={getData}
                                 propertyConfigs={propertyConfigs}
                                 collectionEditable={collectionEditable}
+                                collectionProperties={values.properties as Properties}
                             />}
 
                         {!selectedProperty &&
@@ -490,7 +544,7 @@ export function CollectionPropertiesEditorForm({
             {asDialog && <PropertyFormDialog
                 inArray={false}
                 open={selectedPropertyIndex !== undefined}
-                key={`edit_view_${selectedPropertyIndex}`}
+                key={`edit_view_${selectedPropertyIndex}_${generationCounter}`}
                 autoUpdateId={!selectedProperty}
                 allowDataInference={!isNewCollection}
                 existingProperty={true}
@@ -506,6 +560,7 @@ export function CollectionPropertiesEditorForm({
                 getData={getData}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
+                collectionProperties={values.properties as Properties}
                 onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -532,6 +587,7 @@ export function CollectionPropertiesEditorForm({
             allowDataInference={!isNewCollection}
             propertyConfigs={propertyConfigs}
             collectionEditable={collectionEditable}
+            collectionProperties={values.properties as Properties}
             existingPropertyKeys={values.propertiesOrder as string[]} />
 
         <ErrorBoundary>

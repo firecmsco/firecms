@@ -71,7 +71,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function createNewUser(projectId: string,
-                                 user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> {
+        user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> {
 
         const firebaseAccessToken = await getBackendAuthToken();
         const persistedUserData = {
@@ -91,17 +91,18 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function updateUser(projectId: string,
-                              uid: string,
-                              user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> {
+        uid: string,
+        user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> {
         const firebaseAccessToken = await getBackendAuthToken();
         const persistedUserData = {
             ...user,
             uid: uid,
+            firebase_uid: user.uid, // Preserve client app uid as firebase_uid
             roles: user.roles.map(r => r.id),
             updated_on: new Date()
         }
-        console.debug("Updating user", persistedUserData);
-        return fetch(host + "/projects/" + projectId + "/users/" + uid,
+        const apiUrl = host + "/projects/" + projectId + "/users/" + uid;
+        return fetch(apiUrl,
             {
                 method: "PATCH",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -113,7 +114,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function deleteUser(projectId: string,
-                              uid: string): Promise<void> {
+        uid: string): Promise<void> {
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
@@ -126,9 +127,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function getRootCollections(projectId: string,
-                                      googleAccessToken?: string,
-                                      serviceAccount?: object,
-                                      retries = 10): Promise<string[]> {
+        googleAccessToken?: string,
+        serviceAccount?: object,
+        retries = 10): Promise<string[]> {
         if (rootCollectionsCache[projectId]) {
             return rootCollectionsCache[projectId];
         }
@@ -169,8 +170,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function createServiceAccount(googleAccessToken: string,
-                                        projectId: string,
-                                        reset: boolean): Promise<FireCMSCloudUserWithRoles> {
+        projectId: string,
+        reset: boolean): Promise<FireCMSCloudUserWithRoles> {
         const firebaseAccessToken = await getBackendAuthToken();
         const url = `${host}/projects/${projectId}/service_accounts?reset=${reset}`;
 
@@ -352,10 +353,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 }
 
 function buildHeaders({
-                          firebaseAccessToken,
-                          googleAccessToken,
-                          serviceAccount
-                      }: {
+    firebaseAccessToken,
+    googleAccessToken,
+    serviceAccount
+}: {
     firebaseAccessToken: string,
     googleAccessToken?: string,
     serviceAccount?: object

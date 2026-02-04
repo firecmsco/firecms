@@ -25,11 +25,11 @@ import { updateDateAutoValues } from "@firecms/common";
  * @group Firebase
  */
 export function useBuildDataSource({
-                                       delegate,
-                                       propertyConfigs,
-                                       navigationController,
-                                       authController
-                                   }: {
+    delegate,
+    propertyConfigs,
+    navigationController,
+    authController
+}: {
     delegate: DataSourceDelegate,
     propertyConfigs?: Record<string, PropertyConfig>;
     navigationController: NavigationController;
@@ -53,15 +53,15 @@ export function useBuildDataSource({
          * @group Firestore
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
-                                                                         path,
-                                                                         collection,
-                                                                         filter,
-                                                                         limit,
-                                                                         startAfter,
-                                                                         searchString,
-                                                                         orderBy,
-                                                                         order,
-                                                                     }: FetchCollectionProps<M>
+            path,
+            collection,
+            filter,
+            limit,
+            startAfter,
+            searchString,
+            orderBy,
+            order,
+        }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.fetchCollection<M>({
@@ -139,10 +139,10 @@ export function useBuildDataSource({
          * @group Firestore
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
-                                                                     path,
-                                                                     entityId,
-                                                                     collection
-                                                                 }: FetchEntityProps<M>
+            path,
+            entityId,
+            collection
+        }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.fetchEntity({
@@ -198,7 +198,7 @@ export function useBuildDataSource({
          * @param status
          * @group Firestore
          */
-        saveEntity: useCallback(<M extends Record<string, any>>(
+        saveEntity: useCallback(async <M extends Record<string, any>>(
             {
                 path,
                 entityId,
@@ -218,16 +218,51 @@ export function useBuildDataSource({
                         inputValues: values,
                         properties,
                         status,
-                        timestampNowValue: usedDelegate.currentTime?.() ?? new Date(),
-                        setDateToMidnight: usedDelegate.setDateToMidnight
+                        timestampNowValue: usedDelegate.currentTime?.() ?? new Date()
                     })
                 : values;
+
+            // Auto-assign order property value for new/copy entities
+            let finalValues = updatedValues;
+            const orderProperty = collection?.orderProperty;
+            if (orderProperty && (status === "new" || status === "copy")) {
+                const orderProp = properties?.[orderProperty as keyof M];
+                // Only auto-assign if property is disabled (automatic mode)
+                if (orderProp?.disabled === true) {
+                    const currentValue = updatedValues[orderProperty as keyof M];
+                    if (currentValue === undefined || currentValue === null) {
+                        try {
+                            const entities = await usedDelegate.fetchCollection({
+                                path,
+                                orderBy: orderProperty,
+                                order: "asc",
+                                limit: 1,
+                                collection
+                            });
+                            const minOrder = entities.length > 0
+                                ? entities[0].values?.[orderProperty] ?? null
+                                : null;
+                            finalValues = {
+                                ...updatedValues,
+                                [orderProperty]: minOrder !== null ? minOrder - 1 : 0
+                            } as EntityValues<M>;
+                        } catch (e) {
+                            console.error("Failed to fetch min order value:", e);
+                            // Fallback to 0 if query fails
+                            finalValues = {
+                                ...updatedValues,
+                                [orderProperty]: 0
+                            } as EntityValues<M>;
+                        }
+                    }
+                }
+            }
 
             return usedDelegate.saveEntity({
                 path,
                 collection,
                 entityId,
-                values: updatedValues,
+                values: finalValues,
                 status,
                 navigationController,
             });
@@ -280,12 +315,12 @@ export function useBuildDataSource({
         }, [delegate.generateEntityId]),
 
         countEntities: delegate.countEntities ? async ({
-                                                           path,
-                                                           collection,
-                                                           filter,
-                                                           order,
-                                                           orderBy
-                                                       }: {
+            path,
+            collection,
+            filter,
+            order,
+            orderBy
+        }: {
             path: string,
             collection: EntityCollection<any>,
             filter?: FilterValues<Extract<keyof any, string>>,
@@ -304,11 +339,11 @@ export function useBuildDataSource({
         } : undefined,
 
         isFilterCombinationValid: useCallback(({
-                                                   path,
-                                                   databaseId,
-                                                   filterValues,
-                                                   sortBy
-                                               }: {
+            path,
+            databaseId,
+            filterValues,
+            sortBy
+        }: {
             path: string,
             databaseId?: string,
             filterValues: FilterValues<any>,

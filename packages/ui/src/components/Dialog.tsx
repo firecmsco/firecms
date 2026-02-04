@@ -74,7 +74,7 @@ export const Dialog = ({
         if (!open) {
             const timeout = setTimeout(() => {
                 setDisplayed(false);
-            }, 150);
+            }, 100);
             return () => clearTimeout(timeout);
         } else {
             setDisplayed(true);

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { EntityCollection, FieldCaption, IconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
+import React, { useMemo, useState } from "react";
+import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, resolveCollection, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -8,11 +8,9 @@ import {
     Container,
     DebouncedTextField,
     Dialog,
-    ExpandablePanel,
     IconButton,
     Select,
     SelectItem,
-    SettingsIcon,
     TextField,
     Tooltip,
     Typography,
@@ -23,6 +21,8 @@ import { Field, getIn, useFormex } from "@firecms/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { LayoutModeSwitch } from "./LayoutModeSwitch";
 import { ViewModeSwitch } from "./ViewModeSwitch";
+import { KanbanConfigSection } from "./KanbanConfigSection";
+import { PropertyFormDialog } from "./PropertyEditView";
 
 export function CollectionDetailsForm({
     isNewCollection,
@@ -31,7 +31,7 @@ export function CollectionDetailsForm({
     existingIds,
     groups,
     parentCollection,
-    children
+    expandKanban
 }: {
     isNewCollection: boolean,
     reservedGroups?: string[];
@@ -40,7 +40,7 @@ export function CollectionDetailsForm({
     groups: string[] | null;
     parentCollection?: EntityCollection;
     parentCollectionIds?: string[];
-    children?: React.ReactNode;
+    expandKanban?: boolean;
 }) {
 
     const groupRef = React.useRef<HTMLInputElement>(null);
@@ -58,7 +58,35 @@ export function CollectionDetailsForm({
     const collectionEditor = useCollectionEditorController();
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
-    const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);
+    const [orderPropertyDialogOpen, setOrderPropertyDialogOpen] = useState(false);
+
+    const authController = useAuthController();
+    const customizationController = useCustomizationController();
+
+    // Resolve collection to get properties for order property select
+    const resolvedCollection = useMemo(() => resolveCollection({
+        collection: values,
+        path: values.path,
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
+    }), [values, customizationController.propertyConfigs, authController]);
+
+    // Get number properties (for orderProperty)
+    const numberProperties = useMemo(() => {
+        const result: { key: string; label: string; property: Property; }[] = [];
+        if (!resolvedCollection.properties) return result;
+
+        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
+            if (prop && 'dataType' in prop && prop.dataType === 'number') {
+                result.push({
+                    key,
+                    label: (prop as Property).name || key,
+                    property: prop as Property
+                });
+            }
+        });
+        return result;
+    }, [resolvedCollection.properties]);
 
     const updateDatabaseId = (databaseId: string) => {
         setFieldValue("databaseId", databaseId ?? undefined);
@@ -83,12 +111,6 @@ export function CollectionDetailsForm({
         }
 
     };
-
-    useEffect(() => {
-        if (errors.id) {
-            setAdvancedPanelExpanded(true);
-        }
-    }, [errors.id]);
 
     const collectionIcon = <IconForView collectionOrView={values} />;
 
@@ -218,6 +240,143 @@ export function CollectionDetailsForm({
                         value={values.defaultViewMode ?? "table"}
                         onChange={(value) => setFieldValue("defaultViewMode", value)} />
 
+                    <KanbanConfigSection className={"col-span-12"} forceExpanded={expandKanban} />
+
+                    <div className={"col-span-12 mt-4"}>
+                        {(() => {
+                            // Check if orderProperty references a non-existent property
+                            const orderPropertyMissing = Boolean(values.orderProperty) &&
+                                !numberProperties.some(p => p.key === values.orderProperty);
+
+                            return (
+                                <>
+                                    <Select
+                                        key={`order-select-${numberProperties.length}`}
+                                        name="orderProperty"
+                                        label="Order Property"
+                                        size={"large"}
+                                        fullWidth={true}
+                                        position={"item-aligned"}
+                                        disabled={numberProperties.length === 0}
+                                        error={orderPropertyMissing}
+                                        value={values.orderProperty ?? ""}
+                                        onValueChange={(v) => {
+                                            setFieldValue("orderProperty", v || undefined);
+                                        }}
+                                        renderValue={(value) => {
+                                            if (orderPropertyMissing) {
+                                                return <span className="text-red-500">{value} (not found)</span>;
+                                            }
+                                            const prop = numberProperties.find(p => p.key === value);
+                                            if (!prop) return "Select a property";
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <div className="flex items-center gap-2">
+                                                    <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                    <span>{prop.label}</span>
+                                                </div>
+                                            );
+                                        }}
+                                        endAdornment={values.orderProperty ? (
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFieldValue("orderProperty", undefined);
+                                                }}
+                                            >
+                                                <CloseIcon size="small" />
+                                            </IconButton>
+                                        ) : undefined}
+                                    >
+                                        {numberProperties.map((prop) => {
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <SelectItem key={prop.key} value={prop.key}>
+                                                    <div className="flex items-center gap-3">
+                                                        <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                        <div>
+                                                            <div>{prop.label}</div>
+                                                            <Typography variant="caption" color="secondary">
+                                                                {fieldConfig?.name || "Number"}
+                                                            </Typography>
+                                                        </div>
+                                                    </div>
+                                                </SelectItem>
+                                            );
+                                        })}
+                                    </Select>
+                                    <FieldCaption error={orderPropertyMissing}>
+                                        {orderPropertyMissing
+                                            ? `Property "${values.orderProperty}" does not exist or is not a number property. Please select a valid property or clear the selection.`
+                                            : numberProperties.length === 0
+                                                ? "No number properties found. Add a number property to enable ordering."
+                                                : "Select a number property to persist the order of items"
+                                        }
+                                    </FieldCaption>
+                                </>
+                            );
+                        })()}
+                        {(() => {
+                            // Check if orderProperty references a non-existent property
+                            const orderPropertyMissing = Boolean(values.orderProperty) &&
+                                !numberProperties.some(p => p.key === values.orderProperty);
+                            const showCreateButton = !values.orderProperty || orderPropertyMissing;
+
+                            // Pre-fill with missing property id or default "__order"
+                            const dialogPropertyKey = orderPropertyMissing && values.orderProperty
+                                ? values.orderProperty
+                                : "__order";
+                            const dialogPropertyName = orderPropertyMissing && values.orderProperty
+                                ? unslugify(values.orderProperty)
+                                : "Order";
+
+                            if (!showCreateButton) return null;
+
+                            return (
+                                <>
+                                    <button
+                                        type="button"
+                                        className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
+                                        onClick={() => setOrderPropertyDialogOpen(true)}
+                                    >
+                                        + Create "{dialogPropertyKey}" property
+                                    </button>
+                                    <PropertyFormDialog
+                                        open={orderPropertyDialogOpen}
+                                        onCancel={() => setOrderPropertyDialogOpen(false)}
+                                        property={{
+                                            dataType: "number",
+                                            name: dialogPropertyName,
+                                            disabled: true,
+                                            hideFromCollection: true
+                                        }}
+                                        propertyKey={dialogPropertyKey}
+                                        existingProperty={false}
+                                        autoOpenTypeSelect={false}
+                                        autoUpdateId={false}
+                                        inArray={false}
+                                        allowDataInference={false}
+                                        propertyConfigs={customizationController.propertyConfigs}
+                                        collectionEditable={true}
+                                        existingPropertyKeys={Object.keys(values.properties ?? {})}
+                                        onPropertyChanged={({ id, property }) => {
+                                            const newProperties = {
+                                                ...values.properties,
+                                                [id!]: property
+                                            };
+                                            const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id];
+                                            setFieldValue("properties", newProperties);
+                                            setFieldValue("propertiesOrder", newPropertiesOrder);
+                                            setFieldValue("orderProperty", id);
+                                            setOrderPropertyDialogOpen(false);
+                                        }}
+                                    />
+                                </>
+                            );
+                        })()}
+                    </div>
+
                     <div className={"col-span-12"}>
                         <BooleanSwitchWithLabel
                             position={"start"}
@@ -238,208 +397,6 @@ export function CollectionDetailsForm({
 
 
                     <div className={"col-span-12 mt-8"}>
-                        <ExpandablePanel
-                            expanded={advancedPanelExpanded}
-                            onExpandedChange={setAdvancedPanelExpanded}
-                            title={
-                                <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
-                                    <SettingsIcon />
-                                    <Typography variant={"subtitle2"}
-                                        className="ml-2">
-                                        Advanced
-                                    </Typography>
-                                </div>}
-                            initiallyExpanded={false}>
-                            <div className={"grid grid-cols-12 gap-4 p-4"}>
-
-                                <div className={"col-span-12"}>
-                                    <Field name={"id"}
-                                        as={DebouncedTextField}
-                                        disabled={!isNewCollection}
-                                        label={"Collection id"}
-                                        error={showErrors && Boolean(errors.id)} />
-                                    <FieldCaption error={touched.id && Boolean(errors.id)}>
-                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection. Typically the same as the path."}
-                                    </FieldCaption>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <TextField
-                                        error={showErrors && Boolean(errors.singularName)}
-                                        name={"singularName"}
-                                        aria-describedby={"singularName-helper"}
-                                        onChange={(e) => {
-                                            setFieldTouched("singularName", true);
-                                            return handleChange(e);
-                                        }}
-                                        value={values.singularName ?? ""}
-                                        label={"Singular name"} />
-                                    <FieldCaption error={showErrors && Boolean(errors.singularName)}>
-                                        {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
-                                    </FieldCaption>
-                                </div>
-                                <div className={"col-span-12"}>
-                                    <TextField
-                                        error={showErrors && Boolean(errors.sideDialogWidth)}
-                                        name={"sideDialogWidth"}
-                                        type={"number"}
-                                        aria-describedby={"sideDialogWidth-helper"}
-                                        onChange={(e) => {
-                                            setFieldTouched("sideDialogWidth", true);
-                                            const value = e.target.value;
-                                            if (!value) {
-                                                setFieldValue("sideDialogWidth", null);
-                                            } else if (!isNaN(Number(value))) {
-                                                setFieldValue("sideDialogWidth", Number(value));
-                                            }
-                                        }}
-                                        endAdornment={<IconButton
-                                            size={"small"}
-                                            onClick={() => {
-                                                setFieldValue("sideDialogWidth", null);
-                                            }}
-                                            disabled={!values.sideDialogWidth}>
-                                            <CloseIcon size={"small"} />
-                                        </IconButton>}
-                                        value={values.sideDialogWidth ?? ""}
-                                        label={"Side dialog width"} />
-                                    <FieldCaption error={showErrors && Boolean(errors.singularName)}>
-                                        {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define the width (in pixels) of entities side dialog. Default is 768px"}
-                                    </FieldCaption>
-                                </div>
-                                <div className={"col-span-12"}>
-                                    <TextField
-                                        error={showErrors && Boolean(errors.description)}
-                                        name="description"
-                                        value={values.description ?? ""}
-                                        onChange={handleChange}
-                                        multiline
-                                        minRows={2}
-                                        aria-describedby="description-helper-text"
-                                        label="Description"
-                                    />
-                                    <FieldCaption error={showErrors && Boolean(errors.description)}>
-                                        {showErrors && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
-                                    </FieldCaption>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <Select
-                                        name="defaultSize"
-                                        size={"large"}
-                                        fullWidth={true}
-                                        label="Default row size"
-                                        position={"item-aligned"}
-                                        onChange={handleChange}
-                                        value={values.defaultSize ?? ""}
-                                        renderValue={(value: any) => value.toUpperCase()}
-                                    >
-                                        {["xs", "s", "m", "l", "xl"].map((value) => (
-                                            <SelectItem
-                                                key={`size-select-${value}`}
-                                                value={value}>
-                                                {value.toUpperCase()}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <BooleanSwitchWithLabel
-                                        position={"start"}
-                                        size={"large"}
-                                        label={values.includeJsonView === undefined || values.includeJsonView ? "Include JSON view" : "Do not include JSON view"}
-                                        onValueChange={(v) => setFieldValue("includeJsonView", v)}
-                                        value={values.includeJsonView === undefined ? true : values.includeJsonView}
-                                    />
-                                    <FieldCaption>
-                                        Include the JSON representation of the document.
-                                    </FieldCaption>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <BooleanSwitchWithLabel
-                                        position={"start"}
-                                        size={"large"}
-                                        label={values.inlineEditing === undefined || values.inlineEditing ? "Data can be edited directly in the table view" : "Data can be edited only  in the form view"}
-                                        onValueChange={(v) => setFieldValue("inlineEditing", v)}
-                                        value={values.inlineEditing === undefined ? true : values.inlineEditing}
-                                    />
-                                    <FieldCaption>
-                                        Allow editing data directly in the table view, without opening the form view.
-                                    </FieldCaption>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <Select
-                                        name="customId"
-                                        label="Document IDs generation"
-                                        position={"item-aligned"}
-                                        size={"large"}
-                                        fullWidth={true}
-                                        disabled={customIdValue === "code_defined"}
-                                        onValueChange={(v) => {
-                                            if (v === "code_defined")
-                                                throw new Error("This should not happen");
-                                            setFieldValue("customId", v);
-                                        }}
-                                        value={customIdValue ?? ""}
-                                        renderValue={(value: any) => {
-                                            if (value === "code_defined")
-                                                return "Code defined";
-                                            else if (value === "true")
-                                                return "Users must define an ID";
-                                            else if (value === "optional")
-                                                return "Users can define an ID, but it is not required";
-                                            else
-                                                return "Document ID is generated automatically";
-                                        }}
-                                    >
-                                        <SelectItem value={"false"}>
-                                            Document ID is generated automatically
-                                        </SelectItem>
-                                        <SelectItem value={"true"}>
-                                            Users must define an ID
-                                        </SelectItem>
-                                        <SelectItem value={"optional"}>
-                                            Users can define an ID, but it is not required
-                                        </SelectItem>
-                                    </Select>
-                                </div>
-                                <div className={"col-span-12 mt-4"}>
-                                    <BooleanSwitchWithLabel
-                                        position={"start"}
-                                        size={"large"}
-                                        label="Collection group"
-                                        onValueChange={(v) => setFieldValue("collectionGroup", v)}
-                                        value={values.collectionGroup ?? false}
-                                    />
-                                    <FieldCaption>
-                                        A collection group consists of all collections with the same path. This allows
-                                        you
-                                        to query over multiple collections at once.
-                                    </FieldCaption>
-                                </div>
-                                <div className={"col-span-12"}>
-                                    <BooleanSwitchWithLabel
-                                        position={"start"}
-                                        size={"large"}
-                                        label="Enable text search for this collection"
-                                        onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
-                                        value={values.textSearchEnabled ?? false}
-                                    />
-                                    <FieldCaption>
-                                        Allow text search for this collection. If you have not specified a text search
-                                        delegate, this will use the built-in local text search. This is not recommended
-                                        for large collections, as it may incur in performance and cost issues.
-                                    </FieldCaption>
-                                </div>
-
-
-                            </div>
-                        </ExpandablePanel>
-
-                        {children}
 
                     </div>
 

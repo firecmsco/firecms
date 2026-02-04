@@ -62,11 +62,17 @@ const features = [
     { feature: "Roadmap Prioritization", community: dashIcon, pro: checkIcon, cloud: "Enterprise Only" },
 
 ];
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Compare", url: "https://firecms.co/compare" }
+];
 ---
 
 <Layout
         title="FireCMS Feature Comparison"
         description="Compare features across FireCMS Community (Free Self-Hosted), PRO (Self-Hosted), and Cloud plans."
+        breadcrumbs={breadcrumbs}
 >
     <main>
         {/* Hero Section */}

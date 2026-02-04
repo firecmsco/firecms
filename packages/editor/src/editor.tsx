@@ -23,18 +23,18 @@ import { TextButtons } from "./selectors/text-buttons";
 
 import { removeClassesFromJson } from "./utils/remove_classes";
 import {
-    blockquote,
-    bulletList,
-    code,
-    codeBlock,
-    horizontalRule,
-    listItem,
-    orderedList,
-    placeholder,
-    starterKit,
-    taskItem,
-    taskList,
-    tiptapLink
+  blockquote,
+  bulletList,
+  code,
+  codeBlock,
+  horizontalRule,
+  listItem,
+  orderedList,
+  placeholder,
+  starterKit,
+  taskItem,
+  taskList,
+  tiptapLink
 } from "./editor_extensions";
 import { createDropImagePlugin, createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
@@ -47,203 +47,226 @@ import { SlashCommand, suggestion } from "./extensions/slashCommand";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
+/**
+ * Configuration options for the markdown editor.
+ */
+export interface MarkdownEditorConfig {
+  /**
+   * Allow HTML input/output. When set to false, HTML tags in pasted content
+   * will be stripped. Defaults to true.
+   */
+  html?: boolean;
+
+  /**
+   * Convert pasted text to markdown format. Defaults to false.
+   */
+  transformPastedText?: boolean;
+}
+
 export type FireCMSEditorProps = {
-    content?: JSONContent | string,
-    onMarkdownContentChange?: (content: string) => void,
-    onJsonContentChange?: (content: JSONContent | null) => void,
-    onHtmlContentChange?: (content: string) => void,
-    handleImageUpload: (file: File) => Promise<string>,
-    version?: number,
-    textSize?: FireCMSEditorTextSize,
-    highlight?: { from: number, to: number },
-    aiController?: EditorAIController,
-    customComponents?: CustomEditorComponent[];
-    disabled?: boolean;
+  content?: JSONContent | string,
+  onMarkdownContentChange?: (content: string) => void,
+  onJsonContentChange?: (content: JSONContent | null) => void,
+  onHtmlContentChange?: (content: string) => void,
+  handleImageUpload: (file: File) => Promise<string>,
+  version?: number,
+  textSize?: FireCMSEditorTextSize,
+  highlight?: { from: number, to: number },
+  aiController?: EditorAIController,
+  customComponents?: CustomEditorComponent[];
+  disabled?: boolean;
+  /**
+   * Configuration for markdown parsing and serialization.
+   * Controls how HTML is handled during paste operations.
+   */
+  markdownConfig?: MarkdownEditorConfig;
 };
 
 export type CustomEditorComponent = {
-    name: string,
-    component: React.FC
+  name: string,
+  component: React.FC
 };
 
 const proseClasses = {
-    "sm": "prose-sm",
-    "base": "prose-base",
-    "lg": "prose-lg"
+  "sm": "prose-sm",
+  "base": "prose-base",
+  "lg": "prose-lg"
 }
 
 const canUseDOM = Boolean(
-    typeof window !== "undefined" &&
-    window.document && window.document.createElement
+  typeof window !== "undefined" &&
+  window.document && window.document.createElement
 );
 
 export const FireCMSEditor = ({
-                                  content,
-                                  onJsonContentChange,
-                                  onHtmlContentChange,
-                                  onMarkdownContentChange,
-                                  version,
-                                  textSize = "base",
-                                  highlight,
-                                  handleImageUpload,
-                                  aiController,
-                                  disabled
-                              }: FireCMSEditorProps) => {
+  content,
+  onJsonContentChange,
+  onHtmlContentChange,
+  onMarkdownContentChange,
+  version,
+  textSize = "base",
+  highlight,
+  handleImageUpload,
+  aiController,
+  disabled,
+  markdownConfig
+}: FireCMSEditorProps) => {
 
-    const ref = React.useRef<HTMLDivElement | null>(null);
-    const editorRef = React.useRef<Editor | null>(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const editorRef = React.useRef<Editor | null>(null);
 
-    const imagePlugin = createDropImagePlugin(handleImageUpload);
-    const imageExtension = useMemo(() => createImageExtension(imagePlugin), []);
+  const imagePlugin = createDropImagePlugin(handleImageUpload);
+  const imageExtension = useMemo(() => createImageExtension(imagePlugin), []);
 
-    const [openNode, setOpenNode] = useState(false);
-    const [openLink, setOpenLink] = useState(false);
+  const [openNode, setOpenNode] = useState(false);
+  const [openLink, setOpenLink] = useState(false);
 
-    useInjectStyles("Editor", cssStyles);
+  useInjectStyles("Editor", cssStyles);
 
-    const deferredHighlight = useDeferredValue(highlight);
+  const deferredHighlight = useDeferredValue(highlight);
 
-    useEffect(() => {
-        if (version === undefined) return;
-        if (version > -1 && editorRef.current) {
-            editorRef.current?.commands.setContent(content ?? "");
-        }
-    }, [version]);
-
-    useEffect(() => {
-        editorRef?.current?.setEditable(!disabled);
-    }, [disabled]);
-
-    useEffect(() => {
-        if (version === undefined) return;
-        if (editorRef.current && version > 0) {
-
-            const chain = editorRef.current.chain();
-
-            if (deferredHighlight) {
-                chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
-            } else {
-                chain.focus().removeAutocompleteHighlight().run();
-            }
-
-        }
-    }, [deferredHighlight?.from, deferredHighlight?.to]);
-
-    const firstUpdateRef = React.useRef(true);
-    const onEditorUpdate = (editor: Editor) => {
-        editorRef.current = editor;
-        if (firstUpdateRef.current) {
-            firstUpdateRef.current = false;
-            return; // Skip the first update to avoid unnecessary content change calls
-        }
-        if (onMarkdownContentChange) {
-            // @ts-ignore
-            const markdown = editorRef.current.storage.markdown.getMarkdown();
-            onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
-        }
-        if (onJsonContentChange) {
-            const jsonContent = removeClassesFromJson(editor.getJSON());
-            onJsonContentChange(jsonContent);
-        }
-        if (onHtmlContentChange) {
-            onHtmlContentChange?.(editor.getHTML());
-        }
+  useEffect(() => {
+    if (version === undefined) return;
+    if (version > -1 && editorRef.current) {
+      editorRef.current?.commands.setContent(content ?? "");
     }
+  }, [version]);
 
-    const proseClass = proseClasses[textSize];
+  useEffect(() => {
+    editorRef?.current?.setEditable(!disabled);
+  }, [disabled]);
 
-    const extensions: Extensions = useMemo(() => ([
-        starterKit as any,
-        Document.extend({}),
-        HighlightDecorationExtension(highlight),
-        TextLoadingDecorationExtension,
-        Underline,
-        Bold,
-        TextStyleKit,
-        Italic,
-        Strike,
-        Color,
-        Highlight.configure({
-            multicolor: true
-        }),
-        Heading,
-        CustomKeymap,
-        DragAndDrop,
-        placeholder,
-        tiptapLink,
-        imageExtension,
-        taskList,
-        taskItem,
-        Markdown.configure({
-            html: true
-        }),
-        horizontalRule,
-        bulletList,
-        orderedList,
-        listItem,
-        blockquote,
-        codeBlock,
-        code,
-        SlashCommand.configure({
-            HTMLAttributes: {
-                class: "mention"
-            },
-            suggestion: suggestion(ref, {
-                upload: handleImageUpload,
-                aiController,
-            })
-        })
-    ]), []);
+  useEffect(() => {
+    if (version === undefined) return;
+    if (editorRef.current && version > 0) {
 
-    return (
-        <div
-            ref={ref}
-            className="relative min-h-[300px] w-full">
+      const chain = editorRef.current.chain();
 
-            <EditorProvider
-                content={content ?? ""}
-                extensions={extensions}
-                immediatelyRender={canUseDOM}
-                editorProps={{
-                    editable: () => !disabled,
-                    attributes: {
-                        class: cls(proseClass, "prose-headings:font-title font-default focus:outline-hidden max-w-full p-12")
-                    }
-                }}
-                onCreate={({ editor }) => {
-                    // @ts-ignore
-                    editorRef.current = editor;
-                    editor.setEditable(!disabled);
-                }}
-                onUpdate={({ editor }) => {
-                    onEditorUpdate(editor as Editor);
-                }}>
+      if (deferredHighlight) {
+        chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
+      } else {
+        chain.focus().removeAutocompleteHighlight().run();
+      }
 
-                <EditorBubble
-                    options={{
-                        placement: "top",
-                        offset: 6,
-                    }}
-                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded-xs border bg-white dark:bg-surface-900 shadow-2xs", defaultBorderMixin)}
-                >
-                    <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode}/>
-                    <Separator orientation="vertical"/>
-                    <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
-                    <Separator orientation="vertical"/>
-                    <TextButtons/>
-                </EditorBubble>
+    }
+  }, [deferredHighlight?.from, deferredHighlight?.to]);
 
-            </EditorProvider>
-        </div>
+  const firstUpdateRef = React.useRef(true);
+  const onEditorUpdate = (editor: Editor) => {
+    editorRef.current = editor;
+    if (firstUpdateRef.current) {
+      firstUpdateRef.current = false;
+      return; // Skip the first update to avoid unnecessary content change calls
+    }
+    if (onMarkdownContentChange) {
+      // @ts-ignore
+      const markdown = editorRef.current.storage.markdown.getMarkdown();
+      onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
+    }
+    if (onJsonContentChange) {
+      const jsonContent = removeClassesFromJson(editor.getJSON());
+      onJsonContentChange(jsonContent);
+    }
+    if (onHtmlContentChange) {
+      onHtmlContentChange?.(editor.getHTML());
+    }
+  }
 
-    );
+  const proseClass = proseClasses[textSize];
+
+  const extensions: Extensions = useMemo(() => ([
+    starterKit as any,
+    Document.extend({}),
+    HighlightDecorationExtension(highlight),
+    TextLoadingDecorationExtension,
+    Underline,
+    Bold,
+    TextStyleKit,
+    Italic,
+    Strike,
+    Color,
+    Highlight.configure({
+      multicolor: true
+    }),
+    Heading,
+    CustomKeymap,
+    DragAndDrop,
+    placeholder,
+    tiptapLink,
+    imageExtension,
+    taskList,
+    taskItem,
+    Markdown.configure({
+      html: markdownConfig?.html ?? true,
+      transformPastedText: markdownConfig?.transformPastedText ?? false
+    }),
+    horizontalRule,
+    bulletList,
+    orderedList,
+    listItem,
+    blockquote,
+    codeBlock,
+    code,
+    SlashCommand.configure({
+      HTMLAttributes: {
+        class: "mention"
+      },
+      suggestion: suggestion(ref, {
+        upload: handleImageUpload,
+        aiController,
+      })
+    })
+  ]), [markdownConfig?.html, markdownConfig?.transformPastedText]);
+
+  return (
+    <div
+      ref={ref}
+      className="relative min-h-[300px] w-full">
+
+      <EditorProvider
+        content={content ?? ""}
+        extensions={extensions}
+        immediatelyRender={canUseDOM}
+        editorProps={{
+          editable: () => !disabled,
+          attributes: {
+            class: cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")
+          }
+        }}
+        onCreate={({ editor }) => {
+          // @ts-ignore
+          editorRef.current = editor;
+          editor.setEditable(!disabled);
+        }}
+        onUpdate={({ editor }) => {
+          onEditorUpdate(editor as Editor);
+        }}>
+
+        <EditorBubble
+          options={{
+            placement: "top",
+            offset: 6,
+          }}
+          className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
+        >
+          <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode} />
+          <Separator orientation="vertical" />
+          <LinkSelector open={openLink} onOpenChange={setOpenLink} />
+          <Separator orientation="vertical" />
+          <TextButtons />
+        </EditorBubble>
+
+      </EditorProvider>
+    </div>
+
+  );
 };
 
 function addLineBreakAfterImages(markdown: string): string {
-    // Regular expression to match markdown image syntax
-    const imageRegex = /!\[.*?\]\(.*?\)/g;
-    // Replace image with image followed by a line break
-    return markdown.replace(imageRegex, (match) => `${match}\n`);
+  // Regular expression to match markdown image syntax
+  const imageRegex = /!\[.*?\]\(.*?\)/g;
+  // Replace image with image followed by a line break
+  return markdown.replace(imageRegex, (match) => `${match}\n`);
 }
 
 const cssStyles = `
