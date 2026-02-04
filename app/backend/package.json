@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections.ts --output=src/schema.generated.ts",
     "db:pull": "DOTENV_CONFIG_PATH=../.env drizzle-kit pull",
-    "db:generate": "DOTENV_CONFIG_PATH=../.env drizzle-kit generate",
+    "db:generate": "tsx scripts/db-generate.ts",
     "db:migrate": "DOTENV_CONFIG_PATH=../.env drizzle-kit migrate",
     "db:push": "DOTENV_CONFIG_PATH=../.env drizzle-kit push",
     "db:studio": "DOTENV_CONFIG_PATH=../.env drizzle-kit studio"

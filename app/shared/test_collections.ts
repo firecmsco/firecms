@@ -157,6 +157,16 @@ const postsCollection: EntityCollection = {
             type: "string",
             multiline: true
         },
+        status: {
+            name: "Status",
+            type: "string",
+            enum: [
+                { id: "draft", label: "Draft", color: "grayLight" },
+                { id: "review", label: "In Review", color: "orangeLight" },
+                { id: "published", label: "Published", color: "greenLight" },
+                { id: "archived", label: "Archived", color: "redLight" }
+            ]
+        },
         // A property to demonstrate a relation field in the UI
         author: {
             name: "Author",

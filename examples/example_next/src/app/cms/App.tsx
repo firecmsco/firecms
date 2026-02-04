@@ -82,7 +82,7 @@ export function App() {
             name: "Additional",
             group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
-            view: <ExampleCMSView/>
+            view: <ExampleCMSView />
         },
         // {
         //     path: "board_test",
@@ -95,14 +95,14 @@ export function App() {
             name: "The FireCMS editor",
             description: "This view showcases a custom advanced editor",
             group: "Custom views",
-            view: <TestEditorView/>
+            view: <TestEditorView />
         },
         {
             slug: "ui_components",
             description: "This view showcases some of the UI components available in FireCMS",
             name: "UI components showcase",
             group: "Custom views",
-            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true}/>
+            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true} />
         }
     ]), []);
 
@@ -199,7 +199,7 @@ export function App() {
 
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (configError) {
@@ -224,13 +224,13 @@ export function App() {
                     ]}
                 >
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         let component;
                         if (loading || authLoading) {
-                            component = <CircularProgressCenter size={"large"}/>;
+                            component = <CircularProgressCenter size={"large"} />;
                         } else {
                             if (!canAccessMainView) {
                                 component = (
@@ -242,7 +242,7 @@ export function App() {
                                             signInOptions={signInOptions}
                                             firebaseApp={firebaseApp}
                                             authController={userManagement}
-                                            notAllowedError={notAllowedError}/>
+                                            notAllowedError={notAllowedError} />
                                     </div>
 
                                 );
@@ -252,16 +252,16 @@ export function App() {
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
                                         <AppBar title={title}
-                                                endAdornment={<Link href={"/products"} target={"_blank"}>
-                                                    <Button variant={"text"}>
-                                                        <OpenInNewIcon/>
-                                                        Go to website
-                                                    </Button>
-                                                </Link>}
+                                            endAdornment={<Link href={"/products"} target={"_blank"}>
+                                                <Button variant={"text"}>
+                                                    <OpenInNewIcon />
+                                                    Go to website
+                                                </Button>
+                                            </Link>}
                                         />
-                                        <Drawer/>
-                                        <NavigationRoutes/>
-                                        <SideDialogs/>
+                                        <Drawer />
+                                        <NavigationRoutes />
+                                        <SideDialogs />
                                     </Scaffold>
                                 );
                             }

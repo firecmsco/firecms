@@ -8,6 +8,13 @@
       "when": 1768581693181,
       "tag": "0001_curvy_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770202656656,
+      "tag": "0001_slow_black_tarantula",
+      "breakpoints": true
     }
   ]
 }

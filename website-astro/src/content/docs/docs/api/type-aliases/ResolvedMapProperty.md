@@ -11,7 +11,7 @@ title: "ResolvedMapProperty"
 
 # Type Alias: ResolvedMapProperty\<T\>
 
-> **ResolvedMapProperty**\<`T`\> = `Omit`\<[`MapProperty`](../interfaces/MapProperty), `"properties"` \| `"dataType"` \| `"propertiesOrder"`\> & `object`
+> **ResolvedMapProperty**\<`T`\> = `Omit`\<[`MapProperty`](../interfaces/MapProperty), `"properties"` \| `"type"` \| `"propertiesOrder"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:140](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 

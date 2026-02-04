@@ -11,7 +11,7 @@ title: "ResolvedStringProperty"
 
 # Type Alias: ResolvedStringProperty
 
-> **ResolvedStringProperty** = `Omit`\<[`StringProperty`](../interfaces/StringProperty), `"enumValues"` \| `"dataType"`\> & `object`
+> **ResolvedStringProperty** = `Omit`\<[`StringProperty`](../interfaces/StringProperty), `"enumValues"` \| `"type"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 

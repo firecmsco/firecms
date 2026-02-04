@@ -5,9 +5,10 @@ import {
     EntityTableController,
     EnumValueConfig,
     FilterValues,
-    ResolvedStringProperty,
+    Property,
+    SaveEntityProps,
     SelectionController
-} from "../../types";
+} from "@firecms/types";
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";
@@ -25,7 +26,8 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { getPropertyInPath, resolveCollection, resolveEnumValues } from "../../util";
+import { resolveEnumValues } from "@firecms/common";
+import { getPropertyInPath } from "../../util";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -34,7 +36,6 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
-import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 import { useBoardDataController } from "./useBoardDataController";
 
@@ -80,25 +81,20 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const [showBackfillDialog, setShowBackfillDialog] = useState(false);
     const [backfillLoading, setBackfillLoading] = useState(false);
 
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection,
-        path: collection.path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, customizationController.propertyConfigs, authController]);
+    // v4: use collection directly without resolving
 
     // Get orderProperty from collection config, but validate it exists as a real property
     const rawOrderProperty = collection.orderProperty;
     const orderProperty = useMemo(() => {
         if (!rawOrderProperty) return undefined;
-        // Check if the property actually exists in the resolved collection
-        const property = getPropertyInPath(resolvedCollection.properties, rawOrderProperty);
+        // Check if the property actually exists in the collection
+        const property = getPropertyInPath(collection.properties, rawOrderProperty);
         if (!property) {
             console.warn(`orderProperty "${rawOrderProperty}" is defined but does not exist in the collection properties. Treating as unconfigured.`);
             return undefined;
         }
         return rawOrderProperty;
-    }, [rawOrderProperty, resolvedCollection.properties]);
+    }, [rawOrderProperty, collection.properties]);
 
     // Get columns from the property's enumValues
     const {
@@ -106,21 +102,21 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         columnLabels,
         columnColors
     } = useMemo(() => {
-        const property = getPropertyInPath(resolvedCollection.properties, columnProperty);
-        if (!property || !("dataType" in property) || property.dataType !== "string") {
+        const property = getPropertyInPath(collection.properties, columnProperty);
+        if (!property || !("type" in property) || (property as any).type !== "string") {
             return {
                 enumColumns: [] as string[],
                 columnLabels: {} as Record<string, string>
             };
         }
-        const stringProperty = property as ResolvedStringProperty;
-        if (!stringProperty.enumValues) {
+        const stringProperty = property as any;
+        if (!stringProperty.enum) {
             return {
                 enumColumns: [] as string[],
                 columnLabels: {} as Record<string, string>
             };
         }
-        const enumValues = resolveEnumValues(stringProperty.enumValues);
+        const enumValues = resolveEnumValues(stringProperty.enum);
         if (!enumValues) {
             return {
                 enumColumns: [] as string[],
@@ -141,7 +137,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             columnLabels: labels,
             columnColors: colors
         };
-    }, [resolvedCollection, columnProperty]);
+    }, [collection, columnProperty]);
 
     // Track if user has manually reordered columns in this session
     const [hasUserReordered, setHasUserReordered] = useState(false);
@@ -191,8 +187,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         const deltas: Record<string, number> = {};
         deletedEntities.forEach(entity => {
             // Skip if we've already processed this entity
-            if (processedDeletedRef.current.has(entity.id)) return;
-            processedDeletedRef.current.add(entity.id);
+            if (processedDeletedRef.current.has(String(entity.id))) return;
+            processedDeletedRef.current.add(String(entity.id));
 
             const col = entity.values?.[columnProperty];
             if (col && typeof col === "string") {
@@ -298,10 +294,25 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         });
     }, [allEntities, orderProperty, dataLoading, missingOrderCount]);
 
+    // Create a lookup map of entity ID → column from boardDataController data
+    // This ensures items stay in the column they were fetched for, not re-evaluated from entity.values
+    const entityColumnMap = useMemo(() => {
+        const map: Record<string, string> = {};
+        columns.forEach(col => {
+            const colData = boardDataController.columnData[col];
+            if (colData?.entities) {
+                colData.entities.forEach((entity: Entity<M>) => {
+                    map[String(entity.id)] = col;
+                });
+            }
+        });
+        return map;
+    }, [columns, boardDataController.columnData]);
+
     // Convert entities to board items per column (data already sorted by orderProperty from controller)
     const boardItems: BoardItem<M>[] = useMemo(() => {
         return allEntities.map((entity: Entity<M>) => ({
-            id: entity.id,
+            id: String(entity.id),
             entity
         }));
     }, [allEntities]);
@@ -321,11 +332,15 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return state;
     }, [columns, boardDataController.columnData]);
 
+    // Use the lookup map to assign columns - ensures items stay in the column they were fetched for
     const assignColumn = useCallback((item: BoardItem<M>): string => {
+        const column = entityColumnMap[item.id];
+        if (column) return column;
+        // Fallback: read from entity values (for newly created items or edge cases)
         const value = item.entity.values?.[columnProperty];
         if (value && columns.includes(String(value))) return String(value);
         return columns[0] || "";
-    }, [columnProperty, columns]);
+    }, [entityColumnMap, columnProperty, columns]);
 
     // Calculate new order value using fractional indexing
     const calculateNewOrder = useCallback((

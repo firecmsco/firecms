@@ -11,7 +11,7 @@ title: "ResolvedTimestampProperty"
 
 # Type Alias: ResolvedTimestampProperty
 
-> **ResolvedTimestampProperty** = `Omit`\<[`DateProperty`](../interfaces/DateProperty), `"dataType"`\> & `object`
+> **ResolvedTimestampProperty** = `Omit`\<[`DateProperty`](../interfaces/DateProperty), `"type"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:88](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 

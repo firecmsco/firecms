@@ -1,15 +1,11 @@
 import React, { memo, useCallback, useMemo } from "react";
-import { Entity, EntityCollection, ResolvedProperty } from "../../types";
-import {
-    getEntityImagePreviewPropertyKey,
-    getEntityTitlePropertyKey,
-    getValueInPath,
-    IconForView,
-    resolveCollection
-} from "../../util";
+import { Entity, EntityCollection, Property } from "@firecms/types";
+import { getValueInPath } from "@firecms/common";
+import { getEntityImagePreviewPropertyKey, getEntityTitlePropertyKey } from "../../util/previews";
+import { IconForView } from "../../util";
 import { Checkbox, cls, defaultBorderMixin } from "@firecms/ui";
 import { PropertyPreview } from "../../preview";
-import { useAuthController, useCustomizationController } from "../../hooks";
+import { useCustomizationController } from "../../hooks";
 import { BoardItemViewProps } from "./board_types";
 
 export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardItemViewProps<M> & {
@@ -25,39 +21,31 @@ export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardIte
  * Shows thumbnail, title, and optional selection checkbox.
  */
 function EntityBoardCardInner<M extends Record<string, any> = any>({
-                                                                       item,
-                                                                       isDragging,
-                                                                       isGroupedOver,
-                                                                       style,
-                                                                       collection,
-                                                                       onClick,
-                                                                       selected,
-                                                                       onSelectionChange,
-                                                                       selectionEnabled = false
-                                                                   }: EntityBoardCardProps<M>) {
+    item,
+    isDragging,
+    isGroupedOver,
+    style,
+    collection,
+    onClick,
+    selected,
+    onSelectionChange,
+    selectionEnabled = false
+}: EntityBoardCardProps<M>) {
     const entity = item.entity;
-    const authController = useAuthController();
     const customizationController = useCustomizationController();
 
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection,
-        path: entity.path,
-        values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, entity.path, entity.values, customizationController.propertyConfigs, authController]);
-
+    // v4: use collection directly without resolving
     const titlePropertyKey = useMemo(
-        () => getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs),
-        [resolvedCollection, customizationController.propertyConfigs]
+        () => getEntityTitlePropertyKey(collection, customizationController.propertyConfigs),
+        [collection, customizationController.propertyConfigs]
     );
 
     const imagePropertyKey = useMemo(
-        () => getEntityImagePreviewPropertyKey(resolvedCollection),
-        [resolvedCollection]
+        () => getEntityImagePreviewPropertyKey(collection),
+        [collection]
     );
 
-    const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
+    const imageProperty = imagePropertyKey ? collection.properties[imagePropertyKey] : undefined;
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
 
     const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
@@ -68,7 +56,7 @@ function EntityBoardCardInner<M extends Record<string, any> = any>({
         : undefined;
 
     const titleValue = titlePropertyKey ? getValueInPath(entity.values, titlePropertyKey) : undefined;
-    const titleProperty = titlePropertyKey ? resolvedCollection.properties[titlePropertyKey] as ResolvedProperty : undefined;
+    const titleProperty = titlePropertyKey ? collection.properties[titlePropertyKey] as Property : undefined;
 
     const handleClick = useCallback((e: React.MouseEvent) => {
         // Cmd+click (Mac) or Ctrl+click (Windows) toggles selection

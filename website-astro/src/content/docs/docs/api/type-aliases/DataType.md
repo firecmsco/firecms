@@ -1,6 +1,6 @@
 ---
 slug: "docs/api/type-aliases/DataType"
-title: "DataType"
+title: "type"
 ---
 
 [**@firecms/core**](../README)

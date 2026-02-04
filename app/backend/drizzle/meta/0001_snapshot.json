@@ -1,6 +1,6 @@
 {
-  "id": "92567b8b-2dd2-4a06-b07d-848f8546510d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "23438966-40ca-46ff-b469-3006e443b695",
+  "prevId": "92567b8b-2dd2-4a06-b07d-848f8546510d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -60,6 +60,13 @@
         "content": {
           "name": "content",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "posts_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -229,7 +236,18 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.posts_status": {
+      "name": "posts_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "review",
+        "published",
+        "archived"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

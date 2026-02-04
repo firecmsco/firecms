@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { CollectionSize, ViewMode } from "../../types";
+import { CollectionSize, ViewMode } from "@firecms/types";
 import {
     AppsIcon,
     Button,
@@ -93,14 +93,13 @@ export function ViewModeToggle({
         return "List";
     };
 
-    const showKanban = kanbanEnabled || hasKanbanConfigPlugin;
     const showSizeSelector = size && onSizeChanged && (viewMode === "table" || viewMode === "cards");
     const showKanbanPropertySelector = viewMode === "kanban" &&
         kanbanPropertyOptions &&
         kanbanPropertyOptions.length > 0 &&
         onKanbanPropertyChange;
 
-    // Build toggle options dynamically based on kanban availability
+    // Build toggle options - always include kanban
     const viewModeOptions: ToggleButtonOption<ViewMode>[] = useMemo(() => {
         const options: ToggleButtonOption<ViewMode>[] = [
             {
@@ -112,20 +111,16 @@ export function ViewModeToggle({
                 value: "cards",
                 label: "Cards",
                 icon: <AppsIcon size="small" />
+            },
+            {
+                value: "kanban",
+                label: "Board",
+                icon: <ViewKanbanIcon size="small" />
             }
         ];
 
-        if (showKanban) {
-            options.push({
-                value: "kanban",
-                label: "Board",
-                icon: <ViewKanbanIcon size="small" />,
-                disabled: !kanbanEnabled && !hasKanbanConfigPlugin
-            });
-        }
-
         return options;
-    }, [showKanban, kanbanEnabled, hasKanbanConfigPlugin]);
+    }, []);
 
     return (
         <Popover

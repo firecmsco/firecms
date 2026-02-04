@@ -11,7 +11,7 @@ title: "ResolvedNumberProperty"
 
 # Type Alias: ResolvedNumberProperty
 
-> **ResolvedNumberProperty** = `Omit`\<[`NumberProperty`](../interfaces/NumberProperty), `"enumValues"` \| `"dataType"`\> & `object`
+> **ResolvedNumberProperty** = `Omit`\<[`NumberProperty`](../interfaces/NumberProperty), `"enumValues"` \| `"type"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 

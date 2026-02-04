@@ -144,13 +144,13 @@ export function CollectionPropertiesEditorForm({
                                 keys.push(fullKey);
                             } else if (
                                 typeof newProp === "object" &&
-                                "dataType" in newProp &&
+                                "type" in newProp &&
                                 newProp.dataType === "map" &&
                                 newProp.properties
                             ) {
                                 // This is a map property, check for new nested properties
                                 const existingMapProps = typeof existingProp === "object" &&
-                                    "dataType" in existingProp &&
+                                    "type" in existingProp &&
                                     existingProp.dataType === "map"
                                     ? (existingProp as any).properties
                                     : undefined;
@@ -180,10 +180,10 @@ export function CollectionPropertiesEditorForm({
                                 result[key] = newProp;
                             } else if (
                                 typeof existingProp === "object" &&
-                                "dataType" in existingProp &&
+                                "type" in existingProp &&
                                 existingProp.dataType === "map" &&
                                 typeof newProp === "object" &&
-                                "dataType" in newProp &&
+                                "type" in newProp &&
                                 newProp.dataType === "map" &&
                                 newProp.properties
                             ) {

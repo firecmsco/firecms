@@ -19,16 +19,16 @@ const EXAMPLE_JSON = `{
   "icon": "shopping_cart",
   "properties": {
     "name": {
-      "dataType": "string",
+      "type": "string",
       "name": "Name",
       "validation": { "required": true }
     },
     "price": {
-      "dataType": "number",
+      "type": "number",
       "name": "Price"
     },
     "available": {
-      "dataType": "boolean",
+      "type": "boolean",
       "name": "Available"
     }
   }

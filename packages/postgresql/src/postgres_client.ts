@@ -738,7 +738,16 @@ export class PostgresDataSourceClient {
             searchString: props.searchString,
             collection: props.collection?.name
         };
-        return JSON.stringify(key, Object.keys(key).sort());
+        // Use replacer function (not array) to sort keys at all levels for deterministic output
+        return JSON.stringify(key, (_, value) => {
+            if (value && typeof value === "object" && !Array.isArray(value)) {
+                return Object.keys(value).sort().reduce((sorted: Record<string, any>, k) => {
+                    sorted[k] = value[k];
+                    return sorted;
+                }, {});
+            }
+            return value;
+        });
     }
 
     private createEntitySubscriptionKey(props: FetchEntityProps): string {

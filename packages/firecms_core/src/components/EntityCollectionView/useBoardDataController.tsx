@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Entity, EntityCollection, FilterValues } from "../../types";
-import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
+import { Entity, EntityCollection, FilterValues } from "@firecms/types";
+import { useDataSource, useFireCMSContext } from "../../hooks";
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -78,8 +78,8 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
-    const navigation = useNavigationController();
-    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    // v4: use fullPath directly instead of resolveIdsFrom
+    const resolvedPath = fullPath;
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
     const dataSourceRef = useRef(dataSource);

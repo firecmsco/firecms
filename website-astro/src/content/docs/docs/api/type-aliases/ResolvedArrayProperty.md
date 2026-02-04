@@ -11,7 +11,7 @@ title: "ResolvedArrayProperty"
 
 # Type Alias: ResolvedArrayProperty\<T, ArrayT\>
 
-> **ResolvedArrayProperty**\<`T`, `ArrayT`\> = `Omit`\<[`ArrayProperty`](../interfaces/ArrayProperty), `"of"` \| `"oneOf"` \| `"dataType"`\> & `object`
+> **ResolvedArrayProperty**\<`T`, `ArrayT`\> = `Omit`\<[`ArrayProperty`](../interfaces/ArrayProperty), `"of"` \| `"oneOf"` \| `"type"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 
