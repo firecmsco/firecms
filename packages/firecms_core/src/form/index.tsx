@@ -11,6 +11,7 @@ export { StorageUploadFieldBinding } from "./field_bindings/StorageUploadFieldBi
 export { TextFieldBinding } from "./field_bindings/TextFieldBinding";
 export { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
 export { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
+export { GeopointFieldBinding } from "./field_bindings/GeopointFieldBinding";
 export { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 export { ReferenceAsStringFieldBinding } from "./field_bindings/ReferenceAsStringFieldBinding";
 export { MapFieldBinding } from "./field_bindings/MapFieldBinding";
