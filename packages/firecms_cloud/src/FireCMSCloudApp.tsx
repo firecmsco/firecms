@@ -633,7 +633,8 @@ function FireCMSAppAuthenticated({
     });
 
     useEffect(() => {
-        if (collectionConfigController.collectionsSetup?.status !== "ongoing") {
+        const status = collectionConfigController.collectionsSetup?.status;
+        if (status === "complete" || status === "error") {
             navigationController?.refreshNavigation();
         }
     }, [collectionConfigController.collectionsSetup?.status]);
@@ -660,7 +661,7 @@ function FireCMSAppAuthenticated({
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
         includeIntroView: false,
-        pathSuggestions: rootPathSuggestions,
+        pathSuggestions: rootPathSuggestions?.map(s => s.path),
         generateCollection: buildCollectionGenerationCallback({
             getAuthToken: fireCMSBackend.getBackendAuthToken,
             apiEndpoint: `${fireCMSBackend.backendApiHost}/collections/generate`

@@ -4,15 +4,16 @@ import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } f
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
+import { RootCollectionInfo } from "../api/projects";
 
 export function RootCollectionSuggestions({
-                                              introMode,
-                                              onAnalyticsEvent,
-                                              rootPathSuggestions
-                                          }: {
+    introMode,
+    onAnalyticsEvent,
+    rootPathSuggestions
+}: {
     introMode?: "new_project" | "existing_project",
     onAnalyticsEvent?: (event: string, data?: object) => void;
-    rootPathSuggestions?: string[]; // undefined means loading
+    rootPathSuggestions?: RootCollectionInfo[]; // undefined means loading
 }) {
 
     const navigationController = useNavigationController();
@@ -28,7 +29,7 @@ export function RootCollectionSuggestions({
         : true;
 
     const existingPaths = (navigationController.collections ?? []).map(c => c.path);
-    const filteredSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+    const filteredSuggestions = (rootPathSuggestions ?? []).filter((info) => !existingPaths.includes(info.path));
 
     const loading = filteredSuggestions === undefined;
     const showSuggestions = (filteredSuggestions ?? []).length > 0;
@@ -40,36 +41,37 @@ export function RootCollectionSuggestions({
             className={"flex flex-col gap-2 p-2 my-4"}>
 
             <Typography variant={"body2"} color={"secondary"} className={"flex items-center gap-2"}>
-                <StorageIcon size="smallest"/> Add your <b>database collections</b> to FireCMS
+                <StorageIcon size="smallest" /> Add your <b>database collections</b> to FireCMS
             </Typography>
 
             <div
                 className={"flex flex-row gap-1 overflow-scroll no-scrollbar justify-start items-center"}>
 
                 <AutoSetUpCollectionsButton projectsApi={fireCMSBackend.projectsApi}
-                                            projectId={projectConfig.projectId}
-                                            askConfirmation={true}
-                                            small={true}
-                                            disabled={!canCreateCollections}
-                                            onClick={() => onAnalyticsEvent?.("suggestions_cols_setup_click")}
-                                            onSuccess={() => onAnalyticsEvent?.("suggestions_cols_setup_success")}
-                                            onNoCollections={() => onAnalyticsEvent?.("suggestions_cols_setup_no_cols")}
-                                            onError={() => onAnalyticsEvent?.("suggestions_cols_setup_error")}
+                    projectId={projectConfig.projectId}
+                    askConfirmation={true}
+                    small={true}
+                    disabled={!canCreateCollections}
+                    onClick={() => onAnalyticsEvent?.("suggestions_cols_setup_click")}
+                    onSuccess={() => onAnalyticsEvent?.("suggestions_cols_setup_success")}
+                    onNoCollections={() => onAnalyticsEvent?.("suggestions_cols_setup_no_cols")}
+                    onError={() => onAnalyticsEvent?.("suggestions_cols_setup_error")}
                 />
 
-                {loading && <CircularProgress size={"smallest"}/>}
+                {loading && <CircularProgress size={"smallest"} />}
 
-                {!loading && (filteredSuggestions ?? []).map((path) => {
+                {!loading && (filteredSuggestions ?? []).map((info) => {
                     return (
-                        <div key={path} className={"flex-shrink-0"}>
+                        <div key={info.path} className={"flex-shrink-0"}>
                             <Chip
-                                icon={<AddIcon size={"small"}/>}
+                                icon={<AddIcon size={"small"} />}
                                 colorScheme={"cyanLighter"}
                                 onClick={collectionEditorController && canCreateCollections
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: {
-                                            path,
-                                            name: prettifyIdentifier(path)
+                                            path: info.path,
+                                            name: prettifyIdentifier(info.path),
+                                            databaseId: info.databaseId
                                         },
                                         parentCollectionIds: [],
                                         redirect: true,
@@ -77,7 +79,7 @@ export function RootCollectionSuggestions({
                                     })
                                     : undefined}
                                 size="small">
-                                {path}
+                                {info.path}
                             </Chip>
                         </div>
                     );
@@ -89,3 +91,4 @@ export function RootCollectionSuggestions({
         </div>
     </Collapse>
 }
+

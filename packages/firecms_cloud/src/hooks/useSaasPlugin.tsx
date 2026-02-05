@@ -10,6 +10,7 @@ import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
 import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
 import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel";
+import { RootCollectionInfo } from "../api/projects";
 
 export function useSaasPlugin({
     projectConfig,
@@ -32,7 +33,7 @@ export function useSaasPlugin({
     fireCMSBackend: FireCMSBackend;
     onAnalyticsEvent?: (event: string, data?: object) => void;
     historyDefaultEnabled?: boolean;
-    rootPathSuggestions?: string[];
+    rootPathSuggestions?: RootCollectionInfo[];
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);

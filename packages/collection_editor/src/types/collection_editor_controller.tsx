@@ -28,7 +28,8 @@ export interface CollectionEditorController {
         initialValues?: {
             group?: string,
             path?: string,
-            name?: string
+            name?: string,
+            databaseId?: string
         },
         /**
          * A collection to duplicate from. If provided, the new collection will be
