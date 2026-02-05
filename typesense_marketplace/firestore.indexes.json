@@ -1,0 +1,28 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "marketplace_accounts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "firebaseUid", "order": "ASCENDING" },
+        { "fieldPath": "state", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "marketplace_entitlements",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "account", "order": "ASCENDING" },
+        { "fieldPath": "state", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "marketplace_provisions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Marketplace accounts - only the linked user can read their account
+    match /marketplace_accounts/{accountId} {
+      allow read: if request.auth != null && 
+                     resource.data.firebaseUid == request.auth.uid;
+      allow write: if false; // Only Cloud Functions can write
+    }
+    
+    // Marketplace entitlements - only admins can access
+    match /marketplace_entitlements/{entitlementId} {
+      allow read, write: if request.auth != null && 
+                            request.auth.token.admin == true;
+    }
+    
+    // Marketplace provisions - user can read their own, only functions can write
+    match /marketplace_provisions/{accountId} {
+      allow read: if request.auth != null && 
+                     exists(/databases/$(database)/documents/marketplace_accounts/$(accountId)) &&
+                     get(/databases/$(database)/documents/marketplace_accounts/$(accountId)).data.firebaseUid == request.auth.uid;
+      allow write: if false;
+    }
+    
+    // Pending signups - only functions can access
+    match /marketplace_pending_signups/{accountId} {
+      allow read, write: if false;
+    }
+    
+    // Users collection - user can read/write their own document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
