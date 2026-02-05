@@ -291,11 +291,21 @@ export const ConfigControllerProvider = React.memo(
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
                         collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
-                        getData={getData && currentPropertyDialog?.editedCollectionId
-                            ? () => {
-                                console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!)
-                                return getData(resolvedPath, []);
+                        getData={currentPropertyDialog?.existingEntities || (getData && currentPropertyDialog?.editedCollectionId)
+                            ? async () => {
+                                let data: object[] = [];
+                                // First, use existing entities if available (already loaded in table)
+                                if (currentPropertyDialog?.existingEntities) {
+                                    data = currentPropertyDialog.existingEntities.map(e => e.values);
+                                }
+                                // If getData is available and we have a path, also fetch from database
+                                if (getData && currentPropertyDialog?.editedCollectionId) {
+                                    console.debug("Get data for property, path:", currentPropertyDialog?.editedCollectionId);
+                                    const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!);
+                                    const fetchedData = await getData(resolvedPath, []);
+                                    data.push(...fetchedData);
+                                }
+                                return data;
                             }
                             : undefined}
                         onPropertyChanged={({
