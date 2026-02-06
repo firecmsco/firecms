@@ -5,6 +5,7 @@ import { EntityCollection, Properties, Property, PropertyOrBuilder, isPropertyBu
  */
 export type SchemaContext = Array<{
     collection: string;
+    databaseId?: string;
     properties: Record<string, SchemaProperty>;
 }>;
 
@@ -33,6 +34,7 @@ export function buildSchemaContext(collections: EntityCollection[]): SchemaConte
         .filter(collection => collection.properties)
         .map(collection => ({
             collection: collection.path,
+            databaseId: collection.databaseId,
             properties: buildSchemaProperties(collection.properties as Properties)
         }));
 }
