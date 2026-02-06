@@ -50,12 +50,21 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     const objectSchema: any = {};
     Object.entries(properties as Record<string, ResolvedProperty>)
         .forEach(([name, property]) => {
-            objectSchema[name] = mapPropertyToYup({
-                property: property as ResolvedProperty<any>,
-                customFieldValidator,
-                name,
-                entityId
-            });
+            try {
+                objectSchema[name] = mapPropertyToYup({
+                    property: property as ResolvedProperty<any>,
+                    customFieldValidator,
+                    name,
+                    entityId
+                });
+            } catch (e: any) {
+                console.error(`Error creating validation schema for property ${name}:`, e);
+                objectSchema[name] = yup.mixed().test(
+                    "validation-error",
+                    `Validation error: ${e?.message ?? "Unknown error"}`,
+                    () => false
+                );
+            }
         });
     return yup.object().shape(objectSchema);
 }
@@ -65,7 +74,12 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
         console.error("Error in property", propertyContext);
-        throw Error("Trying to create a yup mapping from a property builder. Please use resolved properties only");
+        // Return a permissive schema with an error message instead of crashing
+        return yup.mixed().test(
+            "property-builder-error",
+            "Invalid property configuration: property builder should be resolved",
+            () => false
+        );
     }
 
     if (property.dataType === "string") {
@@ -85,8 +99,15 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
     } else if (property.dataType === "reference") {
         return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
     }
-    console.error("Unsupported data type in yup mapping", property)
-    throw Error("Unsupported data type in yup mapping");
+
+    // Log the error but don't crash the form - return a permissive schema with an error message
+    console.error("Unsupported data type in yup mapping", property);
+    const dataType = (property as any).dataType ?? "unknown";
+    return yup.mixed().test(
+        "unsupported-data-type",
+        `Unsupported data type: ${dataType}`,
+        () => false
+    );
 }
 
 export function getYupMapObjectSchema({
@@ -99,13 +120,22 @@ export function getYupMapObjectSchema({
     const validation = property.validation;
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
-            objectSchema[childName] = mapPropertyToYup<any>({
-                property: childProperty,
-                parentProperty: property as ResolvedMapProperty,
-                customFieldValidator,
-                name: `${name}[${childName}]`,
-                entityId
-            });
+            try {
+                objectSchema[childName] = mapPropertyToYup<any>({
+                    property: childProperty,
+                    parentProperty: property as ResolvedMapProperty,
+                    customFieldValidator,
+                    name: `${name}[${childName}]`,
+                    entityId
+                });
+            } catch (e: any) {
+                console.error(`Error creating validation schema for property ${childName}:`, e);
+                objectSchema[childName] = yup.mixed().test(
+                    "validation-error",
+                    `Validation error: ${e?.message ?? "Unknown error"}`,
+                    () => false
+                );
+            }
         });
 
     const shape = yup.object().shape(objectSchema);
@@ -379,13 +409,26 @@ function getYupArraySchema({
 
     if (property.of) {
         if (Array.isArray(property.of)) {
-            const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => ({
-                [`${name}[${index}]`]: mapPropertyToYup({
-                    property: p as ResolvedProperty<any>,
-                    parentProperty: property,
-                    entityId
-                })
-            })).reduce((a, b) => ({ ...a, ...b }), {});
+            const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => {
+                try {
+                    return {
+                        [`${name}[${index}]`]: mapPropertyToYup({
+                            property: p as ResolvedProperty<any>,
+                            parentProperty: property,
+                            entityId
+                        })
+                    };
+                } catch (e: any) {
+                    console.error(`Error creating validation schema for array item ${index}:`, e);
+                    return {
+                        [`${name}[${index}]`]: yup.mixed().test(
+                            "validation-error",
+                            `Validation error: ${e?.message ?? "Unknown error"}`,
+                            () => false
+                        )
+                    };
+                }
+            }).reduce((a, b) => ({ ...a, ...b }), {});
             return yup.array().nullable().of(
                 yup.mixed().test(
                     "Dynamic object validation",
@@ -397,11 +440,20 @@ function getYupArraySchema({
                 )
             );
         } else {
-            arraySchema = arraySchema.of(mapPropertyToYup({
-                property: property.of,
-                parentProperty: property,
-                entityId
-            }));
+            try {
+                arraySchema = arraySchema.of(mapPropertyToYup({
+                    property: property.of,
+                    parentProperty: property,
+                    entityId
+                }));
+            } catch (e: any) {
+                console.error(`Error creating validation schema for array of property:`, e);
+                arraySchema = arraySchema.of(yup.mixed().test(
+                    "validation-error",
+                    `Validation error: ${e?.message ?? "Unknown error"}`,
+                    () => false
+                ));
+            }
             const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
             if (arrayUniqueFields) {
                 if (typeof arrayUniqueFields === "boolean") {

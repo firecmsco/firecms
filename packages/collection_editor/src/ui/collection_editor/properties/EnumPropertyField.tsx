@@ -14,7 +14,8 @@ export function EnumPropertyField({
     disabled,
     showErrors,
     allowDataInference,
-    getData
+    getData,
+    propertyNamespace
 }: {
     multiselect: boolean;
     updateIds: boolean;
@@ -22,6 +23,7 @@ export function EnumPropertyField({
     showErrors: boolean;
     allowDataInference?: boolean;
     getData?: () => Promise<object[]>;
+    propertyNamespace?: string;
 }) {
 
     const {
@@ -59,6 +61,11 @@ export function EnumPropertyField({
         }
     };
 
+    // Build full path including namespace for nested properties (e.g., "address.status")
+    const fullPropertyPath = values.id
+        ? (propertyNamespace ? `${propertyNamespace}.${values.id}` : values.id)
+        : undefined;
+
     return (
         <>
             <div className={"col-span-12"}>
@@ -69,9 +76,9 @@ export function EnumPropertyField({
                     onError={(hasError) => {
                         setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
                     }}
-                    getData={getData && values.id
+                    getData={getData && fullPropertyPath
                         ? () => getData()
-                            .then(res => res.map(entry => getIn(entry, values.id!)).filter(Boolean))
+                            .then(res => res.map(entry => getIn(entry, fullPropertyPath)).filter(Boolean))
                         : undefined}
                     onValuesChanged={onValuesChanged} />
             </div>

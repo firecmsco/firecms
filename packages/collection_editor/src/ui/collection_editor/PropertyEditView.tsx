@@ -477,6 +477,7 @@ function PropertyEditFormFields({
             updateIds={!existing}
             disabled={disabled}
             getData={getData}
+            propertyNamespace={propertyNamespace}
             showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "multi_select" ||
         selectedFieldConfigId === "multi_number_select") {
@@ -486,6 +487,7 @@ function PropertyEditFormFields({
             disabled={disabled}
             allowDataInference={allowDataInference}
             getData={getData}
+            propertyNamespace={propertyNamespace}
             showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "file_upload") {
         childComponent =
