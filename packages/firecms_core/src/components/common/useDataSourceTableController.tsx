@@ -290,9 +290,25 @@ function useUpdateUrl<M extends Record<string, any> = any>(
 
     useEffect(() => {
         if (updateUrl) {
-            const newUrl = encodeFilterAndSort(filterValues, sortBy);
-            const search = searchString ? `&search=${encodeURIComponent(searchString)}` : "";
-            const state = `${newUrl}${search}`;
+            // Parse existing URL params to preserve non-filter/sort params like __view
+            const existingParams = new URLSearchParams(window.location.search);
+            const preservedParams = new URLSearchParams();
+
+            // Preserve params that are not filter/sort related
+            existingParams.forEach((value, key) => {
+                if (key.startsWith("__") && key !== "__sort" && key !== "__sort_order") {
+                    preservedParams.set(key, value);
+                }
+            });
+
+            const filterSortState = encodeFilterAndSort(filterValues, sortBy);
+            const search = searchString ? `search=${encodeURIComponent(searchString)}` : "";
+
+            // Combine preserved params with filter/sort state
+            const preservedString = preservedParams.toString();
+            const parts = [preservedString, filterSortState, search].filter(Boolean);
+            const state = parts.join("&");
+
             const hash = window.location.hash;
             if (state === "")
                 window.history.replaceState({}, "", `${window.location.pathname}${hash}`);

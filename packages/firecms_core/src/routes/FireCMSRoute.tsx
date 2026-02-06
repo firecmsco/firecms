@@ -35,29 +35,41 @@ export function FireCMSRoute() {
     });
 
     useEffect(() => {
+        const lastEntry = navigationEntries[navigationEntries.length - 1];
+        const isViewingCollection = lastEntry?.type === "collection";
+
         breadcrumbs.set({
-            breadcrumbs: navigationEntries.map(entry => {
+            breadcrumbs: navigationEntries.map((entry, index) => {
+                const isLastEntry = index === navigationEntries.length - 1;
+
                 if (entry.type === "entity") {
                     return ({
                         title: String(entry.entityId),
                         url: navigation.buildUrlCollectionPath(entry.path)
+                        // count: undefined (not applicable for entities)
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
                         url: navigation.buildUrlCollectionPath(entry.path)
+                        // count: undefined (not applicable for custom views)
                     });
                 } else if (entry.type === "collection") {
+                    // Only show count badge (loading state) when viewing this collection directly
+                    // Don't show count for parent collections when viewing an entity
+                    const showCount = isLastEntry && isViewingCollection;
                     return ({
                         title: entry.collection.name,
-                        url: navigation.buildUrlCollectionPath(entry.path)
+                        url: navigation.buildUrlCollectionPath(entry.path),
+                        id: entry.path,
+                        ...(showCount ? { count: null } : {}) // null = loading, undefined = no badge
                     });
                 } else {
                     throw new Error("Unexpected navigation entry type");
                 }
             })
         });
-    }, [navigationEntries.map(entry => entry.slug).join(",")]);
+    }, [navigationEntries.map(entry => entry.path).join(",")]);
 
     if (isNew) {
         return <EntityFullScreenRoute
@@ -81,7 +93,7 @@ export function FireCMSRoute() {
             path={collection.slug}
             updateUrl={true}
             {...collection}
-            Actions={toArray(collection.Actions)}/>
+            Actions={toArray(collection.Actions)} />
     }
 
     if (isSidePanel) {
@@ -100,7 +112,7 @@ export function FireCMSRoute() {
                 path={collection.slug}
                 updateUrl={true}
                 {...collection}
-                Actions={toArray(collection.Actions)}/>;
+                Actions={toArray(collection.Actions)} />;
         }
     }
 
@@ -127,11 +139,11 @@ function getSelectedTabFromUrl(isNew: boolean, lastCustomView: NavigationViewCol
 }
 
 function EntityFullScreenRoute({
-                                   pathname,
-                                   navigationEntries,
-                                   isNew,
-                                   isCopy
-                               }: {
+    pathname,
+    navigationEntries,
+    isNew,
+    isCopy
+}: {
     pathname: string;
     navigationEntries: NavigationViewInternal[],
     isNew: boolean,
@@ -174,8 +186,8 @@ function EntityFullScreenRoute({
     let blocker: Blocker | undefined = undefined;
     try {
         blocker = useBlocker(({
-                                  nextLocation
-                              }) => {
+            nextLocation
+        }) => {
             if (nextLocation.pathname.startsWith(entityPath))
                 return false;
             return blocked.current;
@@ -191,7 +203,7 @@ function EntityFullScreenRoute({
     }
 
     if (!isNew && !lastEntityEntry) {
-        return <NotFoundPage/>;
+        return <NotFoundPage />;
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
@@ -235,7 +247,7 @@ function EntityFullScreenRoute({
             open={blocker?.state === "blocked"}
             handleOk={() => blocker?.proceed?.()}
             handleCancel={() => blocker?.reset?.()}
-            body={"You have unsaved changes in this entity."}/>
+            body={"You have unsaved changes in this entity."} />
 
     </>;
 }
