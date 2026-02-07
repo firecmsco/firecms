@@ -970,9 +970,16 @@ export const EntityCollectionView = React.memo(
                         onColumnsOrderChange={(newColumns) => {
                             // Extract property keys from the new column order
                             // Filter to only include actual property columns (not frozen columns, not additional fields, etc.)
+                            // Deduplicate to clean up any previously duplicated keys
+                            const seenKeys = new Set<string>();
                             const newPropertiesOrder = newColumns
                                 .filter(col => !col.frozen && getPropertyInPath(collection.properties, col.key))
-                                .map(col => col.key);
+                                .map(col => col.key)
+                                .filter(key => {
+                                    if (seenKeys.has(key)) return false;
+                                    seenKeys.add(key);
+                                    return true;
+                                });
 
                             // Optimistically update local state to prevent UI flickering
                             setLocalPropertiesOrder(newPropertiesOrder);

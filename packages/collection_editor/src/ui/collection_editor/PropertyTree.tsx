@@ -75,7 +75,15 @@ export const PropertyTree = React.memo(
         collectionEditable: boolean;
     }) {
 
-        const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
+        // Filter propertiesOrder to only include top-level keys (no dots) that exist in properties
+        // Nested keys like "data.mode" are for column ordering in the table, not for the property editor
+        const propertyKeys = Object.keys(properties);
+        const filteredOrder = (propertiesOrderProp ?? propertyKeys)
+            .filter(key => !key.includes(".") && properties[key as keyof typeof properties]);
+
+        // Ensure all properties are included (append any missing ones)
+        const missingKeys = propertyKeys.filter(key => !filteredOrder.includes(key));
+        const propertiesOrder = [...filteredOrder, ...missingKeys];
 
         const sensors = useSensors(
             useSensor(PointerSensor, {

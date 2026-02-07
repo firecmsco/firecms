@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "../../types";
+import { getPropertyInPath } from "../../util";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 
@@ -16,15 +17,45 @@ export function useColumnIds<M extends Record<string, any>>(collection: Resolved
 
 function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): PropertyColumnConfig[] {
 
-    return keys.flatMap((key) => {
+    // First, figure out which spread map roots have individual child keys in the order
+    // If so, we should NOT auto-expand them - just use the explicit child keys
+    const rootsWithExplicitChildren = new Set<string>();
+    for (const key of keys) {
+        if (key.includes(".")) {
+            const rootKey = key.split(".")[0];
+            const rootProperty = collection.properties[rootKey];
+            if (rootProperty && rootProperty.dataType === "map" && rootProperty.spreadChildren && rootProperty.properties) {
+                rootsWithExplicitChildren.add(rootKey);
+            }
+        }
+    }
+
+    // Track processed keys to avoid duplicates
+    const processedPropertyKeys = new Set<string>();
+
+    const result = keys.flatMap((key) => {
+        // Skip if already processed (handles duplicates in propertiesOrder)
+        if (processedPropertyKeys.has(key)) return [null];
+
+        // Check if it's a top-level property
         const property = collection.properties[key];
         if (property) {
+            processedPropertyKeys.add(key);
             if (property.hideFromCollection)
                 return [null];
             if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
+
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
-                return getColumnKeysForProperty(property, key);
+                // Check if this spread map has explicit child keys in propertiesOrder
+                if (rootsWithExplicitChildren.has(key)) {
+                    // DON'T auto-expand - the children are explicitly listed elsewhere
+                    return [null];
+                }
+                // Auto-expand all children
+                const childConfigs = getColumnKeysForProperty(property, key);
+                childConfigs.forEach(c => processedPropertyKeys.add(c.key));
+                return childConfigs;
             }
             return [{
                 key,
@@ -32,6 +63,33 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             }];
         }
 
+        // Check if it's a nested key like "data.mode" (for spread map properties)
+        if (key.includes(".")) {
+            const rootKey = key.split(".")[0];
+            const rootProperty = collection.properties[rootKey];
+
+            if (rootProperty && rootProperty.dataType === "map" && rootProperty.properties) {
+                const nestedProperty = getPropertyInPath(collection.properties, key) as ResolvedProperty | undefined;
+                if (nestedProperty) {
+                    processedPropertyKeys.add(key);
+                    // Mark root as seen
+                    processedPropertyKeys.add(rootKey);
+
+                    if (nestedProperty.hideFromCollection)
+                        return [null];
+                    if (nestedProperty.disabled && typeof nestedProperty.disabled === "object" && nestedProperty.disabled.hidden)
+                        return [null];
+
+                    return [{
+                        key,
+                        disabled: Boolean(rootProperty.disabled) || Boolean(rootProperty.readOnly) ||
+                            Boolean(nestedProperty.disabled) || Boolean(nestedProperty.readOnly)
+                    }];
+                }
+            }
+        }
+
+        // Check additional fields
         const additionalField = collection.additionalFields?.find(field => field.key === key);
         if (additionalField) {
             return [{
@@ -40,6 +98,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             }];
         }
 
+        // Check subcollections
         if (collection.subcollections) {
             const subCollection = collection.subcollections.find(subCol => getSubcollectionColumnId(subCol) === key);
             if (subCollection) {
@@ -50,6 +109,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             }
         }
 
+        // Check collection group parent
         if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
             return [{
                 key,
@@ -59,6 +119,37 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
 
         return [null];
     }).filter(Boolean) as PropertyColumnConfig[];
+
+    // Add any missing properties that weren't in propertiesOrder
+    // This ensures properties NEVER disappear
+    for (const propKey of Object.keys(collection.properties)) {
+        // Skip if already processed
+        if (processedPropertyKeys.has(propKey)) continue;
+
+        const property = collection.properties[propKey];
+        if (!property) continue;
+        if (property.hideFromCollection) continue;
+        if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden) continue;
+
+        if (property.dataType === "map" && property.spreadChildren && property.properties) {
+            // For spread maps, add all children that weren't already added
+            const allChildConfigs = getColumnKeysForProperty(property, propKey);
+            for (const childConfig of allChildConfigs) {
+                if (!processedPropertyKeys.has(childConfig.key)) {
+                    result.push(childConfig);
+                    processedPropertyKeys.add(childConfig.key);
+                }
+            }
+        } else {
+            result.push({
+                key: propKey,
+                disabled: Boolean(property.disabled) || Boolean(property.readOnly)
+            });
+            processedPropertyKeys.add(propKey);
+        }
+    }
+
+    return result;
 }
 
 function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubCollections: boolean) {
