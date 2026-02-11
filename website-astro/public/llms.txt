@@ -4942,7 +4942,7 @@ const dataTalkConfig = useBuildDataTalkConfig({
     userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
     getAuthToken: authController.getAuthToken,
     loadSamplePrompts: true
-    // apiEndpoint defaults to https://api.firecms.co/datatalk
+    // apiEndpoint defaults to https://api.firecms.co
 });
 
 // Add DataTalk as a view in your navigation
