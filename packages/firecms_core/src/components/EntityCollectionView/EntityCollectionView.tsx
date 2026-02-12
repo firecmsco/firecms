@@ -501,18 +501,24 @@ export const EntityCollectionView = React.memo(
             authController,
         }), [collection, fullPath]);
 
-        // Check if Kanban view is available (needs kanban.columnProperty with enumValues)
-        const kanbanEnabled = useMemo(() => {
-            if (!collection.kanban?.columnProperty) return false;
-            const property = getPropertyInPath(resolvedCollection.properties, collection.kanban.columnProperty);
-            if (!property || !("dataType" in property) || property.dataType !== "string") return false;
-            return Boolean(property.enumValues);
-        }, [collection.kanban?.columnProperty, resolvedCollection.properties]);
+        // Check if Kanban view is possible (collection has at least one string enum property)
+        const hasEnumProperty = useMemo(() => {
+            const properties = resolvedCollection.properties;
+            return Object.values(properties).some((prop: any) =>
+                prop && prop.dataType === "string" && prop.enumValues
+            );
+        }, [resolvedCollection.properties]);
 
-        // Check if a plugin can configure Kanban (has KanbanSetupComponent)
-        const hasKanbanConfigPlugin = useMemo(() => {
-            return customizationController.plugins?.some(plugin => plugin.collectionView?.KanbanSetupComponent) ?? false;
-        }, [customizationController.plugins]);
+        // Compute the effective enabled views:
+        // - Start from collection.enabledViews (defaults to all three)
+        // - Filter out kanban if no enum properties exist
+        const enabledViews: ViewMode[] = useMemo(() => {
+            const configured = collection.enabledViews ?? ["table", "cards", "kanban"];
+            if (!hasEnumProperty) {
+                return configured.filter(v => v !== "kanban");
+            }
+            return configured;
+        }, [collection.enabledViews, hasEnumProperty]);
 
         // Compute available enum properties for kanban column selection
         const kanbanPropertyOptions: KanbanPropertyOption[] = useMemo(() => {
@@ -819,8 +825,7 @@ export const EntityCollectionView = React.memo(
             <ViewModeToggle
                 viewMode={viewMode}
                 onViewModeChange={onViewModeChange}
-                kanbanEnabled={kanbanEnabled}
-                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
+                enabledViews={enabledViews}
                 size={viewMode === "table" ? tableSize : viewMode === "cards" ? cardSize : undefined}
                 onSizeChanged={viewMode === "table" ? onTableSizeChanged : viewMode === "cards" ? setCardSize : undefined}
                 open={viewModePopoverOpen}
@@ -867,7 +872,7 @@ export const EntityCollectionView = React.memo(
                 />
 
                 {/* View content - only the view-specific content changes */}
-                {viewMode === "kanban" && (kanbanEnabled || hasKanbanConfigPlugin) ? (
+                {viewMode === "kanban" && enabledViews.includes("kanban") ? (
                     <EntityCollectionBoardView
                         key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
                         collection={collection}

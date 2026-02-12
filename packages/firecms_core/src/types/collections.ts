@@ -375,6 +375,15 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     defaultViewMode?: ViewMode;
 
     /**
+     * Which view modes are available for this collection.
+     * Possible values: "table", "cards", "kanban".
+     * Defaults to all three: ["table", "cards", "kanban"].
+     * Note: "kanban" will only be available if the collection has at least
+     * one string property with enumValues defined, regardless of this setting.
+     */
+    enabledViews?: ViewMode[];
+
+    /**
      * Configuration for Kanban board view mode.
      * When set, the Kanban view mode becomes available.
      */
