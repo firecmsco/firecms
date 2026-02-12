@@ -79,7 +79,7 @@ export function VirtualTableSelect(props: {
         multiple
             ? <MultiSelect
                 inputRef={ref}
-                className="w-full h-full p-0 bg-transparent"
+                className="w-full h-full p-0 bg-transparent outline-none"
                 position={"item-aligned"}
                 disabled={disabled}
                 includeClear={false}
@@ -104,8 +104,8 @@ export function VirtualTableSelect(props: {
                 inputRef={ref}
                 size={"large"}
                 fullWidth={true}
-                className="w-full h-full p-0 bg-transparent"
-                inputClassName="focus:ring-0 focus-visible:ring-0 outline-none focus:outline-none focus-visible:outline-none"
+                className="w-full h-full p-0 bg-transparent outline-none [&_button]:ring-0 [&_button]:ring-offset-0"
+                inputClassName="ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-offset-0"
                 position={"item-aligned"}
                 disabled={disabled}
                 padding={false}
