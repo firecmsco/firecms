@@ -36,6 +36,27 @@ Users can still switch between views using the view selector in the collection t
 
 ---
 
+## Restricting Available Views
+
+By default, all three view modes are available. Use `enabledViews` to restrict which views appear in the selector:
+
+```typescript
+const ordersCollection = buildCollection({
+    path: "orders",
+    name: "Orders",
+    enabledViews: ["table", "kanban"], // Cards view won't be available
+    properties: {
+        // ...
+    }
+});
+```
+
+:::note
+The Kanban view is automatically available whenever your collection has at least one string property with `enumValues`. If no enum properties exist, Kanban will not appear in the selector even if included in `enabledViews`.
+:::
+
+---
+
 ## Table View
 
 The default view mode. Displays entities in a spreadsheet-like grid with support for:
@@ -85,9 +106,13 @@ Displays entities as cards organized into columns based on an enum property. Dra
 
 ![Kanban View in Action](/img/blog/kanban_view.png)
 
-### Enable Kanban View
+### Auto-Detection
 
-Set `defaultViewMode: "kanban"` and configure the `kanban` property with the enum field that defines your columns:
+The Kanban view is **automatically available** for any collection that has at least one string property with `enumValues` defined. No additional configuration is required — just define your enum property and the Board option will appear in the view selector.
+
+### Setting a Default Column Property
+
+When your collection has multiple enum properties, you can set which one is used for columns by default with the `kanban` config. Users can switch between enum properties from the view selector.
 
 ```typescript
 const tasksCollection = buildCollection({
@@ -95,7 +120,7 @@ const tasksCollection = buildCollection({
     name: "Tasks",
     defaultViewMode: "kanban",
     kanban: {
-        columnProperty: "status" // Must be a string property with enumValues
+        columnProperty: "status" // Optional: pre-selects which enum to group by
     },
     properties: {
         title: buildProperty({ dataType: "string", name: "Task" }),
