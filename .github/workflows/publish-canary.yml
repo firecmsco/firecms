@@ -40,8 +40,15 @@ jobs:
           # Update all package versions without creating git tags or commits
           npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --yes
 
+          # Commit version changes locally so lerna publish doesn't complain
+          # (this commit is never pushed back)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: canary version $CANARY_VERSION" --no-verify
+
       - name: Publish to npm
-        run: npx lerna publish from-package --yes --no-verify-access --dist-tag canary
+        run: npx lerna publish from-package --yes --dist-tag canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
