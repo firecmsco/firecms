@@ -433,12 +433,17 @@ export const EntityCollectionView = React.memo(
 
         // View mode change: update URL + save to local persistence
         const onViewModeChange = useCallback((mode: ViewMode) => {
+            analyticsController.onAnalyticsEvent?.("view_mode_changed", {
+                path: fullPath,
+                from: viewMode,
+                to: mode
+            });
             setViewMode(mode);
             // Save to local persistence for next visit
             if (userConfigPersistence) {
                 onCollectionModifiedForUser(fullPath, { defaultViewMode: mode } as PartialEntityCollection<M>);
             }
-        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, fullPath]);
+        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, fullPath, analyticsController, viewMode]);
 
         const createEnabled = canCreateEntity(collection, authController, fullPath, null);
 
@@ -568,12 +573,16 @@ export const EntityCollectionView = React.memo(
 
         // Handle kanban property change
         const onKanbanPropertyChange = useCallback((property: string) => {
+            analyticsController.onAnalyticsEvent?.("kanban_property_changed", {
+                path: fullPath,
+                property
+            });
             setSelectedKanbanProperty(property);
             // Save to local persistence
             if (userConfigPersistence) {
                 onCollectionModifiedForUser(fullPath, { kanbanColumnProperty: property } as any);
             }
-        }, [userConfigPersistence, onCollectionModifiedForUser, fullPath]);
+        }, [userConfigPersistence, onCollectionModifiedForUser, fullPath, analyticsController]);
 
         const getPropertyFor = useCallback(({
             propertyKey,

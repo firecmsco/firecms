@@ -111,6 +111,10 @@ export function EntityCard<M extends Record<string, any> = any>({
             return;
         }
         if (onClick) {
+            analyticsController.onAnalyticsEvent?.("card_view_entity_click", {
+                path: entity.path,
+                entityId: entity.id
+            });
             onClick(entity);
         }
     };

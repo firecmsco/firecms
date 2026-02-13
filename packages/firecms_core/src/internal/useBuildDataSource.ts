@@ -238,8 +238,7 @@ export function useBuildDataSource({
             const orderProperty = collection?.orderProperty;
             if (orderProperty && (status === "new" || status === "copy")) {
                 const orderProp = properties?.[orderProperty as keyof M];
-                // Only auto-assign if property is disabled (automatic mode)
-                if (orderProp?.disabled === true) {
+                if (orderProp) {
                     const currentValue = updatedValues[orderProperty as keyof M];
                     if (currentValue === undefined || currentValue === null) {
                         try {

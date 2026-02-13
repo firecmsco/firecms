@@ -34,6 +34,7 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 import { useBoardDataController } from "./useBoardDataController";
@@ -74,6 +75,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
     const sideEntityController = useSideEntityController();
+    const analyticsController = useAnalyticsController();
     const plugins = customizationController.plugins ?? [];
 
     // State for backfill dialog
@@ -222,6 +224,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     }, [plugins]);
 
     const handleColumnReorder = useCallback((newColumns: string[]) => {
+        analyticsController.onAnalyticsEvent?.("kanban_column_reorder", {
+            path: fullPath,
+            columnProperty
+        });
         setHasUserReordered(true);
         setLocalColumnsOrder(newColumns);
         plugins
@@ -235,7 +241,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     newColumnsOrder: newColumns
                 });
             });
-    }, [plugins, fullPath, parentCollectionIds, collection, columnProperty]);
+    }, [plugins, fullPath, parentCollectionIds, collection, columnProperty, analyticsController]);
 
     // Collection-level count queries to detect missing order property
     // Just TWO counts: total and ordered (for the entire collection, not per column)
@@ -393,6 +399,13 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         const entity = items.find(item => item.id === moveInfo?.itemId)?.entity;
         if (!entity) return;
 
+        analyticsController.onAnalyticsEvent?.("kanban_card_moved", {
+            path: fullPath,
+            entityId: entity.id,
+            sourceColumn: moveInfo?.sourceColumn,
+            targetColumn: moveInfo?.targetColumn
+        });
+
         const isColumnChange = moveInfo && moveInfo.sourceColumn !== moveInfo.targetColumn;
 
         // If no orderProperty and not a column change, nothing to do
@@ -440,7 +453,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } catch (e) {
             console.error("Error saving entity:", e);
         }
-    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder, boardDataController]);
+    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder, boardDataController, analyticsController, fullPath]);
 
     // Backfill order values for all entities
     const handleBackfill = useCallback(async () => {
@@ -449,6 +462,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             console.log("No orderProperty, returning");
             return;
         }
+        analyticsController.onAnalyticsEvent?.("kanban_backfill_order", {
+            path: fullPath
+        });
         setBackfillLoading(true);
 
         try {
@@ -514,7 +530,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } finally {
             setBackfillLoading(false);
         }
-    }, [orderProperty, fullPath, collection, dataSource, context, boardDataController]);
+    }, [orderProperty, fullPath, collection, dataSource, context, boardDataController, analyticsController]);
 
     const handleEntityClick = useCallback((entity: Entity<M>) => {
         onEntityClick?.(entity);
@@ -667,6 +683,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     columnLoadingState={columnLoadingState}
                     onLoadMoreColumn={(column) => boardDataController.loadMoreColumn(column)}
                     onAddItemToColumn={(column) => {
+                        analyticsController.onAnalyticsEvent?.("kanban_new_entity_in_column", {
+                            path: fullPath,
+                            column
+                        });
                         sideEntityController.open({
                             path: fullPath,
                             collection,
