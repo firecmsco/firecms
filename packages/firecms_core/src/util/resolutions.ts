@@ -120,7 +120,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     authController: AuthController;
 }): ResolvedProperty<T> | null {
 
-    if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
+    if (propertyOrBuilder !== null && typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
         return propertyOrBuilder as ResolvedProperty<T>;
     }
 
