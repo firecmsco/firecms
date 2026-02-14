@@ -18,13 +18,15 @@ export function CollectionEditorWelcomeView({
     parentCollection,
     onContinue,
     existingCollectionPaths,
-    generateCollection
+    generateCollection,
+    onAnalyticsEvent
 }: {
     path: string;
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
     generateCollection?: CollectionGenerationCallback;
+    onAnalyticsEvent?: (event: string, params?: object) => void;
 }) {
 
     const { pathSuggestions } = useCollectionEditorController();
@@ -99,6 +101,7 @@ export function CollectionEditorWelcomeView({
                                     onContinue();
                                 }}
                                 generateCollection={generateCollection}
+                                onAnalyticsEvent={onAnalyticsEvent}
                                 trigger={
                                     <Button
                                         variant="outlined"

@@ -272,6 +272,7 @@ export const ConfigControllerProvider = React.memo(
                         extraView={extraView}
                         getUser={getUser}
                         generateCollection={generateCollection}
+                        onAnalyticsEvent={onAnalyticsEvent}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {

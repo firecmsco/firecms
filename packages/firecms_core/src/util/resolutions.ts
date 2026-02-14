@@ -62,6 +62,7 @@ export const resolveCollection = <M extends Record<string, any>,>
     const usedPreviousValues = previousValues ?? values ?? defaultValues;
 
     const resolvedProperties = Object.entries(collection.properties)
+        .filter(([, propertyOrBuilder]) => propertyOrBuilder != null)
         .map(([key, propertyOrBuilder]) => {
             const childResolvedProperty = resolveProperty({
                 propertyKey: key,
