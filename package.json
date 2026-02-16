@@ -13,6 +13,7 @@
     "packages/firecms_cloud",
     "packages/firecms_core",
     "packages/cli",
+    "packages/mcp_server",
     "packages/ui",
     "packages/datatalk",
     "packages/create_firecms_app",

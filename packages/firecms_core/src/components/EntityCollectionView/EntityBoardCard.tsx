@@ -149,7 +149,7 @@ function EntityBoardCardInner<M extends Record<string, any> = any>({
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                     {/* Title */}
-                    <div className="truncate text-sm font-medium">
+                    <div className="line-clamp-2 text-sm font-medium">
                         {titleProperty && titleValue ? (
                             <PropertyPreview
                                 propertyKey={titlePropertyKey as string}

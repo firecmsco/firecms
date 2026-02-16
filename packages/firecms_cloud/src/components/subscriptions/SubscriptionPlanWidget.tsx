@@ -6,7 +6,7 @@ import { Subscription } from "../../types";
 
 export type SubscriptionPlanWidgetProps = {}
 
-export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
+export function SubscriptionPlanWidget({ }: SubscriptionPlanWidgetProps) {
 
     const {
         projectId,
@@ -23,7 +23,7 @@ export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
         const pastDueSubscriptions = (subscriptionsController.activeSubscriptions ?? []).filter(s => s.status === "past_due" && s.metadata.projectId === projectId);
         if (pastDueSubscriptions.length === 0) return null;
 
-        return <PastDueAlert subscription={pastDueSubscriptions[0]}/>;
+        return <PastDueAlert subscription={pastDueSubscriptions[0]} />;
     }
 
     const weAreOnTheLastTwoWeeks = trialValidUntil && trialValidUntil.getTime() - Date.now() < 14 * 24 * 60 * 60 * 1000;
@@ -36,17 +36,17 @@ export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
         <Alert
             color={"info"}
             action={<Button
-                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
+                variant="text"
                 onClick={() => setDialogOpen(true)}>
                 More info
             </Button>}>
-            {isTrialOver && <div>Your trial has ended. Please upgrade to continue using FireCMS Cloud</div>}
-            {!isTrialOver && <div>Your trial is active until {trialValidUntil?.toDateString()}</div>}
+            {isTrialOver && <>Your trial has ended. Please upgrade to continue using FireCMS Cloud</>}
+            {!isTrialOver && <>Your trial is active until {trialValidUntil?.toDateString()}</>}
         </Alert>
 
         <PaywallDialog
             trialOver={isTrialOver}
-            open={dialogOpen} onClose={() => setDialogOpen(false)}/>
+            open={dialogOpen} onClose={() => setDialogOpen(false)} />
 
     </div>;
 }
@@ -75,7 +75,7 @@ function PastDueAlert({ subscription }: { subscription: Subscription }) {
             >
                 Update
             </Button>
-            : <CircularProgress size={"smallest"}/>}>
+            : <CircularProgress size={"smallest"} />}>
         <div>Your subscription is past due. Please update your payment method to avoid service disruption</div>
     </Alert>;
 }
