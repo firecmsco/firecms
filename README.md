@@ -5,155 +5,238 @@
 </p>
 
 <h1 align="center">FireCMS</h1>
-<h3 align="center">Awesome Firebase/MongoDB-based headless CMS</h3>
-<p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
+<h3 align="center">The Headless CMS & Admin Panel Framework for Firebase</h3>
+<p align="center">
+  Build powerful back-office apps in minutes.<br/>
+  Go live instantly with <a href="https://app.firecms.co">FireCMS Cloud</a>, or self-host for full control.
+</p>
 
-<br />
+<p align="center">
+  <a href="https://demo.firecms.co">Live Demo</a> •
+  <a href="https://firecms.co/docs">Documentation</a> •
+  <a href="https://firecms.co/features">Features</a> •
+  <a href="https://firecms.co/pricing">Pricing</a> •
+  <a href="https://discord.gg/fxy7xsQm3m">Discord</a>
+</p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@firecms/core"><img src="https://img.shields.io/npm/v/@firecms/core.svg?style=flat-square&color=orange" alt="NPM Version" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg?style=flat-square" alt="License: MIT" /></a>
+  <a href="https://www.npmjs.com/package/@firecms/core"><img src="https://img.shields.io/npm/dw/@firecms/core?style=flat-square&color=blue" alt="NPM Downloads" /></a>
+  <a href="https://discord.gg/fxy7xsQm3m"><img src="https://img.shields.io/discord/1013768502458470442?style=flat-square&logo=discord&logoColor=white&label=Discord" alt="Discord" /></a>
+</p>
 
-[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT) [![npm downloads](https://img.shields.io/npm/dw/@firecms/core)](https://www.npmjs.com/package/@firecms/core)
+<br/>
 
-FireCMS is a headless CMS and admin panel
-that seamlessly integrates with **Firebase and Firestore** by default, but is
-also compatible with any backend.
+<p align="center">
+  <a href="https://demo.firecms.co">
+    <img src="https://firecms.co/img/landing_1080.webm" width="800px" alt="FireCMS Demo" />
+  </a>
+</p>
 
-Effortlessly generate **CRUD views** based on your configuration. FireCMS is
-simple to set up for standard cases and easy to extend and customize for more specific
-needs.
+---
 
-Built to produce collection and form views that naturally align with the
-collection/document model, FireCMS covers a wide range of basic and advanced use
-cases. With extensibility in mind, it's easy to create your own views or modify
-existing ones.
+## What is FireCMS?
 
-FireCMS does **not impose any data structure** restrictions, ensuring a smooth,
-out-of-the-box experience for any project.
+FireCMS is a **developer-first**, open-source headless CMS and admin panel framework built with **React** and **TypeScript**. It connects natively to **Firebase & Firestore** (with MongoDB support too) and generates powerful CRUD views, forms, and data management tools from your schema configuration.
 
-### Core technologies
+It's designed for developers who want full control and extensibility, while providing an exceptional editing experience for non-technical users.
 
-FireCMS is based on this great technologies:
+### ✨ Key Highlights
 
-- Typescript
-- Tailwind CSS
-- Firebase SDK 10
-- React + React Router 6
+- 🔥 **Native Firebase & Firestore integration** — real-time data, auth, and storage out of the box
+- 🤖 **AI-powered features** — autofill fields with GPT/Gemini, generate collections with AI, and query data with natural language (DataTalk)
+- 🎨 **Visual schema editor** — build and modify data models from the UI, with automatic schema inference from existing data
+- ✍️ **Notion-style rich text editor** — block-based content editing with slash commands and AI autocomplete
+- ⚡ **Blazing fast** — built on Tailwind CSS (v4) for maximum performance, replacing the old MUI/emotion stack
+- 🧩 **Radical extensibility** — if you can build it in React, you can build it in FireCMS
 
-### Demo
+---
 
-Check the demo with all the core functionalities.
+## Quick Start
 
-https://demo.firecms.co
+### FireCMS Cloud (Fastest)
 
-> You can modify the data, but it gets periodically restored.
+Get a fully managed CMS connected to your Firebase project — no deployment, no maintenance:
 
-### Getting started
+```
+👉 https://app.firecms.co
+```
 
-The easies way to get started is through [FireCMS Cloud](https://app.firecms.co/).
-Bring your project or create a new one in seconds.
+### Self-Hosted
 
-It will allow you to get started without writing a single line of code. Create collections
-and entities, and start editing your data.
+Scaffold a new project in seconds:
 
-Later on, if you need to customize the CMS, you can build and compile your own views, form fields
-and other components, and upload them to your project.
+```bash
+npx create-firecms-app
+```
+
+Or with yarn / pnpm:
+
+```bash
+yarn create firecms-app
+pnpm create firecms-app
+```
+
+---
 
 ## Features
 
-FireCMS has been meticulously crafted to make it incredibly easy for developers
-to build a CMS/admin tool while offering an excellent data editing experience
-and a user-friendly interface for marketers and content managers.
+### 🏓 Spreadsheet-Style Collection View
 
-### 🏓 Exceptional Spreadsheet View
+An incredibly fast, windowed spreadsheet view with inline editing, real-time updates, filtering, sorting, and text search. Switch between multiple view modes: **spreadsheet table**, **card grid**, and **Kanban board** — automatically available for collections with enum properties.
 
-We've developed a highly efficient windowed **spreadsheet view** for
-collections, allowing inline editing for most common fields, as well as popup
-views for other cases and your custom field implementations.
+### 🤖 AI-Powered Data Management
 
-Featuring **real-time** support, FireCMS is perfect for apps that require
-constant updates. It also supports **text search** (through an external provider
-like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
-data.
+- **AI Autofill** — generate titles, descriptions, translations, and more using context-aware prompts powered by OpenAI and Google Gemini
+- **AI Collection Generation** — describe your data model in natural language and let AI build your schema
+- **DataTalk** — query and update your data using natural language. Ask things like *"Show all products over $100"* or *"Update all out-of-stock items"*
 
-### 📥📤 Data import and export
+### 🎨 Visual Schema Editor & Data Inference
 
-FireCMS supports importing and exporting data in CSV format as well as JSON.
-Bring your data from other sources or export it to use it in other systems.
+Design your data models visually with **20+ field types** and advanced validation rules. Or, connect to an existing Firestore/MongoDB database and let FireCMS **automatically infer your schema** — go from zero to admin panel in minutes.
 
-We offer a robust and flexible system for defining the import and export
-configuration, allowing you to define the fields to be imported/exported, the
-format, and the mapping between the fields in the file and the fields in the
-collection.
+### ✍️ Notion-Style Rich Text Editor
 
-### ✨ Robust Forms
+A beautiful block-based editor with slash commands, drag-and-drop blocks, keyboard shortcuts, and AI-powered text completion. Built on TipTap v3.
 
-![fields](https://firecms.co/img/form_editing.webp)
+### 📥📤 Data Import & Export
 
-When editing an entity, FireCMS offers a nested system of side dialogs for
-navigating through **subcollections** and accessing custom views (such as custom
-forms or blog previews). This functionality can also be accessed
-programmatically using the `useSideEntityController` hook.
+Import data from **CSV, JSON, and Excel** with an intuitive field mapper and validation UI. Export collections to CSV or JSON with customizable date formats and array serialization.
 
-FireCMS includes **over 20 built-in fields** with numerous customization and
-validation options. The components have been carefully designed for an
-outstanding user experience, including advanced features like **references** to
-other collections, **markdown**, and **array reordering**.
+### ✨ Robust Forms & Custom Fields
 
-For unsupported use cases, create your own **custom field** as a React
-component.
+Over **20 built-in field types** including references, markdown, file uploads, arrays, maps, enums, date/time, geopoints, and more. Create **custom fields** as React components for anything else. Supports **conditional fields**, **validation rules**, and a **Notion-style content editor**.
 
-FireCMS also supports **conditional fields** in forms, allowing you to define
-rules for active fields based on your logic.
+### 🖥️ Full-Screen & Side Panel Entity Views
 
-### 👮 Authentication, Permissions, and Role System
+Edit entities in a side panel or expand to full-screen mode. Navigate through subcollections, access custom views, and build **secondary forms** — all with undo/redo support and local draft persistence.
 
-Define which navigation views users can see and the operations (create, edit,
-delete) they can perform based on your role system. You can even configure this
-on a per-entity or collection level.
+### 🕐 Entity History & Audit Trail
 
-By default, FireCMS supports all Firebase authorization mechanisms, but you can
-implement your own.
+Track every change with built-in history. Compare versions, see who changed what and when, and safely revert to previous states.
 
-### 🏹 Relational Support
+### 👮 Roles, Permissions & User Management
 
-Define references to entities in other collections and benefit from the
-integrated reference fields and shortcuts.
+Granular role-based access control for collections, fields, and actions. Manage users and roles directly from the UI, or define permissions programmatically in code.
 
-You can also define subcollections at the entity level for nesting data in a
-collection/document/collection model.
+### 🔄 Real-Time Data
 
-### 🆒 Real-Time Data
-
-Every view in the CMS supports real-time data, making it suitable for displaying
-constantly updated information.
-
-Forms also support this feature, with any modified value in the database being
-updated in any open form view as long as it hasn't been touched by the user.
-This enables advanced cases where a Cloud Function is triggered after saving an
-entity, modifying some values, and requiring real-time updates.
+Every view — collections, forms, and custom views — supports real-time updates. Changes sync instantly across all connected users.
 
 ### 🗂️ File Storage
 
-FireCMS supports uploading files to Firebase Storage out of the box and provides
-specific fields for handling single and multiple file uploads, as well as
-reordering.
+Seamless integration with Firebase Storage for images, videos, and documents. Supports file uploads, drag-and-drop, image resizing, and custom storage implementations.
 
-You can replace the Firebase Storage implementation with your own.
+### 🧩 Custom Views & React Extensibility
 
-## Contact and support
+Build entirely custom views (dashboards, previews, analytics) as React components and add them to the main navigation or as entity-level tabs. Use built-in hooks like `useSideEntityController`, `useSnackbarController`, and `useAuthController` to interact with FireCMS.
 
-If you need general support, you can open a [GitHub issue](https://github.com/firecmsco/firecms/issues) or join
-our [Discord channel](https://discord.gg/fxy7xsQm3m).
+### 🎨 Component Library (`@firecms/ui`)
 
-Do you need consulting setting up your Firestore-based CMS in no time? We are
-happy to help!
-`hello@firecms.co`
+A standalone, production-ready component library built on **Tailwind CSS** and **Radix UI**. Fully typed, accessible, and customizable. Use it in FireCMS or in any React project:
 
-## Changelog
+```bash
+npm install @firecms/ui
+```
 
-https://firecms.co/docs/changelog
+### 🏠 Customizable Home Page
+
+Organize collections into groups with drag-and-drop, favorites, and search. Supports custom branding, logos, and themes.
+
+### 🖥️ CLI
+
+Deploy custom code to FireCMS Cloud with a single command:
+
+```bash
+firecms deploy
+```
+
+---
+
+## Core Technologies
+
+| Technology | Version |
+|---|---|
+| TypeScript | 5.x |
+| React | 18+ |
+| Tailwind CSS | v4 |
+| Firebase | 12 |
+| Radix UI | Latest |
+| TipTap | v3 |
+
+---
+
+## Editions
+
+| | **Community** | **PRO** | **Cloud** |
+|---|---|---|---|
+| License | MIT | BSL | Managed |
+| Hosting | Self-hosted | Self-hosted | Fully managed |
+| Schema editor UI | ❌ | ✅ | ✅ |
+| AI features | ❌ | ✅ | ✅ |
+| DataTalk | ❌ | ✅ | ✅ |
+| Entity history | ❌ | ✅ | ✅ |
+| User management UI | ✅ | ✅ | ✅ |
+| Custom views & fields | ✅ | ✅ | ✅ |
+| Data import/export | ✅ | ✅ | ✅ |
+| MongoDB support | ❌ | ✅ | ❌ |
+| Custom branding | ✅ | ✅ | ✅ |
+
+→ [See full pricing & comparison](https://firecms.co/pricing)
+
+---
+
+## Demo
+
+Explore the live demo with all core features — you can modify data, it gets periodically restored:
+
+**👉 [demo.firecms.co](https://demo.firecms.co)**
+
+---
+
+## Packages
+
+FireCMS is organized as a modular monorepo:
+
+| Package | Description |
+|---|---|
+| `@firecms/core` | Core CMS framework, types, hooks, and components |
+| `@firecms/ui` | Standalone component library (Tailwind + Radix) |
+| `@firecms/firebase` | Firebase/Firestore data source delegate |
+| `@firecms/editor` | Notion-style rich text editor |
+| `@firecms/cli` | CLI for project scaffolding and deployment |
+| `@firecms/collection_editor` | Visual schema/collection editor |
+| `@firecms/data_import` | Data import plugin (CSV, JSON, Excel) |
+| `@firecms/data_export` | Data export plugin (CSV, JSON) |
+| `@firecms/entity_history` | Entity history & audit trail plugin |
+| `@firecms/user_management` | User & role management plugin |
+| `@firecms/datatalk` | Natural language data queries (AI) |
+| `@firecms/data_enhancement` | AI-powered field autofill |
+| `@firecms/schema_inference` | Automatic schema inference from data |
+| `@firecms/formex` | Lightweight form management library |
+| `@firecms/mongodb` | MongoDB data source delegate |
+
+---
+
+## Support & Community
+
+- 📖 [Documentation](https://firecms.co/docs)
+- 💬 [Discord Community](https://discord.gg/fxy7xsQm3m)
+- 🐛 [GitHub Issues](https://github.com/firecmsco/firecms/issues)
+- 📝 [Changelog](https://firecms.co/docs/changelog)
+- 📧 Contact: `hello@firecms.co`
+
+---
+
+## Trusted By
+
+Developers at **Google**, **Microsoft**, **IKEA**, and thousands of companies worldwide.
+
+---
 
 ## License
 
-The core of FireCMS is licensed under the MIT license.
-Some packages, used in FireCMS PRO and Cloud, are licensed under the Business Source License 1.1 (BSL). 
-Check the full [License here](https://github.com/firecmsco/firecms?tab=License-1-ov-file#readme).
+The core of FireCMS is licensed under the **MIT License**.
+Some packages used in FireCMS PRO and Cloud are licensed under the **Business Source License 1.1 (BSL)**.
+See the full [License](https://github.com/firecmsco/firecms?tab=License-1-ov-file#readme) for details.
