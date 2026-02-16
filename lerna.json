@@ -16,6 +16,7 @@
     "packages/firebase_firecms",
     "packages/mongodb",
     "packages/cli",
+    "packages/mcp_server",
     "packages/editor",
     "packages/create_firecms_app",
     "packages/collection_editor",
