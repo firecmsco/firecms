@@ -8,6 +8,7 @@ import {
     Container,
     DebouncedTextField,
     Dialog,
+    HistoryIcon,
     IconButton,
     Select,
     SelectItem,
@@ -375,9 +376,9 @@ export function CollectionDetailsForm({
                             position={"start"}
                             size={"large"}
                             allowIndeterminate={true}
-                            label={values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
+                            label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
                                 values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
-                            )}
+                            )}</span>}
                             onValueChange={(v) => setFieldValue("history", v)}
                             value={values.history === undefined ? null : values.history}
                         />
