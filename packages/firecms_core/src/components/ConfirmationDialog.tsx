@@ -29,13 +29,11 @@ export function ConfirmationDialog({
 
             <DialogActions>
                 <Button
-                    color={"primary"}
                     variant={"text"}
                     onClick={onCancel}
                     autoFocus>Cancel</Button>
 
                 <LoadingButton
-                    color="primary"
                     type="submit"
                     loading={loading}
                     onClick={onAccept}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 interface SheetProps {
     children: React.ReactNode;
@@ -18,6 +19,7 @@ interface SheetProps {
     style?: React.CSSProperties;
     overlayClassName?: string;
     overlayStyle?: React.CSSProperties;
+    portalContainer?: HTMLElement | null;
 }
 
 export const Sheet: React.FC<SheetProps> = ({
@@ -33,9 +35,16 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 style,
                                                 overlayClassName,
                                                 overlayStyle,
+                                                portalContainer,
                                                 ...props
                                             }) => {
     const [displayed, setDisplayed] = useState(false);
+
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -62,7 +71,7 @@ export const Sheet: React.FC<SheetProps> = ({
         <DialogPrimitive.Root open={displayed || open}
                               modal={modal}
                               onOpenChange={onOpenChange}>
-            <DialogPrimitive.Portal>
+            <DialogPrimitive.Portal container={finalContainer}>
                 <DialogPrimitive.Title autoFocus tabIndex={0}>
                     {title ?? "Sheet"}
                 </DialogPrimitive.Title>
@@ -70,8 +79,8 @@ export const Sheet: React.FC<SheetProps> = ({
                     className={cls(
                         "outline-none",
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
-                        "bg-black bg-opacity-50",
-                        "dark:bg-surface-900 dark:bg-opacity-60",
+                        "bg-black bg-opacity-50 bg-black/50",
+                        "dark:bg-surface-900 dark:bg-opacity-60 dark:bg-surface-900/60",
                         displayed && open ? "opacity-100" : "opacity-0",
                         overlayClassName
                     )}

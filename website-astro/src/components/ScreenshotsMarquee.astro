@@ -1,0 +1,28 @@
+---
+import "../styles/marquee.css";
+
+const MMApp = "/img/mm_app.webp";
+const overlay = "/img/overlay.webp";
+const primeUm = "/img/prime_um.png";
+const mmDark = "/img/mm_dark.png";
+const oikosAviationDemo = "/img/oikos_aviation_demo.png";
+
+const images = [
+    MMApp,
+    overlay,
+    primeUm,
+    mmDark,
+    oikosAviationDemo
+];
+---
+
+<div class="marquee">
+    <div class="marquee-content">
+        {images.map((image) => (
+            <img src={image} alt="Screenshot" class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
+        ))}
+         {images.map((image) => (
+            <img src={image} alt="Screenshot" class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
+        ))}
+    </div>
+</div>

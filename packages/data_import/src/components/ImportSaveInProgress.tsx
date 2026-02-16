@@ -64,7 +64,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
                 </Typography>
                 <Button
                     onClick={save}
-                    variant={"outlined"}>
+                    >
                     Retry
                 </Button>
             </CenteredView>

@@ -38,10 +38,8 @@ export function UnsavedChangesDialog({
 
             <DialogActions>
                 <Button variant="text"
-                        color={"primary"}
                         onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button
-                    color={"primary"}
                     onClick={handleOk}> Ok </Button>
             </DialogActions>
         </Dialog>

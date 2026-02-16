@@ -42,10 +42,10 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                 }}
             className={cls(
                 size === "smallest" ? "w-[34px] h-[18px] min-w-[34px] min-h-[18px]" : size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[44px] h-[26px] min-w-[44px] min-h-[26px]",
-                "outline-none rounded-full relative shadow-sm",
+                "outline-none outline-hidden rounded-full relative shadow-sm",
                 value ? (disabled
-                    ? "bg-white bg-opacity-54 dark:bg-surface-accent-950 border-surface-accent-100 dark:border-surface-accent-700 ring-1 ring-surface-accent-200 dark:ring-surface-accent-700"
-                    : "ring-secondary ring-1 bg-secondary dark:bg-secondary") : "bg-white bg-opacity-54 dark:bg-surface-accent-900 ring-1 ring-surface-accent-200 dark:ring-surface-accent-700",
+                    ? "bg-white bg-opacity-54 bg-white/54 dark:bg-surface-accent-950 border-surface-accent-100 dark:border-surface-accent-700 ring-1 ring-surface-accent-200 dark:ring-surface-accent-700"
+                    : "ring-secondary ring-1 bg-secondary dark:bg-secondary") : "bg-white bg-opacity-54 bg-white/54 dark:bg-surface-accent-900 ring-1 ring-surface-accent-200 dark:ring-surface-accent-700",
                 className
             )}
             {...props}

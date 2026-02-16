@@ -12,12 +12,12 @@ import { ErrorBoundary } from "../../components";
  * @group Preview components
  */
 export function ArrayOfStorageComponentsPreview({
-                                                    propertyKey,
-                                                    // entity,
-                                                    value,
-                                                    property: inputProperty,
-                                                    size
-                                                }: PropertyPreviewProps<any[]>) {
+    propertyKey,
+    // entity,
+    value,
+    property: inputProperty,
+    size
+}: PropertyPreviewProps<any[]>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -27,6 +27,8 @@ export function ArrayOfStorageComponentsPreview({
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
+
+    if (!property) return null;
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
@@ -47,7 +49,7 @@ export function ArrayOfStorageComponentsPreview({
                             value={v}
                             // entity={entity}
                             property={property.of as ResolvedProperty<string>}
-                            size={childSize}/>
+                            size={childSize} />
                     </ErrorBoundary>
                 )}
         </div>

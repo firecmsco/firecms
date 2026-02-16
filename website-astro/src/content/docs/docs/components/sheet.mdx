@@ -1,0 +1,31 @@
+---
+slug: docs/components/sheet
+title: Sheet
+sidebar_label: Sheet
+---
+
+The `Sheet` component is used to display sliding panels from the edges of the screen. It can be opened from the top, bottom, left, or right, and may be either opaque or transparent.
+
+## Usage
+
+To use the `Sheet`, import it from your components and pass the `open`, `side`, `transparent`, and `onOpenChange` props.
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+## Basic Sheet
+
+A simple sheet that slides in from the right.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_basic.tsx"/>
+
+## Sheet with Top Side
+
+This example demonstrates a sheet that slides in from the top.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_top.tsx"/>
+
+## Transparent Sheet
+
+This sheet is configured to be transparent.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_transparent.tsx"/>

@@ -75,7 +75,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     copy?: boolean;
     selectedTab?: string;
     parentCollectionIds: string[];
-    onValuesModified?: (modified: boolean, values:M) => void;
+    onValuesModified?: (modified: boolean, values: M) => void;
     onSaved?: (params: OnUpdateParams) => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
@@ -88,9 +88,9 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
  * an entity is opened.
  */
 export function EntityEditView<M extends Record<string, any>, USER extends User>({
-                                                                                     entityId,
-                                                                                     ...props
-                                                                                 }: EntityEditViewProps<M>) {
+    entityId,
+    ...props
+}: EntityEditViewProps<M>) {
 
     const {
         entity,
@@ -123,7 +123,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     }, [authController, entity, status]);
 
     if ((dataLoading && !initialDirtyValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (entityId && !entity && !initialDirtyValues) {
@@ -131,36 +131,36 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     }
 
     return <EntityEditViewInner<M> {...props}
-                                   entityId={entityId}
-                                   entity={entity}
-                                   initialDirtyValues={initialDirtyValues as Partial<M>}
-                                   dataLoading={dataLoading}
-                                   status={status}
-                                   setStatus={setStatus}
-                                   canEdit={canEdit}
+        entityId={entityId}
+        entity={entity}
+        initialDirtyValues={initialDirtyValues as Partial<M>}
+        dataLoading={dataLoading}
+        status={status}
+        setStatus={setStatus}
+        canEdit={canEdit}
     />;
 }
 
 export function EntityEditViewInner<M extends Record<string, any>>({
-                                                                       path,
-                                                                       fullIdPath,
-                                                                       entityId,
-                                                                       selectedTab: selectedTabProp,
-                                                                       collection,
-                                                                       parentCollectionIds,
-                                                                       onValuesModified,
-                                                                       onSaved,
-                                                                       onTabChange,
-                                                                       entity,
-                                                                       initialDirtyValues,
-                                                                       dataLoading,
-                                                                       layout = "side_panel",
-                                                                       barActions,
-                                                                       status,
-                                                                       setStatus,
-                                                                       formProps,
-                                                                       canEdit
-                                                                   }: EntityEditViewProps<M> & {
+    path,
+    fullIdPath,
+    entityId,
+    selectedTab: selectedTabProp,
+    collection,
+    parentCollectionIds,
+    onValuesModified,
+    onSaved,
+    onTabChange,
+    entity,
+    initialDirtyValues,
+    dataLoading,
+    layout = "side_panel",
+    barActions,
+    status,
+    setStatus,
+    formProps,
+    canEdit
+}: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     initialDirtyValues?: Partial<M>, // dirty cached entity in memory
     dataLoading: boolean,
@@ -312,7 +312,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         role="tabpanel">
         <ErrorBoundary>
             <EntityJsonPreview
-                values={formContext?.values ?? entity?.values ?? {}}/>
+                values={formContext?.values ?? entity?.values ?? {}} />
         </ErrorBoundary>
     </div>;
 
@@ -328,7 +328,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 key={`subcol_${subcollectionId}`}
                 role="tabpanel">
 
-                {globalLoading && <CircularProgressCenter/>}
+                {globalLoading && <CircularProgressCenter />}
 
                 {!globalLoading &&
                     (usedEntity && newFullPath
@@ -339,7 +339,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             isSubCollection={true}
                             updateUrl={false}
                             {...subcollection}
-                            openEntityMode={layout}/>
+                            openEntityMode={layout} />
                         : <div className="flex items-center justify-center w-full h-full p-3">
                             <Typography variant={"label"}>
                                 You need to save your entity before
@@ -375,8 +375,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 className={"px-8 h-full overflow-auto"}
                 entity={entity}
                 path={path}
-                collection={collection}/>
-            <div className="h-16"/>
+                collection={collection} />
+            <div className="h-16" />
         </div>
     </div> : null;
 
@@ -396,7 +396,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         disabled={!canEdit}
         {...formProps}
         onEntityChange={(entity) => {
-            console.log("333 EntityEditView onEntityChange:", entity);
             setUsedEntity(entity);
             formProps?.onEntityChange?.(entity);
         }}
@@ -452,7 +451,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
-            className={cls("h-14 items-center flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+            className={cls("h-14 items-center overflow-visible overflow-x-scroll w-full no-scrollbar border-b pl-2 pr-2 flex gap-2 bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
 
             {barActions?.({
                 path: fullIdPath ?? path,
@@ -461,16 +460,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 status
             })}
 
-            <div className={"flex-grow"}/>
+            <div className={"flex-grow"} />
 
             {pluginActionsTop}
 
             {globalLoading && <div className="self-center">
-                <CircularProgress size={"small"}/>
+                <CircularProgress size={"small"} />
             </div>}
 
             {hasAdditionalViews && <Tabs
-                className={"self-end"}
                 value={selectedTab}
                 onValueChange={(value) => {
                     onSideTabClick(value);
@@ -480,7 +478,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     disabled={!hasAdditionalViews}
                     value={JSON_TAB_VALUE}
                     className={"text-sm"}>
-                    <CodeIcon size={"small"}/>
+                    <CodeIcon size={"small"} />
                 </Tab>}
 
                 {customViewTabsStart}
@@ -501,7 +499,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
         {globalLoading
             ? <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
-                <CircularProgressCenter/>
+                <CircularProgressCenter />
             </div>
             : <>
                 {entityReadOnlyView}

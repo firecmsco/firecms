@@ -13,6 +13,7 @@ import {
 import { FirebaseApp } from "@firebase/app";
 import { Session } from "./types";
 import { getDataTalkSamplePrompts } from "./api";
+import { SchemaContext } from "./utils/schemaContext";
 
 export type DataTalkConfig = {
     loading: boolean;
@@ -21,27 +22,41 @@ export type DataTalkConfig = {
     saveSession: (session: Session) => Promise<void>;
     getSession: (sessionId: string) => Promise<Session | undefined>;
     rootPromptsSuggestions?: string[];
+    schemaContext?: SchemaContext;
 };
+
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 
 interface DataTalkConfigParams {
     enabled: boolean;
     firebaseApp?: FirebaseApp;
     userSessionsPath?: string;
     getAuthToken: () => Promise<string>;
-    apiEndpoint: string;
+    apiEndpoint?: string;
     loadSamplePrompts?: boolean;
+    schemaContext?: SchemaContext;
+    projectId?: string;
 }
 
-const DataTalkConfigContext = React.createContext<DataTalkConfig>({} as any);
+const DataTalkConfigContext = React.createContext<DataTalkConfig>({
+    loading: true,
+    sessions: [],
+    createSessionId: () => Promise.reject(new Error("DataTalk not initialized - ensure DataTalkProvider is properly configured")),
+    saveSession: () => Promise.reject(new Error("DataTalk not initialized - ensure DataTalkProvider is properly configured")),
+    getSession: () => Promise.reject(new Error("DataTalk not initialized - ensure DataTalkProvider is properly configured")),
+    rootPromptsSuggestions: []
+});
 
 export function useBuildDataTalkConfig({
-                                           enabled,
-                                           firebaseApp,
-                                           userSessionsPath,
-                                           getAuthToken,
-                                           apiEndpoint,
-                                           loadSamplePrompts = true
-                                       }: DataTalkConfigParams): DataTalkConfig {
+    enabled,
+    firebaseApp,
+    userSessionsPath,
+    getAuthToken,
+    apiEndpoint = DEFAULT_API_ENDPOINT,
+    loadSamplePrompts = true,
+    schemaContext,
+    projectId
+}: DataTalkConfigParams): DataTalkConfig {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [sessions, setSessions] = useState<Session[]>([]);
@@ -54,10 +69,16 @@ export function useBuildDataTalkConfig({
         if (!loadSamplePrompts) return; // Skip loading sample prompts if not requested
         if (samplePromptsRequested.current) return; // Prevent multiple requests
         samplePromptsRequested.current = true;
-        getAuthToken().then((firebaseToken) => {
-            getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
-        });
-    }, [enabled, loadSamplePrompts]);
+        getAuthToken()
+            .then((firebaseToken) => {
+                getDataTalkSamplePrompts(firebaseToken, apiEndpoint, undefined, undefined, projectId).then(setSamplePrompts);
+            })
+            .catch((e) => {
+                // User may not be logged in yet
+                console.debug("Could not load DataTalk sample prompts:", e.message);
+                samplePromptsRequested.current = false; // Allow retry when user logs in
+            });
+    }, [enabled, loadSamplePrompts, getAuthToken, apiEndpoint]);
 
     const createSessionId = useCallback(async (): Promise<string> => {
         if (!firebaseApp) throw Error("useBuildDataTalkConfig Firebase not initialised");
@@ -84,7 +105,7 @@ export function useBuildDataTalkConfig({
 
     useEffect(() => {
         if (!enabled) return;
-        if (!firebaseApp) throw Error("useBuildDataTalkConfig Firebase not initialised");
+        if (!firebaseApp) return; // Firebase not ready yet, skip initialization
         const firestore = getFirestore(firebaseApp);
         if (!firestore || !userSessionsPath) return;
 
@@ -110,7 +131,7 @@ export function useBuildDataTalkConfig({
                 }
             }
         );
-    }, [firebaseApp, userSessionsPath]);
+    }, [enabled, firebaseApp, userSessionsPath]);
 
     return {
         loading,
@@ -118,16 +139,17 @@ export function useBuildDataTalkConfig({
         saveSession,
         getSession,
         createSessionId,
-        rootPromptsSuggestions: samplePrompts
+        rootPromptsSuggestions: samplePrompts,
+        schemaContext
     };
 }
 
 export const useDataTalk = () => useContext(DataTalkConfigContext);
 
 export function DataTalkProvider({
-                                     config,
-                                     children,
-                                 }: { config: DataTalkConfig, children: React.ReactNode }) {
+    config,
+    children,
+}: { config: DataTalkConfig, children: React.ReactNode }) {
 
     return <DataTalkConfigContext.Provider value={config}>
         {children}

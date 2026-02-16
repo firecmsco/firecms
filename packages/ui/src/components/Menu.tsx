@@ -3,6 +3,7 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { focusedDisabled, paperMixin } from "../styles";
 import { cls } from "../util";
+import { usePortalContainer } from "../hooks/PortalContainerContext";
 
 export type MenuProps = {
     children: React.ReactNode;
@@ -33,28 +34,36 @@ const Menu = React.forwardRef<
        onOpenChange,
        portalContainer,
        sideOffset = 4,
-                                    className
-   }, ref) => (
-    <DropdownMenu.Root
-        open={open}
-        defaultOpen={defaultOpen}
-        onOpenChange={onOpenChange}>
-        <DropdownMenu.Trigger
-            ref={ref}
-            asChild>
-            {trigger}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal container={portalContainer}>
-            <DropdownMenu.Content
-                side={side}
-                sideOffset={sideOffset}
-                align={align}
-                className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
-                {children}
-            </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-))
+       className
+   }, ref) => {
+    // Get the portal container from context
+    const contextContainer = usePortalContainer();
+
+    // Prioritize manual prop, fallback to context container
+    const finalContainer = (portalContainer ?? contextContainer ?? undefined) as HTMLElement | undefined;
+
+    return (
+        <DropdownMenu.Root
+            open={open}
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}>
+            <DropdownMenu.Trigger
+                ref={ref}
+                asChild>
+                {trigger}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal container={finalContainer}>
+                <DropdownMenu.Content
+                    side={side}
+                    sideOffset={sideOffset}
+                    align={align}
+                    className={cls(paperMixin, focusedDisabled, "py-2 z-30", className)}>
+                    {children}
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
+})
 Menu.displayName = "Menu"
 
 export { Menu }
@@ -62,20 +71,24 @@ export { Menu }
 export type MenuItemProps = {
     children: React.ReactNode;
     dense?: boolean;
+    disabled?: boolean;
     onClick?: (event: React.MouseEvent) => void;
     className?: string;
 };
 
 export const MenuItem = React.memo(({
-                             children,
-                             dense = false, // Default value is false if not provided
-                             onClick,
-                             className
-                         }: MenuItemProps) => {
+                                        children,
+                                        dense = false, // Default value is false if not provided
+                                        disabled = false,
+                                        onClick,
+                                        className
+                                    }: MenuItemProps) => {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
-        onClick && "cursor-pointer",
-        "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900 flex items-center gap-4",
+        onClick && !disabled && "cursor-pointer",
+        disabled && "opacity-50 cursor-not-allowed",
+        "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 flex items-center gap-4",
+        !disabled && "hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900",
         dense ? "px-4 py-1.5" : "px-4 py-2",
         className
     );
@@ -83,7 +96,8 @@ export const MenuItem = React.memo(({
     return (
         <DropdownMenu.Item
             className={classNames}
-            onClick={onClick}>
+            disabled={disabled}
+            onClick={disabled ? undefined : onClick}>
             {children}
         </DropdownMenu.Item>
     );

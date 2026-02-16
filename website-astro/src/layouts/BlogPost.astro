@@ -1,0 +1,70 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Layout from './Layout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { getAuthor } from '../utils/authors';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage, authors } = Astro.props;
+const author = authors ? getAuthor(authors) : null;
+
+// Generate breadcrumbs for blog posts
+const breadcrumbs = [
+	{ name: "Home", url: "https://firecms.co" },
+	{ name: "Blog", url: "https://firecms.co/blog" },
+	{ name: title, url: `https://firecms.co${Astro.url.pathname}` }
+];
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+	<main class="min-h-screen py-24">
+		<article class="max-w-4xl mx-auto px-6">
+			{heroImage && (
+				<div class="mb-12 rounded-2xl overflow-hidden">
+					<Image
+						width={1020}
+						height={510}
+						src={heroImage}
+						alt={title}
+						class="w-full h-auto"
+					/>
+				</div>
+			)}
+
+			<div class="mb-8 text-center">
+				<div class="text-sm text-surface-400 mb-4">
+					<FormattedDate date={pubDate} />
+					{updatedDate && (
+						<div class="italic mt-2">
+							Last updated on <FormattedDate date={updatedDate} />
+						</div>
+					)}
+				</div>
+				<h1 class="text-4xl md:text-5xl font-bold text-white mb-6">{title}</h1>
+
+				{author && (
+					<div class="flex items-center justify-center gap-4 mb-6">
+						<img
+							src={author.image_url}
+							alt={author.name}
+							class="w-12 h-12 rounded-full"
+						/>
+						<div class="text-left">
+							<div class="text-white font-semibold">{author.name}</div>
+							<div class="text-sm text-surface-400">{author.title}</div>
+						</div>
+					</div>
+				)}
+
+				<hr class="border-surface-800 max-w-xs mx-auto" />
+			</div>
+
+		<div class="prose prose-invert prose-lg max-w-3xl mx-auto [&_p]:my-3 [&_img]:my-8 [&_h1]:mt-8 [&_h1]:mb-4 [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:mt-4 [&_h4]:mb-2 [&_ul]:my-4 [&_ol]:my-4 [&_li]:my-1 [&_blockquote]:my-4 [&_pre]:my-4 [&_hr]:my-6 [&_table]:my-4 [&_img]:my-4 [&_figure]:my-4">
+			<slot />
+		</div>
+		</article>
+	</main>
+</Layout>
+

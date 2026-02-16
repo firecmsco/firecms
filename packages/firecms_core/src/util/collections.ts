@@ -11,10 +11,11 @@ import { isPropertyBuilder } from "./entities";
 export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
     try {
         const propertiesKeys = Object.keys(properties);
-        const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
-        return allPropertiesOrder
-            .map((key) => {
-                if (properties[key as keyof M]) {
+
+        // If no propertiesOrder, just use the original keys order
+        if (!propertiesOrder || propertiesOrder.length === 0) {
+            return propertiesKeys
+                .map((key) => {
                     const property = properties[key] as PropertyOrBuilder;
                     if (!isPropertyBuilder(property) && property?.dataType === "map" && property.properties) {
                         return ({
@@ -26,12 +27,56 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
                     } else {
                         return ({ [key]: property });
                     }
+                })
+                .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<M>;
+        }
+
+        // Filter propertiesOrder to only include TOP-LEVEL property keys that exist
+        // (ignore nested keys like "data.mode" - they are for column ordering, not property filtering)
+        const validOrderKeys = (propertiesOrder as string[]).filter(key => {
+            // Only include top-level keys (no dots) that exist in properties
+            return !key.includes(".") && properties[key as keyof M];
+        });
+
+        // Track which properties we've processed
+        const processedKeys = new Set<string>(validOrderKeys);
+
+        // Build result starting with ordered properties
+        const orderedResult = validOrderKeys
+            .map((key) => {
+                const property = properties[key] as PropertyOrBuilder;
+                if (!isPropertyBuilder(property) && property?.dataType === "map" && property.properties) {
+                    return ({
+                        [key]: {
+                            ...property,
+                            properties: sortProperties(property.properties, property.propertiesOrder)
+                        }
+                    });
                 } else {
-                    return undefined;
+                    return ({ [key]: property });
                 }
             })
-            .filter((a) => a !== undefined)
             .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<M>;
+
+        // Append any properties that were NOT in propertiesOrder (so they don't disappear!)
+        const missingProperties = propertiesKeys
+            .filter(key => !processedKeys.has(key))
+            .map((key) => {
+                const property = properties[key] as PropertyOrBuilder;
+                if (!isPropertyBuilder(property) && property?.dataType === "map" && property.properties) {
+                    return ({
+                        [key]: {
+                            ...property,
+                            properties: sortProperties(property.properties, property.propertiesOrder)
+                        }
+                    });
+                } else {
+                    return ({ [key]: property });
+                }
+            })
+            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<M>;
+
+        return { ...orderedResult, ...missingProperties };
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;

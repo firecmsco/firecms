@@ -1,0 +1,25 @@
+# Exclude build outputs
+dist/
+dist
+**/dist/
+**/dist
+
+build/
+build
+**/build/
+**/build
+
+lib/
+lib
+**/lib/
+**/lib
+
+node_modules/
+node_modules
+**/node_modules/
+**/node_modules
+
+.turbo/
+coverage/
+
+*.d.ts

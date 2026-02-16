@@ -97,8 +97,7 @@ export function TextSearchInfoDialog({
 
             <div className={"flex items-end justify-end gap-4"}>
                 {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled &&
-                    <LoadingButton variant={"outlined"}
-                                   loading={enablingForCollection}
+                    <LoadingButton loading={enablingForCollection}
                                    size={"large"}
                                    onClick={() => {
                                        setEnablingForCollection(true);
@@ -116,8 +115,7 @@ export function TextSearchInfoDialog({
                     </LoadingButton>}
 
                 {!hasOwnTextSearchImplementation && !projectConfig.localTextSearchEnabled &&
-                    <LoadingButton variant={"outlined"}
-                                   loading={enablingLocalSearch}
+                    <LoadingButton loading={enablingLocalSearch}
                                    size={"large"}
                                    onClick={() => {
                                        setEnablingLocalSearch(true);

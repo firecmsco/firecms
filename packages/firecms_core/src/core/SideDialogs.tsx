@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
-import { SideDialogPanelProps } from "../types";
+import { EntitySidePanelProps, SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
 import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
 import { ErrorBoundary } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
+import { EntitySidePanel } from "./EntitySidePanel";
 
 export type SideDialogController = {
     blocked: boolean,
@@ -157,7 +158,8 @@ function SideDialogView({
                         }}
                     >
                         <ErrorBoundary>
-                            {panel.component}
+                            {/* Lazy render EntitySidePanel from props for better performance */}
+                            {panel.component ?? (panel.additional ? <EntitySidePanel {...(panel.additional as EntitySidePanelProps)} /> : null)}
                         </ErrorBoundary>
                     </div>}
 

@@ -86,15 +86,20 @@ it("Merge collections", () => {
 
     expect(mergedCollection).toEqual(
         {
+            id: "product",
             path: "product",
             name: "Products persisted",
             singularName: "Product persisted",
+            merged: true,
+            entityViews: [],
+            entityActions: [],
             properties: {
                 name: {
                     dataType: "string",
                     name: "Name updated",
                     multiline: true,
-                    validation: { required: true }
+                    validation: { required: true },
+                    editable: true
                 },
                 currency: {
                     dataType: "string",
@@ -102,7 +107,8 @@ it("Merge collections", () => {
                     enumValues: [
                         { id: "EUR", label: "Euros" },
                         { id: "DOL", label: "Dollars" },
-                    ]
+                    ],
+                    editable: true
                 },
                 publisher: {
                     name: "Publisher",
@@ -122,7 +128,7 @@ it("Merge collections", () => {
                 },
                 price: priceBuilder,
             },
-            propertiesOrder: ["name", "publisher", "price"],
-            subcollections: undefined
-        });
+            propertiesOrder: ["name", "publisher", "price", "currency"],
+            subcollections: []
+        })
 });

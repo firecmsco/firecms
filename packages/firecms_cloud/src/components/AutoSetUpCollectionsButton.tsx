@@ -1,21 +1,21 @@
 import React from "react";
-import { ConfirmationDialog, useSnackbarController } from "@firecms/core";
-import { AutoAwesomeIcon, LoadingButton } from "@firecms/ui";
+import { AIIcon, ConfirmationDialog, useSnackbarController } from "@firecms/core";
+import { LoadingButton } from "@firecms/ui";
 import { ProjectsApi } from "../api/projects";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
 
 export function AutoSetUpCollectionsButton({
-                                               projectsApi,
-                                               projectId,
-                                               askConfirmation,
-                                               small,
-                                               onClick,
-                                               onSuccess,
-                                               onNoCollections,
-                                               onError,
-                                               color = "neutral",
-                                               disabled
-                                           }: {
+    projectsApi,
+    projectId,
+    askConfirmation,
+    small,
+    onClick,
+    onSuccess,
+    onNoCollections,
+    onError,
+    color = "neutral",
+    disabled
+}: {
     projectsApi: ProjectsApi;
     projectId: string;
     onClick?: () => void;
@@ -29,7 +29,8 @@ export function AutoSetUpCollectionsButton({
 }) {
 
     const configController = useCollectionsConfigController();
-    const setupLoading = configController.collectionsSetup?.status === "ongoing";
+    const collectionsSetupStatus = configController.collectionsSetup?.status;
+    const setupLoading = collectionsSetupStatus === "ongoing";
 
     const [setUpRequested, setSetupRequested] = React.useState(false);
     const snackbarController = useSnackbarController();
@@ -54,7 +55,7 @@ export function AutoSetUpCollectionsButton({
                 } else {
                     onSuccess?.();
                     snackbarController.open({
-                        message: <>Your collections have been set up!<br/>{collections.map(c => c.name).join(", ")}</>,
+                        message: <>Your collections have been set up!<br />{collections.map(c => c.name).join(", ")}</>,
                         type: "success"
                     });
                 }
@@ -84,7 +85,7 @@ export function AutoSetUpCollectionsButton({
                     doCollectionSetup()
                 }
             }}>
-            <AutoAwesomeIcon size={"smallest"}/>
+            <AIIcon size={"smallest"} />
             Automatically set up collections
         </LoadingButton>
 
@@ -97,6 +98,6 @@ export function AutoSetUpCollectionsButton({
             onCancel={() => setSetupRequested(false)}
             title={<>Automatically set up collections?</>}
             body={<>This will automatically create collection configs for collections that are <b>NOT</b> already
-                mapped</>}/>
+                mapped</>} />
     </>;
 }

@@ -3,6 +3,9 @@ import path from "path";
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 
+// @ts-ignore
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineConfig({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
@@ -15,7 +18,8 @@ export default defineConfig({
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
-        react({})
+        react({}),
+        tailwindcss(),
     ],
     resolve: {
         alias: {

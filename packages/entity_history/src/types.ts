@@ -19,4 +19,3 @@ export interface NewHistoryEntryParams<T = any> {
     entityId: string;
     collection?: EntityCollection;
 }
-

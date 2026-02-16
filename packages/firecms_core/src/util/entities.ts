@@ -14,6 +14,7 @@ import {
     ResolvedProperty
 } from "../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
+import { mergeDeep } from "./objects";
 
 export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
     if (property.readOnly)
@@ -84,36 +85,30 @@ export function getDefaultValueForDataType(dataType: DataType) {
  * @group Datasource
  */
 export function updateDateAutoValues<M extends Record<string, any>>({
-                                                                        inputValues,
-                                                                        properties,
-                                                                        status,
-                                                                        timestampNowValue,
-                                                                        setDateToMidnight
-                                                                    }:
-                                                                        {
-                                                                            inputValues: Partial<EntityValues<M>>,
-                                                                            properties: ResolvedProperties<M>,
-                                                                            status: EntityStatus,
-                                                                            timestampNowValue: any,
-                                                                            setDateToMidnight: (input?: any) => any | undefined
-                                                                        }): EntityValues<M> {
+    inputValues,
+    properties,
+    status,
+    timestampNowValue
+}:
+    {
+        inputValues: Partial<EntityValues<M>>,
+        properties: ResolvedProperties<M>,
+        status: EntityStatus,
+        timestampNowValue: any
+    }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
         (inputValue, property) => {
             if (property.dataType === "date") {
-                let resultDate;
                 if (status === "existing" && property.autoValue === "on_update") {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else if ((status === "new" || status === "copy") &&
                     (property.autoValue === "on_update" || property.autoValue === "on_create")) {
-                    resultDate = timestampNowValue;
+                    return timestampNowValue;
                 } else {
-                    resultDate = inputValue;
+                    return inputValue;
                 }
-                if (property.mode === "date")
-                    resultDate = setDateToMidnight(resultDate);
-                return resultDate;
             } else {
                 return inputValue;
             }
@@ -128,10 +123,10 @@ export function updateDateAutoValues<M extends Record<string, any>>({
  * @group Datasource
  */
 export function sanitizeData<M extends Record<string, any>>
-(
-    values: EntityValues<M>,
-    properties: ResolvedProperties<M>
-) {
+    (
+        values: EntityValues<M>,
+        properties: ResolvedProperties<M>
+    ) {
     const result: any = values;
     Object.entries(properties)
         .forEach(([key, property]) => {
@@ -150,23 +145,27 @@ export function traverseValuesProperties<M extends Record<string, any>>(
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> | undefined {
+    // Handle null/undefined inputValues - use empty object as base for mergeDeep
+    const safeInputValues = inputValues ?? {};
+
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues)[key];
+            const inputValue = safeInputValues && (safeInputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === null) return null;
             if (updatedValue === undefined) return undefined;
             return ({ [key]: updatedValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
-    const result = { ...inputValues, ...updatedValues };
-    if (Object.keys(result).length === 0) return undefined;
+    // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
+    const result = mergeDeep(safeInputValues, updatedValues);
+    if (!result || Object.keys(result).length === 0) return undefined;
     return result;
 }
 
 export function traverseValueProperty(inputValue: any,
-                                      property: Property,
-                                      operation: (value: any, property: Property) => any): any {
+    property: Property,
+    operation: (value: any, property: Property) => any): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {

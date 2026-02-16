@@ -16,6 +16,8 @@ export * from "./SelectableTable/SelectableTable";
 export * from "./SelectableTable/SelectableTableContext";
 export * from "./EntityCollectionView/EntityCollectionView";
 export * from "./EntityCollectionView/EntityCollectionViewActions";
+export * from "./EntityCollectionView/EntityCollectionCardView";
+export * from "./EntityCollectionView/EntityCard";
 export * from "./EntityCollectionView/useSelectionController";
 
 export * from "./PropertyConfigBadge";
@@ -38,3 +40,5 @@ export * from "./SearchIconsView";
 export * from "./FieldCaption";
 
 export * from "./EntityPreview";
+
+export * from "./AIIcon";

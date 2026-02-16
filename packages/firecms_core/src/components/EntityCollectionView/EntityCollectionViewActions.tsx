@@ -2,8 +2,19 @@ import React from "react";
 
 import { canCreateEntity, canDeleteEntity } from "../../util";
 import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
-import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
+import {
+    CollectionActionsProps,
+    EntityCollection,
+    EntityTableController,
+    SelectionController
+} from "../../types";
+import {
+    AddIcon,
+    Button,
+    DeleteIcon,
+    IconButton,
+    Tooltip
+} from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
 
@@ -17,21 +28,21 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
     tableController: EntityTableController<M>;
-    collectionEntitiesCount: number;
+    collectionEntitiesCount?: number;
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
-                                                                               collection,
-                                                                               relativePath,
-                                                                               parentCollectionIds,
-                                                                               onNewClick,
-                                                                               onMultipleDeleteClick,
-                                                                               selectionEnabled,
-                                                                               path,
-                                                                               selectionController,
-                                                                               tableController,
-                                                                               collectionEntitiesCount
-                                                                           }: EntityCollectionViewActionsProps<M>) {
+    collection,
+    relativePath,
+    parentCollectionIds,
+    onNewClick,
+    onMultipleDeleteClick,
+    selectionEnabled,
+    path,
+    selectionController,
+    tableController,
+    collectionEntitiesCount,
+}: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
 
@@ -49,7 +60,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
-                startIcon={<AddIcon/>}
+                startIcon={<AddIcon size={"small"} />}
                 variant="filled"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
@@ -60,7 +71,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 variant="filled"
                 color="primary"
             >
-                <AddIcon/>
+                <AddIcon size={"small"} />
             </Button>);
 
     const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null);
@@ -71,7 +82,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 variant={"text"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                startIcon={<DeleteIcon size={"small"}/>}
+                startIcon={<DeleteIcon size={"small"} />}
                 onClick={onMultipleDeleteClick}
                 color={"primary"}
                 className="lg:w-20"
@@ -83,7 +94,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 color={"primary"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
                 onClick={onMultipleDeleteClick}>
-                <DeleteIcon size={"small"}/>
+                <DeleteIcon size={"small"} />
             </IconButton>;
         multipleDeleteButton =
             <Tooltip
@@ -91,6 +102,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 {button}
             </Tooltip>
     }
+
 
     const actionProps: CollectionActionsProps = {
         path,
@@ -116,7 +128,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 actions.push(...toArray(plugin.collectionView?.CollectionActions)
                     .map((Action, j) => (
                         <ErrorBoundary key={`plugin_actions_${i}_${j}`}>
-                            <Action {...actionProps} {...plugin.collectionView?.collectionActionsProps}/>
+                            <Action {...actionProps} {...plugin.collectionView?.collectionActionsProps} />
                         </ErrorBoundary>
                     )));
             }

@@ -15,16 +15,33 @@ All dependencies are linked automatically and just running the following command
 After pulling the code you just need to run:
 
 ```bash
+npm install
+npm run dev
+```
+
+or
+
+```bash
 yarn
 yarn dev
 ``` 
+
 to start the demo project.
 
 You can also run:
+
+```bash
+npm install
+npm run pro
+```
+
+or
+
 ```bash
 yarn
 yarn pro
 ``` 
+
 to use the example project with the Pro version of FireCMS.
 
 ## Support and discussion

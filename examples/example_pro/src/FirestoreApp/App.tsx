@@ -31,9 +31,11 @@ import {
     useValidateAuthenticator
 } from "@firecms/core";
 import {
+    buildFireCMSSearchController,
     FirebaseAuthController,
     FirebaseSignInProvider,
     FirebaseUserWrapper,
+    getFirestoreDataInPath,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -57,7 +59,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./views/TestEditorView";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { mergeCollections, useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@firecms/collection_editor";
 import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
@@ -65,15 +67,28 @@ import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { useMediaManagerPlugin } from "@firecms/media_manager";
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
+import { Route } from "react-router-dom";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
+
+
+const textSearchControllerBuilder = buildFireCMSSearchController({
+    region: "europe-west3",
+    extensionInstanceId: "typesense-search"
+});
 
 export function App() {
 
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
-                                                                                       user,
-                                                                                       authController
-                                                                                   }) => {
+        user,
+        authController
+    }) => {
 
         console.log("Authenticating user", user);
 
@@ -103,7 +118,7 @@ export function App() {
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHubIcon/>
+                <GitHubIcon />
             </IconButton>
         </Tooltip>
     );
@@ -206,7 +221,7 @@ export function App() {
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         localTextSearchEnabled: true,
-        textSearchControllerBuilder: algoliaSearchControllerBuilder
+        textSearchControllerBuilder: textSearchControllerBuilder
     });
 
     const {
@@ -225,8 +240,8 @@ export function App() {
 
     // It is important to memoize the collections and views
     const collections: EntityCollectionsBuilder = useCallback(async ({
-                                                                         authController
-                                                                     }) => {
+        authController
+    }) => {
 
         const sourceCollections: EntityCollection[] = [
             productsCollection,
@@ -256,7 +271,7 @@ export function App() {
             name: "Additional",
             group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
-            view: <ExampleCMSView/>
+            view: <ExampleCMSView />
         },
         // {
         //     path: "typography",
@@ -276,14 +291,14 @@ export function App() {
             name: "The FireCMS editor",
             description: "This view showcases a custom advanced editor",
             group: "Custom views",
-            view: <TestEditorView/>
+            view: <TestEditorView />
         },
         {
             path: "ui_components",
             description: "This view showcases some of the UI components available in FireCMS",
             name: "UI components showcase",
             group: "Custom views",
-            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true}/>
+            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true} />
         }
     ]), []);
 
@@ -308,6 +323,10 @@ export function App() {
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
         collectionInference: buildCollectionInference(firebaseApp),
+        getData: firebaseApp ? (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 200) : undefined,
+        generateCollection: buildCollectionGenerationCallback({
+            getAuthToken: authController.getAuthToken
+        })
     });
 
     const importPlugin = useImportPlugin();
@@ -316,6 +335,32 @@ export function App() {
     const entityHistoryPlugin = useEntityHistoryPlugin({
         defaultEnabled: true,
         getUser: userManagement.getUser
+    });
+
+    const mediaManagerPlugin = useMediaManagerPlugin({
+        storageSource,
+        dataSourceDelegate: firestoreDelegate,
+        storagePath: "media",
+        collectionPath: "media_assets",
+        thumbnailSizes: [
+            {
+                name: "small",
+                width: 280,
+                height: 280,
+                quality: 0.9
+            }
+        ]
+    });
+
+    // DataTalk configuration for self-hosted users
+    const userEmail = authController.user?.email;
+
+    const dataTalkConfig = useBuildDataTalkConfig({
+        enabled: Boolean(userEmail), // Only enable when user is logged in
+        firebaseApp,
+        userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
+        getAuthToken: authController.getAuthToken,
+        loadSamplePrompts: true
     });
 
     const demoPlugin = useMemo(() => ({
@@ -347,6 +392,7 @@ export function App() {
         // importPlugin,
         exportPlugin,
         entityHistoryPlugin,
+        // mediaManagerPlugin,
         demoPlugin,
         collectionEditorPlugin
     ];
@@ -357,7 +403,18 @@ export function App() {
         collections,
         plugins,
         // collectionPermissions: userManagement.collectionPermissions,
-        views,
+        views: [
+            ...views,
+            {
+                path: "datatalk/*",
+                name: "DataTalk",
+                group: "AI",
+                view: <DataTalkRoutes
+                    getAuthToken={authController.getAuthToken}
+                    onAnalyticsEvent={onAnalyticsEvent}
+                />
+            }
+        ],
         adminViews: userManagementAdminViews,
         authController,
         dataSourceDelegate: firestoreDelegate
@@ -367,11 +424,11 @@ export function App() {
         {
             key: "demo_action",
             name: "My demo action",
-            icon: <BarChartIcon size={"small"}/>,
+            icon: <BarChartIcon size={"small"} />,
             onClick: async ({
-                                entity,
-                                context
-                            }) => {
+                entity,
+                context
+            }) => {
                 context.snackbarController.open({
                     type: "info",
                     message: `Demo action for ${entity?.id}`,
@@ -381,7 +438,7 @@ export function App() {
     ], []);
 
     if (firebaseConfigLoading || secondaryFirebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (configError) {
@@ -395,50 +452,52 @@ export function App() {
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
-                <FireCMS
-                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
-                    navigationController={navigationController}
-                    authController={authController}
-                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                    userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
-                    storageSource={storageSource}
-                    onAnalyticsEvent={onAnalyticsEvent}
-                    propertyConfigs={propertyConfigs}
-                    entityActions={entityActions}
-                >
-                    {({
-                          context,
-                          loading
-                      }) => {
+                <DataTalkProvider config={dataTalkConfig}>
+                    <FireCMS
+                        apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
+                        navigationController={navigationController}
+                        authController={authController}
+                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                        userConfigPersistence={userConfigPersistence}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                        onAnalyticsEvent={onAnalyticsEvent}
+                        propertyConfigs={propertyConfigs}
+                        entityActions={entityActions}
+                    >
+                        {({
+                            context,
+                            loading
+                        }) => {
 
-                        if (loading || authLoading) {
-                            return <CircularProgressCenter size={"large"}/>;
-                        }
-                        if (userManagement.user === null || !canAccessMainView) {
-                            return <CustomLoginView authController={authController}
-                                                    firebaseApp={firebaseApp}
-                                                    signInOptions={signInOptions}
-                                                    notAllowedError={notAllowedError}/>
-                        }
+                            if (loading || authLoading) {
+                                return <CircularProgressCenter size={"large"} />;
+                            }
+                            if (userManagement.user === null || !canAccessMainView) {
+                                return <CustomLoginView authController={authController}
+                                    firebaseApp={firebaseApp}
+                                    signInOptions={signInOptions}
+                                    notAllowedError={notAllowedError} />;
+                            }
 
-                        if (userManagement.usersError) {
-                            return <CenteredView><ErrorView
-                                error={userManagement.usersError}/></CenteredView>;
-                        }
+                            if (userManagement.usersError) {
+                                return <CenteredView><ErrorView
+                                    error={userManagement.usersError} /></CenteredView>;
+                            }
 
-                        return <Scaffold
+                            return <Scaffold
                             // logo={logo}
-                        >
-                            <AppBar
-                                title={"My demo app"}
-                                endAdornment={githubLink}/>
-                            <Drawer/>
-                            <NavigationRoutes/>
-                            <SideDialogs/>
-                        </Scaffold>;
-                    }}
-                </FireCMS>
+                            >
+                                <AppBar
+                                    title={"My demo app"}
+                                    endAdornment={githubLink} />
+                                <Drawer />
+                                <NavigationRoutes />
+                                <SideDialogs />
+                            </Scaffold>;
+                        }}
+                    </FireCMS>
+                </DataTalkProvider>
             </ModeControllerProvider>
         </SnackbarProvider>
     );

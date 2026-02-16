@@ -38,7 +38,7 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * @param sortBy
      */
     checkFilterCombination?: (filterValues: VirtualTableFilterValues<Extract<keyof T, string>>,
-                              sortBy?: [string, "asc" | "desc"]) => boolean;
+        sortBy?: [string, "asc" | "desc"]) => boolean;
 
     /**
      * A callback function when scrolling the table to near the end
@@ -162,6 +162,12 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     initialScroll?: number;
 
+    /**
+     * Callback when columns are reordered via drag-and-drop.
+     * @param columns The new column order
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+
 }
 
 export type CellRendererParams<T = any> = {
@@ -172,6 +178,13 @@ export type CellRendererParams<T = any> = {
     rowIndex: number;
     width: number;
     isScrolling?: boolean;
+    // Sortable props for dnd-kit integration
+    sortableNodeRef?: (node: HTMLElement | null) => void;
+    sortableStyle?: React.CSSProperties;
+    sortableAttributes?: Record<string, any>;
+    isDragging?: boolean;
+    isDraggable?: boolean;
+    frozen?: boolean;
 };
 
 /**

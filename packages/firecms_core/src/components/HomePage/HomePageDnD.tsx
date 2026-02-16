@@ -29,7 +29,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { NavigationCardBinding } from "./NavigationCardBinding";
 import { NavigationEntry } from "../../types";
-import { cls } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({
@@ -65,9 +65,9 @@ const cloneItemsForDnd = (items: { name: string; entries: NavigationEntry[] }[])
 
 /* ─────────────────────────────────────────────────────────── */
 export function SortableNavigationCard({
-                                           entry,
-                                           onClick
-                                       }: {
+    entry,
+    onClick
+}: {
     entry: NavigationEntry;
     onClick?: () => void;
 }) {
@@ -92,17 +92,17 @@ export function SortableNavigationCard({
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <NavigationCardBinding {...entry} onClick={onClick}/>
+            <NavigationCardBinding {...entry} onClick={onClick} />
         </div>
     );
 }
 
 export function NavigationGroupDroppable({
-                                             id,
-                                             itemIds,
-                                             children,
-                                             isPotentialCardDropTarget = false
-                                         }: {
+    id,
+    itemIds,
+    children,
+    isPotentialCardDropTarget = false
+}: {
     id: UniqueIdentifier;
     itemIds: UniqueIdentifier[];
     children: React.ReactNode;
@@ -128,10 +128,10 @@ export function NavigationGroupDroppable({
 }
 
 export function SortableNavigationGroup({
-                                            groupName,
-                                            children,
-                                            disabled
-                                        }: {
+    groupName,
+    children,
+    disabled
+}: {
     groupName: string;
     children: React.ReactNode;
     disabled?: boolean;
@@ -164,21 +164,21 @@ export function SortableNavigationGroup({
 }
 
 export function useHomePageDnd({
-                                   items,
-                                   setItems,
-                                   disabled,
-                                   onCardMovedBetweenGroups,
-                                   onGroupMoved,
-                                   onNewGroupDrop,
-                                   onPersist
-                               }: {
+    items,
+    setItems,
+    disabled,
+    onCardMovedBetweenGroups,
+    onGroupMoved,
+    onNewGroupDrop,
+    onPersist
+}: {
     items: { name: string; entries: NavigationEntry[] }[];
     setItems: (
         newItemsOrUpdater:
             | { name: string; entries: NavigationEntry[] }[]
             | ((
-            currentItems: { name: string; entries: NavigationEntry[] }[]
-        ) => { name: string; entries: NavigationEntry[] }[])
+                currentItems: { name: string; entries: NavigationEntry[] }[]
+            ) => { name: string; entries: NavigationEntry[] }[])
     ) => void;
     disabled: boolean;
     onCardMovedBetweenGroups?: (card: NavigationEntry) => void;
@@ -344,9 +344,9 @@ export function useHomePageDnd({
     };
 
     const handleDragOver = ({
-                                active,
-                                over
-                            }: { active: Active; over: any }) => {
+        active,
+        over
+    }: { active: Active; over: any }) => {
         if (disabled || !over) return;
 
         const activeIdNow = active.id;
@@ -395,9 +395,9 @@ export function useHomePageDnd({
     };
 
     const handleDragEnd = ({
-                               active,
-                               over
-                           }: { active: Active; over: any }) => {
+        active,
+        over
+    }: { active: Active; over: any }) => {
         if (disabled || !over) {
             resetDragState();
             return;
@@ -505,10 +505,10 @@ export function useHomePageDnd({
                         }
                     }
                 } else if (overCont && activeCont !== overCont) {
-                    // Card moved between different groups - use CLEAN pre-drag state
+                    // Card moved between different groups - use CLEAN pre-drag state for the MOVE
+                    // but use current dndItems for the POSITION
                     const finalState = cloneItemsForDnd(sourceState);
 
-                    // Find target container from clean state too
                     const finalOverId = lastOverId.current || overIdNow;
                     const cleanOverCont = findContainerInState(finalOverId as string, sourceState) || overCont;
 
@@ -524,17 +524,32 @@ export function useHomePageDnd({
                             // Remove from source
                             const [moved] = src.entries.splice(idxInSrc, 1);
 
-                            // Calculate insertion position in target
+                            // Calculate insertion position using CURRENT dndItems (visual state after handleDragOver)
+                            // because that's where the user visually dropped it
+                            const currentTgt = dndItems.find((g) => g.name === cleanOverCont);
                             const overIsContainer = finalOverId === cleanOverCont;
+
                             if (overIsContainer) {
                                 tgt.entries.push(moved);
-                            } else {
-                                const overIdx = tgt.entries.findIndex((e) => e.url === finalOverId);
-                                if (overIdx !== -1) {
-                                    tgt.entries.splice(overIdx, 0, moved);
+                            } else if (currentTgt) {
+                                // Find position in current visual state
+                                const currentOverIdx = currentTgt.entries.findIndex((e) => e.url === finalOverId);
+                                if (currentOverIdx !== -1) {
+                                    // Find the card at that position in currentTgt, get its URL
+                                    // Then find that same card in tgt (pre-drag state) and insert before it
+                                    const cardAtPosition = currentTgt.entries[currentOverIdx];
+                                    const tgtOverIdx = tgt.entries.findIndex((e) => e.url === cardAtPosition.url);
+                                    if (tgtOverIdx !== -1) {
+                                        tgt.entries.splice(tgtOverIdx, 0, moved);
+                                    } else {
+                                        // Card might have been the dragged one in current state, just push
+                                        tgt.entries.push(moved);
+                                    }
                                 } else {
                                     tgt.entries.push(moved);
                                 }
+                            } else {
+                                tgt.entries.push(moved);
                             }
 
                             // Remove empty source group if needed
@@ -648,9 +663,9 @@ export function useHomePageDnd({
 }
 
 export function NewGroupDropZone({
-                                     disabled,
-                                     setIsHovering
-                                 }: {
+    disabled,
+    setIsHovering
+}: {
     disabled: boolean;
     setIsHovering: (v: boolean) => void;
 }) {
@@ -690,7 +705,7 @@ export function NewGroupDropZone({
                 "fixed right-8 top-1/2 -translate-y-1/2 w-[200px] h-[120px] border border-dashed rounded-lg flex items-center justify-center transition-all",
                 isOver
                     ? "bg-surface-accent-100 dark:bg-surface-accent-800 border-surface-300 dark:border-surface-600"
-                    : "bg-surface-50 dark:bg-surface-900 border-surface-200 dark:border-surface-700"
+                    : "bg-surface-50 dark:bg-surface-900 " + defaultBorderMixin
             )}>
             <div className="text-center p-4">
                 <span className="block font-medium text-sm">

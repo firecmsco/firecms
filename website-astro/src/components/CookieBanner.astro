@@ -1,0 +1,178 @@
+---
+// Cookie Banner Component - Blocking Modal
+---
+
+<style>
+    @keyframes ursula-peek {
+        0% {
+            top: -4rem;
+        }
+        10% {
+            top: -4rem;
+        }
+        20% {
+            top: -4.3rem;
+        }
+        30% {
+            top: -4rem;
+        }
+        84% {
+            top: -6.5rem;
+        }
+        94% {
+            top: -6.5rem;
+        }
+        100% {
+            top: -4rem;
+        }
+    }
+
+    .ursula-animate {
+        animation: ursula-peek 6s ease-in-out infinite;
+    }
+    
+    .cookie-modal-backdrop {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    
+    body.cookie-modal-open {
+        overflow: hidden;
+    }
+</style>
+
+<!-- Full-screen blocking modal -->
+<div id="cookie-banner" class="fixed inset-0 z-[9999] hidden">
+    <!-- Backdrop overlay -->
+    <div class="absolute inset-0 bg-black/60 cookie-modal-backdrop"></div>
+    
+    <!-- Modal content centered -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative flex flex-col opacity-0 scale-95 transition-all duration-300 ease-out">
+            <!-- Ursula peeking from behind -->
+            <img src="/img/ursula.webp"
+                 alt=""
+                 class="absolute right-4 w-32 h-32 object-contain opacity-0 -translate-y-4 transition-all duration-500 ease-out delay-150 pointer-events-none ursula-peek ursula-animate -z-10"
+                 aria-hidden="true" />
+            <div class="relative z-10 bg-white dark:bg-surface-900 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.05)_inset] w-full max-w-[420px] overflow-hidden border border-surface-200 dark:border-surface-800">
+                <div class="p-6">
+                    <div class="mb-5">
+                        <h2 class="text-lg font-bold text-surface-900 dark:text-white mb-3">Cookie Preferences</h2>
+                        <p class="text-sm leading-relaxed text-surface-800 dark:text-surface-200 m-0">
+                            <strong class="font-semibold text-surface-900 dark:text-white">We use cookies</strong> to
+                            enhance your browsing experience and analyze our traffic.
+                            By clicking "Accept", you consent to
+                            <a href="/policy/cookies_policy" target="_blank"
+                               class="text-primary-light hover:text-primary underline transition-colors">our use of
+                                cookies</a>.
+                        </p>
+                    </div>
+                    <div class="flex flex-row gap-3">
+                        <button
+                                id="cookie-decline"
+                                type="button"
+                                class="w-full h-auto border-none px-5 py-3 rounded-lg bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 text-sm leading-none cursor-pointer font-semibold hover:bg-surface-300 dark:hover:bg-surface-700 transition-colors duration-200">
+                            Decline
+                        </button>
+                        <button
+                                id="cookie-accept"
+                                type="button"
+                                class="w-full h-auto border-none px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black text-sm leading-none cursor-pointer font-semibold hover:opacity-90 transition-opacity duration-200">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initializeCookieBanner() {
+        // Check if user has already made a choice
+        const cookieConsent = localStorage.getItem("cookie-consent");
+        const banner = document.getElementById("cookie-banner");
+
+        if (!banner) return;
+
+        // Helper to close modal immediately (no animation)
+        function closeModal() {
+            banner.classList.add("hidden");
+            document.body.classList.remove("cookie-modal-open");
+        }
+
+        if (!cookieConsent) {
+            // Show modal and block scrolling
+            banner.classList.remove("hidden");
+            document.body.classList.add("cookie-modal-open");
+            
+            // Trigger reflow
+            banner.offsetHeight;
+            
+            // Animate in
+            const modalContent = banner.querySelector(".opacity-0");
+            const ursula = banner.querySelector(".ursula-peek");
+            if (modalContent) {
+                modalContent.classList.remove("opacity-0", "scale-95");
+                modalContent.classList.add("opacity-100", "scale-100");
+            }
+            if (ursula) {
+                ursula.classList.remove("opacity-0", "-translate-y-4");
+            }
+        } else {
+            // Ensure banner stays hidden if consent was already given
+            banner.classList.add("hidden");
+            document.body.classList.remove("cookie-modal-open");
+        }
+
+        // Handle accept button
+        const acceptBtn = document.getElementById("cookie-accept");
+        if (acceptBtn) {
+            // Remove any existing listeners by cloning the element
+            const newAcceptBtn = acceptBtn.cloneNode(true);
+            acceptBtn.parentNode?.replaceChild(newAcceptBtn, acceptBtn);
+
+            newAcceptBtn.addEventListener("click", () => {
+                localStorage.setItem("cookie-consent", "accepted");
+                closeModal();
+                // Enable Google Analytics tracking (Consent Mode v2)
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
+                        "ad_storage": "granted",
+                        "ad_user_data": "granted",
+                        "ad_personalization": "granted",
+                        "analytics_storage": "granted"
+                    });
+                }
+            });
+        }
+
+        // Handle decline button
+        const declineBtn = document.getElementById("cookie-decline");
+        if (declineBtn) {
+            // Remove any existing listeners by cloning the element
+            const newDeclineBtn = declineBtn.cloneNode(true);
+            declineBtn.parentNode?.replaceChild(newDeclineBtn, declineBtn);
+
+            newDeclineBtn.addEventListener("click", () => {
+                localStorage.setItem("cookie-consent", "declined");
+                closeModal();
+                // Disable Google Analytics tracking (Consent Mode v2)
+                if (typeof window.gtag !== "undefined") {
+                    window.gtag("consent", "update", {
+                        "ad_storage": "denied",
+                        "ad_user_data": "denied",
+                        "ad_personalization": "denied",
+                        "analytics_storage": "denied"
+                    });
+                }
+            });
+        }
+    }
+
+    // Initialize on first load
+    initializeCookieBanner();
+
+    // Re-initialize after Astro view transitions
+    document.addEventListener("astro:page-load", initializeCookieBanner);
+</script>

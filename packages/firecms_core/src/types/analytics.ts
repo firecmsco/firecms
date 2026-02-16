@@ -34,5 +34,15 @@ export type CMSAnalyticsEvent =
 
     | "collection_inline_editing"
 
+    | "view_mode_changed"
+
+    | "kanban_card_moved"
+    | "kanban_column_reorder"
+    | "kanban_property_changed"
+    | "kanban_new_entity_in_column"
+    | "kanban_backfill_order"
+
+    | "card_view_entity_click"
+
     | "unmapped_event"
     ;

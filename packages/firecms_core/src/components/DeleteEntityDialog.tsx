@@ -187,16 +187,14 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
                 <Button onClick={handleCancel}
                         disabled={loading}
-                        variant="text"
-                        color="primary">
+                        variant="text">
                     Cancel
                 </Button>
                 <Button
                     autoFocus
                     disabled={loading}
                     onClick={handleOk}
-                    variant="filled"
-                    color="primary">
+                    variant="filled">
                     Ok
                 </Button>
             </DialogActions>

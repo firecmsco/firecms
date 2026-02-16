@@ -4,31 +4,47 @@ import {
     useAuthController,
     useSnackbarController
 } from "@firecms/core";
-import { DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
+import { ContentCopyIcon, DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 
 export function HomePageEditorCollectionAction({
-                                                   path,
-                                                   collection
-                                               }: PluginHomePageActionsProps) {
-
+    path,
+    collection
+}: PluginHomePageActionsProps) {
 
     const snackbarController = useSnackbarController();
     const authController = useAuthController();
     const configController = useCollectionsConfigController();
     const collectionEditorController = useCollectionEditorController();
 
-    const permissions = collectionEditorController.configPermissions({
-        user: authController.user,
-        collection
-    });
+    const permissions = collectionEditorController?.configPermissions
+        ? collectionEditorController.configPermissions({
+            user: authController.user,
+            collection
+        })
+        : {
+            createCollections: false,
+            editCollections: false,
+            deleteCollections: false
+        };
 
     const onEditCollectionClicked = () => {
         collectionEditorController?.editCollection({
             id: collection.id,
             parentCollectionIds: []
+        });
+    };
+
+    const onDuplicateCollectionClicked = () => {
+        // Use copyFrom to duplicate the collection with all properties
+        // The editor will handle clearing name, path, and id
+        collectionEditorController?.createCollection({
+            copyFrom: collection,
+            parentCollectionIds: [],
+            redirect: true,
+            sourceClick: "home_page_duplicate"
         });
     };
 
@@ -50,9 +66,21 @@ export function HomePageEditorCollectionAction({
             {permissions.deleteCollections &&
                 <Menu
                     trigger={<IconButton size={"small"}>
-                        <MoreVertIcon size={"small"}/>
+                        <MoreVertIcon size={"small"} />
                     </IconButton>}
                 >
+                    {permissions.createCollections &&
+                        <MenuItem
+                            dense={true}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                onDuplicateCollectionClicked();
+                            }}>
+                            <ContentCopyIcon />
+                            Duplicate
+                        </MenuItem>
+                    }
                     <MenuItem
                         dense={true}
                         onClick={(event) => {
@@ -60,7 +88,7 @@ export function HomePageEditorCollectionAction({
                             event.stopPropagation();
                             setDeleteRequested(true);
                         }}>
-                        <DeleteIcon/>
+                        <DeleteIcon />
                         Delete
                     </MenuItem>
 
@@ -74,7 +102,7 @@ export function HomePageEditorCollectionAction({
                     onClick={(event) => {
                         onEditCollectionClicked();
                     }}>
-                    <SettingsIcon size={"small"}/>
+                    <SettingsIcon size={"small"} />
                 </IconButton>}
         </div>
 
@@ -85,7 +113,7 @@ export function HomePageEditorCollectionAction({
             title={<>Delete this collection?</>}
             body={<> This will <b>not
                 delete any data</b>, only
-                the collection in the CMS</>}/>
+                the collection in the CMS</>} />
     </>;
 
 }

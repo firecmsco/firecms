@@ -129,7 +129,6 @@ export function ArrayOfReferencesFieldBinding({
             <Button
                 className="ml-3.5 my-4 justify-center text-left"
                 variant="text"
-                color="primary"
                 disabled={isSubmitting}
                 onClick={onEntryClick}>
                 <EditIcon size={"small"}/>

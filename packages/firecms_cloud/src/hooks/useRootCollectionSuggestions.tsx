@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigationController } from "@firecms/core";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
+import { RootCollectionInfo } from "../api/projects";
 
 export function useRootCollectionSuggestions({ projectId }: { projectId: string }) {
     const navigationController = useNavigationController();
@@ -9,8 +10,8 @@ export function useRootCollectionSuggestions({ projectId }: { projectId: string 
 
     const existingPaths = (navigationController.collections ?? []).map(c => c.path);
     const [loading, setLoading] = React.useState(true);
-    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
-    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<RootCollectionInfo[] | undefined>();
+    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((info) => !existingPaths.includes(info.path));
 
     const requested = useRef(false);
 
@@ -24,8 +25,8 @@ export function useRootCollectionSuggestions({ projectId }: { projectId: string 
         const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
         requested.current = true;
         fireCMSBackend.projectsApi.getRootCollections(projectId, googleAccessToken)
-            .then((paths) => {
-                setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
+            .then((collections) => {
+                setRootPathSuggestions(collections.filter(c => !existingPaths.includes(c.path.trim().toLowerCase())));
             })
             .finally(() => setLoading(false));
     }, []);

@@ -1,8 +1,8 @@
-import { CMSType, NavigationGroupMapping, Property } from "@firecms/core";
+import { CMSType, EntityCollection, NavigationGroupMapping, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {
-    status: "ongoing" | "complete";
+    status: "ongoing" | "complete" | "error";
     error: string | null;
 }
 
@@ -31,6 +31,16 @@ export interface CollectionsConfigController {
     deleteProperty: (params: DeletePropertyParams) => Promise<void>;
 
     deleteCollection: (props: DeleteCollectionParams) => Promise<void>;
+
+    /**
+     * Update the properties order of a collection (used for column reordering).
+     */
+    updatePropertiesOrder: (params: UpdatePropertiesOrderParams) => Promise<void>;
+
+    /**
+     * Update the Kanban columns order for a collection.
+     */
+    updateKanbanColumnsOrder: (params: UpdateKanbanColumnsOrderParams) => Promise<void>;
 
     navigationEntries: NavigationGroupMapping[];
     saveNavigationEntries: (entries: NavigationGroupMapping[]) => Promise<void>;
@@ -71,4 +81,19 @@ export type DeletePropertyParams = {
 export type DeleteCollectionParams = {
     id: string,
     parentCollectionIds?: string[]
+}
+
+export type UpdatePropertiesOrderParams = {
+    fullPath: string;
+    parentCollectionIds: string[];
+    collection: EntityCollection<any>;
+    newPropertiesOrder: string[];
+}
+
+export type UpdateKanbanColumnsOrderParams = {
+    fullPath: string;
+    parentCollectionIds: string[];
+    collection: EntityCollection<any>;
+    kanbanColumnProperty: string;
+    newColumnsOrder: string[];
 }

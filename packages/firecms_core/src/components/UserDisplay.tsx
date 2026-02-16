@@ -6,17 +6,17 @@ import { EmptyValue } from "../preview";
  * Component to render a single user with name and email
  */
 export function UserDisplay({
-                                user,
-                            }: { user: User | null }) {
+    user,
+}: { user: User | null }) {
     if (!user) {
-        return <EmptyValue/>;
+        return <EmptyValue />;
     }
 
     const avatarSizeClass = "w-6 h-6";
 
     return (
         <div className={cls(
-            "inline-flex items-center gap-4 px-2 py-1 rounded-xl",
+            "inline-flex items-center gap-4 px-2 py-1 rounded-xl text-left",
             "bg-surface-accent-100 dark:bg-surface-accent-800",
             "border",
             defaultBorderMixin

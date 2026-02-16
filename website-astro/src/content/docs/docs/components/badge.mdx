@@ -1,0 +1,27 @@
+---
+slug: docs/components/badge
+title: Badge
+sidebar_label: Badge
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Badges are small counts and labeling components used to add additional information to any content. They're commonly used to display unread counts, status indicators, or just as decorative nodes.
+
+## Basic Badge
+
+By setting the `invisible` prop to `true`, you can hide the badge, making it not visible to users.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_invisible.tsx"/>
+
+## Color Variants
+
+The `color` prop determines the color of the badge. Possible values are `primary`, `secondary`, and `error`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_color.tsx"/>
+
+## Usage with Icons and Buttons
+
+Badges can be wrapped around icons or buttons to provide status indicators.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_icon.tsx"/>

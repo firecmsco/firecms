@@ -28,22 +28,22 @@ export type FileUploadProps = {
     title?: React.ReactNode;
     uploadDescription?: React.ReactNode;
     preventDropOnDocument?: boolean;
-    size?: "medium" | "large";
+    size?: "small" | "medium" | "large";
 };
 
 export function FileUpload({
-                               accept,
-                               onFilesAdded,
-                               onFilesRejected,
-                               maxSize,
-                               disabled,
-                               maxFiles,
-                               title,
-                               uploadDescription,
-                               children,
-                               preventDropOnDocument = true,
-                               size
-                           }: React.PropsWithChildren<FileUploadProps>) {
+    accept,
+    onFilesAdded,
+    onFilesRejected,
+    maxSize,
+    disabled,
+    maxFiles,
+    title,
+    uploadDescription,
+    children,
+    preventDropOnDocument = true,
+    size
+}: React.PropsWithChildren<FileUploadProps>) {
 
     const {
         getRootProps,
@@ -52,15 +52,15 @@ export function FileUpload({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept,
-            noDragEventsBubbling: true,
-            maxSize,
-            onDrop: onFilesAdded,
-            onDropRejected: onFilesRejected,
-            disabled,
-            maxFiles,
-            preventDropOnDocument
-        }
+        accept,
+        noDragEventsBubbling: true,
+        maxSize,
+        onDrop: onFilesAdded,
+        onDropRejected: onFilesRejected,
+        disabled,
+        maxFiles,
+        preventDropOnDocument
+    }
     );
     return <div
         {...getRootProps()}
@@ -71,6 +71,7 @@ export function FileUpload({
             {
                 "h-44": size === "large",
                 "h-28": size === "medium",
+                "h-16": size === "small",
                 "cursor-pointer": !disabled,
                 [fieldBackgroundHoverMixin]: !isDragActive,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-red-500": isDragReject,
@@ -89,8 +90,8 @@ export function FileUpload({
         <div
             className="flex-grow h-28 box-border flex flex-col items-center justify-center text-center">
             <Typography align={"center"}
-                        variant={"label"}
-                        className={"flex flex-row gap-2 justify-center"}>
+                variant={"label"}
+                className={"flex flex-row gap-2 justify-center"}>
                 {uploadDescription}
             </Typography>
         </div>

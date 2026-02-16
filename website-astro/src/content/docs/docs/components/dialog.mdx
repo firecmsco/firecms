@@ -1,0 +1,42 @@
+---
+slug: docs/components/dialog
+title: Dialog
+sidebar_label: Dialog
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Dialog components are used to present content in a layer above the app's main content, and they often request a user response. They are a critical component for modal dialogs, lightboxes, notification pop-ups, and custom content popups.
+
+## Usage
+
+To use the `Dialog`, import it from your components and pass the necessary props including `open`, `onOpenChange`, and the dialog's content as children. Optionally, you can customize its appearance with `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal`, and `onOpenAutoFocus` props.
+
+:::caution
+You need to provide a `DialogTitle` in your `Dialog` component to ensure that the dialog is accessible.
+You will see a warning in the console if you forget to provide a `DialogTitle`.
+:::
+
+## Basic Dialog
+
+A basic example of using the dialog component to show a simple pop-up.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
+
+## Full-Screen Dialog
+
+An example of a dialog that covers the entire screen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
+
+## Scrollable Dialog
+
+Illustrates how to make a dialog's content scrollable.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
+
+## Dialog with Custom Width
+
+Demonstrates usage of the `maxWidth` prop to customize the dialog's width.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

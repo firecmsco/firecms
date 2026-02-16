@@ -93,6 +93,11 @@ export type SelectableTableProps<M extends Record<string, any>> = {
     endAdornment?: React.ReactNode;
 
     AddColumnComponent?: React.ComponentType;
+
+    /**
+     * Callback when columns are reordered via drag-and-drop
+     */
+    onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
 }
 
 /**
@@ -120,41 +125,42 @@ export type SelectableTableProps<M extends Record<string, any>> = {
  * @group Components
  */
 export const SelectableTable = function SelectableTable<M extends Record<string, any>>
-({
-     onValueChange,
-     cellRenderer,
-     onEntityClick,
-     onColumnResize,
-     hoverRow = true,
-     size = "m",
-     inlineEditing = false,
-     tableController:
-         {
-             data,
-             dataLoading,
-             noMoreToLoad,
-             dataLoadingError,
-             filterValues,
-             setFilterValues,
-             sortBy,
-             setSortBy,
-             itemCount,
-             setItemCount,
-             pageSize = 50,
-             paginationEnabled,
-             checkFilterCombination,
-             setPopupCell
-         },
-     filterable = true,
-     onScroll,
-     initialScroll,
-     emptyComponent,
-     columns,
-     forceFilter,
-     highlightedRow,
-     endAdornment,
-     AddColumnComponent
- }: SelectableTableProps<M>) {
+    ({
+        onValueChange,
+        cellRenderer,
+        onEntityClick,
+        onColumnResize,
+        hoverRow = true,
+        size = "m",
+        inlineEditing = false,
+        tableController:
+        {
+            data,
+            dataLoading,
+            noMoreToLoad,
+            dataLoadingError,
+            filterValues,
+            setFilterValues,
+            sortBy,
+            setSortBy,
+            itemCount,
+            setItemCount,
+            pageSize = 50,
+            paginationEnabled,
+            checkFilterCombination,
+            setPopupCell
+        },
+        filterable = true,
+        onScroll,
+        initialScroll,
+        emptyComponent,
+        columns,
+        forceFilter,
+        highlightedRow,
+        endAdornment,
+        AddColumnComponent,
+     onColumnsOrderChange
+    }: SelectableTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -224,7 +230,7 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
         <SelectableTableContext.Provider
             value={contextValue}>
             <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950"
-                 ref={ref}>
+                ref={ref}>
 
                 <VirtualTable
                     data={data}
@@ -247,12 +253,13 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
                     checkFilterCombination={checkFilterCombination}
                     createFilterField={filterable ? createFilterField : undefined}
                     rowClassName={useCallback((entity: Entity<M>) => {
-                        return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "";
+                        return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 bg-surface-100/75 dark:bg-surface-800 dark:bg-opacity-75 dark:bg-surface-800/75" : "";
                     }, [highlightedRow])}
                     className="flex-grow"
                     emptyComponent={emptyComponent}
                     endAdornment={endAdornment}
                     AddColumnComponent={AddColumnComponent}
+                    onColumnsOrderChange={onColumnsOrderChange}
                 />
 
             </div>
@@ -262,13 +269,13 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
 };
 
 function createFilterField({
-                               id,
-                               filterValue,
-                               setFilterValue,
-                               column,
-                               hidden,
-                               setHidden
-                           }: FilterFormFieldProps<{
+    id,
+    filterValue,
+    setFilterValue,
+    column,
+    hidden,
+    setHidden
+}: FilterFormFieldProps<{
     resolvedProperty: ResolvedProperty,
     disabled: boolean,
 }>): React.ReactNode {
@@ -286,40 +293,41 @@ function createFilterField({
     }
     if (baseProperty.dataType === "reference") {
         return <ReferenceFilterField value={filterValue}
-                                     setValue={setFilterValue}
-                                     name={id as string}
-                                     isArray={isArray}
-                                     path={baseProperty.path}
-                                     title={resolvedProperty?.name}
-                                     includeId={baseProperty.includeId}
-                                     previewProperties={baseProperty?.previewProperties}
-                                     hidden={hidden}
-                                     setHidden={setHidden}/>;
+            setValue={setFilterValue}
+            name={id as string}
+            isArray={isArray}
+            path={baseProperty.path}
+            title={resolvedProperty?.name}
+            includeId={baseProperty.includeId}
+            previewProperties={baseProperty?.previewProperties}
+            hidden={hidden}
+            setHidden={setHidden} />;
     } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
         const name = baseProperty.name;
         const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;
         return <StringNumberFilterField value={filterValue}
-                                        setValue={setFilterValue}
-                                        name={id as string}
-                                        dataType={baseProperty.dataType}
-                                        isArray={isArray}
-                                        enumValues={enumValues}
-                                        title={name}/>;
+            setValue={setFilterValue}
+            name={id as string}
+            dataType={baseProperty.dataType}
+            isArray={isArray}
+            enumValues={enumValues}
+            title={name} />;
     } else if (baseProperty.dataType === "boolean") {
         const name = baseProperty.name;
         return <BooleanFilterField value={filterValue}
-                                   setValue={setFilterValue}
-                                   name={id as string}
-                                   title={name}/>;
+            setValue={setFilterValue}
+            name={id as string}
+            title={name} />;
 
     } else if (baseProperty.dataType === "date") {
         const title = baseProperty.name;
         return <DateTimeFilterField value={filterValue}
-                                    setValue={setFilterValue}
-                                    name={id as string}
-                                    mode={baseProperty.mode}
-                                    isArray={isArray}
-                                    title={title}/>;
+            setValue={setFilterValue}
+            name={id as string}
+            mode={baseProperty.mode}
+            isArray={isArray}
+            timezone={baseProperty.timezone}
+            title={title} />;
     }
 
     return (

@@ -1,0 +1,16 @@
+---
+import Default from '@astrojs/starlight/components/PageFrame.astro';
+import CookieBanner from "../CookieBanner.astro";
+---
+
+<Default {...Astro.props}>
+    <slot slot="header" name="header" />
+    <slot slot="sidebar" name="sidebar" />
+    <slot />
+    <CookieBanner />
+</Default>
+
+<script src="../../scripts/tracking-params.js"></script>
+<script src="../../scripts/enhance-app-links.js"></script>
+<script src="../../page-effects.ts"></script>
+

@@ -25,7 +25,13 @@
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "typesense": "^1.8.0"
+  },
+  "peerDependenciesMeta": {
+    "typesense": {
+      "optional": true
+    }
   },
   "exports": {
     ".": {
@@ -36,6 +42,7 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
+    "typesense": "^2.1.0",
     "@types/node": "^20.19.17",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",

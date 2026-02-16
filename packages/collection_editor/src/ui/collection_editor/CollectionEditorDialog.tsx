@@ -42,10 +42,11 @@ import {
     Typography
 } from "@firecms/ui";
 import { YupSchema } from "./CollectionYupValidation";
-import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { GeneralSettingsForm } from "./GeneralSettingsForm";
+import { DisplaySettingsForm } from "./DisplaySettingsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
-import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
+import { ExtendSettingsForm } from "./ExtendSettingsForm";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
@@ -57,7 +58,9 @@ import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
-import { EntityActionsEditTab } from "./EntityActionsEditTab";
+import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
+import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
+import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -67,6 +70,11 @@ export interface CollectionEditorDialogProps {
         path?: string,
         name?: string,
     }
+    /**
+     * A collection to duplicate from. If provided, the new collection will be
+     * pre-populated with the same properties (but with empty name, path, and id).
+     */
+    copyFrom?: PersistedCollection;
     editedCollectionId?: string;
     fullPath?: string; // full path of this particular collection, like `products/123/locales`
     parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
@@ -84,6 +92,24 @@ export interface CollectionEditorDialogProps {
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
     existingEntities?: Entity<any>[];
+    /**
+     * Initial view to open when editing: "general", "display", or "properties".
+     * For new collections, this is ignored.
+     */
+    initialView?: "general" | "display" | "properties";
+    /**
+     * If true, auto-expand the Kanban configuration section.
+     */
+    expandKanban?: boolean;
+    /**
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
+     */
+    generateCollection?: CollectionGenerationCallback;
+    /**
+     * Optional analytics callback
+     */
+    onAnalyticsEvent?: (event: string, params?: object) => void;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -118,30 +144,31 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
             onOpenChange={(open) => !open ? handleCancel() : undefined}
         >
             <DialogTitle hidden>Collection editor</DialogTitle>
-            {open && <CollectionEditor {...props}
-                                       handleCancel={handleCancel}
-                                       setFormDirty={setFormDirty}/>}
+            <AIModifiedPathsProvider>
+                {open && <CollectionEditor {...props}
+                    handleCancel={handleCancel}
+                    setFormDirty={setFormDirty} />}
 
-            <UnsavedChangesDialog
-                open={unsavedChangesDialogOpen}
-                handleOk={() => props.handleClose(undefined)}
-                handleCancel={() => setUnsavedChangesDialogOpen(false)}
-                body={"There are unsaved changes in this collection"}/>
-
+                <UnsavedChangesDialog
+                    open={unsavedChangesDialogOpen}
+                    handleOk={() => props.handleClose(undefined)}
+                    handleCancel={() => setUnsavedChangesDialogOpen(false)}
+                    body={"There are unsaved changes in this collection"} />
+            </AIModifiedPathsProvider>
         </Dialog>
     );
 }
 
 type EditorView = "welcome"
-    | "details"
+    | "general"
+    | "display"
     | "import_data_mapping"
     | "import_data_preview"
     | "import_data_saving"
     | "properties"
     | "loading"
     | "extra_view"
-    | "subcollections"
-    | "custom_actions";
+    | "extend";
 
 export function CollectionEditor(props: CollectionEditorDialogProps & {
     handleCancel: () => void,
@@ -157,7 +184,9 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     } = navigation;
 
     const initialValuesProp = props.initialValues;
-    const includeTemplates = !initialValuesProp?.path && (props.parentCollectionIds ?? []).length === 0;
+    const copyFromProp = props.copyFrom;
+    // Skip templates when duplicating (copyFrom is provided)
+    const includeTemplates = !copyFromProp && !initialValuesProp?.path && (props.parentCollectionIds ?? []).length === 0;
     const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.path.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.id?.trim().toLowerCase()).filter(Boolean) as string[];
@@ -194,25 +223,36 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         }
         : undefined;
 
+    // Build initial values - handle copyFrom for duplication
     const initialValues: PersistedCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
-        : {
-            id: initialValuesProp?.path ?? randomString(16),
-            path: initialValuesProp?.path ?? "",
-            name: initialValuesProp?.name ?? "",
-            group: initialValuesProp?.group ?? "",
-            properties: {} as PropertiesOrBuilders,
-            propertiesOrder: [],
-            icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
-            ownerId: authController.user?.uid ?? ""
-        };
+        : copyFromProp
+            ? {
+                // When duplicating, copy all properties but clear identifiers
+                ...copyFromProp,
+                id: randomString(16),
+                path: "",
+                name: "",
+                subcollections: undefined, // Don't copy subcollections
+                ownerId: authController.user?.uid ?? ""
+            }
+            : {
+                id: initialValuesProp?.path ?? randomString(16),
+                path: initialValuesProp?.path ?? "",
+                name: initialValuesProp?.name ?? "",
+                group: initialValuesProp?.group ?? "",
+                properties: {} as PropertiesOrBuilders,
+                propertiesOrder: [],
+                icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
+                ownerId: authController.user?.uid ?? ""
+            };
 
     if (!initialLoadingCompleted) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (!props.isNewCollection && (!navigation.initialised || !initialLoadingCompleted)) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     return <CollectionEditorInternal
@@ -224,46 +264,50 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         collection={collection}
         setCollection={setCollection}
         groups={groups}
-        propertyConfigs={propertyConfigs}/>
+        propertyConfigs={propertyConfigs} />
 
 }
 
 function CollectionEditorInternal<M extends Record<string, any>>({
-                                                                     isNewCollection,
-                                                                     configController,
-                                                                     editedCollectionId,
-                                                                     parentCollectionIds,
-                                                                     fullPath,
-                                                                     collectionInference,
-                                                                     handleClose,
-                                                                     reservedGroups,
-                                                                     extraView,
-                                                                     handleCancel,
-                                                                     setFormDirty,
-                                                                     getUser,
-                                                                     parentCollection,
-                                                                     getData,
-                                                                     existingPaths,
-                                                                     existingIds,
-                                                                     includeTemplates,
-                                                                     collection,
-                                                                     setCollection,
-                                                                     initialValues,
-                                                                     propertyConfigs,
-                                                                     groups,
-                                                                     existingEntities
-                                                                 }: CollectionEditorDialogProps & {
-                                                                     handleCancel: () => void,
-                                                                     setFormDirty: (dirty: boolean) => void,
-                                                                     initialValues: PersistedCollection<M>,
-                                                                     existingPaths: string[],
-                                                                     existingIds: string[],
-                                                                     includeTemplates: boolean,
-                                                                     collection: PersistedCollection<M> | undefined,
-                                                                     setCollection: (collection: PersistedCollection<M>) => void,
-                                                                     propertyConfigs: Record<string, PropertyConfig<any>>,
-                                                                     groups: string[],
-                                                                 }
+    isNewCollection,
+    configController,
+    editedCollectionId,
+    parentCollectionIds,
+    fullPath,
+    collectionInference,
+    handleClose,
+    reservedGroups,
+    extraView,
+    handleCancel,
+    setFormDirty,
+    getUser,
+    parentCollection,
+    getData,
+    existingPaths,
+    existingIds,
+    includeTemplates,
+    collection,
+    setCollection,
+    initialValues,
+    propertyConfigs,
+    groups,
+    existingEntities,
+    initialView: initialViewProp,
+    expandKanban,
+    generateCollection,
+    onAnalyticsEvent
+}: CollectionEditorDialogProps & {
+    handleCancel: () => void,
+    setFormDirty: (dirty: boolean) => void,
+    initialValues: PersistedCollection<M>,
+    existingPaths: string[],
+    existingIds: string[],
+    includeTemplates: boolean,
+    collection: PersistedCollection<M> | undefined,
+    setCollection: (collection: PersistedCollection<M>) => void,
+    propertyConfigs: Record<string, PropertyConfig<any>>,
+    groups: string[],
+}
 ) {
 
     const importConfig = useImportConfig();
@@ -273,7 +317,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
 
-    const initialView = isNewCollection ? (includeTemplates ? "welcome" : "details") : "properties";
+    const initialView = isNewCollection
+        ? (includeTemplates ? "welcome" : "general")
+        : (initialViewProp ?? "properties");
     const [currentView, setCurrentView] = useState<EditorView>(initialView); // this view can edit either the details view or the properties one
 
     const [error, setError] = React.useState<Error | undefined>();
@@ -303,7 +349,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     const setNextMode = () => {
-        if (currentView === "details") {
+        if (currentView === "general") {
             if (importConfig.inUse) {
                 setCurrentView("import_data_saving");
             } else if (extraView) {
@@ -312,22 +358,29 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 setCurrentView("properties");
             }
         } else if (currentView === "welcome") {
-            setCurrentView("details");
+            setCurrentView("general");
         } else if (currentView === "import_data_mapping") {
             setCurrentView("import_data_preview");
         } else if (currentView === "import_data_preview") {
-            setCurrentView("details");
+            setCurrentView("general");
         } else if (currentView === "extra_view") {
             setCurrentView("properties");
         } else {
-            setCurrentView("details");
+            setCurrentView("general");
         }
 
     };
 
     const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
-        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPaths ?? [], collection.databaseId);
+        return collectionInference?.(
+            collection.path,
+            collection.collectionGroup ?? false,
+            parentPaths ?? [],
+            collection.databaseId,
+            collection.initialFilter,
+            collection.initialSort
+        );
     } : undefined;
 
     const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
@@ -382,6 +435,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             if (!isNewCollection) {
                 saveCollection(newCollectionState).then(() => {
+                    aiModifiedPaths?.clearAllPaths();
                     formexController.resetForm();
                     handleClose(newCollectionState);
                 });
@@ -391,7 +445,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             if (currentView === "welcome") {
                 setNextMode();
                 formexController.resetForm({ values: newCollectionState });
-            } else if (currentView === "details") {
+            } else if (currentView === "general") {
                 if (extraView || importConfig.inUse) {
                     formexController.resetForm({ values: newCollectionState });
                     setNextMode();
@@ -406,8 +460,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 }
                             });
                         }).finally(() => {
-                        setNextMode();
-                    });
+                            setNextMode();
+                        });
                 } else {
                     formexController.resetForm({ values: newCollectionState });
                     setNextMode();
@@ -442,7 +496,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const validation = (col: PersistedCollection) => {
 
         let errors: Record<string, any> = {};
-        const schema = (currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema;
+        const schema = (currentView === "properties" || currentView === "extend" || currentView === "general") && YupSchema;
         if (schema) {
             try {
                 schema.validateSync(col, { abortEarly: false });
@@ -455,7 +509,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         if (currentView === "properties") {
             errors = { ...errors, ...propertyErrorsRef.current };
         }
-        if (currentView === "details") {
+        if (currentView === "general") {
             const pathError = validatePath(col.path, isNewCollection, existingPaths, col.id);
             if (pathError) {
                 errors.path = pathError;
@@ -483,15 +537,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    // TODO: getting data is only working in root collections with this code
     const path = values.path;
     const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
     const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
 
     const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
     const resolvedPath = !pathError ? navigation.resolveIdsFrom(updatedFullPath) : undefined;
+
     const getDataWithPath = resolvedPath && getData ? async () => {
-        const data = await getData(resolvedPath, parentPaths ?? []);
+        const data = await getData!(resolvedPath, parentPaths ?? []);
         if (existingEntities) {
             const existingData = existingEntities.map(e => e.values);
             data.push(...existingData);
@@ -558,7 +612,16 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             onImportDataSet(importData, propertiesOrder);
             setCurrentView("import_data_mapping");
         } else {
-            setCurrentView("details");
+            setCurrentView("general");
+        }
+    };
+
+    const aiModifiedPaths = useAIModifiedPaths();
+
+    const handleAIGenerated = (generatedCollection: EntityCollection, operations?: CollectionOperation[]) => {
+        formController.setValues(generatedCollection as PersistedCollection<M>);
+        if (operations && aiModifiedPaths) {
+            aiModifiedPaths.addModifiedPaths(operations);
         }
     };
 
@@ -566,99 +629,102 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         <Formex value={formController}>
 
             <>
-                {!isNewCollection && <Tabs value={currentView}
-                                           innerClassName={cls(defaultBorderMixin, "px-4 h-14 w-full justify-end bg-surface-50 dark:bg-surface-950 border-b")}
-                                           onValueChange={(v) => setCurrentView(v as EditorView)}>
-                    <Tab value={"details"}>
-                        Details
-                    </Tab>
-                    <Tab value={"properties"}>
-                        Properties
-                    </Tab>
-                    <Tab value={"subcollections"}>
-                        Additional views
-                    </Tab>
-                    <Tab value={"custom_actions"}>
-                        Custom actions
-                    </Tab>
-                </Tabs>}
+                {!isNewCollection && <div className={cls("px-4 py-2 w-full flex items-center justify-end gap-2 bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}>
+                    {generateCollection && (
+                        <AICollectionGeneratorPopover
+                            existingCollection={values}
+                            onGenerated={handleAIGenerated}
+                            generateCollection={generateCollection}
+                            onAnalyticsEvent={onAnalyticsEvent}
+                        />
+                    )}
+                    <Tabs value={currentView}
+                        onValueChange={(v) => setCurrentView(v as EditorView)}>
+                        <Tab value={"general"}>
+                            General
+                        </Tab>
+                        <Tab value={"display"}>
+                            Display
+                        </Tab>
+                        <Tab value={"properties"}>
+                            Properties
+                        </Tab>
+                        <Tab value={"extend"}>
+                            Extend
+                        </Tab>
+                    </Tabs>
+                </div>}
 
                 <form noValidate
-                      onSubmit={formController.handleSubmit}
-                      className={cls(
-                          isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
-                          "flex-grow flex flex-col relative")}>
+                    onSubmit={formController.handleSubmit}
+                    className={cls(
+                        isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
+                        "flex-grow flex flex-col relative")}>
 
                     {currentView === "loading" &&
-                        <CircularProgressCenter/>}
+                        <CircularProgressCenter />}
 
                     {currentView === "extra_view" &&
                         path &&
                         extraView?.View &&
-                        <extraView.View path={path}/>}
+                        <extraView.View path={path} />}
 
                     {currentView === "welcome" &&
                         <CollectionEditorWelcomeView
                             path={path}
                             onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
-                            parentCollection={parentCollection}/>}
+                            parentCollection={parentCollection}
+                            generateCollection={generateCollection}
+                            onAnalyticsEvent={onAnalyticsEvent} />}
 
                     {currentView === "import_data_mapping" && importConfig &&
                         <CollectionEditorImportMapping importConfig={importConfig}
-                                                       collectionEditable={collectionEditable}
-                                                       propertyConfigs={propertyConfigs}/>}
+                            collectionEditable={collectionEditable}
+                            propertyConfigs={propertyConfigs} />}
 
                     {currentView === "import_data_preview" && importConfig &&
                         <CollectionEditorImportDataPreview importConfig={importConfig}
-                                                           properties={values.properties as Properties}
-                                                           propertiesOrder={values.propertiesOrder as string[]}/>}
+                            properties={values.properties as Properties}
+                            propertiesOrder={values.propertiesOrder as string[]} />}
 
                     {currentView === "import_data_saving" && importConfig &&
                         <ImportSaveInProgress importConfig={importConfig}
-                                              collection={values}
-                                              path={path}
-                                              onImportSuccess={async (importedCollection) => {
-                                                  snackbarController.open({
-                                                      type: "info",
-                                                      message: "Data imported successfully"
-                                                  });
-                                                  await saveCollection(values);
-                                                  handleClose(importedCollection);
-                                              }}
+                            collection={values}
+                            path={path}
+                            onImportSuccess={async (importedCollection) => {
+                                snackbarController.open({
+                                    type: "info",
+                                    message: "Data imported successfully"
+                                });
+                                await saveCollection(values);
+                                handleClose(importedCollection);
+                            }}
                         />}
 
-                    {currentView === "details" &&
-                        <CollectionDetailsForm
+                    {currentView === "general" &&
+                        <GeneralSettingsForm
                             existingPaths={existingPaths}
                             existingIds={existingIds}
-                            groups={groups}
-                            parentCollectionIds={parentCollectionIds}
                             parentCollection={parentCollection}
-                            isNewCollection={isNewCollection}>
-                            {!isNewCollection && isMergedCollection && <div className={"flex flex-col gap-4 mt-8"}>
-                                <Typography variant={"body2"} color={"secondary"}>This collection is defined in code.
-                                    The changes done in this editor will override the properties defined in code.
-                                    You can delete the overridden values to revert to the state defined in code.
-                                </Typography>
-                                <Button color={"neutral"}
-                                        onClick={() => {
-                                            setDeleteRequested(true);
-                                        }}>Reset to code</Button>
-                            </div>}
-                        </CollectionDetailsForm>}
+                            isNewCollection={isNewCollection} />
+                    }
 
-                    {currentView === "custom_actions" && collection &&
-                        <EntityActionsEditTab collection={collection}/>}
+                    {currentView === "display" &&
+                        <DisplaySettingsForm expandKanban={expandKanban} />
+                    }
 
-                    {currentView === "subcollections" && collection &&
-                        <SubcollectionsEditTab
+                    {currentView === "extend" && collection &&
+                        <ExtendSettingsForm
+                            collection={collection}
                             parentCollection={parentCollection}
                             configController={configController}
-                            getUser={getUser}
                             collectionInference={collectionInference}
+                            getUser={getUser}
                             parentCollectionIds={parentCollectionIds}
-                            collection={collection}/>}
+                            isMergedCollection={!isNewCollection && isMergedCollection}
+                            onResetToCode={() => setDeleteRequested(true)} />
+                    }
 
                     {currentView === "properties" &&
                         <CollectionPropertiesEditorForm
@@ -683,52 +749,52 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     color={"primary"}
                                     onClick={() => setCurrentView("extra_view")}>
                                     {extraView.icon}
-                                </IconButton>}/>
+                                </IconButton>} />
                     }
 
                     <DialogActions
                         position={"absolute"}>
-                        {error && <ErrorView error={error}/>}
+                        {error && <ErrorView error={error} />}
 
                         {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
                             <Button variant={"text"}
-                                    type="button"
-                                    onClick={() => {
-                                        importConfig.setInUse(false);
-                                        return setCurrentView("welcome");
-                                    }}>
+                                type="button"
+                                onClick={() => {
+                                    importConfig.setInUse(false);
+                                    return setCurrentView("welcome");
+                                }}>
                                 Back
                             </Button>}
 
                         {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
                             <Button variant={"text"}
-                                    type="button"
-                                    onClick={() => {
-                                        setCurrentView("import_data_mapping");
-                                    }}>
+                                type="button"
+                                onClick={() => {
+                                    setCurrentView("import_data_mapping");
+                                }}>
                                 Back
                             </Button>}
 
-                        {isNewCollection && includeTemplates && currentView === "details" &&
+                        {isNewCollection && includeTemplates && currentView === "general" &&
                             <Button variant={"text"}
-                                    type="button"
-                                    onClick={() => setCurrentView("welcome")}>
+                                type="button"
+                                onClick={() => setCurrentView("welcome")}>
                                 Back
                             </Button>}
 
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
-                                                                                    type="button"
-                                                                                    color={"neutral"}
-                                                                                    onClick={() => setCurrentView("details")}>
-                            <ArrowBackIcon/>
+                            type="button"
+                            color={"neutral"}
+                            onClick={() => setCurrentView("general")}>
+                            <ArrowBackIcon />
                             Back
                         </Button>}
 
                         <Button variant={"text"}
-                                color={"neutral"}
-                                onClick={() => {
-                                    handleCancel();
-                                }}>
+                            color={"neutral"}
+                            onClick={() => {
+                                handleCancel();
+                            }}>
                             Cancel
                         </Button>
 
@@ -757,18 +823,18 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 Next
                             </Button>}
 
-                        {isNewCollection && (currentView === "details" || currentView === "properties") &&
+                        {isNewCollection && (currentView === "general" || currentView === "properties") &&
                             <LoadingButton
                                 variant={"filled"}
                                 color="primary"
                                 type="submit"
                                 loading={isSubmitting}
-                                disabled={isSubmitting || (currentView === "details" && !validValues)}
+                                disabled={isSubmitting || (currentView === "general" && !validValues)}
                                 startIcon={currentView === "properties"
-                                    ? <CheckIcon/>
+                                    ? <CheckIcon />
                                     : undefined}
                             >
-                                {currentView === "details" && "Next"}
+                                {currentView === "general" && "Next"}
                                 {currentView === "properties" && "Create collection"}
                             </LoadingButton>}
 
@@ -794,7 +860,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             title={<>Delete the stored config?</>}
             body={<> This will <b>not
                 delete any data</b>, only
-                the stored config, and reset to the code state.</>}/>
+                the stored config, and reset to the code state.</>} />
 
     </DialogContent>
 
@@ -808,7 +874,9 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
     const propertiesResult: PropertiesOrBuilders<any> = {};
     if (properties) {
         Object.keys(properties).forEach((key) => {
-            propertiesResult[key] = applyPropertiesConfig(properties[key] as PropertyOrBuilder, propertyConfigs);
+            const prop = properties[key];
+            if (prop == null) return;
+            propertiesResult[key] = applyPropertiesConfig(prop as PropertyOrBuilder, propertyConfigs);
         });
     }
 
@@ -820,7 +888,7 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
 
 function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Record<string, PropertyConfig<any>>) {
     let internalProperty = property;
-    if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
+    if (propertyConfigs && internalProperty && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
         if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
             internalProperty = propertyConfig.property;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Checkbox, DateTimeField, Label, Select, SelectItem } from "@firecms/ui";
+import { DateTimeField, Select, SelectItem } from "@firecms/ui";
 import { useCustomizationController } from "../../../hooks";
 
 interface DateTimeFilterFieldProps {
@@ -10,9 +10,10 @@ interface DateTimeFilterFieldProps {
     setValue: (value?: [op: VirtualTableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
     title?: string;
+    timezone?: string;
 }
 
-const operationLabels: Record<VirtualTableWhereFilterOp, string> = {
+const operationLabels: Record<VirtualTableWhereFilterOp | "is-null", string> = {
     "==": "==",
     "!=": "!=",
     ">": ">",
@@ -22,30 +23,42 @@ const operationLabels: Record<VirtualTableWhereFilterOp, string> = {
     "not-in": "not in",
     in: "in",
     "array-contains": "Contains",
-    "array-contains-any": "Any"
+    "array-contains-any": "Any",
+    "is-null": "Is null"
 };
 
 const multipleSelectOperations = ["array-contains-any", "in"];
 
 export function DateTimeFilterField({
-                                        name,
-                                        isArray,
-                                        mode,
-                                        value,
-                                        setValue,
-                                        title
-                                    }: DateTimeFilterFieldProps) {
+    name,
+    isArray,
+    mode,
+    value,
+    setValue,
+    title,
+    timezone
+}: DateTimeFilterFieldProps) {
 
     const { locale } = useCustomizationController();
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+    const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
-        : ["==", "!=", ">", "<", ">=", "<="];
+        : ["==", "!=", ">", "<", ">=", "<=", "is-null"];
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<VirtualTableWhereFilterOp | "is-null">(fieldOperation === "==" && fieldValue === null ? "is-null" : fieldOperation);
     const [internalValue, setInternalValue] = useState<Date | null | undefined>(fieldValue);
 
-    function updateFilter(op: VirtualTableWhereFilterOp, val: Date | undefined | null) {
+    const isNullOperation = operation === "is-null";
+
+    function updateFilter(op: VirtualTableWhereFilterOp | "is-null", val: Date | undefined | null) {
+        // Handle "is null" operation
+        if (op === "is-null") {
+            setOperation(op);
+            setInternalValue(null);
+            setValue(["==", null]);
+            return;
+        }
+
         let newValue: Date | null | undefined = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -73,15 +86,15 @@ export function DateTimeFilterField({
 
     return (
 
-        <div className="flex w-[440px]">
-            <div className="w-[80px]">
+        <div className="flex w-full">
+            <div className="w-[100px]">
                 <Select value={operation}
-                        size={"large"}
-                        fullWidth={true}
-                        onValueChange={(value) => {
-                            updateFilter(value as VirtualTableWhereFilterOp, internalValue);
-                        }}
-                        renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
+                    size={"medium"}
+                    fullWidth={true}
+                    onValueChange={(value) => {
+                        updateFilter(value as VirtualTableWhereFilterOp | "is-null", internalValue);
+                    }}
+                    renderValue={(op) => operationLabels[op as keyof typeof operationLabels]}>
                     {possibleOperations.map((op) => (
                         <SelectItem key={op} value={op}>
                             {operationLabels[op]}
@@ -94,30 +107,16 @@ export function DateTimeFilterField({
 
                 <DateTimeField
                     mode={mode}
-                    size={"large"}
+                    size={"medium"}
                     locale={locale}
-                    disabled={internalValue === null}
-                    value={internalValue ?? undefined}
+                    timezone={timezone}
+                    disabled={isNullOperation}
+                    value={isNullOperation ? undefined : (internalValue ?? undefined)}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
                     }}
                     clearable={true}
                 />
-
-                <Label
-                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
-                    htmlFor="null-filter"
-                >
-                    <Checkbox id="null-filter"
-                              checked={internalValue === null}
-                              size={"small"}
-                              onCheckedChange={(checked) => {
-                                  if (internalValue !== null)
-                                      updateFilter(operation, null);
-                                  else updateFilter(operation, undefined);
-                              }}/>
-                    Filter for null values
-                </Label>
 
             </div>
 

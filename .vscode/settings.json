@@ -1,0 +1,41 @@
+{
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/lib": true,
+        "**/.turbo": true,
+        "**/coverage": true,
+        "**/*.d.ts": true,
+        "*.d.ts": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/lib": true,
+        "**/.turbo": true,
+        "**/coverage": true,
+        "**/*.d.ts": true,
+        "*.d.ts": true
+    },
+    "files.watcherExclude": {
+        "**/node_modules/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/lib/**": true,
+        "**/.turbo/**": true,
+        "**/*.d.ts": true,
+        "*.d.ts": true
+    },
+    "typescript.preferences.autoImportFileExcludePatterns": [
+        "**/dist/**",
+        "**/build/**",
+        "**/lib/**",
+        "**/*.d.ts",
+        "*.d.ts"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    }
+}

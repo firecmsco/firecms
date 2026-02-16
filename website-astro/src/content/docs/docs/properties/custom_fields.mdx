@@ -1,0 +1,232 @@
+---
+slug: docs/properties/custom_fields
+title: Custom fields
+sidebar_label: Custom fields
+description: "Learn how to build powerful FireCMS custom fields: component contract, passing custom props, accessing entity context, composing other properties, handling arrays, validation, performance, and advanced examples."
+---
+
+Custom fields let you fully control how a property's value is edited and displayed in a form. Instead of the built‑in renderer for a `dataType`, you supply a React component. That component receives a rich set of props (`FieldProps`) so it can:
+
+- Read and update the current value (`value`, `setValue`)
+- Update any other property in the same form (`setFieldValue` or `context.setFieldValue`)
+- Access all current entity values + form utilities (`context`)
+- Respect form state (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adapt layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Use developer defined `customProps`
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
+
+## When should you create a custom field?
+Use a custom field when you need one (or more) of the following:
+- A visual style not covered by built‑ins (color pickers, tag inputs, sliders, charts, AI assisted fields, etc.)
+- Composite UI combining several properties (e.g. lat/lng map picker writing to two numeric fields)
+- Integrations (upload to an external API, fetch suggestions, geocode, etc.)
+
+If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
+If you need dynamic behavior depending on other values, consider using [conditional fields](./conditional_fields.md) instead.
+
+
+## Custom field example
+A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
+
+```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
+
+interface CustomColorTextFieldProps {
+    color: string;
+}
+
+export default function CustomColorTextField({
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
+    return (
+        <>
+            <TextField
+                inputStyle={{ backgroundColor }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
+        </>
+    );
+}
+```
+
+Usage in a collection:
+
+```tsx
+export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog entry",
+    properties: {
+        // ... other properties
+        gold_text: {
+            name: "Gold text",
+            description: "This field is using a custom component defined by the developer",
+            dataType: "string",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
+            }
+        }
+    }
+});
+```
+
+## Component contract (FieldProps)
+Your component must at minimum:
+1. Read the current `value` (it can be `undefined` or `null` for empty)
+2. Call `setValue(newValue)` when the user changes it
+
+Recommended good practices:
+- Honor `disabled` / `isSubmitting`
+- Show the label and error (use your own UI or `<FieldHelperText>` / built‑ins)
+- Avoid heavy side effects on every keystroke (debounce network calls)
+
+Full interface: [`FieldProps`](../api/interfaces/FieldProps) (includes detailed comments).
+
+## Passing custom props
+Provide a `customProps` object in the property definition. The object is strongly typed via the second generic of `FieldProps<T, CustomProps>`.
+
+
+## Accessing the rest of the entity (form context)
+`context` gives you live access to:
+- All current values (`context.values`)
+- `context.setFieldValue(key, value)` to update any other field
+- `context.save(values)` to trigger a save programmatically (rarely needed in fields)
+- Metadata: `entityId`, `status` (new/existing/copy), `collection`, `openEntityMode`, `disabled`
+
+This enables cross‑field logic (e.g. auto‑fill slug when title changes) or conditional disabling.
+
+## Rendering (or composing) other properties inside a custom field
+If your custom field wants to include the UI of another property, use `PropertyFieldBinding`.
+This keeps validation and consistency:
+
+```tsx
+import { PropertyFieldBinding } from "@firecms/core";
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+This is ideal for composite widgets that orchestrate multiple underlying values.
+For example, the built-in `map` default widget is just a wrapper around the properties defined
+
+## Handling arrays & nested data
+When your custom field is inside an array:
+- `partOfArray` is `true`
+- You may receive an index in a parent context when building nested array editors
+
+For nested values (e.g. editing `address.street` inside a composite field), call `setFieldValue("address.street", value)`.
+
+## Validation strategies
+Prefer declarative validation in the property config when possible. You can still implement client‑side
+guards in the field (e.g. ignore invalid keystrokes) but allow the central validation to surface errors.
+
+Common patterns:
+- Trim on blur but preserve user typing: keep raw input in local state, call `setValue` with cleaned value on blur.
+- Async validation (e.g. uniqueness): debounce the check, set a transient local error, do not block typing.
+
+## Performance tips
+- Debounce network or expensive computations (`useEffect` + `setTimeout` or a utility) instead of per‑keystroke.
+- Memo heavy child components based on relevant props.
+- Avoid storing large derived objects in state; derive them on render or memoize.
+
+## Advanced example: Composite slug editor
+Automatically generates a slug from the title, but allows manual override.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Will auto-generate from Title if left empty"}
+        />
+    );
+}
+```
+
+## Using PropertyFieldBinding inside a composite field
+
+```tsx
+function GeoPointField({ context }: FieldProps<any>) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <PropertyFieldBinding
+        propertyKey="lat"
+        property={context.collection?.properties.lat}
+        context={context}
+        minimalistView
+      />
+      <PropertyFieldBinding
+        propertyKey="lng"
+        property={context.collection?.properties.lng}
+        context={context}
+        minimalistView
+      />
+      {/* Could add a map picker that calls context.setFieldValue("lat", newLat) */}
+    </div>
+  );
+}
+```
+
+## Troubleshooting & gotchas
+- Value not updating: Ensure you call `setValue` (not mutate `value` directly) and that you don't shadow the `value` in local state without syncing.
+- Error never shows: Remember `showError` gates visual display; `error` can exist while `showError` is false.
+- Cross‑field updates ignored: Use the exact property key (e.g. `address.street`, array indexes like `items[0].price`).
+- Field re-renders too often: Wrap heavy logic in `useMemo` / `useCallback`, avoid creating new objects every render.
+- Need read‑only mode: Respect `disabled` from props or `context.disabled`.
+
+## Next steps
+- Explore other customization: [Custom previews](./custom_previews.md)
+- Reuse logic across many properties: create a shared field component and pass different `customProps`.
+- Open source friendly? Consider contributing a reusable field to the community.
+
+By leveraging custom fields you can create rich authoring experiences closely aligned with your product's domain while keeping validation, state and persistence centralized in FireCMS.

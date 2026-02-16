@@ -1,0 +1,106 @@
+# FireCMS Typesense Search - Google Cloud Marketplace Solution
+
+name: firecms-typesense-search
+version: 1.0.0
+providerName: firecms
+
+description: |
+  Full-text search for Firestore powered by Typesense. Automatically syncs your
+  Firestore collections to Typesense for typo-tolerant, instant search.
+
+detailedDescription: |
+  ## Overview
+  
+  FireCMS Typesense Search automatically deploys a Typesense search server on
+  Google Compute Engine and keeps it synchronized with your Firestore database.
+  
+  ## Features
+  
+  - **One-click setup**: Automatic VM provisioning and configuration
+  - **Real-time sync**: Firestore documents are indexed immediately on create/update/delete
+  - **Typo-tolerant**: Typesense provides industry-leading typo tolerance
+  - **Low cost**: Starting at ~$7/month for the Typesense VM
+  - **Scalable**: Choose from multiple VM sizes based on your data volume
+  
+  ## Pricing Tiers
+  
+  | Plan | VM Size | RAM | Storage | Monthly Cost |
+  |------|---------|-----|---------|--------------|
+  | Starter | e2-micro | 1 GB | 10 GB | $15/month |
+  | Professional | e2-small | 2 GB | 50 GB | $29/month |
+  | Enterprise | e2-medium | 4 GB | 100 GB | $59/month |
+  
+  ## How It Works
+  
+  1. Subscribe through Google Cloud Marketplace
+  2. Sign in with your Google account
+  3. Configure which Firestore collections to index
+  4. Your Typesense server is automatically provisioned
+  5. Data syncs in real-time as you update Firestore
+
+productId: firecms-typesense-search
+productKind: SAAS
+
+signupUrl: https://us-central1-firecms-backend.cloudfunctions.net/handleSignup
+loginUrl: https://firecms.co/marketplace/login
+
+support:
+  email: support@firecms.co
+  url: https://firecms.co/support
+  documentation: https://firecms.co/docs/typesense
+
+billing:
+  model: SUBSCRIPTION
+  currency: USD
+
+plans:
+  - name: starter
+    displayName: Starter
+    description: Perfect for small projects with up to 100K documents
+    monthlyPrice: 15.00
+    features:
+      - 1 GB RAM
+      - 10 GB Storage
+      - 100K documents
+      - Email support
+      
+  - name: professional
+    displayName: Professional
+    description: For growing applications with up to 500K documents
+    monthlyPrice: 29.00
+    features:
+      - 2 GB RAM
+      - 50 GB Storage
+      - 500K documents
+      - Priority email support
+      - Slack support
+      
+  - name: enterprise
+    displayName: Enterprise
+    description: For large-scale applications with up to 2M documents
+    monthlyPrice: 59.00
+    features:
+      - 4 GB RAM
+      - 100 GB Storage
+      - 2M documents
+      - Dedicated support
+      - Custom integrations
+
+regions:
+  - us-central1
+  - us-east1
+  - us-west1
+  - europe-west1
+  - europe-west2
+  - europe-west3
+  - asia-east1
+  - asia-northeast1
+  - asia-southeast1
+  - australia-southeast1
+
+requiredApis:
+  - compute.googleapis.com
+  - cloudfunctions.googleapis.com
+  - secretmanager.googleapis.com
+  - firestore.googleapis.com
+  - pubsub.googleapis.com

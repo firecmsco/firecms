@@ -71,8 +71,6 @@ export function BlockPropertyField({
 
     const addChildButton = <Button
         autoFocus
-        color="primary"
-
         onClick={() => setPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}
     >

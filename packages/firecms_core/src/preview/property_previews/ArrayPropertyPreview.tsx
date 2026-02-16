@@ -12,12 +12,12 @@ import { ErrorBoundary } from "../../components";
  * @group Preview components
  */
 export function ArrayPropertyPreview({
-                                         propertyKey,
-                                         value,
-                                         property: inputProperty,
-                                         // entity,
-                                         size
-                                     }: PropertyPreviewProps<any[]>) {
+    propertyKey,
+    value,
+    property: inputProperty,
+    // entity,
+    size
+}: PropertyPreviewProps<any[]>) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -27,6 +27,8 @@ export function ArrayPropertyPreview({
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
+
+    if (!property) return null;
 
     if (!property.of) {
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
@@ -45,24 +47,24 @@ export function ArrayPropertyPreview({
         <div className="w-full flex flex-col gap-2">
             {values &&
                 values.map((value, index) => {
-                        const of: ResolvedProperty = property.resolvedProperties[index] ??
-                            (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
-                        return of
-                            ? <React.Fragment
-                                key={"preview_array_" + index}>
-                                <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
-                                    <ErrorBoundary>
-                                        <PropertyPreview
-                                            propertyKey={propertyKey}
-                                            // entity={entity}
-                                            value={value}
-                                            property={of}
-                                            size={childSize}/>
-                                    </ErrorBoundary>
-                                </div>
-                            </React.Fragment>
-                            : null;
-                    }
+                    const of: ResolvedProperty = property.resolvedProperties[index] ??
+                        (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
+                    return of
+                        ? <React.Fragment
+                            key={"preview_array_" + index}>
+                            <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
+                                <ErrorBoundary>
+                                    <PropertyPreview
+                                        propertyKey={propertyKey}
+                                        // entity={entity}
+                                        value={value}
+                                        property={of}
+                                        size={childSize} />
+                                </ErrorBoundary>
+                            </div>
+                        </React.Fragment>
+                        : null;
+                }
                 )}
         </div>
     );

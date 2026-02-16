@@ -14,13 +14,15 @@ import {
     PartialEntityCollection,
     PropertyOrBuilder,
     ResolvedProperty,
-    SaveEntityProps
+    SaveEntityProps,
+    ViewMode
 } from "../../types";
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
     useDataSourceTableController
 } from "../EntityCollectionTable";
+import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
 import {
     canCreateEntity,
@@ -45,8 +47,12 @@ import {
     useNavigationController,
     useSideEntityController
 } from "../../hooks";
+import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import { EntityCollectionCardView } from "./EntityCollectionCardView";
+import { EntityCollectionBoardView } from "./EntityCollectionBoardView";
+import { ViewModeToggle, KanbanPropertyOption } from "./ViewModeToggle";
 import {
     AddIcon,
     Button,
@@ -142,18 +148,19 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                                     fullPath: fullPathProp,
-                                                                     fullIdPath,
-                                                                     parentCollectionIds,
-                                                                     isSubCollection,
-                                                                     className,
-                                                                     updateUrl,
-                                                                     ...collectionProp
-                                                                 }: EntityCollectionViewProps<M>
+        fullPath: fullPathProp,
+        fullIdPath,
+        parentCollectionIds,
+        isSubCollection,
+        className,
+        updateUrl,
+        ...collectionProp
+    }: EntityCollectionViewProps<M>
     ) {
 
         const context = useFireCMSContext();
         const navigation = useNavigationController();
+        const breadcrumbs = useBreadcrumbsController();
         const fullPath = fullPathProp ?? collectionProp.path;
         const dataSource = useDataSource(collectionProp);
         const sideEntityController = useSideEntityController();
@@ -184,8 +191,19 @@ export const EntityCollectionView = React.memo(
 
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
 
-        // number of entities in the collection
-        const [docsCount, setDocsCount] = useState<number>(0);
+        // Track recently deleted entities for optimistic Kanban count updates
+        const [deletedEntities, setDeletedEntities] = React.useState<Entity<M>[]>([]);
+
+        // number of entities in the collection (undefined = loading)
+        const [docsCount, setDocsCount] = useState<number | undefined>(undefined);
+
+        // Optimistic state for column order to prevent UI flickering during persistence
+        const [localPropertiesOrder, setLocalPropertiesOrder] = useState<string[] | undefined>(collection.propertiesOrder);
+
+        // Sync local state with collection's propertiesOrder when it changes from external sources
+        useEffect(() => {
+            setLocalPropertiesOrder(collection.propertiesOrder);
+        }, [collection.propertiesOrder]);
 
         const unselectNavigatedEntity = useCallback(() => {
             const currentSelection = highlightedEntity;
@@ -207,6 +225,83 @@ export const EntityCollectionView = React.memo(
         const hoverRow = !checkInlineEditing();
 
         const [popOverOpen, setPopOverOpen] = useState(false);
+
+        // View mode priority: URL > saved user config > collection.defaultViewMode
+        const defaultViewMode = collection.defaultViewMode ?? "table";
+
+        // Parse view from URL
+        const getViewFromUrl = useCallback((): ViewMode | null => {
+            const params = new URLSearchParams(window.location.search);
+            const urlView = params.get("__view");
+            if (urlView && ["table", "kanban", "cards"].includes(urlView)) {
+                return urlView as ViewMode;
+            }
+            return null;
+        }, []);
+
+        // Get saved view from local persistence
+        const getSavedView = useCallback((): ViewMode | null => {
+            const saved = userConfigPersistence?.getCollectionConfig<M>(fullPath)?.defaultViewMode;
+            return (saved as ViewMode) ?? null;
+        }, [userConfigPersistence, fullPath]);
+
+        const [viewMode, setViewModeState] = useState<ViewMode>(() => {
+            // Priority: URL > saved config > collection default
+            const urlView = getViewFromUrl();
+            if (urlView) return urlView;
+            const savedView = getSavedView();
+            if (savedView) return savedView;
+            return defaultViewMode;
+        });
+
+        // Sync URL with current view on init (if view came from saved config)
+        useEffect(() => {
+            const urlView = getViewFromUrl();
+            if (!urlView && viewMode !== "table") {
+                // View came from saved config but URL doesn't have it - update URL without push
+                const url = new URL(window.location.href);
+                url.searchParams.set("__view", viewMode);
+                window.history.replaceState({}, "", url.toString());
+            }
+        }, []); // Only on mount
+
+        // Update URL when view mode changes (user action)
+        const setViewMode = useCallback((newMode: ViewMode) => {
+            setViewModeState(newMode);
+
+            // Update URL with __view param
+            const url = new URL(window.location.href);
+            if (newMode === "table") {
+                url.searchParams.delete("__view");
+            } else {
+                url.searchParams.set("__view", newMode);
+            }
+            window.history.pushState({}, "", url.toString());
+        }, []);
+
+        // Listen for browser back/forward
+        useEffect(() => {
+            const handlePopState = () => {
+                const urlView = getViewFromUrl();
+                if (urlView) {
+                    // URL has explicit view - use it
+                    setViewModeState(urlView);
+                } else {
+                    // No URL param - fallback to saved config or collection default
+                    const savedView = getSavedView();
+                    setViewModeState(savedView ?? defaultViewMode);
+                }
+            };
+
+            window.addEventListener("popstate", handlePopState);
+            return () => window.removeEventListener("popstate", handlePopState);
+        }, [getViewFromUrl, getSavedView, defaultViewMode]);
+
+        // Card view size state - controls the grid column count
+        const [cardSize, setCardSize] = useState<CollectionSize>(collection.defaultSize ?? "m");
+
+        // Table view size state - controls row height
+        const [tableSize, setTableSize] = useState<CollectionSize>(collection.defaultSize ?? "m");
 
         const selectionController = useSelectionController<M>();
         const usedSelectionController = collection.selectionController ?? selectionController;
@@ -284,6 +379,7 @@ export const EntityCollectionView = React.memo(
                 path: fullPath
             });
             setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
+            setDeletedEntities(prev => [...prev, entity]);
             setLastDeleteTimestamp(Date.now());
         };
 
@@ -293,6 +389,7 @@ export const EntityCollectionView = React.memo(
             });
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
+            setDeletedEntities(prev => [...prev, ...entities]);
             setLastDeleteTimestamp(Date.now());
         };
 
@@ -317,9 +414,9 @@ export const EntityCollectionView = React.memo(
         }, [userConfigPersistence]);
 
         const onColumnResize = useCallback(({
-                                                width,
-                                                key
-                                            }: OnColumnResizeParams) => {
+            width,
+            key
+        }: OnColumnResizeParams) => {
 
             const collection = collectionRef.current;
             // Only for property columns
@@ -328,29 +425,44 @@ export const EntityCollectionView = React.memo(
             onCollectionModifiedForUser(fullPath, localCollection);
         }, [onCollectionModifiedForUser, fullPath]);
 
-        const onSizeChanged = useCallback((size: CollectionSize) => {
+        const onTableSizeChanged = useCallback((size: CollectionSize) => {
+            setTableSize(size);
             if (userConfigPersistence)
                 onCollectionModifiedForUser(fullPath, { defaultSize: size })
         }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
+
+        // View mode change: update URL + save to local persistence
+        const onViewModeChange = useCallback((mode: ViewMode) => {
+            analyticsController.onAnalyticsEvent?.("view_mode_changed", {
+                path: fullPath,
+                from: viewMode,
+                to: mode
+            });
+            setViewMode(mode);
+            // Save to local persistence for next visit
+            if (userConfigPersistence) {
+                onCollectionModifiedForUser(fullPath, { defaultViewMode: mode } as PartialEntityCollection<M>);
+            }
+        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, fullPath, analyticsController, viewMode]);
 
         const createEnabled = canCreateEntity(collection, authController, fullPath, null);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
-                 name,
-                 value,
-                 property,
-                 entityId
-             }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection),
+                name,
+                value,
+                property,
+                entityId
+            }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection),
             [fullPath]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
-                                                                value,
-                                                                propertyKey,
-                                                                onValueUpdated,
-                                                                setError,
-                                                                data: entity,
-                                                            }) => {
+            value,
+            propertyKey,
+            onValueUpdated,
+            setError,
+            data: entity,
+        }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
@@ -394,10 +506,88 @@ export const EntityCollectionView = React.memo(
             authController,
         }), [collection, fullPath]);
 
+        // Check if Kanban view is possible (collection has at least one string enum property)
+        const hasEnumProperty = useMemo(() => {
+            const properties = resolvedCollection.properties;
+            return Object.values(properties).some((prop: any) =>
+                prop && prop.dataType === "string" && prop.enumValues
+            );
+        }, [resolvedCollection.properties]);
+
+        // Compute the effective enabled views:
+        // - Start from collection.enabledViews (defaults to all three)
+        // - Filter out kanban if no enum properties exist
+        const enabledViews: ViewMode[] = useMemo(() => {
+            const configured = collection.enabledViews ?? ["table", "cards", "kanban"];
+            if (!hasEnumProperty) {
+                return configured.filter(v => v !== "kanban");
+            }
+            return configured;
+        }, [collection.enabledViews, hasEnumProperty]);
+
+        // Compute available enum properties for kanban column selection
+        const kanbanPropertyOptions: KanbanPropertyOption[] = useMemo(() => {
+            const options: KanbanPropertyOption[] = [];
+            const properties = resolvedCollection.properties;
+
+            for (const [key, property] of Object.entries(properties)) {
+                const prop = property as any;
+                if (prop && prop.dataType === "string" && prop.enumValues) {
+                    options.push({
+                        key,
+                        label: prop.name || key
+                    });
+                }
+            }
+
+            return options;
+        }, [resolvedCollection.properties]);
+
+        // Get saved kanban property from user config
+        const getSavedKanbanProperty = useCallback((): string | undefined => {
+            const saved = userConfigPersistence?.getCollectionConfig<M>(fullPath);
+            return (saved as any)?.kanbanColumnProperty;
+        }, [userConfigPersistence, fullPath]);
+
+        // Selected kanban property state - priority: saved config > collection default > first available
+        const [selectedKanbanProperty, setSelectedKanbanProperty] = useState<string>(() => {
+            const saved = getSavedKanbanProperty();
+            if (saved && kanbanPropertyOptions.some(o => o.key === saved)) return saved;
+            if (collection.kanban?.columnProperty) return collection.kanban.columnProperty;
+            return kanbanPropertyOptions[0]?.key ?? "";
+        });
+
+        // Update selected property if options change and current selection is no longer valid
+        useEffect(() => {
+            if (kanbanPropertyOptions.length > 0 && !kanbanPropertyOptions.some(o => o.key === selectedKanbanProperty)) {
+                const saved = getSavedKanbanProperty();
+                if (saved && kanbanPropertyOptions.some(o => o.key === saved)) {
+                    setSelectedKanbanProperty(saved);
+                } else if (collection.kanban?.columnProperty && kanbanPropertyOptions.some(o => o.key === collection.kanban?.columnProperty)) {
+                    setSelectedKanbanProperty(collection.kanban.columnProperty);
+                } else {
+                    setSelectedKanbanProperty(kanbanPropertyOptions[0]?.key ?? "");
+                }
+            }
+        }, [kanbanPropertyOptions, selectedKanbanProperty, getSavedKanbanProperty, collection.kanban?.columnProperty]);
+
+        // Handle kanban property change
+        const onKanbanPropertyChange = useCallback((property: string) => {
+            analyticsController.onAnalyticsEvent?.("kanban_property_changed", {
+                path: fullPath,
+                property
+            });
+            setSelectedKanbanProperty(property);
+            // Save to local persistence
+            if (userConfigPersistence) {
+                onCollectionModifiedForUser(fullPath, { kanbanColumnProperty: property } as any);
+            }
+        }, [userConfigPersistence, onCollectionModifiedForUser, fullPath, analyticsController]);
+
         const getPropertyFor = useCallback(({
-                                                propertyKey,
-                                                entity
-                                            }: GetPropertyForProps<M>) => {
+            propertyKey,
+            entity
+        }: GetPropertyForProps<M>) => {
             let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
@@ -417,7 +607,18 @@ export const EntityCollectionView = React.memo(
             });
         }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 
-        const displayedColumnIds = useColumnIds(resolvedCollection, true);
+        // Use a collection with local propertiesOrder for optimistic UI updates
+        const collectionWithLocalOrder = useMemo(() => {
+            if (localPropertiesOrder && localPropertiesOrder !== resolvedCollection.propertiesOrder) {
+                return {
+                    ...resolvedCollection,
+                    propertiesOrder: localPropertiesOrder
+                };
+            }
+            return resolvedCollection;
+        }, [resolvedCollection, localPropertiesOrder]);
+
+        const displayedColumnIds = useColumnIds(collectionWithLocalOrder, true);
 
         const additionalFields = useMemo(() => {
             const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.map((subcollection) => {
@@ -427,23 +628,22 @@ export const EntityCollectionView = React.memo(
                     width: 200,
                     dependencies: [],
                     Builder: ({ entity }) => (
-                        <Button color={"primary"}
-                                variant={"outlined"}
-                                className={"max-w-full truncate justify-start"}
-                                startIcon={<KeyboardTabIcon size={"small"}/>}
-                                onClick={(event: any) => {
-                                    event.stopPropagation();
-                                    navigateToEntity({
-                                        openEntityMode,
-                                        collection,
-                                        entityId: entity.id,
-                                        selectedTab: subcollection.id ?? subcollection.path,
-                                        path: fullPath,
-                                        fullIdPath,
-                                        navigation,
-                                        sideEntityController
-                                    })
-                                }}>
+                        <Button
+                            className={"max-w-full truncate justify-start"}
+                            startIcon={<KeyboardTabIcon size={"small"} />}
+                            onClick={(event: any) => {
+                                event.stopPropagation();
+                                navigateToEntity({
+                                    openEntityMode,
+                                    collection,
+                                    entityId: entity.id,
+                                    selectedTab: subcollection.id ?? subcollection.path,
+                                    path: fullPath,
+                                    fullIdPath,
+                                    navigation,
+                                    sideEntityController
+                                })
+                            }}>
                             {subcollection.name}
                         </Button>
                     )
@@ -465,7 +665,7 @@ export const EntityCollectionView = React.memo(
                                         <ReferencePreview
                                             key={reference.path + "/" + reference.id}
                                             reference={reference}
-                                            size={"small"}/>
+                                            size={"small"} />
                                     );
                                 })}
                             </div>
@@ -488,9 +688,9 @@ export const EntityCollectionView = React.memo(
         const largeLayout = useLargeLayout();
 
         const getActionsForEntity = ({
-                                         entity,
-                                         customEntityActions
-                                     }: {
+            entity,
+            customEntityActions
+        }: {
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
@@ -514,11 +714,11 @@ export const EntityCollectionView = React.memo(
         };
 
         const tableRowActionsBuilder = useCallback(({
-                                                        entity,
-                                                        size,
-                                                        width,
-                                                        frozen
-                                                    }: {
+            entity,
+            size,
+            width,
+            frozen
+        }: {
             entity: Entity<any>,
             size: CollectionSize,
             width: number,
@@ -558,45 +758,28 @@ export const EntityCollectionView = React.memo(
 
         }, [updateLastDeleteTimestamp, usedSelectionController]);
 
-        const title = <Popover
-            open={popOverOpen}
-            onOpenChange={setPopOverOpen}
-            enabled={Boolean(collection.description)}
-            trigger={<div className="flex flex-col items-start">
-                <Typography
-                    variant={"subtitle1"}
-                    className={`leading-none truncate max-w-[160px] lg:max-w-[240px] ${collection.description ? "cursor-pointer" : "cursor-auto"}`}
-                    onClick={collection.description
-                        ? (e) => {
-                            setPopOverOpen(true);
-                            e.stopPropagation();
-                        }
-                        : undefined}>
-                    {`${collection.name}`}
-                </Typography>
+        // Update breadcrumb count when count changes (only if loaded)
+        useEffect(() => {
+            if (docsCount !== undefined) {
+                breadcrumbs.updateCount(fullPath, docsCount);
+            }
+        }, [docsCount, fullPath, breadcrumbs.updateCount]);
 
-                <EntitiesCount
-                    fullPath={fullPath}
-                    collection={collection}
-                    filter={tableController.filterValues}
-                    sortBy={tableController.sortBy}
-                    onCountChange={setDocsCount}
-                />
+        // EntitiesCount fetches count and updates breadcrumb - no visual rendering needed here
+        const countFetcher = <EntitiesCount
+            fullPath={fullPath}
+            collection={collection}
+            filter={tableController.filterValues}
+            sortBy={tableController.sortBy}
+            onCountChange={setDocsCount}
+        />;
 
-            </div>}
-        >
-
-            {collection.description && <div className="m-4 text-surface-900 dark:text-white">
-                <Markdown source={collection.description}/>
-            </div>}
-
-        </Popover>;
 
         const buildAdditionalHeaderWidget = useCallback(({
-                                                             property,
-                                                             propertyKey,
-                                                             onHover
-                                                         }: {
+            property,
+            propertyKey,
+            onHover
+        }: {
             property: ResolvedProperty,
             propertyKey: string,
             onHover: boolean
@@ -616,7 +799,7 @@ export const EntityCollectionView = React.memo(
                             fullPath={fullPath}
                             collection={collection}
                             tableController={tableController}
-                            parentCollectionIds={parentCollectionIds ?? []}/>;
+                            parentCollectionIds={parentCollectionIds ?? []} />;
                     })}
             </>;
         }, [customizationController.plugins, fullPath, parentCollectionIds]);
@@ -625,9 +808,9 @@ export const EntityCollectionView = React.memo(
             ? function () {
                 if (typeof AddColumnComponent === "function")
                     return <AddColumnComponent fullPath={fullPath}
-                                               parentCollectionIds={parentCollectionIds ?? []}
-                                               collection={collection}
-                                               tableController={tableController}/>;
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController} />;
                 return null;
             }
             : undefined;
@@ -643,32 +826,37 @@ export const EntityCollectionView = React.memo(
             parentCollectionIds
         });
 
+        // Popover open state managed at parent level to prevent closing when view changes
+        const [viewModePopoverOpen, setViewModePopoverOpen] = useState(false);
+
+        // Create ViewModeToggle once to prevent remounting when view changes
+        const viewModeToggleElement = (
+            <ViewModeToggle
+                viewMode={viewMode}
+                onViewModeChange={onViewModeChange}
+                enabledViews={enabledViews}
+                size={viewMode === "table" ? tableSize : viewMode === "cards" ? cardSize : undefined}
+                onSizeChanged={viewMode === "table" ? onTableSizeChanged : viewMode === "cards" ? setCardSize : undefined}
+                open={viewModePopoverOpen}
+                onOpenChange={setViewModePopoverOpen}
+                kanbanPropertyOptions={kanbanPropertyOptions}
+                selectedKanbanProperty={selectedKanbanProperty}
+                onKanbanPropertyChange={onKanbanPropertyChange}
+            />
+        );
+
         return (
-            <div className={cls("overflow-hidden h-full w-full rounded-md", className)}
-                 ref={containerRef}>
-                <EntityCollectionTable
-                    key={`collection_table_${fullPath}`}
-                    additionalFields={additionalFields}
-                    tableController={tableController}
-                    enablePopupIcon={true}
-                    displayedColumnIds={displayedColumnIds}
-                    onSizeChanged={onSizeChanged}
-                    onEntityClick={onEntityClick}
-                    onColumnResize={onColumnResize}
-                    onValueChange={onValueChange}
-                    tableRowActionsBuilder={tableRowActionsBuilder}
-                    uniqueFieldValidator={uniqueFieldValidator}
-                    title={title}
-                    selectionController={usedSelectionController}
-                    highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
-                    defaultSize={collection.defaultSize}
-                    properties={resolvedCollection.properties}
-                    getPropertyFor={getPropertyFor}
-                    onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
-                    onScroll={tableController.onScroll}
-                    initialScroll={tableController.initialScroll}
+            <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
+                ref={containerRef}>
+
+                {/* Unified toolbar - rendered once, outside view conditionals */}
+                {countFetcher}
+                <CollectionTableToolbar
+                    loading={tableController.dataLoading}
+                    onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
+                    onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
                     textSearchLoading={textSearchLoading}
-                    textSearchEnabled={textSearchEnabled}
+                    viewModeToggle={viewModeToggleElement}
                     actionsStart={<EntityCollectionViewStartActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -676,7 +864,8 @@ export const EntityCollectionView = React.memo(
                         path={fullPath}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
-                        collectionEntitiesCount={docsCount}/>}
+                        collectionEntitiesCount={docsCount}
+                        resolvedProperties={resolvedCollection.properties} />}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -689,32 +878,142 @@ export const EntityCollectionView = React.memo(
                         selectionEnabled={selectionEnabled}
                         collectionEntitiesCount={docsCount}
                     />}
-                    emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                        ? <div className="flex flex-col items-center justify-center">
-                            <Typography variant={"subtitle2"}>So empty...</Typography>
-                            <Button
-                                color={"primary"}
-                                variant={"outlined"}
-                                onClick={onNewClick}
-                                className="mt-4"
-                            >
-                                <AddIcon/>
-                                Create your first entry
-                            </Button>
-                        </div>
-                        : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
-                    }
-                    hoverRow={hoverRow}
-                    inlineEditing={checkInlineEditing()}
-                    AdditionalHeaderWidget={buildAdditionalHeaderWidget}
-                    AddColumnComponent={addColumnComponentInternal}
-                    getIdColumnWidth={getIdColumnWidth}
-                    additionalIDHeaderWidget={<EntityIdHeaderWidget
-                        path={fullPath}
-                        fullIdPath={fullIdPath ?? fullPath}
-                        collection={collection}/>}
-                    openEntityMode={openEntityMode}
                 />
+
+                {/* View content - only the view-specific content changes */}
+                {viewMode === "kanban" && enabledViews.includes("kanban") ? (
+                    <EntityCollectionBoardView
+                        key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
+                        collection={collection}
+                        tableController={tableController}
+                        fullPath={fullPath}
+                        parentCollectionIds={parentCollectionIds}
+                        columnProperty={selectedKanbanProperty}
+                        onEntityClick={onEntityClick}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}
+                        highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        deletedEntities={deletedEntities}
+                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                            ? <div className="flex flex-col items-center justify-center">
+                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Button
+                                    onClick={onNewClick}
+                                    className="mt-4"
+                                >
+                                    <AddIcon />
+                                    Create your first entry
+                                </Button>
+                            </div>
+                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                        }
+                    />
+                ) : viewMode === "cards" ? (
+                    <EntityCollectionCardView
+                        key={`cards-view-${fullPath}`}
+                        collection={collection}
+                        tableController={tableController}
+                        onEntityClick={onEntityClick}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}
+                        highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        onScroll={tableController.onScroll}
+                        initialScroll={tableController.initialScroll}
+                        size={cardSize}
+                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                            ? <div className="flex flex-col items-center justify-center">
+                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Button
+                                    onClick={onNewClick}
+                                    className="mt-4"
+                                >
+                                    <AddIcon />
+                                    Create your first entry
+                                </Button>
+                            </div>
+                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                        }
+                    />
+                ) : (
+                    <EntityCollectionTable
+                        key={`collection_table_${fullPath}`}
+                        hideToolbar={true}
+                        additionalFields={additionalFields}
+                        tableController={tableController}
+                        enablePopupIcon={true}
+                        displayedColumnIds={displayedColumnIds}
+                        onSizeChanged={onTableSizeChanged}
+                        onEntityClick={onEntityClick}
+                        onColumnResize={onColumnResize}
+                        onValueChange={onValueChange}
+                        tableRowActionsBuilder={tableRowActionsBuilder}
+                        uniqueFieldValidator={uniqueFieldValidator}
+                        selectionController={usedSelectionController}
+                        highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
+                        defaultSize={tableSize}
+                        properties={resolvedCollection.properties}
+                        getPropertyFor={getPropertyFor}
+                        onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
+                        onScroll={tableController.onScroll}
+                        initialScroll={tableController.initialScroll}
+                        textSearchLoading={textSearchLoading}
+                        textSearchEnabled={textSearchEnabled}
+                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
+                            ? <div className="flex flex-col items-center justify-center">
+                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Button
+                                    onClick={onNewClick}
+                                    className="mt-4"
+                                >
+                                    <AddIcon />
+                                    Create your first entry
+                                </Button>
+                            </div>
+                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                        }
+                        hoverRow={hoverRow}
+                        inlineEditing={checkInlineEditing()}
+                        AdditionalHeaderWidget={buildAdditionalHeaderWidget}
+                        AddColumnComponent={addColumnComponentInternal}
+                        getIdColumnWidth={getIdColumnWidth}
+                        additionalIDHeaderWidget={<EntityIdHeaderWidget
+                            path={fullPath}
+                            fullIdPath={fullIdPath ?? fullPath}
+                            collection={collection} />}
+                        openEntityMode={openEntityMode}
+                        onColumnsOrderChange={(newColumns) => {
+                            // Extract property keys from the new column order
+                            // Filter to only include actual property columns (not frozen columns, not additional fields, etc.)
+                            // Deduplicate to clean up any previously duplicated keys
+                            const seenKeys = new Set<string>();
+                            const newPropertiesOrder = newColumns
+                                .filter(col => !col.frozen && getPropertyInPath(collection.properties, col.key))
+                                .map(col => col.key)
+                                .filter(key => {
+                                    if (seenKeys.has(key)) return false;
+                                    seenKeys.add(key);
+                                    return true;
+                                });
+
+                            // Optimistically update local state to prevent UI flickering
+                            setLocalPropertiesOrder(newPropertiesOrder);
+
+                            // Call each plugin's onColumnsReorder callback
+                            if (customizationController?.plugins) {
+                                customizationController.plugins
+                                    .filter(plugin => plugin.collectionView?.onColumnsReorder)
+                                    .forEach(plugin => {
+                                        plugin.collectionView!.onColumnsReorder!({
+                                            fullPath,
+                                            parentCollectionIds: parentCollectionIds ?? [],
+                                            collection,
+                                            newPropertiesOrder
+                                        });
+                                    });
+                            }
+                        }}
+                    />
+                )}
 
                 {popupCell && <PopupFormField
                     key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entityId}`}
@@ -728,7 +1027,7 @@ export const EntityCollectionView = React.memo(
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
                     onCellValueChange={onValueChange}
-                    container={containerRef.current}/>}
+                    container={containerRef.current} />}
 
                 {deleteEntityClicked &&
                     <DeleteEntityDialog
@@ -739,7 +1038,7 @@ export const EntityCollectionView = React.memo(
                         open={Boolean(deleteEntityClicked)}
                         onEntityDelete={internalOnEntityDelete}
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                        onClose={() => setDeleteEntityClicked(undefined)}/>}
+                        onClose={() => setDeleteEntityClicked(undefined)} />}
 
             </div>
         );
@@ -769,12 +1068,12 @@ export const EntityCollectionView = React.memo(
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
 function EntitiesCount({
-                           fullPath,
-                           collection,
-                           filter,
-                           sortBy,
-                           onCountChange
-                       }: {
+    fullPath,
+    collection,
+    filter,
+    sortBy,
+    onCountChange
+}: {
     fullPath: string,
     collection: EntityCollection,
     filter?: FilterValues<any>,
@@ -803,9 +1102,9 @@ function EntitiesCount({
     }, [fullPath, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
 
     useEffect(() => {
-        if (onCountChange) {
+        if (onCountChange && count !== undefined) {
             setError(undefined);
-            onCountChange(count ?? 0);
+            onCountChange(count);
         }
     }, [onCountChange, count]);
 
@@ -813,13 +1112,10 @@ function EntitiesCount({
         return null;
     }
 
-    return <Typography
-        className="w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left w-fit-content"
-        variant={"caption"}
-        color={"secondary"}>
-        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"}/>}
-    </Typography>;
+    // Count is now displayed in the breadcrumb bar, this component only fetches and reports
+    return null;
 }
+
 
 function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityCollection {
     if (key.includes(".")) {
@@ -830,10 +1126,10 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
 }
 
 function EntityIdHeaderWidget({
-                                  collection,
-                                  path,
-                                  fullIdPath
-                              }: {
+    collection,
+    path,
+    fullIdPath
+}: {
     collection: EntityCollection,
     path: string,
     fullIdPath: string
@@ -857,29 +1153,29 @@ function EntityIdHeaderWidget({
                 alignOffset={-117}
                 trigger={
                     <IconButton size={"small"}>
-                        <SearchIcon size={"small"}/>
+                        <SearchIcon size={"small"} />
                     </IconButton>
                 }>
                 <div
                     className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
                     <form noValidate={true}
-                          onSubmit={(e) => {
-                              e.preventDefault();
-                              if (!searchString) return;
-                              setOpenPopup(false);
-                              const entityId = searchString.trim();
-                              setRecentIds(addRecentId(collection.id, entityId));
-                              navigateToEntity({
-                                  openEntityMode,
-                                  collection,
-                                  entityId,
-                                  path,
-                                  fullIdPath,
-                                  sideEntityController,
-                                  navigation
-                              })
-                          }}
-                          className={"w-96 max-w-full"}>
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!searchString) return;
+                            setOpenPopup(false);
+                            const entityId = searchString.trim();
+                            setRecentIds(addRecentId(collection.id, entityId));
+                            navigateToEntity({
+                                openEntityMode,
+                                collection,
+                                entityId,
+                                path,
+                                fullIdPath,
+                                sideEntityController,
+                                navigation
+                            })
+                        }}
+                        className={"w-96 max-w-full"}>
 
                         <div className="flex p-2 w-full gap-2">
                             <input
@@ -890,32 +1186,32 @@ function EntityIdHeaderWidget({
                                     setSearchString(e.target.value);
                                 }}
                                 value={searchString}
-                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
+                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled} />
                             <Button variant={"text"}
-                                    disabled={!(searchString.trim())}
-                                    type={"submit"}
-                            ><KeyboardTabIcon/></Button>
+                                disabled={!(searchString.trim())}
+                                type={"submit"}
+                            ><KeyboardTabIcon /></Button>
                         </div>
                     </form>
                     {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
                         {recentIds.map(id => (
                             <ReferencePreview reference={new EntityReference(id, path)}
-                                              key={id}
-                                              hover={true}
-                                              onClick={() => {
-                                                  setOpenPopup(false);
-                                                  navigateToEntity({
-                                                      openEntityMode,
-                                                      collection,
-                                                      entityId: id,
-                                                      path,
-                                                      fullIdPath,
-                                                      sideEntityController,
-                                                      navigation
-                                                  })
-                                              }}
-                                              includeEntityLink={false}
-                                              size={"small"}/>
+                                key={id}
+                                hover={true}
+                                onClick={() => {
+                                    setOpenPopup(false);
+                                    navigateToEntity({
+                                        openEntityMode,
+                                        collection,
+                                        entityId: id,
+                                        path,
+                                        fullIdPath,
+                                        sideEntityController,
+                                        navigation
+                                    })
+                                }}
+                                includeEntityLink={false}
+                                size={"small"} />
                         ))}
                     </div>}
                 </div>

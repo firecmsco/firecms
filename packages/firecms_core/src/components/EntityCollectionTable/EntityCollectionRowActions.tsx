@@ -20,41 +20,52 @@ import { getLocalChangesBackup } from "../../util";
  * @group Collection components
  */
 export const EntityCollectionRowActions = function EntityCollectionRowActions({
-                                                                                  entity,
-                                                                                  collection,
-                                                                                  fullPath,
-                                                                                  fullIdPath,
-                                                                                  width,
-                                                                                  frozen,
-                                                                                  isSelected,
-                                                                                  selectionEnabled,
-                                                                                  size,
-                                                                                  highlightEntity,
-                                                                                  onCollectionChange,
-                                                                                  unhighlightEntity,
-                                                                                  actions = [],
-                                                                                  hideId,
-                                                                                  selectionController,
-                                                                                  openEntityMode
-                                                                              }:
-                                                                              {
-                                                                                  entity: Entity<any>,
-                                                                                  collection?: EntityCollection<any>,
-                                                                                  fullPath?: string,
-                                                                                  fullIdPath?: string,
-                                                                                  width: number,
-                                                                                  frozen?: boolean,
-                                                                                  size: CollectionSize,
-                                                                                  isSelected?: boolean,
-                                                                                  selectionEnabled?: boolean,
-                                                                                  actions?: EntityAction[],
-                                                                                  hideId?: boolean,
-                                                                                  onCollectionChange?: () => void,
-                                                                                  selectionController?: SelectionController;
-                                                                                  highlightEntity?: (entity: Entity<any>) => void;
-                                                                                  unhighlightEntity?: (entity: Entity<any>) => void;
-                                                                                  openEntityMode: "side_panel" | "full_screen";
-                                                                              }) {
+    entity,
+    collection,
+    fullPath,
+    fullIdPath,
+    width,
+    frozen,
+    isSelected,
+    selectionEnabled,
+    size,
+    highlightEntity,
+    onCollectionChange,
+    unhighlightEntity,
+    actions = [],
+    hideId,
+    selectionController,
+    openEntityMode,
+    sortableNodeRef,
+    sortableStyle,
+    sortableAttributes,
+    isDragging,
+    isDraggable
+}:
+    {
+        entity: Entity<any>,
+        collection?: EntityCollection<any>,
+        fullPath?: string,
+        fullIdPath?: string,
+        width: number,
+        frozen?: boolean,
+        size: CollectionSize,
+        isSelected?: boolean,
+        selectionEnabled?: boolean,
+        actions?: EntityAction[],
+        hideId?: boolean,
+        onCollectionChange?: () => void,
+        selectionController?: SelectionController;
+        highlightEntity?: (entity: Entity<any>) => void;
+        unhighlightEntity?: (entity: Entity<any>) => void;
+        openEntityMode: "side_panel" | "full_screen";
+        // Sortable props for dnd-kit integration
+        sortableNodeRef?: (node: HTMLElement | null) => void;
+        sortableStyle?: React.CSSProperties;
+        sortableAttributes?: Record<string, any>;
+        isDragging?: boolean;
+        isDraggable?: boolean;
+    }) {
 
     const largeLayout = useLargeLayout();
 
@@ -72,10 +83,11 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
     const hasDraft = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : false;
     const iconSize = largeLayout && (size === "m" || size === "l" || size == "xl") ? "medium" : "small";
-    return (
+
+    const content = (
         <div
             className={cls(
-                "h-full flex items-center justify-center flex-col bg-surface-50 dark:bg-surface-900 bg-opacity-90 dark:bg-opacity-90 z-10",
+                "h-full flex items-center justify-center flex-col bg-surface-50 dark:bg-surface-900 bg-opacity-90 bg-surface-50/90 dark:bg-opacity-90 dark:bg-surface-900/90 z-10",
                 frozen ? "sticky left-0" : ""
             )}
             onClick={useCallback((event: any) => {
@@ -124,8 +136,8 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                         }
                         return (
                             <Tooltip key={index}
-                                     title={tooltip}
-                                     asChild={true}>
+                                title={tooltip}
+                                asChild={true}>
                                 {iconButton}
                             </Tooltip>
                         );
@@ -135,7 +147,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                         <Menu
                             trigger={<IconButton
                                 size={iconSize}>
-                                <MoreVertIcon/>
+                                <MoreVertIcon />
                             </IconButton>}>
                             {collapsedActions.map((action, index) => (
                                 <MenuItem
@@ -183,7 +195,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                     <span className="min-w-0 truncate text-center">
                         {entity
                             ? entity.id
-                            : <Skeleton/>
+                            : <Skeleton />
                         }
                     </span>
                 </div>
@@ -191,5 +203,26 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
         </div>
     );
+
+    // Wrap with sortable outer div when sortable props are provided
+    // Remove tabIndex from attributes to avoid capturing focus before cell content
+    if (sortableNodeRef) {
+        const { tabIndex: _tabIndex, ...sortableAttrsWithoutTabIndex } = sortableAttributes ?? {};
+        return (
+            <div
+                ref={sortableNodeRef}
+                style={sortableStyle}
+                className={cls(
+                    "flex-shrink-0",
+                    frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+                )}
+                {...sortableAttrsWithoutTabIndex}
+            >
+                {content}
+            </div>
+        );
+    }
+
+    return content;
 
 };

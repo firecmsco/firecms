@@ -1,14 +1,14 @@
-import React, { useCallback } from "react";
+import React from "react";
 import {
     DrawerLogo,
-    DrawerNavigationItem,
-    IconForView,
+    DrawerNavigationGroup,
     NavigationResult,
     useApp,
     useAuthController,
+    useCollapsedGroups,
     useNavigationController
 } from "@firecms/core";
-import { AddIcon, Button, Tooltip, Typography, } from "@firecms/ui";
+import { AddIcon, Button, Tooltip } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { RESERVED_GROUPS } from "../utils";
 import { AdminDrawerMenu } from "./AdminDrawerMenu";
@@ -23,8 +23,7 @@ export function FireCMSCloudDrawer() {
 
     const {
         drawerHovered,
-        drawerOpen,
-        closeDrawer
+        drawerOpen
     } = useApp();
 
     const navigation = useNavigationController();
@@ -43,23 +42,24 @@ export function FireCMSCloudDrawer() {
         groups
     }: NavigationResult = navigation.topLevelNavigation;
 
-    const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div className="w-full"/>;
+    // Collapsible groups state - using "drawer" namespace for independent state from home page
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groups, "drawer");
+
+    const buildHeaderActions = (group: string) => {
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
         const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
-        return <div className="pl-6 pr-4 pt-2 pb-2 flex flex-row items-center">
-            <Typography variant={"caption"}
-                        color={"secondary"}
-                        className="flex-grow font-medium">
-                {group ? group.toUpperCase() : "Views".toUpperCase()}
-            </Typography>
-            {canCreateCollections && <Tooltip
+
+        if (!canCreateCollections) return null;
+
+        return (
+            <Tooltip
                 asChild={true}
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>
                 <Button
                     size={"small"}
                     variant={"text"}
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         collectionEditorController?.createCollection({
                             initialValues: {
                                 group,
@@ -69,45 +69,46 @@ export function FireCMSCloudDrawer() {
                             sourceClick: "drawer_new_collection"
                         });
                     }}>
-                    <AddIcon size={"small"}/>
+                    <AddIcon size={"small"} />
                 </Button>
-            </Tooltip>}
-        </div>;
-    }, [collectionEditorController, drawerOpen]);
+            </Tooltip>
+        );
+    };
 
     return (
 
         <>
-            <DrawerLogo logo={logo}/>
+            <DrawerLogo logo={logo} />
 
             <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
-                 style={{
-                     maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
-                 }}>
+                style={{
+                    maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                }}>
 
-                {groups.map((group) => (
-                    <div
-                        key={`group_${group}`}
-                        className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg rounded-lg ml-3 mr-1"}>
-                        {buildGroupHeader(group)}
-                        {Object.values(navigationEntries)
-                            .filter(e => e.group === group)
-                            .map((view, index) => <DrawerNavigationItem
-                                key={`navigation_${index}`}
-                                adminMenuOpen={adminMenuOpen}
-                                icon={<IconForView collectionOrView={view.collection ?? view.view} size={"small"}/>}
-                                tooltipsOpen={tooltipsOpen}
-                                drawerOpen={drawerOpen}
-                                url={view.url}
-                                name={view.name}/>)}
-                    </div>
-                ))}
+                {groups.map((group) => {
+                    const entriesInGroup = Object.values(navigationEntries).filter(e => e.group === group);
+                    return (
+                        <DrawerNavigationGroup
+                            key={`group_${group}`}
+                            group={group}
+                            entries={entriesInGroup}
+                            collapsed={isGroupCollapsed(group)}
+                            onToggleCollapsed={() => toggleGroupCollapsed(group)}
+                            drawerOpen={drawerOpen}
+                            tooltipsOpen={tooltipsOpen}
+                            adminMenuOpen={adminMenuOpen}
+                            headerActions={buildHeaderActions(group)}
+                        />
+                    );
+                })}
 
             </div>
 
             <AdminDrawerMenu
                 menuOpen={adminMenuOpen}
-                setMenuOpen={setAdminMenuOpen}/>
+                setMenuOpen={setAdminMenuOpen} />
         </>
     );
 }
+
+

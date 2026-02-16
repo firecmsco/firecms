@@ -11,6 +11,7 @@ import {
     useSnackbarController
 } from "@firecms/core";
 import {
+    Avatar,
     Button,
     CenteredView,
     DeleteIcon,
@@ -53,11 +54,12 @@ export function UsersTable({ onUserClicked }: {
             <Table className={"w-full"}>
 
                 <TableHeader>
-                    <TableCell className="truncate w-16"></TableCell>
+                    <TableCell className="w-12"></TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Roles</TableCell>
                     <TableCell>Created on</TableCell>
+                    <TableCell className="w-12"></TableCell>
                 </TableHeader>
                 <TableBody>
                     {users && users.map((user) => {
@@ -73,19 +75,17 @@ export function UsersTable({ onUserClicked }: {
                                     onUserClicked(user);
                                 }}
                             >
-                                <TableCell className={"w-10"}>
-                                    <Tooltip
-                                        asChild={true}
-                                        title={"Delete this user"}>
-                                        <IconButton
-                                            size={"small"}
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                return setUserToBeDeleted(user);
-                                            }}>
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </Tooltip>
+                                <TableCell className={"w-12"}>
+                                    <Avatar
+                                        src={user.photoURL ?? undefined}
+                                        outerClassName="w-8 h-8 min-w-8 min-h-8 p-0"
+                                        className="text-sm"
+                                        hover={false}
+                                    >
+                                        {user.displayName
+                                            ? user.displayName[0].toUpperCase()
+                                            : (user.email ? user.email[0].toUpperCase() : "U")}
+                                    </Avatar>
                                 </TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell className={"font-medium align-left"}>{user.displayName}</TableCell>
@@ -93,12 +93,26 @@ export function UsersTable({ onUserClicked }: {
                                     {userRoles
                                         ? <div className="flex flex-wrap gap-2">
                                             {userRoles.map(userRole =>
-                                                <RoleChip key={userRole?.id} role={userRole}/>
+                                                <RoleChip key={userRole?.id} role={userRole} />
                                             )}
                                         </div>
                                         : null}
                                 </TableCell>
                                 <TableCell>{formattedDate}</TableCell>
+                                <TableCell className={"w-12"}>
+                                    <Tooltip
+                                        asChild={true}
+                                        title={"Delete this user"}>
+                                        <IconButton
+                                            size={"smallest"}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                return setUserToBeDeleted(user);
+                                            }}>
+                                            <DeleteIcon size={"small"} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
                             </TableRow>
                         );
                     })}
@@ -109,34 +123,34 @@ export function UsersTable({ onUserClicked }: {
                                 <Typography variant={"label"}>
                                     There are no users yet
                                 </Typography>
-                                <Button variant={"outlined"}
-                                        onClick={() => {
-                                            if (!authController.user?.uid) {
-                                                throw Error("UsersTable, authController misconfiguration");
-                                            }
-                                            saveUser({
-                                                uid: authController.user?.uid,
-                                                email: authController.user?.email,
-                                                displayName: authController.user?.displayName,
-                                                photoURL: authController.user?.photoURL,
-                                                providerId: authController.user?.providerId,
-                                                isAnonymous: authController.user?.isAnonymous,
-                                                roles: [{ id: "admin", name: "Admin" }],
-                                                created_on: new Date()
-                                            })
-                                                .then(() => {
-                                                    snackbarController.open({
-                                                        type: "success",
-                                                        message: "User added successfully"
-                                                    })
+                                <Button
+                                    onClick={() => {
+                                        if (!authController.user?.uid) {
+                                            throw Error("UsersTable, authController misconfiguration");
+                                        }
+                                        saveUser({
+                                            uid: authController.user?.uid,
+                                            email: authController.user?.email,
+                                            displayName: authController.user?.displayName,
+                                            photoURL: authController.user?.photoURL,
+                                            providerId: authController.user?.providerId,
+                                            isAnonymous: authController.user?.isAnonymous,
+                                            roles: [{ id: "admin", name: "Admin" }],
+                                            created_on: new Date()
+                                        })
+                                            .then(() => {
+                                                snackbarController.open({
+                                                    type: "success",
+                                                    message: "User added successfully"
                                                 })
-                                                .catch((error) => {
-                                                    snackbarController.open({
-                                                        type: "error",
-                                                        message: "Error adding user: " + error.message,
-                                                    })
-                                                });
-                                        }}>
+                                            })
+                                            .catch((error) => {
+                                                snackbarController.open({
+                                                    type: "error",
+                                                    message: "Error adding user: " + error.message,
+                                                })
+                                            });
+                                    }}>
 
                                     Add the logged user as an admin
                                 </Button>
@@ -172,6 +186,6 @@ export function UsersTable({ onUserClicked }: {
                     setUserToBeDeleted(undefined);
                 }}
                 title={<>Delete?</>}
-                body={<>Are you sure you want to delete this user?</>}/>
+                body={<>Are you sure you want to delete this user?</>} />
         </div>);
 }

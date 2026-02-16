@@ -1,5 +1,0 @@
-{
-  "entryPoints": [
-    "../packages/firecms_core/src/index.ts"
-  ]
-}

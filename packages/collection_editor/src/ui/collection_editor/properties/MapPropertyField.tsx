@@ -75,8 +75,6 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                 <div className="flex justify-between items-end my-4">
                     <Typography variant={"subtitle2"}>Properties in this group</Typography>
                     <Button
-                        color="primary"
-                        variant={"outlined"}
                         onClick={() => setPropertyDialogOpen(true)}
                         startIcon={<AddIcon/>}
                     >

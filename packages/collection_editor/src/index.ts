@@ -13,9 +13,14 @@ export {
     editableProperty, removeNonEditableProperties
 } from "./utils/entities";
 export * from "./utils/collections";
+export {
+    validateCollectionJson,
+    type CollectionValidationError,
+    type CollectionValidationResult
+} from "./utils/validateCollectionJson";
 
 export type {
-    CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams, UpdateCollectionParams, CollectionsSetupInfo
+    CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams, UpdateCollectionParams, CollectionsSetupInfo, UpdatePropertiesOrderParams, UpdateKanbanColumnsOrderParams
 } from "./types/config_controller";
 export type {
     CollectionEditorController
@@ -31,6 +36,28 @@ export type {
     CollectionInference
 } from "./types/collection_inference";
 
+export {
+    buildCollectionGenerationCallback,
+    CollectionGenerationApiError,
+    DEFAULT_COLLECTION_GENERATION_ENDPOINT
+} from "./api/generateCollectionApi";
+
+export type {
+    CollectionGenerationCallback,
+    GenerateCollectionRequest,
+    GenerateCollectionResult,
+    CollectionOperation,
+    CollectionOperationType,
+    BuildCollectionGenerationCallbackProps
+} from "./api/generateCollectionApi";
+
 export { MissingReferenceWidget } from "./ui/MissingReferenceWidget";
 
 export * from "./ui/collection_editor/util";
+
+export {
+    PropertyForm,
+    PropertyFormDialog,
+    type PropertyFormProps,
+    type OnPropertyChangedParams
+} from "./ui/collection_editor/PropertyEditView";

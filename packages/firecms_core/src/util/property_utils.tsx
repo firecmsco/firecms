@@ -36,13 +36,13 @@ export function isReferenceProperty(
 }
 
 export function getIdIcon(size: "small" | "medium" | "large"): React.ReactNode {
-    return <CircleIcon size={size}/>;
+    return <CircleIcon size={size} />;
 }
 
 export function getIconForWidget(widget: PropertyConfig | undefined,
-                                 size: "small" | "medium" | "large") {
+    size: "small" | "medium" | "large") {
     const Icon = widget?.Icon ?? CircleIcon;
-    return <Icon size={size}/>;
+    return <Icon size={size} />;
 }
 
 export function getIconForProperty(
@@ -52,7 +52,7 @@ export function getIconForProperty(
 ): React.ReactNode {
 
     if (isPropertyBuilder(property)) {
-        return <FunctionsIcon size={size}/>;
+        return <FunctionsIcon size={size} />;
     } else {
         const widget = getFieldConfig(property, fields);
         return getIconForWidget(widget, size);
@@ -113,25 +113,51 @@ export function getBracketNotation(path: string): string {
 }
 
 /**
- * Get properties exclusively indexed by their order
+ * Get properties sorted by their order, but include ALL properties.
+ * Nested keys (like "data.mode") in propertiesOrder are ignored - they're for column ordering.
  * @param properties
  * @param propertiesOrder
  */
 export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: Extract<keyof M, string>[]): PropertiesOrBuilders<M> {
     if (!propertiesOrder) return properties;
+
+    const propertyKeys = Object.keys(properties);
+
+    // Filter propertiesOrder to only include top-level keys (no dots) that exist
+    const validOrderKeys = (propertiesOrder as string[]).filter(
+        key => !key.includes(".") && properties[key as keyof M]
+    );
+
     const result: PropertiesOrBuilders<any> = {};
-    propertiesOrder.filter(Boolean).forEach(path => {
-        const property = getPropertyInPath(properties, path);
+
+    // First add properties in the specified order
+    validOrderKeys.forEach(key => {
+        const property = properties[key];
         if (typeof property === "object" && property.dataType === "map" && property.properties) {
-            result[path] = {
+            result[key] = {
                 ...property,
                 properties: getPropertiesWithPropertiesOrder(property.properties, property.propertiesOrder ?? [])
             }
-        }
-        if (property) {
-            result[path] = property;
+        } else if (property) {
+            result[key] = property;
         }
     });
+
+    // Then add any missing properties (so they don't disappear!)
+    propertyKeys.forEach(key => {
+        if (!result[key]) {
+            const property = properties[key];
+            if (typeof property === "object" && property.dataType === "map" && property.properties) {
+                result[key] = {
+                    ...property,
+                    properties: getPropertiesWithPropertiesOrder(property.properties, property.propertiesOrder ?? [])
+                }
+            } else if (property) {
+                result[key] = property;
+            }
+        }
+    });
+
     return result;
 }
 

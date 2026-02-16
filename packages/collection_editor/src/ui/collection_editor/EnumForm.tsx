@@ -3,15 +3,19 @@ import equal from "react-fast-compare"
 
 import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
 import {
-    AutorenewIcon,
+    FindInPageIcon,
     Badge,
     Button,
+    ChipColorKey,
     CircularProgress,
+    ColorPicker,
     DebouncedTextField,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    getColorSchemeForKey,
+    getColorSchemeForSeed,
     IconButton,
     ListIcon,
     Paper,
@@ -32,14 +36,14 @@ type EnumFormProps = {
 };
 
 export function EnumForm({
-                             enumValues,
-                             onValuesChanged,
-                             onError,
-                             updateIds,
-                             disabled,
-                             allowDataInference,
-                             getData
-                         }: EnumFormProps) {
+    enumValues,
+    onValuesChanged,
+    onError,
+    updateIds,
+    disabled,
+    allowDataInference,
+    getData
+}: EnumFormProps) {
 
     const formex = useCreateFormex<{
         enumValues: EnumValueConfig[]
@@ -68,7 +72,10 @@ export function EnumForm({
         }
     });
 
-    const { values, errors } = formex;
+    const {
+        values,
+        errors
+    } = formex;
 
     useEffect(() => {
         if (onValuesChanged) {
@@ -78,12 +85,12 @@ export function EnumForm({
 
     return <Formex value={formex}>
         <EnumFormFields enumValuesPath={"enumValues"}
-                        values={values}
-                        errors={errors}
-                        shouldUpdateId={updateIds}
-                        disabled={disabled}
-                        allowDataInference={allowDataInference}
-                        getData={getData}/>
+            values={values}
+            errors={errors}
+            shouldUpdateId={updateIds}
+            disabled={disabled}
+            allowDataInference={allowDataInference}
+            getData={getData} />
     </Formex>
 
 }
@@ -102,14 +109,14 @@ type EnumFormFieldsProps = {
 
 // const EnumFormFields = React.memo(
 function EnumFormFields({
-                            values,
-                            errors,
-                            disabled,
-                            enumValuesPath,
-                            shouldUpdateId,
-                            allowDataInference,
-                            getData,
-                        }: EnumFormFieldsProps) {
+    values,
+    errors,
+    disabled,
+    enumValuesPath,
+    shouldUpdateId,
+    allowDataInference,
+    getData,
+}: EnumFormFieldsProps) {
 
     const {
         setFieldValue
@@ -123,25 +130,27 @@ function EnumFormFields({
     const inferredValues = inferredValuesRef.current;
 
     const buildEntry = ({
-                            index,
-                            internalId
-                        }:ArrayEntryParams) => {
+        index,
+        internalId
+    }: ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
         const entryError = errors?.enumValues && errors?.enumValues[index];
         return <EnumEntry index={index}
-                          disabled={disabled}
-                          enumValuesPath={enumValuesPath}
-                          autoFocus={justAdded}
-                          entryError={entryError}
-                          shouldUpdateId={shouldUpdateId || justAdded}
-                          onDialogOpen={() => setEditDialogIndex(index)}
-                          inferredEntry={inferredValues.has(values.enumValues[index]?.id as string)}
-                          key={`${internalId}`}/>;
+            disabled={disabled}
+            enumValuesPath={enumValuesPath}
+            autoFocus={justAdded}
+            entryError={entryError}
+            shouldUpdateId={shouldUpdateId || justAdded}
+            onDialogOpen={() => setEditDialogIndex(index)}
+            inferredEntry={inferredValues.has(values.enumValues[index]?.id as string)}
+            key={`${internalId}`} />;
     };
 
     const inferValues = async () => {
-        if (!getData)
+        if (!getData) {
+            console.warn("INTERNAL: No getData function provided for data inference");
             return;
+        }
         setInferring(true);
         getData?.().then((data) => {
             if (!data)
@@ -172,18 +181,18 @@ function EnumFormFields({
     return (
         <div className={"col-span-12"}>
             <div className="ml-3.5 flex flex-row items-center">
-                <ListIcon/>
+                <ListIcon />
                 <Typography variant={"subtitle2"}
-                            className="ml-2 grow">
+                    className="ml-2 grow">
                     Values
                 </Typography>
                 {allowDataInference &&
-                    <Button loading={inferring}
-                            disabled={disabled || inferring}
-                            variant={"text"}
-                            size={"small"}
-                            onClick={inferValues}>
-                        {inferring ? <CircularProgress size={"smallest"}/> : <AutorenewIcon/>}
+                    <Button 
+                        disabled={disabled || inferring}
+                        variant={"text"}
+                        size={"small"}
+                        onClick={inferValues}>
+                        {inferring ? <CircularProgress size={"smallest"} /> : <FindInPageIcon />}
                         Infer values from data
                     </Button>}
             </div>
@@ -191,20 +200,23 @@ function EnumFormFields({
             <Paper className="p-4 m-1">
 
                 <ArrayContainer droppableId={enumValuesPath}
-                                addLabel={"Add enum value"}
-                                value={values.enumValues}
-                                disabled={disabled}
-                                size={"small"}
-                                buildEntry={buildEntry}
-                                onInternalIdAdded={setLastInternalIdAdded}
-                                canAddElements={true}
-                                onValueChange={(value) => setFieldValue(enumValuesPath, value)}
-                                newDefaultEntry={{ id: "", label: "" }}/>
+                    addLabel={"Add enum value"}
+                    value={values.enumValues}
+                    disabled={disabled}
+                    size={"small"}
+                    buildEntry={buildEntry}
+                    onInternalIdAdded={setLastInternalIdAdded}
+                    canAddElements={true}
+                    onValueChange={(value) => setFieldValue(enumValuesPath, value)}
+                    newDefaultEntry={{
+                        id: "",
+                        label: ""
+                    }} />
 
                 <EnumEntryDialog index={editDialogIndex}
-                                 open={editDialogIndex !== undefined}
-                                 enumValuesPath={enumValuesPath}
-                                 onClose={() => setEditDialogIndex(undefined)}/>
+                    open={editDialogIndex !== undefined}
+                    enumValuesPath={enumValuesPath}
+                    onClose={() => setEditDialogIndex(undefined)} />
             </Paper>
         </div>
     );
@@ -223,15 +235,15 @@ type EnumEntryProps = {
 
 const EnumEntry = React.memo(
     function EnumEntryInternal({
-                                   index,
-                                   shouldUpdateId: updateId,
-                                   enumValuesPath,
-                                   autoFocus,
-                                   onDialogOpen,
-                                   disabled,
-                                   inferredEntry,
-                                   entryError
-                               }: EnumEntryProps) {
+        index,
+        shouldUpdateId: updateId,
+        enumValuesPath,
+        autoFocus,
+        onDialogOpen,
+        disabled,
+        inferredEntry,
+        entryError
+    }: EnumEntryProps) {
 
         const {
             values,
@@ -256,40 +268,59 @@ const EnumEntry = React.memo(
             currentLabelRef.current = labelValue;
         }, [labelValue]);
 
+        const colorValue = getIn(values, `${enumValuesPath}[${index}].color`) as ChipColorKey | undefined;
+        const colorScheme = colorValue
+            ? getColorSchemeForKey(colorValue)
+            : idValue
+                ? getColorSchemeForSeed(String(idValue))
+                : undefined;
+
         return (
             <>
                 <div className={"flex w-full align-center justify-center"}>
                     <Field name={`${enumValuesPath}[${index}].label`}
-                           as={DebouncedTextField}
-                           className={"flex-grow"}
-                           required
-                           disabled={disabled}
-                           size="small"
-                           autoFocus={autoFocus}
-                           autoComplete="off"
-                           endAdornment={inferredEntry && <AutorenewIcon size={"small"}/>}
-                           error={Boolean(entryError?.label)}/>
+                        as={DebouncedTextField}
+                        className={"flex-grow"}
+                        required
+                        disabled={disabled}
+                        size="small"
+                        autoFocus={autoFocus}
+                        autoComplete="off"
+                        endAdornment={inferredEntry && <FindInPageIcon size={"small"} />}
+                        error={Boolean(entryError?.label)} />
 
-                    {!disabled &&
+                    {!disabled && <>
+                        {/* Color indicator - clickable to open settings */}
+                        <button
+                            type="button"
+                            onClick={() => onDialogOpen()}
+                            className="w-5 h-5 rounded-full flex-shrink-0 self-center border border-surface-accent-200 dark:border-surface-accent-700 hover:scale-110 transition-transform cursor-pointer ml-3"
+                            style={{
+                                backgroundColor: colorScheme?.color ?? "#ccc"
+                            }}
+                            title={colorValue ? `Color: ${colorValue}` : "Auto color - Click to change"}
+                            aria-label="Edit enum color"
+                        />
                         <Badge color={"error"} invisible={!entryError?.id}>
                             <IconButton
                                 size="small"
                                 aria-label="edit"
                                 className={"m-1"}
                                 onClick={() => onDialogOpen()}>
-                                <SettingsIcon size={"small"}/>
+                                <SettingsIcon size={"small"} />
                             </IconButton>
-                        </Badge>}
+                        </Badge>
+                    </>}
 
                 </div>
 
                 {entryError?.label && <Typography variant={"caption"}
-                                                  className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                    className={"ml-3.5 text-red-500 dark:text-red-500"}>
                     {entryError?.label}
                 </Typography>}
 
                 {entryError?.id && <Typography variant={"caption"}
-                                               className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                    className={"ml-3.5 text-red-500 dark:text-red-500"}>
                     {entryError?.id}
                 </Typography>}
 
@@ -306,11 +337,11 @@ const EnumEntry = React.memo(
 );
 
 function EnumEntryDialog({
-                             index,
-                             open,
-                             onClose,
-                             enumValuesPath
-                         }: {
+    index,
+    open,
+    onClose,
+    enumValuesPath
+}: {
     index?: number;
     open: boolean;
     enumValuesPath: string;
@@ -319,9 +350,13 @@ function EnumEntryDialog({
 
     const {
         errors,
+        values,
+        setFieldValue
     } = useFormex<EnumValues>();
 
     const idError = index !== undefined ? getIn(errors, `${enumValuesPath}[${index}].id`) : undefined;
+    const colorValue = index !== undefined ? getIn(values, `${enumValuesPath}[${index}].color`) as ChipColorKey | undefined : undefined;
+
     return <Dialog
         maxWidth="md"
         aria-labelledby="enum-edit-dialog"
@@ -331,27 +366,39 @@ function EnumEntryDialog({
         <DialogTitle hidden>Enum form dialog</DialogTitle>
         <DialogContent>
             {index !== undefined &&
-                <div>
-                    <Field name={`${enumValuesPath}[${index}].id`}
-                           as={DebouncedTextField}
-                           required
-                           label={"ID"}
-                           size="small"
-                           autoComplete="off"
-                           error={Boolean(idError)}/>
+                <div className="flex flex-col gap-4">
+                    <div>
+                        <Field name={`${enumValuesPath}[${index}].id`}
+                            as={DebouncedTextField}
+                            required
+                            label={"ID"}
+                            size="small"
+                            autoComplete="off"
+                            error={Boolean(idError)} />
 
-                    <FieldCaption error={Boolean(idError)}>
-                        {idError ?? "Value saved in the data source"}
-                    </FieldCaption>
+                        <FieldCaption error={Boolean(idError)}>
+                            {idError ?? "Value saved in the data source"}
+                        </FieldCaption>
+                    </div>
+
+                    <div>
+                        <Typography variant="body2" className="font-medium mb-2">
+                            Chip color
+                        </Typography>
+                        <ColorPicker
+                            value={colorValue}
+                            onChange={(color) => setFieldValue(`${enumValuesPath}[${index}].color`, color)}
+                            size="small"
+                            allowClear={true}
+                        />
+                    </div>
                 </div>}
         </DialogContent>
 
         <DialogActions>
             <Button
                 autoFocus
-                variant="outlined"
-                onClick={onClose}
-                color="primary">
+                onClick={onClose}>
                 Ok
             </Button>
         </DialogActions>

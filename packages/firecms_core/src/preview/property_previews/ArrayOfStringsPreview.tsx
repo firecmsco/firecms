@@ -10,12 +10,12 @@ import { ErrorBoundary } from "../../components";
  * @group Preview components
  */
 export function ArrayOfStringsPreview({
-                                          propertyKey,
-                                          value,
-                                          property: inputProperty,
-                                          // entity,
-                                          size
-                                      }: PropertyPreviewProps<string[]>) {
+    propertyKey,
+    value,
+    property: inputProperty,
+    // entity,
+    size
+}: PropertyPreviewProps<string[]>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
@@ -24,6 +24,8 @@ export function ArrayOfStringsPreview({
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });
+
+    if (!property) return null;
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
@@ -43,10 +45,10 @@ export function ArrayOfStringsPreview({
                     <div key={`preview_array_strings_${propertyKey}_${index}`}>
                         <ErrorBoundary>
                             <StringPropertyPreview propertyKey={propertyKey}
-                                                   property={stringProperty}
-                                                   value={v}
+                                property={stringProperty}
+                                value={v}
                                 // entity={entity}
-                                                   size={size}/>
+                                size={size} />
                         </ErrorBoundary>
                     </div>
                 )}

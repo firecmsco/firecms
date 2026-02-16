@@ -4,6 +4,7 @@ import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, Resolve
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
+import { FormEntry } from "../components/FormEntry";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 
@@ -15,19 +16,19 @@ import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/u
  * @group Form fields
  */
 export function MapFieldBinding({
-                                    propertyKey,
-                                    value,
-                                    showError,
-                                    error,
-                                    disabled,
-                                    property,
-                                    partOfArray,
-                                    minimalistView: minimalistViewProp,
-                                    includeDescription,
-                                    autoFocus,
-                                    context,
-                                    onPropertyChange
-                                }: FieldProps<Record<string, any>>) {
+    propertyKey,
+    value,
+    showError,
+    error,
+    disabled,
+    property,
+    partOfArray,
+    minimalistView: minimalistViewProp,
+    includeDescription,
+    autoFocus,
+    context,
+    onPropertyChange
+}: FieldProps<Record<string, any>>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
@@ -52,75 +53,76 @@ export function MapFieldBinding({
     }
 
     const mapFormView = <>
-            <div
-                className={cls("py-1 flex flex-col space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
-                {Object.entries(mapProperties)
-                    .filter(([_, property]) => !isHidden(property))
-                    .map(([entryKey, childProperty], index) => {
-                            const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
-                            const fieldBindingProps: PropertyFieldBindingProps<any> = {
-                                propertyKey: `${propertyKey}.${entryKey}`,
-                                disabled: disabled || thisDisabled,
-                                property: childProperty,
-                                includeDescription,
-                                context,
-                                partOfArray: false,
-                                minimalistView: false,
-                                autoFocus: autoFocus && index === 0,
-                                onPropertyChange: function (updatedProperty) {
-                                    onPropertyChange?.({
-                                        properties: {
-                                            [entryKey]: updatedProperty
-                                        }
-                                    } as Partial<MapProperty>);
+        <div
+            className={cls("py-1 flex flex-wrap gap-x-4 w-full space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
+            {Object.entries(mapProperties)
+                .filter(([_, property]) => !isHidden(property))
+                .map(([entryKey, childProperty], index) => {
+                    const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
+                    const fieldBindingProps: PropertyFieldBindingProps<any> = {
+                        propertyKey: `${propertyKey}.${entryKey}`,
+                        disabled: disabled || thisDisabled,
+                        property: childProperty,
+                        includeDescription,
+                        context,
+                        partOfArray: false,
+                        minimalistView: false,
+                        autoFocus: autoFocus && index === 0,
+                        onPropertyChange: function (updatedProperty) {
+                            onPropertyChange?.({
+                                properties: {
+                                    [entryKey]: updatedProperty
                                 }
-                            };
-
-                            return (
-                                <div key={`map-${propertyKey}-${index}`} className={"relative"}>
-                                    <ErrorBoundary>
-                                        <PropertyFieldBinding
-                                            {...fieldBindingProps}/>
-                                    </ErrorBoundary>
-                                </div>
-                            )                                ;
+                            } as Partial<MapProperty>);
                         }
-                    )
+                    };
+
+                    const widthPercentage = childProperty.widthPercentage ?? 100;
+                    return (
+                        <FormEntry propertyKey={`${propertyKey}.${entryKey}`}
+                            widthPercentage={widthPercentage}
+                            key={`map-${propertyKey}-${index}`}>
+                            <PropertyFieldBinding
+                                {...fieldBindingProps} />
+                        </FormEntry>
+                    );
                 }
-            </div>
+                )
+            }
+        </div>
 
-            {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
+        {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
 
-        </>
-    ;
+    </>
+        ;
 
     return (
         <ErrorBoundary>
 
             {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
-                                                 onExpandedChange={(expanded) => {
-                                                     onPropertyChange?.({
-                                                         expanded
-                                                     });
-                                                 }}
-                                                 className={property.widthPercentage !== undefined ? "mt-8" : undefined}
-                                                 innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-surface-900"}
-                                                 title={<LabelWithIconAndTooltip
-                                                     propertyKey={propertyKey}
-                                                     icon={getIconForProperty(property, "small")}
-                                                     required={property.validation?.required}
-                                                     title={property.name}
-                                                     className={"text-text-secondary dark:text-text-secondary-dark"}/>}>
+                onExpandedChange={(expanded) => {
+                    onPropertyChange?.({
+                        expanded
+                    });
+                }}
+                className={property.widthPercentage !== undefined ? "mt-8" : undefined}
+                innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-surface-900"}
+                title={<LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name}
+                    className={"text-text-secondary dark:text-text-secondary-dark"} />}>
                 {mapFormView}
             </ExpandablePanel>}
 
             {minimalistView && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError ?? false}
-                             error={error && !partOfArray ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
-                             disabled={disabled}
-                             property={property}/>
+                showError={showError ?? false}
+                error={error && !partOfArray ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
+                disabled={disabled}
+                property={property} />
 
         </ErrorBoundary>
     );
@@ -150,7 +152,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
             onValueChange={handleAddProperty}
             renderValue={(key) => (properties as Properties)[key].name || key}>
             {keys.map((key) => <SelectItem key={key}
-                                           value={key}>{(properties as Properties)[key].name || key}</SelectItem>)}
+                value={key}>{(properties as Properties)[key].name || key}</SelectItem>)}
         </Select>
     </div>;
 };

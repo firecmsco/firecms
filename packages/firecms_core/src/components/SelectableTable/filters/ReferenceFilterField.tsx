@@ -35,16 +35,16 @@ const operationLabels = {
 const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
 export function ReferenceFilterField({
-                                         value,
-                                         setValue,
-                                         isArray,
-                                         path,
-                                         includeId = true,
-                                         previewProperties,
-                                         setHidden
-                                     }: ReferenceFilterFieldProps) {
+    value,
+    setValue,
+    isArray,
+    path,
+    includeId = true,
+    previewProperties,
+    setHidden
+}: ReferenceFilterFieldProps) {
 
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+    const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];
 
@@ -110,16 +110,16 @@ export function ReferenceFilterField({
     const multiple = multipleSelectOperations.includes(operation);
 
     const referenceDialogController = useReferenceDialog({
-            multiselect: multiple,
-            path,
-            collection,
-            onSingleEntitySelected,
-            onMultipleEntitiesSelected,
-            selectedEntityIds,
-            onClose: () => {
-                setHidden(false);
-            }
+        multiselect: multiple,
+        path,
+        collection,
+        onSingleEntitySelected,
+        onMultipleEntitiesSelected,
+        selectedEntityIds,
+        onClose: () => {
+            setHidden(false);
         }
+    }
     );
 
     const doOpenDialog = () => {
@@ -144,15 +144,15 @@ export function ReferenceFilterField({
 
     return (
 
-        <div className="flex w-[480px] flex-row">
-            <div className="w-[140px]">
+        <div className="flex w-full flex-row">
+            <div className="w-[100px]">
                 <Select value={operation}
-                        size={"large"}
-                        fullWidth={true}
-                        onValueChange={(value) => {
-                            updateFilter(value as VirtualTableWhereFilterOp, internalValue);
-                        }}
-                        renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
+                    size={"medium"}
+                    fullWidth={true}
+                    onValueChange={(value) => {
+                        updateFilter(value as VirtualTableWhereFilterOp, internalValue);
+                    }}
+                    renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
                     {possibleOperations.map((op) => (
                         <SelectItem key={op} value={op}>
                             {operationLabels[op]}
@@ -161,7 +161,7 @@ export function ReferenceFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2 h-full gap-2 flex flex-col w-[340px]">
+            <div className="flex-grow ml-2 h-full gap-2 flex flex-col">
 
                 {internalValue && Array.isArray(internalValue) && <div>
                     {internalValue.map((ref, index) => buildEntry(ref))}
@@ -173,9 +173,9 @@ export function ReferenceFilterField({
 
                 {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                     <Button onClick={doOpenDialog}
-                            variant={"outlined"}
-                            size={"large"}
-                            className="h-full w-full">
+
+                        size={"medium"}
+                        className="h-full w-full">
                         {multiple ? "Select references" : "Select reference"}
                     </Button>
                 }
@@ -185,13 +185,13 @@ export function ReferenceFilterField({
                     htmlFor="null-filter"
                 >
                     <Checkbox id="null-filter"
-                              checked={internalValue === null}
-                              size={"small"}
-                              onCheckedChange={(checked) => {
-                                  if (internalValue !== null)
-                                      updateFilter(operation, null);
-                                  else updateFilter(operation, undefined);
-                              }}/>
+                        checked={internalValue === null}
+                        size={"small"}
+                        onCheckedChange={(checked) => {
+                            if (internalValue !== null)
+                                updateFilter(operation, null);
+                            else updateFilter(operation, undefined);
+                        }} />
                     Filter for null values
                 </Label>}
 

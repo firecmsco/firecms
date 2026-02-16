@@ -1,0 +1,195 @@
+---
+import MobileMenuToggle from "virtual:starlight/components/MobileMenuToggle";
+import SiteFooter from "../../components/Footer.astro";
+import CookieBanner from "../../components/CookieBanner.astro";
+
+const { hasSidebar } = Astro.locals.starlightRoute;
+---
+
+<div class="page">
+    <!-- FIXED HEADER -->
+    <header class="header">
+        <slot name="header"/>
+    </header>
+
+    <!-- CONTENT AREA (sidebar + main) -->
+    <div class="content-container">
+        <!-- STICKY SIDEBAR -->
+        {hasSidebar && (
+            <aside class="sidebar-wrapper">
+                <nav class="sidebar-sticky" aria-label={Astro.locals.t("sidebarNav.accessibleLabel")} data-sidebar-scroll>
+                    <MobileMenuToggle/>
+                    <div id="starlight__sidebar" class="sidebar-pane">
+                        <div class="sidebar-content">
+                            <slot name="sidebar"/>
+                        </div>
+                    </div>
+                </nav>
+            </aside>
+        )}
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <slot/>
+        </main>
+    </div>
+
+    <!-- FOOTER BELOW EVERYTHING -->
+    <footer class="footer z-50">
+        <SiteFooter/>
+    </footer>
+
+</div>
+
+<style>
+    .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Fixed header at top */
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--sl-nav-height);
+        z-index: var(--sl-z-index-navbar);
+        background-color: var(--sl-color-bg-nav);
+        border-bottom: 1px solid var(--sl-color-hairline-shade);
+        padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
+    }
+
+    /* Content container with sidebar and main */
+    .content-container {
+        display: flex;
+        margin-top: var(--sl-nav-height);
+        flex: 1;
+    }
+
+    /* Sidebar wrapper - fixed width */
+    .sidebar-wrapper {
+        width: var(--sl-sidebar-width);
+        flex-shrink: 0;
+    }
+
+    /* Sidebar sticky container */
+    .sidebar-sticky {
+        position: sticky;
+        top: var(--sl-nav-height);
+        height: calc(100vh - var(--sl-nav-height));
+        overflow-y: auto; /* Scroll independently */
+        background-color: var(--sl-color-bg-sidebar);
+        border-right: 1px solid var(--sl-color-hairline-shade);
+    }
+
+    .sidebar-pane {
+        height: 100%;
+    }
+
+    .sidebar-content {
+        height: 100%;
+        min-height: max-content;
+        padding: 1rem var(--sl-sidebar-pad-x) 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sidebar-content::after {
+        content: '';
+        padding-bottom: 1px;
+    }
+
+    /* Main content takes remaining space */
+    .main-content {
+        flex: 1;
+        min-width: 0; /* Prevent flex overflow */
+    }
+
+    /* Mobile: sidebar becomes overlay menu */
+    @media (max-width: 50rem) {
+        .content-container {
+            flex-direction: column;
+        }
+
+        .sidebar-wrapper {
+            width: 100%;
+        }
+
+        .sidebar-sticky {
+            position: fixed;
+            top: var(--sl-nav-height);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: var(--sl-z-index-menu);
+            background-color: var(--sl-color-black);
+            visibility: var(--sl-sidebar-visibility, hidden);
+        }
+
+        :global([aria-expanded='true']) ~ .sidebar-pane {
+            --sl-sidebar-visibility: visible;
+        }
+
+        .header {
+            padding-inline-end: calc(
+                var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size)
+            );
+        }
+    }
+
+    @media (min-width: 50rem) {
+        :global([data-has-sidebar]) .header {
+            padding-inline-end: var(--sl-nav-pad-x);
+        }
+    }
+</style>
+
+<script>
+    // Store scroll position globally
+    declare global {
+        interface Window {
+            __sidebarScrollPos: number;
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        window.__sidebarScrollPos = window.__sidebarScrollPos || 0;
+    }
+
+    function saveSidebarScroll() {
+        const sidebar = document.querySelector('[data-sidebar-scroll]') as HTMLElement;
+        if (sidebar) {
+            window.__sidebarScrollPos = sidebar.scrollTop;
+            console.log('[SIDEBAR] Saved scroll position:', window.__sidebarScrollPos);
+        }
+    }
+
+    function restoreSidebarScroll() {
+        const sidebar = document.querySelector('[data-sidebar-scroll]') as HTMLElement;
+        if (sidebar) {
+            console.log('[SIDEBAR] Restoring scroll position:', window.__sidebarScrollPos);
+            sidebar.scrollTop = window.__sidebarScrollPos;
+
+            // Force it again after a small delay
+            setTimeout(() => {
+                sidebar.scrollTop = window.__sidebarScrollPos;
+                console.log('[SIDEBAR] Re-applied scroll position:', sidebar.scrollTop);
+            }, 50);
+        }
+    }
+
+    // Save before navigation
+    document.addEventListener('astro:before-preparation', saveSidebarScroll);
+
+    // Restore after swap
+    document.addEventListener('astro:after-swap', restoreSidebarScroll);
+
+    // Also restore on page load (for initial load)
+    document.addEventListener('astro:page-load', restoreSidebarScroll);
+
+    console.log('[SIDEBAR] Scroll preservation script loaded');
+</script>
+

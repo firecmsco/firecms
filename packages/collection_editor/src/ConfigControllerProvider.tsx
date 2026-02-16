@@ -17,6 +17,7 @@ import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
 import { PropertyFormDialog } from "./ui/collection_editor/PropertyEditView";
 import { PersistedCollection } from "./types/persisted_collection";
+import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 
 export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as any);
 export const CollectionEditorContext = React.createContext<CollectionEditorController>({} as any);
@@ -57,21 +58,28 @@ export interface ConfigControllerProviderProps {
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
+    /**
+     * Callback function for generating/modifying collections.
+     * The plugin is API-agnostic - the consumer provides the implementation.
+     */
+    generateCollection?: CollectionGenerationCallback;
+
 }
 
 export const ConfigControllerProvider = React.memo(
     function ConfigControllerProvider({
-                                          children,
-                                          collectionConfigController,
-                                          configPermissions,
-                                          reservedGroups,
-                                          collectionInference,
-                                          extraView,
-                                          getUser,
-                                          getData,
-                                          onAnalyticsEvent,
-                                          pathSuggestions
-                                      }: PropsWithChildren<ConfigControllerProviderProps>) {
+        children,
+        collectionConfigController,
+        configPermissions,
+        reservedGroups,
+        collectionInference,
+        extraView,
+        getUser,
+        getData,
+        onAnalyticsEvent,
+        pathSuggestions,
+        generateCollection
+    }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
         const navigate = useNavigate();
@@ -89,9 +97,12 @@ export const ConfigControllerProvider = React.memo(
                 group?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
             existingEntities?: Entity<any>[],
             pathSuggestions?: string[];
+            initialView?: "general" | "display" | "properties";
+            expandKanban?: boolean;
         }>();
 
         const [currentPropertyDialog, setCurrentPropertyDialog] = React.useState<{
@@ -104,7 +115,8 @@ export const ConfigControllerProvider = React.memo(
             fullPath?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[];
+            collection?: PersistedCollection;
         }>();
 
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
@@ -114,17 +126,21 @@ export const ConfigControllerProvider = React.memo(
         }), []);
 
         const editCollection = ({
-                                    id,
-                                    fullPath,
-                                    parentCollectionIds,
-                                    parentCollection,
-                                    existingEntities
-                                }: {
+            id,
+            fullPath,
+            parentCollectionIds,
+            parentCollection,
+            existingEntities,
+            initialView,
+            expandKanban
+        }: {
             id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity<any>[],
+            initialView?: "general" | "display" | "properties",
+            expandKanban?: boolean
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
             onAnalyticsEvent?.("edit_collection", {
@@ -139,19 +155,21 @@ export const ConfigControllerProvider = React.memo(
                 parentCollection,
                 redirect: false,
                 existingEntities,
-                pathSuggestions
+                pathSuggestions,
+                initialView,
+                expandKanban
             });
         };
 
         const editProperty = ({
-                                  propertyKey,
-                                  property,
-                                  editedCollectionId,
-                                  currentPropertiesOrder,
-                                  parentCollectionIds,
-                                  collection,
-                                  existingEntities
-                              }: {
+            propertyKey,
+            property,
+            editedCollectionId,
+            currentPropertiesOrder,
+            parentCollectionIds,
+            collection,
+            existingEntities
+        }: {
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
@@ -180,17 +198,19 @@ export const ConfigControllerProvider = React.memo(
                 editedCollectionId,
                 parentCollectionIds,
                 collectionEditable: collection?.editable === undefined || collection?.editable === true,
-                existingEntities
+                existingEntities,
+                collection
             });
         };
 
         const createCollection = ({
-                                      parentCollectionIds,
-                                      parentCollection,
-                                      initialValues,
-                                      redirect,
-                                      sourceClick
-                                  }: {
+            parentCollectionIds,
+            parentCollection,
+            initialValues,
+            copyFrom,
+            redirect,
+            sourceClick
+        }: {
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
             initialValues?: {
@@ -198,6 +218,7 @@ export const ConfigControllerProvider = React.memo(
                 path?: string,
                 name?: string
             },
+            copyFrom?: PersistedCollection,
             redirect: boolean,
             sourceClick?: string
         }) => {
@@ -205,10 +226,11 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
+                copyFrom,
                 redirect,
                 sourceClick
             });
-            onAnalyticsEvent?.("create_collection", {
+            onAnalyticsEvent?.(copyFrom ? "duplicate_collection" : "create_collection", {
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
@@ -220,6 +242,7 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 parentCollection,
                 initialValues,
+                copyFrom,
                 redirect,
                 pathSuggestions
             });
@@ -248,6 +271,8 @@ export const ConfigControllerProvider = React.memo(
                         reservedGroups={reservedGroups}
                         extraView={extraView}
                         getUser={getUser}
+                        generateCollection={generateCollection}
+                        onAnalyticsEvent={onAnalyticsEvent}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
@@ -256,7 +281,7 @@ export const ConfigControllerProvider = React.memo(
                                 }
                             }
                             setCurrentDialog(undefined);
-                        }}/>
+                        }} />
 
                     {/* Used for editing properties*/}
                     <PropertyFormDialog
@@ -267,17 +292,27 @@ export const ConfigControllerProvider = React.memo(
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
                         collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
-                        getData={getData && currentPropertyDialog?.editedCollectionId
-                            ? () => {
-                                console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!)
-                                return getData(resolvedPath, []);
+                        getData={currentPropertyDialog?.existingEntities || (getData && currentPropertyDialog?.editedCollectionId)
+                            ? async () => {
+                                let data: object[] = [];
+                                // First, use existing entities if available (already loaded in table)
+                                if (currentPropertyDialog?.existingEntities) {
+                                    data = currentPropertyDialog.existingEntities.map(e => e.values);
+                                }
+                                // If getData is available and we have a path, also fetch from database
+                                if (getData && currentPropertyDialog?.editedCollectionId) {
+                                    console.debug("Get data for property, path:", currentPropertyDialog?.editedCollectionId);
+                                    const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!);
+                                    const fetchedData = await getData(resolvedPath, []);
+                                    data.push(...fetchedData);
+                                }
+                                return data;
                             }
                             : undefined}
                         onPropertyChanged={({
-                                                id,
-                                                property
-                                            }) => {
+                            id,
+                            property
+                        }) => {
                             if (!currentPropertyDialog) return;
                             if (!id) return;
                             const newProperty = !(currentPropertyDialog.propertyKey);
@@ -330,11 +365,11 @@ export const ConfigControllerProvider = React.memo(
                         }}
                         initialErrors={{}}
                         forceShowErrors={false}
-                        existingPropertyKeys={[]}
+                        existingPropertyKeys={currentPropertyDialog?.collection?.properties ? Object.keys(currentPropertyDialog.collection.properties) : []}
                         allowDataInference={true}
                         propertyConfigs={propertyConfigs}
                         property={currentPropertyDialog?.property}
-                        propertyKey={currentPropertyDialog?.propertyKey}/>
+                        propertyKey={currentPropertyDialog?.propertyKey} />
 
                 </CollectionEditorContext.Provider>
 

@@ -123,7 +123,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     <main
                         className="flex flex-col flex-grow overflow-auto">
 
-                        {hasAppBar && <DrawerHeader/>}
+                        {hasAppBar && <DrawerHeader />}
 
                         <div
                             className={cls(defaultBorderMixin, "flex-grow overflow-auto m-0 ", {
@@ -174,9 +174,9 @@ function DrawerWrapper(props: {
 
         {!props.open && props.displayed && (
             <Tooltip title="Open menu"
-                     side="right"
-                     sideOffset={12}
-                     asChild={true}>
+                side="right"
+                sideOffset={12}
+                asChild={true}>
                 <div
                     className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
                     <IconButton
@@ -185,21 +185,20 @@ function DrawerWrapper(props: {
                         onClick={() => props.setDrawerOpen(true)}
                         size="large"
                     >
-                        <MenuIcon/>
+                        <MenuIcon size="small" />
                     </IconButton>
                 </div>
             </Tooltip>
         )}
 
         <div
-            className={`z-20 absolute right-0 top-4 ${
-                props.open ? "opacity-100" : "opacity-0 invisible"
-            } transition-opacity duration-200 ease-in-out`}>
+            className={`z-20 absolute right-0 top-4 ${props.open ? "opacity-100" : "opacity-0 invisible"
+                } transition-opacity duration-200 ease-in-out`}>
             <IconButton
                 aria-label="Close drawer"
                 onClick={() => props.setDrawerOpen(false)}
             >
-                <ChevronLeftIcon/>
+                <ChevronLeftIcon />
             </IconButton>
         </div>
 
@@ -221,14 +220,14 @@ function DrawerWrapper(props: {
                 size="large"
                 className="absolute sm:top-2 sm:left-4 top-1 left-2"
             >
-                <MenuIcon/>
+                <MenuIcon />
             </IconButton>
             <Sheet side={"left"}
-                   transparent={true}
-                   open={props.open}
-                   onOpenChange={props.setDrawerOpen}
-                   title={"Navigation drawer"}
-                   overlayClassName={"bg-white bg-opacity-80"}
+                transparent={true}
+                open={props.open}
+                onOpenChange={props.setDrawerOpen}
+                title={"Navigation drawer"}
+                overlayClassName={"bg-white bg-opacity-80 bg-white/80"}
             >
                 {innerDrawer}
             </Sheet>

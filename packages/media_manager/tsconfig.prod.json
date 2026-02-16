@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "paths": {}
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "../firecms_core/src",
+        "../ui/src",
+        "../formex/src"
+    ]
+}

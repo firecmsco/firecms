@@ -7,7 +7,7 @@ import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-import { NavigationGroupMapping } from "./navigation";
+import { NavigationGroupMapping, CMSView } from "./navigation";
 import { InternalUserManagement } from "./internal_user_management";
 
 /**
@@ -45,6 +45,12 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     };
 
     userManagement?: InternalUserManagement
+
+    /**
+     * Views to be automatically added to the navigation.
+     * These views will be merged with the views provided to useBuildNavigationController.
+     */
+    views?: CMSView[];
 
     homePage?: {
 
@@ -161,6 +167,50 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             collection: EC;
             tableController: EntityTableController;
         }>;
+
+        /**
+         * Callback called when columns are reordered via drag and drop.
+         * Used by plugins to persist the new column order.
+         */
+        onColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            newPropertiesOrder: string[];
+        }) => void;
+
+        /**
+         * Callback called when Kanban board columns are reordered via drag and drop.
+         * Used by plugins to persist the new Kanban column order.
+         */
+        onKanbanColumnsReorder?: (props: {
+            fullPath: string;
+            parentCollectionIds: string[];
+            collection: EC;
+            kanbanColumnProperty: string;
+            newColumnsOrder: string[];
+        }) => void;
+
+        /**
+         * Component to render when Kanban view is missing configuration.
+         * Used to provide a CTA to open the collection editor to configure Kanban.
+         */
+        KanbanSetupComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+        }>;
+
+        /**
+         * Component to render an "Add Column" button at the end of the Kanban board.
+         * Used to allow adding new enum values to the column property.
+         */
+        AddKanbanColumnComponent?: React.ComponentType<{
+            collection: EC;
+            fullPath: string;
+            parentCollectionIds: string[];
+            columnProperty: string;
+        }>;
     }
 
     form?: {
@@ -178,6 +228,11 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * Add custom actions to the top of the form
          */
         ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
+
+        /**
+         * Add custom content above the entity title in the form view
+         */
+        BeforeTitle?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
         fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
 

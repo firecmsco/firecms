@@ -16,6 +16,7 @@
             "dom"
         ],
         "skipLibCheck": true,
+        "types": ["node"],
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
         "declaration": true,

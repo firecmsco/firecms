@@ -12,14 +12,14 @@ import { AuthController } from "./auth";
  */
 export type DataType<T extends CMSType = CMSType> =
     T extends string ? "string" :
-        T extends number ? "number" :
-            T extends boolean ? "boolean" :
-                T extends Date ? "date" :
-                    T extends GeoPoint ? "geopoint" :
-                        T extends Vector ? "vector" :
-                            T extends EntityReference ? "reference" :
-                                T extends Array<any> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+    T extends number ? "number" :
+    T extends boolean ? "boolean" :
+    T extends Date ? "date" :
+    T extends GeoPoint ? "geopoint" :
+    T extends Vector ? "vector" :
+    T extends EntityReference ? "reference" :
+    T extends Array<any> ? "array" :
+    T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -52,13 +52,13 @@ export type AnyProperty =
  */
 export type Property<T extends CMSType = any> =
     T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? DateProperty :
-                    T extends GeoPoint ? GeopointProperty :
-                        T extends EntityReference ? ReferenceProperty :
-                            T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
+    T extends number ? NumberProperty :
+    T extends boolean ? BooleanProperty :
+    T extends Date ? DateProperty :
+    T extends GeoPoint ? GeopointProperty :
+    T extends EntityReference ? ReferenceProperty :
+    T extends Array<CMSType> ? ArrayProperty<T> :
+    T extends Record<string, any> ? MapProperty<T> : AnyProperty;
 
 /**
  * Interface including all common properties of a CMS property
@@ -167,6 +167,19 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * It defaults to 100, but you can set it to 50 to have two fields in the same row.
      */
     widthPercentage?: number;
+
+    /**
+     * Declarative conditions for dynamic property behavior using JSON Logic.
+     *
+     * An alternative to PropertyBuilder functions that can be:
+     * - Stored in the database as JSON
+     * - Edited via the collection editor UI
+     * - Evaluated at runtime like property builders
+     *
+     * @see PropertyConditions for available condition options
+     * @see https://jsonlogic.com/ for JSON Logic syntax
+     */
+    conditions?: PropertyConditions;
 }
 
 /**
@@ -193,6 +206,281 @@ export interface PropertyDisabledConfig {
      * Set this flag to true if you want to hide this field when disabled
      */
     hidden?: boolean;
+}
+
+/**
+ * A JSON Logic rule that gets evaluated at runtime.
+ * @see https://jsonlogic.com/
+ *
+ * Common operators:
+ * - Comparison: ==, !=, ===, !==, >, <, >=, <=
+ * - Logic: and, or, !, !!
+ * - Data access: var, missing, missing_some
+ * - Array: in, map, filter, reduce, all, some, none, merge
+ * - String: substr, cat
+ * - Numeric: +, -, *, /, %, min, max
+ *
+ * Custom operators:
+ * - hasRole(roleId) - check if user has role by ID
+ * - hasAnyRole([roleIds]) - check if user has any of the roles
+ * - isToday(timestamp) - check if timestamp is today
+ * - isPast(timestamp) - check if timestamp is in the past
+ * - isFuture(timestamp) - check if timestamp is in the future
+ *
+ * @group Entity properties
+ */
+export type JsonLogicRule = Record<string, any>;
+
+/**
+ * Conditions for individual enum values within a property.
+ * @group Entity properties
+ */
+export interface EnumValueConditions {
+    /**
+     * Disable this enum option when condition is true.
+     * The option appears grayed out and cannot be selected.
+     */
+    disabled?: JsonLogicRule;
+
+    /**
+     * Message explaining why this option is disabled.
+     */
+    disabledMessage?: string;
+
+    /**
+     * Completely hide this enum option when condition is true.
+     * The option is removed from the dropdown/list.
+     */
+    hidden?: JsonLogicRule;
+}
+
+/**
+ * Declarative conditions for dynamic property behavior.
+ * All conditions are JSON Logic rules evaluated against ConditionContext.
+ *
+ * An alternative to PropertyBuilder functions that can be:
+ * - Stored in the database as JSON
+ * - Edited via the collection editor UI
+ * - Evaluated at runtime like property builders
+ *
+ * @see https://jsonlogic.com/ for JSON Logic syntax
+ * @group Entity properties
+ */
+export interface PropertyConditions {
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // FIELD STATE CONDITIONS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Disable the field when this condition evaluates to true.
+     * The field becomes non-editable but still visible (unless also hidden).
+     *
+     * @example Disable when another field has a specific value
+     * ```json
+     * { "==": [{ "var": "values.status" }, "archived"] }
+     * ```
+     */
+    disabled?: JsonLogicRule;
+
+    /**
+     * Message to display when the field is disabled by a condition.
+     */
+    disabledMessage?: string;
+
+    /**
+     * Clear the field's value when it becomes disabled.
+     * @default false
+     */
+    clearOnDisabled?: boolean;
+
+    /**
+     * Hide the field completely when this condition evaluates to true.
+     * The field is removed from the form (not just visually hidden).
+     */
+    hidden?: JsonLogicRule;
+
+    /**
+     * Make the field read-only when this condition evaluates to true.
+     * Renders as a preview instead of an input.
+     */
+    readOnly?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // VALIDATION CONDITIONS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Make the field required when this condition evaluates to true.
+     * Overrides the static `validation.required` setting.
+     */
+    required?: JsonLogicRule;
+
+    /**
+     * Custom message when conditional required validation fails.
+     */
+    requiredMessage?: string;
+
+    /**
+     * Dynamic minimum value for number/string length.
+     * Should evaluate to a number.
+     */
+    min?: JsonLogicRule;
+
+    /**
+     * Dynamic maximum value for number/string length.
+     * Should evaluate to a number.
+     */
+    max?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // VALUE CONDITIONS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Dynamic default value for new entities.
+     * Should evaluate to a value of the appropriate type for the field.
+     * Only applied when entityId is empty (new entity).
+     */
+    defaultValue?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // ENUM CONDITIONS (for string/number properties with enumValues)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Conditions for individual enum values.
+     * Keys are the enum value IDs, values are condition configs.
+     *
+     * @example Disable certain enum options based on user role
+     * ```json
+     * {
+     *   "admin": {
+     *     "disabled": { "!": { "hasRole": "admin" } },
+     *     "disabledMessage": "Admin option requires admin role"
+     *   }
+     * }
+     * ```
+     */
+    enumConditions?: Record<string | number, EnumValueConditions>;
+
+    /**
+     * Filter which enum values are available.
+     * Should evaluate to an array of allowed enum value IDs.
+     */
+    allowedEnumValues?: JsonLogicRule;
+
+    /**
+     * Exclude specific enum values.
+     * Should evaluate to an array of enum value IDs to exclude.
+     */
+    excludedEnumValues?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // REFERENCE CONDITIONS (for reference properties)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Dynamic path for reference properties.
+     * Should evaluate to a collection path string.
+     */
+    referencePath?: JsonLogicRule;
+
+    /**
+     * Dynamic filter for reference selection.
+     * Should evaluate to a FilterValues object.
+     */
+    referenceFilter?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // ARRAY CONDITIONS (for array properties)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Can elements be added to the array?
+     */
+    canAddElements?: JsonLogicRule;
+
+    /**
+     * Can elements be reordered in the array?
+     */
+    sortable?: JsonLogicRule;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // STORAGE CONDITIONS (for file upload properties)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Dynamic accepted file types.
+     * Should evaluate to an array of MIME types.
+     */
+    acceptedFiles?: JsonLogicRule;
+
+    /**
+     * Dynamic maximum file size in bytes.
+     * Should evaluate to a number.
+     */
+    maxFileSize?: JsonLogicRule;
+}
+
+/**
+ * Context available during JSON Logic condition evaluation.
+ * Mirrors PropertyBuilderProps but adapted for JSON serialization.
+ * @group Entity properties
+ */
+export interface ConditionContext {
+    /**
+     * Current form/entity values.
+     * Date values are converted to Unix timestamps (milliseconds).
+     */
+    values: Record<string, any>;
+
+    /**
+     * Previous values before the current edit session.
+     */
+    previousValues: Record<string, any>;
+
+    /**
+     * Current value of this property specifically.
+     */
+    propertyValue: any;
+
+    /**
+     * Collection path (e.g., "products", "users/uid123/orders")
+     */
+    path: string;
+
+    /**
+     * Entity ID. Undefined for new entities.
+     */
+    entityId?: string;
+
+    /**
+     * Whether this is a new entity being created.
+     */
+    isNew: boolean;
+
+    /**
+     * Index of this property (only for array items).
+     */
+    index?: number;
+
+    /**
+     * Current authenticated user information.
+     */
+    user: {
+        uid: string;
+        email: string | null;
+        displayName: string | null;
+        photoURL: string | null;
+        /** Role IDs the user has (extracted from Role[].id) */
+        roles: string[];
+    };
+
+    /**
+     * Current timestamp as Unix milliseconds.
+     */
+    now: number;
 }
 
 /**
@@ -290,14 +578,14 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
  */
 export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
     ({
-         values,
-         previousValues,
-         propertyValue,
-         index,
-         path,
-         entityId,
-         authController
-     }: PropertyBuilderProps<M>) => Property<T> | null;
+        values,
+        previousValues,
+        propertyValue,
+        index,
+        path,
+        entityId,
+        authController
+    }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**
  * @group Entity properties
@@ -354,6 +642,27 @@ export interface BooleanProperty extends BaseProperty<boolean> {
 }
 
 /**
+ * Configuration options for the markdown editor.
+ * @group Entity properties
+ */
+export interface MarkdownConfig {
+    /**
+     * Allow HTML input/output. When set to false, HTML tags in pasted content
+     * will be stripped and only markdown-compatible formatting will be preserved.
+     * Defaults to true for backwards compatibility.
+     */
+    html?: boolean;
+
+    /**
+     * Convert pasted text to markdown format. When enabled, rich text pasted
+     * from external sources (like Google Docs or Word) will be converted to
+     * clean markdown instead of preserving HTML styles.
+     * Defaults to false.
+     */
+    transformPastedText?: boolean;
+}
+
+/**
  * @group Entity properties
  */
 export interface StringProperty extends BaseProperty<string> {
@@ -369,10 +678,13 @@ export interface StringProperty extends BaseProperty<string> {
 
     /**
      * Should this string property be displayed as a markdown field. If true,
-     * the field is rendered as a text editors that supports markdown highlight
+     * the field is rendered as a text editor that supports markdown highlight
      * syntax. It also includes a preview of the result.
+     *
+     * You can also pass a configuration object to customize the markdown editor
+     * behavior, particularly how HTML content is handled during paste operations.
      */
-    markdown?: boolean;
+    markdown?: boolean | MarkdownConfig;
 
     /**
      * You can use the enum values providing a map of possible
@@ -620,6 +932,14 @@ export interface DateProperty extends BaseProperty<Date> {
      * Add an icon to clear the value and set it to `null`. Defaults to `false`
      */
     clearable?: boolean;
+
+    /**
+     * IANA timezone string (e.g., "America/New_York", "Europe/London").
+     * Used to display and input dates in the specified timezone.
+     * The value stored will always be in UTC.
+     * If not provided, uses the user's local timezone.
+     */
+    timezone?: string;
 }
 
 /**
@@ -951,7 +1271,7 @@ export interface ImageResize {
      * - `contain`: Scale down to fit within bounds, preserving aspect ratio (default)
      * - `cover`: Scale to fill bounds, preserving aspect ratio (may crop)
      */
-    mode?: 'contain' | 'cover';
+    mode?: "contain" | "cover";
 
     /**
      * Output format for the resized image.
@@ -960,7 +1280,7 @@ export interface ImageResize {
      * - `png`: Convert to PNG
      * - `webp`: Convert to WebP
      */
-    format?: 'original' | 'jpeg' | 'png' | 'webp';
+    format?: "original" | "jpeg" | "png" | "webp";
 
     /**
      * Quality for lossy formats (JPEG, WebP). Number between 0 and 100.

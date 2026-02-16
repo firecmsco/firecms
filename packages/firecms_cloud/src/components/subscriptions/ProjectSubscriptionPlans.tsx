@@ -3,7 +3,7 @@ import { useBrowserTitleAndIcon } from "@firecms/core";
 import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
-import { getPriceString, getSubscriptionStatusText } from "../settings/common";
+import { formatPrice, getPriceString, getSubscriptionStatusText } from "../settings/common";
 import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
@@ -44,7 +44,7 @@ export function ProjectSubscriptionPlans() {
         <div className={"relative"}>
 
             {loading &&
-                <div className={"absolute w-full h-full flex items-center justify-center"}><CircularProgress/></div>}
+                <div className={"absolute w-full h-full flex items-center justify-center"}><CircularProgress /></div>}
 
             <div className={cls("grid grid-cols-12 gap-4 items-center", loading ? "collapse" : "")}>
 
@@ -75,13 +75,13 @@ export function ProjectSubscriptionPlans() {
 
                     {!isSubscribed && plusProduct && <UpgradeCloudSubscriptionView
                         product={plusProduct}
-                        projectId={projectId}/>}
+                        projectId={projectId} />}
 
 
                     {isSubscribed && plusSubscription &&
-                        <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
+                        <CurrentCloudSubscriptionView subscription={plusSubscription} />}
 
-                    <StripeDisclaimer/>
+                    <StripeDisclaimer />
 
                 </div>
 
@@ -93,31 +93,31 @@ export function ProjectSubscriptionPlans() {
                         </div>
 
                         <ul className={"px-2 text-base"}>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 Managed always up-to-date service
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 Local text search
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>Unlimited
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />Unlimited
                                 users and roles
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>Theme and
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />Theme and
                                 logo customization
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 Custom form fields and custom views
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 Secondary databases
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>AI
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />AI
                                 content generation with OpenAI and Google
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 Unlimited data export
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
                                 AppCheck
                             </li>
                         </ul>
@@ -135,8 +135,8 @@ interface CurrentSubscriptionViewProps {
 }
 
 function CurrentCloudSubscriptionView({
-                                          subscription,
-                                      }: CurrentSubscriptionViewProps) {
+    subscription,
+}: CurrentSubscriptionViewProps) {
 
     const {
         getBackendAuthToken,
@@ -162,6 +162,12 @@ function CurrentCloudSubscriptionView({
         }
     }, []);
 
+    // Detect if this is a per-seat subscription vs legacy metered billing
+    const isPerSeatBilling = subscription.items?.[0]?.price?.lookup_key === "cloud_per_seat";
+    const seatCount = subscription.items?.[0]?.quantity ?? subscription.quantity;
+    const seatPrice = subscription.items?.[0]?.price?.unit_amount;
+    const seatCurrency = subscription.items?.[0]?.price?.currency ?? subscription.price?.currency ?? "eur";
+
     return (
         <div
             key={subscription.id}
@@ -170,40 +176,49 @@ function CurrentCloudSubscriptionView({
             <div className={"flex flex-col gap-2"}>
                 <div>
                     The subscription is <Chip
-                    className={"inline"}
-                    size={"small"}
-                    colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
-                    {statusText} </Chip>.
+                        className={"inline"}
+                        size={"small"}
+                        colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
+                        {statusText} </Chip>.
 
-                    {subscription.current_period_end && <> The next payment is
+                    {subscription.current_period_end && !subscription.canceled_at && <> The next payment is
                         on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
 
-                    <>
-                        The current price is <Chip
-                        size={"small"}>{getPriceString(subscription.price)}
-                    </Chip>per user.
-                    </>
+                    {isPerSeatBilling ? (
+                        <>
+                            You have <Chip size={"small"}>{seatCount} {seatCount === 1 ? "seat" : "seats"}</Chip>
+                            {seatPrice && <> at {formatPrice(seatPrice, seatCurrency)}/seat/{subscription.interval ?? "month"}</>}.
+                        </>
+                    ) : (
+                        <>
+                            The current price is <Chip
+                                size={"small"}>{getPriceString(subscription.price)}
+                            </Chip> per user (usage-based).
+                        </>
+                    )}
 
-                    {subscription.cancel_at && <> This subscription was <b>cancelled</b> and
-                        will be active
-                        until {subscription.cancel_at.toDate().toLocaleDateString()}. </>}
+                    {subscription.cancel_at && <>
+                        {" "}This subscription was <b>cancelled</b> and will be active
+                        until {subscription.cancel_at.toDate().toLocaleDateString()}.
+                        {isPerSeatBilling && <> No additional charges will apply after cancellation.</>}
+                    </>}
 
                     {!subscription.canceled_at && <a
                         className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
                         href={cancelLinkUrl}
                         target="_blank" rel="noreferrer">{
-                        " Manage subscription"
-                    }</a>}
+                            " Manage subscription"
+                        }</a>}
 
                 </div>
 
                 {stripeUpdatePaymentUrl && <Button component={"a"}
-                                                   variant={"filled"}
-                                                   color={"neutral"}
-                                                   size={"small"}
-                                                   href={stripeUpdatePaymentUrl}
-                                                   target="_blank"
-                                                   rel="noreferrer">
+                    variant={"filled"}
+                    color={"neutral"}
+                    size={"small"}
+                    href={stripeUpdatePaymentUrl}
+                    target="_blank"
+                    rel="noreferrer">
                     Update payment method
                 </Button>}
 

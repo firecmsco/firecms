@@ -35,10 +35,10 @@ export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";
 
 export function DefaultHomePage({
-                                    additionalActions,
-                                    additionalChildrenStart,
-                                    additionalChildrenEnd
-                                }: {
+    additionalActions,
+    additionalChildrenStart,
+    additionalChildrenEnd
+}: {
     additionalActions?: React.ReactNode;
     additionalChildrenStart?: React.ReactNode;
     additionalChildrenEnd?: React.ReactNode;
@@ -94,6 +94,10 @@ export function DefaultHomePage({
         name: string;
         entries: NavigationEntry[];
     } | null>(null);
+
+    // Flag to prevent useEffect from overwriting local DnD state
+    const isDndDirtyRef = useRef(false);
+    const dndDirtyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Memoize the processed groups to avoid unnecessary recalculations
     const processedGroups = useMemo(() => {
@@ -159,7 +163,12 @@ export function DefaultHomePage({
     }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins]);
 
     // Update state only when processedGroups actually changes
+    // Skip update if DnD just made a local change (dirty flag is set)
     useEffect(() => {
+        if (isDndDirtyRef.current) {
+            // DnD just updated the state, skip this sync
+            return;
+        }
         setAdminGroupData(processedGroups.adminGroupData);
         setItems(processedGroups.items);
     }, [processedGroups]);
@@ -171,8 +180,8 @@ export function DefaultHomePage({
         updater:
             | { name: string; entries: NavigationEntry[] }[]
             | ((
-            prev: { name: string; entries: NavigationEntry[] }[]
-        ) => { name: string; entries: NavigationEntry[] }[])
+                prev: { name: string; entries: NavigationEntry[] }[]
+            ) => { name: string; entries: NavigationEntry[] }[])
     ) => {
         setItems(updater); // local only
     };
@@ -180,6 +189,19 @@ export function DefaultHomePage({
     const persistNavigationGroups = (
         latest: { name: string; entries: NavigationEntry[] }[]
     ) => {
+        // Set dirty flag to prevent useEffect from overwriting local state
+        isDndDirtyRef.current = true;
+
+        // Clear any existing timeout
+        if (dndDirtyTimeoutRef.current) {
+            clearTimeout(dndDirtyTimeoutRef.current);
+        }
+
+        // Clear dirty flag after a delay to allow navigation to update
+        dndDirtyTimeoutRef.current = setTimeout(() => {
+            isDndDirtyRef.current = false;
+        }, 1000);
+
         // Map ALL groups including "Views"
         const draggable: NavigationGroupMapping[] = latest.map((g) => ({
             name: g.name,
@@ -205,7 +227,7 @@ export function DefaultHomePage({
         ...(adminGroupData ? [adminGroupData.name] : [])
     ], [items, adminGroupData]);
 
-    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames);
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames, "home");
 
 
     const {
@@ -264,6 +286,7 @@ export function DefaultHomePage({
     let additionalPluginChildrenStart: React.ReactNode | undefined;
     let additionalPluginChildrenEnd: React.ReactNode | undefined;
     let additionalPluginSections: React.ReactNode | undefined;
+    let additionalPluginActions: React.ReactNode | undefined;
 
     if (customizationController.plugins) {
         const sectionProps: PluginGenericProps = { context };
@@ -311,6 +334,19 @@ export function DefaultHomePage({
                     ))}
             </div>
         );
+
+        // Collect additionalActions from plugins
+        additionalPluginActions = (
+            <>
+                {customizationController.plugins
+                    .filter((p) => p.homePage?.additionalActions)
+                    .map((plugin, i) => (
+                        <React.Fragment key={`plugin_actions_${i}`}>
+                            {plugin.homePage!.additionalActions}
+                        </React.Fragment>
+                    ))}
+            </>
+        );
     }
 
     /* ───────────────────────────────────────────────────────────────
@@ -332,9 +368,10 @@ export function DefaultHomePage({
                         className="w-full flex-grow"
                     />
                     {additionalActions}
+                    {additionalPluginActions}
                 </div>
 
-                <FavouritesView hidden={performingSearch}/>
+                <FavouritesView hidden={performingSearch} />
 
                 {additionalChildrenStart}
                 {additionalPluginChildrenStart}
@@ -487,7 +524,7 @@ export function DefaultHomePage({
 
                     <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
                         {activeGroupData &&
-                        draggingGroupId === activeGroupData.name ? (
+                            draggingGroupId === activeGroupData.name ? (
                             <div
                                 className="rounded-lg bg-transparent"
                                 style={{
@@ -498,7 +535,7 @@ export function DefaultHomePage({
                                 <NavigationGroup
                                     group={
                                         activeGroupData.name ===
-                                        DEFAULT_GROUP_NAME
+                                            DEFAULT_GROUP_NAME
                                             ? undefined
                                             : activeGroupData.name
                                     }

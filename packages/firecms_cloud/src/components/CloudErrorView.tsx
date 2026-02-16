@@ -77,7 +77,7 @@ export function CloudErrorView({
             </pre>}
 
             {onRetry && <Button
-                variant="outlined"
+
                 color="error"
                 onClick={() => onRetry()}
             >
@@ -149,7 +149,7 @@ function CloudMissingServiceAccountErrorView({
             {message}
         </Typography>
         <LoadingButton
-            variant="outlined"
+
             color="error"
             onClick={onClick}
             loading={isSubmitting}
@@ -185,7 +185,7 @@ function CloudNeedsToAcceptTermsErrorView({
             </a>
         </Typography>
         <Button
-            variant="outlined"
+
             color="error"
             onClick={onFixed}
             startIcon={<BuildIcon/>}
@@ -221,7 +221,7 @@ function CloudNoPreviousFirebaseProjectsErrorView({
         </Typography>
 
         <Button
-            variant="outlined"
+
             color="error"
             onClick={onFixed}
             startIcon={<BuildIcon/>}

@@ -34,13 +34,13 @@ import { downloadEntitiesExport } from "./export";
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
-                                                                                             collection: inputCollection,
-                                                                                             path: inputPath,
-                                                                                             collectionEntitiesCount,
-                                                                                             onAnalyticsEvent,
-                                                                                             exportAllowed,
-                                                                                             notAllowedView
-                                                                                         }: CollectionActionsProps<M, USER, EntityCollection<M, any>> & {
+    collection: inputCollection,
+    path: inputPath,
+    collectionEntitiesCount,
+    onAnalyticsEvent,
+    exportAllowed,
+    notAllowedView
+}: CollectionActionsProps<M, USER, EntityCollection<M, any>> & {
     exportAllowed?: (props: { collectionEntitiesCount: number, path: string, collection: EntityCollection }) => boolean;
     notAllowedView?: React.ReactNode;
     onAnalyticsEvent?: (event: string, params?: any) => void;
@@ -65,7 +65,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const path = navigationController.resolveIdsFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
-        collectionEntitiesCount,
+        collectionEntitiesCount: collectionEntitiesCount ?? 0,
         path,
         collection: inputCollection
     });
@@ -127,7 +127,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     }, [exportConfig?.additionalFields]);
 
     const doDownload = useCallback(async (collection: ResolvedEntityCollection<M>,
-                                          exportConfig: ExportConfig<any> | undefined) => {
+        exportConfig: ExportConfig<any> | undefined) => {
 
         onAnalyticsEvent?.("export_collection", {
             collection: collection.path
@@ -185,12 +185,12 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     return <>
 
         <Tooltip title={"Export"}
-                 asChild={true}>
+            asChild={true}>
             <IconButton
                 size={"small"}
                 color={"primary"}
                 onClick={handleClickOpen}>
-                <DownloadIcon size={"small"}/>
+                <DownloadIcon size={"small"} />
             </IconButton>
         </Tooltip>
 
@@ -205,7 +205,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
                 <div>Download the the content of this table as a CSV</div>
 
-                {collectionEntitiesCount > DOCS_LIMIT &&
+                {collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT &&
                     <Alert color={"warning"}>
                         <div>
                             This collections has a large number
@@ -217,40 +217,40 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     <div className={"p-4 flex flex-col"}>
                         <div className="flex items-center">
                             <input id="radio-csv" type="radio" value="csv" name="exportType"
-                                   checked={exportType === "csv"}
-                                   onChange={() => setExportType("csv")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={exportType === "csv"}
+                                onChange={() => setExportType("csv")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">CSV</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">CSV</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
-                                   checked={exportType === "json"}
-                                   onChange={() => setExportType("json")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={exportType === "json"}
+                                onChange={() => setExportType("json")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">JSON</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">JSON</label>
                         </div>
                     </div>
 
                     <div className={"p-4 flex flex-col"}>
                         <div className="flex items-center">
                             <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
-                                   checked={dateExportType === "timestamp"}
-                                   onChange={() => setDateExportType("timestamp")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={dateExportType === "timestamp"}
+                                onChange={() => setDateExportType("timestamp")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
-                                   checked={dateExportType === "string"}
-                                   onChange={() => setDateExportType("string")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={dateExportType === "string"}
+                                onChange={() => setDateExportType("string")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
                                 as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>
@@ -262,13 +262,13 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     disabled={exportType !== "csv"}
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
-                    label={"Flatten arrays"}/>
+                    label={"Flatten arrays"} />
 
                 <BooleanSwitchWithLabel
                     size={"small"}
                     value={includeUndefinedValues}
                     onValueChange={setIncludeUndefinedValues}
-                    label={"Include undefined values"}/>
+                    label={"Include undefined values"} />
 
                 {!canExport && notAllowedView}
 
@@ -276,18 +276,15 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
             <DialogActions>
 
-                {dataLoading && <CircularProgress size={"smallest"}/>}
+                {dataLoading && <CircularProgress size={"smallest"} />}
 
                 <Button onClick={handleClose}
-                        color={"primary"}
-                        variant={"text"}>
+                    variant={"text"}>
                     Cancel
                 </Button>
 
-                <Button variant="filled"
-                        onClick={onOkClicked}
-                        color={"primary"}
-                        disabled={dataLoading || !canExport}>
+                <Button onClick={onOkClicked}
+                    disabled={dataLoading || !canExport}>
                     Download
                 </Button>
 

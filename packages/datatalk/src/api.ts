@@ -1,11 +1,16 @@
 import { ChatMessage } from "./types";
+import { SchemaContext } from "./utils/schemaContext";
+
+const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 
 export async function streamDataTalkCommand(firebaseAccessToken: string,
-                                            command: string,
-                                            apiEndpoint: string,
-                                            sessionId: string,
-                                            messages: ChatMessage[],
-                                            onDelta: (delta: string) => void
+    command: string,
+    apiEndpoint: string = DEFAULT_API_ENDPOINT,
+    sessionId: string,
+    messages: ChatMessage[],
+    onDelta: (delta: string) => void,
+    schemaContext?: SchemaContext,
+    projectId?: string
 ): Promise<string> {
 
     // eslint-disable-next-line no-async-promise-executor
@@ -20,14 +25,16 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                 body: JSON.stringify({
                     sessionId,
                     command,
-                    history: messages
+                    history: messages,
+                    schemaContext,
+                    ...(projectId && { projectId })
                 })
             });
 
             if (!response.ok) {
                 const data = await response.json();
                 console.error("Error streaming data talk command", data);
-                reject(new ApiError(data.message, data.code));
+                reject(new DataTalkApiError(data.message, data.code));
                 return;
             }
 
@@ -88,8 +95,10 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
 }
 
 export function getDataTalkSamplePrompts(firebaseAccessToken: string,
-                                         apiEndpoint: string,
-                                         messages?: ChatMessage[]
+    apiEndpoint: string = DEFAULT_API_ENDPOINT,
+    messages?: ChatMessage[],
+    schemaContext?: SchemaContext,
+    projectId?: string
 ): Promise<string[]> {
     return fetch(apiEndpoint + "/datatalk/sample_prompts", {
         method: "POST",
@@ -98,13 +107,15 @@ export function getDataTalkSamplePrompts(firebaseAccessToken: string,
             Authorization: `Bearer ${firebaseAccessToken}`
         },
         body: JSON.stringify({
-            history: messages ?? []
+            history: messages ?? [],
+            schemaContext,
+            ...(projectId && { projectId })
         })
     })
         .then(response => {
             if (!response.ok) {
                 return response.json().then(data => {
-                    throw new ApiError(data.message, data.code);
+                    throw new DataTalkApiError(data.message, data.code);
                 });
             }
             return response.json();
@@ -112,12 +123,18 @@ export function getDataTalkSamplePrompts(firebaseAccessToken: string,
         .then(data => data.data);
 }
 
-export class ApiError extends Error {
+export class DataTalkApiError extends Error {
 
     public code?: string;
 
     constructor(message: string, code?: string) {
         super(message);
         this.code = code;
+        this.name = "DataTalkApiError";
     }
 }
+
+/**
+ * @deprecated Use DataTalkApiError instead
+ */
+export const ApiError = DataTalkApiError;

@@ -1,0 +1,334 @@
+---
+// src/pages/startups.astro
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+// The Layout component should handle the Header and Footer
+// import Header from "../components/Header.astro";
+// import Footer from "../components/Footer.astro";
+import ScreenshotsMarquee from "../components/ScreenshotsMarquee.astro";
+import ClientLogos from "../components/ClientLogos.astro";
+
+const title = "FireCMS for Startups - Move Fast, Scale Smart";
+const description = "Get your startup's admin panel from database to production in minutes, not weeks. Focus on your core product and let FireCMS handle the back-office.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Startups", url: "https://firecms.co/startups" }
+];
+
+// Inline SVG icon definitions
+const zapIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>`;
+const cloudIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>`;
+const spreadsheetIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125v-12.75c0-.621.504-1.125 1.125-1.125h17.25c.621 0 1.125.504 1.125 1.125v12.75c0 .621-.504 1.125-1.125 1.125m-17.25 0h17.25m-17.25 0l1.125 1.125c.15.15.313.225.487.225h14.25c.174 0 .337-.075.487-.225l1.125-1.125m-17.25 0h17.25M9 13.125h6M9 16.5h6" /></svg>`;
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+    <!-- Hero Section -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <!-- Background accents and subtle grid -->
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans">
+          Move Fast, Scale Smart
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          Get your startup's admin panel from database to production in <b>minutes</b>. Stop wasting time on boilerplate CRUD and focus on your core product.
+        </p>
+        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+          Start Your 1-Month Free Trial
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="relative isolate bg-black py-16">
+        <div class="mx-auto max-w-7xl px-8 lg:px-12">
+            <h2 class="text-center text-lg font-semibold leading-8 text-surface-400">
+                Trusted by developers at forward-thinking companies
+            </h2>
+            <div class="mx-auto mt-4 mb-8">
+                <ClientLogos filter="startups"/>
+            </div>
+        </div>
+        <SectionBackgroundAccents bottomLine={true}/>
+    </section>
+
+    <!-- Problem / Solution Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Your MVP Needs a Back-Office, Not a Backlog</h2>
+          <p class="mt-6 text-lg leading-8 text-surface-400">Building an internal admin panel is a distraction. FireCMS connects directly to your Firebase/MongoDB database and gives you a production-ready UI in minutes, letting your engineers focus on what matters.</p>
+        </div>
+
+        <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
+          <img src="/img/users_table.png"
+               alt="Screenshot of FireCMS Admin Panel managing User Data"
+               class="w-full h-auto"/>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- "Built for Velocity" Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for Startup Velocity</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+            <Fragment set:html={zapIcon} />
+            <h3 class="text-xl font-semibold mb-2 text-white">Instant Setup from Data</h3>
+            <p class="text-surface-400 text-sm leading-relaxed">Point FireCMS at your existing Firestore/MongoDB and let it automatically infer your schemas. No tedious config, just immediate results.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+            <Fragment set:html={cloudIcon} />
+            <h3 class="text-xl font-semibold mb-2 text-white">Launch in Minutes</h3>
+            <p class="text-surface-400 text-sm leading-relaxed">Use FireCMS Cloud for a fully managed, zero-maintenance admin panel. Connect your project and go live without thinking about deployment.</p>
+          </div>
+          <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+            <Fragment set:html={spreadsheetIcon} />
+            <h3 class="text-xl font-semibold mb-2 text-white">Empower Your Team</h3>
+            <p class="text-surface-400 text-sm leading-relaxed">The intuitive spreadsheet UI and Notion-style editor mean non-technical users can manage data safely and efficiently from day one.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="relative isolate bg-black py-24 sm:py-32 scroll-mt-20">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Trusted by Founders & CTOs</h2>
+        </div>
+        <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2">
+          <!-- Example Quote 3: EasyHome -->
+          <figure class="text-center">
+            <blockquote class="text-xl leading-8 text-surface-300">
+              <p>“So far, this has been the missing piece of the puzzle for running a Firebase back-end. I love how we can just throw some React in there and it all feels so seamless.”</p>
+            </blockquote>
+            <figcaption class="mt-8 flex items-center justify-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-surface-800 object-cover" src="/img/avatars/john.avif" alt="John Coppa"/>
+              <div class="text-sm leading-6">
+                <div class="font-semibold text-white">John Coppa</div>
+                <div class="text-surface-400">CTO at EasyHome</div>
+              </div>
+            </figcaption>
+          </figure>
+
+          <!-- Example Quote 4: OikosBrain -->
+          <figure class="text-center">
+            <blockquote class="text-xl leading-8 text-surface-300">
+              <p>“We are early adopters of FireCMS (and very proud of it) and it gives us a lot of flexibility and ease of integration of anything we develop.”</p>
+            </blockquote>
+            <figcaption class="mt-8 flex items-center justify-center gap-x-4">
+              <img class="h-10 w-10 rounded-full bg-surface-800 object-cover" src="/img/avatars/manuel.avif" alt="Manuel Pinilla"/>
+              <div class="text-sm leading-6">
+                <div class="font-semibold text-white">Manuel Pinilla</div>
+                <div class="text-surface-400">Founder, OikosBrain</div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Path to Scale Section -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl text-center">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Start Fast, Scale with Full
+                    Control.</h2>
+                <p class="text-lg text-surface-400 mb-8">Begin on our managed Cloud for maximum speed. As your needs grow,
+                    you can easily migrate to our open-source Self-Hosted framework to add custom React components,
+                    white-label the UI, and take full ownership of your back-office.</p>
+                <a href="/pricing"
+                   class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out">
+                    Compare Cloud & Self-Hosted
+                </a>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 mt-12">
+                <video
+                        class="w-full h-auto"
+                        loop
+                        autoplay
+                        muted
+                        playsinline>
+                    <source src="/img/schema_editor.webm" type="video/webm"/>
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Startup-Friendly Features Section -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl text-center mb-16">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Startup-Friendly Features</h2>
+                <p class="mt-6 text-lg leading-8 text-surface-400">Everything you need, nothing you don't.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="Firebase/MongoDB Native" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Firebase/MongoDB Native</h3>
+                        <p class="text-sm text-surface-400">Leverages their real-time sync, security, and scalability directly.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-off.svg" alt="Zero Server Management" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Zero Server Management</h3>
+                        <p class="text-sm text-surface-400">Focus on features, not infrastructure (with Firebase/MongoDB).</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/edit.svg" alt="Schema Editor & Inference" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Schema Editor & Inference</h3>
+                        <p class="text-sm text-surface-400">Visual building & auto-detection adapt to your data fast.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-input.svg" alt="Powerful Editing Tools" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Powerful Editing Tools</h3>
+                        <p class="text-sm text-surface-400">Spreadsheet & form views, file storage, references, and more.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt="Role-Based Access Control" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Role-Based Access Control</h3>
+                        <p class="text-sm text-surface-400">Configure views and permissions per user role easily.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg" alt="Flexible Customization" class="h-6 w-6 filter invert mt-1"/>
+                    <div>
+                        <h3 class="font-semibold text-white">Flexible Customization</h3>
+                        <p class="text-sm text-surface-400">Add custom fields, logic, hooks, and full React views.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="relative bg-black text-surface-200 py-16">
+        <ScreenshotsMarquee/>
+    </div>
+
+    <!-- More Than Just a CMS Section -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 items-start">
+                <div>
+                    <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-6">More Than Just a CMS</h2>
+                    <p class="text-xl text-surface-400 mb-8">
+                        Extend FireCMS to build the custom internal tools your startup needs.
+                        Sensible defaults meet powerful customization.
+                    </p>
+                </div>
+                <ul class="text-left text-lg space-y-4">
+                    <li class="flex items-start">
+                        <svg
+                             class="w-6 h-6 mr-3 text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
+                        </svg>
+                        <span><b>Internal Tools:</b> Tailored dashboards for support, ops, sales, or data admin on your backend.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg
+                             class="w-6 h-6 mr-3 text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span><b>Headless Content:</b> Manage content for web/mobile apps, marketing sites, blogs, docs.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg
+                             class="w-6 h-6 mr-3 text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        <span><b>User Management:</b> View, edit, and manage user profiles and permissions.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg
+                             class="w-6 h-6 mr-3 text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span><b>Product/E-commerce Data:</b> Manage catalogs, variants, pricing, inventory easily.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg
+                             class="w-6 h-6 mr-3 text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span><b>App Configuration:</b> Control settings, feature flags, or A/B tests via a UI.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Built for Pivots Section -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 items-center">
+          <div class="lg:order-last self-start">
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">Built for Pivots</h2>
+            <p class="text-lg text-surface-400 mb-8">Startups evolve. Your tools should too. FireCMS makes adapting your data models easy. Change schemas, add content types, or restructure without rebuilding. The headless architecture decouples backend and frontend for maximum flexibility.</p>
+            <a href="/features" class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out">
+              Explore Features
+            </a>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
+            <img src="/img/widgets.png" alt="FireCMS Widgets" class="w-full h-auto"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="bg-black py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Ready to accelerate your startup?</h2>
+            <div class="flex items-center justify-center gap-x-6">
+                <a href="https://app.firecms.co"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+                    Start Your Free Trial
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                         class="h-5 w-5 text-white filter invert"/>
+                </a>
+                <a href="/contact"
+                   class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                    Contact Sales
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
+                         class="h-4 w-4 text-white filter invert"/>
+                </a>
+            </div>
+        </div>
+    </section>
+
+  </main>
+</Layout>

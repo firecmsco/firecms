@@ -35,7 +35,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
 
     let multiline: boolean | undefined = false;
     if (property.dataType === "string") {
-        multiline = (property.multiline || property.markdown) ?? false;
+        multiline = (property.multiline || Boolean(property.markdown)) ?? false;
     }
 
     useClearRestoreValue({

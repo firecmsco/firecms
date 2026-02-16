@@ -1,0 +1,90 @@
+---
+slug: docs/self
+title: Quickstart
+sidebar_label: Quickstart
+description: Get started with self-hosted FireCMS in minutes. Create a new project using the CLI and run it locally.
+---
+
+Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. FireCMS self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
+
+:::tip When to choose self-hosted?
+- **Data sovereignty**: Your data never leaves your infrastructure
+- **Custom backends**: Use **MongoDB**, custom APIs, or any database
+- **Deep customization**: Full access to extend every part of the CMS
+- **On-premise requirements**: Deploy behind firewalls or in private clouds
+:::
+
+### Community vs PRO
+
+| Feature | Community (Free) | PRO |
+|---------|-----------------|-----|
+| Full CRUD UI | ✅ | ✅ |
+| Custom React fields | ✅ | ✅ |
+| TypeScript support | ✅ | ✅ |
+| Collection Editor UI | ❌ | ✅ |
+| Data import/export | ❌ | ✅ |
+| LLM autocompletion | ❌ | ✅ |
+| User & role management | ❌ | ✅ |
+
+Both versions are built on **React**, connect to **Firebase/Firestore** (or MongoDB), and give you a production-ready **admin panel** in minutes.
+
+
+### Create a new project using the CLI
+
+To create a new project using the CLI, you can run the following command:
+```bash
+npx create-firecms-app
+```
+or:
+
+```bash
+yarn create firecms-app
+```
+
+
+This will create a new FireCMS, Community or PRO, project in the selected folder.
+A FireCMS project is a React application that you can customize to fit your needs.
+The initial project will have a basic structure with a few collections and a couple of custom views.
+
+### Running the project
+
+To run the project, you run the following commands:
+
+```bash
+cd my-cms
+yarn
+yarn dev
+```
+
+or
+
+```bash
+cd my-cms
+npm install
+npm run dev
+```
+
+This will install the dependencies and start the development server.
+
+### Changing the base URL of FireCMS
+
+FireCMS uses React Router to handle the routing of the application.
+You can change the base URL of FireCMS by modifying the `basename` property of the `BrowserRouter` component in the `src/main.tsx` file.
+For example, if you want to change the base URL to `/admin`, you can do it like this:
+
+```tsx
+import React from "react"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+import "./index.css"
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <BrowserRouter basename={"/admin"}>
+            <App/>
+        </BrowserRouter>
+    </React.StrictMode>
+)
+```

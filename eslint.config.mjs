@@ -33,6 +33,9 @@ export default [
 
         rules: {
             "no-undef": "off",
+            "react/jsx-tag-spacing": ["warn", {
+                "beforeSelfClosing": "never"
+            }],
             "space-before-function-paren": 0,
             "react/prop-types": 0,
             "react/jsx-handler-names": 0,

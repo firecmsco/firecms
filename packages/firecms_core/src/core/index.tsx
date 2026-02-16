@@ -2,6 +2,7 @@ export * from "./FireCMS";
 
 export * from "./DefaultDrawer";
 export * from "./DrawerNavigationItem";
+export * from "./DrawerNavigationGroup";
 
 export * from "./field_configs";
 

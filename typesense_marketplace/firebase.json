@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "source": "backend",
+    "runtime": "nodejs20",
+    "codebase": "typesense-marketplace"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

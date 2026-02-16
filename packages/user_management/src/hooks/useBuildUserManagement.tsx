@@ -298,12 +298,17 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
 
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         if (mgmtUser) {
-            // check if the uid is updated in the user management system
-            if (mgmtUser.uid !== user.uid) {
-                console.warn("User uid has changed, updating user in user management system");
+            // check if the uid or photoURL needs to be updated in the user management system
+            const needsUidUpdate = mgmtUser.uid !== user.uid;
+            const needsPhotoUpdate = user.photoURL && mgmtUser.photoURL !== user.photoURL;
+
+            if (needsUidUpdate || needsPhotoUpdate) {
+                const updateReason = needsUidUpdate ? "uid" : "photoURL";
+                console.debug(`User ${updateReason} has changed, updating user in user management system`);
                 saveUser({
                     ...mgmtUser,
-                    uid: user.uid
+                    uid: user.uid,
+                    ...(needsPhotoUpdate ? { photoURL: user.photoURL } : {})
                 }).then(() => {
                     console.debug("User updated in user management system", mgmtUser);
                 }).catch(e => {
@@ -322,7 +327,10 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
 
     const userRoleIds = userRoles?.map(r => r.id);
     useEffect(() => {
-        console.debug("Setting user roles", { userRoles, roles });
+        console.debug("Setting user roles", {
+            userRoles,
+            roles
+        });
         authController.setUserRoles?.(userRoles ?? []);
     }, [userRoleIds]);
 

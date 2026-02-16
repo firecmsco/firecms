@@ -52,4 +52,10 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
      */
     interactive?: boolean;
 
+    /**
+     * If true, image previews will fill their container completely.
+     * Only applies to image type properties.
+     */
+    fill?: boolean;
+
 }

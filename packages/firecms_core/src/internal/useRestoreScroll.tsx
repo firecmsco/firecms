@@ -1,24 +1,28 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const scrollsMap: Record<string, number> = {};
 
 export function useRestoreScroll() {
 
-    // const scrollsMap = React.useRef<Record<string, number>>({});
-
     const location = useLocation();
 
-    const containerRef = React.useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [scroll, setScroll] = React.useState(0);
     const [direction, setDirection] = React.useState<"up" | "down">("down");
 
+    // Use ref to track previous scroll for direction calculation
+    // This avoids recreating handleScroll on every scroll
+    const prevScrollRef = useRef(0);
+
     const handleScroll = useCallback(() => {
         if (!containerRef.current || !location.key) return;
-        scrollsMap[location.key] = containerRef.current.scrollTop;
-        setScroll(containerRef.current.scrollTop);
-        setDirection(containerRef.current.scrollTop > scroll ? "down" : "up");
-    }, [containerRef, location.key, scroll]);
+        const scrollTop = containerRef.current.scrollTop;
+        scrollsMap[location.key] = scrollTop;
+        setScroll(scrollTop);
+        setDirection(scrollTop > prevScrollRef.current ? "down" : "up");
+        prevScrollRef.current = scrollTop;
+    }, [location.key]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -29,16 +33,24 @@ export function useRestoreScroll() {
             if (container)
                 container.removeEventListener("scroll", handleScroll);
         };
-    }, [containerRef, handleScroll, location]);
+    }, [handleScroll]);
 
+    // Defer scroll restoration to next tick to allow async content to render
+    // This is necessary because DefaultHomePage content loads asynchronously
     useEffect(() => {
-        if (!containerRef.current || !scrollsMap[location.key]) return;
-        containerRef.current.scrollTo(
-            {
-                top: scrollsMap[location.key],
+        const savedScroll = scrollsMap[location.key];
+        if (!containerRef.current || !savedScroll) return;
+
+        const timeoutId = setTimeout(() => {
+            if (!containerRef.current) return;
+            containerRef.current.scrollTo({
+                top: savedScroll,
                 behavior: "auto"
             });
-    }, [location]);
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
+    }, [location.key]);
 
     return {
         containerRef,

@@ -19,17 +19,17 @@ type DateTimeFieldProps = FieldProps<Date>;
  * @group Form fields
  */
 export function DateTimeFieldBinding({
-                                         propertyKey,
-                                         value,
-                                         setValue,
-                                         autoFocus,
-                                         error,
-                                         showError,
-                                         disabled,
-                                         touched,
-                                         property,
-                                         includeDescription
-                                     }: DateTimeFieldProps) {
+    propertyKey,
+    value,
+    setValue,
+    autoFocus,
+    error,
+    showError,
+    disabled,
+    touched,
+    property,
+    includeDescription
+}: DateTimeFieldProps) {
 
     const { locale } = useCustomizationController();
     const internalValue = value || null;
@@ -50,21 +50,22 @@ export function DateTimeFieldBinding({
                     mode={property.mode}
                     clearable={property.clearable}
                     locale={locale}
+                    timezone={property.timezone}
                     error={showError}
                     disabled={disabled}
                     label={<LabelWithIcon
                         icon={getIconForProperty(property, "small")}
                         required={property.validation?.required}
                         className={showError ? "text-red-500 dark:text-red-500" : "text-text-secondary dark:text-text-secondary-dark"}
-                        title={property.name}/>}
+                        title={property.name} />}
                 />
             </PropertyIdCopyTooltip>
 
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             disabled={disabled}
-                             property={property}/>
+                showError={showError}
+                error={error}
+                disabled={disabled}
+                property={property} />
 
         </>
     );

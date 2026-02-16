@@ -352,4 +352,74 @@ describe("mergeDeep", () => {
             c: 3
         });
     });
+
+    it("should preserve EntityReference class instances instead of merging them as plain objects", () => {
+        // Simulate EntityReference-like class with isEntityReference method
+        class EntityReference {
+            constructor(public id: string, public path: string) { }
+            isEntityReference() { return true; }
+        }
+
+        const ref1 = new EntityReference("id1", "collection/path1");
+        const ref2 = new EntityReference("id2", "collection/path2");
+
+        const target = { ref: ref1, other: "value" };
+        const source = { ref: ref2 };
+
+        const result = mergeDeep(target, source);
+
+        // The source reference should replace target reference completely
+        expect(result.ref).toBe(ref2);
+        // Should preserve the class instance and its method
+        expect(result.ref.isEntityReference).toBeDefined();
+        expect(result.ref.isEntityReference()).toBe(true);
+        expect(result.ref.id).toBe("id2");
+        expect(result.ref.path).toBe("collection/path2");
+    });
+
+    it("should preserve GeoPoint class instances instead of merging them as plain objects", () => {
+        class GeoPoint {
+            constructor(public latitude: number, public longitude: number) { }
+        }
+
+        const geo1 = new GeoPoint(40.7128, -74.0060);
+        const geo2 = new GeoPoint(51.5074, -0.1278);
+
+        const target = { location: geo1 };
+        const source = { location: geo2 };
+
+        const result = mergeDeep(target, source);
+
+        // The source GeoPoint should replace target completely
+        expect(result.location).toBe(geo2);
+        expect(result.location instanceof GeoPoint).toBe(true);
+        expect(result.location.latitude).toBe(51.5074);
+        expect(result.location.longitude).toBe(-0.1278);
+    });
+
+    it("should still merge plain objects normally while preserving class instances", () => {
+        class EntityReference {
+            constructor(public id: string, public path: string) { }
+            isEntityReference() { return true; }
+        }
+
+        const ref = new EntityReference("id1", "collection/path1");
+
+        const target = {
+            ref: ref,
+            nested: { a: 1, b: 2 }
+        };
+        const source = {
+            nested: { b: 3, c: 4 }
+        };
+
+        const result = mergeDeep(target, source);
+
+        // Reference should be preserved from target (not in source)
+        expect(result.ref).toBe(ref);
+        expect(result.ref.isEntityReference()).toBe(true);
+
+        // Plain object should be merged normally
+        expect(result.nested).toEqual({ a: 1, b: 3, c: 4 });
+    });
 });

@@ -425,7 +425,6 @@ export function RolesDetailsForm({
                             {savingError.message ?? "There was an error saving this role"}
                         </Typography>}
                         <Button variant={"text"}
-                                color={"primary"}
                                 onClick={() => {
                                     handleClose();
                                 }}>
@@ -433,7 +432,6 @@ export function RolesDetailsForm({
                         </Button>
                         <LoadingButton
                             variant="filled"
-                            color="primary"
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}

@@ -62,14 +62,24 @@ export function VirtualTableSelect(props: {
             key={`${enumKey}`}
             enumKey={String(enumKey)}
             enumValues={enumValues}
-            size={small ? "small" : "medium"}/>;
+            size={small ? "small" : "medium"} />;
     };
+
+    // When the dropdown closes (including on escape), restore focus to the trigger
+    const handleOpenChange = useCallback((open: boolean) => {
+        if (!open && ref.current) {
+            // Use setTimeout to ensure focus is restored after Radix finishes its cleanup
+            setTimeout(() => {
+                ref.current?.focus({ preventScroll: true });
+            }, 0);
+        }
+    }, []);
 
     return (
         multiple
             ? <MultiSelect
                 inputRef={ref}
-                className="w-full h-full p-0 bg-transparent"
+                className="w-full h-full p-0 bg-transparent outline-none"
                 position={"item-aligned"}
                 disabled={disabled}
                 includeClear={false}
@@ -77,7 +87,8 @@ export function VirtualTableSelect(props: {
                 value={validValue
                     ? ((internalValue as any[]).map(v => v.toString()))
                     : ([])}
-                onValueChange={onChange}>
+                onValueChange={onChange}
+                onOpenChange={handleOpenChange}>
                 {enumValues?.map((enumConfig) => (
                     <MultiSelectItem
                         key={enumConfig.id}
@@ -85,7 +96,7 @@ export function VirtualTableSelect(props: {
                         <EnumValuesChip
                             enumKey={enumConfig.id}
                             enumValues={enumValues}
-                            size={small ? "small" : "medium"}/>
+                            size={small ? "small" : "medium"} />
                     </MultiSelectItem>
                 ))}
             </MultiSelect>
@@ -93,7 +104,8 @@ export function VirtualTableSelect(props: {
                 inputRef={ref}
                 size={"large"}
                 fullWidth={true}
-                className="w-full h-full p-0 bg-transparent"
+                className="w-full h-full p-0 bg-transparent outline-none [&_button]:ring-0 [&_button]:ring-offset-0"
+                inputClassName="ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-offset-0"
                 position={"item-aligned"}
                 disabled={disabled}
                 padding={false}
@@ -101,6 +113,7 @@ export function VirtualTableSelect(props: {
                     ? internalValue?.toString()
                     : ""}
                 onValueChange={onChange}
+                onOpenChange={handleOpenChange}
                 renderValue={renderValue}>
                 {enumValues?.map((enumConfig) => (
                     <SelectItem
@@ -109,7 +122,7 @@ export function VirtualTableSelect(props: {
                         <EnumValuesChip
                             enumKey={enumConfig.id}
                             enumValues={enumValues}
-                            size={small ? "small" : "medium"}/>
+                            size={small ? "small" : "medium"} />
                     </SelectItem>
                 ))}
             </Select>

@@ -12,6 +12,13 @@ import { AppCheckOptions } from "@firecms/firebase";
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
 
+export type TypesenseSearchConfig = {
+    enabled: boolean;
+    region: string;
+    extensionInstanceId: string;
+    collections?: string[];
+};
+
 export type ProjectConfig = {
 
     projectId: string;
@@ -39,6 +46,9 @@ export type ProjectConfig = {
     localTextSearchEnabled: boolean;
     updateLocalTextSearchEnabled: (allow: boolean) => Promise<void>;
 
+    typesenseSearchConfig?: TypesenseSearchConfig;
+    updateTypesenseSearchConfig: (config: TypesenseSearchConfig | null) => Promise<void>;
+
     primaryColor?: string;
     secondaryColor?: string;
     updatePrimaryColor: (color?: string) => void;
@@ -64,12 +74,22 @@ interface ProjectConfigParams {
 }
 
 export function useBuildProjectConfig({
-                                          backendFirebaseApp,
-                                          projectId,
-                                      }: ProjectConfigParams): ProjectConfig {
+    backendFirebaseApp,
+    projectId,
+}: ProjectConfigParams): ProjectConfig {
 
-    const [primaryColor, setPrimaryColor] = useState<string | undefined>(DEFAULT_PRIMARY_COLOR);
-    const [secondaryColor, setSecondaryColor] = useState<string | undefined>(DEFAULT_SECONDARY_COLOR);
+    const [primaryColor, setPrimaryColor] = useState<string | undefined>(() => {
+        // Check for legacy CSS property
+        const legacyPrimary = getComputedStyle(document.documentElement)
+            .getPropertyValue('--fcms-primary')?.trim();
+        return legacyPrimary || DEFAULT_PRIMARY_COLOR;
+    });
+    const [secondaryColor, setSecondaryColor] = useState<string | undefined>(() => {
+        // Check for legacy CSS property
+        const legacySecondary = getComputedStyle(document.documentElement)
+            .getPropertyValue('--fcms-secondary')?.trim();
+        return legacySecondary || DEFAULT_SECONDARY_COLOR;
+    });
 
     const projectPath = `projects/${projectId}`;
     const configPath = projectId ? projectPath : undefined;
@@ -87,6 +107,7 @@ export function useBuildProjectConfig({
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
+    const [typesenseSearchConfig, setTypesenseSearchConfig] = useState<TypesenseSearchConfig | undefined>();
     const [historyDefaultEnabled, setHistoryDefaultEnabled] = useState<boolean>(false);
     const [blocked, setBlocked] = useState<boolean>(false);
 
@@ -120,15 +141,19 @@ export function useBuildProjectConfig({
     // update css variables when colors change in :root
     useEffect(() => {
         if (primaryColor) {
+            document.documentElement.style.setProperty("--color-primary", primaryColor);
+            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(primaryColor, 10));
             document.documentElement.style.setProperty("--fcms-primary", primaryColor);
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 10));
         } else {
-            document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--color-primary", DEFAULT_PRIMARY_COLOR);
+            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--fcms-primary", DEFAULT_PRIMARY_COLOR);
         }
         if (secondaryColor) {
+            document.documentElement.style.setProperty("--color-secondary", secondaryColor);
             document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
         } else {
+            document.documentElement.style.setProperty("--color-secondary", DEFAULT_SECONDARY_COLOR);
             document.documentElement.style.setProperty("--fcms-secondary", DEFAULT_SECONDARY_COLOR);
         }
 
@@ -160,6 +185,13 @@ export function useBuildProjectConfig({
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         return setDoc(doc(firestore, configPath), { local_text_search_enabled: allowed }, { merge: true });
+    }, [configPath]);
+
+    const updateTypesenseSearchConfig = useCallback(async (config: TypesenseSearchConfig | null): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { typesense_search_config: config }, { merge: true });
     }, [configPath]);
 
     const updateHistoryDefaultEnabled = useCallback(async (enabled: boolean): Promise<void> => {
@@ -200,6 +232,7 @@ export function useBuildProjectConfig({
                     setSubscriptionPlan(plan);
                     setSubscriptionData(snapshot.get("subscription_data"));
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
+                    setTypesenseSearchConfig(snapshot.get("typesense_search_config"));
                     setHistoryDefaultEnabled(snapshot.get("history_default_enabled") ?? false);
                     const trialTimestamp = snapshot.get("trial_valid_until");
                     if (trialTimestamp) {
@@ -292,6 +325,8 @@ export function useBuildProjectConfig({
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
         localTextSearchEnabled,
         updateLocalTextSearchEnabled,
+        typesenseSearchConfig,
+        updateTypesenseSearchConfig,
         historyDefaultEnabled,
         updateHistoryDefaultEnabled,
         updateSurveyData,
