@@ -229,6 +229,11 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          */
         ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
+        /**
+         * Add custom content above the entity title in the form view
+         */
+        BeforeTitle?: React.ComponentType<PluginFormActionProps<any, EC>>;
+
         fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
 
         fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;

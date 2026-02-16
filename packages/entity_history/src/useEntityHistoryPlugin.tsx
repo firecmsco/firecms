@@ -4,6 +4,7 @@ import { EntityHistoryView } from "./components/EntityHistoryView";
 import { HistoryIcon } from "@firecms/ui";
 import { entityHistoryCallbacks } from "./entity_history_callbacks";
 import { HistoryControllerProvider } from "./HistoryControllerProvider";
+import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents";
 
 /**
  * This plugin adds a history view to the entity side panel.
@@ -16,12 +17,13 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
         if (collection.history === true || (defaultEnabled && collection.history !== false)) {
             return {
                 ...collection,
+                history: true,
                 entityViews: [
                     ...(collection.entityViews ?? []),
                     {
                         key: "__history",
                         name: "History",
-                        tabComponent: <HistoryIcon size={"small"}/>,
+                        tabComponent: <HistoryIcon size={"small"} />,
                         Builder: EntityHistoryView,
                         position: "start"
                     }
@@ -39,6 +41,9 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
             props: {
                 getUser: props?.getUser
             }
+        },
+        form: {
+            BeforeTitle: LastEditedByFormAction
         },
         collection: {
             modifyCollection
