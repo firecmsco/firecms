@@ -142,7 +142,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         const firebaseAccessToken = await getBackendAuthToken();
 
         async function retry() {
-            // wait 2 seconds
+            // wait 5 seconds
             await new Promise(resolve => setTimeout(resolve, 5000));
             console.debug("Retrying getRootCollections", retries);
             return getRootCollections(projectId, googleAccessToken, serviceAccount, retries - 1);
@@ -158,8 +158,20 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 }),
             })
             .then(async (res) => {
+                // Don't retry on 429 (quota exhausted) or 403 (forbidden) — these won't resolve with retries
+                if (res.status === 429) {
+                    console.warn("Quota exhausted for getRootCollections, returning empty", { projectId });
+                    return [];
+                }
+                if (res.status === 403) {
+                    console.warn("Permission denied for getRootCollections", { projectId });
+                    return [];
+                }
                 if (res.status >= 300) {
-                    return await retry();
+                    if (retries > 0) {
+                        return await retry();
+                    }
+                    return [];
                 }
                 const data = await handleApiResponse<{
                     collections?: string[];
