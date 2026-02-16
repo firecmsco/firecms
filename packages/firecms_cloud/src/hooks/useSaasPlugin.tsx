@@ -6,6 +6,7 @@ import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FireCMSAppConfig, FireCMSBackend } from "../types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
+import { PermissionErrorView } from "../components/PermissionErrorView";
 import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
 import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
@@ -96,6 +97,23 @@ export function useSaasPlugin({
             modifyCollection
         },
         collectionView: {
+
+            CollectionError: useCallback(({ path, collection, parentCollectionIds, error }: {
+                path: string;
+                collection: EntityCollection;
+                parentCollectionIds?: string[];
+                error: Error;
+            }) => {
+                return <PermissionErrorView
+                    path={path}
+                    collection={collection}
+                    parentCollectionIds={parentCollectionIds}
+                    error={error}
+                    projectId={projectConfig.projectId}
+                    projectsApi={fireCMSBackend.projectsApi}
+                    onAnalyticsEvent={onAnalyticsEvent}
+                />;
+            }, [projectConfig.projectId, fireCMSBackend.projectsApi, onAnalyticsEvent]),
 
             blockSearch: ({
                 context,

@@ -829,6 +829,24 @@ export const EntityCollectionView = React.memo(
         // Popover open state managed at parent level to prevent closing when view changes
         const [viewModePopoverOpen, setViewModePopoverOpen] = useState(false);
 
+        // Compute plugin-provided error view for collection loading errors
+        const pluginErrorView = useMemo(() => {
+            const error = tableController.dataLoadingError;
+            if (!error || !customizationController.plugins) return null;
+            for (const plugin of customizationController.plugins) {
+                if (plugin.collectionView?.CollectionError) {
+                    const CollectionError = plugin.collectionView.CollectionError;
+                    return <CollectionError
+                        path={fullPath}
+                        collection={collection}
+                        parentCollectionIds={parentCollectionIds}
+                        error={error}
+                    />;
+                }
+            }
+            return null;
+        }, [tableController.dataLoadingError, customizationController.plugins, fullPath, collection, parentCollectionIds]);
+
         // Create ViewModeToggle once to prevent remounting when view changes
         const viewModeToggleElement = (
             <ViewModeToggle
@@ -881,7 +899,9 @@ export const EntityCollectionView = React.memo(
                 />
 
                 {/* View content - only the view-specific content changes */}
-                {viewMode === "kanban" && enabledViews.includes("kanban") ? (
+                {tableController.dataLoadingError && pluginErrorView
+                    ? pluginErrorView
+                    : viewMode === "kanban" && enabledViews.includes("kanban") ? (
                     <EntityCollectionBoardView
                         key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
                         collection={collection}
