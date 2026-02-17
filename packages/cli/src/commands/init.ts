@@ -44,7 +44,7 @@ const __dirname = path.dirname(__filename);
 
 const targetDirPath = findSpecificParentDir(__dirname, "cli");
 
-export type Template = "cloud" | "v2" | "next-pro" | "pro" | "community";
+export type Template = "cloud" | "v2" | "next-pro" | "pro" | "community" | "astro";
 export type InitOptions = Partial<{
     // skipPrompts: boolean;
     git: boolean;
@@ -128,6 +128,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--pro": Boolean,
             "--next-pro": Boolean,
             "--community": Boolean,
+            "--astro": Boolean,
             "--debug": Boolean,
             "--env": String
         },
@@ -153,6 +154,8 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         template = "pro";
     } else if (args["--community"]) {
         template = "community";
+    } else if (args["--astro"]) {
+        template = "astro";
     }
 
     return {
@@ -199,6 +202,10 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                     {
                         name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
                         value: "community"
+                    },
+                    {
+                        name: "FireCMS with Astro " + chalk.gray("(self-hosted with Astro SSG/SSR and blog support)"),
+                        value: "astro"
                     }
                 ]
             }
@@ -357,6 +364,8 @@ export async function createProject(options: InitOptions) {
         templateFolder = "template";
     } else if (options.template === "cloud") {
         templateFolder = "template_cloud";
+    } else if (options.template === "astro") {
+        templateFolder = "template_astro";
     } else {
         throw new Error("createProject: Invalid template");
     }
@@ -441,6 +450,15 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.bgYellow.black.bold("yarn deploy") + " or " + chalk.bgYellow.black.bold("npm run deploy"));
         console.log("and see it running in https://app.firecms.co");
         console.log("");
+    } else if (options.template === "astro") {
+        console.log("Make sure you have a valid Firebase config in ");
+        console.log(chalk.cyan.bold("src/common/firebase_config.ts"));
+        console.log("");
+        console.log("Run:");
+        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("npm run dev"));
+        console.log("");
     } else {
         throw new Error("createProject: Invalid template");
     }
@@ -474,6 +492,12 @@ async function copyTemplateFiles(options: InitOptions) {
                 "./package.json",
                 "./.firebaserc"
             ]);
+        } else if (options.template === "astro") {
+            return replaceProjectIdInTemplateFiles(options, [
+                "./src/common/firebase_config.ts",
+                "./package.json",
+                "./.firebaserc"
+            ]);
         } else if (options.template === "cloud") {
 
             return replaceProjectIdInTemplateFiles(options, [
@@ -486,7 +510,14 @@ async function copyTemplateFiles(options: InitOptions) {
 
 async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
 
-    const internalTargetDirectory = options.template === "next-pro" ? "src/app/common/firebase_config.ts" : "src/firebase_config.ts"
+    let internalTargetDirectory: string;
+    if (options.template === "next-pro") {
+        internalTargetDirectory = "src/app/common/firebase_config.ts";
+    } else if (options.template === "astro") {
+        internalTargetDirectory = "src/common/firebase_config.ts";
+    } else {
+        internalTargetDirectory = "src/firebase_config.ts";
+    }
 
     const fullFileName = path.resolve(options.targetDirectory, internalTargetDirectory);
     fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
@@ -608,6 +639,6 @@ async function createSelfHostedProjectWebappConfig(env, projectId, debug, onErr?
 }
 
 function isSelfHostedTemplate(template: Template) {
-    return ["pro", "next-pro", "community"].includes(template);
+    return ["pro", "next-pro", "community", "astro"].includes(template);
 }
 

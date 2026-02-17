@@ -1,0 +1,25 @@
+---
+export const prerender = false;
+import "@/styles/index.css";
+import "@fontsource/rubik/400.css";
+import "@fontsource/rubik/500.css";
+import "@fontsource/rubik/600.css";
+import "@fontsource/rubik/700.css";
+import { BlogList } from "../../blog/BlogList";
+---
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog — FireCMS Astro Demo</title>
+    <meta name="description" content="Explore blog articles from the FireCMS demo Firestore database, rendered with Astro." />
+    <style>
+        body {
+            font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <BlogList client:only="react" />
+</body>
+</html>
