@@ -18,7 +18,7 @@ export function isReferenceProperty(
     authController: AuthController,
     propertyOrBuilder: PropertyOrBuilder,
     fields: Record<string, PropertyConfig>) {
-    const resolvedProperty = resolveProperty({
+    const resolvedProperty: ResolvedProperty<any> | null = resolveProperty({
         propertyKey: "ignore", // TODO
         propertyOrBuilder,
         propertyConfigs: fields,

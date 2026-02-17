@@ -234,7 +234,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [columns, onColumnResize]);
 
         // saving the current filter as a ref as a workaround for header closure
-        const filterRef = useRef<VirtualTableFilterValues<any> | undefined>();
+        const filterRef = useRef<VirtualTableFilterValues<any> | undefined>(undefined);
 
         useEffect(() => {
             filterRef.current = filterInput;
@@ -491,7 +491,7 @@ function MemoizedList({
     itemSize,
     includeAddColumn
 }: {
-    outerRef: RefObject<HTMLDivElement>;
+    outerRef: RefObject<HTMLDivElement | null>;
     width: number;
     height: number;
     itemCount: number;

@@ -16,7 +16,14 @@ export default defineConfig(({ command }) => {
             logOverride: { "this-is-undefined-in-esm": "silent" }
         },
         plugins: [
-            react(),
+            react({
+                // Use classic JSX runtime (React.createElement) instead of the
+                // automatic runtime (react/jsx-runtime). This is critical because
+                // the federation plugin can't share react/jsx-runtime as a subpath
+                // import. With classic runtime, JSX goes through the shared "react"
+                // module, ensuring the host and remote use the same React instance.
+                jsxRuntime: "classic"
+            }),
             tailwindcss(),
             federation({
                 name: "remote_app",
@@ -24,24 +31,28 @@ export default defineConfig(({ command }) => {
                 exposes: {
                     "./config": "./src/index"
                 },
-                shared: ["react", "react-dom",
-                    ...(build
-                        ? [
-                            "@firecms/cloud",
-                            "@firecms/core",
-                            "@firecms/firebase",
-                            "@firecms/ui",
-                            "@firebase/firestore",
-                            "@firebase/app",
-                            "@firebase/functions",
-                            "@firebase/auth",
-                            "@firebase/storage",
-                            "@firebase/analytics",
-                            "@firebase/remote-config",
-                            "@firebase/app-check"
-                        ]
-                        : [])
-                ]
+                shared: {
+                    "react": {
+                        requiredVersion: "^18.0.0 || ^19.0.0",
+                        generate: false,
+                    },
+                    "react-dom": {
+                        requiredVersion: "^18.0.0 || ^19.0.0",
+                        generate: false,
+                    },
+                    "@firecms/cloud": { requiredVersion: "^3.0.0", generate: false },
+                    "@firecms/core": { requiredVersion: "^3.0.0", generate: false },
+                    "@firecms/firebase": { requiredVersion: "^3.0.0", generate: false },
+                    "@firecms/ui": { requiredVersion: "^3.0.0", generate: false },
+                    "@firebase/firestore": { generate: false },
+                    "@firebase/app": { generate: false },
+                    "@firebase/functions": { generate: false },
+                    "@firebase/auth": { generate: false },
+                    "@firebase/storage": { generate: false },
+                    "@firebase/analytics": { generate: false },
+                    "@firebase/remote-config": { generate: false },
+                    "@firebase/app-check": { generate: false },
+                }
             })
         ],
         build: {

@@ -43,8 +43,8 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@tailwindcss/typography": "^0.5.15",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.21.0",
     "@typescript-eslint/parser": "^8.21.0",
     "@vitejs/plugin-react": "^4.3.2",

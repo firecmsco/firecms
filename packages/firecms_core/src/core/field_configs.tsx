@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ArrayProperty, FieldProps, Property, PropertyConfig, ResolvedProperty } from "../types";
+import { ArrayProperty, FieldProps, NumberProperty, Property, PropertyConfig, ResolvedProperty, StringProperty } from "../types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -397,14 +397,19 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "custom_array";
         } else if (isPropertyBuilder(of)) {
             return "repeat";
-        } else if (of?.dataType === "string" && of.enumValues) {
-            return "multi_select";
-        } else if (of?.dataType === "number" && of.enumValues) {
-            return "multi_number_select";
-        } else if (of?.dataType === "string" && of.storage) {
-            return "multi_file_upload";
-        } else if (of?.dataType === "reference") {
-            return "multi_references";
+        } else if (of) {
+            const ofProperty = of as Property;
+            if (ofProperty.dataType === "string" && (ofProperty as StringProperty).enumValues) {
+                return "multi_select";
+            } else if (ofProperty.dataType === "number" && (ofProperty as NumberProperty).enumValues) {
+                return "multi_number_select";
+            } else if (ofProperty.dataType === "string" && (ofProperty as StringProperty).storage) {
+                return "multi_file_upload";
+            } else if (ofProperty.dataType === "reference") {
+                return "multi_references";
+            } else {
+                return "repeat";
+            }
         } else {
             return "repeat";
         }

@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect } from "react";
 
 interface DraggableProps {
-    containerRef: React.RefObject<HTMLDivElement>,
-    innerRef: React.RefObject<HTMLDivElement>,
+    containerRef: React.RefObject<HTMLDivElement | null>,
+    innerRef: React.RefObject<HTMLDivElement | null>,
     x?: number;
     y?: number;
     onMove: (params: { x: number, y: number }) => void,
 }
 
 export function useDraggable({
-                                 containerRef,
-                                 innerRef,
-                                 x,
-                                 y,
-                                 onMove
-                             }: DraggableProps) {
+    containerRef,
+    innerRef,
+    x,
+    y,
+    onMove
+}: DraggableProps) {
 
     let relX = 0;
     let relY = 0;
@@ -62,9 +62,9 @@ export function useDraggable({
         if (event.target.localName === "input" || !listeningRef.current)
             return;
         onMove({
-                x: event.screenX - relX,
-                y: event.screenY - relY
-            }
+            x: event.screenX - relX,
+            y: event.screenY - relY
+        }
         );
         event.stopPropagation();
     };

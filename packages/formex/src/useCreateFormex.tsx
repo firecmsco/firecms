@@ -5,18 +5,18 @@ import equal from "react-fast-compare";
 import { FormexController, FormexResetProps } from "./types";
 
 export function useCreateFormex<T extends object>({
-                                                      initialValues,
-                                                      initialErrors,
-                                                      initialDirty,
-                                                      initialTouched,
-                                                      validation,
-                                                      validateOnChange = false,
-                                                      validateOnInitialRender = false,
-                                                      onSubmit,
-                                                      onReset,
-                                                      onValuesChangeDeferred,
-                                                      debugId,
-                                                  }: {
+    initialValues,
+    initialErrors,
+    initialDirty,
+    initialTouched,
+    validation,
+    validateOnChange = false,
+    validateOnInitialRender = false,
+    onSubmit,
+    onReset,
+    onValuesChangeDeferred,
+    debugId,
+}: {
     initialValues: T;
     initialErrors?: Record<string, string>;
     initialDirty?: boolean;
@@ -50,7 +50,7 @@ export function useCreateFormex<T extends object>({
 
     const onValuesChangeRef = useRef(onValuesChangeDeferred);
     onValuesChangeRef.current = onValuesChangeDeferred;
-    const debounceTimeoutRef = useRef<any>();
+    const debounceTimeoutRef = useRef<any>(undefined);
 
     const callDebouncedOnValuesChange = useCallback((values: T) => {
         if (onValuesChangeRef.current) {

@@ -34,7 +34,7 @@ export type FilterFormFieldProps<CustomProps> = {
 };
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
-    resizeHandleRef: RefObject<HTMLDivElement>;
+    resizeHandleRef: RefObject<HTMLDivElement | null>;
     columnIndex: number;
     isResizingIndex: number;
     column: VirtualTableColumn<any>;
@@ -51,20 +51,20 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends Record<string, any>>({
-                                                                   resizeHandleRef,
-                                                                   columnIndex,
-                                                                   isResizingIndex,
-                                                                   sort,
-                                                                   onColumnSort,
-                                                                   onFilterUpdate,
-                                                                   filter,
-                                                                   column,
-                                                                   onClickResizeColumn,
-                                                                   createFilterField,
-                                                                   AdditionalHeaderWidget,
-                                                                   isDragging,
-                                                                   isDraggable
-                                                               }: VirtualTableHeaderProps<M>) {
+        resizeHandleRef,
+        columnIndex,
+        isResizingIndex,
+        sort,
+        onColumnSort,
+        onFilterUpdate,
+        filter,
+        column,
+        onClickResizeColumn,
+        createFilterField,
+        AdditionalHeaderWidget,
+        isDragging,
+        isDraggable
+    }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
 
@@ -129,11 +129,11 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     <>
 
                         {AdditionalHeaderWidget &&
-                            <AdditionalHeaderWidget onHover={onHover || openFilter}/>}
+                            <AdditionalHeaderWidget onHover={onHover || openFilter} />}
 
                         {column.sortable && (sort || hovered || openFilter) &&
                             <Badge color="secondary"
-                                   invisible={!sort}>
+                                invisible={!sort}>
                                 <IconButton
                                     size={"small"}
                                     className={onHover || openFilter ? "bg-white dark:bg-surface-950" : undefined}
@@ -142,11 +142,11 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                     }}
                                 >
                                     {!sort &&
-                                        <ArrowUpwardIcon/>}
+                                        <ArrowUpwardIcon />}
                                     {sort === "asc" &&
-                                        <ArrowUpwardIcon/>}
+                                        <ArrowUpwardIcon />}
                                     {sort === "desc" &&
-                                        <ArrowUpwardIcon className={"rotate-180"}/>}
+                                        <ArrowUpwardIcon className={"rotate-180"} />}
                                 </IconButton>
                             </Badge>
                         }
@@ -154,7 +154,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.filter && createFilterField && <div>
                         <Badge color="secondary"
-                               invisible={!filter}>
+                            invisible={!filter}>
 
                             <Popover
                                 open={openFilter}
@@ -166,16 +166,16 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         className={onHover || openFilter ? "bg-white dark:bg-surface-950" : undefined}
                                         size={"small"}
                                         onClick={handleSettingsClick}>
-                                        <FilterListIcon size={"small"}/>
+                                        <FilterListIcon size={"small"} />
                                     </IconButton>}
                             >
                                 <FilterForm column={column}
-                                            filter={filter}
-                                            onHover={onHover}
-                                            onFilterUpdate={update}
-                                            createFilterField={createFilterField}
-                                            hidden={hidden}
-                                            setHidden={setHidden}/>
+                                    filter={filter}
+                                    onHover={onHover}
+                                    onFilterUpdate={update}
+                                    createFilterField={createFilterField}
+                                    hidden={hidden}
+                                    setHidden={setHidden} />
 
                             </Popover>
 
@@ -204,14 +204,14 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     }, equal) as React.FunctionComponent<VirtualTableHeaderProps<any>>;
 
 function FilterForm<M>({
-                           column,
-                           onFilterUpdate,
-                           filter,
-                           onHover,
-                           createFilterField,
-                           hidden,
-                           setHidden
-                       }: FilterFormProps<M>) {
+    column,
+    onFilterUpdate,
+    filter,
+    onHover,
+    createFilterField,
+    hidden,
+    setHidden
+}: FilterFormProps<M>) {
 
     const id = column.key;
 
@@ -245,12 +245,12 @@ function FilterForm<M>({
     if (!filterField) return null;
     return (
         <form noValidate={true}
-              onSubmit={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  submit();
-              }}
-              className={"text-surface-900 dark:text-white"}>
+            onSubmit={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                submit();
+            }}
+            className={"text-surface-900 dark:text-white"}>
             <div
                 className={cls(defaultBorderMixin, "py-4 px-6 typography-label border-b")}>
                 {column.title ?? id}

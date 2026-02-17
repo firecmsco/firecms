@@ -186,6 +186,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         if (typeof value === "object") {
             content =
                 <MapPropertyPreview {...props}
+                    value={value as Record<string, CMSType>}
                     property={property as ResolvedMapProperty} />;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);

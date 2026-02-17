@@ -28,7 +28,7 @@ export function EntityTableCellActions({
         }
     }, []);
 
-    const iconRef = useRef<HTMLButtonElement>();
+    const iconRef = useRef<HTMLButtonElement>(undefined);
     useEffect(() => {
         if (iconRef.current && selected) {
             iconRef.current.focus({ preventScroll: true });

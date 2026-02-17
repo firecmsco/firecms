@@ -92,7 +92,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
     const user = userProp ?? authController.user;
 
-    let avatarComponent: JSX.Element | null;
+    let avatarComponent: React.ReactElement | null;
 
     if (user) {
         const initial = user?.displayName

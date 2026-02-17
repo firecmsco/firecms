@@ -3,7 +3,7 @@ import { SampleEntityView } from "./entity_views/SampleEntityView";
 import { demoCollection } from "./collections/demo";
 
 const appConfig: FireCMSAppConfig = {
-    version: "1",
+    version: "2",
     collections: [
         demoCollection
     ],
@@ -19,7 +19,7 @@ const appConfig: FireCMSAppConfig = {
                     height: 20,
                     backgroundColor: value,
                     borderRadius: "4px",
-                }}/>;
+                }} />;
             },
         },
     }],

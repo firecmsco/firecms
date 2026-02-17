@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { useFormex } from "@firecms/formex";
 
 export const ErrorFocus = ({ containerRef }:
-                               {
-                                   containerRef?: React.RefObject<HTMLDivElement>
-                               }) => {
+    {
+        containerRef?: React.RefObject<HTMLDivElement | null>
+    }) => {
     const {
         isValidating,
         errors,

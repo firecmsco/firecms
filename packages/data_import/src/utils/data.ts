@@ -18,13 +18,13 @@ import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
 
 export function convertDataToEntity(authController: AuthController,
-                                    navigation: NavigationController,
-                                    data: Record<any, any>,
-                                    idColumn: string | undefined,
-                                    headersMapping: Record<string, string | null>,
-                                    properties: Properties,
-                                    path: string,
-                                    defaultValues: Record<string, any>): Entity<any> {
+    navigation: NavigationController,
+    data: Record<any, any>,
+    idColumn: string | undefined,
+    headersMapping: Record<string, string | null>,
+    properties: Properties,
+    path: string,
+    defaultValues: Record<string, any>): Entity<any> {
     const flatObject = flattenEntry(data);
     if (idColumn)
         delete flatObject[idColumn];
@@ -83,7 +83,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     if (value === null) return null;
 
     if (property === undefined) return value;
-    const usedProperty: ResolvedProperty | null = resolveProperty({
+    const usedProperty: ResolvedProperty<any> | null = resolveProperty({
         propertyOrBuilder: property,
         authController
     })

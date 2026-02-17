@@ -36,7 +36,7 @@ export type SelectProps<T extends SelectValue = string> = {
     error?: boolean,
     position?: "item-aligned" | "popper",
     endAdornment?: React.ReactNode,
-    inputRef?: React.RefObject<HTMLButtonElement>,
+    inputRef?: React.RefObject<HTMLButtonElement | null>,
     padding?: boolean,
     invisible?: boolean,
     children?: React.ReactNode;
@@ -45,33 +45,33 @@ export type SelectProps<T extends SelectValue = string> = {
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
-                                                                   inputRef,
-                                                                   open,
-                                                                   name,
-                                                                   fullWidth = false,
-                                                                   id,
-                                                                   onOpenChange,
-                                                                   value,
-                                                                   onChange,
-                                                                   onValueChange,
-                                                                   className,
-                                                                   inputClassName,
-                                                                   viewportClassName,
-                                                                   placeholder,
-                                                                   renderValue,
-                                                                   label,
-                                                                   size = "large",
-                                                                   error,
-                                                                   disabled,
-                                                                   padding = true,
-                                                                   position = "item-aligned",
-                                                                   endAdornment,
-                                                                   invisible,
-                                                                   children,
-                                                                   dataType = "string",
-                                                                   portalContainer: manualContainer, // Rename to avoid confusion
-                                                                   ...props
-                                                               }, ref) => {
+    inputRef,
+    open,
+    name,
+    fullWidth = false,
+    id,
+    onOpenChange,
+    value,
+    onChange,
+    onValueChange,
+    className,
+    inputClassName,
+    viewportClassName,
+    placeholder,
+    renderValue,
+    label,
+    size = "large",
+    error,
+    disabled,
+    padding = true,
+    position = "item-aligned",
+    endAdornment,
+    invisible,
+    children,
+    dataType = "string",
+    portalContainer: manualContainer, // Rename to avoid confusion
+    ...props
+}, ref) => {
 
     const [openInternal, setOpenInternal] = useState(open ?? false);
 
@@ -115,7 +115,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
         // Find the child that matches the current value to display its content
         let found: React.ReactNode = null;
         Children.forEach(children, (child) => {
-            if (React.isValidElement(child) && String((child.props as any).value) === String(value)) {
+            if (React.isValidElement<SelectItemProps>(child) && String(child.props.value) === String(value)) {
                 found = child.props.children;
             }
         });
@@ -192,30 +192,30 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 "min-h-[64px]": size === "large"
                             }
                         )}>
-                            <SelectPrimitive.Value
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                }}
-                                placeholder={placeholder}
-                                className={"w-full"}>
+                        <SelectPrimitive.Value
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}
+                            placeholder={placeholder}
+                            className={"w-full"}>
 
-                                {hasValue && value !== undefined && renderValue
-                                    ? renderValue(value)
-                                    : (displayChildren || placeholder)
-                                }
+                            {hasValue && value !== undefined && renderValue
+                                ? renderValue(value)
+                                : (displayChildren || placeholder)
+                            }
 
-                            </SelectPrimitive.Value>
-                        </div>
+                        </SelectPrimitive.Value>
+                    </div>
 
-                        <SelectPrimitive.Icon asChild>
-                            <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                                   className={cls("transition", open ? "rotate-180" : "", {
-                                                       "px-2": size === "large",
-                                                       "px-1": size === "medium" || size === "small",
-                                                   })}/>
-                        </SelectPrimitive.Icon>
-                 </SelectPrimitive.Trigger>
+                    <SelectPrimitive.Icon asChild>
+                        <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
+                            className={cls("transition", open ? "rotate-180" : "", {
+                                "px-2": size === "large",
+                                "px-1": size === "medium" || size === "small",
+                            })} />
+                    </SelectPrimitive.Icon>
+                </SelectPrimitive.Trigger>
 
                 {endAdornment && (
                     <div
@@ -232,9 +232,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {/* Pass the calculated finalContainer */}
             <SelectPrimitive.Portal container={finalContainer}>
                 <SelectPrimitive.Content position={position}
-                                         className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
+                    className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={cls("p-1", viewportClassName)}
-                                              style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
+                        style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
@@ -254,11 +254,11 @@ export type SelectItemProps<T extends SelectValue = string> = {
 };
 
 export const SelectItem = React.memo(function SelectItem<T extends SelectValue = string>({
-                                                               value,
-                                                               children,
-                                                               disabled,
-                                                               className
-                                                           }: SelectItemProps<T>) {
+    value,
+    children,
+    disabled,
+    className
+}: SelectItemProps<T>) {
     // Convert value to string for Radix UI
     const stringValue = String(value);
 
@@ -280,7 +280,7 @@ export const SelectItem = React.memo(function SelectItem<T extends SelectValue =
         <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
         <div
             className="absolute left-1 data-[state=checked]:block hidden">
-            <CheckIcon size={16}/>
+            <CheckIcon size={16} />
         </div>
     </SelectPrimitive.Item>;
 });
@@ -292,10 +292,10 @@ export type SelectGroupProps = {
 };
 
 export const SelectGroup = React.memo(function SelectGroup({
-                                label,
-                                children,
-                                className
-                            }: SelectGroupProps) {
+    label,
+    children,
+    className
+}: SelectGroupProps) {
     return <>
         <SelectPrimitive.Group
             className={cls(

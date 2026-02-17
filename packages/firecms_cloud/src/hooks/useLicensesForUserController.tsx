@@ -45,7 +45,7 @@ export function useLicensesForUserController(): LicensesController {
     const { backendFirebaseApp: firebaseApp } = useFireCMSBackend();
     const { backendUid: userId } = useFireCMSBackend();
 
-    const firestoreRef = useRef<Firestore>();
+    const firestoreRef = useRef<Firestore>(undefined);
 
     const [licenses, setLicenses] = useState<ProLicense[]>([]);
     const [licenseLoading, setLicensesLoading] = useState<boolean>(true);

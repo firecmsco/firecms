@@ -33,7 +33,7 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder<T extends CMSType, M extends Record<string, any>>(propertyOrBuilder?: PropertyOrBuilder<T, M> | Property<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T, M> {
+export function isPropertyBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any>(propertyOrBuilder?: PropertyOrBuilder<T, M> | Property | ResolvedProperty): propertyOrBuilder is PropertyBuilder<T, M> {
     return typeof propertyOrBuilder === "function";
 }
 

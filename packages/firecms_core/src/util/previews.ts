@@ -1,4 +1,4 @@
-import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "../types";
+import { AuthController, EntityCollection, Property, PropertyConfig, ResolvedEntityCollection } from "../types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
 import { getFieldConfig } from "../core";
@@ -33,7 +33,7 @@ export function getEntityTitlePropertyKey<M extends Record<string, any>>(collect
     for (const key in collection.properties) {
         const property = collection.properties[key];
         if (!isPropertyBuilder(property)) {
-            const field = getFieldConfig(property, propertyConfigs);
+            const field = getFieldConfig(property as Property, propertyConfigs);
             if (field?.key === "text_field") {
                 return key;
             }

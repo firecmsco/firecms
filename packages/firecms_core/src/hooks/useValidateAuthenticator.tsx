@@ -51,7 +51,7 @@ export function useValidateAuthenticator<USER extends User = any>
      * We use this ref to check the authentication only if the user has
      * changed.
      */
-    const checkedUserRef = useRef<User | undefined>();
+    const checkedUserRef = useRef<User | undefined>(undefined);
 
     const checkAuthentication = useCallback(async () => {
 

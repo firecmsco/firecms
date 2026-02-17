@@ -137,7 +137,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     }
                     const configProperty = resolveProperty({
                         propertyKey,
-                        propertyOrBuilder: propertyConfig.property,
+                        propertyOrBuilder: propertyConfig.property as any,
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
@@ -145,7 +145,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                         index,
                         authController
                     });
-                    Component = configProperty.Field as ComponentType<FieldProps<T>>;
+                    Component = configProperty?.Field as ComponentType<FieldProps<T>> | undefined;
                 }
                 if (!Component) {
                     console.warn(`No field component found for property ${propertyKey}`);
@@ -302,7 +302,7 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
     if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
         return true;
     }
-    if (isPropertyBuilder(property)) {
+    if (isPropertyBuilder(property as any)) {
         return true;
     }
     const defAProperty = property as Property | ResolvedProperty;

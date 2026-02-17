@@ -26,7 +26,7 @@ const SortableColumnHeader = ({
 }: {
     column: VirtualTableColumn;
     columnIndex: number;
-    columnRefs: React.RefObject<HTMLDivElement>[];
+    columnRefs: React.RefObject<HTMLDivElement | null>[];
     isResizing: number;
     onFilterUpdate: any;
     filter: [VirtualTableWhereFilterOp, any] | undefined;

@@ -13,6 +13,7 @@ import {
     Properties,
     PropertiesOrBuilders,
     Property,
+    PropertyBuilder,
     PropertyConfig,
     PropertyOrBuilder,
     ResolvedArrayProperty,
@@ -109,7 +110,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     ...props
 }: {
     propertyKey?: string,
-    propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
+    propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T> | PropertyOrBuilder | Property | ResolvedProperty | undefined,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -135,7 +136,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             throw Error("Trying to resolve a property builder without specifying the entity path");
 
         const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
-        const result: Property<T> | null = propertyOrBuilder({
+        const result: Property<T> | null = (propertyOrBuilder as PropertyBuilder<T, M>)({
             ...props,
             path,
             propertyValue: usedPropertyValue,

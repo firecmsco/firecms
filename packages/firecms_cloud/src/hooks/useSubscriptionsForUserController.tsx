@@ -45,7 +45,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
 
     const { backendUid: userId } = useFireCMSBackend();
     const snackbar = useSnackbarController();
-    const firestoreRef = useRef<Firestore>();
+    const firestoreRef = useRef<Firestore>(undefined);
 
     const [products, setProducts] = useState<ProductWithPrices[] | undefined>();
     const [productsLoading, setProductsLoading] = useState<boolean>(true);

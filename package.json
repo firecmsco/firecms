@@ -61,6 +61,8 @@
   "devDependencies": {
     "@eslint/js": "^9.35.0",
     "@types/eslint__js": "^9.14.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
     "eslint": "^9.35.0",
@@ -75,7 +77,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }

@@ -55,7 +55,7 @@ interface MultiSelectProps<T extends MultiSelectValue = string> {
     multiple?: boolean,
     includeSelectAll?: boolean,
     includeClear?: boolean,
-    inputRef?: React.RefObject<HTMLButtonElement>,
+    inputRef?: React.RefObject<HTMLButtonElement | null>,
     padding?: boolean,
     invisible?: boolean,
     children: React.ReactNode;
@@ -118,20 +118,18 @@ export const MultiSelect = React.forwardRef<
 
         const allValues = React.useMemo(() => children
             ?
-            // @ts-ignore
             Children.map(children, (child) => {
-                if (React.isValidElement(child)) {
+                if (React.isValidElement<MultiSelectItemProps>(child)) {
                     return child.props.value;
                 }
                 return null;
-            }).filter(Boolean) as any[]
+            })?.filter(Boolean) ?? []
             : [], [children]);
 
         const optionsMap = React.useMemo(() => {
             const map = new Map<string, React.ReactNode>();
             Children.forEach(children, (child) => {
-                if (React.isValidElement(child)) {
-                    // @ts-ignore
+                if (React.isValidElement<MultiSelectItemProps>(child)) {
                     map.set(String(child.props.value), child.props.children);
                 }
             });

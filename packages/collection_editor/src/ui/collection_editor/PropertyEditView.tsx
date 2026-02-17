@@ -313,7 +313,7 @@ export function PropertyFormDialog({
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
-    const formexRef = useRef<FormexController<PropertyWithId>>();
+    const formexRef = useRef<FormexController<PropertyWithId>>(undefined);
     const getController = (helpers: FormexController<PropertyWithId>) => {
         formexRef.current = helpers;
     };

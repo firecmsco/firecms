@@ -65,7 +65,7 @@ export function MarkdownEditorFieldBinding({
     }, [value]);
 
     const resolvedProperty = resolveProperty({
-        propertyOrBuilder: property as PropertyOrBuilder,
+        propertyOrBuilder: property as PropertyOrBuilder<string>,
         values: entityValues,
         authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;

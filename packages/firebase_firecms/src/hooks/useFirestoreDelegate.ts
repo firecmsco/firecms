@@ -102,7 +102,7 @@ export function useFirestoreDelegate({
     localTextSearchEnabled
 }: FirestoreDataSourceProps): FirestoreDelegate {
 
-    const searchControllerRef = useRef<FirestoreTextSearchController>();
+    const searchControllerRef = useRef<FirestoreTextSearchController>(undefined);
     const snackbarController = useSnackbarController();
 
     useEffect(() => {
