@@ -9,6 +9,7 @@ import { getCurrentUser, getTokens, refreshCredentials } from "./auth";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
 import chalk from "chalk";
+import { createWriteStream } from "fs";
 
 export async function deploy(projectId: string, env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);
@@ -19,7 +20,18 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
     }
     console.log("Starting deploy");
     const zipFilePath = await createZipFromBuild();
-    await uploadZip(projectId, zipFilePath, env, debug);
+
+    let sourceZipPath: string | null = null;
+    try {
+        sourceZipPath = await createSourceZip();
+        if (sourceZipPath) {
+            console.log("📦 Source code packaged for revision history");
+        }
+    } catch (e) {
+        console.warn("⚠️ Could not package source code (non-fatal):", (e as Error).message);
+    }
+
+    await uploadZip(projectId, zipFilePath, sourceZipPath, env, debug);
 }
 
 export async function createZipFromBuild(): Promise<string> {
@@ -37,7 +49,85 @@ export async function createZipFromBuild(): Promise<string> {
     })
 }
 
-export async function uploadZip(projectId: string, zipFilePath: string, env: "prod" | "dev", debug: boolean) {
+/**
+ * Directories and files to exclude from the source zip.
+ */
+const SOURCE_ZIP_EXCLUDES = new Set([
+    "node_modules",
+    "dist",
+    ".git",
+    ".idea",
+    ".vscode",
+    ".next",
+    ".turbo",
+    "build",
+    "coverage",
+    ".env",
+    ".env.local",
+]);
+
+/**
+ * Creates a zip of the entire project root (cwd), excluding
+ * build artifacts, node_modules, and other non-source files.
+ * Returns the path to the zip, or null if nothing to zip.
+ */
+export async function createSourceZip(): Promise<string | null> {
+    const projectRoot = process.cwd();
+    const destFile = path.join(os.tmpdir(), "firecms_source.zip");
+
+    // Use dynamic import for the zip-folder's underlying archiver
+    // We'll build a zip manually using Node streams + the 'archiver' pattern
+    // from zip-folder, but with exclusion support.
+    const archiver = await importArchiver();
+    if (!archiver) {
+        // Fallback: skip source zip if archiver not available
+        return null;
+    }
+
+    return new Promise<string>((resolve, reject) => {
+        const output = createWriteStream(destFile);
+        const archive = archiver("zip", { zlib: { level: 6 } });
+
+        output.on("close", () => resolve(destFile));
+        archive.on("error", (err: Error) => reject(err));
+        archive.pipe(output);
+
+        // Walk the project directory and add files
+        addDirectoryToArchive(archive, projectRoot, "");
+
+        archive.finalize();
+    });
+}
+
+function addDirectoryToArchive(archive: any, basePath: string, relativePath: string) {
+    const fullPath = relativePath ? path.join(basePath, relativePath) : basePath;
+    const entries = fs.readdirSync(fullPath, { withFileTypes: true });
+
+    for (const entry of entries) {
+        if (SOURCE_ZIP_EXCLUDES.has(entry.name)) continue;
+        // Skip hidden files/dirs (dotfiles) except specific ones we might want
+        if (entry.name.startsWith(".") && !["src", "public"].includes(entry.name)) continue;
+
+        const entryRelative = relativePath ? path.join(relativePath, entry.name) : entry.name;
+
+        if (entry.isDirectory()) {
+            addDirectoryToArchive(archive, basePath, entryRelative);
+        } else if (entry.isFile()) {
+            archive.file(path.join(basePath, entryRelative), { name: entryRelative });
+        }
+    }
+}
+
+async function importArchiver(): Promise<any> {
+    try {
+        const mod = await import("archiver");
+        return mod.default ?? mod;
+    } catch {
+        return null;
+    }
+}
+
+export async function uploadZip(projectId: string, zipFilePath: string, sourceZipPath: string | null, env: "prod" | "dev", debug: boolean) {
 
     if (env === "dev") {
         console.log("!!! Uploading to dev server");
@@ -55,6 +145,11 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
     }
 
     form.append("zip", fs.createReadStream(zipFilePath), "file.zip");
+
+    // Append source zip if available
+    if (sourceZipPath && fs.existsSync(sourceZipPath)) {
+        form.append("source_zip", fs.createReadStream(sourceZipPath), "source.zip");
+    }
 
     try {
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
@@ -85,3 +180,4 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
         spinner.fail();
     }
 }
+
