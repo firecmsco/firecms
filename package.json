@@ -42,7 +42,8 @@
     "pro": "cd examples/example_pro && run-s dev",
     "next": "cd examples/example_next && run-s dev",
     "cloud": "cd examples/example_cloud && run-s dev",
-    "saas": "cd saas && run-s dev",
+    "saas:staging": "cd saas && run-s dev:staging",
+    "saas": "cd saas && run-s dev:prod",
     "datatalk": "cd saas_datatalk && run-s dev",
     "deploy:demo": "cd examples/example_pro && run-s deploy",
     "preview": "cd examples/example_pro && run-s preview",
@@ -72,5 +73,9 @@
     "lerna": "^9.0.3",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }
