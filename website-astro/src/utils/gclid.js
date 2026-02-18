@@ -1,8 +1,8 @@
 // Utility to get and set gclid and UTM params
-// These params are stored for 2 weeks to track conversions across sessions
+// These params are stored for 90 days to match Google Ads attribution window
 
 const STORAGE_KEY = "ad_tracking_params";
-const EXPIRY_DAYS = 14;
+const EXPIRY_DAYS = 90;
 const TRACKING_PARAMS = ["gclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
 
 /**
@@ -35,10 +35,10 @@ export function getStoredTrackingParams() {
 
         const data = JSON.parse(stored);
 
-        // Check if expired (2 weeks)
+        // Check if expired
         if (data.timestamp) {
             const age = Date.now() - data.timestamp;
-            const maxAge = EXPIRY_DAYS * 24 * 60 * 60 * 1000; // 2 weeks in milliseconds
+            const maxAge = EXPIRY_DAYS * 24 * 60 * 60 * 1000;
 
             if (age > maxAge) {
                 // Expired, clear storage

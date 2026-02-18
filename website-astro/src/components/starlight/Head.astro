@@ -86,8 +86,12 @@ const breadcrumbSchema = {
     // Set timestamp - only once
     window.gtag("js", new Date());
 
-    // Initialize GA4 and let Enhanced Measurement handle pageviews automatically
-    window.gtag("config", "G-NL75PPNYXD");
+    // Initialize GA4 with cross-domain tracking to app.firecms.co
+    window.gtag("config", "G-NL75PPNYXD", {
+        linker: {
+            domains: ["app.firecms.co"]
+        }
+    });
 
 </script>
 

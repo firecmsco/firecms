@@ -29,7 +29,8 @@ function enhanceAppLinks() {
               event_label: link.href,
               page_path: window.location.pathname,
               link_text: link.textContent?.trim() || '',
-              link_url: link.href
+              link_url: link.href,
+              transport_type: 'beacon'
             });
           }
 

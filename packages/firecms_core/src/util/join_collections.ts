@@ -11,8 +11,8 @@ import { sortProperties } from "./collections";
 import { isPropertyBuilder } from "./entities";
 
 function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) => (EntityCollection | void)) | undefined,
-                             collection: EntityCollection,
-                             parentPaths: string[]) {
+    collection: EntityCollection,
+    parentPaths: string[]) {
     if (modifyCollection) {
         const modified = modifyCollection({
             collection,
@@ -34,9 +34,9 @@ function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) =
  *
  */
 export function joinCollectionLists(targetCollections: EntityCollection[],
-                                    sourceCollections: EntityCollection[] | undefined,
-                                    parentPaths: string[] = [],
-                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void): EntityCollection[] {
+    sourceCollections: EntityCollection[] | undefined,
+    parentPaths: string[] = [],
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void): EntityCollection[] {
 
     // merge collections that are in both lists
     const updatedCollections = (sourceCollections ?? [])
@@ -73,9 +73,9 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
  *
  */
 export function mergeCollection(target: EntityCollection,
-                                source: EntityCollection,
-                                parentPaths: string[] = [],
-                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
+    source: EntityCollection,
+    parentPaths: string[] = [],
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
     const subcollectionsMerged = joinCollectionLists(
@@ -125,6 +125,8 @@ export function mergeCollection(target: EntityCollection,
 }
 
 function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBuilder): PropertyOrBuilder {
+    if (!source) return target;
+    if (!target) return source;
     if (isPropertyBuilder(source)) {
         return source;
     } else if (isPropertyBuilder(target)) {
