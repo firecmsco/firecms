@@ -80,8 +80,8 @@
     "tailwind-merge": "^2.6.0"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": ">=18.3.1 || >=19.0.0",
+    "react-dom": ">=18.3.1 || >=19.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",
@@ -91,8 +91,8 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^20.19.17",
     "@types/object-hash": "^3.0.6",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.3",
     "@types/react-measure": "^2.0.12",
     "@vitejs/plugin-react": "^4.7.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",

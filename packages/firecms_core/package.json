@@ -76,8 +76,8 @@
     "yup": "^1.7.1"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
+    "react": ">=18.3.1 || >=19.0.0",
+    "react-dom": ">=18.3.1 || >=19.0.0",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0"
   },
@@ -89,8 +89,8 @@
     "@types/json-logic-js": "^2.0.8",
     "@types/node": "^20.19.17",
     "@types/object-hash": "^3.0.6",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.3",
     "@types/react-measure": "^2.0.12",
     "@vitejs/plugin-react": "^4.7.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
