@@ -16,7 +16,7 @@
         "@elastic/elasticsearch": "^8.13.0",
         "@google-cloud/firestore": "^6.8.0",
         "algoliasearch": "^4.23.2",
-        "axios": "1.7.4",
+        "axios": "1.13.5",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "express": "^4.19.2",
