@@ -27,7 +27,7 @@
     "@fontsource/poppins": "^5.1.0",
     "@tailwindcss/typography": "^0.5.15",
     "firebase": "^12.9.0",
-    "next": "15.5.9",
+    "next": "15.5.10",
     "nextjs-toploader": "^3.7.15",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
