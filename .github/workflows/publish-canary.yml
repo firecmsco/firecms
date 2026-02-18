@@ -48,7 +48,7 @@ jobs:
           git commit -m "chore: canary version $CANARY_VERSION" --no-verify
 
       - name: Publish to npm
-        run: npx lerna publish from-package --yes --dist-tag canary
+        run: npx lerna publish from-package --yes --no-verify-access --dist-tag canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

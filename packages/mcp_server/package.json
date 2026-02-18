@@ -1,6 +1,9 @@
 {
   "name": "@firecms/mcp-server",
   "version": "3.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "MCP server for FireCMS Cloud — manage projects, collections, users, and AI features via the Model Context Protocol",
   "type": "module",
   "main": "./dist/index.js",

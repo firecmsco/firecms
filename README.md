@@ -29,9 +29,7 @@
 <br/>
 
 <p align="center">
-  <a href="https://demo.firecms.co">
-    <img src="https://firecms.co/img/landing_1080.webm" width="800px" alt="FireCMS Demo" />
-  </a>
+  <img src="https://firecms.co/img/demo_products.png" width="800px" alt="FireCMS " />
 </p>
 
 ---
@@ -177,9 +175,10 @@ firecms deploy
 | AI features | ❌ | ✅ | ✅ |
 | DataTalk | ❌ | ✅ | ✅ |
 | Entity history | ❌ | ✅ | ✅ |
-| User management UI | ✅ | ✅ | ✅ |
+| User management UI | ❌ | ✅ | ✅ |
 | Custom views & fields | ✅ | ✅ | ✅ |
-| Data import/export | ✅ | ✅ | ✅ |
+| Data import/export | ❌ | ✅ | ✅ |
+| Content history audit trail | ❌ | ✅ | ✅ |
 | MongoDB support | ❌ | ✅ | ❌ |
 | Custom branding | ✅ | ✅ | ✅ |
 
