@@ -849,6 +849,161 @@ You can still deploy it in your own Firebase project. The same build you generat
 CMS locally can be deployed to Firebase hosting, or any other hosting service.
 
 
+## Migrating from v3.0 to v3.1 (Cloud)
+
+This migration guide applies to **FireCMS Cloud** projects that deploy custom code using the CLI
+(`firecms deploy`).
+
+### Do I Need to Do Anything?
+
+**All FireCMS Cloud users get every new feature automatically** — Kanban board, Cards view,
+AI collection generation, and more are already live in your project. No update needed.
+
+If you deploy **custom code** via the CLI (`firecms deploy`), your existing build will continue to
+work exactly as before. However, we strongly encourage you to update your local dependencies to
+Tailwind CSS v4 and React 19. React 18 is still supported today, but **will be deprecated in a
+future release**, so updating now will save you effort later.
+
+---
+
+### Recommended Updates
+
+#### Update FireCMS Packages
+
+Update all `@firecms/*` packages in your `package.json` to version **3.1**:
+
+```bash
+npm i @firecms/cloud@3.1.0
+```
+
+---
+
+#### Migrate to Tailwind CSS v4
+
+FireCMS 3.1 ships with **Tailwind CSS v4** support. While your existing Tailwind v3 setup will
+continue to work, we recommend upgrading for faster builds and simpler configuration.
+
+##### 1. Install Tailwind CSS v4 and the Vite plugin
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+##### 2. Update your `vite.config.ts`
+
+Add the new Tailwind CSS Vite plugin:
+
+```typescript
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+##### 3. Update your `index.css`
+
+Replace your existing CSS with the new v4 format:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::note
+The old CSS variable names (`--fcms-primary`, `--fcms-primary-dark`, `--fcms-primary-bg`) have been
+replaced. Use `--color-primary` and `--color-secondary` instead — dark and background variants are
+now computed automatically.
+:::
+
+##### 4. Clean up old config files
+
+Remove these files from your project — they are no longer needed:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+#### Upgrade to React 19
+
+FireCMS 3.1 supports **React 19** while maintaining backward compatibility with React 18.3.
+We recommend upgrading now — **React 18 support will be removed in a future release**.
+
+```bash
+npm i react@19 react-dom@19
+npm i -D @types/react@19 @types/react-dom@19
+```
+
+:::tip
+If you see TypeScript errors like `Cannot find namespace 'JSX'` after upgrading, replace explicit
+`JSX.Element` return types with `React.ReactElement` or remove the return type annotation entirely.
+:::
+
+---
+
+### What's New in v3.1
+
+These features are already available in your FireCMS Cloud project — no update required:
+
+- **Kanban Board view** — drag-and-drop entities grouped by enum properties
+- **Cards view** — visual card layout for content-heavy collections
+- **AI Collection Generation** — generate schemas from natural language
+- **Drag-and-drop column reordering** — rearrange table columns by dragging, order is saved automatically
+- **Duplicate collections** — clone an existing collection to create a new one with the same schema
+- **Entity History improvements** — previous values, "last edited by" indicator, per-collection toggles
+- **New filter UI** — redesigned filter view for a cleaner experience
+- **Timezone support for dates** — correct timezone handling, no more midnight auto-conversion
+- **Enum conditions** — dynamically filter enum values based on other properties
+- **Collapsible drawer groups** — cleaner sidebar navigation
+- **TipTap V3** — improved rich-text editor
+- **Image resizing** — built-in image resizing on upload
+
+For custom code projects, updating also unlocks:
+
+- **Tailwind CSS v4** — faster builds, simpler config
+- **React 19** — latest React features and performance
+
+Check the [changelog](/docs/changelog) for the complete list of changes.
+
+---
+
+### Troubleshooting
+
+#### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will
+cause type mismatches and runtime errors.
+
+#### Styles not applying after Tailwind v4 migration
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
+- Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
+
+#### `Cannot find namespace 'JSX'`
+Update your return type annotations from `JSX.Element` to `React.ReactElement` or remove the
+explicit return type and let TypeScript infer it.
+
 ## Eject Collections from UI to Code
 
 The **newest version of [FireCMS](https://app.firecms.co)**, version 3.0 allows you to fully manage the CMS in the Cloud

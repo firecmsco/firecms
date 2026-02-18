@@ -7,38 +7,6 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 const title = "Firebase CMS & Firestore CMS | FireCMS";
 const description = "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework.";
 
-const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "Organization",
-            "@id": "https://firecms.co/#organization",
-            "name": "FireCMS",
-            "url": "https://firecms.co/"
-        },
-        {
-            "@type": "WebSite",
-            "@id": "https://firecms.co/#website",
-            "url": "https://firecms.co/",
-            "name": "FireCMS",
-            "publisher": { "@id": "https://firecms.co/#organization" }
-        },
-        {
-            "@type": "SoftwareApplication",
-            "@id": "https://firecms.co/#software",
-            "name": "FireCMS",
-            "applicationCategory": "DeveloperApplication",
-            "operatingSystem": "Web",
-            "url": "https://firecms.co/",
-            "description": "FireCMS is a Firebase CMS and Firestore CMS framework to build admin panels and back-office apps.",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            }
-        }
-    ]
-};
 ---
 
 <Layout title={title} description={description}>
@@ -326,7 +294,7 @@ const jsonLd = {
             </div>
         </section>
 
-        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+
     </main>
 
 </Layout>

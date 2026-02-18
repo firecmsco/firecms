@@ -1,7 +1,7 @@
 ---
 slug: beyond_table_cards_kanban_views
 title: "Beyond the Table: Cards and Kanban Views in FireCMS"
-description: FireCMS 3.0 introduces Cards and Kanban views - pick the interface that actually makes sense for your data
+description: FireCMS 3.1 introduces Cards and Kanban views - pick the interface that actually makes sense for your data
 pubDate: 2026-02-02
 authors: marian
 image: /img/blog/cards_view_plants.png
