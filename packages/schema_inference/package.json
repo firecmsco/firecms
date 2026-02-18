@@ -33,7 +33,7 @@
   },
   "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
   "dependencies": {
-    "axios": "1.13.2",
+    "axios": "1.13.5",
     "vite-plugin-static-copy": "3.1.4"
   }
 }
