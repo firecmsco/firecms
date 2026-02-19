@@ -130,7 +130,7 @@ describe("generateDrizzleSchema", () => {
             expect(result).toContain("pgPolicy");
             expect(result).toContain('as: "permissive"');
             expect(result).toContain('for: "all"');
-            expect(result).toContain("${table.user_id} = current_setting('firecms.current_user_id')");
+            expect(result).toContain("${table.user_id} = auth.uid()");
             // 'all' needs both using and withCheck
             expect(result).toContain("using:");
             expect(result).toContain("withCheck:");
@@ -200,7 +200,7 @@ describe("generateDrizzleSchema", () => {
             }];
 
             const result = await generateSchema(collections);
-            expect(result).toContain("current_setting('firecms.current_user_roles') ~ 'admin'");
+            expect(result).toContain("auth.roles() ~ 'admin'");
         });
 
         it("should combine roles with access: public", async () => {
@@ -215,7 +215,7 @@ describe("generateDrizzleSchema", () => {
 
             const result = await generateSchema(collections);
             // Should be (true) AND (role check)
-            expect(result).toContain("(true) AND (current_setting('firecms.current_user_roles') ~ 'admin|manager')");
+            expect(result).toContain("(true) AND (auth.roles() ~ 'admin|manager')");
         });
 
         it("should combine roles with ownerField", async () => {
@@ -233,8 +233,8 @@ describe("generateDrizzleSchema", () => {
 
             const result = await generateSchema(collections);
             // Should combine owner check AND role check
-            expect(result).toContain("current_setting('firecms.current_user_id')");
-            expect(result).toContain("current_setting('firecms.current_user_roles') ~ 'editor'");
+            expect(result).toContain("auth.uid()");
+            expect(result).toContain("auth.roles() ~ 'editor'");
             expect(result).toContain("AND");
         });
 
@@ -285,8 +285,8 @@ describe("generateDrizzleSchema", () => {
                 securityRules: [
                     {
                         operation: "update",
-                        using: "{user_id} = current_setting('firecms.current_user_id')",
-                        withCheck: "{status} != 'archived' OR current_setting('firecms.current_user_roles') ~ 'admin'"
+                        using: "{user_id} = auth.uid()",
+                        withCheck: "{status} != 'archived' OR auth.roles() ~ 'admin'"
                     }
                 ]
             }];
@@ -294,7 +294,7 @@ describe("generateDrizzleSchema", () => {
             const result = await generateSchema(collections);
             expect(result).toContain("using:");
             expect(result).toContain("withCheck:");
-            expect(result).toContain("${table.user_id} = current_setting('firecms.current_user_id')");
+            expect(result).toContain("${table.user_id} = auth.uid()");
             expect(result).toContain("${table.status} != 'archived'");
         });
 
@@ -372,7 +372,7 @@ describe("generateDrizzleSchema V2 improvements", () => {
             ]
         }];
         const result = await generateSchema(collections);
-        expect(result).toContain("current_setting('firecms.current_user_roles') ~ 'admin'");
+        expect(result).toContain("auth.roles() ~ 'admin'");
     });
     it("should generate multiple policies from operations array", async () => {
         const collections: EntityCollection[] = [{
@@ -468,6 +468,6 @@ describe("generateDrizzleSchema V2 improvements", () => {
         }];
         const result = await generateSchema(collections);
         // Should be (true) AND (role check) — same effect as access: "public" + roles
-        expect(result).toContain("(true) AND (current_setting('firecms.current_user_roles') ~ 'admin')");
+        expect(result).toContain("(true) AND (auth.roles() ~ 'admin')");
     });
 });

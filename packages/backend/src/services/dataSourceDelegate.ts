@@ -319,11 +319,11 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             return async (...args: any[]) => {
                 // @ts-ignore
                 return await originalDb.transaction(async (tx) => {
-                    // Set the user ID and roles for RLS
-                    await tx.execute(sql`SELECT set_config('firecms.current_user_id', ${user.uid}, true)`);
-                    // Set user roles as comma-separated string for role-based RLS policies
+                    // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
+                    await tx.execute(sql`SELECT set_config('app.user_id', ${user.uid}, true)`);
                     const rolesString = (user.roles ?? []).map(r => r.id).join(",");
-                    await tx.execute(sql`SELECT set_config('firecms.current_user_roles', ${rolesString}, true)`);
+                    await tx.execute(sql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
+                    await tx.execute(sql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: user.uid, roles: (user.roles ?? []).map(r => r.id) })}, true)`);
 
                     // Create a temporary delegate using the transaction client
                     // We need to instantiate a new EntityService with the tx

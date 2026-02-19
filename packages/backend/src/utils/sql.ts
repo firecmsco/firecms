@@ -1,26 +1,42 @@
 import { sql, SQL } from "drizzle-orm";
 
 /**
- * Returns a SQL chunk that gets the current user ID from the session configuration.
- * This corresponds to the `firecms.current_user_id` configuration set in the transaction.
+ * Returns a SQL chunk calling `auth.uid()` — the current user's ID.
+ * This is a Supabase-style helper function created in the `auth` schema
+ * that reads `app.user_id` set per-transaction by `withAuth()`.
  *
- * @returns SQL chunk
+ * @example
+ * sql`${table.user_id} = ${authUid()}`
  */
-export const sqlGetCurrentUser = (): SQL => {
-    return sql`current_setting('firecms.current_user_id')`;
+export const authUid = (): SQL => {
+    return sql`auth.uid()`;
 };
 
 /**
- * Returns a SQL chunk that gets the current user's roles (comma-separated string)
- * from the session configuration.
- * This corresponds to the `firecms.current_user_roles` configuration set in the transaction.
+ * Returns a SQL chunk calling `auth.roles()` — the current user's roles
+ * as a comma-separated string.
+ * Reads `app.user_roles` set per-transaction by `withAuth()`.
  *
- * Use with PostgreSQL regex match (~) to check for specific roles:
- * `sql\`${sqlGetCurrentUserRoles()} ~ 'admin'\``
- *
- * @returns SQL chunk
+ * @example
+ * sql`auth.roles() ~ 'admin'`
  */
-export const sqlGetCurrentUserRoles = (): SQL => {
-    return sql`current_setting('firecms.current_user_roles')`;
+export const authRoles = (): SQL => {
+    return sql`auth.roles()`;
 };
 
+/**
+ * Returns a SQL chunk calling `auth.jwt()` — the full JWT claims as JSONB.
+ * Reads `app.jwt` set per-transaction by `withAuth()`.
+ *
+ * @example
+ * sql`auth.jwt()->>'sub'`
+ */
+export const authJwt = (): SQL => {
+    return sql`auth.jwt()`;
+};
+
+/** @deprecated Use {@link authUid} instead. */
+export const sqlGetCurrentUser = authUid;
+
+/** @deprecated Use {@link authRoles} instead. */
+export const sqlGetCurrentUserRoles = authRoles;

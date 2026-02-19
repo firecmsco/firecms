@@ -90,7 +90,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     databaseId?: string;
 
     /**
-     * Row Level Security policies for this collection (Supabase-style).
+     * Security rules for this collection (Supabase-style Row Level Security).
      * When defined, the schema generator will enable RLS on the table and
      * create the corresponding PostgreSQL policies.
      *
@@ -99,9 +99,10 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * 2. **Raw SQL** — `using` and `withCheck` for full PostgreSQL power
      * 3. **Combined** — mix shortcuts with `roles` for common patterns
      *
-     * The authenticated user context is available via:
-     * - `current_setting('firecms.current_user_id')` — user's ID
-     * - `current_setting('firecms.current_user_roles')` — comma-separated app roles
+     * The authenticated user context is available in raw SQL via:
+     * - `auth.uid()`   — the current user's ID
+     * - `auth.roles()` — comma-separated app role IDs
+     * - `auth.jwt()`   — full JWT claims as JSONB
      *
      * @example
      * // Simple: only owners can access their own rows
@@ -128,7 +129,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * securityRules: [
      *   {
      *     operation: "select",
-     *     using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = current_setting('firecms.current_user_id'))"
+     *     using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = auth.uid())"
      *   }
      * ]
      *
@@ -803,21 +804,22 @@ export type SelectedCellProps<M extends Record<string, any> = any> = {
 export type SecurityOperation = "select" | "insert" | "update" | "delete" | "all";
 
 /**
- * Flexible Row Level Security policy for a collection.
+ * Flexible Row Level Security rule for a collection.
  *
- * Inspired by Supabase's approach to PostgreSQL RLS. Policies can range from
+ * Inspired by Supabase's approach to PostgreSQL RLS. Rules can range from
  * simple convenience shortcuts to fully custom SQL expressions, giving you the
  * full power of PostgreSQL Row Level Security.
  *
- * The authenticated user's identity is available via:
- * - `current_setting('firecms.current_user_id')` — the user's ID
- * - `current_setting('firecms.current_user_roles')` — comma-separated app role IDs
+ * The authenticated user's identity is available in raw SQL via:
+ * - `auth.uid()`   — the user's ID
+ * - `auth.roles()` — comma-separated app role IDs
+ * - `auth.jwt()`   — full JWT claims as JSONB
  *
  * These are set automatically per-transaction by the backend.
  *
- * **How policies combine:** PostgreSQL evaluates all matching policies for an
- * operation. Permissive policies are OR'd together (any one passing is enough).
- * Restrictive policies are AND'd (all must pass). This mirrors Supabase behavior.
+ * **How rules combine:** PostgreSQL evaluates all matching policies for an
+ * operation. Permissive rules are OR'd together (any one passing is enough).
+ * Restrictive rules are AND'd (all must pass). This mirrors Supabase behavior.
  *
  * @group Models
  */
@@ -882,7 +884,7 @@ export interface SecurityRule {
     /**
      * **Shortcut.** The property (column) that stores the owner's user ID.
      * Generates a USING/WITH CHECK clause like:
-     *   `<column> = current_setting('firecms.current_user_id')`
+     *   `<column> = auth.uid()`
      *
      * Cannot be combined with `using` / `withCheck` / `access`.
      *
@@ -911,16 +913,15 @@ export interface SecurityRule {
     access?: "public";
 
     /**
-     * **Shortcut.** Restrict this policy to users that have one of these
+     * **Shortcut.** Restrict this rule to users that have one of these
      * application-level roles.
      *
      * **Important:** These are NOT native PostgreSQL database roles. They are
      * application roles managed by FireCMS, stored in the `firecms_user_roles`
-     * table, and injected into each transaction via:
-     *   `current_setting('firecms.current_user_roles')` (comma-separated string)
+     * table, and injected into each transaction via `auth.roles()`.
      *
      * Generates a condition like:
-     *   `current_setting('firecms.current_user_roles') ~ '<role1>|<role2>'`
+     *   `auth.roles() ~ '<role1>|<role2>'`
      *
      * Can be combined with `ownerField`, `access`, or raw `using`/`withCheck`.
      * When combined, the role check is AND'd with the other condition.
@@ -956,14 +957,14 @@ export interface SecurityRule {
      * // Only the owner, or users with 'moderator' role
      * {
      *   operation: "select",
-     *   using: "{user_id} = current_setting('firecms.current_user_id') OR current_setting('firecms.current_user_roles') ~ 'moderator'"
+     *   using: "{user_id} = auth.uid() OR auth.roles() ~ 'moderator'"
      * }
      *
      * @example
      * // Cross-table subquery: only if user belongs to the org
      * {
      *   operation: "select",
-     *   using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = current_setting('firecms.current_user_id'))"
+     *   using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = auth.uid())"
      * }
      */
     using?: string;
@@ -988,14 +989,14 @@ export interface SecurityRule {
      *
      * @example
      * // Users can only insert rows where they are the owner
-     * { operation: "insert", withCheck: "{user_id} = current_setting('firecms.current_user_id')" }
+     * { operation: "insert", withCheck: "{user_id} = auth.uid()" }
      *
      * @example
      * // Prevent changing the status to 'archived' unless admin
      * {
      *   operation: "update",
-     *   using: "{user_id} = current_setting('firecms.current_user_id')",
-     *   withCheck: "{status} != 'archived' OR current_setting('firecms.current_user_roles') ~ 'admin'"
+     *   using: "{user_id} = auth.uid()",
+     *   withCheck: "{status} != 'archived' OR auth.roles() ~ 'admin'"
      * }
      *
      * @example

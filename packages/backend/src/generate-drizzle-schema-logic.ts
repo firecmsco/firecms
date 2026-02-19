@@ -130,11 +130,11 @@ const resolveRawSql = (expression: string): string => {
 
 /**
  * Wraps a SQL clause with a role check using AND.
- * Generates: `(<clause>) AND (current_setting('firecms.current_user_roles') ~ '<role1>|<role2>')`
+ * Generates: `(<clause>) AND (auth.roles() ~ '<role1>|<role2>')`
  */
 const wrapWithRoleCheck = (clause: string, roles: string[]): string => {
     const rolesPattern = roles.join("|");
-    const roleCondition = `current_setting('firecms.current_user_roles') ~ '${rolesPattern}'`;
+    const roleCondition = `auth.roles() ~ '${rolesPattern}'`;
     return `sql\`(${unwrapSql(clause)}) AND (${roleCondition})\``;
 };
 
@@ -157,7 +157,7 @@ const buildUsingClause = (rule: SecurityRule): string | null => {
         return `sql\`true\``;
     }
     if (rule.ownerField) {
-        return `sql\`\${table.${rule.ownerField}} = current_setting('firecms.current_user_id')\``;
+        return `sql\`\${table.${rule.ownerField}} = auth.uid()\``;
     }
     return null;
 };
@@ -225,13 +225,13 @@ const generateSinglePolicyCode = (tableName: string, rule: SecurityRule, operati
         } else if (needsUsing) {
             // Roles-only rule (e.g. { operation: "select", roles: ["admin"] })
             const rolesPattern = roles.join("|");
-            usingClause = `sql\`current_setting('firecms.current_user_roles') ~ '${rolesPattern}'\``;
+            usingClause = `sql\`auth.roles() ~ '${rolesPattern}'\``;
         }
         if (withCheckClause) {
             withCheckClause = wrapWithRoleCheck(withCheckClause, roles);
         } else if (needsWithCheck) {
             const rolesPattern = roles.join("|");
-            withCheckClause = `sql\`current_setting('firecms.current_user_roles') ~ '${rolesPattern}'\``;
+            withCheckClause = `sql\`auth.roles() ~ '${rolesPattern}'\``;
         }
     }
 

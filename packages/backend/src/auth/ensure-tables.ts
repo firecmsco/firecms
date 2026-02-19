@@ -160,6 +160,34 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
             ADD COLUMN IF NOT EXISTS email_verification_sent_at TIMESTAMP WITH TIME ZONE
         `);
 
+        // Create the `auth` schema with Supabase-style helper functions for RLS.
+        //   auth.uid()   → returns the current user's ID (reads app.user_id)
+        //   auth.jwt()   → returns the full JWT claims as JSONB (reads app.jwt)
+        //   auth.roles() → returns comma-separated role IDs (reads app.user_roles)
+        // These read from session-local config vars set per-transaction by withAuth().
+        await db.execute(sql`CREATE SCHEMA IF NOT EXISTS auth`);
+
+        await db.execute(sql`
+            CREATE OR REPLACE FUNCTION auth.uid() RETURNS text AS $$
+                SELECT NULLIF(current_setting('app.user_id', true), '');
+            $$ LANGUAGE sql STABLE
+        `);
+
+        await db.execute(sql`
+            CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb AS $$
+                SELECT COALESCE(
+                    NULLIF(current_setting('app.jwt', true), ''),
+                    '{}'
+                )::jsonb;
+            $$ LANGUAGE sql STABLE
+        `);
+
+        await db.execute(sql`
+            CREATE OR REPLACE FUNCTION auth.roles() RETURNS text AS $$
+                SELECT COALESCE(NULLIF(current_setting('app.user_roles', true), ''), '');
+            $$ LANGUAGE sql STABLE
+        `);
+
         // Seed default roles if none exist
         await seedDefaultRoles(db);
 
