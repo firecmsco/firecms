@@ -202,7 +202,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             cleanedCollection
         });
         return runTransaction(firestore, async (transaction) => {
-            transaction.set(ref, cleanedCollection, { merge: true });
+            transaction.set(ref, cleanedCollection);
             if (previousStrippedId && previousStrippedId !== strippedPath) {
                 const previousRef = doc(firestore, collectionsConfigPath, previousStrippedId);
                 transaction.delete(previousRef);
