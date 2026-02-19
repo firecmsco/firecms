@@ -90,6 +90,58 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     databaseId?: string;
 
     /**
+     * Row Level Security policies for this collection (Supabase-style).
+     * When defined, the schema generator will enable RLS on the table and
+     * create the corresponding PostgreSQL policies.
+     *
+     * Supports three levels of expressiveness:
+     * 1. **Convenience shortcuts** — `ownerField`, `access`, `roles`
+     * 2. **Raw SQL** — `using` and `withCheck` for full PostgreSQL power
+     * 3. **Combined** — mix shortcuts with `roles` for common patterns
+     *
+     * The authenticated user context is available via:
+     * - `current_setting('firecms.current_user_id')` — user's ID
+     * - `current_setting('firecms.current_user_roles')` — comma-separated app roles
+     *
+     * @example
+     * // Simple: only owners can access their own rows
+     * securityRules: [
+     *   { operation: "all", ownerField: "user_id" }
+     * ]
+     *
+     * @example
+     * // Public read, owner-only write (using operations array to reduce boilerplate)
+     * securityRules: [
+     *   { operation: "select", access: "public" },
+     *   { operations: ["insert", "update", "delete"], ownerField: "created_by" }
+     * ]
+     *
+     * @example
+     * // Role-based: admins read all rows, users read own
+     * securityRules: [
+     *   { operation: "select", roles: ["admin"], using: "true" },
+     *   { operation: "all", ownerField: "user_id" }
+     * ]
+     *
+     * @example
+     * // Raw SQL: cross-table check with subquery
+     * securityRules: [
+     *   {
+     *     operation: "select",
+     *     using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = current_setting('firecms.current_user_id'))"
+     *   }
+     * ]
+     *
+     * @example
+     * // Restrictive policy with both USING and WITH CHECK to constrain old AND new row states
+     * securityRules: [
+     *   { operation: "all", ownerField: "user_id" },
+     *   { operation: "update", mode: "restrictive", using: "{is_locked} = false", withCheck: "{is_locked} = false" }
+     * ]
+     */
+    securityRules?: SecurityRule[];
+
+    /**
      * If this collection is a top level navigation entry, you can set this
      * property to `true` to indicate that this collection is a collection group.
      */
@@ -743,3 +795,218 @@ export type SelectedCellProps<M extends Record<string, any> = any> = {
     entityPath: string;
     entityId: string | number;
 };
+
+/**
+ * SQL operation that a policy applies to.
+ * @group Models
+ */
+export type SecurityOperation = "select" | "insert" | "update" | "delete" | "all";
+
+/**
+ * Flexible Row Level Security policy for a collection.
+ *
+ * Inspired by Supabase's approach to PostgreSQL RLS. Policies can range from
+ * simple convenience shortcuts to fully custom SQL expressions, giving you the
+ * full power of PostgreSQL Row Level Security.
+ *
+ * The authenticated user's identity is available via:
+ * - `current_setting('firecms.current_user_id')` — the user's ID
+ * - `current_setting('firecms.current_user_roles')` — comma-separated app role IDs
+ *
+ * These are set automatically per-transaction by the backend.
+ *
+ * **How policies combine:** PostgreSQL evaluates all matching policies for an
+ * operation. Permissive policies are OR'd together (any one passing is enough).
+ * Restrictive policies are AND'd (all must pass). This mirrors Supabase behavior.
+ *
+ * @group Models
+ */
+export interface SecurityRule {
+    /**
+     * Optional human-readable name for the policy.
+     * If not provided, one will be auto-generated from the table name and operation.
+     * Must be unique per table.
+     *
+     * When using `operations` (array), each generated policy will have the
+     * operation name appended, e.g. `"owner_access_select"`, `"owner_access_update"`.
+     */
+    name?: string;
+
+    /**
+     * Which SQL operation this policy applies to.
+     * Use this when the policy targets a single operation or all operations.
+     *
+     * For multiple specific operations, use `operations` (array) instead.
+     * If neither is specified, defaults to `"all"`.
+     *
+     * @default "all"
+     */
+    operation?: SecurityOperation;
+
+    /**
+     * Array of SQL operations this policy applies to.
+     * The compiler will generate one PostgreSQL policy per operation, sharing
+     * the same configuration.
+     *
+     * This reduces boilerplate when the same rule applies to multiple (but not all)
+     * operations.
+     *
+     * Takes precedence over `operation` (singular) if both are specified.
+     *
+     * @example
+     * // Same rule for select and update
+     * { operations: ["select", "update"], ownerField: "user_id" }
+     *
+     * @example
+     * // Equivalent to operation: "all"
+     * { operations: ["all"], ownerField: "user_id" }
+     */
+    operations?: SecurityOperation[];
+
+    /**
+     * Whether this policy is `"permissive"` (default) or `"restrictive"`.
+     *
+     * - **permissive**: Multiple permissive policies for the same operation are
+     *   OR'd together — if *any* passes, access is granted.
+     * - **restrictive**: Restrictive policies are AND'd with all permissive
+     *   policies — they act as additional gates that *must* also pass.
+     *
+     * This is the same model as PostgreSQL / Supabase.
+     *
+     * @default "permissive"
+     */
+    mode?: "permissive" | "restrictive";
+
+    // ── Convenience shortcuts ───────────────────────────────────────────
+
+    /**
+     * **Shortcut.** The property (column) that stores the owner's user ID.
+     * Generates a USING/WITH CHECK clause like:
+     *   `<column> = current_setting('firecms.current_user_id')`
+     *
+     * Cannot be combined with `using` / `withCheck` / `access`.
+     *
+     * @example
+     * { operation: "all", ownerField: "user_id" }
+     */
+    ownerField?: string;
+
+    /**
+     * **Shortcut.** Grant unrestricted row access (no row filtering) for this operation.
+     * Generates `USING (true)`.
+     *
+     * This means "no row-level filter", NOT "anonymous/unauthenticated access".
+     * Authentication is still enforced at the API layer — this only controls which
+     * *rows* authenticated users can see.
+     *
+     * Typically used alone for genuinely public read endpoints, or combined with
+     * `roles` to give certain roles an unfiltered view of the table.
+     *
+     * Cannot be combined with `using` / `withCheck` / `ownerField`.
+     *
+     * @example
+     * // Public read (any authenticated user sees all rows)
+     * { operation: "select", access: "public" }
+     */
+    access?: "public";
+
+    /**
+     * **Shortcut.** Restrict this policy to users that have one of these
+     * application-level roles.
+     *
+     * **Important:** These are NOT native PostgreSQL database roles. They are
+     * application roles managed by FireCMS, stored in the `firecms_user_roles`
+     * table, and injected into each transaction via:
+     *   `current_setting('firecms.current_user_roles')` (comma-separated string)
+     *
+     * Generates a condition like:
+     *   `current_setting('firecms.current_user_roles') ~ '<role1>|<role2>'`
+     *
+     * Can be combined with `ownerField`, `access`, or raw `using`/`withCheck`.
+     * When combined, the role check is AND'd with the other condition.
+     *
+     * @example
+     * // Only admins can delete
+     * { operation: "delete", roles: ["admin"] }
+     *
+     * @example
+     * // Admins have unfiltered read access to all rows
+     * { operation: "select", roles: ["admin"], using: "true" }
+     */
+    roles?: string[];
+
+    // ── Raw SQL expressions (full power) ────────────────────────────────
+
+    /**
+     * Raw SQL expression for the `USING` clause.
+     * This controls which *existing* rows are visible / can be modified / deleted.
+     * Applied to SELECT, UPDATE, and DELETE.
+     *
+     * You can reference columns via `{column_name}` which will be resolved to
+     * `table.column_name` in the generated Drizzle code. You can also use any
+     * valid PostgreSQL expression.
+     *
+     * Cannot be combined with `ownerField` or `access`.
+     *
+     * @example
+     * // Rows published in the last 30 days are visible
+     * { operation: "select", using: "{published_at} > now() - interval '30 days'" }
+     *
+     * @example
+     * // Only the owner, or users with 'moderator' role
+     * {
+     *   operation: "select",
+     *   using: "{user_id} = current_setting('firecms.current_user_id') OR current_setting('firecms.current_user_roles') ~ 'moderator'"
+     * }
+     *
+     * @example
+     * // Cross-table subquery: only if user belongs to the org
+     * {
+     *   operation: "select",
+     *   using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = current_setting('firecms.current_user_id'))"
+     * }
+     */
+    using?: string;
+
+    /**
+     * Raw SQL expression for the `WITH CHECK` clause.
+     * This controls which *new/updated* row values are allowed.
+     * Applied to INSERT and UPDATE.
+     *
+     * Same syntax as `using` — use `{column_name}` to reference columns.
+     *
+     * **Important for UPDATE:** PostgreSQL evaluates two row states — the
+     * *existing* row (`USING`) and the *incoming new* row (`WITH CHECK`).
+     * If you only specify `using`, the same expression is used for both.
+     * For security-sensitive updates, always specify `withCheck` explicitly
+     * to constrain what the new row values can be.
+     *
+     * If not provided on INSERT/UPDATE policies, falls back to `using`
+     * (which matches PostgreSQL's own default behavior).
+     *
+     * Cannot be combined with `ownerField` or `access`.
+     *
+     * @example
+     * // Users can only insert rows where they are the owner
+     * { operation: "insert", withCheck: "{user_id} = current_setting('firecms.current_user_id')" }
+     *
+     * @example
+     * // Prevent changing the status to 'archived' unless admin
+     * {
+     *   operation: "update",
+     *   using: "{user_id} = current_setting('firecms.current_user_id')",
+     *   withCheck: "{status} != 'archived' OR current_setting('firecms.current_user_roles') ~ 'admin'"
+     * }
+     *
+     * @example
+     * // Restrictive gate: prevent locking AND unlocking unless admin.
+     * // `using` checks the old row state, `withCheck` checks the new.
+     * {
+     *   operation: "update",
+     *   mode: "restrictive",
+     *   using: "{is_locked} = false",
+     *   withCheck: "{is_locked} = false"
+     * }
+     */
+    withCheck?: string;
+}

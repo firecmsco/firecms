@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+// import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, Properties } from "@firecms/types";
 import { getTableName, resolveCollectionRelations } from "@firecms/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
@@ -14,6 +14,7 @@ import {
 import { sanitizeAndConvertDates, serializeDataToServer } from "../data-transformer";
 import { RelationService } from "./RelationService";
 import { EntityFetchService } from "./EntityFetchService";
+import { DrizzleClient } from "../interfaces";
 
 /**
  * Service for handling all entity write operations.
@@ -23,7 +24,7 @@ export class EntityPersistService {
     private relationService: RelationService;
     private fetchService: EntityFetchService;
 
-    constructor(private db: NodePgDatabase<any>) {
+    constructor(private db: DrizzleClient) {
         this.relationService = new RelationService(db);
         this.fetchService = new EntityFetchService(db);
     }

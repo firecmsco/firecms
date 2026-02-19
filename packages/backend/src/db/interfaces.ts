@@ -7,6 +7,14 @@
  */
 
 import { Entity, EntityCollection, FilterValues, WhereFilterOp } from "@firecms/types";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { PgTransaction } from "drizzle-orm/pg-core";
+
+/**
+ * Type representing either a direct database connection or a transaction.
+ * Used to allow services to operate within a transaction context.
+ */
+export type DrizzleClient = NodePgDatabase<any> | PgTransaction<any, any, any>;
 
 // =============================================================================
 // DATABASE CONNECTION INTERFACES

@@ -4,7 +4,6 @@ import { ApiResponse, QueryOptions } from "../types";
 
 /**
  * Lightweight REST API generator that leverages existing FireCMS DataSourceDelegate
- * No duplication - uses your existing DataSourceDelegate implementation
  */
 export class RestApiGenerator {
     private collections: EntityCollection[];
@@ -38,11 +37,14 @@ export class RestApiGenerator {
             try {
                 const queryOptions = this.parseQueryOptions(req.query);
 
+                // Get data source from request (injected by Auth middleware) or fallback to instance default
+                const dataSource = (req as any).dataSource || this.dataSource;
+
                 // Fetch raw data directly from EntityService without Entity wrapper
-                const entities = await this.fetchRawCollection(collection, queryOptions);
+                const entities = await this.fetchRawCollection(dataSource, collection, queryOptions);
 
                 // Get count if needed
-                const total = await this.countRawEntities(collection, queryOptions);
+                const total = await this.countRawEntities(dataSource, collection, queryOptions);
 
                 res.json({
                     data: entities,
@@ -64,8 +66,11 @@ export class RestApiGenerator {
             try {
                 const { id } = req.params;
 
+                // Get data source from request (injected by Auth middleware) or fallback to instance default
+                const dataSource = (req as any).dataSource || this.dataSource;
+
                 // Fetch raw data directly from EntityService without Entity wrapper
-                const entity = await this.fetchRawEntity(collection, String(id));
+                const entity = await this.fetchRawEntity(dataSource, collection, String(id));
 
                 if (!entity) {
                     res.status(404).json(this.formatError(new Error("Entity not found")));
@@ -82,10 +87,13 @@ export class RestApiGenerator {
         // POST /collection - Create entity (uses existing saveEntity)
         this.router.post(basePath, async (req: Request, res: Response): Promise<void> => {
             try {
+                // Get data source from request (injected by Auth middleware) or fallback to instance default
+                const dataSource = (req as any).dataSource || this.dataSource;
+
                 const path = collection.dbPath || collection.slug;
-                const entityId = this.dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
+                const entityId = dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
                 // Use existing saveEntity from DataSourceDelegate
-                const entity = await this.dataSource.saveEntity({
+                const entity = await dataSource.saveEntity({
                     path,
                     entityId,
                     values: req.body,
@@ -105,8 +113,11 @@ export class RestApiGenerator {
             try {
                 const { id } = req.params;
 
+                // Get data source from request (injected by Auth middleware) or fallback to instance default
+                const dataSource = (req as any).dataSource || this.dataSource;
+
                 // Check if entity exists first
-                const existingEntity = await this.dataSource.fetchEntity({
+                const existingEntity = await dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     collection
@@ -118,7 +129,7 @@ export class RestApiGenerator {
                 }
 
                 // Use existing saveEntity from DataSourceDelegate
-                const entity = await this.dataSource.saveEntity({
+                const entity = await dataSource.saveEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     values: req.body,
@@ -138,8 +149,11 @@ export class RestApiGenerator {
             try {
                 const { id } = req.params;
 
+                // Get data source from request (injected by Auth middleware) or fallback to instance default
+                const dataSource = (req as any).dataSource || this.dataSource;
+
                 // Check if entity exists first
-                const existingEntity = await this.dataSource.fetchEntity({
+                const existingEntity = await dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     collection
@@ -151,7 +165,7 @@ export class RestApiGenerator {
                 }
 
                 // Use existing deleteEntity from DataSourceDelegate (expects the full entity)
-                await this.dataSource.deleteEntity({
+                await dataSource.deleteEntity({
                     entity: existingEntity,
                     collection
                 });
@@ -279,9 +293,9 @@ export class RestApiGenerator {
     /**
      * Fetch raw collection data without Entity wrapper
      */
-    private async fetchRawCollection(collection: EntityCollection, queryOptions: QueryOptions) {
+    private async fetchRawCollection(dataSource: DataSourceDelegate, collection: EntityCollection, queryOptions: QueryOptions) {
         // Use existing fetchCollection from DataSourceDelegate
-        const entities = await this.dataSource.fetchCollection({
+        const entities = await dataSource.fetchCollection({
             path: collection.dbPath || collection.slug,
             collection,
             filter: queryOptions.where,
@@ -298,8 +312,8 @@ export class RestApiGenerator {
     /**
      * Count raw entities for a collection
      */
-    private async countRawEntities(collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
-        return this.dataSource.countEntities ? await this.dataSource.countEntities({
+    private async countRawEntities(dataSource: DataSourceDelegate, collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
+        return dataSource.countEntities ? await dataSource.countEntities({
             path: collection.dbPath || collection.slug,
             collection,
             filter: queryOptions.where
@@ -309,9 +323,9 @@ export class RestApiGenerator {
     /**
      * Fetch single entity raw data without Entity wrapper
      */
-    private async fetchRawEntity(collection: EntityCollection, entityId: string) {
+    private async fetchRawEntity(dataSource: DataSourceDelegate, collection: EntityCollection, entityId: string) {
         // Use existing fetchEntity from DataSourceDelegate
-        const entity = await this.dataSource.fetchEntity({
+        const entity = await dataSource.fetchEntity({
             path: collection.dbPath || collection.slug,
             entityId,
             collection

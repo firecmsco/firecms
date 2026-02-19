@@ -4,7 +4,7 @@
  * PostgreSQL and Drizzle ORM backend implementation for FireCMS
  * This package provides a complete backend solution for FireCMS applications
  * using PostgreSQL as the database and Drizzle ORM for type-safe database operations.
- * 
+ *
  * The package also exports abstract interfaces (EntityRepository, RealtimeProvider,
  * CollectionRegistryInterface, ConditionBuilder) that can be implemented by other
  * database backends (e.g., MongoDB, MySQL).
@@ -81,6 +81,7 @@ export * from "./storage";
 // Schema generation
 export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
+export * from "./utils/sql";
 
 // Factory functions for creating backend instances
 export * from "./factory";

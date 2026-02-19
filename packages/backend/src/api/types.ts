@@ -1,5 +1,10 @@
-import { EntityCollection } from "@firecms/types";
+import { DataSourceDelegate, User, EntityCollection } from "@firecms/types";
 import { Request } from "express";
+
+export interface FireCMSRequest extends Request {
+    user?: User;
+    dataSource?: DataSourceDelegate;
+}
 
 /**
  * Configuration for API generation
@@ -15,7 +20,7 @@ export interface ApiConfig {
     };
     auth?: {
         enabled: boolean;
-        validator?: (req: Request) => Promise<boolean | { userId: string; [key: string]: any }>;
+        validator?: (req: Request) => Promise<boolean | { userId: string;[key: string]: any }>;
     };
     pagination?: {
         defaultLimit: number;

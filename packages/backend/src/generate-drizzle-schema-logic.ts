@@ -1,4 +1,4 @@
-import { EntityCollection, NumberProperty, Property, Relation, RelationProperty, StringProperty } from "@firecms/types";
+import { EntityCollection, NumberProperty, Property, Relation, RelationProperty, SecurityOperation, SecurityRule, StringProperty } from "@firecms/types";
 import {
     getEnumVarName,
     getTableName,
@@ -118,11 +118,155 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
     return `    ${propName}: ${columnDefinition}`;
 };
 
+/**
+ * Resolves a raw SQL string, replacing `{column_name}` with `${table.column_name}`.
+ * The result is wrapped in a Drizzle sql`` template literal.
+ */
+const resolveRawSql = (expression: string): string => {
+    // Replace {column_name} with ${table.column_name}
+    const resolved = expression.replace(/\{(\w+)\}/g, (_, col) => `\${table.${col}}`);
+    return `sql\`${resolved}\``;
+};
+
+/**
+ * Wraps a SQL clause with a role check using AND.
+ * Generates: `(<clause>) AND (current_setting('firecms.current_user_roles') ~ '<role1>|<role2>')`
+ */
+const wrapWithRoleCheck = (clause: string, roles: string[]): string => {
+    const rolesPattern = roles.join("|");
+    const roleCondition = `current_setting('firecms.current_user_roles') ~ '${rolesPattern}'`;
+    return `sql\`(${unwrapSql(clause)}) AND (${roleCondition})\``;
+};
+
+/**
+ * Extracts the inner expression from a `sql\`...\`` wrapper.
+ */
+const unwrapSql = (sqlExpr: string): string => {
+    const match = sqlExpr.match(/^sql`(.*)`$/s);
+    return match ? match[1] : sqlExpr;
+};
+
+/**
+ * Builds the USING clause for a policy based on shortcuts or raw SQL.
+ */
+const buildUsingClause = (rule: SecurityRule): string | null => {
+    if (rule.using) {
+        return resolveRawSql(rule.using);
+    }
+    if (rule.access === "public") {
+        return `sql\`true\``;
+    }
+    if (rule.ownerField) {
+        return `sql\`\${table.${rule.ownerField}} = current_setting('firecms.current_user_id')\``;
+    }
+    return null;
+};
+
+/**
+ * Builds the WITH CHECK clause for a policy based on shortcuts or raw SQL.
+ * Falls back to the USING clause if not explicitly provided.
+ */
+const buildWithCheckClause = (rule: SecurityRule): string | null => {
+    if (rule.withCheck) {
+        return resolveRawSql(rule.withCheck);
+    }
+    // For insert/update/all, fall back to using clause if withCheck not specified
+    return buildUsingClause(rule);
+};
+
+/**
+ * Generates Drizzle pgPolicy() calls from a declarative SecurityRule definition.
+ *
+ * Supports the full spectrum:
+ * - Convenience shortcuts: ownerField, access, roles
+ * - Raw SQL: using, withCheck
+ * - Mode: permissive (default) or restrictive
+ * - operations[] array: generates one policy per operation
+ * - Combinations: roles + ownerField, roles + raw SQL, etc.
+ */
+const generatePolicyCode = (tableName: string, rule: SecurityRule, index: number): string => {
+    // Resolve operations: operations[] takes precedence over operation (singular)
+    const ops: SecurityOperation[] = rule.operations && rule.operations.length > 0
+        ? rule.operations
+        : [rule.operation ?? "all"];
+
+    // Generate one pgPolicy per operation
+    return ops.map((op, opIdx) => {
+        const policyName = rule.name
+            ? (ops.length > 1 ? `${rule.name}_${op}` : rule.name)
+            : `${tableName}_${op}_policy_${index}${ops.length > 1 ? `_${opIdx}` : ""}`;
+
+        return generateSinglePolicyCode(tableName, rule, op, policyName);
+    }).join("");
+};
+
+/**
+ * Generates a single pgPolicy() call for one specific operation.
+ */
+const generateSinglePolicyCode = (tableName: string, rule: SecurityRule, operation: SecurityOperation, policyName: string): string => {
+    const mode = rule.mode ?? "permissive";
+    const roles = rule.roles;
+
+    // Determine which clauses this operation needs:
+    // SELECT, DELETE → USING only
+    // INSERT → WITH CHECK only
+    // UPDATE, ALL → both USING and WITH CHECK
+    const needsUsing = operation !== "insert";
+    const needsWithCheck = operation !== "select" && operation !== "delete";
+
+    let usingClause = needsUsing ? buildUsingClause(rule) : null;
+    let withCheckClause = needsWithCheck ? buildWithCheckClause(rule) : null;
+
+    // If roles are specified, wrap existing clauses with role check,
+    // or generate a roles-only clause.
+    if (roles && roles.length > 0) {
+        if (usingClause) {
+            usingClause = wrapWithRoleCheck(usingClause, roles);
+        } else if (needsUsing) {
+            // Roles-only rule (e.g. { operation: "select", roles: ["admin"] })
+            const rolesPattern = roles.join("|");
+            usingClause = `sql\`current_setting('firecms.current_user_roles') ~ '${rolesPattern}'\``;
+        }
+        if (withCheckClause) {
+            withCheckClause = wrapWithRoleCheck(withCheckClause, roles);
+        } else if (needsWithCheck) {
+            const rolesPattern = roles.join("|");
+            withCheckClause = `sql\`current_setting('firecms.current_user_roles') ~ '${rolesPattern}'\``;
+        }
+    }
+
+    // Fallback: if we still have no clauses, deny all (safety net)
+    if (!usingClause && needsUsing) {
+        usingClause = `sql\`false\``;
+    }
+    if (!withCheckClause && needsWithCheck) {
+        withCheckClause = `sql\`false\``;
+    }
+
+    // Build the policy options object
+    const parts: string[] = [];
+    parts.push(`as: "${mode}"`);
+    parts.push(`for: "${operation}"`);
+    parts.push(`to: ["public"]`);
+    if (usingClause) parts.push(`using: ${usingClause}`);
+    if (withCheckClause) parts.push(`withCheck: ${withCheckClause}`);
+
+    return `    pgPolicy("${policyName}", { ${parts.join(", ")} }),\n`;
+};
+
 // --- Main Schema Generation Logic ---
 export const generateSchema = async (collections: EntityCollection[]): Promise<string> => {
     let schemaContent = "// This file is auto-generated by the FireCMS Drizzle generator. Do not edit manually.\n\n";
-    schemaContent += "import { primaryKey, pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, numeric, serial } from 'drizzle-orm/pg-core';\n";
-    schemaContent += "import { relations as drizzleRelations } from 'drizzle-orm';\n\n";
+
+    const hasRLS = collections.some(c => c.securityRules && c.securityRules.length > 0);
+
+    const pgCoreImports = ["primaryKey", "pgTable", "integer", "varchar", "boolean", "timestamp", "jsonb", "pgEnum", "numeric", "serial"];
+    if (hasRLS) pgCoreImports.push("pgPolicy");
+    schemaContent += `import { ${pgCoreImports.join(", ")} } from 'drizzle-orm/pg-core';\n`;
+
+    const drizzleOrmImports = ["relations as drizzleRelations"];
+    if (hasRLS) drizzleOrmImports.push("sql");
+    schemaContent += `import { ${drizzleOrmImports.join(", ")} } from 'drizzle-orm';\n\n`;
 
     const exportedTableVars: string[] = [];
     const exportedEnumVars: string[] = [];
@@ -167,7 +311,10 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 const junctionTableName = relation.through.table;
                 if (!allTablesToGenerate.has(junctionTableName)) {
                     allTablesToGenerate.set(junctionTableName, {
-                        collection: { dbPath: junctionTableName, properties: {} } as EntityCollection,
+                        collection: {
+                            dbPath: junctionTableName,
+                            properties: {}
+                        } as EntityCollection,
                         isJunction: true,
                         relation: relation,
                         sourceCollection: collection
@@ -179,19 +326,27 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     }
 
     // 3. Generate pgTable definitions for all unique tables
-    for (const [tableName, { collection, isJunction, relation, sourceCollection }] of allTablesToGenerate.entries()) {
+    for (const [tableName, {
+        collection,
+        isJunction,
+        relation,
+        sourceCollection
+    }] of allTablesToGenerate.entries()) {
         const tableVarName = getTableVarName(tableName);
         if (isJunction && relation && sourceCollection && relation.through) {
             const targetCollection = relation.target();
-            const { sourceColumn, targetColumn } = relation.through;
+            const {
+                sourceColumn,
+                targetColumn
+            } = relation.through;
 
             const onDelete = relation.onDelete ?? "cascade";
             const refOptions = `{ onDelete: \"${onDelete}\" }`;
 
             const sourceColType = isNumericId(sourceCollection) ? "integer" : "varchar";
             const targetColType = isNumericId(targetCollection) ? "integer" : "varchar";
-            const sourceId = sourceCollection.idField ?? 'id';
-            const targetId = targetCollection.idField ?? 'id';
+            const sourceId = sourceCollection.idField ?? "id";
+            const targetId = targetCollection.idField ?? "id";
 
             schemaContent += `export const ${tableVarName} = pgTable(\"${tableName}\", {\n`;
             schemaContent += `    ${sourceColumn}: ${sourceColType}(\"${toSnakeCase(sourceColumn)}\").notNull().references(() => ${getTableVarName(getTableName(sourceCollection))}.${sourceId}, ${refOptions}),\n`;
@@ -199,7 +354,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             schemaContent += `}, (table) => ({\n`;
             schemaContent += `    pk: primaryKey({ columns: [table.${sourceColumn}, table.${targetColumn}] })\n`;
             schemaContent += `}));\n\n`;
-        } else if(!isJunction) {
+        } else if (!isJunction) {
             schemaContent += `export const ${tableVarName} = pgTable(\"${tableName}\", {\n`;
             schemaContent += getDrizzleIdColumn(collection);
             const columns = new Set<string>();
@@ -209,20 +364,36 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 if (columnString) columns.add(columnString);
             });
             if (columns.size > 0) schemaContent += `,\n${Array.from(columns).join(",\n")}`;
-            schemaContent += "\n});\n\n";
+
+            const securityRules = collection.securityRules;
+            if (securityRules && securityRules.length > 0) {
+                schemaContent += "\n}, (table) => ([\n";
+                securityRules.forEach((rule, idx) => {
+                    schemaContent += generatePolicyCode(tableName, rule, idx);
+                });
+                schemaContent += "]));\n\n";
+            } else {
+                schemaContent += "\n});\n\n";
+            }
         }
         if (!exportedTableVars.includes(tableVarName)) exportedTableVars.push(tableVarName);
     }
 
     // 4. Generate Drizzle Relations
-    for (const [tableName, { collection, isJunction }] of allTablesToGenerate.entries()) {
+    for (const [tableName, {
+        collection,
+        isJunction
+    }] of allTablesToGenerate.entries()) {
         const tableVarName = getTableVarName(tableName);
         const tableRelations: string[] = [];
 
         if (isJunction) {
             const relationInfo = Array.from(allTablesToGenerate.values()).find(v => v.isJunction && getTableName(v.collection) === tableName);
-            if(relationInfo && relationInfo.relation && relationInfo.sourceCollection && relationInfo.relation.through) {
-                const { relation, sourceCollection } = relationInfo;
+            if (relationInfo && relationInfo.relation && relationInfo.sourceCollection && relationInfo.relation.through) {
+                const {
+                    relation,
+                    sourceCollection
+                } = relationInfo;
                 const targetCollection = relation.target();
                 const sourceTableVar = getTableVarName(getTableName(sourceCollection));
                 const targetTableVar = getTableVarName(getTableName(targetCollection));
@@ -250,12 +421,10 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                     if (rel.cardinality === "one") {
                         if (rel.direction === "owning" && rel.localKey) {
                             tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${rel.localKey}],\n        references: [${targetTableVar}.${target.idField ?? "id"}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
-                        }
-                        else if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
+                        } else if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
                             const sourceIdField = collection.idField ?? "id";
                             tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${rel.foreignKeyOnTarget}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
-                        }
-                        else if (rel.direction === "inverse" && !rel.foreignKeyOnTarget) {
+                        } else if (rel.direction === "inverse" && !rel.foreignKeyOnTarget) {
                             // Handle inverse one-to-one relations where the FK is on the target table
                             // but foreignKeyOnTarget is not explicitly specified
                             // In this case, we need to find the corresponding owning relation on the target

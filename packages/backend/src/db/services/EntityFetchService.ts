@@ -1,6 +1,6 @@
 import { and, asc, count, desc, eq, gt, lt, or, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+// import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues } from "@firecms/types";
 import { resolveCollectionRelations } from "@firecms/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
@@ -13,6 +13,7 @@ import {
 } from "./entity-helpers";
 import { parseDataFromServer } from "../data-transformer";
 import { RelationService } from "./RelationService";
+import { DrizzleClient } from "../interfaces";
 
 /**
  * Service for handling all entity read operations.
@@ -21,7 +22,7 @@ import { RelationService } from "./RelationService";
 export class EntityFetchService {
     private relationService: RelationService;
 
-    constructor(private db: NodePgDatabase<any>) {
+    constructor(private db: DrizzleClient) {
         this.relationService = new RelationService(db);
     }
 

@@ -1,7 +1,7 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+// import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, FilterValues } from "@firecms/types";
 import { EntityFetchService, EntityPersistService, RelationService } from "./services";
-import { EntityRepository, FetchCollectionOptions, SearchOptions, CountOptions } from "./interfaces";
+import { EntityRepository, FetchCollectionOptions, SearchOptions, CountOptions, DrizzleClient } from "./interfaces";
 
 // Re-export data transformer functions for external use
 export { sanitizeAndConvertDates, serializeDataToServer, parseDataFromServer } from "./data-transformer";
@@ -27,7 +27,7 @@ export class EntityService implements EntityRepository {
     private fetchService: EntityFetchService;
     private persistService: EntityPersistService;
 
-    constructor(private db: NodePgDatabase<any>) {
+    constructor(private db: DrizzleClient) {
         this.fetchService = new EntityFetchService(db);
         this.persistService = new EntityPersistService(db);
     }

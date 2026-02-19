@@ -1,6 +1,9 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+// import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
+import { DrizzleClient } from "../db/interfaces";
+import { User } from "@firecms/types";
+import { sql } from "drizzle-orm";
 import {
     DataSourceDelegate,
     DeleteEntityProps,
@@ -21,7 +24,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     private realtimeService: RealtimeService;
 
     constructor(
-        private db: NodePgDatabase,
+        private db: DrizzleClient,
         realtimeService: RealtimeService
     ) {
         this.entityService = new EntityService(db);
@@ -287,5 +290,80 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
     private generateSubscriptionId(): string {
         return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    /**
+     * Create a new delegate instance with authenticated context.
+     * Starts a transaction and sets the current_user_id and current_user_roles
+     * configuration parameters for PostgreSQL Row Level Security.
+     */
+    async withAuth(user: User): Promise<PostgresDataSourceDelegate> {
+        // We need to return a proxy that wraps every method in a transaction
+        // But since we can't easily start a transaction and keep it open for multiple calls without a callback,
+        // we'll implement a different approach:
+        // We returns a new delegate where every operation will start its own transaction,
+        // set the config, and then perform the operation.
+        // Ideally, if Drizzle supported session variables on connection, we'd use that.
+        // Since we are using a pool, we MUST use a transaction to guarantee the SET LOCAL applies to the query.
+
+        const authenticatedDelegate = Object.create(this);
+        const originalDb = this.db;
+
+        // We can't directly "return" a delegate that shares a single transaction for *future* calls
+        // because typical usage is: get delegate -> await fetch -> await save.
+        // Each await releases the event loop.
+        // So we have to wrap each method.
+
+        const wrapMethod = (methodName: keyof PostgresDataSourceDelegate) => {
+            const originalMethod = this[methodName] as Function;
+            return async (...args: any[]) => {
+                // @ts-ignore
+                return await originalDb.transaction(async (tx) => {
+                    // Set the user ID and roles for RLS
+                    await tx.execute(sql`SELECT set_config('firecms.current_user_id', ${user.uid}, true)`);
+                    // Set user roles as comma-separated string for role-based RLS policies
+                    const rolesString = (user.roles ?? []).map(r => r.id).join(",");
+                    await tx.execute(sql`SELECT set_config('firecms.current_user_roles', ${rolesString}, true)`);
+
+                    // Create a temporary delegate using the transaction client
+                    // We need to instantiate a new EntityService with the tx
+                    const txEntityService = new EntityService(tx);
+
+                    // Creates a lightweight copy of the delegate to invoke the method on
+                    // We can't use 'this' directly because it might be bound to the original db
+                    // But wait, the methods in THIS class mainly delegate to this.entityService.
+                    // So we can just call the method on a new instance that interprets `this.entityService` as `txEntityService`.
+
+                    // Let's create a partial clone
+                    const txDelegate = new PostgresDataSourceDelegate(tx, this.realtimeService);
+                    // Force inject the transactional entity service
+                    // @ts-ignore
+                    txDelegate.entityService = txEntityService;
+
+                    return await originalMethod.apply(txDelegate, args);
+                });
+            };
+        };
+
+        // Wrap the methods that perform DB operations
+        authenticatedDelegate.fetchCollection = wrapMethod("fetchCollection");
+        authenticatedDelegate.fetchEntity = wrapMethod("fetchEntity");
+        authenticatedDelegate.saveEntity = wrapMethod("saveEntity");
+        authenticatedDelegate.deleteEntity = wrapMethod("deleteEntity");
+        authenticatedDelegate.checkUniqueField = wrapMethod("checkUniqueField");
+        authenticatedDelegate.countEntities = wrapMethod("countEntities");
+
+        // Listen methods use websockets/realtime service which handles auth differently (via connection params usually),
+        // OR we might need to think about how listen works with RLS.
+        // For now, let's assume Listen is handled separately or doesn't need this transaction wrap
+        // because it establishes a long-lived connection where we might set config once?
+        // Actually, RealtimeService logic generates queries too?
+        // If RealtimeService uses `db` to fetch updates, it needs RLS too.
+        // But RealtimeService is a singleton.
+        // Only the initial fetch in `listenCollection` uses `fetchCollection`.
+        // So wrapping `fetchCollection` covers the initial data.
+        // Subsequent updates come from `notifyEntityUpdate`.
+
+        return authenticatedDelegate;
     }
 }
