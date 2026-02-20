@@ -1,0 +1,51 @@
+{
+    "extends": "astro/tsconfigs/strict",
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ],
+            "@firecms/core": [
+                "../../packages/firecms_core/src"
+            ],
+            "@firecms/firebase": [
+                "../../packages/firebase_firecms/src"
+            ],
+            "@firecms/ui": [
+                "../../packages/ui/src"
+            ],
+            "@firecms/editor": [
+                "../../packages/editor/src"
+            ],
+            "@firecms/data_enhancement": [
+                "../../packages/data_enhancement/src"
+            ],
+            "@firecms/collection_editor": [
+                "../../packages/collection_editor/src"
+            ],
+            "@firecms/collection_editor_firebase": [
+                "../../packages/collection_editor_firebase/src"
+            ],
+            "@firecms/data_import": [
+                "../../packages/data_import/src"
+            ],
+            "@firecms/data_export": [
+                "../../packages/data_export/src"
+            ],
+            "@firecms/user_management": [
+                "../../packages/user_management/src"
+            ],
+            "@firecms/schema_inference": [
+                "../../packages/schema_inference/src"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.astro"
+    ]
+}

@@ -36,6 +36,18 @@ For FireCMS PRO:
 firecms init --pro
 ```
 
+For FireCMS with Astro (self-hosted with Astro SSG/SSR and blog support):
+
+```bash
+firecms init --astro
+```
+
+For FireCMS Community (MIT licensed):
+
+```bash
+firecms init --community
+```
+
 #### To run locally
 
 For development purposes, you can link the package locally.
