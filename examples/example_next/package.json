@@ -27,7 +27,7 @@
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
     "firebase": "^12.9.0",
-    "next": "15.5.9",
+    "next": "15.5.10",
     "nextjs-toploader": "^3.9.17",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
