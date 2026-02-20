@@ -13,3 +13,5 @@ Be careful when escaping strings, avoid this lint error and similar ones:
 ESLint: Unnecessary escape character: \". (no-useless-escape)
 
 NEVER convert to any.
+
+Use `pnpm` exclusively, do not use `npm` or `yarn`.

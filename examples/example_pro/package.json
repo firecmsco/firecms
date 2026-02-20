@@ -22,7 +22,6 @@
     "@fontsource/comic-neue": "^5.2.7",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/noto-serif": "^5.2.9",
-    "@supabase/supabase-js": "^2.57.4",
     "algoliasearch": "^5.45.0",
     "bson-objectid": "^2.0.4",
     "firebase": "^12.7.0",

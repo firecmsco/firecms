@@ -140,7 +140,7 @@ export class UserService implements UserRepository {
             WHERE ur.user_id = ${userId}
         `);
 
-        return (result.rows as any[]).map(row => ({
+        return (result.rows as Array<{ id: string; name: string; is_admin: boolean; default_permissions: Record<string, boolean> | null; collection_permissions: Record<string, Record<string, boolean>> | null; config: Record<string, unknown> | null }>).map(row => ({
             id: row.id,
             name: row.name,
             isAdmin: row.is_admin,
@@ -214,7 +214,7 @@ export class RoleService implements RoleRepository {
 
         if (result.rows.length === 0) return null;
 
-        const row = result.rows[0] as any;
+        const row = result.rows[0] as { id: string; name: string; is_admin: boolean; default_permissions: Record<string, boolean> | null; collection_permissions: Record<string, Record<string, boolean>> | null; config: Record<string, unknown> | null };
         return {
             id: row.id,
             name: row.name,
@@ -232,7 +232,7 @@ export class RoleService implements RoleRepository {
             ORDER BY name
         `);
 
-        return (result.rows as any[]).map(row => ({
+        return (result.rows as Array<{ id: string; name: string; is_admin: boolean; default_permissions: Record<string, boolean> | null; collection_permissions: Record<string, Record<string, boolean>> | null; config: Record<string, unknown> | null }>).map(row => ({
             id: row.id,
             name: row.name,
             isAdmin: row.is_admin,
@@ -256,7 +256,7 @@ export class RoleService implements RoleRepository {
             RETURNING id, name, is_admin, default_permissions, collection_permissions, config
         `);
 
-        const row = result.rows[0] as any;
+        const row = result.rows[0] as { id: string; name: string; is_admin: boolean; default_permissions: Record<string, boolean> | null; collection_permissions: Record<string, Record<string, boolean>> | null; config: Record<string, unknown> | null };
         return {
             id: row.id,
             name: row.name,
@@ -368,7 +368,7 @@ export class PasswordResetTokenService {
 
         if (result.rows.length === 0) return null;
 
-        const row = result.rows[0] as any;
+        const row = result.rows[0] as { user_id: string; expires_at: string | number | Date };
         return {
             userId: row.user_id,
             expiresAt: new Date(row.expires_at)

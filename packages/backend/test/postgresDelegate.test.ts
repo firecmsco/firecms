@@ -1,5 +1,5 @@
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { PostgresDataSourceDelegate } from '../src/services/dataSourceDelegate';
 import { RealtimeService } from '../src/services/realtimeService';
 import { EntityService } from '../src/db/entityService';
@@ -8,21 +8,21 @@ import { sql } from 'drizzle-orm';
 
 // Mock dependencie
 const mockDb = {
-    transaction: vi.fn(),
-    execute: vi.fn(),
-    select: vi.fn().mockReturnThis(),
-    from: vi.fn().mockReturnThis(),
-    limit: vi.fn().mockReturnThis(),
-    where: vi.fn().mockReturnThis(),
-    orderBy: vi.fn().mockReturnThis(),
+    transaction: jest.fn(),
+    execute: jest.fn(),
+    select: jest.fn().mockReturnThis(),
+    from: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
 } as unknown as NodePgDatabase<any>;
 
 const mockRealtimeService = {
-    registerDataSourceSubscription: vi.fn(),
-    addSubscriptionCallback: vi.fn(),
-    removeSubscriptionCallback: vi.fn(),
+    registerDataSourceSubscription: jest.fn(),
+    addSubscriptionCallback: jest.fn(),
+    removeSubscriptionCallback: jest.fn(),
     subscriptions: new Map(),
-    notifyEntityUpdate: vi.fn(),
+    notifyEntityUpdate: jest.fn(),
 } as unknown as RealtimeService;
 
 
@@ -30,7 +30,7 @@ describe('PostgresDataSourceDelegate', () => {
     let delegate: PostgresDataSourceDelegate;
 
     beforeEach(() => {
-        vi.clearAllMocks();
+        jest.clearAllMocks();
         delegate = new PostgresDataSourceDelegate(mockDb, mockRealtimeService);
     });
 
@@ -55,9 +55,9 @@ describe('PostgresDataSourceDelegate', () => {
             // Mock transaction execution
             (mockDb.transaction as any).mockImplementation(async (cb: any) => {
                 const mockTx = {
-                    execute: vi.fn(),
-                    select: vi.fn().mockReturnThis(),
-                    from: vi.fn().mockReturnThis(),
+                    execute: jest.fn(),
+                    select: jest.fn().mockReturnThis(),
+                    from: jest.fn().mockReturnThis(),
                 };
                 return cb(mockTx);
             });
@@ -86,9 +86,9 @@ describe('PostgresDataSourceDelegate', () => {
             let txExecutor: any;
             (mockDb.transaction as any).mockImplementation(async (cb: any) => {
                 const mockTx = {
-                    execute: vi.fn(),
-                    select: vi.fn().mockReturnThis(),
-                    from: vi.fn().mockReturnThis(),
+                    execute: jest.fn(),
+                    select: jest.fn().mockReturnThis(),
+                    from: jest.fn().mockReturnThis(),
                 };
                 txExecutor = mockTx;
                 // We throw here to stop execution before it hits unmocked entity service logic
@@ -109,7 +109,7 @@ describe('PostgresDataSourceDelegate', () => {
             const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
 
             const mockTx = {
-                execute: vi.fn(),
+                execute: jest.fn(),
             } as any;
 
             try {

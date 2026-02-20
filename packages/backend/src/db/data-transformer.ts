@@ -145,10 +145,10 @@ export function serializeDataToServer<M extends Record<string, any>>(
     }
 
     if (inverseRelationUpdates.length > 0) {
-        (result as any).__inverseRelationUpdates = inverseRelationUpdates;
+        (result as Record<string, unknown>).__inverseRelationUpdates = inverseRelationUpdates;
     }
     if (joinPathRelationUpdates.length > 0) {
-        (result as any).__joinPathRelationUpdates = joinPathRelationUpdates;
+        (result as Record<string, unknown>).__joinPathRelationUpdates = joinPathRelationUpdates;
     }
 
     return result;
@@ -347,13 +347,13 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                     break;
                                 }
 
-                                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as any;
+                                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as unknown as typeof query;
                                 currentTable = joinTable;
                             }
 
                             // Add where condition for the current entity
                             const sourceIdField = sourceTable[(collection.idField || "id") as keyof typeof sourceTable] as AnyPgColumn;
-                            query = query.where(eq(sourceIdField, currentEntityId)) as any;
+                            query = query.where(eq(sourceIdField, currentEntityId)) as unknown as typeof query;
 
                             // Build additional conditions array
                             const additionalFilters: SQL[] = [];

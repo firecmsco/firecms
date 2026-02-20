@@ -1,5 +1,5 @@
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { FireCMSApiServer } from '../src/api/server';
 import { DataSourceDelegate, User } from '@firecms/types';
 import { ApiConfig } from '../src/api/types';
@@ -7,22 +7,22 @@ import http from 'http';
 import { AddressInfo } from 'net';
 
 // Mock DataSourceDelegate
-const mockWithAuth = vi.fn();
+const mockWithAuth = jest.fn();
 const mockDataSource: DataSourceDelegate & { withAuth: any } = {
     key: 'test-postgres',
-    fetchCollection: vi.fn().mockImplementation(async () => {
+    fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'default-entity', values: { name: 'Default' } }];
     }),
-    fetchEntity: vi.fn(),
-    saveEntity: vi.fn(),
-    deleteEntity: vi.fn(),
-    countEntities: vi.fn(),
+    fetchEntity: jest.fn(),
+    saveEntity: jest.fn(),
+    deleteEntity: jest.fn(),
+    countEntities: jest.fn(),
     withAuth: mockWithAuth
 } as any;
 
 const mockScopedDataSource = {
     ...mockDataSource,
-    fetchCollection: vi.fn().mockImplementation(async () => {
+    fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'scoped-entity', values: { name: 'Scoped' } }];
     }),
     withAuth: undefined // Scoped delegate doesn't need withAuth
@@ -37,7 +37,7 @@ describe('FireCMSApiServer RLS Integration', () => {
     let baseUrl: string;
 
     beforeEach(() => {
-        vi.clearAllMocks();
+        jest.clearAllMocks();
         config = {
             collections: [
                 {
@@ -48,16 +48,16 @@ describe('FireCMSApiServer RLS Integration', () => {
             ],
             auth: {
                 enabled: true,
-                validator: vi.fn()
+                validator: jest.fn() as any
             },
             enableREST: true
         };
         server = new FireCMSApiServer({ ...config, dataSource: mockDataSource });
     });
 
-    afterEach((done) => {
+    afterEach(async () => {
         if (httpServer) {
-            httpServer.close();
+            await new Promise((resolve) => httpServer.close(resolve));
         }
     });
 
@@ -106,7 +106,7 @@ describe('FireCMSApiServer RLS Integration', () => {
         mockWithAuth.mockRejectedValue(new Error("Auth failed"));
 
         // Mock console.error to avoid noise
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
 
         await startServer();
 

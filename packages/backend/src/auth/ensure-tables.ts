@@ -204,7 +204,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 async function seedDefaultRoles(db: NodePgDatabase): Promise<void> {
     // Check if any roles exist
     const result = await db.execute(sql`SELECT COUNT(*) as count FROM firecms_roles`);
-    const count = parseInt((result.rows[0] as any)?.count || "0", 10);
+    const count = parseInt((result.rows[0] as unknown as Record<string, string | number>)?.count as string || "0", 10);
 
     if (count > 0) {
         console.log(`📋 Found ${count} existing roles`);

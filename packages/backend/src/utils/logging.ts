@@ -7,10 +7,10 @@ export function configureLogLevel(logLevel?: string) {
     const logLevels = { error: 0, warn: 1, info: 2, debug: 3 };
     const currentLevel = logLevels[LOG_LEVEL as keyof typeof logLevels] ?? 2;
 
-    if (currentLevel < 3) console.debug = () => {};
-    if (currentLevel < 2) console.log = () => {};
-    if (currentLevel < 1) console.warn = () => {};
-    if (currentLevel < 0) console.error = () => {};
+    if (currentLevel < 3) console.debug = () => { };
+    if (currentLevel < 2) console.log = () => { };
+    if (currentLevel < 1) console.warn = () => { };
+    if (currentLevel < 0) console.error = () => { };
 }
 
 /**
@@ -18,8 +18,8 @@ export function configureLogLevel(logLevel?: string) {
  */
 export function resetConsole() {
     // Store original methods if not already stored
-    if (!(global as any).__originalConsole) {
-        (global as any).__originalConsole = {
+    if (!(global as unknown as Record<string, unknown>).__originalConsole) {
+        (global as unknown as Record<string, unknown>).__originalConsole = {
             log: console.log,
             warn: console.warn,
             error: console.error,
@@ -27,7 +27,7 @@ export function resetConsole() {
         };
     }
 
-    const original = (global as any).__originalConsole;
+    const original = (global as unknown as Record<string, unknown>).__originalConsole as Console;
     console.log = original.log;
     console.warn = original.warn;
     console.error = original.error;

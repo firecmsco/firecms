@@ -270,18 +270,18 @@ export class DrizzleConditionBuilder {
             // Try multiple ways to extract table names from Drizzle objects
             if (currentTable && typeof currentTable === "object") {
                 // Check common Drizzle table name properties
-                currentTableName = (currentTable as any)[Symbol.for("drizzle:Name")] ||
-                    (currentTable as any)._.name ||
-                    (currentTable as any).tableName ||
-                    (currentTable as any).name ||
+                currentTableName = (currentTable as unknown as Record<string | symbol, unknown>)[Symbol.for("drizzle:Name")] as string ||
+                    ((currentTable as unknown as Record<string, unknown>)._ as Record<string, unknown>)?.name as string ||
+                    (currentTable as unknown as Record<string, unknown>).tableName as string ||
+                    (currentTable as unknown as Record<string, unknown>).name as string ||
                     "unknown";
             }
 
             if (parentTable && typeof parentTable === "object") {
-                parentTableName = (parentTable as any)[Symbol.for("drizzle:Name")] ||
-                    (parentTable as any)._.name ||
-                    (parentTable as any).tableName ||
-                    (parentTable as any).name ||
+                parentTableName = (parentTable as unknown as Record<string | symbol, unknown>)[Symbol.for("drizzle:Name")] as string ||
+                    ((parentTable as unknown as Record<string, unknown>)._ as Record<string, unknown>)?.name as string ||
+                    (parentTable as unknown as Record<string, unknown>).tableName as string ||
+                    (parentTable as unknown as Record<string, unknown>).name as string ||
                     "unknown";
             }
 
@@ -328,7 +328,7 @@ export class DrizzleConditionBuilder {
         if (currentTable === toTable) {
             // current -> toTable, so join the fromTable
             const left = fromTable[fromColName as keyof typeof fromTable] as AnyPgColumn;
-            const right = (currentTable as any)[toColName] as AnyPgColumn;
+            const right = (currentTable as unknown as Record<string, unknown>)[toColName] as AnyPgColumn;
 
             if (!left || !right) {
                 // Check if this might be a many-to-many relationship requiring a junction table
@@ -354,7 +354,7 @@ export class DrizzleConditionBuilder {
         } else if (currentTable === fromTable) {
             // current -> fromTable, so join the toTable
             const left = toTable[toColName as keyof typeof toTable] as AnyPgColumn;
-            const right = (currentTable as any)[fromColName] as AnyPgColumn;
+            const right = (currentTable as unknown as Record<string, unknown>)[fromColName] as AnyPgColumn;
 
             if (!left || !right) {
                 // Check if this might be a many-to-many relationship requiring a junction table

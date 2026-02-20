@@ -315,8 +315,8 @@ export class LocalStorageController implements StorageController {
                     bucket,
                     fullPath: entryPath,
                     name: entry.name,
-                    parent: null as any, // Simplified - not fully implementing parent chain
-                    root: null as any,
+                    parent: null as never, // Simplified - not fully implementing parent chain
+                    root: null as never,
                     toString: () => `local://${bucket}/${entryPath}`
                 };
 

@@ -104,16 +104,16 @@ export class RelationService {
                     throw new Error(`Join columns not found: ${fromColumn} -> ${toColumn}`);
                 }
 
-                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as any;
+                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as unknown as typeof query;
                 currentTable = joinTable;
             }
 
             // Add where condition for the parent entity
             const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(eq(parentIdField, parsedParentId)) as any;
+            query = query.where(eq(parentIdField, parsedParentId)) as unknown as typeof query;
 
             if (options.limit) {
-                query = query.limit(options.limit) as any;
+                query = query.limit(options.limit) as unknown as typeof query;
             }
 
             const results = await query;
@@ -121,9 +121,9 @@ export class RelationService {
 
             // Process results
             const entities: Entity<M>[] = [];
-            for (const row of results as any[]) {
-                const targetEntity = row[targetTableName] || row;
-                const entityId = targetEntity[idInfo.fieldName];
+            for (const row of results as Array<Record<string, unknown>>) {
+                const targetEntity = (row[targetTableName] as Record<string, unknown>) || row;
+                const entityId = targetEntity[idInfo.fieldName as string];
                 const parsedValues = await parseDataFromServer(targetEntity, targetCollection, this.db, collectionRegistry);
 
                 entities.push({
@@ -302,13 +302,13 @@ export class RelationService {
                     throw new Error(`Join columns not found: ${fromColumn} -> ${toColumn}`);
                 }
 
-                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as any;
+                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as unknown as typeof query;
                 currentTable = joinTable;
             }
 
             // Add where condition for ALL parent entities at once
             const parentIdField = parentTable[(parentCollection.idField || "id") as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(inArray(parentIdField, parsedParentIds)) as any;
+            query = query.where(inArray(parentIdField, parsedParentIds)) as unknown as typeof query;
 
             const results = await query;
             const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
@@ -526,7 +526,7 @@ export class RelationService {
                     await tx
                         .update(targetTable)
                         .set({ [relation.foreignKeyOnTarget]: parsedParentId })
-                        .where(inArray(targetIdCol as any, parsedTargetIds as any));
+                        .where(inArray(targetIdCol as AnyPgColumn, parsedTargetIds as unknown[]));
                 } else {
                     // If empty array provided, clear all existing links for this parent
                     await tx
@@ -862,7 +862,7 @@ export class RelationService {
                 if (parentFKValue !== null && parentFKValue !== undefined) {
                     await tx.update(targetTable)
                         .set({ [targetFKColName]: null })
-                        .where(eq(targetFKCol, parentFKValue as any));
+                        .where(eq(targetFKCol, parentFKValue as unknown as string));
                 }
                 continue;
             }
@@ -874,7 +874,7 @@ export class RelationService {
             if (parentFKValue !== null && parentFKValue !== undefined) {
                 await tx.update(targetTable)
                     .set({ [targetFKColName]: null })
-                    .where(eq(targetFKCol, parentFKValue as any));
+                    .where(eq(targetFKCol, parentFKValue as unknown as string));
             } else {
                 console.warn(`Cannot set joinPath relation '${relation.relationName}' because parent FK value is null/undefined`);
                 continue;
@@ -882,7 +882,7 @@ export class RelationService {
 
             // Now set the FK on the target entity
             await tx.update(targetTable)
-                .set({ [targetFKColName]: parentFKValue as any })
+                .set({ [targetFKColName]: parentFKValue })
                 .where(eq(targetIdCol, parsedTargetId));
         }
     }

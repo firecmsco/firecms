@@ -61,13 +61,16 @@ export class GraphQLSchemaGenerator {
         // Add ID field
         fields.id = {
             type: new GraphQLNonNull(GraphQLString),
-            description: "Unique identifier"
+            description: "Unique identifier",
+            resolve: (source) => source.id
         };
 
         // Convert properties to GraphQL fields
         Object.entries(collection.properties).forEach(([key, property]) => {
-            if (property.type !== "relation") {
-                fields[key] = this.convertPropertyToField(property);
+            if (property.type !== "relation" && key !== "id") {
+                const fieldConfig = this.convertPropertyToField(property);
+                fieldConfig.resolve = (source) => source.values?.[key];
+                fields[key] = fieldConfig;
             }
         });
 
@@ -172,8 +175,9 @@ export class GraphQLSchemaGenerator {
                 args: {
                     id: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve: async (_, args) => {
-                    const entity = await this.dataSource.fetchEntity({
+                resolve: async (_, args, context: any) => {
+                    const ds = context.dataSource || this.dataSource;
+                    const entity = await ds.fetchEntity({
                         path: collection.dbPath || collection.slug,
                         entityId: args.id,
                         collection
@@ -191,9 +195,10 @@ export class GraphQLSchemaGenerator {
                     where: { type: GraphQLString },
                     orderBy: { type: GraphQLString }
                 },
-                resolve: async (_, args) => {
+                resolve: async (_, args, context: any) => {
+                    const ds = context.dataSource || this.dataSource;
                     const filter = args.where ? JSON.parse(args.where) : undefined;
-                    const entities = await this.dataSource.fetchCollection({
+                    const entities = await ds.fetchCollection({
                         path: collection.dbPath || collection.slug,
                         collection,
                         filter,
@@ -230,10 +235,11 @@ export class GraphQLSchemaGenerator {
                 args: {
                     input: { type: new GraphQLNonNull(inputType) }
                 },
-                resolve: async (_, args) => {
+                resolve: async (_, args, context: any) => {
+                    const ds = context.dataSource || this.dataSource;
                     const path = collection.dbPath || collection.slug;
-                    const entityId = this.dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
-                    const entity = await this.dataSource.saveEntity({
+                    const entityId = ds.generateEntityId?.(path, collection) ?? crypto.randomUUID();
+                    const entity = await ds.saveEntity({
                         path,
                         entityId,
                         values: args.input,
@@ -251,8 +257,9 @@ export class GraphQLSchemaGenerator {
                     id: { type: new GraphQLNonNull(GraphQLString) },
                     input: { type: new GraphQLNonNull(inputType) }
                 },
-                resolve: async (_, args) => {
-                    const entity = await this.dataSource.saveEntity({
+                resolve: async (_, args, context: any) => {
+                    const ds = context.dataSource || this.dataSource;
+                    const entity = await ds.saveEntity({
                         path: collection.dbPath || collection.slug,
                         entityId: args.id,
                         values: args.input,
@@ -269,15 +276,16 @@ export class GraphQLSchemaGenerator {
                 args: {
                     id: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve: async (_, args) => {
+                resolve: async (_, args, context: any) => {
                     try {
-                        const existingEntity = await this.dataSource.fetchEntity({
+                        const ds = context.dataSource || this.dataSource;
+                        const existingEntity = await ds.fetchEntity({
                             path: collection.dbPath || collection.slug,
                             entityId: args.id,
                             collection
                         });
                         if (!existingEntity) return false;
-                        await this.dataSource.deleteEntity({
+                        await ds.deleteEntity({
                             entity: existingEntity,
                             collection
                         });

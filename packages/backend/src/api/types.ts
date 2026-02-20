@@ -6,6 +6,8 @@ export interface FireCMSRequest extends Request {
     dataSource?: DataSourceDelegate;
 }
 
+export type AuthResult = boolean | User | { userId: string; roles?: string[]; [key: string]: any };
+
 /**
  * Configuration for API generation
  */
@@ -20,7 +22,7 @@ export interface ApiConfig {
     };
     auth?: {
         enabled: boolean;
-        validator?: (req: Request) => Promise<boolean | { userId: string;[key: string]: any }>;
+        validator?: (req: FireCMSRequest) => Promise<AuthResult>;
     };
     pagination?: {
         defaultLimit: number;

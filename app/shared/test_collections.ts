@@ -161,10 +161,26 @@ const postsCollection: EntityCollection = {
             name: "Status",
             type: "string",
             enum: [
-                { id: "draft", label: "Draft", color: "grayLight" },
-                { id: "review", label: "In Review", color: "orangeLight" },
-                { id: "published", label: "Published", color: "greenLight" },
-                { id: "archived", label: "Archived", color: "redLight" }
+                {
+                    id: "draft",
+                    label: "Draft",
+                    color: "grayLight"
+                },
+                {
+                    id: "review",
+                    label: "In Review",
+                    color: "orangeLight"
+                },
+                {
+                    id: "published",
+                    label: "Published",
+                    color: "greenLight"
+                },
+                {
+                    id: "archived",
+                    label: "Archived",
+                    color: "redLight"
+                }
             ]
         },
         // A property to demonstrate a relation field in the UI
@@ -242,9 +258,18 @@ const privateNotesCollection: EntityCollection = {
     description: "Demonstrates Supabase-style RLS policies. Users can only access their own notes. Admins can read all. Locked notes cannot be updated.",
     securityRules: [
         // Admins have unfiltered access to all rows (roles + raw SQL)
-        { name: "admin_bypass", operation: "all", roles: ["admin"], using: "true" },
+        {
+            name: "admin_bypass",
+            operation: "all",
+            roles: ["admin"],
+            using: "true"
+        },
         // Regular users: full access to own rows only (operations array reduces boilerplate)
-        { name: "owner_access", operation: "all", ownerField: "user_id" },
+        {
+            name: "owner_access",
+            operation: "all",
+            ownerField: "user_id"
+        },
         // Restrictive gate: prevent updates on locked notes.
         // Both `using` (old row state) and `withCheck` (new row state) are constrained
         // to prevent both editing locked notes AND locking unlocked notes.

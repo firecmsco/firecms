@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, EntityCollection, Properties } from "@firecms/types";
+import { Entity, EntityCollection, Properties, Relation } from "@firecms/types";
 import { getTableName, resolveCollectionRelations } from "@firecms/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
@@ -94,7 +94,7 @@ export class EntityPersistService {
                             const parentIdInfo = getIdFieldInfo(currentCollection);
                             const parsedParentId = parseIdValue(currentEntityId, parentIdInfo.type);
 
-                            (effectiveValues as any).__junction_table_info = {
+                            (effectiveValues as Record<string, unknown>).__junction_table_info = {
                                 parentCollection: currentCollection,
                                 parentId: parsedParentId,
                                 relation: relation,
@@ -129,11 +129,11 @@ export class EntityPersistService {
                         const parentIdInfo = getIdFieldInfo(currentCollection);
                         const parsedParentId = parseIdValue(currentEntityId, parentIdInfo.type);
 
-                        const existingValue = (effectiveValues as any)[targetColumnName];
+                        const existingValue = (effectiveValues as Record<string, unknown>)[targetColumnName];
                         if (existingValue !== undefined && existingValue !== null && existingValue !== parsedParentId) {
                             console.warn(`Overriding provided value '${existingValue}' for FK '${targetColumnName}' with path parent id '${parsedParentId}'.`);
                         }
-                        (effectiveValues as any)[targetColumnName] = parsedParentId;
+                        (effectiveValues as Record<string, unknown>)[targetColumnName] = parsedParentId;
                         break;
                     } else {
                         const nextEntityId = segments[i + 1];
@@ -172,12 +172,12 @@ export class EntityPersistService {
         const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties, collection);
 
         // Extract relation updates before sanitizing
-        const inverseRelationUpdates = (processedData as any).__inverseRelationUpdates || [];
-        const joinPathRelationUpdates = (processedData as any).__joinPathRelationUpdates || [];
-        const junctionTableInfo = (processedData as any).__junction_table_info;
-        delete (processedData as any).__inverseRelationUpdates;
-        delete (processedData as any).__joinPathRelationUpdates;
-        delete (processedData as any).__junction_table_info;
+        const inverseRelationUpdates = ((processedData as Record<string, unknown>).__inverseRelationUpdates as Array<{ relationKey: string; relation: Relation; newValue: unknown; currentEntityId?: string | number; }>) || [];
+        const joinPathRelationUpdates = ((processedData as Record<string, unknown>).__joinPathRelationUpdates as Array<{ relationKey: string; relation: Relation; newTargetId: unknown; }>) || [];
+        const junctionTableInfo = (processedData as Record<string, unknown>).__junction_table_info as { parentCollection: EntityCollection<any, any>; parentId: string | number; relation: Relation; relationKey: string; } | undefined;
+        delete (processedData as Record<string, unknown>).__inverseRelationUpdates;
+        delete (processedData as Record<string, unknown>).__joinPathRelationUpdates;
+        delete (processedData as Record<string, unknown>).__junction_table_info;
 
         const entityData = sanitizeAndConvertDates(processedData);
 
@@ -194,7 +194,7 @@ export class EntityPersistService {
             } else {
                 const dataForInsert = { ...entityData };
                 if (idInfo.fieldName in dataForInsert) {
-                    delete (dataForInsert as any)[idInfo.fieldName];
+                    delete (dataForInsert as Record<string, unknown>)[idInfo.fieldName];
                 }
 
                 const result = await tx

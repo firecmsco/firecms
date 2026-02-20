@@ -270,8 +270,8 @@ export class S3StorageController implements StorageController {
             bucket: resolvedBucket,
             fullPath: obj.Key || '',
             name: (obj.Key || '').split('/').pop() || '',
-            parent: null as any,
-            root: null as any,
+            parent: null as never,
+            root: null as never,
             toString: () => `s3://${resolvedBucket}/${obj.Key}`
         }));
 
@@ -279,8 +279,8 @@ export class S3StorageController implements StorageController {
             bucket: resolvedBucket,
             fullPath: prefix.Prefix || '',
             name: (prefix.Prefix || '').replace(/\/$/, '').split('/').pop() || '',
-            parent: null as any,
-            root: null as any,
+            parent: null as never,
+            root: null as never,
             toString: () => `s3://${resolvedBucket}/${prefix.Prefix}`
         }));
 

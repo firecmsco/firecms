@@ -82,13 +82,13 @@ export class EntityFetchService {
                         key,
                         {}
                     );
-                    (values as any)[key] = relatedEntities.map(e => ({
+                    (values as Record<string, unknown>)[key] = relatedEntities.map(e => ({
                         id: e.id,
                         path: e.path,
                         __type: "relation"
                     }));
                 } else if (relation.cardinality === "one") {
-                    if ((values as any)[key] == null) {
+                    if ((values as Record<string, unknown>)[key] == null) {
                         try {
                             const relatedEntities = await this.relationService.fetchRelatedEntities(
                                 collectionPath,
@@ -98,7 +98,7 @@ export class EntityFetchService {
                             );
                             if (relatedEntities.length > 0) {
                                 const e = relatedEntities[0];
-                                (values as any)[key] = {
+                                (values as Record<string, unknown>)[key] = {
                                     id: e.id,
                                     path: e.path,
                                     __type: "relation"
@@ -291,7 +291,7 @@ export class EntityFetchService {
             if (!propertyKeys.has(key) || relation.cardinality !== "one") continue;
 
             const entitiesMissingRelation = entitiesWithValues.filter(item =>
-                (item.values as any)[key] == null
+                (item.values as Record<string, unknown>)[key] == null
             );
 
             if (entitiesMissingRelation.length === 0) continue;
@@ -309,7 +309,7 @@ export class EntityFetchService {
                     const entityId = item.entity[idInfo.fieldName];
                     const relatedEntity = relationResults.get(entityId);
                     if (relatedEntity) {
-                        (item.values as any)[key] = {
+                        (item.values as Record<string, unknown>)[key] = {
                             id: relatedEntity.id,
                             path: relatedEntity.path,
                             __type: "relation"
@@ -333,7 +333,7 @@ export class EntityFetchService {
                             key,
                             {}
                         );
-                        (item.values as any)[key] = relatedEntities.map(e => ({
+                        (item.values as Record<string, unknown>)[key] = relatedEntities.map(e => ({
                             id: e.id,
                             path: e.path,
                             __type: "relation"

@@ -27,6 +27,6 @@ export function createStorageController(config: StorageConfig): StorageControlle
         case 's3':
             return new S3StorageController(config);
         default:
-            throw new Error(`Unknown storage type: ${(config as any).type}`);
+            throw new Error(`Unknown storage type: ${(config as Record<string, unknown>).type}`);
     }
 }
