@@ -5,7 +5,6 @@ import {
     getFieldConfig,
     Property,
     PropertyConfigBadge,
-    resolveCollection,
     unslugify,
     useAuthController,
     useCustomizationController
@@ -33,21 +32,13 @@ export function KanbanConfigSection({
     const panelRef = useRef<HTMLDivElement>(null);
     const [columnPropertyDialogOpen, setColumnPropertyDialogOpen] = useState(false);
 
-    // Resolve collection to get properties
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection: values,
-        path: values.path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [values, customizationController.propertyConfigs, authController]);
-
     // Get enum string properties (for columnProperty)
     const enumStringProperties = useMemo(() => {
         const result: { key: string; label: string; property: Property }[] = [];
-        if (!resolvedCollection.properties) return result;
+        if (!values.properties) return result;
 
-        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
-            if (prop && 'dataType' in prop && prop.dataType === 'string' && prop.enumValues) {
+        Object.entries(values.properties).forEach(([key, prop]) => {
+            if (prop && 'type' in prop && prop.type === 'string' && prop.enum) {
                 result.push({
                     key,
                     label: (prop as Property).name || key,
@@ -56,7 +47,7 @@ export function KanbanConfigSection({
             }
         });
         return result;
-    }, [resolvedCollection.properties]);
+    }, [values.properties]);
 
     const kanbanConfig = values.kanban;
 
@@ -150,7 +141,7 @@ export function KanbanConfigSection({
                 {columnPropertyMissing
                     ? `Property "${kanbanConfig?.columnProperty}" does not exist or is not an enum string property. Please select a valid property or clear the selection.`
                     : enumStringProperties.length === 0
-                        ? "No enum string properties found. Add a string property with enumValues to use Kanban view."
+                        ? "No enum string properties found. Add a string property with enum to use Kanban view."
                         : "Select a string property with enum values to group entities into columns"
                 }
             </FieldCaption>
@@ -168,14 +159,14 @@ export function KanbanConfigSection({
                         open={columnPropertyDialogOpen}
                         onCancel={() => setColumnPropertyDialogOpen(false)}
                         property={{
-                            dataType: "string",
+                            type: "string",
                             name: dialogPropertyName,
-                            enumValues: [
+                            enum: [
                                 { id: "todo", label: "To Do" },
                                 { id: "in_progress", label: "In Progress" },
                                 { id: "done", label: "Done" }
                             ]
-                        }}
+                        } as any}
                         propertyKey={dialogPropertyKey}
                         existingProperty={false}
                         autoOpenTypeSelect={false}

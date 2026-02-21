@@ -2,8 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import {
     EntityCollection,
     getPropertyInPath,
-    ResolvedStringProperty,
-    resolveCollection,
+    StringProperty,
     resolveEnumValues,
     toSnakeCase,
     useAuthController,
@@ -46,25 +45,18 @@ export function AddKanbanColumnAction({
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection,
-        path: fullPath,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [collection, fullPath, customizationController.propertyConfigs, authController]);
-
     // Get current enum values
     const currentEnumValues = useMemo(() => {
-        const property = getPropertyInPath(resolvedCollection.properties, columnProperty);
-        if (!property || !('dataType' in property) || property.dataType !== "string") {
+        const property = getPropertyInPath(collection.properties, columnProperty);
+        if (!property || !('type' in property) || property.type !== "string") {
             return [];
         }
-        const stringProperty = property as ResolvedStringProperty;
-        if (!stringProperty.enumValues) {
+        const stringProperty = property as StringProperty;
+        if (!stringProperty.enum) {
             return [];
         }
-        return resolveEnumValues(stringProperty.enumValues) ?? [];
-    }, [resolvedCollection, columnProperty]);
+        return resolveEnumValues(stringProperty.enum) ?? [];
+    }, [collection, columnProperty]);
 
     const handleAddColumn = useCallback(async () => {
         if (!newValueLabel.trim() || !configController) return;
@@ -76,21 +68,21 @@ export function AddKanbanColumnAction({
             let property = collection?.properties?.[columnProperty];
             let isCodeDefinedProperty = false;
 
+            // Property not in persisted config - use base collection
             if (!property || typeof property === 'function') {
-                // Property not in persisted config - check resolved collection
-                property = resolvedCollection.properties?.[columnProperty];
+                property = collection.properties?.[columnProperty];
                 isCodeDefinedProperty = true;
             }
 
-            // Type guard: property must be an object with dataType === "string"
-            if (!property || typeof property === 'function' || !('dataType' in property) || property.dataType !== "string") {
+            // Type guard: property must be an object with type === "string"
+            if (!property || typeof property === 'function' || !('type' in property) || property.type !== "string") {
                 console.error("Column property not found or not a string. Property:", property);
                 setSaving(false);
                 return;
             }
 
             // Now we know property is a StringProperty
-            const stringProperty = property as { dataType: "string"; enumValues?: any; name?: string };
+            const stringProperty = property as { type: "string"; enum?: any; name?: string };
 
             // Create new enum value
             const newId = toSnakeCase(newValueLabel.trim());
@@ -110,16 +102,16 @@ export function AddKanbanColumnAction({
             const updatedEnumValues = [...existingEnumValues, newEnumValue];
 
             // Build the property to save
-            // If it's code-defined, we create a minimal override with just enumValues
+            // If it's code-defined, we create a minimal override with just enum
             const updatedProperty = isCodeDefinedProperty
                 ? {
-                    dataType: "string" as const,
+                    type: "string" as const,
                     name: stringProperty.name || columnProperty,
-                    enumValues: updatedEnumValues
+                    enum: updatedEnumValues
                 }
                 : {
                     ...property,
-                    enumValues: updatedEnumValues
+                    enum: updatedEnumValues
                 };
 
             // Save the updated property

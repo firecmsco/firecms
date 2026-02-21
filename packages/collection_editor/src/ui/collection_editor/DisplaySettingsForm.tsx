@@ -5,7 +5,6 @@ import {
     getFieldConfig,
     Property,
     PropertyConfigBadge,
-    resolveCollection,
     unslugify,
     useAuthController,
     useCustomizationController
@@ -45,21 +44,13 @@ export function DisplaySettingsForm({
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
-    // Resolve collection to get properties for order property select
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection: values,
-        path: values.path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [values, customizationController.propertyConfigs, authController]);
-
     // Get number properties (for orderProperty)
     const numberProperties = useMemo(() => {
         const result: { key: string; label: string; property: Property; }[] = [];
-        if (!resolvedCollection.properties) return result;
+        if (!values.properties) return result;
 
-        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
-            if (prop && 'dataType' in prop && prop.dataType === 'number') {
+        Object.entries(values.properties).forEach(([key, prop]) => {
+            if (prop && 'type' in prop && prop.type === 'number') {
                 result.push({
                     key,
                     label: (prop as Property).name || key,
@@ -68,21 +59,11 @@ export function DisplaySettingsForm({
             }
         });
         return result;
-    }, [resolvedCollection.properties]);
+    }, [values.properties]);
 
     const showErrors = submitCount > 0;
 
-    // Document ID generation value
-    let customIdValue: "true" | "false" | "optional" | "code_defined" | undefined;
-    if (typeof values.customId === "object") {
-        customIdValue = "code_defined";
-    } else if (values.customId === true) {
-        customIdValue = "true";
-    } else if (values.customId === false) {
-        customIdValue = "false";
-    } else if (values.customId === "optional") {
-        customIdValue = "optional";
-    }
+
 
     return (
         <div className={"overflow-auto my-auto"}>
@@ -213,7 +194,7 @@ export function DisplaySettingsForm({
                                         open={orderPropertyDialogOpen}
                                         onCancel={() => setOrderPropertyDialogOpen(false)}
                                         property={{
-                                            dataType: "number",
+                                            type: "number",
                                             name: dialogPropertyName,
                                             disabled: true,
                                             hideFromCollection: true

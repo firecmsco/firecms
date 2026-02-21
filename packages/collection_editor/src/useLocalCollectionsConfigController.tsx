@@ -8,10 +8,15 @@ export function useLocalCollectionsConfigController(
     baseCollections: EntityCollection[] = []
 ): CollectionsConfigController {
 
-    const markAsEditable = (c: PersistedCollection) => {
+    const markAsEditable = (c: PersistedCollection, visited = new Set<PersistedCollection>()) => {
+        if (visited.has(c)) return c;
+        visited.add(c);
+
         c.editable = true;
-        makePropertiesEditable(c.properties as Properties);
-        getSubcollections(c).forEach(markAsEditable);
+        if (c.properties) {
+            makePropertiesEditable(c.properties as Properties);
+        }
+        getSubcollections(c).forEach(sub => markAsEditable(sub as PersistedCollection, visited));
         return c;
     };
 

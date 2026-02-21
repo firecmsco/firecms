@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, resolveCollection, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
+import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -63,21 +63,13 @@ export function CollectionDetailsForm({
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
-    // Resolve collection to get properties for order property select
-    const resolvedCollection = useMemo(() => resolveCollection({
-        collection: values,
-        path: values.path,
-        propertyConfigs: customizationController.propertyConfigs,
-        authController
-    }), [values, customizationController.propertyConfigs, authController]);
-
     // Get number properties (for orderProperty)
     const numberProperties = useMemo(() => {
         const result: { key: string; label: string; property: Property; }[] = [];
-        if (!resolvedCollection.properties) return result;
+        if (!values.properties) return result;
 
-        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
-            if (prop && 'dataType' in prop && prop.dataType === 'number') {
+        Object.entries(values.properties).forEach(([key, prop]) => {
+            if (prop && 'type' in prop && prop.type === 'number') {
                 result.push({
                     key,
                     label: (prop as Property).name || key,
@@ -86,7 +78,7 @@ export function CollectionDetailsForm({
             }
         });
         return result;
-    }, [resolvedCollection.properties]);
+    }, [values.properties]);
 
     const updateDatabaseId = (databaseId: string) => {
         setFieldValue("databaseId", databaseId ?? undefined);
@@ -126,12 +118,7 @@ export function CollectionDetailsForm({
 
     const isSubcollection = !!parentCollection;
 
-    let customIdValue: "true" | "false" | "optional" | "code_defined" | undefined;
-    if (typeof values.customId === "object") {
-        customIdValue = "code_defined";
-    } else if (values.customId === "optional") {
-        customIdValue = "optional";
-    }
+
 
     const showErrors = submitCount > 0;
 
@@ -346,7 +333,7 @@ export function CollectionDetailsForm({
                                         open={orderPropertyDialogOpen}
                                         onCancel={() => setOrderPropertyDialogOpen(false)}
                                         property={{
-                                            dataType: "number",
+                                            type: "number",
                                             name: dialogPropertyName,
                                             disabled: true,
                                             hideFromCollection: true

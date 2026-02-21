@@ -18,6 +18,7 @@ import {
     useBuildNavigationController,
     useBackendStorageSource
 } from "@firecms/core";
+import { useLocalCollectionsConfigController, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
 import {
@@ -109,6 +110,11 @@ export function App() {
     }, [authController.user, authController.initialLoading, postgresDelegate.client, authController.getAuthToken]);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
+    const collectionConfigController = useLocalCollectionsConfigController(API_URL, collections);
+    const collectionEditorPlugin = useCollectionEditorPlugin({
+        collectionConfigController,
+        configPermissions: () => ({ createCollections: true, editCollections: true, deleteCollections: true })
+    });
 
     // Build collections from both PostgreSQL and Firestore sources
     const collectionsBuilder = useCallback(() => {
@@ -128,7 +134,7 @@ export function App() {
     }, [firestoreDelegate]);
 
     const navigationController = useBuildNavigationController({
-        plugins: [dataEnhancementPlugin],
+        plugins: [dataEnhancementPlugin, collectionEditorPlugin],
         collections: collectionsBuilder,
         views: adminViews,
         authController,

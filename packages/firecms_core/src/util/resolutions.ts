@@ -23,13 +23,9 @@ import {
     ResolvedStringProperty,
     StringProperty,
     UserConfigurationPersistence
-} from "../types";
-import { getValueInPath, mergeDeep } from "./objects";
-import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
-import { DEFAULT_ONE_OF_TYPE } from "./common";
+} from "@firecms/types";
+import { getValueInPath, mergeDeep, getDefaultValuesFor, isPropertyBuilder, DEFAULT_ONE_OF_TYPE, enumToObjectEntries, isDefaultFieldConfigId } from "@firecms/common";
 import { getIn } from "@firecms/formex";
-import { enumToObjectEntries } from "./enums";
-import { isDefaultFieldConfigId } from "../core";
 
 export const resolveCollection = <M extends Record<string, any>,>
     ({
@@ -84,7 +80,7 @@ export const resolveCollection = <M extends Record<string, any>,>
 
     const properties: Properties = mergeDeep(resolvedProperties, storedProperties);
     const cleanedProperties = Object.entries(properties)
-        .filter(([_, property]) => Boolean(property?.dataType))
+        .filter(([_, property]) => Boolean((property as any)?.dataType))
         .map(([id, property]) => ({ [id]: property }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 
@@ -281,7 +277,7 @@ export function resolveArrayProperty<T extends any[], M>({
                 ...property,
                 resolved: true,
                 fromBuilder: props.fromBuilder,
-                resolvedProperties: property.of.map((p, index) => {
+                resolvedProperties: property.of.map((p: any, index: number) => {
                     return resolveProperty({
                         propertyKey: `${propertyKey}.${index}`,
                         propertyOrBuilder: p as Property<any>,
@@ -409,7 +405,7 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
         return {
             ...property,
             resolved: true,
-            enumValues: enumToObjectEntries(property.enumValues)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
+            enumValues: enumToObjectEntries(property.enumValues)?.filter((value: any) => value && (value.id || value.id === 0) && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
     }
