@@ -8,7 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections.ts --output=src/schema.generated.ts",
+    "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections --output=src/schema.generated.ts",
     "db:pull": "DOTENV_CONFIG_PATH=../.env drizzle-kit pull",
     "db:generate": "tsx scripts/db-generate.ts",
     "db:migrate": "DOTENV_CONFIG_PATH=../.env drizzle-kit migrate",

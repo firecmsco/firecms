@@ -25,7 +25,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     let server: FireCMSApiServer;
     let app: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockCollections = [
             {
                 slug: "secrets",
@@ -56,7 +56,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     it("REST API: should route requests explicitly to the authenticated datasource if auth yields a User", async () => {
         const mockUser: User = { uid: "user-abc" };
 
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableREST: true,
@@ -79,7 +79,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     });
 
     it("REST API: should fallback to global datasource if auth is completely disabled", async () => {
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableREST: true,
@@ -100,7 +100,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     it("GraphQL API: should construct the execution context using the scoped data source", async () => {
         const mockUser: User = { uid: "graphql-user" };
 
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableGraphQL: true,

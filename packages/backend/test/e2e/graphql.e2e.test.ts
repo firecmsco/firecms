@@ -12,7 +12,7 @@ describe("GraphQL E2E Tests", () => {
     let server: FireCMSApiServer;
     let app: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockCollections = [
             {
                 slug: "books",
@@ -49,7 +49,7 @@ describe("GraphQL E2E Tests", () => {
             generateEntityId: jest.fn().mockReturnValue("generated-id")
         };
 
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: true,

@@ -36,7 +36,7 @@ describe('FireCMSApiServer RLS Integration', () => {
     let httpServer: http.Server;
     let baseUrl: string;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         jest.clearAllMocks();
         config = {
             collections: [
@@ -52,7 +52,7 @@ describe('FireCMSApiServer RLS Integration', () => {
             },
             enableREST: true
         };
-        server = new FireCMSApiServer({ ...config, dataSource: mockDataSource });
+        server = await FireCMSApiServer.create({ ...config, dataSource: mockDataSource });
     });
 
     afterEach(async () => {

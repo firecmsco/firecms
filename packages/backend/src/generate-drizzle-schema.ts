@@ -1,5 +1,7 @@
-import { promises as fs } from "fs";
+import { promises as fsPromises } from "fs";
+import * as fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
 import chokidar from "chokidar";
 import { generateSchema } from "./generate-drizzle-schema-logic";
 
@@ -49,13 +51,39 @@ const runGeneration = async (collectionsFilePath?: string, outputPath?: string) 
         }
 
         const resolvedPath = path.resolve(collectionsFilePath);
-        const fileUrl = `file://${resolvedPath}?t=${Date.now()}`;
+        let collections: any[] = [];
+        const stats = fs.statSync(resolvedPath);
 
-        const imported = await import(fileUrl);
-        const collections = imported.backendCollections || imported.collections;
+        if (stats.isDirectory()) {
+            const files = fs.readdirSync(resolvedPath);
+            for (const file of files) {
+                if ((file.endsWith('.ts') || file.endsWith('.js')) &&
+                    !file.includes('.test.') &&
+                    !file.endsWith('.d.ts') &&
+                    file !== 'index.ts' && file !== 'index.js') {
 
-        if (!collections || !Array.isArray(collections)) {
-            console.error("Error: Could not find 'backendCollections' or 'collections' array export in the provided file.");
+                    const filePath = path.join(resolvedPath, file);
+                    try {
+                        const fileUrl = pathToFileURL(filePath).href;
+                        const dynamicImport = new Function('url', 'return import(url)');
+                        const module = await dynamicImport(fileUrl);
+                        if (module && module.default) {
+                            collections.push(module.default);
+                        }
+                    } catch (err: any) {
+                        console.error(`Error loading ${file}:`, err.message);
+                    }
+                }
+            }
+        } else {
+            const fileUrl = pathToFileURL(resolvedPath).href + `?t=${Date.now()}`;
+            const dynamicImport = new Function('url', 'return import(url)');
+            const imported = await dynamicImport(fileUrl);
+            collections = imported.backendCollections || imported.collections;
+        }
+
+        if (!collections || !Array.isArray(collections) || collections.length === 0) {
+            console.error("Error: Could not find collections array or failed to load directory.");
             return;
         }
 
@@ -63,8 +91,8 @@ const runGeneration = async (collectionsFilePath?: string, outputPath?: string) 
 
         if (outputPath) {
             const outputDir = path.dirname(outputPath);
-            await fs.mkdir(outputDir, { recursive: true });
-            await fs.writeFile(outputPath, schemaContent);
+            await fsPromises.mkdir(outputDir, { recursive: true });
+            await fsPromises.writeFile(outputPath, schemaContent);
             console.log("✅ Drizzle schema generated successfully at", outputPath);
         } else {
             console.log("✅ Drizzle schema generated successfully.");

@@ -13,7 +13,7 @@ describe("FireCMSApiServer", () => {
     let mockDataSource: jest.Mocked<PostgresDataSourceDelegate>;
     let mockCollections: any[];
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockCollections = [
             {
                 slug: "products",
@@ -51,8 +51,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("constructor", () => {
-        it("should initialize with required configuration", () => {
-            const server = new FireCMSApiServer({
+        it("should initialize with required configuration", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -62,8 +62,8 @@ describe("FireCMSApiServer", () => {
             expect(server.getRouter()).toBeDefined();
         });
 
-        it("should accept optional CORS configuration", () => {
-            const server = new FireCMSApiServer({
+        it("should accept optional CORS configuration", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 cors: {
@@ -77,8 +77,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("getRouter", () => {
-        it("should return an Express router", () => {
-            const server = new FireCMSApiServer({
+        it("should return an Express router", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -90,8 +90,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("getApp", () => {
-        it("should return an Express app", () => {
-            const server = new FireCMSApiServer({
+        it("should return an Express app", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -103,8 +103,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("generateOpenApiSpec", () => {
-        it("should generate OpenAPI specification", () => {
-            const server = new FireCMSApiServer({
+        it("should generate OpenAPI specification", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -117,8 +117,8 @@ describe("FireCMSApiServer", () => {
             expect(spec.paths).toBeDefined();
         });
 
-        it("should include paths for each collection", () => {
-            const server = new FireCMSApiServer({
+        it("should include paths for each collection", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -130,8 +130,8 @@ describe("FireCMSApiServer", () => {
             expect(spec.paths["/categories"]).toBeDefined();
         });
 
-        it("should include CRUD operations", () => {
-            const server = new FireCMSApiServer({
+        it("should include CRUD operations", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -148,8 +148,8 @@ describe("FireCMSApiServer", () => {
             expect(productByIdPath.delete).toBeDefined(); // Delete
         });
 
-        it("should use default title and version", () => {
-            const server = new FireCMSApiServer({
+        it("should use default title and version", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -165,8 +165,8 @@ describe("FireCMSApiServer", () => {
     describe("REST API Routes", () => {
         let server: FireCMSApiServer;
 
-        beforeEach(() => {
-            server = new FireCMSApiServer({
+        beforeEach(async () => {
+            server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -246,8 +246,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("GraphQL Endpoint", () => {
-        it("should setup GraphQL handler", () => {
-            const server = new FireCMSApiServer({
+        it("should setup GraphQL handler", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -259,10 +259,10 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("Middleware", () => {
-        it("should apply CORS middleware when configured", () => {
+        it("should apply CORS middleware when configured", async () => {
             const cors = require("cors");
 
-            new FireCMSApiServer({
+            await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 cors: { origin: "*" }
@@ -271,8 +271,8 @@ describe("FireCMSApiServer", () => {
             expect(cors).toHaveBeenCalled();
         });
 
-        it("should apply JSON parsing middleware", () => {
-            const server = new FireCMSApiServer({
+        it("should apply JSON parsing middleware", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -283,8 +283,8 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("listen", () => {
-        it("should have listen method for standalone mode", () => {
-            const server = new FireCMSApiServer({
+        it("should have listen method for standalone mode", async () => {
+            const server = await FireCMSApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });

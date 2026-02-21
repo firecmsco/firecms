@@ -7,7 +7,6 @@ import { createPostgresDatabaseConnection, initializeFireCMSAPI, initializeFireC
 import { createMongoDBConnection, createMongoDelegate } from "@firecms/mongodb";
 
 import { enums, relations, tables } from "./schema.generated";
-import { collections } from "shared";
 
 import * as dotenv from "dotenv";
 
@@ -75,7 +74,7 @@ async function startServer() {
     // Initialize FireCMS Backend with auth (now async)
     // Auth, admin, and storage routes are automatically mounted
     const backend = await initializeFireCMSBackend({
-        collections,
+        collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         server,
         app, // Express app for mounting auth/storage routes
         // Multi-datasource configuration
@@ -114,7 +113,7 @@ async function startServer() {
     });
 
     // OPTIONAL: Initialize REST/GraphQL API for external integrations
-    initializeFireCMSAPI(app, backend, {
+    await initializeFireCMSAPI(app, backend, {
         basePath: "/api",
         enableGraphQL: true,
         enableREST: true,

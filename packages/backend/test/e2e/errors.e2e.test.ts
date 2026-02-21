@@ -14,7 +14,7 @@ describe("Global Error Handling E2E", () => {
     let server: FireCMSApiServer;
     let app: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockCollections = [
             {
                 slug: "faulty",
@@ -47,7 +47,7 @@ describe("Global Error Handling E2E", () => {
             getConfigurations: jest.fn().mockResolvedValue({ collections: mockCollections, schema: {} })
         };
 
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: false,

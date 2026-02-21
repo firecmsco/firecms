@@ -12,13 +12,6 @@ export const authors = pgTable("authors", {
     picture: varchar("picture")
 });
 
-export const profiles = pgTable("profiles", {
-    id: serial("id").primaryKey(),
-    bio: varchar("bio"),
-    website: varchar("website"),
-    author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
-});
-
 export const posts = pgTable("posts", {
     id: serial("id").primaryKey(),
     title: varchar("title").notNull(),
@@ -34,11 +27,6 @@ export const postsTags = pgTable("posts_tags", {
     pk: primaryKey({ columns: [table.post_id, table.tag_id] })
 }));
 
-export const tags = pgTable("tags", {
-    id: serial("id").primaryKey(),
-    name: varchar("name").notNull()
-});
-
 export const privateNotes = pgTable("private_notes", {
     id: serial("id").primaryKey(),
     title: varchar("title").notNull(),
@@ -46,10 +34,22 @@ export const privateNotes = pgTable("private_notes", {
     user_id: varchar("user_id").notNull(),
     is_locked: boolean("is_locked")
 }, (table) => ([
-    pgPolicy("admin_bypass", { as: "permissive", for: "all", to: ["public"], using: sql`(true) AND (current_setting('firecms.current_user_roles') ~ 'admin')`, withCheck: sql`(true) AND (current_setting('firecms.current_user_roles') ~ 'admin')` }),
-    pgPolicy("owner_access", { as: "permissive", for: "all", to: ["public"], using: sql`${table.user_id} = current_setting('firecms.current_user_id')`, withCheck: sql`${table.user_id} = current_setting('firecms.current_user_id')` }),
+    pgPolicy("admin_bypass", { as: "permissive", for: "all", to: ["public"], using: sql`(true) AND (auth.roles() ~ 'admin')`, withCheck: sql`(true) AND (auth.roles() ~ 'admin')` }),
+    pgPolicy("owner_access", { as: "permissive", for: "all", to: ["public"], using: sql`${table.user_id} = auth.uid()`, withCheck: sql`${table.user_id} = auth.uid()` }),
     pgPolicy("no_update_locked", { as: "restrictive", for: "update", to: ["public"], using: sql`${table.is_locked} = false`, withCheck: sql`${table.is_locked} = false` }),
 ]));
+
+export const profiles = pgTable("profiles", {
+    id: serial("id").primaryKey(),
+    bio: varchar("bio"),
+    website: varchar("website"),
+    author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
+});
+
+export const tags = pgTable("tags", {
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull()
+});
 
 export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({
     profile: one(profiles, {
@@ -58,14 +58,6 @@ export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({
         relationName: "profile"
     }),
     posts: many(posts, { relationName: "posts" })
-}));
-
-export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({
-    author: one(authors, {
-        fields: [profiles.author_id],
-        references: [authors.id],
-        relationName: "author"
-    })
 }));
 
 export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({
@@ -88,11 +80,19 @@ export const postsTagsRelations = drizzleRelations(postsTags, ({ one, many }) =>
     })
 }));
 
+export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({
+    author: one(authors, {
+        fields: [profiles.author_id],
+        references: [authors.id],
+        relationName: "author"
+    })
+}));
+
 export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
     posts: many(posts, { relationName: "posts" })
 }));
 
-export const tables = { authors, profiles, posts, postsTags, tags, privateNotes };
+export const tables = { authors, posts, postsTags, privateNotes, profiles, tags };
 export const enums = { postsStatus };
-export const relations = { authorsRelations, profilesRelations, postsRelations, postsTagsRelations, tagsRelations };
+export const relations = { authorsRelations, postsRelations, postsTagsRelations, profilesRelations, tagsRelations };
 

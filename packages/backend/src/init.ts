@@ -10,6 +10,9 @@ import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, FireCMSApiServer } from "./api";
 import { Express } from "express";
+import * as fs from "fs";
+import * as path from "path";
+import { pathToFileURL } from "url";
 import { configureLogLevel } from "./utils/logging";
 import {
     configureGoogleOAuth,
@@ -90,7 +93,8 @@ export interface PostgresDatasourceConfig {
 export type DatasourceConfig = DataSourceDelegate | PostgresDatasourceConfig;
 
 export interface FireCMSBackendConfig {
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
+    collectionsDir?: string;
     server: Server;
     /** Express app for mounting auth/storage routes */
     app: Express;
@@ -209,6 +213,13 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 
     console.log("🔥 Initializing FireCMS Backend");
 
+    // ============ Load collections dynamically if needed ============
+    let activeCollections = config.collections || [];
+    if (config.collectionsDir && activeCollections.length === 0) {
+        activeCollections = await loadCollectionsFromDirectory(config.collectionsDir);
+        console.log(`📁 Auto-discovered ${activeCollections.length} collections from ${config.collectionsDir}`);
+    }
+
     // ============ Parse datasource configuration ============
 
     let rawDatasourceConfigs: Record<string, DatasourceConfig>;
@@ -249,7 +260,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
             Object.values(schema.tables).forEach((table) => {
                 if (isTable(table)) {
                     const tableName = getTableName(table);
-                    const matchingCollection = config.collections.find(
+                    const matchingCollection = activeCollections.find(
                         c => c.dbPath === tableName && (
                             c.datasource === datasourceId ||
                             (!c.datasource && datasourceId === DEFAULT_DATASOURCE_ID)
@@ -279,7 +290,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     console.log(`✅ Initialized ${Object.keys(delegates).length} datasource(s): ${Object.keys(delegates).join(", ")}`);
 
     // Register collections
-    config.collections.forEach(collection => collectionRegistry.register(collection));
+    activeCollections.forEach(collection => collectionRegistry.register(collection));
 
     // ============ Get default datasource for auth ============
     // Auth requires PostgreSQL, so we need to find the default db connection
@@ -517,17 +528,17 @@ function isStorageConfig(obj: unknown): obj is StorageConfig {
  * @param config API configuration options
  * @returns API server instance
  */
-export function initializeFireCMSAPI(
+export async function initializeFireCMSAPI(
     app: Express,
     backend: FireCMSBackendInstance,
     config: Partial<ApiConfig> = {}
-): FireCMSApiServer {
+): Promise<FireCMSApiServer> {
     console.log("🚀 Initializing FireCMS REST/GraphQL API (optional for external integrations)");
 
     // Get collections from the registry using the correct method
     const collections = collectionRegistry.getCollections();
 
-    const apiServer = new FireCMSApiServer({
+    const apiServer = await FireCMSApiServer.create({
         collections,
         dataSource: backend.dataSourceDelegate,
         basePath: config.basePath || "/api",
@@ -544,9 +555,51 @@ export function initializeFireCMSAPI(
 
     const basePath = config.basePath || "/api";
     console.log(`✅ GraphQL endpoint: ${basePath}/graphql`);
-    console.log(`✅ REST API: ${basePath}/`);
     console.log(`✅ API docs: ${basePath}/swagger`);
 
     return apiServer;
+}
+
+/**
+ * Asynchronously load collection files from a directory for backend initialization
+ */
+async function loadCollectionsFromDirectory(directory: string): Promise<EntityCollection[]> {
+    const collections: EntityCollection[] = [];
+    try {
+        if (!fs.existsSync(directory)) {
+            console.warn(`[initializeFireCMSBackend] Collections directory not found: ${directory}`);
+            return collections;
+        }
+
+        const files = fs.readdirSync(directory);
+        for (const file of files) {
+            // Only load .ts and .js files, ignore test files and declaration files
+            if ((file.endsWith('.ts') || file.endsWith('.js')) &&
+                !file.includes('.test.') &&
+                !file.endsWith('.d.ts') &&
+                file !== 'index.ts' && file !== 'index.js') {
+
+                const filePath = path.join(directory, file);
+                try {
+                    const fileUrl = pathToFileURL(filePath).href;
+
+                    // Use new Function to compile dynamic import natively and bypass tsc converting import() to require()
+                    const dynamicImport = new Function('url', 'return import(url)');
+                    const module = await dynamicImport(fileUrl);
+                    // Expect the collection to be the default export
+                    if (module && module.default) {
+                        collections.push(module.default);
+                    } else {
+                        console.warn(`[initializeFireCMSBackend] File ${file} does not have a default export. Skipping.`);
+                    }
+                } catch (err: any) {
+                    console.error(`[initializeFireCMSBackend] Failed to load collection from ${file}: ${err.message}`);
+                }
+            }
+        }
+    } catch (err) {
+        console.error(`[initializeFireCMSBackend] Error reading collections directory: ${err}`);
+    }
+    return collections;
 }
 

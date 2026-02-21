@@ -14,7 +14,7 @@ describe("REST API E2E Tests", () => {
     let server: FireCMSApiServer;
     let app: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockCollections = [
             {
                 slug: "products",
@@ -39,7 +39,7 @@ describe("REST API E2E Tests", () => {
             getConfigurations: jest.fn().mockResolvedValue({ collections: mockCollections, schema: {} })
         };
 
-        server = new FireCMSApiServer({
+        server = await FireCMSApiServer.create({
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: false,

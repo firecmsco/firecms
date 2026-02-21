@@ -6,13 +6,14 @@ export interface FireCMSRequest extends Request {
     dataSource?: DataSourceDelegate;
 }
 
-export type AuthResult = boolean | User | { userId: string; roles?: string[]; [key: string]: any };
+export type AuthResult = boolean | User | { userId: string; roles?: string[];[key: string]: any };
 
 /**
  * Configuration for API generation
  */
 export interface ApiConfig {
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
+    collectionsDir?: string;
     basePath?: string;
     enableGraphQL?: boolean;
     enableREST?: boolean;

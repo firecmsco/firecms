@@ -3,8 +3,10 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataSourceDelegate, User } from "@firecms/types";
+import { DataSourceDelegate, User, EntityCollection } from "@firecms/types";
 import { ApiConfig, FireCMSRequest } from "./types";
+import * as fs from "fs";
+import * as path from "path";
 
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
@@ -16,7 +18,7 @@ export class FireCMSApiServer {
     private config: ApiConfig;
     private dataSource: DataSourceDelegate;
 
-    constructor(config: ApiConfig & { dataSource: DataSourceDelegate }) {
+    private constructor(config: ApiConfig & { dataSource: DataSourceDelegate }) {
         this.config = {
             basePath: "/api",
             enableGraphQL: true,
@@ -29,11 +31,72 @@ export class FireCMSApiServer {
         };
 
         this.dataSource = config.dataSource;
+
         this.app = express();
         this.router = Router();
         this.setupMiddleware();
-        this.setupRoutes();
-        this.app.use(this.router);
+        // Setup routes is now called in the factory
+    }
+
+    /**
+     * Factory method to create an asynchronously initialized ApiServer instance
+     */
+    public static async create(config: ApiConfig & { dataSource: DataSourceDelegate }): Promise<FireCMSApiServer> {
+        // Auto-discover collections if a directory is provided and collections aren't explicitly passed
+        if (config.collectionsDir && (!config.collections || config.collections.length === 0)) {
+            config.collections = await FireCMSApiServer.loadCollectionsFromDirectory(config.collectionsDir);
+        } else if (!config.collections) {
+            config.collections = [];
+        }
+
+        const server = new FireCMSApiServer(config);
+        server.setupRoutes();
+        server.app.use(server.router);
+        return server;
+    }
+
+    /**
+     * Asynchronously load collection files from a directory
+     */
+    private static async loadCollectionsFromDirectory(directory: string): Promise<EntityCollection[]> {
+        const collections: EntityCollection[] = [];
+        try {
+            if (!fs.existsSync(directory)) {
+                console.warn(`[FireCMSApiServer] Collections directory not found: ${directory}`);
+                return collections;
+            }
+
+            const files = fs.readdirSync(directory);
+            for (const file of files) {
+                // Only load .ts and .js files, ignore test files and declaration files
+                if ((file.endsWith('.ts') || file.endsWith('.js')) &&
+                    !file.includes('.test.') &&
+                    !file.endsWith('.d.ts') &&
+                    file !== 'index.ts' && file !== 'index.js') {
+
+                    const filePath = path.join(directory, file);
+                    try {
+                        const fileUrl = process.platform === 'win32'
+                            ? `file://${filePath.replace(/\\/g, '/')}`
+                            : filePath;
+
+                        // Use dynamic import for synchronous loading in Node.js ESM mode
+                        const module = await import(fileUrl);
+                        // Expect the collection to be the default export
+                        if (module && module.default) {
+                            collections.push(module.default);
+                        } else {
+                            console.warn(`[FireCMSApiServer] File ${file} does not have a default export. Skipping.`);
+                        }
+                    } catch (err: any) {
+                        console.error(`[FireCMSApiServer] Failed to load collection from ${file}: ${err.message}`);
+                    }
+                }
+            }
+        } catch (err) {
+            console.error(`[FireCMSApiServer] Error reading collections directory: ${err}`);
+        }
+        return collections;
     }
 
     /**
@@ -93,14 +156,14 @@ export class FireCMSApiServer {
             res.json({
                 status: "healthy",
                 timestamp: new Date().toISOString(),
-                collections: this.config.collections.map(c => c.slug),
+                collections: this.config.collections?.map(c => c.slug) || [],
                 dataSource: this.dataSource.key
             });
         });
 
         // Collections metadata endpoint
         this.router.get(`${basePath}/collections`, (req: Request, res: Response) => {
-            const collectionsMetadata = this.config.collections.map(collection => ({
+            const collectionsMetadata = (this.config.collections || []).map(collection => ({
                 slug: collection.slug,
                 name: collection.name,
                 singularName: collection.singularName,
@@ -120,7 +183,7 @@ export class FireCMSApiServer {
 
         // GraphQL endpoint - uses existing DataSourceDelegate
         if (this.config.enableGraphQL) {
-            const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections, this.dataSource);
+            const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections || [], this.dataSource);
             const schema = schemaGenerator.generateSchema();
 
             const graphQLHandler = createHandler({
@@ -163,7 +226,7 @@ export class FireCMSApiServer {
         }
 
         if (this.config.enableREST) {
-            const restGenerator = new RestApiGenerator(this.config.collections, this.dataSource);
+            const restGenerator = new RestApiGenerator(this.config.collections || [], this.dataSource);
             const restRoutes = restGenerator.generateRoutes();
             this.router.use(basePath, restRoutes);
         }
@@ -239,7 +302,7 @@ export class FireCMSApiServer {
             }
         };
 
-        this.config.collections.forEach(collection => {
+        (this.config.collections || []).forEach(collection => {
             spec.components.schemas[collection.singularName || collection.name] = {
                 type: "object",
                 properties: {
