@@ -1,109 +1,51 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { deepEqual as equal } from "fast-equals"
-
-import { useBlocker, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { deepEqual as equal } from "fast-equals";
 
 import {
-    AuthController,
-    CMSView,
-    CMSViewsBuilder,
-    DataSourceDelegate,
     EntityCollection,
-    EntityCollectionsBuilder,
-    EntityReference,
-    FireCMSPlugin,
+    CMSView,
+    User,
     NavigationController,
     NavigationEntry,
     NavigationGroupMapping,
     NavigationResult,
+    FireCMSPlugin,
+    AuthController,
+    EntityCollectionsBuilder,
     PermissionsBuilder,
-    User,
-    UserConfigurationPersistence
+    CMSViewsBuilder,
+    UserConfigurationPersistence,
+    DataSourceDelegate
 } from "@firecms/types";
-import {
-    applyPermissionsFunctionIfEmpty,
-    CollectionRegistry,
-    getParentReferencesFromPath,
-    getSubcollections,
-    mergeDeep,
-    removeInitialAndTrailingSlashes,
-    resolveCollectionPathIds,
-    resolvePermissions
-} from "@firecms/common";
+
+import { useNavigationURLs } from "./navigation/useNavigationURLs";
+import { useNavigationRegistry } from "./navigation/useNavigationRegistry";
+import { resolveCollections, resolveCMSViews } from "./navigation/useNavigationResolution";
+import { useCustomBlocker } from "./navigation/useCustomBlocker";
+import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./navigation/utils";
+
+export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
+    basePath?: string;
+    baseCollectionPath?: string;
+    authController: AuthController<USER>;
+    collections?: EC[] | EntityCollectionsBuilder<EC>;
+    collectionPermissions?: PermissionsBuilder;
+    views?: CMSView[] | CMSViewsBuilder;
+    adminViews?: CMSView[] | CMSViewsBuilder;
+    userConfigPersistence?: UserConfigurationPersistence;
+    dataSourceDelegate: DataSourceDelegate;
+    plugins?: FireCMSPlugin[];
+    navigationGroupMappings?: NavigationGroupMapping[];
+    disabled?: boolean;
+    viewsOrder?: string[];
+};
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
-export const NAVIGATION_DEFAULT_GROUP_NAME = "Views";
-export const NAVIGATION_ADMIN_GROUP_NAME = "Admin";
-
-export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
-    /**
-     * Base path for the CMS, used to build the all the URLs.
-     * Defaults to "/".
-     */
-    basePath?: string,
-    /**
-     * Base path for the collections, used to build the collection URLs.
-     * Defaults to "c" (e.g. "/c/products").
-     */
-    baseCollectionPath?: string,
-    /**
-     * The auth controller used to manage the user authentication and permissions.
-     */
-    authController: AuthController<USER>;
-    /**
-     * The collections to be used in the CMS.
-     * This can be a static array of collections or a function that returns a promise
-     * resolving to an array of collections.
-     */
-    collections?: EC[] | EntityCollectionsBuilder<EC>;
-    /**
-     * Optional permissions builder to be applied to the collections.
-     * If not provided, the permissions will be resolved from the collection configuration.
-     */
-    collectionPermissions?: PermissionsBuilder;
-    /**
-     * Custom views to be added to the CMS, these will be available in the main navigation.
-     * This can be a static array of views or a function that returns a promise
-     * resolving to an array of views.
-     */
-    views?: CMSView[] | CMSViewsBuilder;
-    /**
-     * Custom views to be added to the CMS admin navigation.
-     * This can be a static array of views or a function that returns a promise
-     * resolving to an array of views.
-     */
-    adminViews?: CMSView[] | CMSViewsBuilder;
-    /**
-     * Controller for storing user preferences.
-     */
-    userConfigPersistence?: UserConfigurationPersistence;
-    /**
-     * Delegate for data source operations, used to resolve collections and views.
-     */
-    dataSourceDelegate: DataSourceDelegate;
-    /**
-     * Plugins to be used in the CMS.
-     */
-    plugins?: FireCMSPlugin[];
-    /**
-     * Used to define the name of groups and order of the navigation entries.
-     */
-    navigationGroupMappings?: NavigationGroupMapping[];
-    /**
-     * If true, the navigation logic will not be updated until this flag is false
-     */
-    disabled?: boolean;
-
-    /**
-     * @deprecated
-     * Use `navigationGroupMappings` instead.
-     */
-    viewsOrder?: string[];
-};
-
 export function useBuildNavigationController<EC extends EntityCollection, USER extends User>(props: BuildNavigationContextProps<EC, USER>): NavigationController {
+
     const {
         basePath = DEFAULT_BASE_PATH,
         baseCollectionPath = DEFAULT_COLLECTION_PATH,
@@ -122,7 +64,11 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const navigate = useNavigate();
 
-    const collectionRegistryRef = useRef<CollectionRegistry>(new CollectionRegistry());
+    const registryHook = useNavigationRegistry(userConfigPersistence);
+    const { collectionRegistryRef } = registryHook;
+
+    const urlsHook = useNavigationURLs(basePath, baseCollectionPath, collectionRegistryRef);
+
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
     const navigationEntriesOrderRef = useRef<string[] | undefined>();
@@ -132,23 +78,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
-
-    const cleanBasePath = removeInitialAndTrailingSlashes(basePath);
-    const cleanBaseCollectionPath = removeInitialAndTrailingSlashes(baseCollectionPath);
-
-    const homeUrl = cleanBasePath ? `/${cleanBasePath}` : "/";
-
-    const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
-
-
-    const buildCMSUrlPath = useCallback((path: string): string => {
-        // Strip trailing /* wildcard from paths (used for nested routes in React Router)
-        const cleanPath = path.replace(/\/\*$/, "");
-        return cleanBasePath ? `/${cleanBasePath}/${encodePath(cleanPath)}` : `/${encodePath(cleanPath)}`;
-    }, [cleanBasePath]);
-
-    const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
-        [baseCollectionPath]);
 
     const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
     const pluginGroups = [...new Set(allPluginGroups)];
@@ -170,7 +99,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 if (collection.hideFromNavigation) return acc;
 
                 const pathKey = collection.slug;
-                let groupName = getGroup(collection); // Initial group
+                let groupName = getGroup(collection);
 
                 if (finalNavigationGroupMappings) {
                     for (const pluginGroupDef of finalNavigationGroupMappings) {
@@ -183,7 +112,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `collection:${pathKey}`,
-                    url: buildUrlCollectionPath(pathKey),
+                    url: urlsHook.buildUrlCollectionPath(pathKey),
                     type: "collection",
                     name: collection.name.trim(),
                     slug: pathKey,
@@ -198,7 +127,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 if (view.hideFromNavigation) return acc;
 
                 const pathKey = view.slug;
-                let groupName = getGroup(view); // Initial group
+                let groupName = getGroup(view);
 
                 if (finalNavigationGroupMappings) {
                     for (const pluginGroupDef of finalNavigationGroupMappings) {
@@ -211,7 +140,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `view:${pathKey}`,
-                    url: buildCMSUrlPath(pathKey),
+                    url: urlsHook.buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "view",
                     slug: view.slug,
@@ -230,7 +159,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `admin:${pathKey}`,
-                    url: buildCMSUrlPath(pathKey),
+                    url: urlsHook.buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "admin",
                     slug: view.slug,
@@ -284,15 +213,15 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const uniqueGroupsArray = [...new Set(allDefinedGroups)];
         const adminGroups = uniqueGroupsArray.filter(g => g === NAVIGATION_ADMIN_GROUP_NAME);
         const nonAdminGroups = uniqueGroupsArray.filter(g => g !== NAVIGATION_ADMIN_GROUP_NAME);
-        const uniqueGroups = [...nonAdminGroups, ...adminGroups];
+        const uniqueGroups = [...nonAdminGroups, ...adminGroups] as string[];
 
         return {
-            allowDragAndDrop: plugins?.some(plugin => plugin.homePage?.allowDragAndDrop) ?? false,
+            allowDragAndDrop: plugins?.some((plugin: FireCMSPlugin) => plugin.homePage?.allowDragAndDrop) ?? false,
             navigationEntries,
             groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
         };
-    }, [navigationGroupMappings, buildCMSUrlPath, buildUrlCollectionPath, pluginGroups]);
+    }, [navigationGroupMappings, urlsHook.buildCMSUrlPath, urlsHook.buildUrlCollectionPath, pluginGroups]);
 
     const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
         if (!plugins) {
@@ -315,8 +244,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         }
 
         // Then persist to backend
-        if (plugins.some(plugin => plugin.homePage?.onNavigationEntriesUpdate)) {
-            plugins.forEach(plugin => {
+        if (plugins.some((plugin: FireCMSPlugin) => plugin.homePage?.onNavigationEntriesUpdate)) {
+            plugins.forEach((plugin: FireCMSPlugin) => {
                 if (plugin.homePage?.onNavigationEntriesUpdate) {
                     plugin.homePage.onNavigationEntriesUpdate(filteredEntries);
                 }
@@ -396,532 +325,21 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         refreshNavigation();
     }, [refreshNavigation]);
 
-    const getCollection = useCallback((
-        slugOrPath: string,
-        includeUserOverride = false
-    ): EC | undefined => {
-
-        const registry = collectionRegistryRef.current;
-
-        const cleanedPath = removeInitialAndTrailingSlashes(slugOrPath);
-        if (!cleanedPath) return undefined;
-
-        const pathSegments = cleanedPath.split("/");
-
-        let collectionPath = cleanedPath;
-        // If the path has an even number of segments, it points to an entity, so we get the parent collection
-        if (pathSegments.length > 0 && pathSegments.length % 2 === 0) {
-            collectionPath = pathSegments.slice(0, -1).join("/");
-        }
-
-        if (!collectionPath) return undefined;
-
-        let collection: EntityCollection | undefined;
-        try {
-            collection = registry.resolvePathToCollections(collectionPath).finalCollection;
-        } catch (e) {
-            // This can happen if the path is not a valid collection path, which is a valid case.
-            // We just return undefined.
-            console.debug(`Could not resolve path to collection: ${collectionPath}`, e);
-            return undefined;
-        }
-
-        if (!collection) {
-            return undefined;
-        }
-
-        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(slugOrPath) : undefined;
-        const overriddenCollection = collection ? mergeDeep(collection, userOverride ?? {}) : undefined;
-
-        if (!overriddenCollection) return undefined;
-
-        // This is to preserve functions that are lost in `mergeDeep`
-        let result: Partial<EntityCollection> | undefined = overriddenCollection;
-        const subcollections = overriddenCollection.subcollections;
-        const callbacks = overriddenCollection.callbacks;
-        const permissions = overriddenCollection.permissions;
-        result = {
-            ...result,
-            subcollections: result?.subcollections ?? subcollections,
-            callbacks: result?.callbacks ?? callbacks,
-            permissions: result?.permissions ?? permissions
-        };
-
-        return { ...overriddenCollection, ...result } as EC;
-
-    }, [userConfigPersistence]);
-
-    const getCollectionBySlug = useCallback((slug: string): EC | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined)
-            throw Error("getCollectionById: Collections have not been initialised yet");
-        return registry.get(slug) as EC | undefined;
-    }, []);
-
-    const getRawCollection = useCallback((slugOrPath: string): EC | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined) return undefined;
-
-        const cleanedPath = removeInitialAndTrailingSlashes(slugOrPath);
-        if (!cleanedPath) return undefined;
-
-        // Ensure we check slugs as well as paths natively in getRaw()
-        return registry.getRaw(cleanedPath) as EC | undefined;
-    }, []);
-
-    const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined)
-            throw Error("getCollectionFromPaths: Collections have not been initialised yet");
-
-        if (!pathSegments?.length) {
-            return undefined;
-        }
-
-        const path = pathSegments.reduce((acc, segment, i) => {
-            if (i === 0) return segment;
-            return `${acc}/fake_id/${segment}`;
-        }, "");
-
-        try {
-            const { finalCollection } = registry.resolvePathToCollections(path);
-            return finalCollection as EC | undefined;
-        } catch (e) {
-            console.debug(`Could not resolve path segments to collection: ${pathSegments.join("/")}`, e);
-            return undefined;
-        }
-    }, []);
-
-    const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined)
-            throw Error("getCollectionFromIds: Collections have not been initialised yet");
-
-        if (!ids?.length) {
-            return undefined;
-        }
-
-        const path = ids.reduce((acc, segment, i) => {
-            if (i === 0) return segment;
-            return `${acc}/fake_id/${segment}`;
-        }, "");
-
-        try {
-            const { finalCollection } = registry.resolvePathToCollections(path);
-            return finalCollection as EC | undefined;
-        } catch (e) {
-            console.debug(`Could not resolve ids to collection: ${ids.join("/")}`, e);
-            return undefined;
-        }
-    }, []);
-
-    const isUrlCollectionPath = useCallback(
-        (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
-        [fullCollectionPath]);
-
-    const urlPathToDataPath = useCallback((path: string): string => {
-        const decodedPath = decodeURIComponent(path);
-        if (decodedPath.startsWith(fullCollectionPath))
-            return decodedPath.replace(fullCollectionPath, "");
-        throw Error("Expected path starting with " + fullCollectionPath);
-    }, [fullCollectionPath]);
-
-    const resolveIdsFrom = useCallback((path: string): string => {
-        const registry = collectionRegistryRef.current;
-        if (!registry) {
-            return resolveCollectionPathIds(path, []);
-        }
-        return resolveCollectionPathIds(path, registry.getCollections());
-    }, []);
-
-    const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
-        const registry = collectionRegistryRef.current;
-        if (!registry) {
-            return [];
-        }
-        return getParentReferencesFromPath({
-            path,
-            collections: registry.getCollections()
-        });
-    }, []);
-
-    const getParentCollectionIds = useCallback((path: string): string[] => {
-
-        const strings = path.split("/");
-        const oddPathSegments = strings.filter((_, i) => i % 2 === 0);
-        oddPathSegments.pop();
-
-        const result: string[][] = [];
-
-        for (let i = 1; i <= oddPathSegments.length; i++) {
-            result.push(oddPathSegments.slice(0, i));
-        }
-
-        // for each odd path segment, get the collection
-        return result.map(r => getCollectionFromPaths(r)?.slug).filter(Boolean) as string[];
-    }, [getAllParentReferencesForPath])
-
-    const convertIdsToPaths = useCallback((ids: string[]): string[] => {
-        const registry = collectionRegistryRef.current;
-        if (!registry) {
-            throw new Error("convertIdsToPaths: collectionRegistryRef not initialised");
-        }
-        let currentCollections: EntityCollection[] = registry.getCollections();
-        const paths: string[] = [];
-        for (let i = 0; i < ids.length; i++) {
-            const id = ids[i];
-            const collection: EntityCollection | undefined = currentCollections.find(c => c.slug === id);
-            if (!collection)
-                throw Error(`Collection with id ${id} not found`);
-            paths.push(collection.dbPath);
-            currentCollections = getSubcollections(collection) ?? [];
-        }
-        return paths;
-    }, []);
-
+    // Omit getCollection and registry methods from returned shape to just use registryHook's getters directly
     return {
+        ...registryHook,
+        ...urlsHook,
         collections: collectionRegistryRef.current.getCollections(),
         views: viewsRef.current,
         adminViews: adminViewsRef.current,
         loading: !initialised || navigationLoading,
         navigationLoadingError,
-        homeUrl,
         basePath,
         baseCollectionPath,
         initialised,
-        getCollection,
-        getRawCollection,
-        getCollectionById: getCollectionBySlug,
-        getCollectionFromPaths,
-        getCollectionFromIds,
-        isUrlCollectionPath,
-        urlPathToDataPath,
-        buildUrlCollectionPath,
-        resolveDatabasePathsFrom: resolveIdsFrom,
         topLevelNavigation,
         refreshNavigation,
-        getParentReferencesFromPath: getAllParentReferencesForPath,
-        getParentCollectionIds,
-        convertIdsToPaths,
         navigate,
         plugins
-    };
-}
-
-function encodePath(input: string) {
-    return encodeURIComponent(removeInitialAndTrailingSlashes(input))
-        .replaceAll("%2F", "/")
-        .replaceAll("%23", "#");
-}
-
-function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
-    return resolvedCollections
-        .filter((c) => {
-            if (!c.permissions) return true;
-            const resolvedPermissions = resolvePermissions(c, authController, c.slug, null);
-            return resolvedPermissions?.read !== false;
-        })
-        .map((c) => {
-            if (!c.subcollections) return c;
-            return {
-                ...c,
-                subcollections: () => filterOutNotAllowedCollections(c.subcollections?.() ?? [], authController)
-            }
-        });
-}
-
-function applyPluginModifyCollection(resolvedCollections: EntityCollection[], modifyCollection: (collection: EntityCollection) => EntityCollection) {
-    return resolvedCollections.map((collection: EntityCollection): EntityCollection => {
-        const modifiedCollection = modifyCollection(collection);
-        if (modifiedCollection.subcollections) {
-            return {
-                ...modifiedCollection,
-                subcollections: () => applyPluginModifyCollection(modifiedCollection.subcollections?.() ?? [], modifyCollection)
-            } satisfies EntityCollection;
-        }
-        return modifiedCollection;
-    });
-}
-
-async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
-    collectionPermissions: PermissionsBuilder | undefined,
-    authController: AuthController,
-    dataSource: DataSourceDelegate,
-    plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
-    let resolvedCollections: EntityCollection[] = [];
-    if (typeof collections === "function") {
-        resolvedCollections = await collections({
-            user: authController.user,
-            authController,
-            dataSource
-        });
-    } else if (Array.isArray(collections)) {
-        resolvedCollections = collections;
-    }
-
-    if (plugins) {
-        for (const plugin of plugins) {
-            if (plugin.collection?.modifyCollection) {
-                resolvedCollections = applyPluginModifyCollection(resolvedCollections, plugin.collection.modifyCollection);
-            }
-
-            if (plugin.collection?.injectCollections) {
-                resolvedCollections = plugin.collection.injectCollections(resolvedCollections ?? []);
-            }
-        }
-    }
-
-    resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
-    resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
-    return resolvedCollections;
-}
-
-async function resolveCMSViews(
-    baseViews: CMSView[] | CMSViewsBuilder | undefined,
-    authController: AuthController,
-    dataSource: DataSourceDelegate,
-    plugins?: FireCMSPlugin[]
-) {
-    let resolvedViews: CMSView[] = [];
-    if (typeof baseViews === "function") {
-        resolvedViews = await baseViews({
-            user: authController.user,
-            authController,
-            dataSource
-        });
-    } else if (Array.isArray(baseViews)) {
-        resolvedViews = baseViews;
-    }
-
-    // Inject views from plugins
-    if (plugins) {
-        for (const plugin of plugins) {
-            if (plugin.views && plugin.views.length > 0) {
-                resolvedViews = [...resolvedViews, ...plugin.views];
-            }
-        }
-    }
-
-    return resolvedViews;
-}
-
-function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
-    const trimmed = collectionOrView.group?.trim();
-    if (!trimmed || trimmed === "") {
-        return NAVIGATION_DEFAULT_GROUP_NAME;
-    }
-    return trimmed ?? NAVIGATION_DEFAULT_GROUP_NAME;
-}
-
-function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
-    if (a.length !== b.length) {
-        return false;
-    }
-    const aCopy = [...a];
-    const bCopy = [...b];
-    const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
-    const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
-    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
-}
-
-function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
-    const {
-        subcollections: subcollectionsA,
-        ...restA
-    } = a;
-    const {
-        subcollections: subcollectionsB,
-        ...restB
-    } = b;
-    if (!areCollectionListsEqual(getSubcollections(a), getSubcollections(b))) {
-        return false;
-    }
-    const restAWithoutFunctions = Object.fromEntries(
-        Object.entries(restA).filter(([_, v]) => typeof v !== 'function')
-    );
-    const restBWithoutFunctions = Object.fromEntries(
-        Object.entries(restB).filter(([_, v]) => typeof v !== 'function')
-    );
-    return equal(restAWithoutFunctions, restBWithoutFunctions);
-}
-
-type NavigationBlocker = {
-    updateBlockListener: (path: string, block: boolean, basePath?: string) => () => void;
-    isBlocked: (path: string) => boolean;
-    proceed?: () => void;
-    reset?: () => void;
-};
-
-function useCustomBlocker(): NavigationBlocker {
-    const [blockListeners, setBlockListeners] = useState<Record<string, {
-        block: boolean,
-        basePath?: string
-    }>>({});
-
-    const shouldBlock = Object.values(blockListeners).some(b => b.block);
-
-    let blocker: any;
-    try {
-        blocker = useBlocker(({
-            nextLocation
-        }) => {
-            const allBasePaths = Object.values(blockListeners).map(b => b.basePath).filter(Boolean) as string[];
-            if (allBasePaths && allBasePaths.some(path => nextLocation.pathname.startsWith(path)))
-                return false;
-            return shouldBlock;
-        });
-    } catch (e) {
-        // console.warn("Blocker not available, navigation will not be blocked");
-    }
-
-    const updateBlockListener = (path: string, block: boolean, basePath?: string) => {
-        setBlockListeners(prev => ({
-            ...prev,
-            [path]: {
-                block,
-                basePath
-            }
-        }));
-        return () => setBlockListeners(prev => {
-            const {
-                [path]: removed,
-                ...rest
-            } = prev;
-            return rest;
-        })
-    };
-
-    const isBlocked = (path: string) => {
-        return (blockListeners[path]?.block ?? false) && blocker?.state === "blocked";
-    }
-
-    return {
-        updateBlockListener,
-        isBlocked,
-        proceed: blocker?.proceed,
-        reset: blocker?.reset
-    }
-}
-
-function computeNavigationGroups({
-    navigationGroupMappings,
-    collections,
-    views,
-    plugins
-}: {
-    navigationGroupMappings?: NavigationGroupMapping[],
-    collections?: EntityCollection[],
-    views?: CMSView[],
-    plugins?: FireCMSPlugin[]
-}): NavigationGroupMapping[] {
-
-    let result = navigationGroupMappings;
-
-    // Merge plugin navigation entries
-    // IMPORTANT: Deep clone the groups to avoid mutating the original input
-    result = plugins ? plugins?.reduce((acc, plugin) => {
-        if (plugin.homePage?.navigationEntries) {
-            plugin.homePage.navigationEntries.forEach((entry) => {
-                const {
-                    name,
-                    entries
-                } = entry;
-                const existingGroup = acc.find(entry => entry.name === name);
-                if (existingGroup) {
-                    existingGroup.entries.push(...entries);
-                } else {
-                    acc.push({
-                        name,
-                        entries: [...entries]
-                    });
-                }
-            });
-
-        }
-        return acc;
-    }, (result ?? []).map(g => ({
-        name: g.name,
-        entries: [...g.entries]
-    }))) : result;
-
-    // Track all entries that are already assigned to groups
-    const assignedEntries = new Set<string>();
-    if (result) {
-        result.forEach(group => {
-            group.entries.forEach(entry => assignedEntries.add(entry));
-        });
-    }
-
-    // Find collections and views that are NOT in any persisted group
-    const unassignedGroupMap: Record<string, string[]> = {};
-
-    // Check collections
-    (collections ?? []).forEach(collection => {
-        const entry = collection.slug;
-        if (!assignedEntries.has(entry)) {
-            const groupName = getGroup(collection);
-            if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
-            unassignedGroupMap[groupName].push(entry);
-        }
-    });
-
-    // Check views
-    (views ?? []).forEach(view => {
-        const entry = view.slug;
-        if (!assignedEntries.has(entry)) {
-            const groupName = getGroup(view);
-            if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
-            unassignedGroupMap[groupName].push(entry);
-        }
-    });
-
-    // Merge unassigned entries into existing groups or create new groups
-    Object.entries(unassignedGroupMap).forEach(([groupName, entries]) => {
-        if (result) {
-            const existingGroup = result.find(g => g.name === groupName);
-            if (existingGroup) {
-                existingGroup.entries.push(...entries);
-            } else {
-                result.push({
-                    name: groupName,
-                    entries
-                });
-            }
-        }
-    });
-
-    if (!result) {
-        // No persisted data at all - create from scratch
-        result = [];
-        const groupMap: Record<string, string[]> = {};
-
-        // Add collections
-        (collections ?? []).forEach(collection => {
-            const name = getGroup(collection);
-            const entry = collection.slug;
-            if (!groupMap[name]) groupMap[name] = [];
-            groupMap[name].push(entry);
-        });
-
-        // Add views
-        (views ?? []).forEach(view => {
-            const name = getGroup(view);
-            const entry = Array.isArray(view.slug) ? view.slug[0] : view.slug;
-            if (!groupMap[name]) groupMap[name] = [];
-            groupMap[name].push(entry);
-        });
-
-        // Convert groupMap to result array
-        result = Object.entries(groupMap).map(([name, entries]) => ({
-            name,
-            entries
-        }));
-    }
-
-    // Remove duplicates in entries
-    result.forEach(group => {
-        group.entries = [...new Set(group.entries)];
-    });
-
-    return result;
+    } as any;
 }

@@ -197,7 +197,6 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             content = <DatePreview
                 date={value}
                 mode={property.mode}
-                timezone={property.timezone}
             />;
         } else {
             content = buildWrongValueType(propertyKey, property.type, value);

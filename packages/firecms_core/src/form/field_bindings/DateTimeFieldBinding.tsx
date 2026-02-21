@@ -50,7 +50,6 @@ export function DateTimeFieldBinding({
                     mode={property.mode}
                     clearable={property.clearable}
                     locale={locale}
-                    timezone={property.timezone}
                     error={showError}
                     disabled={disabled}
                     label={<LabelWithIcon

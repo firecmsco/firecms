@@ -2,7 +2,13 @@
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
-import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "@firecms/types";
+import {
+    CustomizationController,
+    FireCMSContext,
+    FireCMSPlugin,
+    FireCMSProps,
+    User
+} from "@firecms/types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useFireCMSContext } from "../hooks";
@@ -12,8 +18,8 @@ import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 import { DataSourceContext } from "../contexts/DataSourceContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
-import { NavigationContext } from "../contexts/NavigationContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
+import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
@@ -63,9 +69,9 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const userManagement = plugins?.find(p => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
-            users: [],
-            getUser: (uid: string) => null
-        };
+        users: [],
+        getUser: (uid: string) => null
+    };
 
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController, authController);
@@ -115,7 +121,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
             <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading navigation"}
-                    error={navigationController.navigationLoadingError}/>
+                    error={navigationController.navigationLoadingError} />
             </CenteredView>
         );
     }
@@ -125,7 +131,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
             <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading auth"}
-                    error={authController.authError}/>
+                    error={authController.authError} />
             </CenteredView>
         );
     }
@@ -138,7 +144,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                 </Typography>
                 <Typography>
                     You need a valid license to use FireCMS PRO. Please reach out at <a
-                    href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
+                        href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
                 </Typography>
                 {accessResponse?.message &&
                     <Typography>{accessResponse?.message}</Typography>}
@@ -161,19 +167,22 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                                     value={sideDialogsController}>
                                     <SideEntityControllerContext.Provider
                                         value={sideEntityController}>
-                                        <NavigationContext.Provider
-                                            value={navigationController}>
-                                            <InternalUserManagementContext.Provider value={userManagement}>
-                                                <DialogsProvider>
-                                                    <BreadcrumbsProvider>
-                                                        <FireCMSInternal
-                                                            loading={loading}>
-                                                            {children}
-                                                        </FireCMSInternal>
-                                                    </BreadcrumbsProvider>
-                                                </DialogsProvider>
-                                            </InternalUserManagementContext.Provider>
-                                        </NavigationContext.Provider>
+                                        <CollectionRegistryContext.Provider value={navigationController as any}>
+                                            <NavigationStateContext.Provider value={navigationController as any}>
+                                                <CMSUrlContext.Provider value={navigationController as any}>
+                                                    <InternalUserManagementContext.Provider value={userManagement}>
+                                                        <DialogsProvider>
+                                                            <BreadcrumbsProvider>
+                                                                <FireCMSInternal
+                                                                    loading={loading}>
+                                                                    {children}
+                                                                </FireCMSInternal>
+                                                            </BreadcrumbsProvider>
+                                                        </DialogsProvider>
+                                                    </InternalUserManagementContext.Provider>
+                                                </CMSUrlContext.Provider>
+                                            </NavigationStateContext.Provider>
+                                        </CollectionRegistryContext.Provider>
                                     </SideEntityControllerContext.Provider>
                                 </SideDialogsControllerContext.Provider>
                             </AuthControllerContext.Provider>
@@ -187,9 +196,9 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
 }
 
 function FireCMSInternal({
-                             loading,
-                             children
-                         }: {
+    loading,
+    children
+}: {
     loading: boolean;
     children: (props: {
         context: FireCMSContext;
@@ -211,7 +220,7 @@ function FireCMSInternal({
             if (plugin.provider) {
                 childrenResult = (
                     <plugin.provider.Component {...plugin.provider.props}
-                                               context={context}>
+                        context={context}>
                         {childrenResult}
                     </plugin.provider.Component>
                 );

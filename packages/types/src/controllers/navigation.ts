@@ -2,84 +2,10 @@ import React from "react";
 import { EntityCollection, EntityReference, FireCMSPlugin } from "../types";
 
 /**
- * Controller that includes the resolved navigation and utility methods and
- * attributes.
- * This controller holds the state of the navigation including the collections.
+ * Controller that handles URL path building and resolution.
  * @group Models
  */
-export type NavigationController<EC extends EntityCollection = EntityCollection<any>> = {
-
-    /**
-     * List of the mapped collections in the CMS.
-     * Each entry relates to a collection in the root database.
-     * Each of the navigation entries in this field
-     * generates an entry in the main menu.
-     */
-    collections?: EntityCollection[];
-
-    /**
-     * Custom additional views created by the developer, added to the main
-     * navigation
-     */
-    views?: CMSView[];
-
-    /**
-     * Custom additional views created by the developer, added to the admin
-     * navigation
-     */
-    adminViews?: CMSView[];
-
-    /**
-     * Configuration for the views that should be displayed at the top
-     * level of the navigation (e.g. in the home page or the navigation
-     * drawer)
-     */
-    topLevelNavigation?: NavigationResult;
-
-    /**
-     * Is the navigation loading (the configuration persistence has not
-     * loaded yet, or a specified navigation builder has not completed)
-     */
-    loading: boolean;
-
-    /**
-     * Was there an error while loading the navigation data
-     */
-    navigationLoadingError?: any;
-
-    /**
-     * Is the registry ready to be used
-     */
-    initialised: boolean;
-
-    /**
-     * Get the collection configuration for a given path.
-     * The collection is resolved from the given path or alias.
-     */
-    getCollection: (slugOrPath: string, includeUserOverride?: boolean) => EC | undefined;
-
-    /**
-     * Get the raw, un-normalized collection configuration.
-     * This bypasses the `CollectionRegistry` normalization (such as injecting `relation` instances).
-     * This is strictly for the Visual Editor to manipulate AST code without persisting runtime state.
-     */
-    getRawCollection: (slugOrPath: string) => EC | undefined;
-
-    /**
-     * Get the top level collection configuration for a given id
-     */
-    getCollectionById: (id: string) => EC | undefined;
-
-    /**
-     * Get the collection configuration from its parent ids.
-     */
-    getCollectionFromIds: (ids: string[]) => EC | undefined;
-
-    /**
-     * Get the collection configuration from its parent path segments.
-     */
-    getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
-
+export type CMSUrlController = {
     /**
      * Default path under the navigation routes of the CMS will be created.
      * Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
@@ -121,16 +47,125 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     buildUrlCollectionPath: (path: string) => string;
 
     /**
+     * Build a URL path for the CMS (e.g. for custom views)
+     * @param path
+     */
+    buildCMSUrlPath: (path: string) => string;
+
+    /**
      * Turn a path with collection ids into a resolved path.
      * The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
-     * @param pathWithAliases
+     * @param path
      */
     resolveDatabasePathsFrom: (path: string) => string;
+
+    /**
+     * A function to navigate to a specified route or URL.
+     *
+     * @param {string} to - The target route or URL to navigate to.
+     * @param {NavigateOptions} [options] - Optional configuration settings for navigation, such as replace behavior or state data.
+     */
+    navigate: (to: string, options?: NavigateOptions) => void;
+};
+
+/**
+ * Controller that manages the state of the navigation menu,
+ * including resolved views and top-level grouping.
+ * @group Models
+ */
+export type NavigationStateController = {
+    /**
+     * Custom additional views created by the developer, added to the main
+     * navigation
+     */
+    views?: CMSView[];
+
+    /**
+     * Custom additional views created by the developer, added to the admin
+     * navigation
+     */
+    adminViews?: CMSView[];
+
+    /**
+     * Configuration for the views that should be displayed at the top
+     * level of the navigation (e.g. in the home page or the navigation
+     * drawer)
+     */
+    topLevelNavigation?: NavigationResult;
+
+    /**
+     * Is the navigation loading (the configuration persistence has not
+     * loaded yet, or a specified navigation builder has not completed)
+     */
+    loading: boolean;
+
+    /**
+     * Was there an error while loading the navigation data
+     */
+    navigationLoadingError?: any;
 
     /**
      * Call this method to recalculate the navigation
      */
     refreshNavigation: () => void;
+
+    /**
+     * Plugin system allowing to extend the CMS functionality.
+     */
+    plugins?: FireCMSPlugin<any, any, any>[];
+};
+
+/**
+ * Controller that provides access to the registered entity collections.
+ * @group Models
+ */
+export type CollectionRegistryController<EC extends EntityCollection = EntityCollection<any>> = {
+
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections?: EntityCollection[];
+
+    /**
+     * Is the registry ready to be used
+     */
+    initialised: boolean;
+
+    /**
+     * Get the collection configuration for a given path.
+     * The collection is resolved from the given path or alias.
+     */
+    getCollection: (slugOrPath: string, includeUserOverride?: boolean) => EC | undefined;
+
+    /**
+     * Get the raw, un-normalized collection configuration.
+     * This bypasses the `CollectionRegistry` normalization (such as injecting `relation` instances).
+     * This is strictly for the Visual Editor to manipulate AST code without persisting runtime state.
+     */
+    getRawCollection: (slugOrPath: string) => EC | undefined;
+
+    /**
+     * Get the top level collection configuration for a given id
+     */
+    getCollectionBySlug: (id: string) => EC | undefined;
+
+    /**
+     * Get the root collection for a given id. Alias for getCollectionBySlug.
+     */
+    getCollectionById: (id: string) => EC | undefined;
+
+    /**
+     * Get the collection configuration from its parent ids.
+     */
+    getCollectionFromIds: (ids: string[]) => EC | undefined;
+
+    /**
+     * Get the collection configuration from its parent path segments.
+     */
+    getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
 
     /**
      * Retrieve all the related parent references for a given path
@@ -150,20 +185,21 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      */
     convertIdsToPaths: (ids: string[]) => string[];
 
-    /**
-     * A function to navigate to a specified route or URL.
-     *
-     * @param {string} to - The target route or URL to navigate to.
-     * @param {NavigateOptions} [options] - Optional configuration settings for navigation, such as replace behavior or state data.
-     */
-    navigate: (to: string, options?: NavigateOptions) => void;
+};
 
-    /**
-     * Plugin system allowing to extend the CMS functionality.
-     */
-    plugins?: FireCMSPlugin<any, any, any>[];
-
-}
+/**
+ * Legacy monolithic controller that includes the resolved navigation and utility methods and attributes.
+ * It is a combination of CMSUrlController, NavigationStateController, and CollectionRegistryController.
+ * @group Models
+ * @deprecated Use the specific controllers instead.
+ */
+export type NavigationController<EC extends EntityCollection = EntityCollection<any>> =
+    CMSUrlController &
+    NavigationStateController &
+    CollectionRegistryController<EC> & {
+        getCollectionBySlug: (slug: string) => EC | undefined;
+        buildCMSUrlPath: (path: string) => string;
+    };
 
 export interface NavigateOptions {
     replace?: boolean;

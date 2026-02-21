@@ -23,7 +23,7 @@ import {
     useCustomizationController,
     useDataSource,
     useFireCMSContext,
-    useNavigationController,
+    useCollectionRegistryController,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
@@ -201,7 +201,7 @@ export function EntityForm<M extends Record<string, any>>({
     }
 
     const sideEntityController = useSideEntityController();
-    const navigationController = useNavigationController();
+    const collectionRegistryController = useCollectionRegistryController();
 
     const navigateBack = useCallback(() => {
         if (openEntityMode === "side_panel") {
@@ -558,7 +558,7 @@ export function EntityForm<M extends Record<string, any>>({
     const plugins = customizationController.plugins;
 
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
-    const parentCollectionIds = navigationController.getParentCollectionIds(path);
+    const parentCollectionIds = collectionRegistryController.getParentCollectionIds(path);
 
     if (plugins && collection) {
         const actionProps: PluginFormActionProps = {

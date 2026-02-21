@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationController } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
@@ -33,19 +33,19 @@ export function DefaultDrawer({
     const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
 
     const analyticsController = useAnalyticsController();
-    const navigation = useNavigationController();
+    const navigationState = useNavigationStateController();
 
     const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
     const largeLayout = useLargeLayout();
     const navigate = useNavigate();
 
-    if (!navigation.topLevelNavigation)
+    if (!navigationState.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
 
     const {
         navigationEntries,
         groups
-    }: NavigationResult = navigation.topLevelNavigation;
+    }: NavigationResult = navigationState.topLevelNavigation;
 
     const adminViews = navigationEntries.filter(e => e.type === "admin") ?? [];
     const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
@@ -143,7 +143,7 @@ export function DrawerLogo({ logo }: {
     logo?: string;
 }) {
 
-    const navigation = useNavigationController();
+    const urlController = useCMSUrlController();
     const { drawerOpen } = useApp();
     return <div
         style={{
@@ -157,7 +157,7 @@ export function DrawerLogo({ logo }: {
             side="right">
             <Link
                 className={"block"}
-                to={navigation.basePath}>
+                to={urlController.basePath}>
                 {logo
                     ? <img src={logo}
                         alt="Logo"
