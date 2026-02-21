@@ -1,7 +1,7 @@
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 import { FirebaseApp } from "@firebase/app";
 import { getFunctions, httpsCallable } from "@firebase/functions";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
 /**
  * Configuration returned by the FireCMS Search Extension
@@ -204,7 +204,7 @@ export function buildFireCMSSearchController(
          */
         const init = async (props: {
             path: string;
-            collection?: EntityCollection | ResolvedEntityCollection;
+            collection?: EntityCollection;
             databaseId?: string;
         }): Promise<boolean> => {
             try {
@@ -289,7 +289,7 @@ export function buildFireCMSSearchController(
             searchString: string;
             path: string;
             databaseId?: string;
-            collection?: EntityCollection | ResolvedEntityCollection;
+            collection?: EntityCollection;
         }): Promise<readonly string[] | undefined> => {
             if (!typesenseClient) {
                 // Ensure client is initialized

@@ -21,7 +21,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "text_field",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: undefined,
@@ -37,7 +36,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "user_select",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: undefined,
@@ -53,7 +51,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "multiline",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 multiline: true,
                 storage: undefined,
                 markdown: undefined,
@@ -69,7 +66,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "markdown",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: true,
@@ -84,7 +80,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "url",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: undefined,
@@ -100,7 +95,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "email",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: undefined,
@@ -116,7 +110,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "select",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
                 multiline: undefined,
                 markdown: undefined,
@@ -132,7 +125,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_select",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "string",
                     enum: propertyData.of?.enum ?? []
@@ -145,7 +137,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "number",
                 propertyConfig: "number_input",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 enum: undefined
             } satisfies NumberProperty
         );
@@ -155,7 +146,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "number",
                 propertyConfig: "number_select",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 enum: propertyData.enumValues ?? []
             } satisfies NumberProperty
         );
@@ -165,7 +155,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_number_select",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "number",
                     enum: propertyData.of?.enum ?? []
@@ -178,7 +167,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "file_upload",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: {
                     storagePath: "/"
                 }
@@ -190,7 +178,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_file_upload",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "string",
                     storage: propertyData.of?.storage ?? {
@@ -205,7 +192,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "map",
                 propertyConfig: "group",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 keyValue: false,
                 properties: propertyData.properties ?? {}
             } satisfies MapProperty
@@ -216,7 +202,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "map",
                 propertyConfig: "key_value",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 keyValue: true,
                 properties: undefined
             } satisfies MapProperty
@@ -227,7 +212,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "reference",
                 propertyConfig: "reference",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies Property
         );
     } else if (selectedWidgetId === "reference_as_string") {
@@ -236,7 +220,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "reference_as_string",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies Property
         );
     } else if (selectedWidgetId === "multi_references") {
@@ -245,7 +228,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_references",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
                     type: "reference"
                 }
@@ -257,7 +239,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "boolean",
                 propertyConfig: "switch",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies BooleanProperty
         );
     } else if (selectedWidgetId === "date_time") {
@@ -266,7 +247,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "date",
                 propertyConfig: "date_time",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 mode: "date_time"
             } satisfies DateProperty
         );
@@ -276,7 +256,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "repeat",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies ArrayProperty
         );
     } else if (selectedWidgetId === "block") {
@@ -285,7 +264,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "block",
-                editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 oneOf: {
                     properties: {}
                 }

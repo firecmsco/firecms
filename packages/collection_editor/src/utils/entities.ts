@@ -9,7 +9,7 @@ export function editableProperty(property: Property): boolean {
             return false;
         else if (property.type === "array" && Array.isArray(property.of))
             return false;
-        return property.editable === undefined ? true : Boolean(property.editable);
+        return true;
     }
 }
 

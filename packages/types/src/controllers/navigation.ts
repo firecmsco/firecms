@@ -59,6 +59,13 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     getCollection: (slugOrPath: string, includeUserOverride?: boolean) => EC | undefined;
 
     /**
+     * Get the raw, un-normalized collection configuration.
+     * This bypasses the `CollectionRegistry` normalization (such as injecting `relation` instances).
+     * This is strictly for the Visual Editor to manipulate AST code without persisting runtime state.
+     */
+    getRawCollection: (slugOrPath: string) => EC | undefined;
+
+    /**
      * Get the top level collection configuration for a given id
      */
     getCollectionById: (id: string) => EC | undefined;

@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { EntityCollection, FireCMSPlugin, InternalUserManagement, useNavigationController } from "@firecms/core";
-import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
+import { CollectionsConfigController } from "@firecms/collection_editor";
+import { mergeCollections } from "../utils/merge_collections";
 import { HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
@@ -102,7 +103,7 @@ export function useSaasPlugin({
                 collection,
                 parentCollectionIds
             }) => {
-                return !(projectConfig.typesenseSearchConfig?.enabled || (projectConfig.localTextSearchEnabled && collection.textSearchEnabled));
+                return !(projectConfig.typesenseSearchConfig?.enabled || projectConfig.localTextSearchEnabled);
             },
 
             showTextSearchBar: ({
@@ -110,7 +111,7 @@ export function useSaasPlugin({
                 path,
                 collection
             }) => {
-                if (collection.textSearchEnabled === false) {
+                if (false) {
                     return false;
                 }
                 return true;
@@ -122,7 +123,7 @@ export function useSaasPlugin({
                 parentCollectionIds
             }) => {
 
-                const canSearch = projectConfig.typesenseSearchConfig?.enabled || (projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
+                const canSearch = projectConfig.typesenseSearchConfig?.enabled || projectConfig.localTextSearchEnabled;
                 if (!canSearch) {
                     if (parentCollectionIds === undefined) {
                         console.warn("Enabling text search: Parent collection ids are undefined")

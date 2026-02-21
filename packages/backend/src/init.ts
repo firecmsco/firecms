@@ -540,6 +540,7 @@ export async function initializeFireCMSAPI(
 
     const apiServer = await FireCMSApiServer.create({
         collections,
+        collectionsDir: config.collectionsDir,
         dataSource: backend.dataSourceDelegate,
         basePath: config.basePath || "/api",
         enableGraphQL: config.enableGraphQL ?? true,

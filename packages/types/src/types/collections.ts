@@ -225,12 +225,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     pagination?: boolean | number;
 
     /**
-     * Flag to indicate if a search bar should be displayed on top of
-     * the collection table.
-     */
-    textSearchEnabled?: boolean;
-
-    /**
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
@@ -416,14 +410,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Width of the side dialog (in pixels) when opening an entity in this collection.
      */
     sideDialogWidth?: number | string;
-
-    /**
-     * Can this collection configuration be edited by the end user.
-     * Defaults to `true`.
-     * Keep in mind that you can also set this prop to individual properties.
-     * This prop has only effect if you are using the collection editor.
-     */
-    editable?: boolean;
 
     /**
      * If set to true, the default values of the properties will be applied

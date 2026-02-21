@@ -15,13 +15,13 @@ import { inferTypeFromValue } from "@firecms/schema_inference";
 import { mergeDeep } from "@firecms/common";
 
 export function convertDataToEntity(authController: AuthController,
-                                    navigation: NavigationController,
-                                    data: Record<any, any>,
-                                    idColumn: string | undefined,
-                                    headersMapping: Record<string, string | null>,
-                                    properties: Properties,
-                                    path: string,
-                                    defaultValues: Record<string, any>): Entity<any> {
+    navigation: NavigationController,
+    data: Record<any, any>,
+    idColumn: string | undefined,
+    headersMapping: Record<string, string | null>,
+    properties: Properties,
+    path: string,
+    defaultValues: Record<string, any>): Entity<any> {
     const flatObject = flattenEntry(data);
     if (idColumn)
         delete flatObject[idColumn];
@@ -141,7 +141,7 @@ export function processValueMapping(authController: AuthController, value: any, 
             databaseId = targetCollection?.databaseId;
         }
 
-        return new EntityReference(entityId, path, databaseId);
+        return new EntityReference({ id: entityId, path, databaseId });
 
     } else if (from === to) {
         return value;

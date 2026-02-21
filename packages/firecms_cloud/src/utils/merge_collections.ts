@@ -5,24 +5,17 @@ import {
 } from "@firecms/core";
 import {
     joinCollectionLists,
-    makePropertiesEditable,
-} from "@firecms/common";
-import { PersistedCollection } from "../types/persisted_collection";
+} from "./join_collections";
+import { PersistedCollection } from "@firecms/collection_editor";
 
 /**
  * Function in charge of merging collections defined in code with those stored in the backend.
  */
 export const mergeCollections = (baseCollections: EntityCollection[],
-                                 backendCollections: PersistedCollection[] = [],
-                                 modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
+    backendCollections: PersistedCollection[] = [],
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ) => {
 
-    const markAsEditable = (c: PersistedCollection) => {
-        makePropertiesEditable(c.properties as Properties);
-        getSubcollections(c).forEach(markAsEditable);
-    };
-
-    backendCollections.forEach(markAsEditable);
 
     const result = joinCollectionLists(baseCollections, backendCollections, [], modifyCollection);
 

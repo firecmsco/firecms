@@ -16,5 +16,19 @@ export function getEntityImagePreviewPropertyKey<M extends object>(collection: E
             return key;
         }
     }
+    // also check for URL properties with image preview type
+    for (const key in collection.properties) {
+        const property = collection.properties[key];
+        if (property.type === "string" && property.url === "image") {
+            return key;
+        }
+    }
+    // and arrays of URL properties with image preview type
+    for (const key in collection.properties) {
+        const property = collection.properties[key];
+        if (property.type === "array" && property.of?.type === "string" && property.of.url === "image") {
+            return key;
+        }
+    }
     return undefined;
 }

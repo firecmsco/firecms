@@ -1,6 +1,5 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
 import {
-    makePropertiesEditable,
     Properties,
     Property,
     PropertyConfig,
@@ -62,7 +61,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
         throw Error("Entity collection has not been persisted correctly");
     const propertiesOrder = data.propertiesOrder;
     const properties = data.properties as Properties ?? {};
-    makePropertiesEditable(properties);
+
     // Normalize enum values from object format to array format (sorted alphabetically)
     const normalizedProperties = normalizePropertiesEnumValues(properties, true);
     const sortedProperties = sortProperties(normalizedProperties, propertiesOrder);
@@ -104,7 +103,7 @@ export function prepareCollectionForPersistence<M extends {
         newCollection.entityActions = newCollection.entityActions.filter(action => typeof action === "string");
     }
 
-    delete newCollection.editable;
+
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;
@@ -127,7 +126,6 @@ function cleanPropertyConfigs(properties: Properties, propertyConfigs: Record<st
             } else {
                 cleanProperty = property;
             }
-            delete cleanProperty.editable;
 
             // Normalize enum values to array format for persistence (preserves order in Firestore)
             if (cleanProperty.enumValues) {

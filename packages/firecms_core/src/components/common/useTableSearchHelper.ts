@@ -10,10 +10,10 @@ export interface UseTableSearchHelperParams<M extends Record<string, any>> {
 }
 
 export function useTableSearchHelper<M extends Record<string, any>>({
-                                                                        collection,
-                                                                        path,
-                                                                        parentCollectionIds
-                                                                    }: UseTableSearchHelperParams<M>) {
+    collection,
+    path,
+    parentCollectionIds
+}: UseTableSearchHelperParams<M>) {
 
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
@@ -23,7 +23,6 @@ export function useTableSearchHelper<M extends Record<string, any>>({
     const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
 
     let onTextSearchClick: (() => void) | undefined;
-    let textSearchEnabled = Boolean(collection.textSearchEnabled);
 
     const props = {
         context,
@@ -67,22 +66,10 @@ export function useTableSearchHelper<M extends Record<string, any>>({
             }
             : undefined;
 
-        customizationController.plugins?.forEach(p => {
-            if (!textSearchEnabled)
-                if (p.collectionView?.showTextSearchBar) {
-                    textSearchEnabled = p.collectionView.showTextSearchBar({
-                        context,
-                        path,
-                        collection,
-                        parentCollectionIds
-                    });
-                }
-        })
     }
     return {
         textSearchLoading,
         textSearchInitialised,
-        onTextSearchClick,
-        textSearchEnabled
+        onTextSearchClick
     };
 }

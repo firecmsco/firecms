@@ -828,10 +828,10 @@ export function EntityForm<M extends Record<string, any>>({
                             className={"flex flex-row gap-4 self-end sticky top-4 z-10"}>
 
                             {manualApplyLocalChanges && hasLocalChanges &&
-                                <LocalChangesMenu
+                                <LocalChangesMenu<M>
                                     cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
                                     properties={collection.properties}
-                                    localChangesData={localChangesData as Partial<M>}
+                                    cachedData={localChangesData as Partial<M>}
                                     formex={formex}
                                     onClearLocalChanges={() => setLocalChangesCleared(true)}
                                 />}

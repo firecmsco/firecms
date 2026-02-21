@@ -787,8 +787,7 @@ export const EntityCollectionView = React.memo(
         const {
             textSearchLoading,
             textSearchInitialised,
-            onTextSearchClick,
-            textSearchEnabled
+            onTextSearchClick
         } = useTableSearchHelper({
             collection,
             path: path,
@@ -823,8 +822,8 @@ export const EntityCollectionView = React.memo(
                 {countFetcher}
                 <CollectionTableToolbar
                     loading={tableController.dataLoading}
-                    onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
-                    onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
+                    onTextSearch={textSearchInitialised ? tableController.setSearchString : undefined}
+                    onTextSearchClick={!textSearchInitialised ? onTextSearchClick : undefined}
                     textSearchLoading={textSearchLoading}
                     viewModeToggle={viewModeToggleElement}
                     actionsStart={<EntityCollectionViewStartActions
@@ -927,7 +926,6 @@ export const EntityCollectionView = React.memo(
                         onScroll={tableController.onScroll}
                         initialScroll={tableController.initialScroll}
                         textSearchLoading={textSearchLoading}
-                        textSearchEnabled={textSearchEnabled}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
                                 <Typography variant={"subtitle2"}>So empty...</Typography>
@@ -1019,7 +1017,6 @@ export const EntityCollectionView = React.memo(
             equal(a.Actions, b.Actions) &&
             equal(a.defaultSize, b.defaultSize) &&
             equal(a.includeJsonView, b.includeJsonView) &&
-            equal(a.textSearchEnabled, b.textSearchEnabled) &&
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.sideDialogWidth, b.sideDialogWidth) &&
             equal(a.openEntityMode, b.openEntityMode) &&

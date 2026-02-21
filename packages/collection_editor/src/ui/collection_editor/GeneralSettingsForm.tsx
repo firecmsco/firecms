@@ -61,14 +61,14 @@ export function GeneralSettingsForm({
     const updateName = (name: string) => {
         setFieldValue("name", name);
 
-        const pathTouched = getIn(touched, "path");
+        const pathTouched = getIn(touched, "dbPath");
         if (!pathTouched && isNewCollection && name) {
-            setFieldValue("path", toSnakeCase(name));
+            setFieldValue("dbPath", toSnakeCase(name));
         }
 
-        const idTouched = getIn(touched, "id");
+        const idTouched = getIn(touched, "slug");
         if (!idTouched && isNewCollection && name) {
-            setFieldValue("id", toSnakeCase(name));
+            setFieldValue("slug", toSnakeCase(name));
         }
 
         const singularNameTouched = getIn(touched, "singularName");
@@ -127,17 +127,17 @@ export function GeneralSettingsForm({
                         </FieldCaption>
                     </div>
 
-                    {/* Path */}
+                    {/* dbPath */}
                     <div className={cls("col-span-12")}>
-                        <Field name={"path"}
+                        <Field name={"dbPath"}
                             as={DebouncedTextField}
                             label={"Path"}
                             required
-                            error={showErrors && Boolean(errors.path)} />
+                            error={showErrors && Boolean(errors.dbPath)} />
 
-                        <FieldCaption error={touched.path && Boolean(errors.path)}>
-                            {touched.path && Boolean(errors.path)
-                                ? errors.path
+                        <FieldCaption error={touched.dbPath && Boolean(errors.dbPath)}>
+                            {touched.dbPath && Boolean(errors.dbPath)
+                                ? errors.dbPath
                                 : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
                         </FieldCaption>
                     </div>
@@ -178,13 +178,13 @@ export function GeneralSettingsForm({
 
                     {/* Collection ID */}
                     <div className={"col-span-12"}>
-                        <Field name={"id"}
-                               as={DebouncedTextField}
-                               disabled={!isNewCollection}
-                               label={"Collection ID"}
-                               error={showErrors && Boolean(errors.id)} />
-                        <FieldCaption error={touched.id && Boolean(errors.id)}>
-                            {touched.id && Boolean(errors.id) ? errors.id : "This ID identifies this collection. Typically the same as the path."}
+                        <Field name={"slug"}
+                            as={DebouncedTextField}
+                            disabled={!isNewCollection}
+                            label={"Collection ID"}
+                            error={showErrors && Boolean(errors.slug)} />
+                        <FieldCaption error={touched.slug && Boolean(errors.slug)}>
+                            {touched.slug && Boolean(errors.slug) ? errors.slug : "This ID identifies this collection. Typically the same as the path."}
                         </FieldCaption>
                     </div>
 
@@ -249,7 +249,7 @@ export function GeneralSettingsForm({
                             }}
                             value={
                                 typeof values.customId === "object" ? "code_defined" :
-                                    values.customId === true ? "true" :
+                                    values.customId === (true as any) ? "true" :
                                         values.customId === "optional" ? "optional" : "false"
                             }
                             renderValue={(value: any) => {
@@ -275,22 +275,6 @@ export function GeneralSettingsForm({
                         </Select>
                         <FieldCaption>
                             Configure how document IDs are generated when creating new entities.
-                        </FieldCaption>
-                    </div>
-
-                    {/* Text search */}
-                    <div>
-                        <BooleanSwitchWithLabel
-                            position={"start"}
-                            size={"large"}
-                            label="Enable text search for this collection"
-                            onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
-                            value={values.textSearchEnabled ?? false}
-                        />
-                        <FieldCaption>
-                            Allow text search for this collection. If you have not specified a text search
-                            delegate, this will use the built-in local text search. This is not recommended
-                            for large collections, as it may incur in performance and cost issues.
                         </FieldCaption>
                     </div>
                 </ExpandablePanel>

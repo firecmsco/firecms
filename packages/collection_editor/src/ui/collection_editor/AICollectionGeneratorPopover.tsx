@@ -76,8 +76,8 @@ export function AICollectionGeneratorPopover({
 
         try {
             const collectionsContext = existingCollections.map(c => ({
-                path: c.path,
-                id: c.id,
+                dbPath: c.dbPath,
+                slug: c.slug,
                 name: c.name,
                 properties: c.properties,
                 propertiesOrder: c.propertiesOrder
@@ -88,8 +88,8 @@ export function AICollectionGeneratorPopover({
                 existingCollections: collectionsContext.slice(0, 30),
                 ...(existingCollection && {
                     existingCollection: {
-                        path: existingCollection.path,
-                        id: existingCollection.id,
+                        dbPath: existingCollection.dbPath,
+                        slug: existingCollection.slug,
                         name: existingCollection.name,
                         properties: existingCollection.properties,
                         propertiesOrder: existingCollection.propertiesOrder

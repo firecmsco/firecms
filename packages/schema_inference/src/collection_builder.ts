@@ -335,10 +335,7 @@ function buildPropertyFromCount(
         }
     }
 
-    return {
-        ...result,
-        editable: true
-    };
+    return result;
 }
 
 function buildPropertiesFromCount(

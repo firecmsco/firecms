@@ -5,7 +5,6 @@ import {
     EntityCollection,
     ErrorBoundary,
     isPropertyBuilder,
-    makePropertiesEditable,
     MapProperty,
     Properties,
     Property,
@@ -34,6 +33,8 @@ import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
 import { useAIModifiedPaths } from "./AIModifiedPathsContext";
+
+type PropertyOrBuilder = Property | any;
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
@@ -113,9 +114,6 @@ export function CollectionPropertiesEditorForm({
             // @ts-ignore
             doCollectionInference(values)
                 .then((newCollection) => {
-
-                    if (newCollection)
-                        makePropertiesEditable(newCollection.properties as Properties);
 
                     if (!newCollection) {
                         snackbarController.open({
@@ -516,7 +514,6 @@ export function CollectionPropertiesEditorForm({
                                 getData={getData}
                                 propertyConfigs={propertyConfigs}
                                 collectionEditable={collectionEditable}
-                                collectionProperties={values.properties as Properties}
                             />}
 
                         {!selectedProperty &&
@@ -560,7 +557,6 @@ export function CollectionPropertiesEditorForm({
                 getData={getData}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
-                collectionProperties={values.properties as Properties}
                 onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -587,7 +583,6 @@ export function CollectionPropertiesEditorForm({
             allowDataInference={!isNewCollection}
             propertyConfigs={propertyConfigs}
             collectionEditable={collectionEditable}
-            collectionProperties={values.properties as Properties}
             existingPropertyKeys={values.propertiesOrder as string[]} />
 
         <ErrorBoundary>

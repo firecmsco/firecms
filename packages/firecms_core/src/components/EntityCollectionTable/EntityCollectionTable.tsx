@@ -61,7 +61,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         initialScroll,
         onScroll,
         onSizeChanged,
-        textSearchEnabled = false,
+
         hoverRow = true,
         inlineEditing = false,
         additionalFields,
@@ -350,9 +350,9 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             className={cls("h-full w-full flex flex-col bg-white dark:bg-surface-950", className)}>
 
             {!hideToolbar && <CollectionTableToolbar
-                onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                onTextSearch={onTextSearch}
                 textSearchLoading={textSearchLoading}
-                onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
+                onTextSearchClick={onTextSearchClick}
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}

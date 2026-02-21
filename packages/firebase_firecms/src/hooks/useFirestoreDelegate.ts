@@ -702,7 +702,7 @@ export function firestoreToCMSModel(data: any): any {
     if (data instanceof DocumentReference) {
         // @ts-ignore
         const databaseId = data?.firestore?._databaseId?.database;
-        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path), databaseId);
+        return new EntityReference({ id: data.id, path: getCMSPathFromFirestorePath(data.path), databaseId });
     }
     if (Array.isArray(data)) {
         return data.map(firestoreToCMSModel).filter(v => v !== undefined);

@@ -37,7 +37,7 @@ import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { useLocalCollectionsConfigController } from "@firecms/collection_editor";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 export function App() {
 
@@ -77,15 +77,14 @@ export function App() {
             productsCollection
             // Your collections here
         ];
-        // You can merge collections defined in the collection editor (UI) with your own collections
-        return mergeCollections(collections, collectionConfigController.collections ?? []);
-    }, [collectionConfigController.collections]);
+        return collections;
+    }, []);
 
     // Here you define your custom top-level views
     const views: CMSView[] = useMemo(() => ([{
         path: "example",
         name: "Example CMS view",
-        view: <ExampleCMSView/>
+        view: <ExampleCMSView />
     }]), []);
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
@@ -200,7 +199,7 @@ export function App() {
     });
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (configError) {
@@ -220,13 +219,13 @@ export function App() {
                     storageSource={storageSource}
                 >
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         let component;
                         if (loading || authLoading) {
-                            component = <CircularProgressCenter size={"large"}/>;
+                            component = <CircularProgressCenter size={"large"} />;
                         } else {
                             if (!canAccessMainView) {
                                 component = (
@@ -235,17 +234,17 @@ export function App() {
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
                                         authController={authController}
-                                        notAllowedError={notAllowedError}/>
+                                        notAllowedError={notAllowedError} />
                                 );
                             } else {
                                 component = (
                                     <Scaffold
                                         // logo={...}
                                         autoOpenDrawer={false}>
-                                        <AppBar title={title}/>
-                                        <Drawer/>
-                                        <NavigationRoutes/>
-                                        <SideDialogs/>
+                                        <AppBar title={title} />
+                                        <Drawer />
+                                        <NavigationRoutes />
+                                        <SideDialogs />
                                     </Scaffold>
                                 );
                             }

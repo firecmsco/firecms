@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { User } from "@firecms/core";
 import * as authApi from "../api";
 import {
-    CustomAuthController,
-    CustomAuthControllerProps,
+    FireCMSAuthController,
+    FireCMSAuthControllerProps,
     AuthTokens,
     UserInfo
 } from "../types";
@@ -89,15 +89,15 @@ function isTokenExpiredOrNearExpiry(expiresAt: number, bufferMs: number = TOKEN_
 }
 
 /**
- * Custom auth controller hook for JWT-based authentication
+ * Auth controller hook for JWT-based authentication
  * with @firecms/backend
  * 
  * @param props Configuration options
- * @returns CustomAuthController instance
+ * @returns FireCMSAuthController instance
  */
-export function useCustomAuthController(
-    props: CustomAuthControllerProps = {}
-): CustomAuthController {
+export function useFireCMSAuthController(
+    props: FireCMSAuthControllerProps = {}
+): FireCMSAuthController {
     const { apiUrl, onSignOut, defineRolesFor } = props;
 
     const [user, setUser] = useState<User | null>(null);
@@ -179,6 +179,12 @@ export function useCustomAuthController(
         } catch (error: any) {
             console.error("[AUTH] Token refresh failed:", error?.message);
             isRefreshingRef.current = false;
+
+            // If it's a network error (e.g., backend restarting), we throw so callers can retry
+            // instead of immediately assuming the refresh token is invalid and signing out.
+            if (error?.code === "NETWORK_ERROR") {
+                throw error;
+            }
             return null;
         }
     }, []);
@@ -213,13 +219,23 @@ export function useCustomAuthController(
             if (!isMountedRef.current) return;
 
             console.log("[AUTH] Scheduled token refresh triggered");
-            const newTokens = await refreshAccessToken();
+            try {
+                const newTokens = await refreshAccessToken();
 
-            if (newTokens && isMountedRef.current) {
-                scheduleTokenRefresh(newTokens);
-            } else if (!newTokens && isMountedRef.current) {
-                console.log("[AUTH] Scheduled refresh failed, signing out");
-                clearSessionAndSignOut();
+                if (newTokens && isMountedRef.current) {
+                    scheduleTokenRefresh(newTokens);
+                } else if (!newTokens && isMountedRef.current) {
+                    console.log("[AUTH] Scheduled refresh failed due to invalid token, signing out");
+                    clearSessionAndSignOut();
+                }
+            } catch (error) {
+                // Network error - try again shortly instead of logging out
+                console.log("[AUTH] Network error during scheduled refresh, retrying in 10s");
+                if (isMountedRef.current) {
+                    refreshTimeoutRef.current = setTimeout(() => {
+                        scheduleTokenRefresh(tokens);
+                    }, 10000);
+                }
             }
         }, timeUntilRefresh);
     }, [refreshAccessToken, clearSessionAndSignOut]);
@@ -239,12 +255,22 @@ export function useCustomAuthController(
         // Check if token is expired or about to expire
         if (isTokenExpiredOrNearExpiry(currentTokens.accessTokenExpiresAt)) {
             console.log("[AUTH] Token expired or near expiry, refreshing before returning...");
-            const newTokens = await refreshAccessToken();
-            if (!newTokens) {
+            try {
+                const newTokens = await refreshAccessToken();
+                if (!newTokens) {
+                    clearSessionAndSignOut();
+                    throw new Error("Session expired. Please login again.");
+                }
+                return newTokens.accessToken;
+            } catch (error: any) {
+                // If the error was a network error during refresh, just re-throw it 
+                // so the user isn't logged out locally and the network request fails naturally.
+                if (error?.code === "NETWORK_ERROR") {
+                    throw error;
+                }
                 clearSessionAndSignOut();
-                throw new Error("Session expired. Please login again.");
+                throw error;
             }
-            return newTokens.accessToken;
         }
 
         return currentTokens.accessToken;
@@ -498,8 +524,12 @@ export function useCustomAuthController(
             } catch (error: any) {
                 if (!isMountedRef.current) return;
                 console.error("[AUTH] Token refresh failed during restore:", error?.message);
-                clearAuthFromStorage();
-                tokensRef.current = null;
+
+                // Do not clear the session entirely if it's just a temporary network outage
+                if (error?.code !== "NETWORK_ERROR") {
+                    clearAuthFromStorage();
+                    tokensRef.current = null;
+                }
             } finally {
                 if (isMountedRef.current) {
                     setInitialLoading(false);
@@ -523,12 +553,16 @@ export function useCustomAuthController(
                 // Check if token needs refreshing
                 if (isTokenExpiredOrNearExpiry(tokensRef.current.accessTokenExpiresAt)) {
                     console.log("[AUTH] Visibility change - token needs refresh");
-                    const newTokens = await refreshAccessToken();
+                    try {
+                        const newTokens = await refreshAccessToken();
 
-                    if (newTokens && isMountedRef.current) {
-                        scheduleTokenRefresh(newTokens);
-                    } else if (!newTokens && isMountedRef.current) {
-                        clearSessionAndSignOut();
+                        if (newTokens && isMountedRef.current) {
+                            scheduleTokenRefresh(newTokens);
+                        } else if (!newTokens && isMountedRef.current) {
+                            clearSessionAndSignOut();
+                        }
+                    } catch (error) {
+                        console.log("[AUTH] Network error during visibility refresh, deferring.");
                     }
                 }
             }

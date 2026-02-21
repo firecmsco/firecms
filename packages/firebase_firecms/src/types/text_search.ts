@@ -36,7 +36,7 @@ export type FirestoreTextSearchController = {
         path: string,
         currentUser?: FirebaseUser,
         databaseId?: string,
-        collection?: EntityCollection | ResolvedEntityCollection
+        collection?: EntityCollection
     }) => (Promise<readonly string[] | undefined>),
 
 };

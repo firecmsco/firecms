@@ -124,7 +124,6 @@ export function CollectionEditorImportMapping({
         const propertyData = importConfig.importData.map((d) => getIn(d, importKey));
         const inferredNewProperty = {
             ...buildPropertyFromData(propertyData, property, getInferenceType),
-            editable: true
         };
 
         if (propertyPath) {
@@ -165,7 +164,6 @@ export function CollectionEditorImportMapping({
                                                       setSelectedProperty({
                                                           ...property,
                                                           id: propertyKey,
-                                                          editable: true
                                                       });
                                                   }}
                                                   propertyTypeView={<PropertySelect property={property}

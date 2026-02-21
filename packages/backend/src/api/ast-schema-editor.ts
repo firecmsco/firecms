@@ -1,4 +1,4 @@
-import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment, VariableDeclaration } from "ts-morph";
+import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment, VariableDeclaration, IndentationText } from "ts-morph";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -9,7 +9,7 @@ export class AstSchemaEditor {
     constructor(collectionsDir: string) {
         this.project = new Project({
             manipulationSettings: {
-                indentationText: require("ts-morph").IndentationText.FourSpaces,
+                indentationText: IndentationText.FourSpaces,
             }
         });
         if (fs.existsSync(collectionsDir)) {
@@ -52,7 +52,7 @@ export class AstSchemaEditor {
         return null;
     }
 
-    private convertJsonToAstString(obj: any, indentLevel: number = 0): string {
+    private convertJsonToAstString(obj: any, indentLevel: number = 0, oldAstNode?: ObjectLiteralExpression): string {
         const indent = "    ".repeat(indentLevel);
         const innerIndent = "    ".repeat(indentLevel + 1);
 
@@ -72,13 +72,61 @@ export class AstSchemaEditor {
         }
         if (typeof obj === "object") {
             const keys = Object.keys(obj);
-            if (keys.length === 0) return "{}";
+
+            // Collect preserved AST properties
+            const preservedProps: string[] = [];
+            if (oldAstNode) {
+                const oldProps = oldAstNode.getProperties();
+                for (const oldProp of oldProps) {
+                    if (oldProp.isKind(SyntaxKind.PropertyAssignment)) {
+                        const nameNode = oldProp.getNameNode();
+                        let name = nameNode.getText();
+                        if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, -1);
+                        if (name.startsWith("'") && name.endsWith("'")) name = name.slice(1, -1);
+
+                        // If the JSON object doesn't have this key, check if we should preserve it
+                        if (!(name in obj)) {
+                            const init = oldProp.getInitializer();
+                            if (init) {
+                                const kind = init.getKind();
+                                const isCode = kind === SyntaxKind.ArrowFunction ||
+                                    kind === SyntaxKind.FunctionExpression ||
+                                    kind === SyntaxKind.Identifier ||
+                                    kind === SyntaxKind.CallExpression ||
+                                    kind === SyntaxKind.JsxElement;
+
+                                if (isCode || name === "target" || name === "callbacks" || name === "permissions") {
+                                    // Preserve this property exactly as it was
+                                    const keyStr = /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(name) ? name : `"${name}"`;
+                                    preservedProps.push(`${keyStr}: ${init.getText()}`);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (keys.length === 0 && preservedProps.length === 0) return "{}";
 
             const props = keys.map(key => {
                 const keyStr = /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? key : `"${key}"`;
-                return `${keyStr}: ${this.convertJsonToAstString(obj[key], indentLevel + 1)}`;
+
+                // If the value is an object, pass the old AST node to recurse
+                let childAstNode: ObjectLiteralExpression | undefined;
+                if (oldAstNode && typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+                    const oldProp = oldAstNode.getProperty(
+                        (p: any) => p.getName && (p.getName() === key || p.getName() === `"${key}"` || p.getName() === `'${key}'`)
+                    );
+                    if (oldProp && oldProp.isKind(SyntaxKind.PropertyAssignment)) {
+                        childAstNode = oldProp.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
+                    }
+                }
+
+                return `${keyStr}: ${this.convertJsonToAstString(obj[key], indentLevel + 1, childAstNode)}`;
             });
-            return `{\n${innerIndent}${props.join(`,\n${innerIndent}`)}\n${indent}}`;
+
+            const allProps = [...props, ...preservedProps];
+            return `{\n${innerIndent}${allProps.join(`,\n${innerIndent}`)}\n${indent}}`;
         }
         return "undefined";
     }
@@ -101,7 +149,12 @@ export class AstSchemaEditor {
                 (p: any) => p.getName && (p.getName() === propertyKey || p.getName() === `"${propertyKey}"`)
             );
 
-            const newInitializer = this.convertJsonToAstString(propertyConfig, 2);
+            let oldPropAstNode: ObjectLiteralExpression | undefined;
+            if (existingProp && existingProp.isKind(SyntaxKind.PropertyAssignment)) {
+                oldPropAstNode = existingProp.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
+            }
+
+            const newInitializer = this.convertJsonToAstString(propertyConfig, 2, oldPropAstNode);
 
             if (existingProp) {
                 if (existingProp.isKind(SyntaxKind.PropertyAssignment)) {
@@ -148,10 +201,16 @@ export class AstSchemaEditor {
         } else {
             // Update root level properties gracefully
             for (const key of Object.keys(collectionData)) {
-                if (key === "properties" || key === "relations" || key === "customId") continue; // Kept via other AST functions or handled separately.
+                if (key === "relations" || key === "customId") continue; // Kept via other AST functions or handled separately.
 
                 let prop = collectionObj.getProperty(key) as PropertyAssignment;
-                const newInit = this.convertJsonToAstString(collectionData[key], 1);
+
+                let oldAstNode: ObjectLiteralExpression | undefined;
+                if (prop && prop.isKind(SyntaxKind.PropertyAssignment)) {
+                    oldAstNode = prop.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
+                }
+
+                const newInit = this.convertJsonToAstString(collectionData[key], 1, oldAstNode);
                 if (prop) {
                     prop.setInitializer(newInit);
                 } else {

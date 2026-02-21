@@ -3,16 +3,16 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { ArrowBackIcon, Button, CircularProgress, IconButton, MailIcon, TextField, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo, useModeController } from "@firecms/core";
 
-import { CustomAuthController } from "../types";
+import { FireCMSAuthController } from "../types";
 
 /**
- * Props for CustomLoginView
+ * Props for FireCMSLoginView
  */
-export interface CustomLoginViewProps {
+export interface FireCMSLoginViewProps {
     /**
-     * Auth controller from useCustomAuthController
+     * Auth controller from useFireCMSAuthController
      */
-    authController: CustomAuthController;
+    authController: FireCMSAuthController;
 
     /**
      * Path to the logo displayed in the login screen
@@ -64,7 +64,7 @@ export interface CustomLoginViewProps {
  * Login view component for custom JWT authentication
  * Based on MongoLoginView pattern from @firecms/mongodb
  */
-export function CustomLoginView({
+export function FireCMSLoginView({
     logo,
     authController,
     noUserComponent,
@@ -73,7 +73,7 @@ export function CustomLoginView({
     notAllowedError,
     googleEnabled = false,
     googleClientId
-}: CustomLoginViewProps) {
+}: FireCMSLoginViewProps) {
 
     const modeState = useModeController();
 
@@ -219,7 +219,7 @@ function GoogleLoginButton({
 }: {
     disabled?: boolean,
     googleClientId: string,
-    authController: CustomAuthController
+    authController: FireCMSAuthController
 }) {
     const handleGoogleLogin = async () => {
         try {
@@ -285,7 +285,7 @@ function LoginForm({
 }: {
     onClose: () => void,
     onForgotPassword: () => void,
-    authController: CustomAuthController,
+    authController: FireCMSAuthController,
     mode: "light" | "dark",
     registrationMode: boolean,
     noUserComponent?: ReactNode,
@@ -424,7 +424,7 @@ function ForgotPasswordForm({
     authController
 }: {
     onClose: () => void,
-    authController: CustomAuthController
+    authController: FireCMSAuthController
 }) {
     const [email, setEmail] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);

@@ -115,6 +115,7 @@ async function startServer() {
     // OPTIONAL: Initialize REST/GraphQL API for external integrations
     await initializeFireCMSAPI(app, backend, {
         basePath: "/api",
+        collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         enableGraphQL: true,
         enableREST: true,
         cors: {

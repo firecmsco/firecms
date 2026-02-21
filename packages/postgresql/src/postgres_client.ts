@@ -125,8 +125,9 @@ export class PostgresDataSourceClient {
 
             const timeout = setTimeout(() => {
                 this.pendingRequests.delete(requestId);
+                this.authPromise = null; // Clear promise so we can retry later
                 reject(new Error("Authentication timeout"));
-            }, 10000);
+            }, 30000);
 
             this.pendingRequests.set(requestId, {
                 resolve: () => {
@@ -199,6 +200,17 @@ export class PostgresDataSourceClient {
             this.ws.onclose = () => {
                 console.log("Disconnected from PostgreSQL backend");
                 this.isConnected = false;
+                this.isAuthenticated = false;
+                this.authPromise = null;
+
+                // Reject pending auth promises
+                for (const [reqId, handlers] of this.pendingRequests.entries()) {
+                    if (reqId.startsWith("auth_")) {
+                        handlers.reject(new Error("Connection closed during authentication"));
+                        this.pendingRequests.delete(reqId);
+                    }
+                }
+
                 this.attemptReconnect();
             };
 

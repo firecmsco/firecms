@@ -1,6 +1,6 @@
-import { EntityCollection, makePropertiesEditable } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
-export const blogCollectionTemplate:EntityCollection = {
+export const blogCollectionTemplate: EntityCollection = {
     slug: "blog",
     dbPath: "blog",
     name: "Blog",
@@ -8,7 +8,7 @@ export const blogCollectionTemplate:EntityCollection = {
     icon: "article",
     description: "A collection of blog entries",
     defaultSize: "l",
-    properties: makePropertiesEditable({
+    properties: {
         name: {
             name: "Name",
             validation: { required: true },
@@ -108,5 +108,5 @@ export const blogCollectionTemplate:EntityCollection = {
                 previewAsTag: true
             }
         }
-    })
+    }
 };

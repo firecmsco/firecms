@@ -22,7 +22,7 @@ import { flattenKeys, removeEntityFromCache } from "../../util/entity_cache";
 import { Properties } from "@firecms/types";
 import { PropertyCollectionView } from "../../components/PropertyCollectionView";
 
-interface LocalChangesMenuProps<M extends object> {
+interface LocalChangesMenuProps<M extends Record<string, any>> {
     cacheKey: string;
     cachedData: Partial<M>;
     formex: FormexController<M>;
@@ -30,7 +30,7 @@ interface LocalChangesMenuProps<M extends object> {
     properties: Properties;
 }
 
-export function LocalChangesMenu<M extends object>({
+export function LocalChangesMenu<M extends Record<string, any>>({
     cachedData,
     formex,
     onClearLocalChanges,

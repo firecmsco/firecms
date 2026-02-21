@@ -5,11 +5,17 @@ import {
     EnumValueConfig,
     JsonLogicRule,
     PropertyConditions,
-    ResolvedProperty,
-    CMSType,
+    Property,
     Role
-} from "../types";
-import { getIn } from "@firecms/formex";
+} from "@firecms/types";
+
+/**
+ * Access a nested property from an object via dot notation.
+ */
+function getIn(obj: any, path: string): any {
+    if (!obj || !path) return undefined;
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+}
 
 let operationsRegistered = false;
 
@@ -152,10 +158,10 @@ export function buildConditionContext(params: {
 /**
  * Apply PropertyConditions to a resolved property, evaluating all JSON Logic rules.
  */
-export function applyPropertyConditions<T extends CMSType>(
-    property: ResolvedProperty<T>,
+export function applyPropertyConditions(
+    property: Property,
     context: ConditionContext
-): ResolvedProperty<T> {
+): Property {
     const { conditions } = property;
     if (!conditions) return property;
 
@@ -236,7 +242,7 @@ export function applyPropertyConditions<T extends CMSType>(
     // REFERENCE CONDITIONS
     // ═══════════════════════════════════════════════════════════════════════
 
-    if (result.dataType === "reference") {
+    if (result.type === "reference") {
         if (conditions.referencePath) {
             (result as any).path = evaluateCondition(conditions.referencePath, context);
         }
@@ -249,7 +255,7 @@ export function applyPropertyConditions<T extends CMSType>(
     // ARRAY CONDITIONS
     // ═══════════════════════════════════════════════════════════════════════
 
-    if (result.dataType === "array") {
+    if (result.type === "array") {
         if (conditions.canAddElements !== undefined) {
             (result as any).canAddElements = evaluateCondition(conditions.canAddElements, context);
         }

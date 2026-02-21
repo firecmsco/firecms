@@ -1,6 +1,6 @@
 import React from "react";
 import { cls, ExpandMoreIcon, Typography } from "@firecms/ui";
-import { NavigationEntry } from "../types";
+import { NavigationEntry } from "@firecms/types";
 import { IconForView } from "../util";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
 

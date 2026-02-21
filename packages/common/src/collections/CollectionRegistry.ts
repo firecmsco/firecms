@@ -10,12 +10,19 @@ import {
 import { deepEqual } from "fast-equals";
 
 import { enumToObjectEntries, getSubcollections, removeFunctions, resolveCollectionRelations } from "../util";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export class CollectionRegistry {
 
+    // Normalized runtime layer (used by Data Grid / UI)
     private collectionsByDbPath = new Map<string, EntityCollection>();
     private collectionsBySlug = new Map<string, EntityCollection>();
     private rootCollections: EntityCollection[] = [];
+
+    // Raw configuration layer (used by Collection Editor AST generator)
+    private rawCollectionsByDbPath = new Map<string, EntityCollection>();
+    private rawCollectionsBySlug = new Map<string, EntityCollection>();
+    private rawRootCollections: EntityCollection[] = [];
 
     constructor(collections?: EntityCollection[]) {
         if (collections) {
@@ -27,6 +34,10 @@ export class CollectionRegistry {
         this.collectionsByDbPath.clear();
         this.collectionsBySlug.clear();
         this.rootCollections = [];
+
+        this.rawCollectionsByDbPath.clear();
+        this.rawCollectionsBySlug.clear();
+        this.rawRootCollections = [];
     }
 
     /**
@@ -49,37 +60,50 @@ export class CollectionRegistry {
             this.reset();
 
             // Register the normalized collections
-            normalizedCollections.forEach(c => this.register(c));
+            normalizedCollections.forEach((c, index) => this.register(c, collections[index]));
         }
 
         return hasChanged;
     }
 
-    register(collection: EntityCollection) {
+    register(collection: EntityCollection, rawCollection?: EntityCollection) {
+        const raw = rawCollection ? cloneDeep(rawCollection) : cloneDeep(collection);
+
         this.rootCollections.push(collection);
-        this._registerRecursively(collection);
+        this.rawRootCollections.push(raw);
+
+        this._registerRecursively(collection, raw);
     }
 
-    private _registerRecursively(collection: EntityCollection) {
+    private _registerRecursively(collection: EntityCollection, rawCollection: EntityCollection) {
         if (this.collectionsByDbPath.has(collection.dbPath)) {
             return;
         }
 
         const normalizedCollection = this.normalizeCollection(collection);
         this.collectionsByDbPath.set(normalizedCollection.dbPath, normalizedCollection);
-        if (normalizedCollection.slug)
+        this.rawCollectionsByDbPath.set(rawCollection.dbPath, rawCollection);
+
+        if (normalizedCollection.slug) {
             this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);
+        }
+        if (rawCollection.slug) {
+            this.rawCollectionsBySlug.set(rawCollection.slug, rawCollection);
+        }
 
         const subcollections = getSubcollections(collection);
+        const rawSubcollections = getSubcollections(rawCollection);
 
-        if (subcollections) {
-            subcollections.forEach(subCollection => this._registerRecursively(this.normalizeCollection(subCollection)));
+        if (subcollections && rawSubcollections) {
+            subcollections.forEach((subCollection, index) => {
+                this._registerRecursively(this.normalizeCollection(subCollection), cloneDeep(rawSubcollections[index]));
+            });
         }
     }
 
     public normalizeCollection(collection: EntityCollection): EntityCollection {
         const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
-        collection.textSearchEnabled = collection.textSearchEnabled === undefined ? true : collection.textSearchEnabled;
+
         collection.properties = properties;
         return collection;
     }
@@ -129,6 +153,16 @@ export class CollectionRegistry {
 
         // Fallback to dbPath lookup
         return this.collectionsByDbPath.get(path);
+    }
+
+    /**
+     * Gets the pristine, un-normalized collection exactly as it was provided.
+     * Useful for the AST editor so it doesn't accidentally serialize injected metadata back to disk.
+     */
+    getRaw(path: string): EntityCollection | undefined {
+        const bySlug = this.rawCollectionsBySlug.get(path);
+        if (bySlug) return bySlug;
+        return this.rawCollectionsByDbPath.get(path);
     }
 
     /**
@@ -182,6 +216,10 @@ export class CollectionRegistry {
 
     getCollections(): EntityCollection[] {
         return Array.from(this.collectionsByDbPath.values());
+    }
+
+    getRawCollections(): EntityCollection[] {
+        return Array.from(this.rawCollectionsByDbPath.values());
     }
 
     /**

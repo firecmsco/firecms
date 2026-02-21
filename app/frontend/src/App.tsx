@@ -22,8 +22,8 @@ import { useLocalCollectionsConfigController, useCollectionEditorPlugin } from "
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
 import {
-    useCustomAuthController,
-    CustomLoginView,
+    useFireCMSAuthController,
+    FireCMSLoginView,
     useBackendUserManagement,
     createUserManagementAdminViews
 } from "@firecms/auth";
@@ -47,7 +47,7 @@ export function App() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Custom auth controller (replaces Firebase auth)
-    const authController = useCustomAuthController({
+    const authController = useFireCMSAuthController({
         apiUrl: API_URL,
         googleClientId: GOOGLE_CLIENT_ID
     });
@@ -160,7 +160,7 @@ export function App() {
                         // Show login if no user (backend handles auth validation)
                         if (!authController.user) {
                             return (
-                                <CustomLoginView
+                                <FireCMSLoginView
                                     authController={authController}
                                     googleEnabled={!!GOOGLE_CLIENT_ID}
                                     googleClientId={GOOGLE_CLIENT_ID}

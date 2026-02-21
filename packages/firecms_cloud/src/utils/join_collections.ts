@@ -1,11 +1,9 @@
 import { EntityCollection, MapProperty, ModifyCollectionProps, Properties, Property, } from "@firecms/types";
-import { mergeDeep } from "./objects";
-import { sortProperties } from "./collections";
-import { isPropertyBuilder } from "./entities";
+import { mergeDeep, sortProperties, isPropertyBuilder } from "@firecms/common";
 
 function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) => (EntityCollection | void)) | undefined,
-                             collection: EntityCollection,
-                             parentPaths: string[]) {
+    collection: EntityCollection,
+    parentPaths: string[]) {
     if (modifyCollection) {
         const modified = modifyCollection({
             collection,
@@ -29,9 +27,9 @@ function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) =
  *
  */
 export function joinCollectionLists(targetCollections: EntityCollection[],
-                                    sourceCollections: EntityCollection[] | undefined,
-                                    parentPaths: string[] = [],
-                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void): EntityCollection[] {
+    sourceCollections: EntityCollection[] | undefined,
+    parentPaths: string[] = [],
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void): EntityCollection[] {
 
     // merge collections that are in both lists
     const updatedCollections = (sourceCollections ?? [])
@@ -68,9 +66,9 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
  *
  */
 export function mergeCollection(target: EntityCollection,
-                                source: EntityCollection,
-                                parentPaths: string[] = [],
-                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
+    source: EntityCollection,
+    parentPaths: string[] = [],
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
     const subcollectionsMerged = joinCollectionLists(
@@ -126,8 +124,6 @@ function mergeProperty(target: Property, source: Property): Property {
         return target;
     } else {
         const mergedProperty = mergeDeep(target, source);
-        const targetEditable = target.editable === undefined ? true : Boolean(target.editable);
-        const sourceEditable = source.editable === undefined ? true : Boolean(source.editable);
 
         if (source.type === "map" && source.properties) {
             const targetProperties = ("properties" in target ? target.properties : {}) as Properties;
@@ -143,14 +139,12 @@ function mergeProperty(target: Property, source: Property): Property {
             });
             return {
                 ...mergedProperty,
-                editable: targetEditable && sourceEditable,
                 properties: mergedProperties,
                 propertiesOrder: mergedPropertiesOrder
             } as MapProperty;
         }
         return {
             ...mergedProperty,
-            editable: targetEditable && sourceEditable
         };
     }
 }

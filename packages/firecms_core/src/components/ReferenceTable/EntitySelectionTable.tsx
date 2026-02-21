@@ -212,11 +212,11 @@ export function EntitySelectionTable<M extends Record<string, any>>(
     };
 
     const tableRowActionsBuilder = ({
-                                        entity,
-                                        size,
-                                        width,
-                                        frozen
-                                    }: {
+        entity,
+        size,
+        width,
+        frozen
+    }: {
         entity: Entity<any>,
         size: CollectionSize,
         width: number,
@@ -246,7 +246,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 
     if (!collection) {
         return <ErrorView
-            error={"Could not find collection with id " + collection}/>
+            error={"Could not find collection with id " + collection} />
     }
 
     const displayedColumnIds = useColumnIds(collection, false);
@@ -262,8 +262,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
     const {
         textSearchLoading,
         textSearchInitialised,
-        onTextSearchClick,
-        textSearchEnabled
+        onTextSearchClick
     } =
         useTableSearchHelper({
             collection,
@@ -278,8 +277,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
                         textSearchLoading={textSearchLoading}
-                        onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
-                        textSearchEnabled={textSearchEnabled}
+                        onTextSearchClick={!textSearchInitialised ? onTextSearchClick : undefined}
                         additionalFields={collection.additionalFields}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
@@ -291,7 +289,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
                             <IconForView
                                 size={"small"}
                                 collectionOrView={collection}
-                                className={"text-surface-300 dark:text-surface-600"}/>
+                                className={"text-surface-300 dark:text-surface-600"} />
                             {collection.singularName
                                 ? `Select ${collection.singularName}`
                                 : `Select from ${collection.name}`}
@@ -305,14 +303,14 @@ export function EntitySelectionTable<M extends Record<string, any>>(
                             collection={collection}
                             path={path}
                             onNewClick={onNewClick}
-                            onClear={onClear}/>
+                            onClear={onClear} />
                         }
                     />}
             </div>
             <DialogActions translucent={false}>
                 {description &&
                     <Typography variant={"body2"}
-                                className="grow text-left">
+                        className="grow text-left">
                         {description}
                     </Typography>}
                 <Button
@@ -328,11 +326,11 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 }
 
 function EntitySelectionDialogActions({
-                                          collection,
-                                          path,
-                                          onClear,
-                                          onNewClick
-                                      }: {
+    collection,
+    path,
+    onClear,
+    onNewClick
+}: {
     collection: EntityCollection<any>,
     path: string,
     onClear: () => void,
@@ -353,18 +351,18 @@ function EntitySelectionDialogActions({
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}
-                startIcon={<AddIcon/>}>
+                startIcon={<AddIcon />}>
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
                 onClick={onClick}>
-                <AddIcon/>
+                <AddIcon />
             </Button>);
 
     return (
         <>
             <Button onClick={onClear}
-                    variant={"text"}>
+                variant={"text"}>
                 Clear
             </Button>
             {addButton}

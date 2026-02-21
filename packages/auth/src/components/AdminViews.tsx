@@ -62,7 +62,7 @@ export function createUserManagementAdminViews({ userManagement, apiUrl, getAuth
 // RoleChip Component (matches original)
 // ============================================
 function RoleChip({ role }: { role: Role }) {
-    let colorScheme: string;
+    let colorScheme: any;
     if (role.isAdmin) {
         colorScheme = "blueDarker";
     } else if (role.id === "editor") {

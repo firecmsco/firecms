@@ -458,6 +458,17 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         return registry.get(slug) as EC | undefined;
     }, []);
 
+    const getRawCollection = useCallback((slugOrPath: string): EC | undefined => {
+        const registry = collectionRegistryRef.current;
+        if (registry === undefined) return undefined;
+
+        const cleanedPath = removeInitialAndTrailingSlashes(slugOrPath);
+        if (!cleanedPath) return undefined;
+
+        // Ensure we check slugs as well as paths natively in getRaw()
+        return registry.getRaw(cleanedPath) as EC | undefined;
+    }, []);
+
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
         const registry = collectionRegistryRef.current;
         if (registry === undefined)
@@ -579,6 +590,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         baseCollectionPath,
         initialised,
         getCollection,
+        getRawCollection,
         getCollectionById: getCollectionBySlug,
         getCollectionFromPaths,
         getCollectionFromIds,

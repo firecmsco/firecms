@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { Entity, EntityCollection, Property } from "@firecms/types";
-import { getValueInPath } from "@firecms/common";
-import { getEntityImagePreviewPropertyKey, getEntityTitlePropertyKey } from "../../util/previews";
+import { getValueInPath, getEntityImagePreviewPropertyKey } from "@firecms/common";
+import { getEntityTitlePropertyKey } from "../../util/previews";
 import { IconForView } from "../../util";
 import { Checkbox, cls, defaultBorderMixin } from "@firecms/ui";
 import { PropertyPreview } from "../../preview";

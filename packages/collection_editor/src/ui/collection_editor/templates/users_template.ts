@@ -1,4 +1,4 @@
-import { EntityCollection, makePropertiesEditable } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
 export const usersCollectionTemplate: EntityCollection = {
     slug: "users",
@@ -7,7 +7,7 @@ export const usersCollectionTemplate: EntityCollection = {
     singularName: "User",
     description: "Registered users in the app/web",
     icon: "person",
-    properties: makePropertiesEditable({
+    properties: {
         displayName: {
             name: "Display name",
             type: "string"
@@ -38,5 +38,5 @@ export const usersCollectionTemplate: EntityCollection = {
             type: "string",
             url: "image"
         }
-    }),
+    },
 };

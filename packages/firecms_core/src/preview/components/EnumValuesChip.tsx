@@ -16,12 +16,12 @@ export interface EnumValuesChipProps {
  * @group Preview components
  */
 export function EnumValuesChip({
-                                   enumValues,
-                                   enumKey,
-                                   size,
-                                   className,
-                                   children
-                               }: EnumValuesChipProps) {
+    enumValues,
+    enumKey,
+    size,
+    className,
+    children
+}: EnumValuesChipProps) {
     if (!enumValues) return null;
     const enumValuesConfig = enumToObjectEntries(enumValues);
     const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValuesConfig, enumKey) : undefined;

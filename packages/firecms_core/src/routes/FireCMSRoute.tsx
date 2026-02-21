@@ -97,7 +97,7 @@ export function FireCMSRoute() {
     }
 
     if (isSidePanel) {
-        const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
+        const lastCollectionEntry = [...navigationEntries].reverse().find((entry: any) => entry.type === "collection");
         if (lastCollectionEntry) {
             let collection: EntityCollection<any> | undefined;
             const firstEntry = navigationEntries[0] as NavigationViewCollectionInternal<any>;
@@ -158,14 +158,14 @@ function EntityFullScreenRoute({
     // is navigating away blocked
     const blocked = useRef(false);
 
-    const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
+    const lastEntityEntry = [...navigationEntries].reverse().find((entry: any) => entry.type === "entity");
     const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
 
-    const lastCustomView = navigationEntriesAfterEntity.findLast(
-        (entry) => entry.type === "custom_view" || entry.type === "collection"
+    const lastCustomView = [...navigationEntriesAfterEntity].reverse().find(
+        (entry: any) => entry.type === "custom_view" || entry.type === "collection"
     ) as NavigationViewCollectionInternal<any> | NavigationViewEntityCustomInternal<any> | undefined;
 
-    const entityId = lastEntityEntry?.entityId;
+    const entityId = (lastEntityEntry as any)?.entityId;
 
     const urlTab = getSelectedTabFromUrl(isNew, lastCustomView);
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
@@ -196,7 +196,7 @@ function EntityFullScreenRoute({
         // console.warn("Blocker not available, navigation will not be blocked");
     }
 
-    const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
+    const lastCollectionEntry = [...navigationEntries].reverse().find((entry: any) => entry.type === "collection");
 
     if (isNew && !lastCollectionEntry) {
         throw new Error("INTERNAL: No collection found in the navigation");
@@ -206,7 +206,7 @@ function EntityFullScreenRoute({
         return <NotFoundPage />;
     }
 
-    const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
+    const collection = isNew ? (lastCollectionEntry as any)!.collection : (lastEntityEntry as any)!.parentCollection;
     const fullIdPath = isNew ? lastCollectionEntry!.slug : lastEntityEntry!.slug;
     const collectionPath = navigation.resolveDatabasePathsFrom(fullIdPath);
     return <>

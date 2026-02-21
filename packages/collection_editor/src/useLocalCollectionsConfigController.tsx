@@ -1,36 +1,41 @@
 import { CollectionsConfigController } from "./types/config_controller";
 import { EntityCollection, Properties, getSubcollections } from "@firecms/core";
-import { makePropertiesEditable } from "@firecms/common";
 import { PersistedCollection } from "./types/persisted_collection";
 
+
+
 export function useLocalCollectionsConfigController(
-    apiUrl: string = "http://localhost:3001/api",
+    apiUrl: string = "http://localhost:3001",
     baseCollections: EntityCollection[] = []
 ): CollectionsConfigController {
 
-    const markAsEditable = (c: PersistedCollection, visited = new Set<PersistedCollection>()) => {
-        if (visited.has(c)) return c;
-        visited.add(c);
-
-        c.editable = true;
-        if (c.properties) {
-            makePropertiesEditable(c.properties as Properties);
-        }
-        getSubcollections(c).forEach(sub => markAsEditable(sub as PersistedCollection, visited));
-        return c;
-    };
-
-    const parsedCollections = baseCollections.map(c => markAsEditable({ ...c }));
+    const parsedCollections = baseCollections;
 
     const request = async (endpoint: string, payload: any) => {
-        const response = await fetch(`${apiUrl}/schema-editor${endpoint}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        if (!response.ok) {
-            const err = await response.json().catch(() => ({}));
-            throw new Error(err.error?.message || err.error || "Error communicating with local dev server");
+        console.log("dispatching dev server request", endpoint, payload);
+        try {
+            const response = await fetch(`${apiUrl.replace(/\/$/, '')}/api/schema-editor${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            console.log("dev server response", endpoint, response.status);
+            if (!response.ok) {
+                const text = await response.text();
+                let err: any = {};
+                try {
+                    err = JSON.parse(text);
+                } catch (e) { }
+
+                if (Object.keys(err).length === 0) {
+                    err = { message: text };
+                }
+                console.error("dev server error payload:", err);
+                throw new Error(err.error?.message || err.error || err.message || "Error communicating with local dev server");
+            }
+        } catch (e) {
+            console.error("fetch request failed", e);
+            throw e;
         }
     };
 

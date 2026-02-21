@@ -6,22 +6,21 @@
 
 // Types
 export type {
-    CustomAuthController,
-    CustomAuthControllerProps,
+    FireCMSAuthController,
+    FireCMSAuthControllerProps,
     AuthTokens,
     UserInfo,
     AuthResponse,
     RefreshResponse
 } from "./types";
 
-// Hooks
-export { useCustomAuthController } from "./hooks/useCustomAuthController";
+export { useFireCMSAuthController } from "./hooks/useFireCMSAuthController";
 export { useBackendUserManagement } from "./hooks/useBackendUserManagement";
 export type { BackendUserManagementConfig, UserManagement } from "./hooks/useBackendUserManagement";
 
 // Components
-export { CustomLoginView } from "./components/CustomLoginView";
-export type { CustomLoginViewProps } from "./components/CustomLoginView";
+export { FireCMSLoginView } from "./components/FireCMSLoginView";
+export type { FireCMSLoginViewProps } from "./components/FireCMSLoginView";
 export { createUserManagementAdminViews } from "./components/AdminViews";
 
 // API utilities

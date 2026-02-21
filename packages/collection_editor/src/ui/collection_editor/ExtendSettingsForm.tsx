@@ -65,11 +65,10 @@ export function ExtendSettingsForm({
                     collectionInference={collectionInference}
                     getUser={getUser}
                     parentCollectionIds={parentCollectionIds}
-                    embedded={true}
                 />
 
                 {/* Entity Actions Section */}
-                <EntityActionsEditTab collection={collection} embedded={true} />
+                <EntityActionsEditTab collection={collection} />
 
                 {/* Reset to code (for merged collections) */}
                 {isMergedCollection && onResetToCode && (

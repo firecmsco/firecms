@@ -119,8 +119,6 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
         forceFilter?: FilterValues<Extract<keyof M, string>>;
 
-        textSearchEnabled?: boolean;
-
         inlineEditing?: boolean;
 
         additionalFields?: AdditionalFieldDelegate<M, USER>[];

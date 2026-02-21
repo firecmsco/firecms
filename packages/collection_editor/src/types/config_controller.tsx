@@ -1,4 +1,4 @@
-import { NavigationGroupMapping, CMSType, EntityCollection, NavigationGroupMapping, Property } from "@firecms/core";
+import { EntityCollection, NavigationGroupMapping, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {

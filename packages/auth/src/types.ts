@@ -1,10 +1,10 @@
 import { AuthController, Role, User } from "@firecms/core";
 
 /**
- * Custom auth controller that extends the base AuthController
+ * Auth controller that extends the base AuthController
  * with additional methods for email/password and Google login
  */
-export type CustomAuthController = AuthController & {
+export type FireCMSAuthController = AuthController & {
     /** Login with Google ID token from frontend Google Sign-In */
     googleLogin: (idToken: string) => Promise<void>;
     /** Login with email and password */
@@ -26,9 +26,9 @@ export type CustomAuthController = AuthController & {
 }
 
 /**
- * Props for useCustomAuthController hook
+ * Props for useFireCMSAuthController hook
  */
-export interface CustomAuthControllerProps {
+export interface FireCMSAuthControllerProps {
     /** Base URL of the backend API */
     apiUrl?: string;
     /** Google OAuth client ID (optional, enables Google login) */

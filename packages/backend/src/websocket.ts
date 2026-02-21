@@ -69,6 +69,7 @@ export function createPostgresWebSocket(
                             session.user = user;
                             session.authenticated = true;
                         }
+                        console.debug(`[WS] replying AUTH_SUCCESS for requestId ${requestId}`);
                         ws.send(JSON.stringify({
                             type: "AUTH_SUCCESS",
                             requestId,
@@ -76,6 +77,7 @@ export function createPostgresWebSocket(
                         }));
                         console.debug(`🔐 [WebSocket Server] Client ${clientId} authenticated as ${user.userId}`);
                     } else {
+                        console.debug(`[WS] replying AUTH_ERROR for requestId ${requestId} (invalid token)`);
                         ws.send(JSON.stringify({
                             type: "AUTH_ERROR",
                             requestId,

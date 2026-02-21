@@ -192,7 +192,13 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         try {
             if (navigation.initialised) {
                 if (props.editedCollectionId) {
-                    setCollection(navigation.getCollectionFromPaths([...(props.parentCollectionIds ?? []), props.editedCollectionId]));
+                    // We must use getRawCollection so the editor schema fields 
+                    // aren't polluted with dynamically injected runtime `relations`.
+                    // The path lookup relies on generating a fake child path to resolve through the registry
+                    const dbPath = [...(props.parentCollectionIds ?? []), props.editedCollectionId]
+                        .reduce((acc, segment, i) => i === 0 ? segment : `${acc}/fake_id/${segment}`, "");
+
+                    setCollection(navigation.getRawCollection(dbPath) as PersistedCollection<any>);
                 } else {
                     setCollection(undefined);
                 }
@@ -201,7 +207,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         } catch (e) {
             console.error(e);
         }
-    }, [props.editedCollectionId, props.parentCollectionIds, navigation.initialised, navigation.getCollectionFromPaths]);
+    }, [props.editedCollectionId, props.parentCollectionIds, navigation.initialised, navigation.getRawCollection]);
 
     if (!topLevelNavigation) {
         throw Error("Internal: Navigation not ready in collection editor");
@@ -225,8 +231,6 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
             ? {
                 // When duplicating, copy all properties but clear identifiers
                 ...copyFromProp,
-                id: randomString(16),
-                path: "",
                 name: "",
                 subcollections: undefined, // Don't copy subcollections
                 ownerId: authController.user?.uid ?? ""
@@ -371,9 +375,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             collection.dbPath,
             collection.collectionGroup ?? false,
             parentPaths ?? [],
-            collection.databaseId,
-            collection.initialFilter,
-            collection.initialSort
+            collection.databaseId
         );
     } : undefined;
 
@@ -428,10 +430,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         try {
 
             if (!isNewCollection) {
-                saveCollection(newCollectionState).then(() => {
-                    aiModifiedPaths?.clearAllPaths();
-                    formexController.resetForm();
-                    handleClose(newCollectionState);
+                saveCollection(newCollectionState).then((success) => {
+                    if (success) {
+                        aiModifiedPaths?.clearAllPaths();
+                        formexController.resetForm();
+                        handleClose(newCollectionState);
+                    }
                 });
                 return;
             }
@@ -468,10 +472,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             } else if (currentView === "import_data_preview") {
                 setNextMode();
             } else if (currentView === "properties") {
-                saveCollection(newCollectionState).then(() => {
-                    formexController.resetForm({ values: initialValues });
-                    setNextMode();
-                    handleClose(newCollectionState);
+                saveCollection(newCollectionState).then((success) => {
+                    if (success) {
+                        formexController.resetForm({ values: initialValues });
+                        setNextMode();
+                        handleClose(newCollectionState);
+                    }
                 });
             } else {
                 setNextMode();
@@ -496,7 +502,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 schema.validateSync(col, { abortEarly: false });
             } catch (e: any) {
                 e.inner.forEach((err: any) => {
-                    errors[err.slug] = err.message;
+                    if (err.path) {
+                        errors[err.path] = err.message;
+                    }
                 });
             }
         }
@@ -512,6 +520,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             if (idError) {
                 errors.id = idError;
             }
+        }
+        if (Object.keys(errors).length > 0) {
+            console.error("Formex validation blocked save:", errors, "Current view:", currentView);
         }
         return errors;
     };

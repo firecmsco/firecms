@@ -128,9 +128,9 @@ export const PropertyForm = React.memo(
         } : undefined);
 
         const doOnPropertyChanged = ({
-                                         id,
-                                         property
-                                     }: OnPropertyChangedParams) => {
+            id,
+            property
+        }: OnPropertyChangedParams) => {
             const params = {
                 id,
                 previousId: lastSubmittedProperty.current?.id,
@@ -156,10 +156,7 @@ export const PropertyForm = React.memo(
                 } = newPropertyWithId;
                 doOnPropertyChanged({
                     id,
-                    property: {
-                        ...property,
-                        editable: property.editable ?? true
-                    }
+                    property: property as Property
                 });
                 if (!existingProperty)
                     controller.resetForm({ values: initialValue });
@@ -231,28 +228,28 @@ export const PropertyForm = React.memo(
                 allowDataInference={allowDataInference}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
-                {...formexController}/>
+                {...formexController} />
         </Formex>;
     }, (a, b) =>
-        a.getData === b.getData &&
-        a.propertyKey === b.propertyKey &&
-        a.propertyNamespace === b.propertyNamespace &&
-        a.includeIdAndName === b.includeIdAndName &&
-        a.autoOpenTypeSelect === b.autoOpenTypeSelect &&
-        a.autoUpdateId === b.autoUpdateId &&
-        a.existingPropertyKeys === b.existingPropertyKeys &&
-        a.existingProperty === b.existingProperty
+    a.getData === b.getData &&
+    a.propertyKey === b.propertyKey &&
+    a.propertyNamespace === b.propertyNamespace &&
+    a.includeIdAndName === b.includeIdAndName &&
+    a.autoOpenTypeSelect === b.autoOpenTypeSelect &&
+    a.autoUpdateId === b.autoUpdateId &&
+    a.existingPropertyKeys === b.existingPropertyKeys &&
+    a.existingProperty === b.existingProperty
 );
 
 export function PropertyFormDialog({
-                                       open,
-                                       onCancel,
-                                       onOkClicked,
-                                       onPropertyChanged,
-                                       getData,
-                                       collectionEditable,
-                                       ...formProps
-                                   }: PropertyFormProps & {
+    open,
+    onCancel,
+    onOkClicked,
+    onPropertyChanged,
+    getData,
+    collectionEditable,
+    ...formProps
+}: PropertyFormProps & {
     open?: boolean;
     onOkClicked?: () => void;
     onCancel?: () => void;
@@ -268,25 +265,25 @@ export function PropertyFormDialog({
         fullWidth={true}
     >
         <form noValidate={true}
-              autoComplete={"off"}
-              onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  formexRef.current?.handleSubmit(e)
-              }}>
+            autoComplete={"off"}
+            onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                formexRef.current?.handleSubmit(e)
+            }}>
             <DialogTitle hidden>Property edit view</DialogTitle>
             <DialogContent>
 
                 <PropertyForm {...formProps}
-                              onDismiss={onCancel}
-                              onPropertyChanged={(params) => {
-                                  onPropertyChanged?.(params);
-                                  onOkClicked?.();
-                              }}
-                              collectionEditable={collectionEditable}
-                              onPropertyChangedImmediate={false}
-                              getController={getController}
-                              getData={getData}
+                    onDismiss={onCancel}
+                    onPropertyChanged={(params) => {
+                        onPropertyChanged?.(params);
+                        onOkClicked?.();
+                    }}
+                    collectionEditable={collectionEditable}
+                    onPropertyChangedImmediate={false}
+                    getController={getController}
+                    getData={getData}
                 />
             </DialogContent>
 
@@ -311,26 +308,26 @@ export function PropertyFormDialog({
 }
 
 function PropertyEditFormFields({
-                                    values,
-                                    errors,
-                                    setValues,
-                                    existing,
-                                    autoUpdateId = false,
-                                    autoOpenTypeSelect,
-                                    includeIdAndTitle,
-                                    onPropertyChanged,
-                                    onDelete,
-                                    propertyNamespace,
-                                    onDismiss,
-                                    onError,
-                                    showErrors,
-                                    disabled,
-                                    inArray,
-                                    getData,
-                                    allowDataInference,
-                                    propertyConfigs,
-                                    collectionEditable
-                                }: {
+    values,
+    errors,
+    setValues,
+    existing,
+    autoUpdateId = false,
+    autoOpenTypeSelect,
+    includeIdAndTitle,
+    onPropertyChanged,
+    onDelete,
+    propertyNamespace,
+    onDismiss,
+    onError,
+    showErrors,
+    disabled,
+    inArray,
+    getData,
+    allowDataInference,
+    propertyConfigs,
+    collectionEditable
+}: {
     includeIdAndTitle?: boolean;
     existing: boolean;
     autoUpdateId?: boolean;
@@ -401,16 +398,16 @@ function PropertyEditFormFields({
         selectedFieldConfigId === "email") {
         childComponent =
             <StringPropertyField widgetId={selectedFieldConfigId}
-                                 disabled={disabled}
-                                 showErrors={showErrors}/>;
+                disabled={disabled}
+                showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "url") {
         childComponent =
             <UrlPropertyField disabled={disabled}
-                              showErrors={showErrors}/>;
+                showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "markdown") {
         childComponent =
             <MarkdownPropertyField disabled={disabled}
-                                   showErrors={showErrors}/>;
+                showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "select" ||
         selectedFieldConfigId === "number_select") {
         childComponent = <EnumPropertyField
@@ -419,7 +416,7 @@ function PropertyEditFormFields({
             updateIds={!existing}
             disabled={disabled}
             getData={getData}
-            showErrors={showErrors}/>;
+            showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "multi_select" ||
         selectedFieldConfigId === "multi_number_select") {
         childComponent = <EnumPropertyField
@@ -428,64 +425,64 @@ function PropertyEditFormFields({
             disabled={disabled}
             allowDataInference={allowDataInference}
             getData={getData}
-            showErrors={showErrors}/>;
+            showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "file_upload") {
         childComponent =
             <StoragePropertyField existing={existing}
-                                  multiple={false}
-                                  disabled={disabled}/>;
+                multiple={false}
+                disabled={disabled} />;
     } else if (selectedFieldConfigId === "multi_file_upload") {
         childComponent =
             <StoragePropertyField existing={existing}
-                                  multiple={true}
-                                  disabled={disabled}/>;
+                multiple={true}
+                disabled={disabled} />;
     } else if (selectedFieldConfigId === "switch") {
-        childComponent = <BooleanPropertyField disabled={disabled}/>;
+        childComponent = <BooleanPropertyField disabled={disabled} />;
     } else if (selectedFieldConfigId === "number_input") {
-        childComponent = <NumberPropertyField disabled={disabled}/>;
+        childComponent = <NumberPropertyField disabled={disabled} />;
     } else if (selectedFieldConfigId === "group") {
         childComponent =
             <MapPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
-                              collectionEditable={collectionEditable}
-                              propertyConfigs={propertyConfigs}/>;
+                collectionEditable={collectionEditable}
+                propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "block") {
         childComponent =
             <BlockPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
-                                collectionEditable={collectionEditable}
-                                propertyConfigs={propertyConfigs}/>;
+                collectionEditable={collectionEditable}
+                propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "reference") {
         childComponent =
             <ReferencePropertyField showErrors={showErrors}
-                                    existing={existing}
-                                    multiple={false}
-                                    disabled={disabled}/>;
+                existing={existing}
+                multiple={false}
+                disabled={disabled} />;
     } else if (selectedFieldConfigId === "reference_as_string") {
         childComponent =
             <ReferencePropertyField showErrors={showErrors}
-                                    existing={existing}
-                                    asString={true}
-                                    multiple={false}
-                                    disabled={disabled}/>;
+                existing={existing}
+                asString={true}
+                multiple={false}
+                disabled={disabled} />;
     } else if (selectedFieldConfigId === "date_time") {
-        childComponent = <DateTimePropertyField disabled={disabled}/>;
+        childComponent = <DateTimePropertyField disabled={disabled} />;
     } else if (selectedFieldConfigId === "multi_references") {
         childComponent =
             <ReferencePropertyField showErrors={showErrors}
-                                    existing={existing}
-                                    multiple={true}
-                                    disabled={disabled}/>;
+                existing={existing}
+                multiple={true}
+                disabled={disabled} />;
     } else if (selectedFieldConfigId === "repeat") {
         childComponent =
             <RepeatPropertyField showErrors={showErrors}
-                                 existing={existing}
-                                 getData={getData}
-                                 allowDataInference={allowDataInference}
-                                 disabled={disabled}
-                                 collectionEditable={collectionEditable}
-                                 propertyConfigs={propertyConfigs}/>;
+                existing={existing}
+                getData={getData}
+                allowDataInference={allowDataInference}
+                disabled={disabled}
+                collectionEditable={collectionEditable}
+                propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "key_value") {
         childComponent =
-            <KeyValuePropertyField disabled={disabled}/>;
+            <KeyValuePropertyField disabled={disabled} />;
     } else {
         childComponent = null;
     }
@@ -517,12 +514,12 @@ function PropertyEditFormFields({
                         showError={Boolean(selectedWidgetError)}
                         existing={existing}
                         propertyConfigs={propertyConfigs}
-                        inArray={inArray}/>
+                        inArray={inArray} />
 
                     {selectedWidgetError &&
                         <Typography variant="caption"
-                                    className={"ml-3.5"}
-                                    color={"error"}>Required</Typography>}
+                            className={"ml-3.5"}
+                            color={"error"}>Required</Typography>}
 
                     {/*<Typography variant="caption" className={"ml-3.5"}>Define your own custom properties and*/}
                     {/*    components</Typography>*/}
@@ -535,36 +532,36 @@ function PropertyEditFormFields({
                         className="m-4"
                         disabled={disabled}
                         onClick={() => setDeleteDialogOpen(true)}>
-                        <DeleteIcon/>
+                        <DeleteIcon />
                     </IconButton>}
             </div>
 
             <div className={"grid grid-cols-12 gap-y-12 mt-8 mb-8"}>
                 {includeIdAndTitle &&
                     <CommonPropertyFields showErrors={showErrors}
-                                          disabledId={existing}
-                                          isNewProperty={!existing}
-                                          disabled={disabled}
-                                          autoUpdateId={autoUpdateId}
-                                          ref={nameFieldRef}/>}
+                        disabledId={existing}
+                        isNewProperty={!existing}
+                        disabled={disabled}
+                        autoUpdateId={autoUpdateId}
+                        ref={nameFieldRef} />}
 
                 {childComponent}
 
                 <div className={"col-span-12"}>
-                    <AdvancedPropertyValidation disabled={disabled}/>
+                    <AdvancedPropertyValidation disabled={disabled} />
                 </div>
             </div>
 
             {onDelete &&
                 <ConfirmationDialog open={deleteDialogOpen}
-                                    onAccept={() => onDelete(values?.id, propertyNamespace)}
-                                    onCancel={() => setDeleteDialogOpen(false)}
-                                    title={<div>Delete this property?</div>}
-                                    body={
-                                        <div> This will <b>not delete any
-                                            data</b>, only modify the
-                                            collection.</div>
-                                    }/>}
+                    onAccept={() => onDelete(values?.id, propertyNamespace)}
+                    onCancel={() => setDeleteDialogOpen(false)}
+                    title={<div>Delete this property?</div>}
+                    body={
+                        <div> This will <b>not delete any
+                            data</b>, only modify the
+                            collection.</div>
+                    } />}
 
         </>
     );
@@ -623,17 +620,17 @@ const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
 };
 
 function WidgetSelectView({
-                              initialProperty,
-                              value,
-                              onValueChange,
-                              open,
-                              onOpenChange,
-                              disabled,
-                              showError,
-                              existing,
-                              propertyConfigs,
-                              inArray
-                          }: {
+    initialProperty,
+    value,
+    onValueChange,
+    open,
+    onOpenChange,
+    disabled,
+    showError,
+    existing,
+    propertyConfigs,
+    inArray
+}: {
     initialProperty?: PropertyWithId,
     value?: PropertyConfigId,
     onValueChange: (value: string) => void,
@@ -693,20 +690,20 @@ function WidgetSelectView({
                 className={cls(
                     "flex items-center")}>
                 <div className={"mr-8"}>
-                    <PropertyConfigBadge propertyConfig={computedFieldConfig}/>
+                    <PropertyConfigBadge propertyConfig={computedFieldConfig} />
                 </div>
                 <div className={"flex flex-col items-start text-base text-left"}>
                     <div>{computedFieldConfig.name}</div>
                     <Typography variant={"caption"}
-                                color={"secondary"}>
+                        color={"secondary"}>
                         {computedFieldConfig.description}
                     </Typography>
                 </div>
             </div>}
         </div>
         <Dialog open={open}
-                onOpenChange={(open) => onOpenChange(open, Boolean(value))}
-                maxWidth={"4xl"}>
+            onOpenChange={(open) => onOpenChange(open, Boolean(value))}
+            maxWidth={"4xl"}>
             <DialogTitle>
                 Select a property widget
             </DialogTitle>
@@ -727,7 +724,7 @@ function WidgetSelectView({
                                                 onOpenChange(false, true);
                                             }}
                                             propertyConfig={propertyConfig}
-                                            existing={existing}/>;
+                                            existing={existing} />;
                                     }
                                     return null;
                                 })}
@@ -759,12 +756,12 @@ export interface PropertySelectItemProps {
 }
 
 export function WidgetSelectViewItem({
-                                         onClick,
-                                         initialProperty,
-                                         // optionDisabled,
-                                         propertyConfig,
-                                         existing
-                                     }: PropertySelectItemProps) {
+    onClick,
+    initialProperty,
+    // optionDisabled,
+    propertyConfig,
+    existing
+}: PropertySelectItemProps) {
     const baseProperty = propertyConfig.property;
     const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty) && baseProperty.type !== initialProperty?.type;
 
@@ -776,13 +773,13 @@ export function WidgetSelectViewItem({
                 "flex flex-row items-center text-base min-h-[48px]",
             )}>
             <div className={"mr-8"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={shouldWarnChangingtype}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={shouldWarnChangingtype} />
             </div>
             <div>
                 <div className={"flex flex-row gap-2 items-center"}>
                     {shouldWarnChangingtype && <Tooltip
                         title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
-                        <WarningIcon size="smallest" className={"w-4"}/>
+                        <WarningIcon size="smallest" className={"w-4"} />
                     </Tooltip>}
                     <Typography
                         variant={"label"}
@@ -790,8 +787,8 @@ export function WidgetSelectViewItem({
                 </div>
 
                 <Typography variant={"caption"}
-                            color={"secondary"}
-                            className={"max-w-sm"}>
+                    color={"secondary"}
+                    className={"max-w-sm"}>
                     {propertyConfig.description}
                 </Typography>
 
