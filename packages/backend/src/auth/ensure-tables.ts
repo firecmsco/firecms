@@ -167,26 +167,33 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
         // These read from session-local config vars set per-transaction by withAuth().
         await db.execute(sql`CREATE SCHEMA IF NOT EXISTS auth`);
 
-        await db.execute(sql`
-            CREATE OR REPLACE FUNCTION auth.uid() RETURNS text AS $$
-                SELECT NULLIF(current_setting('app.user_id', true), '');
-            $$ LANGUAGE sql STABLE
-        `);
+        // Use an advisory transaction lock to serialize function recreation during HMR
+        // This prevents the "tuple concurrently updated" race condition when multiple Node 
+        // workers or rapid restarts attempt to CREATE OR REPLACE FUNCTION simultaneously.
+        await db.transaction(async (tx) => {
+            await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext('firecms_auth_functions_init'))`);
 
-        await db.execute(sql`
-            CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb AS $$
-                SELECT COALESCE(
-                    NULLIF(current_setting('app.jwt', true), ''),
-                    '{}'
-                )::jsonb;
-            $$ LANGUAGE sql STABLE
-        `);
+            await tx.execute(sql`
+                CREATE OR REPLACE FUNCTION auth.uid() RETURNS text AS $$
+                    SELECT NULLIF(current_setting('app.user_id', true), '');
+                $$ LANGUAGE sql STABLE
+            `);
 
-        await db.execute(sql`
-            CREATE OR REPLACE FUNCTION auth.roles() RETURNS text AS $$
-                SELECT COALESCE(NULLIF(current_setting('app.user_roles', true), ''), '');
-            $$ LANGUAGE sql STABLE
-        `);
+            await tx.execute(sql`
+                CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb AS $$
+                    SELECT COALESCE(
+                        NULLIF(current_setting('app.jwt', true), ''),
+                        '{}'
+                    )::jsonb;
+                $$ LANGUAGE sql STABLE
+            `);
+
+            await tx.execute(sql`
+                CREATE OR REPLACE FUNCTION auth.roles() RETURNS text AS $$
+                    SELECT COALESCE(NULLIF(current_setting('app.user_roles', true), ''), '');
+                $$ LANGUAGE sql STABLE
+            `);
+        });
 
         // Seed default roles if none exist
         await seedDefaultRoles(db);

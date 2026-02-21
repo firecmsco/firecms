@@ -53,8 +53,12 @@ export class AstSchemaEditor {
     }
 
     private convertJsonToAstString(obj: any, indentLevel: number = 0, oldAstNode?: ObjectLiteralExpression): string {
-        const indent = "    ".repeat(indentLevel);
-        const innerIndent = "    ".repeat(indentLevel + 1);
+        // Base TS-morph parses arrays as 2 levels deep from the property key: 
+        // PropertiesObject = level 1, PropertyConfig = level 2.
+        // We calibrate the spacing multiples to keep the items flush with standard TS format.
+        const indentStr = "    ";
+        const indent = indentStr.repeat(indentLevel);
+        const innerIndent = indentStr.repeat(indentLevel + 1);
 
         if (obj === null || obj === undefined) {
             return "undefined";
@@ -167,6 +171,10 @@ export class AstSchemaEditor {
                 });
             }
 
+            const file = this.getCollectionFile(collectionId);
+            if (file) {
+                file.formatText();
+            }
             await this.project.save();
         }
     }
@@ -184,6 +192,10 @@ export class AstSchemaEditor {
                 );
                 if (existingProp) {
                     existingProp.remove();
+                    const file = this.getCollectionFile(collectionId);
+                    if (file) {
+                        file.formatText();
+                    }
                     await this.project.save();
                 }
             }
@@ -220,6 +232,9 @@ export class AstSchemaEditor {
                     });
                 }
             }
+        }
+        if (file) {
+            file.formatText();
         }
         await this.project.save();
     }

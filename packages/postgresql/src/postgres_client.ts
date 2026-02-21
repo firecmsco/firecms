@@ -99,7 +99,7 @@ export class PostgresDataSourceClient {
     private connectionPromise: Promise<void> | null = null;
     private isReconnecting = false;
 
-    private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void }>();
+    private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void; message?: any }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private isConnected = false;
@@ -203,12 +203,18 @@ export class PostgresDataSourceClient {
                 this.isAuthenticated = false;
                 this.authPromise = null;
 
-                // Reject pending auth promises
-                for (const [reqId, handlers] of this.pendingRequests.entries()) {
+                // Re-queue pending requests so the UI doesn't hang indefinitely or crash
+                for (const [reqId, request] of this.pendingRequests.entries()) {
                     if (reqId.startsWith("auth_")) {
-                        handlers.reject(new Error("Connection closed during authentication"));
-                        this.pendingRequests.delete(reqId);
+                        request.reject(new Error("Connection closed during authentication"));
+                    } else if (request.message) {
+                        request.message._queuedResolve = request.resolve;
+                        request.message._queuedReject = request.reject;
+                        this.messageQueue.push(request.message);
+                    } else {
+                        request.reject(new ApiError("Connection closed", "Connection closed"));
                     }
+                    this.pendingRequests.delete(reqId);
                 }
 
                 this.attemptReconnect();
@@ -465,13 +471,16 @@ export class PostgresDataSourceClient {
             }
         }
 
-        const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const requestId = message.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         message.requestId = requestId;
 
-        this.pendingRequests.set(requestId, {
-            resolve,
-            reject
-        });
+        if (!this.pendingRequests.has(requestId)) {
+            this.pendingRequests.set(requestId, {
+                resolve,
+                reject,
+                message
+            });
+        }
 
         try {
             this.ws!.send(JSON.stringify(message));

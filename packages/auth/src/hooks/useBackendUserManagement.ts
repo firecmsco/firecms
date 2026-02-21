@@ -126,26 +126,58 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
     const apiRequest = useCallback(async (
         endpoint: string,
         method: string = "GET",
-        body?: any
+        body?: any,
+        retryCount: number = 6
     ): Promise<any> => {
-        const token = await getAuthToken();
-        // Use /api/admin prefix for admin endpoints
-        const response = await fetch(`${apiUrl}/api/admin${endpoint}`, {
-            method,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: body ? JSON.stringify(body) : undefined
-        });
+        let lastError: Error | null = null;
+        for (let attempt = 0; attempt < retryCount; attempt++) {
+            try {
+                const token = await getAuthToken();
+                // Use /api/admin prefix for admin endpoints
+                const response = await fetch(`${apiUrl}/api/admin${endpoint}`, {
+                    method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: body ? JSON.stringify(body) : undefined
+                });
 
-        if (!response.ok) {
-            const error = await response.json();
-            console.error("Admin API error:", error);
-            throw new Error(error.error?.message || "API request failed");
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMessage = "API request failed";
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.error?.message || errorMessage;
+                    } catch (e) {
+                        errorMessage = errorText || `HTTP error ${response.status}`;
+                    }
+
+                    const error: any = new Error(errorMessage);
+                    error.status = response.status;
+                    throw error;
+                }
+
+                return await response.json();
+            } catch (error: any) {
+                lastError = error;
+
+                // Retry conditions: Network errors (TypeError) OR 5xx Server Errors (Backend rebooting)
+                const isNetworkError = error instanceof TypeError || error?.name === "TypeError";
+                const isServerError = error.status >= 500 && error.status < 600;
+
+                if (attempt < retryCount - 1 && (isNetworkError || isServerError)) {
+                    const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // 1s, 2s, 4s...
+                    console.warn(`Admin API request to ${endpoint} failed, retrying in ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    continue;
+                }
+
+                console.error("Admin API error after retries:", error);
+                throw error;
+            }
         }
-
-        return response.json();
+        throw lastError;
     }, [apiUrl, getAuthToken]);
 
     /**

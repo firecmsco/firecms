@@ -9,44 +9,44 @@ const authorsCollection: EntityCollection = {
     dbPath: "authors",
     icon: "Person",
     properties: {
-                id: {
-                    type: "number",
-                    validation: {
-                        required: true
-                    }
-                },
-                name: {
-                    name: "Name",
-                    type: "string",
-                    validation: {
-                        required: true
-                    }
-                },
-                email: {
-                    name: "Email",
-                    type: "string",
-                    email: true,
-                    validation: {
-                        required: true
-                    }
-                },
-                picture: {
-                    name: "Picture",
-                    type: "string",
-                    validation: {
-                        required: false
-                    },
-                    storage: {
-                        storagePath: "author_pictures/"
-                    }
-                },
-                profile: {
-                    name: "Profile",
-                    type: "relation",
-                    relationName: "profile",
-                    description: " <a> </a>"
-                }
+        id: {
+            type: "number",
+            validation: {
+                required: true
+            }
+        },
+        name: {
+            name: "Name",
+            type: "string",
+            validation: {
+                required: true
+            }
+        },
+        email: {
+            name: "Email",
+            type: "string",
+            email: true,
+            validation: {
+                required: true
+            }
+        },
+        picture: {
+            name: "Picture",
+            type: "string",
+            validation: {
+                required: false
             },
+            storage: {
+                storagePath: "author_pictures/"
+            }
+        },
+        profile: {
+            name: "Profile",
+            type: "relation",
+            relationName: "profile",
+            description: " <a> </a>"
+        }
+    },
     relations: [
         {
             relationName: "profile",
@@ -62,6 +62,13 @@ const authorsCollection: EntityCollection = {
             direction: "inverse",
             inverseRelationName: "author"
         }
+    ],
+    propertiesOrder: [
+        "id",
+        "email",
+        "picture",
+        "profile",
+        "name"
     ]
 };
 
