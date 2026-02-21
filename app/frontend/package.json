@@ -8,7 +8,6 @@
     "@apollo/client": "^3.12.6",
     "@firecms/auth": "4.0.0-alpha.1",
     "@firecms/collection_editor": "4.0.0-alpha.1",
-    "@firecms/collection_editor_firebase": "4.0.0-alpha.1",
     "@firecms/firebase": "4.0.0-alpha.1",
     "@firecms/types": "4.0.0-alpha.1",
     "@firecms/core": "4.0.0-alpha.1",

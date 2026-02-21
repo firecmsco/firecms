@@ -136,9 +136,6 @@ importers:
       '@firecms/collection_editor':
         specifier: 4.0.0-alpha.1
         version: link:../../packages/collection_editor
-      '@firecms/collection_editor_firebase':
-        specifier: 4.0.0-alpha.1
-        version: link:../../packages/collection_editor_firebase
       '@firecms/core':
         specifier: 4.0.0-alpha.1
         version: link:../../packages/firecms_core
@@ -370,6 +367,9 @@ importers:
       pg:
         specifier: ^8.11.3
         version: 8.17.1
+      ts-morph:
+        specifier: 27.0.2
+        version: 27.0.2
       ws:
         specifier: ^8.16.0
         version: 8.19.0
@@ -424,7 +424,7 @@ importers:
         version: 7.2.2
       ts-jest:
         specifier: 29.4.1
-        version: 29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(esbuild@0.25.12)(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -571,55 +571,6 @@ importers:
       ts-jest:
         specifier: ^29.4.5
         version: 29.4.6(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.4
-        version: 7.3.1(@types/node@20.19.17)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2)
-
-  packages/collection_editor_firebase:
-    dependencies:
-      '@firecms/collection_editor':
-        specifier: 4.0.0-alpha.1
-        version: link:../collection_editor
-      '@firecms/core':
-        specifier: 4.0.0-alpha.1
-        version: link:../firecms_core
-      '@firecms/firebase':
-        specifier: 4.0.0-alpha.1
-        version: link:../firebase_firecms
-      '@firecms/schema_inference':
-        specifier: 4.0.0-alpha.1
-        version: link:../schema_inference
-      '@firecms/types':
-        specifier: 4.0.0-alpha.1
-        version: link:../types
-      firebase:
-        specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
-        version: 12.8.0
-      react:
-        specifier: '>=18.0.0'
-        version: 18.3.1
-      react-dom:
-        specifier: '>=18.0.0'
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@types/node':
-        specifier: ^20.19.17
-        version: 20.19.17
-      '@types/react':
-        specifier: ^18.3.24
-        version: 18.3.27
-      '@types/react-dom':
-        specifier: ^18.3.7
-        version: 18.3.7(@types/react@18.3.27)
-      babel-plugin-react-compiler:
-        specifier: ^19.0.0-beta-af1b7da-20250417
-        version: 19.0.0-beta-af1b7da-20250417
-      eslint-plugin-react-compiler:
-        specifier: ^19.1.0-rc.2
-        version: 19.1.0-rc.2(eslint@9.39.2(jiti@2.6.1))
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1001,9 +952,6 @@ importers:
 
   packages/datatalk:
     dependencies:
-      '@firecms/collection_editor_firebase':
-        specifier: 4.0.0-alpha.1
-        version: link:../collection_editor_firebase
       '@firecms/core':
         specifier: 4.0.0-alpha.1
         version: link:../firecms_core
@@ -1366,9 +1314,6 @@ importers:
       '@firecms/collection_editor':
         specifier: 4.0.0-alpha.1
         version: link:../collection_editor
-      '@firecms/collection_editor_firebase':
-        specifier: 4.0.0-alpha.1
-        version: link:../collection_editor_firebase
       '@firecms/core':
         specifier: 4.0.0-alpha.1
         version: link:../firecms_core
@@ -1721,7 +1666,7 @@ importers:
         version: 10.4.3(socks@2.8.7)
       ts-jest:
         specifier: 29.4.1
-        version: 29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(esbuild@0.25.12)(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -5490,6 +5435,9 @@ packages:
       '@tiptap/core': ^3.16.0
       '@tiptap/pm': ^3.16.0
 
+  '@ts-morph/common@0.28.1':
+    resolution: {integrity: sha512-W74iWf7ILp1ZKNYXY5qbddNaml7e9Sedv5lvU1V8lftlitkc9Pq1A+jlH23ltDgWYeZFFEqGCD1Ies9hqu3O+g==}
+
   '@tsconfig/node10@1.0.12':
     resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
 
@@ -6363,6 +6311,9 @@ packages:
   co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
+
+  code-block-writer@13.0.3:
+    resolution: {integrity: sha512-Oofo0pq3IKnsFtuHqSF7TqBfr71aeyZDVJ0HpmqB7FBM2qEigL0iPONSCZSO9pE9dZTAxANe5XHG9Uy0YMv8cg==}
 
   code-point-at@1.1.0:
     resolution: {integrity: sha512-RpAVKQA5T63xEj6/giIbUEtZwJ4UFIc3ZtvEkiaUERylqe8xb5IvqcgOurZLahv93CLKfxcw5YI+DZcUBRyLXA==}
@@ -9434,6 +9385,9 @@ packages:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
 
+  path-browserify@1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
+
   path-exists@3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==}
     engines: {node: '>=4'}
@@ -10633,6 +10587,9 @@ packages:
         optional: true
       jest-util:
         optional: true
+
+  ts-morph@27.0.2:
+    resolution: {integrity: sha512-fhUhgeljcrdZ+9DZND1De1029PrE+cMkIP7ooqkLRTrRLTqcki2AstsyJm0vRNbTbVCNJ0idGlbBrfqc7/nA8w==}
 
   ts-node@10.9.2:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
@@ -15232,6 +15189,12 @@ snapshots:
       '@tiptap/core': 3.16.0(@tiptap/pm@3.16.0)
       '@tiptap/pm': 3.16.0
 
+  '@ts-morph/common@0.28.1':
+    dependencies:
+      minimatch: 10.1.1
+      path-browserify: 1.0.1
+      tinyglobby: 0.2.15
+
   '@tsconfig/node10@1.0.12': {}
 
   '@tsconfig/node12@1.0.11': {}
@@ -16237,6 +16200,8 @@ snapshots:
       - '@types/react-dom'
 
   co@4.6.0: {}
+
+  code-block-writer@13.0.3: {}
 
   code-point-at@1.1.0: {}
 
@@ -20217,6 +20182,8 @@ snapshots:
 
   parseurl@1.3.3: {}
 
+  path-browserify@1.0.1: {}
+
   path-exists@3.0.0: {}
 
   path-exists@4.0.0: {}
@@ -21534,7 +21501,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  ts-jest@29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):
+  ts-jest@29.4.1(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(esbuild@0.25.12)(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -21552,6 +21519,7 @@ snapshots:
       '@jest/transform': 30.2.0
       '@jest/types': 30.2.0
       babel-jest: 29.7.0(@babel/core@7.28.6)
+      esbuild: 0.25.12
       jest-util: 30.2.0
 
   ts-jest@29.4.6(@babel/core@7.28.6)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.6))(jest-util@30.2.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):
@@ -21573,6 +21541,11 @@ snapshots:
       '@jest/types': 30.2.0
       babel-jest: 29.7.0(@babel/core@7.28.6)
       jest-util: 30.2.0
+
+  ts-morph@27.0.2:
+    dependencies:
+      '@ts-morph/common': 0.28.1
+      code-block-writer: 13.0.3
 
   ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3):
     dependencies:

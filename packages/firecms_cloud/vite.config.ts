@@ -39,7 +39,6 @@ export default defineConfig(() => ({
             "@firecms/user_management": path.resolve(__dirname, "../user_management/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
             "@firecms/collection_editor": path.resolve(__dirname, "../collection_editor/src"),
-            "@firecms/collection_editor_firebase": path.resolve(__dirname, "../collection_editor_firebase/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
             "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),

@@ -7,6 +7,7 @@ import { DataSourceDelegate, User, EntityCollection } from "@firecms/types";
 import { ApiConfig, FireCMSRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
+import { createSchemaEditorRoutes } from "./schema-editor-routes";
 
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
@@ -229,6 +230,12 @@ export class FireCMSApiServer {
             const restGenerator = new RestApiGenerator(this.config.collections || [], this.dataSource);
             const restRoutes = restGenerator.generateRoutes();
             this.router.use(basePath, restRoutes);
+        }
+
+        // Schema Editor (AST Generation) endpoints
+        if (this.config.collectionsDir) {
+            const schemaEditorRoutes = createSchemaEditorRoutes(this.config.collectionsDir);
+            this.router.use(`${basePath}/schema-editor`, schemaEditorRoutes);
         }
 
         // OpenAPI/Swagger documentation endpoint

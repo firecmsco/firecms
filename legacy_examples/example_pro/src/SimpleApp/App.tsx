@@ -34,7 +34,7 @@ import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { booksCollection } from "./books_collection";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { useLocalCollectionsConfigController } from "@firecms/collection_editor";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 export const firebaseConfig = {
@@ -95,7 +95,7 @@ function ProSample() {
         firebaseApp
     });
 
-    const collectionConfigController = useFirestoreCollectionsConfigController({
+    const collectionConfigController = useLocalCollectionsConfigController({
         firebaseApp
     });
 

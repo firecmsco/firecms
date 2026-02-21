@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@firecms/collection_editor": "^3.0.1",
-    "@firecms/collection_editor_firebase": "^3.0.1",
     "@firecms/core": "^3.0.1",
     "@firecms/data_enhancement": "^3.0.1",
     "@firecms/data_export": "^3.0.1",

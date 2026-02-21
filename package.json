@@ -25,7 +25,6 @@
     "packages/mongodb",
     "packages/firebase_firecms",
     "packages/collection_editor",
-    "packages/collection_editor_firebase",
     "packages/user_management",
     "packages/data_import",
     "packages/data_export",

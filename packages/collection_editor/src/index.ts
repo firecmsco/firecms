@@ -8,6 +8,9 @@ export {
 export {
     useCollectionsConfigController
 } from "./useCollectionsConfigController";
+export {
+    useLocalCollectionsConfigController
+} from "./useLocalCollectionsConfigController";
 
 export {
     editableProperty, removeNonEditableProperties

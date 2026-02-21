@@ -49,7 +49,6 @@ export default defineConfig(() => ({
             "@firecms/firebase": path.resolve(__dirname, "../firebase_firecms/src"),
             "@firecms/formex": path.resolve(__dirname, "../formex/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@firecms/collection_editor_firebase": path.resolve(__dirname, "../collection_editor_firebase/src"),
             "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
             "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),

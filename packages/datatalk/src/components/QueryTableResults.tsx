@@ -24,7 +24,7 @@ import { setIn } from "@firecms/formex";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
 import { Typography } from "@firecms/ui";
 import { BasicExportAction } from "@firecms/data_export";
-import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
+import { getPropertiesFromData } from "@firecms/collection_editor";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 
 export function QueryTableResults({

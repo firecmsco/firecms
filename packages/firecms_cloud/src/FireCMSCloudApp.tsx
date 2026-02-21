@@ -21,9 +21,10 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    User
+    User,
+    EntityCollection
 } from "@firecms/core";
-import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { useLocalCollectionsConfigController } from "@firecms/collection_editor";
 import {
     CollectionEditorPermissionsBuilder,
     CollectionsConfigController,
@@ -357,13 +358,10 @@ export function FireCMSClientWithController({
         });
     }, []);
 
-    const configController = useFirestoreCollectionsConfigController({
-        firebaseApp: fireCMSBackend.backendFirebaseApp,
-        generalConfigPath: `projects/${projectId}`,
-        configPath: `projects/${projectId}/collections`,
-        permissions,
-        propertyConfigs: appConfig?.propertyConfigs
-    });
+    const configController = useLocalCollectionsConfigController(
+        "http://localhost:3001/api",
+        appConfig?.collections as EntityCollection[] ?? []
+    );
 
     // Sync user profile data (photoURL, displayName) from Google sign-in if missing or changed
     const profileSyncRef = React.useRef<{ photoURL?: string | null, displayName?: string | null }>({});
@@ -656,7 +654,6 @@ function FireCMSAppAuthenticated({
         configPermissions,
         reservedGroups: RESERVED_GROUPS,
         getUser: userManagement.getUser,
-        collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
         includeIntroView: false,

@@ -6,7 +6,6 @@
   "dependencies": {
     "@apollo/client": "^3.14.0",
     "@firecms/collection_editor": "4.0.0-alpha.1",
-    "@firecms/collection_editor_firebase": "4.0.0-alpha.1",
     "@firecms/core": "4.0.0-alpha.1",
     "@firecms/types": "4.0.0-alpha.1",
     "@firecms/data_enhancement": "4.0.0-alpha.1",

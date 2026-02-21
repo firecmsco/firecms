@@ -36,7 +36,7 @@ import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlug
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
-import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { useLocalCollectionsConfigController } from "@firecms/collection_editor";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 export function App() {
@@ -67,7 +67,7 @@ export function App() {
      * Controller used to save the collection configuration in Firestore.
      * Note that this is optional and you can define your collections in code.
      */
-    const collectionConfigController = useFirestoreCollectionsConfigController({
+    const collectionConfigController = useLocalCollectionsConfigController({
         firebaseApp
     });
 
@@ -177,7 +177,6 @@ export function App() {
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
-        collectionInference: buildCollectionInference(firebaseApp),
     });
 
     const plugins = [
