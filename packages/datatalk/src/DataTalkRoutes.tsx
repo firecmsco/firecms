@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { CircularProgressCenter, EntityCollection, useNavigationController } from "@firecms/core";
+import { CircularProgressCenter, EntityCollection, useCollectionRegistryController } from "@firecms/core";
 import { DataTalkConfig, useDataTalk } from "./DataTalkProvider";
 import { DataTalkSession } from "./DataTalkSession";
 import { Session } from "./types";
@@ -23,10 +23,10 @@ export function DataTalkRoutes({
 }) {
 
     const dataTalkConfig = useDataTalk();
-    const navigationController = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
 
     // Use collections from prop or from navigation controller
-    const collections = collectionsProp ?? navigationController.collections;
+    const collections = collectionsProp ?? collectionRegistry.collections;
 
     if (dataTalkConfig.loading) {
         return <CircularProgressCenter />

@@ -15,7 +15,7 @@ import {
     Skeleton,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useCMSUrlController } from "../hooks";
 import { User } from "@firecms/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
@@ -76,7 +76,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
     const logo = logoProp ?? appLogo;
 
-    const navigation = useNavigationController();
+    const navigation = useCMSUrlController();
 
     const breadcrumbs = useBreadcrumbsController();
 

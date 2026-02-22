@@ -15,6 +15,7 @@
     "@firecms/formex": "4.0.0-alpha.1",
     "@firecms/schema_inference": "4.0.0-alpha.1",
     "@firecms/ui": "4.0.0-alpha.1",
+    "@firecms/types": "4.0.0-alpha.1",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.4.1"
   },

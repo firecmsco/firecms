@@ -1,7 +1,7 @@
 import { useSideDialogsController } from "./useSideDialogsController";
 import { EntitySelectionProps, EntitySelectionTable } from "../components";
 import { useCallback } from "react";
-import { useNavigationController } from "./useNavigationController";
+import { useCollectionRegistryController } from "./navigation/contexts";
 
 /**
  * This hook is used to open a side dialog that allows the selection
@@ -18,7 +18,7 @@ export function useEntitySelectionDialog<M extends Record<string, any>>(referenc
     onClose?: () => void;
 }): { open: () => void; close: () => void } {
 
-    const navigation = useNavigationController();
+    const navigation = useCollectionRegistryController();
     const sideDialogsController = useSideDialogsController();
 
     const open = useCallback(() => {

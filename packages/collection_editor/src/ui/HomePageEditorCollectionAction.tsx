@@ -72,7 +72,7 @@ export function HomePageEditorCollectionAction({
                     {permissions.createCollections &&
                         <MenuItem
                             dense={true}
-                            onClick={(event) => {
+                            onClick={(event: any) => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 onDuplicateCollectionClicked();
@@ -83,7 +83,7 @@ export function HomePageEditorCollectionAction({
                     }
                     <MenuItem
                         dense={true}
-                        onClick={(event) => {
+                        onClick={(event: any) => {
                             event.preventDefault();
                             event.stopPropagation();
                             setDeleteRequested(true);
@@ -99,7 +99,7 @@ export function HomePageEditorCollectionAction({
             {permissions.editCollections &&
                 <IconButton
                     size={"small"}
-                    onClick={(event) => {
+                    onClick={(event: any) => {
                         onEditCollectionClicked();
                     }}>
                     <SettingsIcon size={"small"} />

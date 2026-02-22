@@ -49,7 +49,9 @@
     },
     "dependencies": {
         "@firecms/types": "4.0.0-alpha.1",
+        "@firecms/core": "4.0.0-alpha.1",
         "mongodb": "^6.12.0",
+        "realm-web": "^2.0.0",
         "ws": "^8.16.0"
     },
     "devDependencies": {

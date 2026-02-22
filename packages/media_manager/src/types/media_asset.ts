@@ -6,7 +6,7 @@ export interface MediaAsset {
     /**
      * Unique identifier for the asset (document ID in the database)
      */
-    id: string;
+    id: string | number;
 
     /**
      * Original file name

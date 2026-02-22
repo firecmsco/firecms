@@ -1,19 +1,19 @@
 import { AutoFixHighIcon, Avatar, Menu, MenuItem, PersonIcon } from "@firecms/ui";
 import React, { useEffect, useRef, useState } from "react";
-import { ChatMessage, FeedbackSlug } from "@firecms/types";
+import { ChatMessage, FeedbackSlug } from "../types";
 import { SystemMessage } from "./SystemMessage";
 import { EntityCollection } from "@firecms/core";
 
 export function MessageLayout({
-                                  message,
-                                  autoRunCode,
-                                  onRemove,
-                                  collections,
-                                  onRegenerate,
-                                  canRegenerate,
-                                  onFeedback,
-                                  onUpdatedMessage
-                              }: {
+    message,
+    autoRunCode,
+    onRemove,
+    collections,
+    onRegenerate,
+    canRegenerate,
+    onFeedback,
+    onUpdatedMessage
+}: {
     message?: ChatMessage,
     autoRunCode?: boolean,
     onRemove?: () => void,
@@ -51,10 +51,10 @@ export function MessageLayout({
     }, [ref]);
 
     return <div ref={ref}
-                className="flex flex-col gap-2 bg-white dark:bg-surface-800/20 dark:bg-surface-800/20 rounded-lg p-4 shadow-2xs">
+        className="flex flex-col gap-2 bg-white dark:bg-surface-800/20 dark:bg-surface-800/20 rounded-lg p-4 shadow-2xs">
         <div className="flex items-start gap-3 justify-center">
             <Menu trigger={<Avatar className="w-10 h-10 shrink-0">
-                {message?.user === "USER" ? <PersonIcon/> : <AutoFixHighIcon/>}
+                {message?.user === "USER" ? <PersonIcon /> : <AutoFixHighIcon />}
             </Avatar>}>
                 <MenuItem dense onClick={onRemove}>Remove</MenuItem>
             </Menu>
@@ -63,16 +63,16 @@ export function MessageLayout({
 
                 {message
                     ? (message.user === "USER"
-                        ? <UserMessage text={message.text}/>
+                        ? <UserMessage text={message.text} />
                         : <SystemMessage text={message.text}
-                                         loading={message.loading}
-                                         autoRunCode={autoRunCode}
-                                         collections={collections}
-                                         canRegenerate={canRegenerate}
-                                         containerWidth={containerWidth ?? undefined}
-                                         onRegenerate={onRegenerate}
-                                         onUpdatedMessage={onUpdatedMessageInternal}
-                                         onFeedback={onFeedback}/>)
+                            loading={message.loading}
+                            autoRunCode={autoRunCode}
+                            collections={collections}
+                            canRegenerate={canRegenerate}
+                            containerWidth={containerWidth ?? undefined}
+                            onRegenerate={onRegenerate}
+                            onUpdatedMessage={onUpdatedMessageInternal}
+                            onFeedback={onFeedback} />)
                     : null}
 
             </div>

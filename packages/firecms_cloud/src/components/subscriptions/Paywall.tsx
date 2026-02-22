@@ -17,10 +17,10 @@ import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 
 export function PaywallDialog({
-                                  open,
-                                  trialOver,
-                                  onClose,
-                              }: {
+    open,
+    trialOver,
+    onClose,
+}: {
     open: boolean,
     trialOver: boolean,
     onClose: () => void
@@ -30,16 +30,16 @@ export function PaywallDialog({
         // fullScreen={true}
         maxWidth={"2xl"}
         open={open}
-        onOpenChange={(open) => !open ? onClose() : undefined}
+        onOpenChange={(open: boolean) => !open ? onClose() : undefined}
     >
 
         <DialogTitle hidden>Plans comparison</DialogTitle>
         <DialogContent>
-            <Paywall trialOver={trialOver}/>
+            <Paywall trialOver={trialOver} />
         </DialogContent>
         <IconButton className={"absolute top-4 right-4"}
-                    onClick={onClose}>
-            <CloseIcon/>
+            onClick={onClose}>
+            <CloseIcon />
         </IconButton>
     </Dialog>;
 }
@@ -53,7 +53,7 @@ export function Paywall({ trialOver }: {
             maxWidth={"xl"}
             className={"flex flex-col gap-4 p-8 m-auto"}>
 
-            <FireCMSLogo width={"64px"}/>
+            <FireCMSLogo width={"64px"} />
 
             {trialOver && <Typography variant={"h3"}>
                 Your free trial is over
@@ -70,17 +70,17 @@ export function Paywall({ trialOver }: {
 
             <Typography variant={"caption"}>
                 If you need help, don&apos;t hesitate to reach us at <a
-                href="mailto:hello@firecms.co?subject=Subscription%20help"
-                rel="noopener noreferrer"
-                target="_blank">
-                hello@firecms.co </a>, or in our <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
+                    href="mailto:hello@firecms.co?subject=Subscription%20help"
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    hello@firecms.co </a>, or in our <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
             </Typography>
 
             <div className={"flex flex-row gap-4 mt-8"}>
-                <UpgradeButton/>
+                <UpgradeButton />
             </div>
 
 
@@ -109,7 +109,7 @@ function UpgradeButton() {
             variant={"filled"}
             color={"primary"}
             loading={true}
-            startIcon={<RocketLaunchIcon/>}>
+            startIcon={<RocketLaunchIcon />}>
             Create a subscription
         </LoadingButton>
     }
@@ -118,5 +118,5 @@ function UpgradeButton() {
         includePriceSelect={true}
         largePriceLabel={true}
         product={plusProduct}
-        projectId={projectId}/>
+        projectId={projectId} />
 }

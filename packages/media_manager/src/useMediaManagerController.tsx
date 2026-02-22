@@ -243,7 +243,7 @@ export function useMediaManagerController({
     }, [storageSource, dataSourceDelegate, storagePath, collectionPath, bucket, thumbnailSizes, thumbnailPath]);
 
     // Delete an asset
-    const deleteAsset = useCallback(async (assetId: string): Promise<void> => {
+    const deleteAsset = useCallback(async (assetId: string | number): Promise<void> => {
         const asset = assets.find(a => a.id === assetId);
         if (!asset) {
             throw new Error(`Asset with id ${assetId} not found`);
@@ -275,7 +275,7 @@ export function useMediaManagerController({
 
     // Update asset metadata
     const updateAsset = useCallback(async (
-        assetId: string,
+        assetId: string | number,
         data: Partial<MediaAsset>
     ): Promise<void> => {
         const asset = assets.find(a => a.id === assetId);

@@ -10,7 +10,7 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useNavigationController,
+    useCollectionRegistryController,
     useSideEntityController
 } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
@@ -68,7 +68,7 @@ export function EntityPreviewData({
     const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
 
     const collection = collectionProp ?? navigationController.getCollection(entity.path);
 

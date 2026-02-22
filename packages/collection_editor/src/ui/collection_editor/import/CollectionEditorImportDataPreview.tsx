@@ -4,29 +4,29 @@ import {
     EntityCollectionTable,
     Properties,
     useAuthController,
-    useNavigationController,
+    useCollectionRegistryController,
     useSelectionController
 } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { Typography } from "@firecms/ui";
 
 export function CollectionEditorImportDataPreview({
-                                                      importConfig,
-                                                      properties,
-                                                      propertiesOrder
-                                                  }: {
+    importConfig,
+    properties,
+    propertiesOrder
+}: {
     importConfig: ImportConfig,
     properties: Properties,
     propertiesOrder: string[]
 }) {
 
     const authController = useAuthController();
-    const navigation = useNavigationController();
+    const registry = useCollectionRegistryController();
     const [loading, setLoading] = useState<boolean>(false);
 
     async function loadEntities() {
         const mappedData = importConfig.importData.map(d => convertDataToEntity(authController,
-            navigation,
+            registry,
             d,
             importConfig.idColumn,
             importConfig.headersMapping,
@@ -42,7 +42,7 @@ export function CollectionEditorImportDataPreview({
 
     const selectionController = useSelectionController();
     if (loading)
-        return <CircularProgressCenter/>
+        return <CircularProgressCenter />
 
     return <EntityCollectionTable
         title={<div>
@@ -54,7 +54,7 @@ export function CollectionEditorImportDataPreview({
             dataLoading: false,
             noMoreToLoad: false
         }}
-        endAdornment={<div className={"h-12"}/>}
+        endAdornment={<div className={"h-12"} />}
         filterable={false}
         sortable={false}
         selectionController={selectionController}
@@ -64,6 +64,6 @@ export function CollectionEditorImportDataPreview({
         }))}
         openEntityMode={"side_panel"}
         properties={properties}
-        enablePopupIcon={false}/>
+        enablePopupIcon={false} />
 
 }

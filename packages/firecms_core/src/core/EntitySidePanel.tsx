@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntityCollection, EntitySidePanelProps } from "@firecms/types";
-import { useNavigationController, useSideEntityController } from "../hooks";
+import { useCollectionRegistryController, useSideEntityController } from "../hooks";
 
 import { ErrorBoundary } from "../components";
 import { EntityEditView, OnUpdateParams } from "./EntityEditView";
@@ -38,7 +38,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const location = useLocation();
 
     const sideEntityController = useSideEntityController();
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
     const sideDialogsController = useSideDialogContext();
 
     const onClose = () => {

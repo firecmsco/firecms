@@ -33,6 +33,7 @@ import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
 import { useAIModifiedPaths } from "./AIModifiedPathsContext";
+import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 type PropertyOrBuilder = Property | any;
 
@@ -76,6 +77,7 @@ export function CollectionPropertiesEditorForm({
     } = useFormex<PersistedCollection>();
 
     const snackbarController = useSnackbarController();
+    const configController = useCollectionsConfigController();
 
     const largeLayout = useLargeLayout();
     const asDialog = !largeLayout
@@ -105,7 +107,7 @@ export function CollectionPropertiesEditorForm({
 
     const inferPropertiesFromData = doCollectionInference
         ? (): void => {
-            if (!doCollectionInference)
+            if (!doCollectionInference || configController?.readOnly)
                 return;
 
             setInferringProperties(true);
@@ -267,6 +269,7 @@ export function CollectionPropertiesEditorForm({
     };
 
     const deleteProperty = (propertyKey?: string, namespace?: string) => {
+        if (configController?.readOnly) return;
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
@@ -287,6 +290,7 @@ export function CollectionPropertiesEditorForm({
     };
 
     const onPropertyMove = (propertiesOrder: string[], namespace?: string) => {
+        if (configController?.readOnly) return;
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
     };
 
@@ -297,6 +301,7 @@ export function CollectionPropertiesEditorForm({
         id?: string,
         property: Property
     }) => {
+        if (configController?.readOnly) return;
         if (!id) {
             throw Error("Need to include an ID when creating a new property")
         }
@@ -458,6 +463,7 @@ export function CollectionPropertiesEditorForm({
                         <Tooltip title={"Add new property"}
                             asChild={true}>
                             <Button
+                                disabled={configController?.readOnly}
                                 onClick={() => setNewPropertyDialogOpen(true)}>
                                 <AddIcon />
                             </Button>
@@ -475,13 +481,14 @@ export function CollectionPropertiesEditorForm({
                         propertiesOrder={usedPropertiesOrder}
                         onPropertyClick={onPropertyClick}
                         onPropertyMove={onPropertyMove}
-                        onPropertyRemove={(isNewCollection || (inferredPropertyKeys && inferredPropertyKeys.length > 0)) ? deleteProperty : undefined}
-                        collectionEditable={collectionEditable}
+                        onPropertyRemove={(isNewCollection || (inferredPropertyKeys && inferredPropertyKeys.length > 0)) && !configController?.readOnly ? deleteProperty : undefined}
+                        collectionEditable={collectionEditable && !configController?.readOnly}
                         errors={errors} />
                 </ErrorBoundary>
 
                 <Button className={"mt-8 w-full"}
                     size={"large"}
+                    disabled={configController?.readOnly}
                     onClick={() => setNewPropertyDialogOpen(true)}
                     startIcon={<AddIcon />}>
                     Add new property
@@ -513,7 +520,7 @@ export function CollectionPropertiesEditorForm({
                                 initialErrors={initialErrors}
                                 getData={getData}
                                 propertyConfigs={propertyConfigs}
-                                collectionEditable={collectionEditable}
+                                collectionEditable={collectionEditable && !configController?.readOnly}
                             />}
 
                         {!selectedProperty &&
@@ -524,6 +531,7 @@ export function CollectionPropertiesEditorForm({
                                         : "Select a property to edit it"}
                                 </Typography>
                                 <Button
+                                    disabled={configController?.readOnly}
                                     onClick={() => setNewPropertyDialogOpen(true)}
                                 >
                                     <AddIcon />
@@ -556,7 +564,7 @@ export function CollectionPropertiesEditorForm({
                 initialErrors={initialErrors}
                 getData={getData}
                 propertyConfigs={propertyConfigs}
-                collectionEditable={collectionEditable}
+                collectionEditable={collectionEditable && !configController?.readOnly}
                 onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -582,7 +590,7 @@ export function CollectionPropertiesEditorForm({
             getData={getData}
             allowDataInference={!isNewCollection}
             propertyConfigs={propertyConfigs}
-            collectionEditable={collectionEditable}
+            collectionEditable={collectionEditable && !configController?.readOnly}
             existingPropertyKeys={values.propertiesOrder as string[]} />
 
         <ErrorBoundary>

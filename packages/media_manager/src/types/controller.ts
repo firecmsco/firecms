@@ -47,14 +47,14 @@ export interface MediaManagerController {
      * Delete an asset from storage and database
      * @param assetId The ID of the asset to delete
      */
-    deleteAsset: (assetId: string) => Promise<void>;
+    deleteAsset: (assetId: string | number) => Promise<void>;
 
     /**
      * Update asset metadata
      * @param assetId The ID of the asset to update
      * @param data The fields to update
      */
-    updateAsset: (assetId: string, data: Partial<MediaAsset>) => Promise<void>;
+    updateAsset: (assetId: string | number, data: Partial<MediaAsset>) => Promise<void>;
 
     /**
      * Refresh the assets list from the database

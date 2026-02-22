@@ -126,13 +126,13 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
     }, [firestoreRef, userId]);
 
     const subscribe = async (props: {
-                                 projectId?: string,
-                                 licenseId?: string,
-                                 quantity?: number,
-                                 productPrice: ProductPrice,
-                                 onCheckoutSessionReady: (url?: string, error?: Error) => void,
-                                 type: SubscriptionType
-                             }
+        projectId?: string,
+        licenseId?: string,
+        quantity?: number,
+        productPrice: ProductPrice,
+        onCheckoutSessionReady: (url?: string, error?: Error) => void,
+        type: SubscriptionType
+    }
     ) => {
         const {
             projectId,
@@ -174,9 +174,9 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         await projectsApi.createCloudStripeNewSubscriptionLink({
             projectId,
             currency
-        }).then((sessionUrl) => {
+        }).then((sessionUrl: any) => {
             onCheckoutSessionReady(sessionUrl, undefined);
-        }).catch(e => {
+        }).catch((e: any) => {
             console.error("Error subscribing to Cloud", projectId, e);
             onCheckoutSessionReady(undefined, e);
         });

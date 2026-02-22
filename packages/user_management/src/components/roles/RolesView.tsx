@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 
-import { Role, useNavigationController } from "@firecms/core";
+import { Role, useCollectionRegistryController } from "@firecms/core";
 import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
@@ -8,7 +8,7 @@ import { RolesDetailsForm } from "./RolesDetailsForm";
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {
 
-        const { collections } = useNavigationController();
+        const { collections } = useCollectionRegistryController();
         const [dialogOpen, setDialogOpen] = useState(false);
         const [selectedRole, setSelectedRole] = useState<Role | undefined>();
 
@@ -29,19 +29,19 @@ export const RolesView = React.memo(
 
                 <div className="flex items-center mt-12">
                     <Typography gutterBottom variant="h4"
-                                className="grow"
-                                component="h4">
+                        className="grow"
+                        component="h4">
                         Roles
                     </Typography>
                     <Button
                         size={"large"}
-                        startIcon={<AddIcon/>}
+                        startIcon={<AddIcon />}
                         onClick={() => setDialogOpen(true)}>
                         Add role
                     </Button>
                 </div>
 
-                <RolesTable onRoleClicked={onRoleClicked} editable={true}/>
+                <RolesTable onRoleClicked={onRoleClicked} editable={true} />
 
                 <RolesDetailsForm
                     key={selectedRole?.id ?? "new"}
@@ -49,7 +49,7 @@ export const RolesView = React.memo(
                     role={selectedRole}
                     editable={true}
                     collections={collections}
-                    handleClose={handleClose}/>
+                    handleClose={handleClose} />
 
             </Container>
         )

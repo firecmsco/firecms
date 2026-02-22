@@ -19,19 +19,19 @@ import {
     ThumbDownOffAltIcon,
     Tooltip
 } from "@firecms/ui";
-import { FeedbackSlug } from "@firecms/types";
+import { FeedbackSlug } from "../types";
 
 export function SystemMessage({
-                                  text,
-                                  loading,
-                                  containerWidth,
-                                  autoRunCode,
-                                  collections,
-                                  onRegenerate,
-                                  canRegenerate,
-                                  onFeedback,
-                                  onUpdatedMessage,
-                              }: {
+    text,
+    loading,
+    containerWidth,
+    autoRunCode,
+    collections,
+    onRegenerate,
+    canRegenerate,
+    onFeedback,
+    onUpdatedMessage,
+}: {
     text?: string,
     loading?: boolean,
     containerWidth?: number,
@@ -71,55 +71,55 @@ export function SystemMessage({
                 return <div
                     className={"max-w-full prose dark:prose-invert prose-headings:font-title text-base text-surface-700 dark:text-surface-200"}
                     dangerouslySetInnerHTML={{ __html: element.content }}
-                    key={index}/>;
+                    key={index} />;
             } else if (element.type === "code") {
                 return <CodeBlock key={index}
-                                  loading={loading}
-                                  autoRunCode={autoRunCode}
-                                  initialCode={element.content}
-                                  collections={collections}
-                                  onCodeModified={(updatedCode) => {
-                                      const updatedElements = [...parsedElements];
-                                      updatedElements[index] = {
-                                          type: "code",
-                                          content: updatedCode
-                                      };
-                                      setParsedElements(updatedElements);
-                                      onUpdatedElements(updatedElements);
-                                  }}
-                                  maxWidth={containerWidth ? containerWidth - 90 : undefined}/>;
+                    loading={loading}
+                    autoRunCode={autoRunCode}
+                    initialCode={element.content}
+                    collections={collections}
+                    onCodeModified={(updatedCode) => {
+                        const updatedElements = [...parsedElements];
+                        updatedElements[index] = {
+                            type: "code",
+                            content: updatedCode
+                        };
+                        setParsedElements(updatedElements);
+                        onUpdatedElements(updatedElements);
+                    }}
+                    maxWidth={containerWidth ? containerWidth - 90 : undefined} />;
             } else {
                 console.error("Unknown element type", element);
                 return null;
             }
         })}
 
-        {loading && <Skeleton className={"max-w-4xl mt-1 mb-4"}/>}
+        {loading && <Skeleton className={"max-w-4xl mt-1 mb-4"} />}
 
         <div className={"mt-2 flex flex-row gap-1"}>
             {canRegenerate && <Tooltip title={"Regenerate"}
-                                       asChild={true}>
+                asChild={true}>
                 <IconButton size={"smallest"} disabled={loading} onClick={onRegenerate}>
-                    <LoopIcon size={"smallest"}/>
+                    <LoopIcon size={"smallest"} />
                 </IconButton>
             </Tooltip>}
 
             <Tooltip title={"Copy"}
-                     asChild={true}>
-                <MessageCopyIcon text={text ?? ""} disabled={loading}/>
+                asChild={true}>
+                <MessageCopyIcon text={text ?? ""} disabled={loading} />
             </Tooltip>
 
             <BadMessageIcon disabled={loading}
-                            onFeedback={onFeedback}/>
+                onFeedback={onFeedback} />
         </div>
 
     </>;
 }
 
 function MessageCopyIcon({
-                             text,
-                             disabled
-                         }: {
+    text,
+    disabled
+}: {
     text: string,
     disabled?: boolean
 }) {
@@ -135,19 +135,19 @@ function MessageCopyIcon({
     }, [copied]);
 
     return <IconButton size={"smallest"}
-                       disabled={disabled}
-                       onClick={() => {
-                           setCopied(true);
-                           navigator.clipboard.writeText(text);
-                       }}>
-        {copied ? <CheckIcon size={"smallest"}/> : <ContentCopyIcon size={"smallest"}/>}
+        disabled={disabled}
+        onClick={() => {
+            setCopied(true);
+            navigator.clipboard.writeText(text);
+        }}>
+        {copied ? <CheckIcon size={"smallest"} /> : <ContentCopyIcon size={"smallest"} />}
     </IconButton>;
 }
 
 function BadMessageIcon({
-                            disabled,
-                            onFeedback
-                        }: {
+    disabled,
+    onFeedback
+}: {
     disabled?: boolean,
     onFeedback?: (reason?: FeedbackSlug, feedback?: string) => void,
 }) {
@@ -157,13 +157,13 @@ function BadMessageIcon({
     return <>
 
         <Tooltip title={dialogOpen ? undefined : "Bad response"}
-                 asChild={true}>
+            asChild={true}>
             <IconButton size={"smallest"}
-                        disabled={disabled}
-                        onClick={() => {
-                            setDialogOpen(true);
-                        }}>
-                <ThumbDownOffAltIcon size={"smallest"}/>
+                disabled={disabled}
+                onClick={() => {
+                    setDialogOpen(true);
+                }}>
+                <ThumbDownOffAltIcon size={"smallest"} />
             </IconButton>
         </Tooltip>
         <Dialog
@@ -180,30 +180,30 @@ function BadMessageIcon({
 
                 <div className={"flex flex-row gap-2 flex-wrap"}>
                     <FeedbackLabel title={"Not helpful"}
-                                   value={"not_helpful"}
-                                   selected={selected}
-                                   setSelected={setSelected}/>
+                        value={"not_helpful"}
+                        selected={selected}
+                        setSelected={setSelected} />
                     <FeedbackLabel title={"Not factually correct"}
-                                   value={"not_factually_correct"}
-                                   selected={selected}
-                                   setSelected={setSelected}/>
+                        value={"not_factually_correct"}
+                        selected={selected}
+                        setSelected={setSelected} />
                     <FeedbackLabel title={"Incorrect code"}
-                                   value={"incorrect_code"}
-                                   selected={selected}
-                                   setSelected={setSelected}/>
+                        value={"incorrect_code"}
+                        selected={selected}
+                        setSelected={setSelected} />
                     <FeedbackLabel title={"Unsafe or problematic"}
-                                   value={"unsafe_or_problematic"}
-                                   selected={selected}
-                                   setSelected={setSelected}/>
+                        value={"unsafe_or_problematic"}
+                        selected={selected}
+                        setSelected={setSelected} />
                     <FeedbackLabel title={"Other"}
-                                   value={"other"}
-                                   selected={selected}
-                                   setSelected={setSelected}/>
+                        value={"other"}
+                        selected={selected}
+                        setSelected={setSelected} />
                 </div>
                 <TextField size={"small"}
-                           value={feedbackText}
-                           onChange={(e) => setFeedbackText(e.target.value)}
-                           placeholder={"Feel free to add specific details"}></TextField>
+                    value={feedbackText}
+                    onChange={(e) => setFeedbackText(e.target.value)}
+                    placeholder={"Feel free to add specific details"}></TextField>
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => {
@@ -213,27 +213,27 @@ function BadMessageIcon({
             </DialogActions>
 
             <IconButton className={"absolute top-4 right-4"}
-                        onClick={() => setDialogOpen(false)}>
-                <CloseIcon/>
+                onClick={() => setDialogOpen(false)}>
+                <CloseIcon />
             </IconButton>
         </Dialog>
     </>;
 }
 
 function FeedbackLabel({
-                           setSelected,
-                           title,
-                           value,
-                           selected
-                       }: {
+    setSelected,
+    title,
+    value,
+    selected
+}: {
     value: FeedbackSlug,
     title: string,
     selected: FeedbackSlug,
     setSelected: (value: FeedbackSlug | null) => void
 }) {
     return <Label border={true}
-                  className={value === selected ? "bg-surface-300 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-700" : ""}
-                  onClick={() => {
-                      setSelected(value);
-                  }}>{title}</Label>;
+        className={value === selected ? "bg-surface-300 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-700" : ""}
+        onClick={() => {
+            setSelected(value);
+        }}>{title}</Label>;
 }

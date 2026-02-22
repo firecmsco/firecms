@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSnackbarController } from "@firecms/core";
 import { BuildIcon, Button, LoadingButton, Typography } from "@firecms/ui";
-import { FireCMSBackend } from "@firecms/types";
+import { FireCMSBackend } from "../types";
 import { useFireCMSBackend } from "../hooks";
 
 export type CloudError = {

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { CMSView, EntityCollection, FieldCaption, Role, User, useSnackbarController, ConfirmationDialog, useAuthController, useNavigationController } from "@firecms/core";
+import { CMSView, EntityCollection, FieldCaption, Role, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@firecms/core";
 import {
     AddIcon,
     Button,
@@ -583,8 +583,8 @@ function RoleDetailsForm({
     handleClose: () => void;
 }) {
     const snackbarController = useSnackbarController();
-    const navigationController = useNavigationController();
-    const collections = navigationController.collections ?? [];
+    const collectionRegistryController = useCollectionRegistryController();
+    const collections = collectionRegistryController.collections ?? [];
     const isNewRole = !roleProp;
 
     const [roleId, setRoleId] = useState(roleProp?.id || "");

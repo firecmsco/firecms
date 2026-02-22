@@ -1,6 +1,6 @@
 import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../core/EntityEditView";
-import { useNavigationController } from "../hooks";
+import { useCollectionRegistryController, useCMSUrlController } from "../hooks";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,8 @@ import {
 export function FireCMSRoute() {
 
     const location = useLocation();
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
+    const cmsUrlController = useCMSUrlController();
     const breadcrumbs = useBreadcrumbsController();
 
     const hash = location.hash;
@@ -27,11 +28,11 @@ export function FireCMSRoute() {
     const isCopy = hash.includes("#copy");
 
     const pathname = location.pathname;
-    const navigationPath = navigation.urlPathToDataPath(pathname);
+    const navigationPath = cmsUrlController.urlPathToDataPath(pathname);
 
     const navigationEntries = getNavigationEntriesFromPath({
         path: navigationPath,
-        collections: navigation.collections ?? []
+        collections: collectionRegistry.collections ?? []
     });
 
     useEffect(() => {
@@ -45,13 +46,13 @@ export function FireCMSRoute() {
                 if (entry.type === "entity") {
                     return ({
                         title: String(entry.entityId),
-                        url: navigation.buildUrlCollectionPath(entry.path)
+                        url: cmsUrlController.buildUrlCollectionPath(entry.path)
                         // count: undefined (not applicable for entities)
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
-                        url: navigation.buildUrlCollectionPath(entry.path)
+                        url: cmsUrlController.buildUrlCollectionPath(entry.path)
                         // count: undefined (not applicable for custom views)
                     });
                 } else if (entry.type === "collection") {
@@ -60,7 +61,7 @@ export function FireCMSRoute() {
                     const showCount = isLastEntry && isViewingCollection;
                     return ({
                         title: entry.collection.name,
-                        url: navigation.buildUrlCollectionPath(entry.path),
+                        url: cmsUrlController.buildUrlCollectionPath(entry.path),
                         id: entry.path,
                         ...(showCount ? { count: null } : {}) // null = loading, undefined = no badge
                     });
@@ -82,9 +83,9 @@ export function FireCMSRoute() {
 
     if (navigationEntries.length === 1 && navigationEntries[0].type === "collection") {
         let collection: EntityCollection<any> | undefined;
-        collection = navigation.getCollectionById(navigationEntries[0].id);
+        collection = collectionRegistry.getCollection(navigationEntries[0].id);
         if (!collection)
-            collection = navigation.getCollection(navigationEntries[0].slug);
+            collection = collectionRegistry.getCollection(navigationEntries[0].slug);
         if (!collection)
             return null;
         return <EntityCollectionView
@@ -101,9 +102,9 @@ export function FireCMSRoute() {
         if (lastCollectionEntry) {
             let collection: EntityCollection<any> | undefined;
             const firstEntry = navigationEntries[0] as NavigationViewCollectionInternal<any>;
-            collection = navigation.getCollectionById(firstEntry.id);
+            collection = collectionRegistry.getCollection(firstEntry.id);
             if (!collection)
-                collection = navigation.getCollection(firstEntry.slug);
+                collection = collectionRegistry.getCollection(firstEntry.slug);
             if (!collection)
                 return null;
             return <EntityCollectionView
@@ -150,10 +151,11 @@ function EntityFullScreenRoute({
     isCopy: boolean
 }) {
 
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
+    const cmsUrlController = useCMSUrlController();
     const navigate = useNavigate();
 
-    const navigationPath = navigation.urlPathToDataPath(pathname);
+    const navigationPath = cmsUrlController.urlPathToDataPath(pathname);
 
     // is navigating away blocked
     const blocked = useRef(false);
@@ -170,7 +172,7 @@ function EntityFullScreenRoute({
     const urlTab = getSelectedTabFromUrl(isNew, lastCustomView);
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
 
-    const parentCollectionIds = navigation.getParentCollectionIds(navigationPath);
+    const parentCollectionIds = collectionRegistry.getParentCollectionIds(navigationPath);
     useEffect(() => {
         if (urlTab !== selectedTab) {
             setSelectedTab(urlTab);
@@ -208,7 +210,7 @@ function EntityFullScreenRoute({
 
     const collection = isNew ? (lastCollectionEntry as any)!.collection : (lastEntityEntry as any)!.parentCollection;
     const fullIdPath = isNew ? lastCollectionEntry!.slug : lastEntityEntry!.slug;
-    const collectionPath = navigation.resolveDatabasePathsFrom(fullIdPath);
+    const collectionPath = cmsUrlController.resolveDatabasePathsFrom(fullIdPath);
     return <>
         <EntityEditView
             key={collection.slug + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}

@@ -12,8 +12,8 @@ import {
     setDoc
 } from "@firebase/firestore";
 import { FirebaseApp } from "@firebase/app";
-import { FireCMSBackend, FireCMSCloudUserWithRoles } from "@firecms/types";
-import { CMSType, PermissionsBuilder, Role, User } from "@firecms/core";
+import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types";
+import { PermissionsBuilder, Role, User } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
 import { resolveUserRolePermissions, UserManagement } from "@firecms/user_management";
 
@@ -144,7 +144,7 @@ export function useBuildCloudUserManagement({
         }, { merge: true });
     }, [configPath]);
 
-    const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
+    const saveRole = useCallback(<M extends { [Key: string]: any }>(role: Role): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting", role);
@@ -190,7 +190,7 @@ export function useBuildCloudUserManagement({
         return mgmtUser?.roles;
     }, [userIds]);
 
-    const isAdmin = loggedInUser?.roles.some(r => r.id === "admin");
+    const isAdmin = loggedInUser?.roles.some((r: Role) => r.id === "admin");
 
     const getUser = useCallback((uid: string): User | null => {
         if (!users) throw Error("Users not loaded");

@@ -1,5 +1,5 @@
 import React from "react";
-import { FireCMSPlugin, useAuthController, useNavigationController, User } from "@firecms/core";
+import { FireCMSPlugin, useAuthController, useCollectionRegistryController, useNavigationStateController, User } from "@firecms/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
@@ -136,8 +136,10 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
 
 export function IntroWidget() {
 
-    const navigation = useNavigationController();
-    if (!navigation.topLevelNavigation)
+    const navigationState = useNavigationStateController();
+    const collectionRegistry = useCollectionRegistryController();
+
+    if (!navigationState.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
     const authController = useAuthController();
@@ -149,7 +151,7 @@ export function IntroWidget() {
         }).createCollections
         : true;
 
-    if (!navigation.initialised || (navigation.collections ?? []).length > 0) {
+    if (!collectionRegistry.initialised || (collectionRegistry.collections ?? []).length > 0) {
         return null;
     }
 

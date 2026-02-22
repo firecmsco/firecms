@@ -1,15 +1,15 @@
 import React from "react";
 import { Field, getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
+import { FieldCaption, IconForView, NumberProperty, StringProperty, useCollectionRegistryController } from "@firecms/core";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
 
 export function ReferencePropertyField({
-                                           existing,
-                                           multiple,
-                                           disabled,
-                                           showErrors,
-                                           asString
-                                       }: {
+    existing,
+    multiple,
+    disabled,
+    showErrors,
+    asString
+}: {
     existing: boolean,
     multiple: boolean,
     disabled: boolean,
@@ -23,14 +23,14 @@ export function ReferencePropertyField({
         errors,
     } = useFormex<StringProperty | NumberProperty>();
 
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
 
-    if (!navigation)
+    if (!collectionRegistry.initialised)
         return <div className={"col-span-12"}>
-            <CircularProgress/>
+            <CircularProgress />
         </div>;
 
-    const pathPath = asString ? "reference.slug" : (multiple ? "of.slug" : "path") ;
+    const pathPath = asString ? "reference.slug" : (multiple ? "of.slug" : "path");
     const pathValue: string | undefined = getIn(values, pathPath);
     const pathError: string | undefined = showErrors && getIn(errors, pathPath);
 
@@ -39,13 +39,13 @@ export function ReferencePropertyField({
             <div className={"col-span-12"}>
 
                 <Field name={pathPath}
-                       pathPath={pathPath}
-                       type="select"
-                       disabled={disabled}
-                       value={pathValue}
-                       error={pathError}
-                       handleChange={handleChange}
-                       as={CollectionsSelect}/>
+                    pathPath={pathPath}
+                    type="select"
+                    disabled={disabled}
+                    value={pathValue}
+                    error={pathError}
+                    handleChange={handleChange}
+                    as={CollectionsSelect} />
 
             </div>
 
@@ -54,13 +54,13 @@ export function ReferencePropertyField({
 }
 
 export function CollectionsSelect({
-                                      disabled,
-                                      pathPath,
-                                      value,
-                                      handleChange,
-                                      error,
-                                      ...props
-                                  }: {
+    disabled,
+    pathPath,
+    value,
+    handleChange,
+    error,
+    ...props
+}: {
     disabled: boolean,
     pathPath: string,
     value?: string,
@@ -68,14 +68,14 @@ export function CollectionsSelect({
     error?: string
 }) {
 
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
 
-    if (!navigation)
+    if (!collectionRegistry.initialised)
         return <div className={"col-span-12"}>
-            <CircularProgress/>
+            <CircularProgress />
         </div>;
 
-    const collections = navigation?.collections ?? [];
+    const collections = collectionRegistry.collections ?? [];
 
     const groups: string[] = Array.from(new Set(
         Object.values(collections).map(e => e.group).filter(Boolean) as string[]
@@ -95,12 +95,12 @@ export function CollectionsSelect({
                 fullWidth={true}
                 onChange={handleChange}
                 label={"Target collection"}
-                renderValue={(selected) => {
+                renderValue={(selected: any) => {
                     const selectedCollection = collections.find(collection => collection.slug === selected || collection.dbPath === selected);
                     if (!selectedCollection) return null;
                     return (
                         <div className="flex flex-row">
-                            <IconForView collectionOrView={selectedCollection}/>
+                            <IconForView collectionOrView={selectedCollection} />
                             <Typography
                                 variant={"subtitle2"}
                                 className="font-medium ml-4">
@@ -112,7 +112,7 @@ export function CollectionsSelect({
 
                 {groups.flatMap((group) => (
                     <SelectGroup label={group || "Views"}
-                                 key={`group_${group}`}>
+                        key={`group_${group}`}>
                         {
                             collections.filter(collection => collection.group === group)
                                 .map((collection) => {
@@ -120,7 +120,7 @@ export function CollectionsSelect({
                                         key={`${collection.slug ?? collection.dbPath}-${group}`}
                                         value={collection.slug ?? collection.dbPath}>
                                         <div className="flex flex-row">
-                                            <IconForView collectionOrView={collection}/>
+                                            <IconForView collectionOrView={collection} />
                                             <Typography
                                                 variant={"subtitle2"}
                                                 className="font-medium ml-4">
@@ -138,9 +138,9 @@ export function CollectionsSelect({
                     {ungroupedCollections
                         .map((collection) => {
                             return <SelectItem key={collection.slug ?? collection.dbPath}
-                                               value={collection.slug ?? collection.dbPath}>
+                                value={collection.slug ?? collection.dbPath}>
                                 <div className="flex flex-row">
-                                    <IconForView collectionOrView={collection}/>
+                                    <IconForView collectionOrView={collection} />
                                     <Typography
                                         variant={"subtitle2"}
                                         className="font-medium ml-4">

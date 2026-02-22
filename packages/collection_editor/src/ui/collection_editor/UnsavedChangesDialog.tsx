@@ -10,17 +10,17 @@ export interface UnsavedChangesDialogProps {
 }
 
 export function UnsavedChangesDialog({
-                                         open,
-                                         handleOk,
-                                         handleCancel,
-                                         body,
-                                         title
-                                     }: UnsavedChangesDialogProps) {
+    open,
+    handleOk,
+    handleCancel,
+    body,
+    title
+}: UnsavedChangesDialogProps) {
 
     return (
         <Dialog
             open={open}
-            onOpenChange={(open) => open ? handleCancel() : handleOk()}
+            onOpenChange={(open: boolean) => open ? handleCancel() : handleOk()}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
@@ -38,7 +38,7 @@ export function UnsavedChangesDialog({
 
             <DialogActions>
                 <Button variant="text"
-                        onClick={handleCancel} autoFocus> Cancel </Button>
+                    onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button
                     onClick={handleOk}> Ok </Button>
             </DialogActions>

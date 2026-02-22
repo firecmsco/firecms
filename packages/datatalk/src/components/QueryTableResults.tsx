@@ -13,19 +13,16 @@ import {
     mergeEntityActions,
     OnCellValueChange,
     Properties,
-    resolveCollection,
-    resolveEntityAction,
     useAuthController,
     useCustomizationController,
-    useNavigationController,
+    useCollectionRegistryController,
     useSelectionController
 } from "@firecms/core";
 import { setIn } from "@firecms/formex";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
 import { Typography } from "@firecms/ui";
 import { BasicExportAction } from "@firecms/data_export";
-import { getPropertiesFromData } from "@firecms/collection_editor";
-import { buildPropertiesOrder } from "@firecms/schema_inference";
+import { buildPropertiesOrder, buildEntityPropertiesFromData, inferTypeFromValue } from "@firecms/schema_inference";
 
 export function QueryTableResults({
     querySnapshot,
@@ -38,7 +35,7 @@ export function QueryTableResults({
 }) {
 
     const authController = useAuthController();
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
     const customizationController = useCustomizationController();
 
     async function inferProperties() {
@@ -59,7 +56,7 @@ export function QueryTableResults({
         setPath(resultsPath);
 
         if (resultsPath) {
-            const collection = navigation.getCollection(resultsPath, true);
+            const collection = collectionRegistry.getCollection(resultsPath, true);
             setCollection(collection);
             if (collection) {
                 // foundProperties = collection.properties;
@@ -68,7 +65,7 @@ export function QueryTableResults({
         }
 
         const docs = querySnapshot.docs.map((doc: any) => doc.data());
-        foundProperties = await getPropertiesFromData(docs);
+        foundProperties = await buildEntityPropertiesFromData(docs, inferTypeFromValue);
 
         foundPropertiesOrder = buildPropertiesOrder(foundProperties, foundPropertiesOrder, priorityKeys);
 
@@ -87,15 +84,7 @@ export function QueryTableResults({
     const [path, setPath] = useState<string | null>(null);
     const [collection, setCollection] = useState<EntityCollection | undefined>();
 
-    const resolvedCollection = useMemo(() => {
-        return collection && path ? resolveCollection<any>({
-            collection,
-            path: path,
-            propertyConfigs: customizationController.propertyConfigs,
-            authController
-        })
-            : undefined;
-    }, [collection, path]);
+    const resolvedCollection = collection;
 
     const selectionController = useSelectionController();
     const displayedColumnIds = (propertiesOrder ?? Object.keys(properties ?? {}))
@@ -158,7 +147,13 @@ export function QueryTableResults({
     }) => {
 
         const customEntityActions = (resolvedCollection?.entityActions ?? [])
-            .map(action => resolveEntityAction(action, customizationController.entityActions))
+            .map((action: any) => {
+                if (typeof action === "string") {
+                    return customizationController.entityActions?.find((entry) => entry.key === action);
+                } else {
+                    return action;
+                }
+            })
             .filter(Boolean) as EntityAction[];
 
         const actions = getActionsForEntity({

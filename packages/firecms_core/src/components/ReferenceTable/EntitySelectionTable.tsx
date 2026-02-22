@@ -11,7 +11,7 @@ import {
     useCustomizationController,
     useDataSource,
     useLargeLayout,
-    useNavigationController,
+    useCMSUrlController,
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
@@ -104,10 +104,10 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
-    const navigation = useNavigationController();
+    const cmsUrlController = useCMSUrlController();
     const analyticsController = useAnalyticsController();
 
-    const path = navigation.resolveDatabasePathsFrom(pathInput);
+    const path = cmsUrlController.resolveDatabasePathsFrom(pathInput);
 
     const dataSource = useDataSource(collection);
 

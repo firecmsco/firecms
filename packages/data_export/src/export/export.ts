@@ -25,16 +25,16 @@ export interface DownloadEntitiesExportParams<M extends Record<string, any>> {
 }
 
 export function downloadEntitiesExport<M extends Record<string, any>>({
-                                                                          data,
-                                                                          additionalData,
-                                                                          properties,
-                                                                          propertiesOrder,
-                                                                          name,
-                                                                          flattenArrays,
-                                                                          additionalHeaders,
-                                                                          exportType,
-                                                                          dateExportType
-                                                                      }: DownloadEntitiesExportParams<M>
+    data,
+    additionalData,
+    properties,
+    propertiesOrder,
+    name,
+    flattenArrays,
+    additionalHeaders,
+    exportType,
+    dateExportType
+}: DownloadEntitiesExportParams<M>
 ) {
 
     console.debug("Downloading export", {
@@ -59,10 +59,10 @@ export function downloadEntitiesExport<M extends Record<string, any>>({
 }
 
 export function getEntityCSVExportableData(data: Entity<any>[],
-                                           additionalData: Record<string, any>[] | undefined,
-                                           properties: Properties,
-                                           headers: Header[],
-                                           dateExportType: "timestamp" | "string"
+    additionalData: Record<string, any>[] | undefined,
+    properties: Properties,
+    headers: Header[],
+    dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
@@ -82,9 +82,9 @@ export function getEntityCSVExportableData(data: Entity<any>[],
 }
 
 export function getEntityJsonExportableData(data: Entity<any>[],
-                                            additionalData: Record<string, any>[] | undefined,
-                                            properties: Properties,
-                                            dateExportType: "timestamp" | "string"
+    additionalData: Record<string, any>[] | undefined,
+    properties: Properties,
+    dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
@@ -102,9 +102,9 @@ export function getEntityJsonExportableData(data: Entity<any>[],
 }
 
 function getExportHeaders<M extends Record<string, any>>(properties: Properties,
-                                                         propertiesOrder: string[] | undefined,
-                                                         additionalHeaders: string[] | undefined,
-                                                         arrayValuesCount?: ArrayValuesCount): Header[] {
+    propertiesOrder: string[] | undefined,
+    additionalHeaders: string[] | undefined,
+    arrayValuesCount?: ArrayValuesCount): Header[] {
 
     const headers: Header[] = [
         {
@@ -159,9 +159,9 @@ function getHeaders(property: Property, propertyKey: string, prefix = ""): Heade
 }
 
 function processValueForExport(inputValue: any,
-                               property: Property,
-                               exportType: "csv" | "json",
-                               dateExportType: "timestamp" | "string"
+    property: Property,
+    exportType: "csv" | "json",
+    dateExportType: "timestamp" | "string"
 ): any {
 
     let value;
@@ -184,7 +184,7 @@ function processValueForExport(inputValue: any,
         }
     } else if (property.type === "reference" && inputValue && inputValue.isEntityReference && inputValue.isEntityReference()) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
-        value = ref ? ref.pathWithIdAndDatabase : null;
+        value = ref ? ref.fullPath : null;
     } else if (property.type === "date" && inputValue instanceof Date) {
         value = inputValue ? (dateExportType === "timestamp" ? inputValue.getTime() : inputValue.toISOString()) : null;
     } else {
@@ -195,11 +195,11 @@ function processValueForExport(inputValue: any,
 }
 
 function processValuesForExport<M extends Record<string, any>>
-(inputValues: Record<keyof M, any>,
- properties: Properties,
- exportType: "csv" | "json",
- dateExportType: "timestamp" | "string"
-): Record<keyof M, any> {
+    (inputValues: Record<keyof M, any>,
+        properties: Properties,
+        exportType: "csv" | "json",
+        dateExportType: "timestamp" | "string"
+    ): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];

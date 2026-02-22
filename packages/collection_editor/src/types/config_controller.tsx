@@ -17,6 +17,17 @@ export interface CollectionsConfigController {
     collections?: PersistedCollection[];
 
     /**
+     * If true, the configuration cannot be modified.
+     * Use readOnlyReason to explain why.
+     */
+    readOnly?: boolean;
+
+    /**
+     * Reason why the configuration is read-only.
+     */
+    readOnlyReason?: string;
+
+    /**
      * Status information about the automatic collections setup process.
      * Stored in the project config document at `collectionsSetup`.
      */

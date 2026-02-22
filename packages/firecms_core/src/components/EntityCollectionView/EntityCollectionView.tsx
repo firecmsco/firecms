@@ -42,7 +42,8 @@ import {
     useDataSource,
     useFireCMSContext,
     useLargeLayout,
-    useNavigationController,
+    useCollectionRegistryController,
+    useCMSUrlController,
     useSideEntityController
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
@@ -157,7 +158,8 @@ export const EntityCollectionView = React.memo(
     ) {
 
         const context = useFireCMSContext();
-        const navigation = useNavigationController();
+        const collectionRegistry = useCollectionRegistryController();
+        const cmsUrlController = useCMSUrlController();
         const breadcrumbs = useBreadcrumbsController();
         const path = pathProp ?? collectionProp.dbPath;
         const dataSource = useDataSource(collectionProp);
@@ -337,7 +339,7 @@ export const EntityCollectionView = React.memo(
 
             const entityPath = collection?.collectionGroup ? clickedEntity.path : (path ?? clickedEntity.path);
             navigateToEntity({
-                navigation,
+                navigation: cmsUrlController,
                 path: entityPath,
                 sideEntityController,
                 openEntityMode,
@@ -358,7 +360,7 @@ export const EntityCollectionView = React.memo(
                 entityId: undefined,
                 path: path,
                 sideEntityController,
-                navigation,
+                navigation: cmsUrlController,
                 onClose: unselectNavigatedEntity
             })
         }, [path, sideEntityController]);
@@ -610,7 +612,7 @@ export const EntityCollectionView = React.memo(
                                     entityId: entity.id,
                                     selectedTab: subcollection.slug ?? subcollection.dbPath,
                                     path: path,
-                                    navigation,
+                                    navigation: cmsUrlController,
                                     sideEntityController
                                 })
                             }}>
@@ -627,7 +629,7 @@ export const EntityCollectionView = React.memo(
                     width: 260,
                     dependencies: [],
                     Builder: ({ entity }) => {
-                        const collectionsWithPath = navigation.getParentReferencesFromPath(entity.path);
+                        const collectionsWithPath = collectionRegistry.getParentReferencesFromPath(entity.path);
                         return (
                             <div className={"flex flex-col gap-2 w-full"}>
                                 {collectionsWithPath.map((reference) => {
@@ -1040,7 +1042,7 @@ function EntitiesCount({
 }) {
 
     const dataSource = useDataSource(collection);
-    const navigation = useNavigationController();
+    const navigation = useCollectionRegistryController();
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
 
@@ -1094,7 +1096,7 @@ function EntityIdHeaderWidget({
     idPath: string
 }) {
 
-    const navigation = useNavigationController();
+    const cmsUrlController = useCMSUrlController();
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
     const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.slug).map(String));
@@ -1131,7 +1133,7 @@ function EntityIdHeaderWidget({
                                 path,
 
                                 sideEntityController,
-                                navigation
+                                navigation: cmsUrlController
                             })
                         }}
                         className={"w-96 max-w-full"}>
@@ -1166,7 +1168,7 @@ function EntityIdHeaderWidget({
                                         path,
 
                                         sideEntityController,
-                                        navigation
+                                        navigation: cmsUrlController
                                     })
                                 }}
                                 includeEntityLink={false}

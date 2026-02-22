@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
-import { ProductPrice, ProductWithPrices } from "@firecms/types";
+import { ProductPrice, ProductWithPrices } from "../../types";
 import { useSubscriptionsForUserController } from "../../hooks";
 import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
 
@@ -9,11 +9,11 @@ function getDefaultCurrency(productPrice: ProductPrice) {
 }
 
 export function UpgradeCloudSubscriptionView({
-                                                 product,
-                                                 includePriceSelect = true,
-                                                 largePriceLabel = false,
-                                                 projectId
-                                             }: {
+    product,
+    includePriceSelect = true,
+    largePriceLabel = false,
+    projectId
+}: {
     product: ProductWithPrices,
     projectId: string,
     includePriceSelect?: boolean,
@@ -27,7 +27,7 @@ export function UpgradeCloudSubscriptionView({
     } = useSubscriptionsForUserController();
 
     // Filter for per-seat price with lookup_key = cloud_per_seat
-    const productPrice = product.prices.find((p) => p.lookup_key === "cloud_per_seat");
+    const productPrice = product.prices.find((p: any) => p.lookup_key === "cloud_per_seat");
 
     if (!productPrice) {
         throw new Error("INTERNAL: No per-seat price found (lookup_key: cloud_per_seat)");
@@ -44,7 +44,7 @@ export function UpgradeCloudSubscriptionView({
         currencies={productPrice.currency_options}
         selectedCurrency={currency}
         setSelectedCurrency={setCurrency}
-        largePriceLabel={largePriceLabel}/>;
+        largePriceLabel={largePriceLabel} />;
 
     const [linkLoading, setLinkLoading] = useState<boolean>(false);
 
@@ -86,7 +86,7 @@ export function UpgradeCloudSubscriptionView({
                 loading={linkLoading}
                 onClick={doSubscribe}
                 color={"primary"}
-                startIcon={<RocketLaunchIcon/>}>
+                startIcon={<RocketLaunchIcon />}>
                 Create a subscription
             </LoadingButton>
 

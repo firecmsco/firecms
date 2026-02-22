@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useNavigationController } from "../../hooks";
+import { useNavigationStateController } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { NavigationEntry } from "@firecms/types";
 import { Chip, Collapse, StarIcon } from "@firecms/ui";
@@ -32,7 +32,7 @@ function NavigationChip({ entry }: { entry: NavigationEntry }) {
         icon={<StarIcon
             onClick={onIconClick}
             size={18}
-            className={favourite ? "text-secondary" : "text-surface-400 dark:text-surface-500"}/>
+            className={favourite ? "text-secondary" : "text-surface-400 dark:text-surface-500"} />
         }>
         {entry.name}
     </Chip>;
@@ -40,7 +40,7 @@ function NavigationChip({ entry }: { entry: NavigationEntry }) {
 
 export function FavouritesView({ hidden }: { hidden: boolean }) {
 
-    const navigationController = useNavigationController();
+    const navigationController = useNavigationStateController();
     const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!userConfigurationPersistence)
@@ -53,7 +53,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
     return <Collapse in={favouriteCollections.length > 0}>
         <div className="flex flex-row flex-wrap gap-2 pb-2 min-h-[32px]">
             {favouriteCollections.map((entry) => <NavigationChip key={entry.slug}
-                                                                 entry={entry}/>)}
+                entry={entry} />)}
         </div>
     </Collapse>;
 }

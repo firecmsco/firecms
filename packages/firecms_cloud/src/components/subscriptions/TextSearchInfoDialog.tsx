@@ -15,13 +15,13 @@ import { useState } from "react";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 
 export function TextSearchInfoDialog({
-                                         open,
-                                         closeDialog,
-                                         collection,
-                                         collectionConfigController,
-                                         parentCollectionIds,
-                                         hasOwnTextSearchImplementation
-                                     }: {
+    open,
+    closeDialog,
+    collection,
+    collectionConfigController,
+    parentCollectionIds,
+    hasOwnTextSearchImplementation
+}: {
     open: boolean,
     closeDialog: () => void,
     path: string,
@@ -41,8 +41,7 @@ export function TextSearchInfoDialog({
             id: collection.slug,
             parentCollectionIds,
             collectionData: {
-                slug: collection.slug,
-                textSearchEnabled: true
+                slug: collection.slug
             }
         })
     }
@@ -54,7 +53,7 @@ export function TextSearchInfoDialog({
     >
 
         <DialogTitle variant={"h5"} className={"flex flex-row gap-4 items-center"}>
-            <SearchIcon/>
+            <SearchIcon />
             Enable text search
         </DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
@@ -96,41 +95,40 @@ export function TextSearchInfoDialog({
             </>}
 
             <div className={"flex items-end justify-end gap-4"}>
-                {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled &&
+                {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) &&
                     <LoadingButton loading={enablingForCollection}
-                                   size={"large"}
-                                   onClick={() => {
-                                       setEnablingForCollection(true);
-                                       enableTextSearchForCollection()
-                                           .then(() => {
-                                               snackbarController.open({
-                                                   message: "Local text search enabled",
-                                                   type: "success"
-                                               });
-                                               closeDialog();
-                                           })
-                                           .finally(() => setEnablingForCollection(false));
-                                   }}>
+                        size={"large"}
+                        onClick={() => {
+                            setEnablingForCollection(true);
+                            enableTextSearchForCollection()
+                                .then(() => {
+                                    snackbarController.open({
+                                        message: "Local text search enabled",
+                                        type: "success"
+                                    });
+                                    closeDialog();
+                                })
+                                .finally(() => setEnablingForCollection(false));
+                        }}>
                         Enable for this collection
                     </LoadingButton>}
 
                 {!hasOwnTextSearchImplementation && !projectConfig.localTextSearchEnabled &&
                     <LoadingButton loading={enablingLocalSearch}
-                                   size={"large"}
-                                   onClick={() => {
-                                       setEnablingLocalSearch(true);
-                                       projectConfig.updateLocalTextSearchEnabled(true)
-                                           .then(async () => {
-                                               if (!collection.textSearchEnabled)
-                                                   await enableTextSearchForCollection();
-                                               snackbarController.open({
-                                                   message: "Local text search enabled",
-                                                   type: "success"
-                                               });
-                                               closeDialog();
-                                           })
-                                           .finally(() => setEnablingLocalSearch(false));
-                                   }}>
+                        size={"large"}
+                        onClick={() => {
+                            setEnablingLocalSearch(true);
+                            projectConfig.updateLocalTextSearchEnabled(true)
+                                .then(async () => {
+                                    await enableTextSearchForCollection();
+                                    snackbarController.open({
+                                        message: "Local text search enabled",
+                                        type: "success"
+                                    });
+                                    closeDialog();
+                                })
+                                .finally(() => setEnablingLocalSearch(false));
+                        }}>
                         Enable for project
                     </LoadingButton>}
 
@@ -139,8 +137,8 @@ export function TextSearchInfoDialog({
         </DialogContent>
 
         <IconButton className={"absolute top-4 right-4"}
-                    onClick={closeDialog}>
-            <CloseIcon/>
+            onClick={closeDialog}>
+            <CloseIcon />
         </IconButton>
     </Dialog>;
 }

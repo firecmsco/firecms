@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EntityCollection, useNavigationController, useSnackbarController, AIIcon } from "@firecms/core";
+import { EntityCollection, useCollectionRegistryController, useSnackbarController, AIIcon } from "@firecms/core";
 import {
     Button,
     CircularProgress,
@@ -7,6 +7,7 @@ import {
     Menu,
     SendIcon,
     TextField,
+    Tooltip,
     Typography
 } from "@firecms/ui";
 import {
@@ -15,6 +16,7 @@ import {
     CollectionOperation
 } from "../../api/generateCollectionApi";
 import { PersistedCollection } from "../../types/persisted_collection";
+import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 export interface AICollectionGeneratorPopoverProps {
     /**
@@ -63,10 +65,11 @@ export function AICollectionGeneratorPopover({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
+    const configController = useCollectionsConfigController();
     const snackbarController = useSnackbarController();
 
-    const existingCollections = navigation.collections ?? [];
+    const existingCollections = collectionRegistry.collections ?? [];
 
     const handleGenerate = async () => {
         if (!prompt.trim()) return;
@@ -128,29 +131,37 @@ export function AICollectionGeneratorPopover({
         }
     };
 
+    const tooltipTitle = configController?.readOnly
+        ? (configController.readOnlyReason || "Collection generation is disabled")
+        : undefined;
+
     const defaultTrigger = showLabel ? (
-        <Button
-            variant="text"
-            size={size}
-            disabled={loading}
-            startIcon={loading
-                ? <CircularProgress size="smallest" />
-                : <AIIcon size="small" />
-            }
-        >
-            AI Assist
-        </Button>
+        <Tooltip title={tooltipTitle} asChild={true}>
+            <Button
+                variant="text"
+                size={size}
+                disabled={loading || configController?.readOnly}
+                startIcon={loading
+                    ? <CircularProgress size="smallest" />
+                    : <AIIcon size="small" />
+                }
+            >
+                AI Assist
+            </Button>
+        </Tooltip>
     ) : (
-        <IconButton
-            size={size}
-            disabled={loading}
-            aria-label="AI Assist"
-        >
-            {loading
-                ? <CircularProgress size="smallest" />
-                : <AIIcon size="small" />
-            }
-        </IconButton>
+        <Tooltip title={tooltipTitle} asChild={true}>
+            <IconButton
+                size={size}
+                disabled={loading || configController?.readOnly}
+                aria-label="AI Assist"
+            >
+                {loading
+                    ? <CircularProgress size="smallest" />
+                    : <AIIcon size="small" />
+                }
+            </IconButton>
+        </Tooltip>
     );
 
     return (

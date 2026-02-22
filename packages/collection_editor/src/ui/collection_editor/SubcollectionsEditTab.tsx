@@ -30,13 +30,13 @@ import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
 import { useFormex } from "@firecms/formex";
 
 export function SubcollectionsEditTab({
-                                          collection,
-                                          parentCollection,
-                                          configController,
-                                          collectionInference,
-                                          getUser,
-                                          parentCollectionIds
-                                      }: {
+    collection,
+    parentCollection,
+    configController,
+    collectionInference,
+    getUser,
+    parentCollectionIds
+}: {
     collection: PersistedCollection,
     parentCollection?: EntityCollection,
     configController: CollectionsConfigController;
@@ -83,10 +83,10 @@ export function SubcollectionsEditTab({
                                 <TableBody>
                                     {subcollections.map((subcollection) => (
                                         <TableRow key={subcollection.slug}
-                                                  onClick={() => setCurrentDialog({
-                                                      isNewCollection: false,
-                                                      editedCollectionId: subcollection.slug
-                                                  })}>
+                                            onClick={() => setCurrentDialog({
+                                                isNewCollection: false,
+                                                editedCollectionId: subcollection.slug
+                                            })}>
                                             <TableCell
                                                 align="left">
                                                 <Typography variant={"subtitle2"} className={"grow"}>
@@ -96,15 +96,15 @@ export function SubcollectionsEditTab({
                                             <TableCell
                                                 align="right">
                                                 <Tooltip title={"Remove"}
-                                                         asChild={true}>
+                                                    asChild={true}>
                                                     <IconButton size="small"
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    setSubcollectionToDelete(subcollection.slug);
-                                                                }}
-                                                                color="inherit">
-                                                        <DeleteIcon size={"small"}/>
+                                                        onClick={(e: any) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            setSubcollectionToDelete(subcollection.slug);
+                                                        }}
+                                                        color="inherit">
+                                                        <DeleteIcon size={"small"} />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
@@ -120,7 +120,7 @@ export function SubcollectionsEditTab({
                                     });
                                 }}
                                 variant={"text"}
-                                startIcon={<AddIcon/>}>
+                                startIcon={<AddIcon />}>
                                 Add subcollection
                             </Button>
 
@@ -135,11 +135,11 @@ export function SubcollectionsEditTab({
 
                         {totalEntityViews === 0 &&
                             <Alert action={<Button variant="text"
-                                                   size={"small"}
-                                                   href={"https://firecms.co/docs/cloud/quickstart"}
-                                                   component={"a"}
-                                                   rel="noopener noreferrer"
-                                                   target="_blank">More info</Button>}>
+                                size={"small"}
+                                href={"https://firecms.co/docs/cloud/quickstart"}
+                                component={"a"}
+                                rel="noopener noreferrer"
+                                target="_blank">More info</Button>}>
                                 Define your own custom views by uploading them with the CLI.
                             </Alert>
                         }
@@ -159,15 +159,15 @@ export function SubcollectionsEditTab({
                                                 <TableCell
                                                     align="right">
                                                     <Tooltip title={"Remove"}
-                                                             asChild={true}>
+                                                        asChild={true}>
                                                         <IconButton size="small"
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        e.stopPropagation();
-                                                                        setViewToDelete(view.key);
-                                                                    }}
-                                                                    color="inherit">
-                                                            <DeleteIcon size={"small"}/>
+                                                            onClick={(e: any) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                setViewToDelete(view.key);
+                                                            }}
+                                                            color="inherit">
+                                                            <DeleteIcon size={"small"} />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </TableCell>
@@ -195,7 +195,7 @@ export function SubcollectionsEditTab({
                                         setAddEntityViewDialogOpen(true);
                                     }}
                                     variant={"text"}
-                                    startIcon={<AddIcon/>}>
+                                    startIcon={<AddIcon />}>
                                     Add custom entity view
                                 </Button>
                             </Paper>
@@ -208,37 +208,37 @@ export function SubcollectionsEditTab({
                 </div>
             </Container>
 
-            <div style={{ height: "52px" }}/>
+            <div style={{ height: "52px" }} />
 
             {subcollectionToDelete &&
                 <ConfirmationDialog open={Boolean(subcollectionToDelete)}
-                                    onAccept={() => {
-                                              const props = {
-                                                  id: subcollectionToDelete,
-                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.slug]
-                                              };
-                                              console.debug("Deleting subcollection", props)
-                                              configController.deleteCollection(props).then(() => {
-                                                  setSubcollectionToDelete(undefined);
-                                                  setSubcollections(subcollections?.filter(e => e.slug !== subcollectionToDelete))
-                                              });
-                                          }}
-                                    onCancel={() => setSubcollectionToDelete(undefined)}
-                                    title={<>Delete this subcollection?</>}
-                                    body={<> This will <b>not
-                                              delete any data</b>, only
-                                              the collection in the CMS</>}/>}
+                    onAccept={() => {
+                        const props = {
+                            id: subcollectionToDelete,
+                            parentCollectionIds: [...(parentCollectionIds ?? []), collection.slug]
+                        };
+                        console.debug("Deleting subcollection", props)
+                        configController.deleteCollection(props).then(() => {
+                            setSubcollectionToDelete(undefined);
+                            setSubcollections(subcollections?.filter(e => e.slug !== subcollectionToDelete))
+                        });
+                    }}
+                    onCancel={() => setSubcollectionToDelete(undefined)}
+                    title={<>Delete this subcollection?</>}
+                    body={<> This will <b>not
+                        delete any data</b>, only
+                        the collection in the CMS</>} />}
             {viewToDelete &&
                 <ConfirmationDialog open={Boolean(viewToDelete)}
-                                    onAccept={() => {
-                                              setFieldValue("entityViews", values.entityViews?.filter(e => e !== viewToDelete));
-                                              setViewToDelete(undefined);
-                                          }}
-                                    onCancel={() => setViewToDelete(undefined)}
-                                    title={<>Remove this view?</>}
-                                    body={<>This will <b>not
-                                              delete any data</b>, only
-                                              the view in the CMS</>}/>}
+                    onAccept={() => {
+                        setFieldValue("entityViews", values.entityViews?.filter(e => e !== viewToDelete));
+                        setViewToDelete(undefined);
+                    }}
+                    onCancel={() => setViewToDelete(undefined)}
+                    title={<>Remove this view?</>}
+                    body={<>This will <b>not
+                        delete any data</b>, only
+                        the view in the CMS</>} />}
 
             <CollectionEditorDialog
                 open={Boolean(currentDialog)}
@@ -254,7 +254,7 @@ export function SubcollectionsEditTab({
                         setSubcollections([...subcollections, updatedCollection]);
                     }
                     setCurrentDialog(undefined);
-                }}/>
+                }} />
 
             <EntityCustomViewsSelectDialog
                 open={addEntityViewDialogOpen}
@@ -263,7 +263,7 @@ export function SubcollectionsEditTab({
                         setFieldValue("entityViews", [...(values.entityViews ?? []), selectedViewKey]);
                     }
                     setAddEntityViewDialogOpen(false);
-                }}/>
+                }} />
         </div>
     );
 }

@@ -5,7 +5,7 @@ export * from "./data/useRelationSelector";
 export * from "./data/save";
 export * from "./data/delete";
 
-export * from "./useNavigationController";
+
 export * from "./navigation/contexts";
 
 export * from "./useResolvedNavigationFrom";

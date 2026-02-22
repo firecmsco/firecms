@@ -11,7 +11,7 @@ export const clientesCollection: EntityCollection = {
     dbPath: "clientes",
     icon: "Person",
     description: "Información de los clientes del servicio de alquiler",
-    textSearchEnabled: true,
+
     properties: {
         id: {
             type: "number",

@@ -1,4 +1,5 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
+import { CollectionsConfigController } from "./config_controller";
 import { Entity, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
@@ -50,6 +51,11 @@ export interface CollectionEditorController {
         collection: PersistedCollection,
         existingEntities: Entity<any>[]
     }) => void;
+
+    /**
+     * The config controller that this editor represents.
+     */
+    configController: CollectionsConfigController;
 
     configPermissions: CollectionEditorPermissionsBuilder;
 

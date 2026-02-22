@@ -26,10 +26,10 @@ const fileTypes: Record<string, string> = {
 }
 
 export function StoragePropertyField({
-                                         multiple,
-                                         existing,
-                                         disabled
-                                     }: {
+    multiple,
+    existing,
+    disabled
+}: {
     multiple: boolean;
     existing: boolean;
     disabled: boolean;
@@ -89,9 +89,9 @@ export function StoragePropertyField({
                 <ExpandablePanel
                     title={
                         <div className="flex flex-row text-surface-500 text-text-secondary dark:text-text-secondary-dark">
-                            <CloudUploadIcon/>
+                            <CloudUploadIcon />
                             <Typography variant={"subtitle2"}
-                                        className="ml-4">
+                                className="ml-4">
                                 File upload config
                             </Typography>
                         </div>
@@ -109,7 +109,7 @@ export function StoragePropertyField({
                                 value={fileTypesValue ?? []}
                                 onValueChange={handleTypesChange}
                                 label={allFileTypesSelected ? undefined : "Allowed file types"}
-                                renderValues={(selected) => {
+                                renderValues={(selected: any[]) => {
                                     if (!selected || selected.length === 0) return "All file types allowed";
                                     return selected.map((v: string) => fileTypes[v])
                                         .filter((v: string) => Boolean(v))
@@ -124,12 +124,12 @@ export function StoragePropertyField({
                                             {label}
                                         </div>
                                         <Button size={"small"}
-                                                variant={"text"}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    return setFieldValue(acceptedFiles, [value]);
-                                                }}>
+                                            variant={"text"}
+                                            onClick={(e: any) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                return setFieldValue(acceptedFiles, [value]);
+                                            }}>
                                             Only
                                         </Button>
                                     </MultiSelectItem>
@@ -140,20 +140,20 @@ export function StoragePropertyField({
 
                         <div className={"col-span-12"}>
                             <Field name={fileName}
-                                   as={DebouncedTextField}
-                                   label={"File name"}
-                                   size={"small"}
-                                   disabled={hasFilenameCallback || disabled}
-                                   value={hasFilenameCallback ? "-" : fileNameValue}
+                                as={DebouncedTextField}
+                                label={"File name"}
+                                size={"small"}
+                                disabled={hasFilenameCallback || disabled}
+                                value={hasFilenameCallback ? "-" : fileNameValue}
                             />
                         </div>
                         <div className={"col-span-12"}>
                             <Field name={storagePath}
-                                   as={DebouncedTextField}
-                                   label={"Storage path"}
-                                   disabled={hasStoragePathCallback || disabled}
-                                   size={"small"}
-                                   value={hasStoragePathCallback ? "-" : storagePathValue}
+                                as={DebouncedTextField}
+                                label={"Storage path"}
+                                disabled={hasStoragePathCallback || disabled}
+                                size={"small"}
+                                value={hasStoragePathCallback ? "-" : storagePathValue}
                             />
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
                                 <p>You can use the following placeholders in
@@ -171,16 +171,16 @@ export function StoragePropertyField({
                             </Typography>
 
                             <Field name={includeBucketUrl}
-                                   type="checkbox">
+                                type="checkbox">
                                 {({
-                                      field,
-                                      form
-                                  }: FormexFieldProps) => {
+                                    field,
+                                    form
+                                }: FormexFieldProps) => {
                                     return <SwitchControl
                                         label={"Include bucket URL (gs://...) in saved value"}
                                         disabled={existing || disabled}
                                         form={form}
-                                        field={field}/>;
+                                        field={field} />;
                                 }}
                             </Field>
 
@@ -191,16 +191,16 @@ export function StoragePropertyField({
                             </Typography>
 
                             <Field name={storeUrl}
-                                   type="checkbox">
+                                type="checkbox">
                                 {({
-                                      field,
-                                      form
-                                  }: FormexFieldProps) => {
+                                    field,
+                                    form
+                                }: FormexFieldProps) => {
                                     return <SwitchControl
                                         label={"Save URL instead of storage path"}
                                         disabled={existing || disabled}
                                         form={form}
-                                        field={field}/>;
+                                        field={field} />;
                                 }}
                             </Field>
 
@@ -215,22 +215,22 @@ export function StoragePropertyField({
 
                         <div className={"col-span-12"}>
                             <DebouncedTextField name={maxSize}
-                                                type={"number"}
-                                                label={"Max size (in bytes)"}
-                                                size={"small"}
-                                                value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
-                                                onChange={(e) => {
-                                                    const value = e.target.value;
-                                                    if (value === "") setFieldValue(maxSize, undefined);
-                                                    else setFieldValue(maxSize, parseInt(value));
-                                                }}
+                                type={"number"}
+                                label={"Max size (in bytes)"}
+                                size={"small"}
+                                value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
+                                onChange={(e: any) => {
+                                    const value = e.target.value;
+                                    if (value === "") setFieldValue(maxSize, undefined);
+                                    else setFieldValue(maxSize, parseInt(value));
+                                }}
                             />
                         </div>
 
                         <div className={"col-span-12 mt-4"}>
                             <Typography variant={"subtitle2"}
-                                        color={"secondary"}
-                                        className={"mb-2 block"}>
+                                color={"secondary"}
+                                className={"mb-2 block"}>
                                 Image Resize Configuration
                             </Typography>
                             <Typography variant={"caption"} className={"mb-2 block text-xs"}>
@@ -246,7 +246,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxWidthValue !== undefined && imageResizeMaxWidthValue !== null ? imageResizeMaxWidthValue.toString() : ""}
-                                onChange={(e) => {
+                                onChange={(e: any) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeMaxWidth, undefined);
                                     else setFieldValue(imageResizeMaxWidth, parseInt(value));
@@ -262,7 +262,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxHeightValue !== undefined && imageResizeMaxHeightValue !== null ? imageResizeMaxHeightValue.toString() : ""}
-                                onChange={(e) => {
+                                onChange={(e: any) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeMaxHeight, undefined);
                                     else setFieldValue(imageResizeMaxHeight, parseInt(value));
@@ -328,7 +328,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeQualityValue !== undefined && imageResizeQualityValue !== null ? imageResizeQualityValue.toString() : ""}
-                                onChange={(e) => {
+                                onChange={(e: any) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeQuality, undefined);
                                     else {
@@ -353,10 +353,10 @@ export function StoragePropertyField({
 
                 <ValidationPanel>
                     {!multiple && <div className={"grid grid-cols-12 gap-2"}>
-                        <GeneralPropertyValidation disabled={disabled}/>
+                        <GeneralPropertyValidation disabled={disabled} />
                     </div>}
                     {multiple && <div className={"col-span-12"}>
-                        <ArrayPropertyValidation disabled={disabled}/>
+                        <ArrayPropertyValidation disabled={disabled} />
                     </div>}
                 </ValidationPanel>
 

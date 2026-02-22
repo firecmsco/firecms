@@ -5,7 +5,7 @@ import {
     useCollapsedGroups,
     useCustomizationController,
     useFireCMSContext,
-    useNavigationController
+    useNavigationStateController
 } from "../../hooks";
 import {
     CMSAnalyticsEvent,
@@ -46,7 +46,7 @@ export function DefaultHomePage({
 
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
-    const navigationController = useNavigationController();
+    const navigationController = useNavigationStateController();
 
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");

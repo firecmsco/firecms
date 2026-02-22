@@ -19,7 +19,9 @@ import {
     removeUndefined,
     useAuthController,
     useCustomizationController,
-    useNavigationController,
+    useNavigationStateController,
+    useCollectionRegistryController,
+    useCMSUrlController,
     User,
     useSnackbarController
 } from "@firecms/core";
@@ -170,13 +172,16 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     setFormDirty: (dirty: boolean) => void
 }) {
     const { propertyConfigs } = useCustomizationController();
-    const navigation = useNavigationController();
+    const navigationState = useNavigationStateController();
+    const collectionRegistry = useCollectionRegistryController();
     const authController = useAuthController();
 
     const {
         topLevelNavigation,
+    } = navigationState;
+    const {
         collections
-    } = navigation;
+    } = collectionRegistry;
 
     const initialValuesProp = props.initialValues;
     const copyFromProp = props.copyFrom;
@@ -190,7 +195,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
 
     useEffect(() => {
         try {
-            if (navigation.initialised) {
+            if (collectionRegistry.initialised) {
                 if (props.editedCollectionId) {
                     // We must use getRawCollection so the editor schema fields 
                     // aren't polluted with dynamically injected runtime `relations`.
@@ -198,7 +203,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
                     const dbPath = [...(props.parentCollectionIds ?? []), props.editedCollectionId]
                         .reduce((acc, segment, i) => i === 0 ? segment : `${acc}/fake_id/${segment}`, "");
 
-                    setCollection(navigation.getRawCollection(dbPath) as PersistedCollection<any>);
+                    setCollection(collectionRegistry.getRawCollection(dbPath) as PersistedCollection<any>);
                 } else {
                     setCollection(undefined);
                 }
@@ -207,7 +212,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         } catch (e) {
             console.error(e);
         }
-    }, [props.editedCollectionId, props.parentCollectionIds, navigation.initialised, navigation.getRawCollection]);
+    }, [props.editedCollectionId, props.parentCollectionIds, collectionRegistry.initialised, collectionRegistry.getRawCollection]);
 
     if (!topLevelNavigation) {
         throw Error("Internal: Navigation not ready in collection editor");
@@ -250,7 +255,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         return <CircularProgressCenter />;
     }
 
-    if (!props.isNewCollection && (!navigation.initialised || !initialLoadingCompleted)) {
+    if (!props.isNewCollection && (!collectionRegistry.initialised || !initialLoadingCompleted)) {
         return <CircularProgressCenter />;
     }
 
@@ -309,7 +314,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 ) {
 
     const importConfig = useImportConfig();
-    const navigation = useNavigationController();
+    const urlController = useCMSUrlController();
+    const collectionRegistry = useCollectionRegistryController();
     const snackbarController = useSnackbarController();
 
     // Use this ref to store which properties have errors
@@ -547,8 +553,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const updatedFullPath = path?.includes("/") ? path?.split("/").slice(0, -1).join("/") + "/" + usedPath : usedPath; // TODO: this path is wrong
     const pathError = validatePath(usedPath, isNewCollection, existingPaths, values.slug);
 
-    const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
-    const resolvedPath = !pathError ? navigation.resolveDatabasePathsFrom(updatedFullPath) : undefined;
+    const parentPaths = !pathError && parentCollectionIds ? collectionRegistry.convertIdsToPaths(parentCollectionIds) : undefined;
+    const resolvedPath = !pathError ? urlController.resolveDatabasePathsFrom(updatedFullPath) : undefined;
     const getDataWithPath = resolvedPath && getData ? async () => {
         const data = await getData!(resolvedPath, parentPaths ?? []);
         if (existingEntities) {
@@ -845,9 +851,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             variant="filled"
                             color="primary"
                             type="submit"
+                            disabled={isSubmitting || configController?.readOnly}
                             loading={isSubmitting}
                         >
-                            Update collection
+                            {configController?.readOnly ? "Update collection (Read-only)" : "Update collection"}
                         </LoadingButton>}
 
                     </DialogActions>

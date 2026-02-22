@@ -22,7 +22,7 @@ import {
     SkeletonPropertyComponent,
     useAuthController,
     useCustomizationController,
-    useNavigationController,
+    useCollectionRegistryController,
     useSideEntityController
 } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
@@ -40,10 +40,10 @@ export type EntityPreviewProps = {
 };
 
 function PreviousValueView({
-                               previousValueInPath,
-                               childProperty,
-                               propertyKey
-                           }: {
+    previousValueInPath,
+    childProperty,
+    propertyKey
+}: {
     previousValueInPath: any,
     childProperty: Property,
     propertyKey: string
@@ -68,9 +68,9 @@ function PreviousValueView({
                     propertyKey={propertyKey as string}
                     value={previousValueInPath}
                     property={childProperty as Property}
-                    size={"small"}/>
+                    size={"small"} />
             </div>}>
-            <KeyboardBackspaceIcon size={"smallest"} color={"disabled"} className={"mb-1"}/>
+            <KeyboardBackspaceIcon size={"smallest"} color={"disabled"} className={"mb-1"} />
         </Tooltip>
     }
 }
@@ -80,23 +80,23 @@ function PreviousValueView({
  * It is used by default in reference fields and whenever a reference is displayed.
  */
 export function EntityHistoryEntry({
-                                       actions,
-                                       hover,
-                                       collection: collectionProp,
-                                       previewKeys,
-                                       onClick,
-                                       size,
-                                       entity,
-                                       previousValues
-                                   }: EntityPreviewProps) {
+    actions,
+    hover,
+    collection: collectionProp,
+    previewKeys,
+    onClick,
+    size,
+    entity,
+    previousValues
+}: EntityPreviewProps) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
-    const navigationController = useNavigationController();
+    const collectionRegistryController = useCollectionRegistryController();
     const sideEntityController = useSideEntityController();
 
-    const collection = collectionProp ?? navigationController.getCollection(entity.path);
+    const collection = collectionProp ?? collectionRegistryController.getCollection(entity.path);
     const updatedOn = entity.values?.["__metadata"]?.["updated_on"];
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);
@@ -110,7 +110,7 @@ export function EntityHistoryEntry({
         <div className={"ml-4 flex items-center gap-4"}>
             <Typography variant={"body2"} color={"secondary"}>{updatedOn.toLocaleString()}</Typography>
             {!user && updatedBy && <Chip size={"small"}>{updatedBy}</Chip>}
-            {user && <UserChip user={user}/>}
+            {user && <UserChip user={user} />}
         </div>
         <div
             className={cls(
@@ -130,7 +130,7 @@ export function EntityHistoryEntry({
 
             {entity &&
                 <Tooltip title={"See details for this revision"}
-                         className={"my-2 grow-0 shrink-0 self-start"}>
+                    className={"my-2 grow-0 shrink-0 self-start"}>
                     <IconButton
                         color={"inherit"}
                         className={""}
@@ -154,7 +154,7 @@ export function EntityHistoryEntry({
                                 updateUrl: true
                             });
                         }}>
-                        <KeyboardTabIcon/>
+                        <KeyboardTabIcon />
                     </IconButton>
                 </Tooltip>}
 
@@ -167,30 +167,30 @@ export function EntityHistoryEntry({
                     const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;
 
                     const element = childProperty ? (entity
-                            ? <PropertyPreview
-                                propertyKey={key as string}
-                                value={valueInPath}
-                                property={childProperty as Property}
-                                size={"small"}/>
-                            : <SkeletonPropertyComponent
-                                property={childProperty as Property}
-                                size={"small"}/>) :
+                        ? <PropertyPreview
+                            propertyKey={key as string}
+                            value={valueInPath}
+                            property={childProperty as Property}
+                            size={"small"} />
+                        : <SkeletonPropertyComponent
+                            property={childProperty as Property}
+                            size={"small"} />) :
                         <Typography variant={"body2"}>
                             {typeof valueInPath === "string" ? valueInPath : JSON.stringify(valueInPath)}
                         </Typography>;
                     return (
                         <div key={"ref_prev_" + key}
-                             className="flex w-full my-1 items-center">
+                            className="flex w-full my-1 items-center">
                             <Typography variant={"caption"}
-                                        color={"secondary"}
-                                        className="min-w-[140px] md:min-w-[200px] w-1/5 pr-8 overflow-hidden text-ellipsis text-right">
+                                color={"secondary"}
+                                className="min-w-[140px] md:min-w-[200px] w-1/5 pr-8 overflow-hidden text-ellipsis text-right">
                                 {key}
                             </Typography>
                             <div className="w-4/5">
                                 {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
                                     <PreviousValueView previousValueInPath={previousValueInPath}
-                                                       childProperty={childProperty as Property}
-                                                       propertyKey={key}/>
+                                        childProperty={childProperty as Property}
+                                        propertyKey={key} />
                                 }
                                 {element}
                             </div>

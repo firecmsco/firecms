@@ -6,7 +6,7 @@ import {
     Entity,
     Property,
     useCustomizationController,
-    useNavigationController,
+    useCMSUrlController,
     User,
     useSnackbarController
 } from "@firecms/core";
@@ -81,7 +81,7 @@ export const ConfigControllerProvider = React.memo(
         generateCollection
     }: PropsWithChildren<ConfigControllerProviderProps>) {
 
-        const navigation = useNavigationController();
+        const urlController = useCMSUrlController();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
         const { propertyConfigs } = useCustomizationController();
@@ -256,7 +256,8 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
-                        pathSuggestions
+                        pathSuggestions,
+                        configController: collectionConfigController
                     }}>
 
                     {children}
@@ -275,7 +276,7 @@ export const ConfigControllerProvider = React.memo(
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
-                                    const url = navigation.buildUrlCollectionPath(collection.slug);
+                                    const url = urlController.buildUrlCollectionPath(collection.slug);
                                     navigate(url);
                                 }
                             }
@@ -294,7 +295,7 @@ export const ConfigControllerProvider = React.memo(
                         getData={getData && currentPropertyDialog?.editedCollectionId
                             ? () => {
                                 console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = navigation.resolveDatabasePathsFrom(currentPropertyDialog.editedCollectionId!)
+                                const resolvedPath = urlController.resolveDatabasePathsFrom(currentPropertyDialog.editedCollectionId!)
                                 return getData(resolvedPath, []);
                             }
                             : undefined}

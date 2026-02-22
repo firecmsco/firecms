@@ -1,7 +1,7 @@
 import { AuthController, FireCMSContext, User } from "@firecms/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
-import { useNavigationController } from "./useNavigationController";
+import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
 import { useSideEntityController } from "./useSideEntityController";
 import { useDataSource } from "./data/useDataSource";
 import { useStorageSource } from "./useStorageSource";
@@ -27,7 +27,16 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
     const authController = useAuthController<USER, AuthControllerType>();
     const sideDialogsController = useSideDialogsController();
     const sideEntityController = useSideEntityController();
-    const navigation = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
+    const navigationState = useNavigationStateController();
+    const cmsUrlController = useCMSUrlController();
+
+    const navigation = React.useMemo(() => ({
+        ...collectionRegistry,
+        ...navigationState,
+        ...cmsUrlController,
+        getCollectionBySlug: collectionRegistry.getCollection
+    }), [collectionRegistry, navigationState, cmsUrlController]);
     const dataSource = useDataSource();
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();
@@ -41,7 +50,7 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
         authController,
         sideDialogsController,
         sideEntityController,
-        navigation,
+        navigation: navigation as any,
         dataSource,
         storageSource,
         snackbarController,
@@ -52,12 +61,12 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
         userManagement
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         fireCMSContextRef.current = {
             authController,
             sideDialogsController,
             sideEntityController,
-            navigation,
+            navigation: navigation as any,
             dataSource,
             storageSource,
             snackbarController,

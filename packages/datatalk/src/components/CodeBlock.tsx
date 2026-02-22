@@ -20,20 +20,20 @@ function ExecutionErrorView(props: { executionError: Error }) {
     });
 
     return <div className={"w-full text-sm bg-red-100 dark:bg-red-800 p-4 rounded-lg"}>
-        <code className={"text-red-700 dark:text-red-300 break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }}/>
+        <code className={"text-red-700 dark:text-red-300 break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </div>;
 }
 
 export function CodeBlock({
-                              initialCode,
-                              maxWidth,
-                              loading,
-                              sourceLoading,
-                              onCodeModified,
-                              autoRunCode,
-                              onCodeRun,
-                              collections
-                          }: {
+    initialCode,
+    maxWidth,
+    loading,
+    sourceLoading,
+    onCodeModified,
+    autoRunCode,
+    onCodeRun,
+    collections
+}: {
     initialCode?: string,
     sourceLoading?: boolean,
     loading?: boolean,
@@ -134,7 +134,7 @@ export function CodeBlock({
                             const priorityKeys = extractStringLiterals(code);
                             return displayQuerySnapshotData(codeResult, priorityKeys);
                         } else if (codeResult instanceof firestoreLibrary.DocumentReference) {
-                            return setExecutionResult("Document added successfully with reference: " + codeResult.slug);
+                            return setExecutionResult("Document added successfully with reference: " + codeResult.id);
                         } else if (codeResult instanceof firestoreLibrary.DocumentSnapshot) {
                             const res = JSON.stringify(codeResult.data(), null, 2);
                             originalConsoleLog("Document data", res);
@@ -173,12 +173,12 @@ export function CodeBlock({
 
     return (
         <div className={"flex flex-col my-4 gap-2"}
-             style={{
-                 maxWidth: maxWidth ? maxWidth + "px" : undefined
-             }}>
+            style={{
+                maxWidth: maxWidth ? maxWidth + "px" : undefined
+            }}>
 
             <div className={"flex flex-row w-full gap-4"}
-                 ref={textAreaRef}>
+                ref={textAreaRef}>
                 <AutoHeightEditor
                     value={code}
                     loading={loading}
@@ -186,13 +186,13 @@ export function CodeBlock({
                     onChange={handleCodeChange}
                 />
                 <Button size="small"
-                        variant={codeHasBeenRun ? "outlined" : "filled"}
-                        onClick={executeQuery}
-                        disabled={!code}>Run Code</Button>
+                    variant={codeHasBeenRun ? "outlined" : "filled"}
+                    onClick={executeQuery}
+                    disabled={!code}>Run Code</Button>
             </div>
 
             {executionError && (
-                <ExecutionErrorView executionError={executionError}/>
+                <ExecutionErrorView executionError={executionError} />
             )}
 
             {(querySnapshot || loadingQuery || consoleOutput || executionResult) && (
@@ -206,11 +206,11 @@ export function CodeBlock({
                         "h-[92px]": !querySnapshot && loadingQuery
                     })}>
 
-                    {loadingQuery && <CircularProgressCenter/>}
+                    {loadingQuery && <CircularProgressCenter />}
 
                     {querySnapshot && <QueryTableResults querySnapshot={querySnapshot}
-                                                         priorityKeys={codePriorityKeys}
-                                                         collections={collections}/>}
+                        priorityKeys={codePriorityKeys}
+                        collections={collections} />}
 
                     {(consoleOutput || executionResult) && (
                         <>
@@ -218,15 +218,15 @@ export function CodeBlock({
                                 <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
                                     {consoleOutput &&
                                         <pre className={"text-sm font-mono text-surface-700 dark:text-surface-200"}>
-                                {consoleOutput}
-                            </pre>}
+                                            {consoleOutput}
+                                        </pre>}
                                     {executionResult &&
                                         <pre className={"text-xs font-mono text-surface-700 dark:text-surface-200"}>
-                                    {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
-                            </pre>}
+                                            {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
+                                        </pre>}
                                 </Paper>}
 
-                            {arrayOfObjects && <DataTable data={convertedData}/>}
+                            {arrayOfObjects && <DataTable data={convertedData} />}
                         </>
                     )}
                 </div>

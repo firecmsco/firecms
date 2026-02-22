@@ -3,7 +3,7 @@ import { doc, getFirestore, onSnapshot, setDoc } from "@firebase/firestore";
 import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "@firebase/app-check";
 
 import { FirebaseApp } from "@firebase/app";
-import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "@firecms/types";
+import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "@firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";

@@ -4,23 +4,16 @@ import { EntityCollection, EntityReference } from "@firecms/types";
 export type CollectionRegistryController<EC extends EntityCollection = EntityCollection<any>> = {
     getCollection: (slugOrPath: string, includeUserOverride?: boolean) => EC | undefined;
     getRawCollection: (slugOrPath: string) => EC | undefined;
-    getCollectionBySlug: (slug: string) => EC | undefined;
-    getCollectionById: (id: string) => EC | undefined;
-    getCollectionFromIds: (ids: string[]) => EC | undefined;
-    getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
     getParentReferencesFromPath: (path: string) => EntityReference[];
     getParentCollectionIds: (path: string) => string[];
     convertIdsToPaths: (ids: string[]) => string[];
     initialised: boolean;
+    collections?: EntityCollection[];
 };
 
 export const CollectionRegistryContext = createContext<CollectionRegistryController>({
     getCollection: () => undefined,
     getRawCollection: () => undefined,
-    getCollectionBySlug: () => undefined,
-    getCollectionById: () => undefined,
-    getCollectionFromIds: () => undefined,
-    getCollectionFromPaths: () => undefined,
     getParentReferencesFromPath: () => [],
     getParentCollectionIds: () => [],
     convertIdsToPaths: () => [],

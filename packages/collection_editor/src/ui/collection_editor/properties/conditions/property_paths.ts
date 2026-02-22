@@ -1,4 +1,5 @@
-import { Properties, Property, PropertyOrBuilder, isPropertyBuilder } from "@firecms/core";
+import { Properties, Property } from "@firecms/core";
+import { isPropertyBuilder } from "@firecms/common";
 
 /**
  * Recursively extract all property paths from a Properties object.
@@ -28,7 +29,7 @@ export function getPropertyPaths(
         paths.push(fullPath);
 
         // Recursively add nested map properties
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             const nestedPaths = getPropertyPaths(
                 property.properties as Properties,
                 fullPath
@@ -37,12 +38,12 @@ export function getPropertyPaths(
         }
 
         // For arrays with object items, add the nested paths too
-        if (property.dataType === "array" && property.of) {
-            const ofPropertyOrBuilder = property.of as PropertyOrBuilder;
+        if (property.type === "array" && property.of) {
+            const ofPropertyOrBuilder = property.of as unknown as Property;
             // Skip if the array's 'of' is a PropertyBuilder
             if (!isPropertyBuilder(ofPropertyOrBuilder)) {
                 const ofProperty = ofPropertyOrBuilder as Property;
-                if (ofProperty.dataType === "map" && ofProperty.properties) {
+                if (ofProperty.type === "map" && ofProperty.properties) {
                     const nestedPaths = getPropertyPaths(
                         ofProperty.properties as Properties,
                         `${fullPath}[]`
@@ -79,7 +80,7 @@ export function getGroupedPropertyPaths(
         const property = propertyOrBuilder as Property;
         grouped[key] = [key];
 
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             const nestedPaths = getPropertyPaths(
                 property.properties as Properties,
                 key

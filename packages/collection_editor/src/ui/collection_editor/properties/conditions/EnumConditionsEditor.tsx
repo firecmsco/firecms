@@ -16,12 +16,11 @@ import {
 import {
     Properties,
     Property,
-    PropertyOrBuilder,
     getFieldConfig,
     DEFAULT_FIELD_CONFIGS,
-    EnumValueConfig,
-    isPropertyBuilder
+    EnumValueConfig
 } from "@firecms/core";
+import { isPropertyBuilder } from "@firecms/common";
 import { PropertyWithId } from "../../PropertyEditView";
 import { getPropertyPaths } from "./property_paths";
 
@@ -80,14 +79,14 @@ function getPropertyAtPath(
 
     for (const part of parts) {
         if (!current) return undefined;
-        const propertyOrBuilder = current[part] as PropertyOrBuilder | undefined;
+        const propertyOrBuilder = current[part] as Property | undefined;
         if (!propertyOrBuilder) return undefined;
 
         if (isPropertyBuilder(propertyOrBuilder)) return undefined;
 
         property = propertyOrBuilder as Property;
 
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             current = property.properties as Properties;
         } else {
             current = undefined;
@@ -101,11 +100,11 @@ function getPropertyAtPath(
  * Get enum values from the current property being edited
  */
 function getCurrentPropertyEnumValues(values: PropertyWithId): EnumValueConfig[] {
-    if (values.dataType === "string" && values.enumValues) {
-        if (Array.isArray(values.enumValues)) {
-            return values.enumValues;
+    if (values.type === "string" && values.enum) {
+        if (Array.isArray(values.enum)) {
+            return values.enum;
         }
-        return Object.entries(values.enumValues).map(([id, label]) => ({
+        return Object.entries(values.enum).map(([id, label]) => ({
             id,
             label: typeof label === "string" ? label : (label as EnumValueConfig).label
         }));
@@ -133,11 +132,11 @@ function getFieldColor(fieldPath: string, collectionProperties?: Properties): st
  */
 function getFieldEnumValues(property: Property | undefined): EnumValueConfig[] {
     if (!property) return [];
-    if (property.dataType === "string" && property.enumValues) {
-        if (Array.isArray(property.enumValues)) {
-            return property.enumValues;
+    if (property.type === "string" && property.enum) {
+        if (Array.isArray(property.enum)) {
+            return property.enum;
         }
-        return Object.entries(property.enumValues).map(([id, label]) => ({
+        return Object.entries(property.enum).map(([id, label]) => ({
             id,
             label: typeof label === "string" ? label : (label as EnumValueConfig).label
         }));
@@ -326,7 +325,7 @@ function EnumConditionRow({
 
     // Get the property for the selected field
     const selectedFieldProperty = getPropertyAtPath(config.field, collectionProperties);
-    const isBoolean = config.field === "isNew" || selectedFieldProperty?.dataType === "boolean";
+    const isBoolean = config.field === "isNew" || selectedFieldProperty?.type === "boolean";
 
     // Check if the selected field has enum values
     const fieldEnumValues = getFieldEnumValues(selectedFieldProperty);

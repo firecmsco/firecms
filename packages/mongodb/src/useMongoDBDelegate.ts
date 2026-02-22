@@ -61,9 +61,9 @@ export function useMongoDBDelegate({
         searchString?: string,
         orderBy?: string,
         order?: "desc" | "asc",
-        limit?: number): [Realm.Services.MongoDB.Filter, Realm.Services.MongoDB.FindOptions] => {
+        limit?: number): [any, any] => {
 
-        const queryParams: Realm.Services.MongoDB.Filter = {};
+        const queryParams: any = {};
         if (filter) {
             Object.entries(filter).forEach(([key, filterParameter]) => {
                 const [op, value] = filterParameter as [WhereFilterOp, any];
@@ -76,7 +76,7 @@ export function useMongoDBDelegate({
         //     queryParams['$text'] = { $search: searchString };
         // }
 
-        const options: Realm.Services.MongoDB.FindOptions = {};
+        const options: any = {};
         if (orderBy && order) {
             // @ts-ignore
             options["sort"] = { [orderBy]: (order === "desc" ? -1 : 1) };
@@ -129,7 +129,7 @@ export function useMongoDBDelegate({
         }
 
         const fetchedDocs = await mongoCollection.find(queryParams, options);
-        return fetchedDocs.map((doc) => mongoToEntity(doc, path));
+        return fetchedDocs.map((doc: any) => mongoToEntity(doc, path));
     }, [app, buildQuery, cluster, database]);
 
     const fetchEntity = useCallback(async <M extends Record<string, any>>({
@@ -267,6 +267,7 @@ export function useMongoDBDelegate({
         const onDocReplace = (change: ChangeEvent) => {
             const entity = mongoToEntity(change.fullDocument, path);
             const idx = getEntityIndex(currentEntities, entity);
+            if (idx === null) return;
             updateCurrentEntities(replaceValueAtIndex(currentEntities, idx, entity));
         };
 
@@ -281,6 +282,7 @@ export function useMongoDBDelegate({
         const watchCollection = async () => {
             const [queryParams, options] = buildQuery(filter, searchString, orderBy, order, limit);
             stream = mongoCollection.watch(queryParams);
+            if (!stream) return;
             for await (const change of stream) {
                 switch (change.operationType) {
                     case "insert": {
@@ -497,7 +499,7 @@ function convertFromMongoValue(value: unknown): any {
             return value;
         }
         if ("path" in value && "id" in value && typeof value.path === "string") {
-            return new EntityReference((value.id as any).toString(), value.path);
+            return new EntityReference({ id: (value.id as any).toString(), path: value.path });
         }
         return convertFromMongoValues(value);
     }

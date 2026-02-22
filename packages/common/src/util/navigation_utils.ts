@@ -1,4 +1,4 @@
-import { EntityCollection, NavigationController, SideEntityController } from "@firecms/types";
+import { EntityCollection, CMSUrlController, SideEntityController } from "@firecms/types";
 import { getSubcollections } from "./resolutions";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
@@ -170,28 +170,28 @@ export function getCollectionPathsCombinations(subpaths: string[]): string[] {
 }
 
 export function navigateToEntity({
-                                     openEntityMode,
-                                     collection,
-                                     entityId,
-                                     copy,
-                                     path,
-                                     selectedTab,
-                                     sideEntityController,
-                                     onClose,
-                                     navigation
-                                 }:
+    openEntityMode,
+    collection,
+    entityId,
+    copy,
+    path,
+    selectedTab,
+    sideEntityController,
+    onClose,
+    navigation
+}:
 
-                                 {
-                                     openEntityMode: "side_panel" | "full_screen";
-                                     collection?: EntityCollection;
-                                     entityId?: string | number;
-                                     selectedTab?: string;
-                                     copy?: boolean;
-                                     path: string;
-                                     sideEntityController: SideEntityController;
-                                     onClose?: () => void;
-                                     navigation: NavigationController
-                                 }) {
+    {
+        openEntityMode: "side_panel" | "full_screen";
+        collection?: EntityCollection;
+        entityId?: string | number;
+        selectedTab?: string;
+        copy?: boolean;
+        path: string;
+        sideEntityController: SideEntityController;
+        onClose?: () => void;
+        navigation: CMSUrlController
+    }) {
 
     if (openEntityMode === "side_panel") {
 

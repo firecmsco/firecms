@@ -5,7 +5,7 @@ import {
     EntityReference,
     getPropertyInPath,
     isPropertyBuilder,
-    NavigationController,
+    CollectionRegistryController,
     Properties,
     Property,
 } from "@firecms/core";
@@ -15,7 +15,7 @@ import { inferTypeFromValue } from "@firecms/schema_inference";
 import { mergeDeep } from "@firecms/common";
 
 export function convertDataToEntity(authController: AuthController,
-    navigation: NavigationController,
+    navigation: CollectionRegistryController,
     data: Record<any, any>,
     idColumn: string | undefined,
     headersMapping: Record<string, string | null>,
@@ -76,7 +76,7 @@ export function flattenEntry(obj: any, parent = ""): any {
     }, {});
 }
 
-export function processValueMapping(authController: AuthController, value: any, navigation: NavigationController, property?: Property): any {
+export function processValueMapping(authController: AuthController, value: any, navigation: CollectionRegistryController, property?: Property): any {
     if (value === null) return null;
 
     if (property === undefined) return value;
@@ -137,7 +137,7 @@ export function processValueMapping(authController: AuthController, value: any, 
 
         // If no explicit database was provided in the string, try to get it from the collection
         if (databaseId === undefined) {
-            const targetCollection: EntityCollection<any> | undefined = navigation.getCollectionById(path);
+            const targetCollection: EntityCollection<any> | undefined = navigation.getCollection(path);
             databaseId = targetCollection?.databaseId;
         }
 

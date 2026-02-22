@@ -47,7 +47,7 @@ export function ProjectSettings() {
                     <BooleanSwitchWithLabel
                         position={"start"}
                         label="Enable local text search"
-                        onValueChange={(v) => projectConfig.updateLocalTextSearchEnabled(v)}
+                        onValueChange={(v: boolean) => projectConfig.updateLocalTextSearchEnabled(v)}
                         value={projectConfig.localTextSearchEnabled}
                     />
 
@@ -65,7 +65,7 @@ export function ProjectSettings() {
                     <BooleanSwitchWithLabel
                         position={"start"}
                         label="Document history enabled for all collections"
-                        onValueChange={(v) => projectConfig.updateHistoryDefaultEnabled(v)}
+                        onValueChange={(v: boolean) => projectConfig.updateHistoryDefaultEnabled(v)}
                         value={projectConfig.historyDefaultEnabled ?? false}
                     />
 
@@ -104,7 +104,7 @@ function ProjectNameTextField() {
 
     return <TextField value={name}
         label={"Project name"}
-        onChange={e => setName(e.target.value)}
+        onChange={(e: any) => setName(e.target.value)}
         onBlur={() => {
             if (name) projectConfig.updateProjectName(name);
         }} />;
@@ -127,7 +127,7 @@ function LogoUploadField() {
         uploadLogo(acceptedFiles[0]);
     }
 
-    const onFilesRejected: OnFileUploadRejected = (fileRejections, event) => {
+    const onFilesRejected: OnFileUploadRejected = (fileRejections: any[], event: any) => {
         for (const fileRejection of fileRejections) {
             for (const error of fileRejection.errors) {
                 snackbarContext.open({
@@ -190,7 +190,7 @@ function ThemeColors() {
                             <input
                                 type="color"
                                 value={projectConfig.primaryColor}
-                                onChange={e => {
+                                onChange={(e: any) => {
                                     return projectConfig.updatePrimaryColor(e.target.value);
                                 }}
                             />
@@ -200,7 +200,7 @@ function ThemeColors() {
                             <input
                                 type="color"
                                 value={projectConfig.secondaryColor}
-                                onChange={e => {
+                                onChange={(e: any) => {
                                     return projectConfig.updateSecondaryColor(e.target.value);
                                 }}
                             />

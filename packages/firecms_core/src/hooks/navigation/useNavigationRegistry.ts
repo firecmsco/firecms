@@ -57,13 +57,6 @@ export function useNavigationRegistry(userConfigPersistence?: UserConfigurationP
 
     }, [userConfigPersistence]);
 
-    const getCollectionBySlug = useCallback((slug: string): EntityCollection | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined)
-            throw Error("getCollectionById: Collections have not been initialised yet");
-        return registry.get(slug) as EntityCollection | undefined;
-    }, []);
-
     const getRawCollection = useCallback((slugOrPath: string): EntityCollection | undefined => {
         const registry = collectionRegistryRef.current;
         if (registry === undefined) return undefined;
@@ -93,29 +86,6 @@ export function useNavigationRegistry(userConfigPersistence?: UserConfigurationP
             return finalCollection as EC | undefined;
         } catch (e) {
             console.debug(`Could not resolve path segments to collection: ${pathSegments.join("/")}`, e);
-            return undefined;
-        }
-    }, []);
-
-    const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
-        const registry = collectionRegistryRef.current;
-        if (registry === undefined)
-            throw Error("getCollectionFromIds: Collections have not been initialised yet");
-
-        if (!ids?.length) {
-            return undefined;
-        }
-
-        const path = ids.reduce((acc, segment, i) => {
-            if (i === 0) return segment;
-            return `${acc}/fake_id/${segment}`;
-        }, "");
-
-        try {
-            const { finalCollection } = registry.resolvePathToCollections(path);
-            return finalCollection as EC | undefined;
-        } catch (e) {
-            console.debug(`Could not resolve ids to collection: ${ids.join("/")}`, e);
             return undefined;
         }
     }, []);
@@ -167,11 +137,7 @@ export function useNavigationRegistry(userConfigPersistence?: UserConfigurationP
         collectionRegistryRef,
         getCollection,
         getRawCollection,
-        getCollectionBySlug,
-        getCollectionById: getCollectionBySlug,
-        getCollectionFromPaths,
-        getCollectionFromIds,
-        getAllParentReferencesForPath,
+        getParentReferencesFromPath: getAllParentReferencesForPath,
         getParentCollectionIds,
         convertIdsToPaths
     };

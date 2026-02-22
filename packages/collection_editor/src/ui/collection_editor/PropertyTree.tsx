@@ -290,7 +290,7 @@ export function PropertyTreeEntry({
                             asChild={true}>
                             <IconButton size="smallest"
                                 color="inherit"
-                                onClick={(e) => {
+                                onClick={(e: any) => {
                                     e.stopPropagation();
                                     onPropertyRemove(propertyKey, namespace);
                                 }}>

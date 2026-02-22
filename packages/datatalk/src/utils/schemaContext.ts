@@ -1,4 +1,4 @@
-import { EntityCollection, Properties, Property, PropertyOrBuilder, isPropertyBuilder } from "@firecms/core";
+import { EntityCollection, Properties, Property, isPropertyBuilder } from "@firecms/core";
 
 /**
  * Schema context passed to the DataTalk API for understanding collection structures.
@@ -32,7 +32,7 @@ export function buildSchemaContext(collections: EntityCollection[]): SchemaConte
     return collections
         .filter(collection => collection.properties)
         .map(collection => ({
-            collection: collection.path,
+            collection: collection.slug,
             properties: buildSchemaProperties(collection.properties as Properties)
         }));
 }
@@ -58,7 +58,7 @@ function buildSchemaProperties(properties: Properties): Record<string, SchemaPro
  * Convert a single FireCMS Property to a SchemaProperty.
  */
 function buildSchemaProperty(property: Property): SchemaProperty | null {
-    if (!property || !property.dataType) return null;
+    if (!property || !property.type) return null;
 
     const base: Partial<SchemaProperty> = {};
 
@@ -67,7 +67,7 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
         base.description = property.description;
     }
 
-    switch (property.dataType) {
+    switch (property.type) {
         case "string": {
             const schemaProperty: SchemaProperty = {
                 ...base,
@@ -126,7 +126,7 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
                 ...base,
                 dataType: "array"
             };
-            if ("of" in property && property.of && !isPropertyBuilder(property.of as PropertyOrBuilder)) {
+            if ("of" in property && property.of && !isPropertyBuilder(property.of)) {
                 const ofProperty = buildSchemaProperty(property.of as Property);
                 if (ofProperty) {
                     schemaProperty.of = ofProperty;

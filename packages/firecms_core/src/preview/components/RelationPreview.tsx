@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Entity, EntityCollection, EntityRelation, PreviewSize } from "@firecms/types";
-import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
+import { useCustomizationController, useEntityFetch, useCollectionRegistryController } from "../../hooks";
 import { Skeleton } from "@firecms/ui";
 import { EntityPreview, EntityPreviewContainer, ErrorView } from "../../components";
 
@@ -46,7 +46,7 @@ function RelationPreviewInternal({
 
     const customizationController = useCustomizationController();
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
 
     const collection = navigationController.getCollection(relation.path);
     if (!collection) {

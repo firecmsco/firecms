@@ -16,13 +16,11 @@ import {
 import {
     Properties,
     Property,
-    PropertyOrBuilder,
     getFieldConfig,
     DEFAULT_FIELD_CONFIGS,
-    getIconForWidget,
-    EnumValueConfig,
-    isPropertyBuilder
+    EnumValueConfig
 } from "@firecms/core";
+import { isPropertyBuilder } from "@firecms/common";
 import { PropertyWithId } from "../../PropertyEditView";
 import { getPropertyPaths } from "./property_paths";
 
@@ -98,7 +96,7 @@ function getPropertyAtPath(
 
     for (const part of parts) {
         if (!current) return undefined;
-        const propertyOrBuilder = current[part] as PropertyOrBuilder | undefined;
+        const propertyOrBuilder = current[part] as Property | undefined;
         if (!propertyOrBuilder) return undefined;
 
         // Skip PropertyBuilder functions - they require runtime values
@@ -106,7 +104,7 @@ function getPropertyAtPath(
 
         property = propertyOrBuilder as Property;
 
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             current = property.properties as Properties;
         } else {
             current = undefined;
@@ -128,7 +126,7 @@ function getFieldDataType(
     if (contextField) return contextField.dataType;
 
     const property = getPropertyAtPath(fieldPath, collectionProperties);
-    return property?.dataType ?? "string";
+    return property?.type ?? "string";
 }
 
 /**
@@ -136,13 +134,13 @@ function getFieldDataType(
  */
 function getEnumValues(property: Property | undefined): EnumValueConfig[] | undefined {
     if (!property) return undefined;
-    if (property.dataType === "string" && property.enumValues) {
+    if (property.type === "string" && property.enum) {
         // Normalize to array format
-        if (Array.isArray(property.enumValues)) {
-            return property.enumValues;
+        if (Array.isArray(property.enum)) {
+            return property.enum;
         }
         // Handle object format { key: label }
-        return Object.entries(property.enumValues).map(([id, label]) => ({
+        return Object.entries(property.enum).map(([id, label]) => ({
             id,
             label: typeof label === "string" ? label : (label as EnumValueConfig).label
         }));

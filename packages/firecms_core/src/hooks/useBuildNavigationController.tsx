@@ -329,6 +329,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     return {
         ...registryHook,
         ...urlsHook,
+        getCollectionBySlug: registryHook.getCollection,
+        getCollectionById: registryHook.getCollection,
+        getCollectionFromIds: (ids: string[]) => registryHook.getCollection(ids.join("/")),
+        getCollectionFromPaths: (pathSegments: string[]) => registryHook.getCollection(pathSegments.join("/")),
         collections: collectionRegistryRef.current.getCollections(),
         views: viewsRef.current,
         adminViews: adminViewsRef.current,
@@ -341,5 +345,5 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         refreshNavigation,
         navigate,
         plugins
-    } as any;
+    };
 }

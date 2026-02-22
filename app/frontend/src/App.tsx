@@ -93,21 +93,7 @@ export function App() {
         getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
     });
 
-    // Authenticate WebSocket when user is available (and auth loading is complete)
-    useEffect(() => {
-        const authenticateWebSocket = async () => {
-            if (authController.user && !authController.initialLoading && postgresDelegate.client) {
-                try {
-                    const token = await authController.getAuthToken();
-                    await postgresDelegate.client.authenticate(token);
-                    console.log("WebSocket authenticated successfully");
-                } catch (error) {
-                    console.error("Failed to authenticate WebSocket:", error);
-                }
-            }
-        };
-        authenticateWebSocket();
-    }, [authController.user, authController.initialLoading, postgresDelegate.client, authController.getAuthToken]);
+
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
     const collectionConfigController = useLocalCollectionsConfigController(API_URL, collections);

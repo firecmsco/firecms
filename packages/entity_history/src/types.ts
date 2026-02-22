@@ -16,7 +16,7 @@ export interface NewHistoryEntryParams<T = any> {
     previousValues?: Partial<T>;
     values: Partial<T>;
     path: string;
-    entityId: string;
+    entityId: string | number;
     collection?: EntityCollection;
 }
 

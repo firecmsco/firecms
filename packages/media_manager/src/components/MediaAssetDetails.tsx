@@ -21,8 +21,8 @@ import { MediaAsset } from "../types";
 export interface MediaAssetDetailsProps {
     asset: MediaAsset;
     onClose: () => void;
-    onUpdate: (assetId: string, data: Partial<MediaAsset>) => Promise<void>;
-    onDelete: (assetId: string) => Promise<void>;
+    onUpdate: (assetId: string | number, data: Partial<MediaAsset>) => Promise<void>;
+    onDelete: (assetId: string | number) => Promise<void>;
 }
 
 /**

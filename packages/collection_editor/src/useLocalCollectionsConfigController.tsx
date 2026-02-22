@@ -6,7 +6,10 @@ import { PersistedCollection } from "./types/persisted_collection";
 
 export function useLocalCollectionsConfigController(
     apiUrl: string = "http://localhost:3001",
-    baseCollections: EntityCollection[] = []
+    baseCollections: EntityCollection[] = [],
+    options?: {
+        readOnly?: boolean;
+    }
 ): CollectionsConfigController {
 
     const parsedCollections = baseCollections;
@@ -41,6 +44,8 @@ export function useLocalCollectionsConfigController(
 
     return {
         loading: false,
+        readOnly: options?.readOnly ?? false,
+        readOnlyReason: "Local collection editing is only available in development mode.",
         collections: parsedCollections,
         getCollection: (id) => {
             const found = parsedCollections.find(c => (c as any).id === id || c.slug === id);

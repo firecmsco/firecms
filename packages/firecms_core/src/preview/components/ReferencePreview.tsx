@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Entity, EntityCollection, EntityReference, PreviewSize } from "@firecms/types";
-import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
+import { useCustomizationController, useEntityFetch, useCollectionRegistryController } from "../../hooks";
 import { Skeleton } from "@firecms/ui";
 import { ErrorBoundary, ErrorView } from "../../components";
 import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
@@ -49,7 +49,7 @@ function ReferencePreviewInternal({
 
     const customizationController = useCustomizationController();
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
 
     const collection = navigationController.getCollection(reference.path);
     if (!collection) {

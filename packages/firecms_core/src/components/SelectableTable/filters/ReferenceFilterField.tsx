@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "@firecms/types";
 import { ReferencePreview } from "../../../preview";
-import { useNavigationController, useEntitySelectionDialog } from "../../../hooks";
+import { useCollectionRegistryController, useEntitySelectionDialog } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
 import { getReferenceFrom } from "@firecms/common";
 
@@ -94,7 +94,7 @@ export function ReferenceFilterField({
         }
     }
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
     const collection: EntityCollection | undefined = useMemo(() => {
         return path ? navigationController.getCollection(path) : undefined;
     }, [path]);

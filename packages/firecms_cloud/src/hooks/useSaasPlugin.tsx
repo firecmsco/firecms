@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, InternalUserManagement, useNavigationController } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, InternalUserManagement, useNavigationStateController, useCollectionRegistryController } from "@firecms/core";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { mergeCollections } from "../utils/merge_collections";
 import { HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
-import { FireCMSAppConfig, FireCMSBackend } from "@firecms/types";
+import { FireCMSAppConfig, FireCMSBackend } from "../types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
 import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
@@ -157,15 +157,16 @@ export function IntroWidget({
     onAnalyticsEvent?: (event: string, data?: object) => void;
 }) {
 
-    const navigation = useNavigationController();
-    if (!navigation.topLevelNavigation)
+    const navigationState = useNavigationStateController();
+    const collectionRegistry = useCollectionRegistryController();
+    if (!navigationState.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
-    if (!navigation.initialised) {
+    if (!collectionRegistry.initialised) {
         return null;
     }
-    const hasCollections = navigation.initialised &&
-        (navigation.collections ?? []).length > 0;
+    const hasCollections = collectionRegistry.initialised &&
+        (collectionRegistry.collections ?? []).length > 0;
 
     if (hasCollections) {
         return null;

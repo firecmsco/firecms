@@ -1,23 +1,24 @@
 import { Collapse, ForumIcon, Label, Typography } from "@firecms/ui";
 import { useNavigate } from "react-router";
-import { useNavigationController } from "@firecms/core";
+import { useCollectionRegistryController, useCMSUrlController } from "@firecms/core";
 
 export function DataTalkSuggestions({
-                                        suggestions,
-                                        onAnalyticsEvent
-                                    }: {
+    suggestions,
+    onAnalyticsEvent
+}: {
     suggestions?: string[],
     onAnalyticsEvent?: (event: string, data?: object) => void;
 
 }) {
     const navigate = useNavigate();
-    const navigation = useNavigationController();
-    const hasCollections = (navigation.collections ?? []).length > 0;
+    const collectionRegistry = useCollectionRegistryController();
+    const cmsUrlController = useCMSUrlController();
+    const hasCollections = (collectionRegistry.collections ?? []).length > 0;
 
     return <Collapse in={(suggestions ?? []).length > 0 && hasCollections} className={"mt-4"}>
 
         <Typography variant={"body2"} color={"secondary"} className={"ml-2 flex items-center gap-2"}>
-            <ForumIcon size="smallest"/> Query and update your data in natural language with <b>DATATALK</b>
+            <ForumIcon size="smallest" /> Query and update your data in natural language with <b>DATATALK</b>
         </Typography>
 
         <div className={"flex flex-row gap-2 my-4"}>
@@ -29,7 +30,7 @@ export function DataTalkSuggestions({
                         onAnalyticsEvent?.("datatalk:home_suggestion_clicked", {
                             suggestion
                         });
-                        return navigate(navigation.homeUrl + "/datatalk?prompt=" + suggestion);
+                        return navigate(cmsUrlController.homeUrl + "/datatalk?prompt=" + suggestion);
                     }}
                     key={index}>{suggestion}</Label>
             })}

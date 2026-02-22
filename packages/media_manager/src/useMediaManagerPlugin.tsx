@@ -52,7 +52,7 @@ function MediaLibraryViewInternal() {
  */
 function buildMediaView(): CMSView {
     return {
-        path: "media",
+        slug: "media",
         name: "Media Library",
         description: "Manage your media files and assets",
         group: "Media",

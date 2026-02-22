@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityCollection, useNavigationController } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 import { Button } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 

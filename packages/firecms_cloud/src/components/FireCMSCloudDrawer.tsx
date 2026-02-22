@@ -6,7 +6,7 @@ import {
     NavigationResult,
     useApp,
     useAuthController,
-    useNavigationController
+    useNavigationStateController
 } from "@firecms/core";
 import { AddIcon, Button, Tooltip, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
@@ -27,7 +27,7 @@ export function FireCMSCloudDrawer() {
         closeDrawer
     } = useApp();
 
-    const navigation = useNavigationController();
+    const navigationState = useNavigationStateController();
     const collectionEditorController = useCollectionEditorController();
     const { user } = useAuthController();
 
@@ -35,22 +35,22 @@ export function FireCMSCloudDrawer() {
 
     const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
 
-    if (!navigation.topLevelNavigation)
+    if (!navigationState.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
 
     const {
         navigationEntries,
         groups
-    }: NavigationResult = navigation.topLevelNavigation;
+    }: NavigationResult = navigationState.topLevelNavigation;
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div className="w-full"/>;
+        if (!drawerOpen) return <div className="w-full" />;
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
         const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
         return <div className="pl-6 pr-4 pt-2 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
-                        color={"secondary"}
-                        className="grow font-medium">
+                color={"secondary"}
+                className="grow font-medium">
                 {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
             {canCreateCollections && <Tooltip
@@ -69,7 +69,7 @@ export function FireCMSCloudDrawer() {
                             sourceClick: "drawer_new_collection"
                         });
                     }}>
-                    <AddIcon size={"small"}/>
+                    <AddIcon size={"small"} />
                 </Button>
             </Tooltip>}
         </div>;
@@ -78,12 +78,12 @@ export function FireCMSCloudDrawer() {
     return (
 
         <>
-            <DrawerLogo logo={logo}/>
+            <DrawerLogo logo={logo} />
 
             <div className={"mt-4 grow overflow-scroll no-scrollbar"}
-                 style={{
-                     maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
-                 }}>
+                style={{
+                    maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                }}>
 
                 {groups.map((group) => (
                     <div
@@ -95,11 +95,11 @@ export function FireCMSCloudDrawer() {
                             .map((view, index) => <DrawerNavigationItem
                                 key={`navigation_${index}`}
                                 adminMenuOpen={adminMenuOpen}
-                                icon={<IconForView collectionOrView={view.collection ?? view.view} size={"small"}/>}
+                                icon={<IconForView collectionOrView={view.collection ?? view.view} size={"small"} />}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
                                 url={view.url}
-                                name={view.name}/>)}
+                                name={view.name} />)}
                     </div>
                 ))}
 
@@ -107,7 +107,7 @@ export function FireCMSCloudDrawer() {
 
             <AdminDrawerMenu
                 menuOpen={adminMenuOpen}
-                setMenuOpen={setAdminMenuOpen}/>
+                setMenuOpen={setAdminMenuOpen} />
         </>
     );
 }

@@ -1,21 +1,21 @@
-import { PluginFormActionProps, useAuthController, useNavigationController } from "@firecms/core";
+import { PluginFormActionProps, useAuthController, useCollectionRegistryController } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorEntityAction({
-                                       path,
-                                       parentCollectionIds,
-                                       collection,
-                                       formContext
-                                   }: PluginFormActionProps) {
+    path,
+    parentCollectionIds,
+    collection,
+    formContext
+}: PluginFormActionProps) {
 
     const authController = useAuthController();
-    const navigationController = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
     const collectionEditorController = useCollectionEditorController();
 
-    const parentCollection = navigationController.getCollectionFromIds(parentCollectionIds);
+    const parentCollection = parentCollectionIds.length > 0 ? collectionRegistry.getCollection(parentCollectionIds[parentCollectionIds.length - 1]) : undefined;
 
     const canEditCollection = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
@@ -40,7 +40,7 @@ export function EditorEntityAction({
                     parentCollection: parentCollection as PersistedCollection,
                 })
                 : undefined}>
-            <SettingsIcon size={"small"}/>
+            <SettingsIcon size={"small"} />
         </IconButton>
     </Tooltip>;
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FieldCaption, useNavigationController, useSnackbarController } from "@firecms/core";
+import { FieldCaption, useCollectionRegistryController, useSnackbarController } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Button,
@@ -14,7 +14,7 @@ import { TypesenseSearchConfig } from "../../hooks/useBuildProjectConfig";
 
 export function TypesenseSettingsView() {
     const projectConfig = useProjectConfig();
-    const navigationController = useNavigationController();
+    const collectionRegistry = useCollectionRegistryController();
     const snackbarController = useSnackbarController();
 
     const [config, setConfig] = useState<TypesenseSearchConfig>(projectConfig.typesenseSearchConfig ?? {
@@ -74,7 +74,7 @@ export function TypesenseSettingsView() {
         }
     };
 
-    const collections = navigationController.collections ?? [];
+    const collections = collectionRegistry.collections ?? [];
 
     const saveDisabled = config.enabled && !config.region;
 
@@ -100,7 +100,7 @@ export function TypesenseSettingsView() {
                         required
                         label="GCP Region"
                         value={config.region}
-                        onChange={(e) => handleChange("region", e.target.value)}
+                        onChange={(e: any) => handleChange("region", e.target.value)}
                         placeholder={"europe-west3"}
                         size={"small"}
                         error={!config.region}
@@ -114,7 +114,7 @@ export function TypesenseSettingsView() {
                     <TextField
                         label="Extension Instance ID"
                         value={config.extensionInstanceId}
-                        onChange={(e) => handleChange("extensionInstanceId", e.target.value)}
+                        onChange={(e: any) => handleChange("extensionInstanceId", e.target.value)}
                         placeholder={"typesense-search"}
                         size={"small"}
                     />
@@ -127,14 +127,14 @@ export function TypesenseSettingsView() {
                         <Typography variant={"subtitle2"}>Indexed Collections</Typography>
                         <MultiSelect
                             value={config.collections ?? []}
-                            onValueChange={(v) => handleChange("collections", v)}
+                            onValueChange={(v: any) => handleChange("collections", v)}
                             label="Select collections to index"
                             placeholder={"All collections (Default)"}
                             size={"small"}
                         >
                             {collections.map(col => (
-                                <MultiSelectItem key={col.path} value={col.path}>
-                                    {col.name} ({col.path})
+                                <MultiSelectItem key={col.slug} value={col.slug}>
+                                    {col.name} ({col.slug})
                                 </MultiSelectItem>
                             ))}
                         </MultiSelect>

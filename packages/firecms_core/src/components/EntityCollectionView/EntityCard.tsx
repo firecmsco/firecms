@@ -22,7 +22,7 @@ import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import {
     useAuthController,
     useCustomizationController,
-    useNavigationController,
+    useCollectionRegistryController,
     useSideEntityController
 } from "../../hooks";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
@@ -61,7 +61,7 @@ export function EntityCard<M extends Record<string, any> = any>({
     const analyticsController = useAnalyticsController();
     const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
 
     const resolvedCollection = collection;
 

@@ -11,12 +11,12 @@ export interface SubscriptionPriceSelectParams {
 }
 
 export function SubscriptionPriceSelect({
-                                            productPrices,
-                                            setSelectedPrice,
-                                            largePriceLabel,
-                                            selectedPrice,
-                                            fullWidth = true
-                                        }: SubscriptionPriceSelectParams) {
+    productPrices,
+    setSelectedPrice,
+    largePriceLabel,
+    selectedPrice,
+    fullWidth = true
+}: SubscriptionPriceSelectParams) {
 
     return (productPrices ?? [])?.length > 1
         ? <>
@@ -25,13 +25,13 @@ export function SubscriptionPriceSelect({
                 invisible={true}
                 padding={false}
                 fullWidth={false}
-                onChange={(e) => {
+                onChange={(e: any) => {
                     setSelectedPrice((productPrices ?? []).find(price => price.id === e.target.value));
                 }}
                 className={fullWidth ? "w-full" : "w-fit"}
                 position={"item-aligned"}
                 // label={"Choose pricing plan"}
-                renderValue={(value) => {
+                renderValue={(value: any) => {
                     const price = (productPrices ?? []).find(price => price.id === value);
                     if (!price) return null;
                     if (largePriceLabel) {
@@ -52,7 +52,7 @@ export function SubscriptionPriceSelect({
         </>
         : productPrices ?
             (largePriceLabel ? <span
-                    className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(productPrices[0])}</span>
+                className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(productPrices[0])}</span>
                 : <Chip
                     size={"medium"}>
                     {getPriceString(productPrices[0])}

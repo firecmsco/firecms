@@ -5,7 +5,7 @@ import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "@firecms/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useCustomizationController, useEntitySelectionDialog, useNavigationController } from "../../../hooks";
+import { useCustomizationController, useEntitySelectionDialog, useCollectionRegistryController } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
@@ -29,7 +29,7 @@ type TableReferenceFieldProps = {
 export function TableReferenceField(props: TableReferenceFieldProps) {
     const customizationController = useCustomizationController();
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
     const { path } = props;
     const collection = navigationController.getCollection(path);
     if (!collection) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "@firecms/types";
 import { useDataSource } from "./useDataSource";
-import { useNavigationController } from "../useNavigationController";
+import { useCMSUrlController } from "../navigation/contexts";
 import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
@@ -71,7 +71,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
     const dataSource = useDataSource(collection);
-    const navigationController = useNavigationController();
+    const navigationController = useCMSUrlController();
 
     const path = navigationController.resolveDatabasePathsFrom(inputPath);
 

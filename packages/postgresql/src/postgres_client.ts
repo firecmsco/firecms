@@ -160,6 +160,17 @@ export class PostgresDataSourceClient {
      */
     setAuthTokenGetter(getAuthToken: () => Promise<string>): void {
         this.getAuthToken = getAuthToken;
+        // Auto-authenticate if we are already connected but didn't have the token getter yet
+        if (this.isConnected && !this.isAuthenticated && !this.authPromise) {
+            console.log("WebSocket auto-authenticating after token getter set");
+            this.getAuthToken().then(token => {
+                if (token) {
+                    this.authenticate(token).catch(e => console.warn("WebSocket auto-auth failed:", e));
+                }
+            }).catch(e => {
+                console.warn("WebSocket auto-auth failed:", e);
+            });
+        }
     }
 
     // Initialize WebSocket connection

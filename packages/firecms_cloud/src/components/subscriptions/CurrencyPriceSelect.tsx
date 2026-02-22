@@ -12,25 +12,25 @@ export interface SubscriptionPriceSelectParams {
 }
 
 export function CurrencyPriceSelect({
-                                        currencies,
-                                        setSelectedCurrency,
-                                        largePriceLabel,
-                                        selectedCurrency,
-                                        fullWidth = true,
-                                        price
-                                    }: SubscriptionPriceSelectParams) {
+    currencies,
+    setSelectedCurrency,
+    largePriceLabel,
+    selectedCurrency,
+    fullWidth = true,
+    price
+}: SubscriptionPriceSelectParams) {
 
     return <Select
         size={"medium"}
         padding={false}
         fullWidth={false}
-        onChange={(e) => {
+        onChange={(e: any) => {
             setSelectedCurrency(e.target.value);
         }}
         className={fullWidth ? "w-full" : "w-fit"}
         position={"item-aligned"}
         // label={"Choose pricing plan"}
-        renderValue={(value) => {
+        renderValue={(value: any) => {
             const data = Object.entries(currencies).find(([key, option]) => key === value);
             if (!data) return null;
             const currencyString = getCurrencyString({
@@ -48,13 +48,13 @@ export function CurrencyPriceSelect({
         }}
         value={selectedCurrency ?? ""}>
         {currencies && Object.entries(currencies).map((([key, option]) =>
-                <SelectItem key={key} value={key}>
-                    {getCurrencyString({
-                        key,
-                        option,
-                        price
-                    })}
-                </SelectItem>
+            <SelectItem key={key} value={key}>
+                {getCurrencyString({
+                    key,
+                    option,
+                    price
+                })}
+            </SelectItem>
         ))}
     </Select>;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { useApp, useNavigationController } from "@firecms/core";
+import { useApp, useCMSUrlController } from "@firecms/core";
 import { useDataTalk } from "../DataTalkProvider";
 import { cls, ManageSearchIcon, Typography } from "@firecms/ui";
 
@@ -14,7 +14,7 @@ export function DataTalkDrawer() {
         closeDrawer
     } = useApp();
 
-    const navigation = useNavigationController();
+    const cmsUrlController = useCMSUrlController();
 
     const { sessions } = useDataTalk();
     return (
@@ -22,7 +22,7 @@ export function DataTalkDrawer() {
         <>
             <div className={"grow overflow-scroll no-scrollbar my-8"}>
                 {!drawerOpen && <div className={"flex justify-center p-4 h-full cursor-pointer"} onClick={openDrawer}>
-                    <ManageSearchIcon/>
+                    <ManageSearchIcon />
                 </div>}
                 {sessions?.map((session, index) => {
                     const firstMessage = session.messages[0];
@@ -44,13 +44,13 @@ export function DataTalkDrawer() {
                                 "font-medium text-sm",
                                 isActive ? "bg-surface-accent-200/60 bg-surface-accent-200/60 dark:bg-surface-800/30 dark:bg-surface-800/30" : ""
                             )}
-                            to={navigation.homeUrl + "/datatalk/" + session.id}
+                            to={cmsUrlController.homeUrl + "/datatalk/" + session.id}
                         >
                             <Typography variant={"label"}
-                                        className={"whitespace-nowrap"}>{firstChars}{(firstMessage?.text ?? "").length > charsLimit ? "..." : ""}</Typography>
+                                className={"whitespace-nowrap"}>{firstChars}{(firstMessage?.text ?? "").length > charsLimit ? "..." : ""}</Typography>
                             <Typography variant={"caption"}
-                                        color={"secondary"}
-                                        className={"whitespace-nowrap"}>{session.created_at.toLocaleString()}</Typography>
+                                color={"secondary"}
+                                className={"whitespace-nowrap"}>{session.created_at.toLocaleString()}</Typography>
                         </NavLink>
                     );
                 })}

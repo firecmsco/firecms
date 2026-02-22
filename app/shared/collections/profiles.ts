@@ -7,7 +7,7 @@ const profilesCollection: EntityCollection = {
     slug: "profiles",
     dbPath: "profiles",
     icon: "AccountCircle",
-    textSearchEnabled: true,
+
     properties: {
         id: {
             type: "number",

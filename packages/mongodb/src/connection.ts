@@ -31,7 +31,7 @@ export class MongoDBConnection implements DatabaseConnection {
         // MongoClient doesn't have a direct isConnected property in v6+
         // We check if the client topology is connected
         try {
-            return this.client.topology?.isConnected() ?? false;
+            return (this.client as any).topology?.isConnected() ?? false;
         } catch {
             return false;
         }

@@ -1,4 +1,4 @@
-import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "@firecms/types";
+import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "../types";
 import { handleApiResponse } from "./common";
 import { EntityCollection } from "@firecms/core";
 

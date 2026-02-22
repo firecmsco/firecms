@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Checkbox, Label, MailIcon, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
-import { FireCMSBackend } from "@firecms/types";
+import { FireCMSBackend } from "../../types";
 import { LoginButton } from "@firecms/firebase";
 import { CloudUserPasswordForm } from "./CloudUserPasswordForm";
 

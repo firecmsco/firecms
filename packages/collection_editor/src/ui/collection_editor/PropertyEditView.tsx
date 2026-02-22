@@ -702,7 +702,7 @@ function WidgetSelectView({
             </div>}
         </div>
         <Dialog open={open}
-            onOpenChange={(open) => onOpenChange(open, Boolean(value))}
+            onOpenChange={(open: boolean) => onOpenChange(open, Boolean(value))}
             maxWidth={"4xl"}>
             <DialogTitle>
                 Select a property widget

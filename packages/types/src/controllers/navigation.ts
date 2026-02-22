@@ -147,25 +147,7 @@ export type CollectionRegistryController<EC extends EntityCollection = EntityCol
      */
     getRawCollection: (slugOrPath: string) => EC | undefined;
 
-    /**
-     * Get the top level collection configuration for a given id
-     */
-    getCollectionBySlug: (id: string) => EC | undefined;
 
-    /**
-     * Get the root collection for a given id. Alias for getCollectionBySlug.
-     */
-    getCollectionById: (id: string) => EC | undefined;
-
-    /**
-     * Get the collection configuration from its parent ids.
-     */
-    getCollectionFromIds: (ids: string[]) => EC | undefined;
-
-    /**
-     * Get the collection configuration from its parent path segments.
-     */
-    getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
 
     /**
      * Retrieve all the related parent references for a given path
@@ -199,6 +181,19 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     CollectionRegistryController<EC> & {
         getCollectionBySlug: (slug: string) => EC | undefined;
         buildCMSUrlPath: (path: string) => string;
+
+        /**
+         * @deprecated Use `getCollection` instead.
+         */
+        getCollectionById?: (id: string) => EC | undefined;
+        /**
+         * @deprecated Use `getCollection` instead.
+         */
+        getCollectionFromIds?: (ids: string[]) => EC | undefined;
+        /**
+         * @deprecated Use `getCollection` instead.
+         */
+        getCollectionFromPaths?: (pathSegments: string[]) => EC | undefined;
     };
 
 export interface NavigateOptions {

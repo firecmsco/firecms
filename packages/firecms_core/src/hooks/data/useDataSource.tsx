@@ -8,7 +8,7 @@ import { DataSourceContext } from "../../contexts/DataSourceContext";
  */
 export const useDataSource = (collection?: EntityCollection<any, any>): DataSource => {
     // const customizationController = useCustomizationController();
-    // const navigationController = useNavigationController();
+    // const navigationController = useCollectionRegistryController();
     const defaultDataSource = useContext(DataSourceContext);
     // if (collection?.overrides?.dataSourceDelegate) {
     //     console.trace("Using custom data source for collection " + collection.id);

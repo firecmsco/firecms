@@ -2,15 +2,6 @@ import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import { deepEqual as equal } from "fast-equals"
 import { HistoryEntry, NewHistoryEntryParams } from "./types";
 
-export interface NewHistoryEntryParams {
-    context: FireCMSContext<User>;
-    previousValues?: Partial<any>;
-    values: Partial<any>;
-    path: string;
-    entityId: string | number;
-}
-
-
 export function createHistoryEntry<T = any>({
     context,
     previousValues,

@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FilterValues, PreviewSize } from "@firecms/types";
 import { getReferenceFrom } from "@firecms/common";
 import { ReferencePreview } from "../preview";
-import { useNavigationController, useEntitySelectionDialog } from "../hooks";
+import { useCollectionRegistryController, useEntitySelectionDialog } from "../hooks";
 import { Button, cls } from "@firecms/ui";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
@@ -50,7 +50,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                                                    includeEntityLink
                                                                }: ReferenceWidgetProps<M>) {
 
-    const navigationController = useNavigationController();
+    const navigationController = useCollectionRegistryController();
 
     const collection: EntityCollection | undefined = useMemo(() => {
         return navigationController.getCollection(path);

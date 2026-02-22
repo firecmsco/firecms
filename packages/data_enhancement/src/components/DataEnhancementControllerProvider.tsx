@@ -14,7 +14,7 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useNavigationController,
+    useCMSUrlController,
     useSnackbarController
 } from "@firecms/core";
 
@@ -55,14 +55,14 @@ function getPropertyFromKey(properties: Record<string, InputProperty>, propertyK
 }
 
 export function DataEnhancementControllerProvider({
-                                                      apiKey,
-                                                      getConfigForPath,
-                                                      children,
-                                                      host,
-                                                      path,
-                                                      collection,
-                                                      formContext,
-                                                  }: PropsWithChildren<DataEnhancementControllerProviderProps & PluginFormActionProps<any>>) {
+    apiKey,
+    getConfigForPath,
+    children,
+    host,
+    path,
+    collection,
+    formContext,
+}: PropsWithChildren<DataEnhancementControllerProviderProps & PluginFormActionProps<any>>) {
 
     const [enabled, setEnabled] = useState(false);
     const [suggestions, setSuggestions] = useState<Record<string, string | number>>({});
@@ -105,7 +105,7 @@ export function DataEnhancementControllerProvider({
     }, [getConfigForPath, updateConfig]);
 
     const dataSource = useDataSource(collection);
-    const navigationController = useNavigationController();
+    const cmsUrlController = useCMSUrlController();
 
     const clearSuggestion = useCallback((propertyKey: string) => {
         setSuggestions((prev) => {
@@ -217,7 +217,7 @@ export function DataEnhancementControllerProvider({
             return Promise.reject(new Error("Not logged in"));
         }
 
-        const resolvedPath = navigationController.resolveDatabasePathsFrom(path);
+        const resolvedPath = cmsUrlController.resolveDatabasePathsFrom(path);
         const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {
