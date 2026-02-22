@@ -34,7 +34,7 @@ description: Deployment rules and restrictions for the FireCMS backend and all s
 
 - **Provide the exact command** they should run themselves
 - **Explain what the command will do** before they run it
-- **Never run it on their behalf** — deployment is a human-only action
+- **Never run it on their behalf** — unless they explicitly ask you to.
 
 ## Summary
 
