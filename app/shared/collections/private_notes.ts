@@ -27,6 +27,14 @@ const privateNotesCollection: EntityCollection = {
             withCheck: "{is_locked} = false"
         }
     ],
+    callbacks: {
+        onPreSave: ({ values, context, status }) => {
+            if (status === "new" && !values.user_id) {
+                values.user_id = context.authController.user?.uid;
+            }
+            return values;
+        }
+    },
     properties: {
         id: {
             name: "ID",
