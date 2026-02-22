@@ -1,12 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { deepEqual as equal } from "fast-equals";
 
 import {
-    EntityCollection,
     CMSView,
-    User,
-    NavigationController,
+    EntityCollection,
     NavigationEntry,
     NavigationGroupMapping,
     NavigationResult,
@@ -15,40 +12,37 @@ import {
     EntityCollectionsBuilder,
     PermissionsBuilder,
     CMSViewsBuilder,
-    UserConfigurationPersistence,
-    DataSourceDelegate
+    NavigationStateController,
+    DataSourceDelegate,
+    CollectionRegistryController,
+    CMSUrlController,
+    User
 } from "@firecms/types";
 
-import { useNavigationURLs } from "./navigation/useNavigationURLs";
-import { useNavigationRegistry } from "./navigation/useNavigationRegistry";
-import { resolveCollections, resolveCMSViews } from "./navigation/useNavigationResolution";
-import { useCustomBlocker } from "./navigation/useCustomBlocker";
-import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./navigation/utils";
+import { resolveCollections, resolveCMSViews } from "./useNavigationResolution";
+import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";
+import { CollectionRegistry } from "@firecms/common";
 
-export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
-    basePath?: string;
-    baseCollectionPath?: string;
+export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     collectionPermissions?: PermissionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
-    userConfigPersistence?: UserConfigurationPersistence;
     dataSourceDelegate: DataSourceDelegate;
     plugins?: FireCMSPlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
     viewsOrder?: string[];
+    collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
+    cmsUrlController: CMSUrlController;
 };
 
-const DEFAULT_BASE_PATH = "/";
-const DEFAULT_COLLECTION_PATH = "/c";
-
-export function useBuildNavigationController<EC extends EntityCollection, USER extends User>(props: BuildNavigationContextProps<EC, USER>): NavigationController {
+export function useBuildNavigationStateController<EC extends EntityCollection, USER extends User>(
+    props: BuildNavigationStateProps<EC, USER>
+): NavigationStateController {
 
     const {
-        basePath = DEFAULT_BASE_PATH,
-        baseCollectionPath = DEFAULT_COLLECTION_PATH,
         authController,
         collections: collectionsProp,
         collectionPermissions,
@@ -56,24 +50,16 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         adminViews: adminViewsProp,
         viewsOrder,
         plugins,
-        userConfigPersistence,
         dataSourceDelegate,
         disabled,
-        navigationGroupMappings
+        navigationGroupMappings,
+        collectionRegistryController,
+        cmsUrlController
     } = props;
-
-    const navigate = useNavigate();
-
-    const registryHook = useNavigationRegistry(userConfigPersistence);
-    const { collectionRegistryRef } = registryHook;
-
-    const urlsHook = useNavigationURLs(basePath, baseCollectionPath, collectionRegistryRef);
 
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
     const navigationEntriesOrderRef = useRef<string[] | undefined>();
-
-    const [initialised, setInitialised] = useState<boolean>(false);
 
     const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
@@ -82,7 +68,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
     const pluginGroups = [...new Set(allPluginGroups)];
 
-    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[], navigationGroupMappingsOverride?: NavigationGroupMapping[], onNavigationEntriesUpdateCallback?: (entries: NavigationGroupMapping[]) => void): NavigationResult => {
+    const computeTopNavigation = useCallback((
+        collections: EntityCollection[],
+        views: CMSView[],
+        adminViews: CMSView[],
+        viewsOrder?: string[],
+        navigationGroupMappingsOverride?: NavigationGroupMapping[],
+        onNavigationEntriesUpdateCallback?: (entries: NavigationGroupMapping[]) => void
+    ): NavigationResult => {
 
         const finalNavigationGroupMappings: NavigationGroupMapping[] = computeNavigationGroups({
             navigationGroupMappings: navigationGroupMappingsOverride ?? navigationGroupMappings,
@@ -112,7 +105,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `collection:${pathKey}`,
-                    url: urlsHook.buildUrlCollectionPath(pathKey),
+                    url: cmsUrlController.buildUrlCollectionPath(pathKey),
                     type: "collection",
                     name: collection.name.trim(),
                     slug: pathKey,
@@ -140,7 +133,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `view:${pathKey}`,
-                    url: urlsHook.buildCMSUrlPath(pathKey),
+                    url: cmsUrlController.buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "view",
                     slug: view.slug,
@@ -159,7 +152,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
                 acc.push({
                     id: `admin:${pathKey}`,
-                    url: urlsHook.buildCMSUrlPath(pathKey),
+                    url: cmsUrlController.buildCMSUrlPath(pathKey),
                     name: view.name.trim(),
                     type: "admin",
                     slug: view.slug,
@@ -221,7 +214,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
         };
-    }, [navigationGroupMappings, urlsHook.buildCMSUrlPath, urlsHook.buildUrlCollectionPath, pluginGroups]);
+    }, [navigationGroupMappings, cmsUrlController.buildCMSUrlPath, cmsUrlController.buildUrlCollectionPath, pluginGroups, plugins]);
 
     const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
         if (!plugins) {
@@ -231,9 +224,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const filteredEntries = entries.filter(entry => entry.entries.length > 0);
 
         // Immediately update the local topLevelNavigation with new mappings
-        if (collectionRegistryRef.current && viewsRef.current) {
+        if (collectionRegistryController.collectionRegistryRef.current && viewsRef.current) {
             const updatedNav = computeTopNavigation(
-                collectionRegistryRef.current.getCollections(),
+                collectionRegistryController.collectionRegistryRef.current.getCollections(),
                 viewsRef.current,
                 adminViewsRef.current ?? [],
                 viewsOrder,
@@ -252,7 +245,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             });
         }
 
-    }, [plugins, computeTopNavigation, viewsOrder]);
+    }, [plugins, computeTopNavigation, viewsOrder, collectionRegistryController.collectionRegistryRef]);
 
     const refreshNavigation = useCallback(async () => {
 
@@ -274,8 +267,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
 
             let shouldUpdateTopLevelNav = false;
-            let collectionsChanged = collectionRegistryRef.current.registerMultiple(resolvedCollections);
-            ;
+            let collectionsChanged = collectionRegistryController.collectionRegistryRef.current.registerMultiple(resolvedCollections);
 
             if (collectionsChanged) {
                 console.debug("Collections have changed", resolvedCollections);
@@ -307,8 +299,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         if (navigationLoading)
             setNavigationLoading(false);
-        if (!initialised)
-            setInitialised(true);
 
     }, [
         collectionsProp,
@@ -319,27 +309,26 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         viewsProp,
         adminViewsProp,
         computeTopNavigation,
+        dataSourceDelegate,
+        plugins,
+        viewsOrder,
+        navigationLoading,
+        topLevelNavigation,
+        onNavigationEntriesOrderUpdate,
+        collectionRegistryController.collectionRegistryRef
     ]);
 
     useEffect(() => {
         refreshNavigation();
     }, [refreshNavigation]);
 
-    // Omit getCollection and registry methods from returned shape to just use registryHook's getters directly
     return {
-        ...registryHook,
-        ...urlsHook,
-        collections: collectionRegistryRef.current.getCollections(),
         views: viewsRef.current,
         adminViews: adminViewsRef.current,
-        loading: !initialised || navigationLoading,
-        navigationLoadingError,
-        basePath,
-        baseCollectionPath,
-        initialised,
         topLevelNavigation,
+        loading: navigationLoading,
+        navigationLoadingError,
         refreshNavigation,
-        navigate,
         plugins
     };
 }

@@ -13,7 +13,7 @@ import {
     FireCMSContext,
     ListenCollectionProps,
     ListenEntityProps,
-    NavigationController, Properties,
+    CollectionRegistryController, Properties,
     PropertyConfig,
     SaveEntityProps
 } from "@firecms/types";
@@ -27,12 +27,12 @@ import { updateDateAutoValues } from "@firecms/common";
 export function useBuildDataSource({
     delegate,
     propertyConfigs,
-    navigationController,
+    collectionRegistryController,
     authController
 }: {
     delegate: DataSourceDelegate,
     propertyConfigs?: Record<string, PropertyConfig>;
-    navigationController: NavigationController;
+    collectionRegistryController: CollectionRegistryController;
     authController: AuthController;
 }): DataSource {
 
@@ -73,7 +73,7 @@ export function useBuildDataSource({
                 orderBy,
                 order,
                 collection,
-                navigationController,
+                collectionRegistryController,
             });
         }, [delegate]),
 
@@ -109,7 +109,7 @@ export function useBuildDataSource({
                 }: ListenCollectionProps<M>
             ): () => void => {
 
-                const collection = collectionProp ?? navigationController.getCollection(path);
+                const collection = collectionProp ?? collectionRegistryController.getCollection(path);
                 const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
                 if (!usedDelegate.listenCollection)
@@ -126,9 +126,9 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     collection,
-                    navigationController
+                    collectionRegistryController
                 });
-            }, [delegate, navigationController.getCollection, navigationController])
+            }, [delegate, collectionRegistryController.getCollection, collectionRegistryController])
             : undefined,
 
         /**
@@ -149,7 +149,7 @@ export function useBuildDataSource({
                 path,
                 entityId,
                 collection,
-                navigationController
+                collectionRegistryController
             });
         }, [delegate.fetchEntity]),
 
@@ -183,7 +183,7 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     collection,
-                    navigationController,
+                    collectionRegistryController,
                 })
             }, [delegate.listenEntity]) : undefined,
 
@@ -207,7 +207,7 @@ export function useBuildDataSource({
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            const collection = collectionProp ?? navigationController.getCollection(path);
+            const collection = collectionProp ?? collectionRegistryController.getCollection(path);
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
             const properties: Properties | undefined = collection?.properties;
@@ -264,9 +264,9 @@ export function useBuildDataSource({
                 entityId,
                 values: finalValues,
                 status,
-                navigationController,
+                collectionRegistryController,
             });
-        }, [delegate.saveEntity, navigationController.getCollection]),
+        }, [delegate.saveEntity, collectionRegistryController.getCollection]),
 
         /**
          * Delete an entity
@@ -284,7 +284,7 @@ export function useBuildDataSource({
             return usedDelegate.deleteEntity({
                 entity,
                 collection,
-                navigationController
+                collectionRegistryController
             });
         }, [delegate.deleteEntity]),
 
@@ -334,7 +334,7 @@ export function useBuildDataSource({
                 orderBy,
                 order,
                 collection,
-                navigationController
+                collectionRegistryController
             });
         } : undefined,
 
@@ -357,7 +357,7 @@ export function useBuildDataSource({
                     databaseId,
                     filterValues,
                     sortBy,
-                    navigationController
+                    collectionRegistryController
                 }
             )
         }, [delegate.isFilterCombinationValid]),

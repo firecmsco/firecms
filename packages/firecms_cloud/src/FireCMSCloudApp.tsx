@@ -20,7 +20,9 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
+    useBuildCollectionRegistryController,
+    useBuildCMSUrlController,
+    useBuildNavigationStateController,
     User,
     EntityCollection
 } from "@firecms/core";
@@ -342,7 +344,7 @@ export function FireCMSClientWithController({
         firebaseApp: clientFirebaseApp,
         projectId,
         onUserChanged: (user) => {
-            authController.setUser(user ?? null);
+            authController.setUser(user as any);
             authController.setUserRoles(fireCMSUser?.roles ?? []);
         },
         onAnalyticsEvent: props.onAnalyticsEvent
@@ -632,7 +634,7 @@ function FireCMSAppAuthenticated({
 
     useEffect(() => {
         if (collectionConfigController.collectionsSetup?.status !== "ongoing") {
-            navigationController?.refreshNavigation();
+            // FIXME navigationController?.refreshNavigation(); -> No longer needed or needs alternative.
         }
     }, [collectionConfigController.collectionsSetup?.status]);
 
@@ -673,15 +675,25 @@ function FireCMSAppAuthenticated({
         historyPlugin
     ];
 
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
+    const collectionRegistryController = useBuildCollectionRegistryController({
+        userConfigPersistence
+    });
+
+    const cmsUrlController = useBuildCMSUrlController({
+        basePath: "/",
+        baseCollectionPath: "/c",
+        collectionRegistryController
+    });
+
+    const navigationStateController = useBuildNavigationStateController({
         authController,
-        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
-        views: projectConfig.isTrialOver ? [] : appConfig?.views,
-        userConfigPersistence,
+        collections: undefined,
+        views: undefined,
+        adminViews: undefined,
         dataSourceDelegate: firestoreDelegate,
-        plugins
+        plugins,
+        collectionRegistryController,
+        cmsUrlController
     });
 
     return (
@@ -690,13 +702,15 @@ function FireCMSAppAuthenticated({
                 <UserManagementProvider userManagement={userManagement}>
                     <ModeControllerProvider value={modeController}>
                         <FireCMS
-                            navigationController={navigationController}
+                            collectionRegistryController={collectionRegistryController}
+                            cmsUrlController={cmsUrlController}
+                            navigationStateController={navigationStateController}
                             dateTimeFormat={appConfig?.dateTimeFormat}
                             entityViews={appConfig?.entityViews}
                             entityActions={appConfig?.entityActions}
                             locale={appConfig?.locale}
                             propertyConfigs={propertyConfigsMap}
-                            authController={authController}
+                            authController={authController as any}
                             userConfigPersistence={userConfigPersistence}
                             dataSourceDelegate={firestoreDelegate}
                             storageSource={storageSource}

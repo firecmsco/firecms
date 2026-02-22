@@ -4,11 +4,13 @@ import {
     CustomizationController,
     EntityCollection,
     EntitySidePanelProps,
-    NavigationController,
-    Property,
     SideDialogPanelProps,
     SideDialogsController,
-    SideEntityController
+    SideEntityController,
+    CollectionRegistryController,
+    CMSUrlController,
+    NavigationStateController,
+    Property
 } from "@firecms/types";
 import { useLocation } from "react-router-dom";
 import {
@@ -91,9 +93,11 @@ function getNestedPropertiesDepth(property: Property, accumulator: number = 0): 
     }
 }
 
-export const useBuildSideEntityController = (navigation: NavigationController,
-                                             sideDialogsController: SideDialogsController,
-                                             authController: AuthController
+export const useBuildSideEntityController = (collectionRegistryController: CollectionRegistryController,
+    cmsUrlController: CMSUrlController,
+    navigationStateController: NavigationStateController,
+    sideDialogsController: SideDialogsController,
+    authController: AuthController
 ): SideEntityController => {
 
     const location = useLocation();
@@ -107,21 +111,21 @@ export const useBuildSideEntityController = (navigation: NavigationController,
         const newFlag = location.hash === `#${NEW_URL_HASH}`;
         const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
 
-        if (!navigation.loading) {
-            if ((newFlag || sideFlag) && navigation.isUrlCollectionPath(location.pathname)) {
-                const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
-                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
+        if (!navigationStateController.loading) {
+            if ((newFlag || sideFlag) && cmsUrlController.isUrlCollectionPath(location.pathname)) {
+                const entityOrCollectionPath = cmsUrlController.urlPathToDataPath(location.pathname);
+                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, collectionRegistryController.collections ?? [], newFlag);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
+                        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController))
+                        sideDialogsController.open(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController))
                 }
             }
             initialised.current = true;
         }
-    }, [navigation.loading]);
+    }, [navigationStateController.loading]);
 
     // sync panels if URL changes with #side
     const currentPanelKeys = sideDialogsController.sidePanels.map(p => p.key);
@@ -129,14 +133,14 @@ export const useBuildSideEntityController = (navigation: NavigationController,
         if (initialised.current) {
             const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
             if (sideFlag) {
-                const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
-                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], false);
+                const entityOrCollectionPath = cmsUrlController.urlPathToDataPath(location.pathname);
+                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, collectionRegistryController.collections ?? [], false);
                 // if we have more panels than determined by the url, we ignore the url. We might have references open
                 if (panelsFromUrl.length <= currentPanelKeys.length) {
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
+                const panelProps = propsToSidePanel(lastPanel, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -149,7 +153,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
+                return propsToSidePanel(sidePanelProps.additional, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
             }
             return sidePanelProps;
         });
@@ -176,17 +180,17 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
         sideDialogsController.open(
             propsToSidePanel({
-                    selectedTab: defaultSelectedView,
-                    ...props
-                },
-                navigation.buildUrlCollectionPath,
-                navigation.resolveDatabasePathsFrom,
+                selectedTab: defaultSelectedView,
+                ...props
+            },
+                cmsUrlController.buildUrlCollectionPath,
+                cmsUrlController.resolveDatabasePathsFrom,
                 smallLayout,
                 customizationController,
                 authController
             ));
 
-    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, authController.user]);
+    }, [sideDialogsController, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, authController.user]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 
@@ -194,9 +198,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
+        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
 
-    }, [navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, sideDialogsController, smallLayout, authController.user]);
+    }, [cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, sideDialogsController, smallLayout, authController.user]);
 
     return {
         close,
@@ -256,11 +260,11 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
 }
 
 const propsToSidePanel = (props: EntitySidePanelProps,
-                          buildUrlCollectionPath: (path: string) => string,
-                          resolveIdsFrom: (pathWithAliases: string) => string,
-                          smallLayout: boolean,
-                          customizationController: CustomizationController,
-                          authController: AuthController
+    buildUrlCollectionPath: (path: string) => string,
+    resolveIdsFrom: (pathWithAliases: string) => string,
+    smallLayout: boolean,
+    customizationController: CustomizationController,
+    authController: AuthController
 ): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);

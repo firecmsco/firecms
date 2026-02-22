@@ -7,8 +7,8 @@ import { FireCMSPlugin } from "./plugins";
 import { EntityAction } from "./entity_actions";
 import { User } from "../users";
 import {
-    AuthController, CMSAnalyticsEvent, CMSView, DataSourceDelegate, NavigationController, StorageSource,
-    UserConfigurationPersistence
+    AuthController, CMSAnalyticsEvent, CMSView, DataSourceDelegate, StorageSource,
+    UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController
 } from "../controllers";
 import { FireCMSContext } from "../firecms_context";
 import { InternalUserManagement } from "./internal_user_management";
@@ -80,10 +80,19 @@ export type FireCMSProps<USER extends User> = {
     propertyConfigs?: Record<string, PropertyConfig>;
 
     /**
-     * This controller is in charge of the navigation of the CMS.
-     * It is in charge of resolving the collection and entity paths.
+     * This controller is in charge of resolving the collection and entity paths.
      */
-    navigationController: NavigationController;
+    collectionRegistryController: CollectionRegistryController;
+
+    /**
+     * This controller is in charge of resolving the URL configurations map and building paths
+     */
+    cmsUrlController: CMSUrlController;
+
+    /**
+     * This controller is in charge of resolving the navigation views and state
+     */
+    navigationStateController: NavigationStateController;
 
     /**
      * List of additional custom views for entities.

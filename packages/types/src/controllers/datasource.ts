@@ -1,4 +1,4 @@
-import { NavigationController } from "./navigation";
+import { NavigationController, CollectionRegistryController } from "./navigation";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues } from "../types";
 import { FireCMSContext } from "../firecms_context";
 
@@ -249,27 +249,27 @@ export type FilterCombinationValidProps = {
 };
 
 export type SaveEntityDelegateProps<M extends Record<string, any> = any> = SaveEntityProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 };
 
 export type FetchCollectionDelegateProps<M extends Record<string, any> = any> = FetchCollectionProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 };
 
 export type ListenCollectionDelegateProps<M extends Record<string, any> = any> = ListenCollectionProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 };
 
 export type ListenEntityDelegateProps<M extends Record<string, any> = any> = ListenEntityProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 };
 
 export type FetchEntityDelegateProps<M extends Record<string, any> = any> = FetchEntityProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 }
 
 export type DeleteEntityDelegateProps<M extends Record<string, any> = any> = DeleteEntityProps<M> & {
-    navigationController?: NavigationController
+    collectionRegistryController?: CollectionRegistryController
 }
 
 export interface DataSourceDelegate {
@@ -407,7 +407,7 @@ export interface DataSourceDelegate {
      */
     isFilterCombinationValid?(props: Omit<FilterCombinationValidProps, "collection"> & {
         databaseId?: string,
-        navigationController?: NavigationController
+        collectionRegistryController?: CollectionRegistryController
     }): boolean;
 
     /**

@@ -36,39 +36,39 @@ export type FirebaseAuthController<USER extends User = FirebaseUserWrapper, Extr
     AuthController<USER, ExtraData>
     & {
 
-    confirmationResult?: ConfirmationResult;
+        confirmationResult?: ConfirmationResult;
 
-    googleLogin: () => void;
+        googleLogin: () => void;
 
-    anonymousLogin: () => void;
+        anonymousLogin: () => void;
 
-    appleLogin: () => void;
+        appleLogin: () => void;
 
-    facebookLogin: () => void;
+        facebookLogin: () => void;
 
-    githubLogin: () => void;
+        githubLogin: () => void;
 
-    microsoftLogin: () => void;
+        microsoftLogin: () => void;
 
-    twitterLogin: () => void;
+        twitterLogin: () => void;
 
-    emailPasswordLogin: (email: string, password: string) => void;
+        emailPasswordLogin: (email: string, password: string) => void;
 
-    fetchSignInMethodsForEmail: (email: string) => Promise<string[]>;
+        fetchSignInMethodsForEmail: (email: string) => Promise<string[]>;
 
-    createUserWithEmailAndPassword: (email: string, password: string) => void;
+        createUserWithEmailAndPassword: (email: string, password: string) => void;
 
-    sendPasswordResetEmail: (email: string) => Promise<void>;
+        sendPasswordResetEmail: (email: string) => Promise<void>;
 
-    phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
+        phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
 
-    /**
-     * Skip login
-     */
-    skipLogin: () => void;
+        /**
+         * Skip login
+         */
+        skipLogin: () => void;
 
-    setUser: (user: FirebaseUser | null) => void;
+        setUser: (user: USER | null) => void;
 
-    setUserRoles: (roles: Role[]) => void;
+        setUserRoles: (roles: Role[]) => void;
 
-};
+    };

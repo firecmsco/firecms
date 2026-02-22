@@ -178,23 +178,7 @@ export type CollectionRegistryController<EC extends EntityCollection = EntityCol
 export type NavigationController<EC extends EntityCollection = EntityCollection<any>> =
     CMSUrlController &
     NavigationStateController &
-    CollectionRegistryController<EC> & {
-        getCollectionBySlug: (slug: string) => EC | undefined;
-        buildCMSUrlPath: (path: string) => string;
-
-        /**
-         * @deprecated Use `getCollection` instead.
-         */
-        getCollectionById?: (id: string) => EC | undefined;
-        /**
-         * @deprecated Use `getCollection` instead.
-         */
-        getCollectionFromIds?: (ids: string[]) => EC | undefined;
-        /**
-         * @deprecated Use `getCollection` instead.
-         */
-        getCollectionFromPaths?: (pathSegments: string[]) => EC | undefined;
-    };
+    CollectionRegistryController<EC>;
 
 export interface NavigateOptions {
     replace?: boolean;

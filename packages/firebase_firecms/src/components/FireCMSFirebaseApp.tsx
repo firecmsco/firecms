@@ -15,7 +15,9 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
+    useBuildCollectionRegistryController,
+    useBuildCMSUrlController,
+    useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@firecms/core";
 
@@ -53,31 +55,31 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @category Firebase
  */
 export function FireCMSFirebaseApp({
-                                       name,
-                                       logo,
-                                       logoDark,
-                                       authenticator,
-                                       collections,
-                                       views,
-                                       adminViews,
-                                       textSearchControllerBuilder,
-                                       allowSkipLogin,
-                                       signInOptions = DEFAULT_SIGN_IN_OPTIONS,
-                                       firebaseConfig,
-                                       onFirebaseInit,
-                                       appCheckOptions,
-                                       dateTimeFormat,
-                                       locale,
-                                       basePath,
-                                       baseCollectionPath,
-                                       onAnalyticsEvent,
-                                       propertyConfigs: propertyConfigsProp,
-                                       plugins,
-                                       autoOpenDrawer,
-                                       firestoreIndexesBuilder,
-                                       components,
-                                       localTextSearchEnabled = false,
-                                   }: FireCMSFirebaseAppProps) {
+    name,
+    logo,
+    logoDark,
+    authenticator,
+    collections,
+    views,
+    adminViews,
+    textSearchControllerBuilder,
+    allowSkipLogin,
+    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
+    firebaseConfig,
+    onFirebaseInit,
+    appCheckOptions,
+    dateTimeFormat,
+    locale,
+    basePath,
+    baseCollectionPath,
+    onAnalyticsEvent,
+    propertyConfigs: propertyConfigsProp,
+    plugins,
+    autoOpenDrawer,
+    firestoreIndexesBuilder,
+    components,
+    localTextSearchEnabled = false,
+}: FireCMSFirebaseAppProps) {
 
     /**
      * Update the browser title and icon
@@ -154,19 +156,30 @@ export function FireCMSFirebaseApp({
         storageSource
     });
 
-    const navigationController = useBuildNavigationController({
+    const collectionRegistryController = useBuildCollectionRegistryController({
+        userConfigPersistence
+    });
+
+    const cmsUrlController = useBuildCMSUrlController({
+        basePath: basePath ?? "/",
+        baseCollectionPath: baseCollectionPath ?? "/c",
+        collectionRegistryController
+    });
+
+    const navigationStateController = useBuildNavigationStateController({
+        authController,
         collections,
         views,
-        basePath,
-        baseCollectionPath,
-        authController,
         adminViews,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        plugins,
+        collectionRegistryController,
+        cmsUrlController
     });
 
     if (firebaseConfigLoading || !firebaseApp || loading) {
         return <>
-            <CircularProgressCenter/>
+            <CircularProgressCenter />
         </>;
     }
 
@@ -180,7 +193,9 @@ export function FireCMSFirebaseApp({
 
                 <FireCMS
                     authController={authController}
-                    navigationController={navigationController}
+                    collectionRegistryController={collectionRegistryController}
+                    cmsUrlController={cmsUrlController}
+                    navigationStateController={navigationStateController}
                     userConfigPersistence={userConfigPersistence}
                     dateTimeFormat={dateTimeFormat}
                     dataSourceDelegate={firestoreDelegate}
@@ -191,13 +206,13 @@ export function FireCMSFirebaseApp({
                     plugins={plugins}
                     propertyConfigs={propertyConfigs}>
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         let component;
                         if (loading || authLoading) {
-                            component = <CircularProgressCenter size={"large"}/>;
+                            component = <CircularProgressCenter size={"large"} />;
                         } else {
                             const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                             if (!canAccessMainView) {
@@ -209,18 +224,18 @@ export function FireCMSFirebaseApp({
                                         signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                         firebaseApp={firebaseApp}
                                         authController={authController}
-                                        notAllowedError={notAllowedError}/>
+                                        notAllowedError={notAllowedError} />
                                 );
                             } else {
                                 component = (
                                     <Scaffold
                                         logo={usedLogo}
                                         autoOpenDrawer={autoOpenDrawer}>
-                                        <AppBar title={name} logo={usedLogo}/>
+                                        <AppBar title={name} logo={usedLogo} />
                                         <Drawer />
                                         <NavigationRoutes
-                                            homePage={components?.HomePage ? <components.HomePage/> : undefined}/>
-                                        <SideDialogs/>
+                                            homePage={components?.HomePage ? <components.HomePage /> : undefined} />
+                                        <SideDialogs />
                                     </Scaffold>
                                 );
                             }

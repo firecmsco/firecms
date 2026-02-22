@@ -15,7 +15,9 @@ import {
     SnackbarProvider,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
+    useBuildCollectionRegistryController,
+    useBuildCMSUrlController,
+    useBuildNavigationStateController,
     useBackendStorageSource
 } from "@firecms/core";
 import { useLocalCollectionsConfigController, useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -119,19 +121,31 @@ export function App() {
         ];
     }, [firestoreDelegate]);
 
-    const navigationController = useBuildNavigationController({
+    const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
+
+    const cmsUrlController = useBuildCMSUrlController({
+        basePath: "/",
+        baseCollectionPath: "/c",
+        collectionRegistryController
+    });
+
+    const navigationStateController = useBuildNavigationStateController({
         plugins: [dataEnhancementPlugin, collectionEditorPlugin],
         collections: collectionsBuilder,
         views: adminViews,
         authController,
-        dataSourceDelegate: postgresDelegate
+        dataSourceDelegate: postgresDelegate,
+        collectionRegistryController,
+        cmsUrlController
     });
 
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <FireCMS
-                    navigationController={navigationController}
+                    collectionRegistryController={collectionRegistryController}
+                    cmsUrlController={cmsUrlController}
+                    navigationStateController={navigationStateController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={postgresDelegate}

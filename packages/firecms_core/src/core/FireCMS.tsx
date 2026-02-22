@@ -56,17 +56,19 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         entityViews,
         entityActions,
         components,
-        navigationController,
+        collectionRegistryController,
+        cmsUrlController,
+        navigationStateController,
         apiKey,
         userManagement: _userManagement
     } = props;
 
     if (_pluginsProp) {
-        console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
+        console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationStateController` instead.");
     }
 
-    const plugins = navigationController.plugins ?? _pluginsProp;
-    const userManagement = plugins?.find(p => p.userManagement)?.userManagement
+    const plugins = navigationStateController.plugins ?? _pluginsProp;
+    const userManagement = plugins?.find((p: FireCMSPlugin) => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
         users: [],
@@ -74,11 +76,11 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     };
 
     const sideDialogsController = useBuildSideDialogsController();
-    const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController, authController);
+    const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);
 
-    const pluginsLoading = plugins?.some(p => p.loading) ?? false;
+    const pluginsLoading = plugins?.some((p: FireCMSPlugin) => p.loading) ?? false;
 
-    const loading = authController.initialLoading || navigationController.loading || pluginsLoading;
+    const loading = authController.initialLoading || navigationStateController.loading || pluginsLoading;
 
     const customizationController: CustomizationController = {
         dateTimeFormat,
@@ -108,7 +110,8 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const dataSource = useBuildDataSource({
         delegate: dataSourceDelegate,
         propertyConfigs,
-        navigationController,
+        // Used by DataSource internally for type resolution, pass the registry
+        collectionRegistryController,
         authController
     });
 
@@ -116,12 +119,12 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         console.warn(accessResponse.message);
     }
 
-    if (navigationController.navigationLoadingError) {
+    if (navigationStateController.navigationLoadingError) {
         return (
             <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading navigation"}
-                    error={navigationController.navigationLoadingError} />
+                    error={navigationStateController.navigationLoadingError} />
             </CenteredView>
         );
     }
@@ -167,9 +170,9 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                                     value={sideDialogsController}>
                                     <SideEntityControllerContext.Provider
                                         value={sideEntityController}>
-                                        <CollectionRegistryContext.Provider value={navigationController as any}>
-                                            <NavigationStateContext.Provider value={navigationController as any}>
-                                                <CMSUrlContext.Provider value={navigationController as any}>
+                                        <CollectionRegistryContext.Provider value={collectionRegistryController}>
+                                            <NavigationStateContext.Provider value={navigationStateController}>
+                                                <CMSUrlContext.Provider value={cmsUrlController}>
                                                     <InternalUserManagementContext.Provider value={userManagement}>
                                                         <DialogsProvider>
                                                             <BreadcrumbsProvider>
