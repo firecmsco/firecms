@@ -5,15 +5,15 @@
  * flow through various utility functions during entity save operations.
  */
 import { describe, expect, it } from "@jest/globals";
-import { EntityReference, GeoPoint } from "../src/types";
-import { mergeDeep } from "../src/util/objects";
-import { updateDateAutoValues } from "../src/util/entities";
-import { mergeCallbacks } from "../src/util/callbacks";
+import { EntityReference, GeoPoint } from "@firecms/types";
+import { mergeDeep } from "@firecms/common";
+import { updateDateAutoValues } from "@firecms/common";
+import { mergeCallbacks } from "@firecms/common";
 
 // Real EntityReference class for testing
 class TestEntityReference extends EntityReference {
     constructor(id: string, path: string) {
-        super(id, path);
+        super({ id, path });
     }
 }
 
@@ -130,21 +130,21 @@ describe("EntityReference Preservation - Integration Tests", () => {
             };
 
             const properties = {
-                title: { dataType: "string" as const },
+                title: { type: "string" as const },
                 author: {
-                    dataType: "reference" as const,
+                    type: "reference" as const,
                     path: "users"
                 },
                 category: {
-                    dataType: "reference" as const,
+                    type: "reference" as const,
                     path: "categories"
                 },
                 created_at: {
-                    dataType: "date" as const,
+                    type: "date" as const,
                     autoValue: "on_create" as const
                 },
                 updated_at: {
-                    dataType: "date" as const,
+                    type: "date" as const,
                     autoValue: "on_update" as const
                 },
             };
@@ -177,10 +177,10 @@ describe("EntityReference Preservation - Integration Tests", () => {
             };
 
             const properties = {
-                name: { dataType: "string" as const },
-                location: { dataType: "geopoint" as const },
+                name: { type: "string" as const },
+                location: { type: "geopoint" as const },
                 updated_at: {
-                    dataType: "date" as const,
+                    type: "date" as const,
                     autoValue: "on_update" as const
                 },
             };
@@ -273,18 +273,18 @@ describe("EntityReference Preservation - Integration Tests", () => {
 
             // Step 3: Update auto dates (simulates useBuildDataSource)
             const properties = {
-                title: { dataType: "string" as const },
+                title: { type: "string" as const },
                 author: {
-                    dataType: "reference" as const,
+                    type: "reference" as const,
                     path: "users"
                 },
-                location: { dataType: "geopoint" as const },
+                location: { type: "geopoint" as const },
                 created_at: {
-                    dataType: "date" as const,
+                    type: "date" as const,
                     autoValue: "on_create" as const
                 },
                 updated_at: {
-                    dataType: "date" as const,
+                    type: "date" as const,
                     autoValue: "on_update" as const
                 },
             };
@@ -324,11 +324,11 @@ describe("EntityReference Preservation - Integration Tests", () => {
 
             // Just properties without date fields to isolate array handling
             const properties = {
-                title: { dataType: "string" as const },
+                title: { type: "string" as const },
                 relatedPosts: {
-                    dataType: "array" as const,
+                    type: "array" as const,
                     of: {
-                        dataType: "reference" as const,
+                        type: "reference" as const,
                         path: "posts"
                     }
                 },

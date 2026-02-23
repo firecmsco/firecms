@@ -124,6 +124,15 @@ test.describe('E2E testing for FireCMS UI', () => {
 
         await expect(page.getByText('Save and close', { exact: false })).not.toBeVisible();
         await expect(page.getByText(`${authorName} (Updated)`)).toBeVisible();
+
+        // Teardown - delete the created author
+        // Force a clean navigation to clear any lingering popups or URL filter query parameters
+        await page.goto('/c/authors');
+        await page.waitForTimeout(1000);
+        await page.locator('.flex.min-w-full').filter({ hasText: `${authorName} (Updated)` }).locator('button:has-text("edit")').first().click({ force: true });
+        await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().waitFor({ state: 'visible', timeout: 10000 });
+        await page.getByRole('dialog').locator('button').filter({ hasText: /delete/i }).first().click({ force: true });
+        await page.locator('button').filter({ hasText: /OK|Delete/i }).last().click({ force: true });
     });
 
 });

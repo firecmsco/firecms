@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, Properties, Relation } from "@firecms/types";
@@ -7,8 +7,9 @@ import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
     getCollectionByPath,
     getTableForCollection,
-    getIdFieldInfo,
-    parseIdValue,
+    getPrimaryKeys,
+    parseIdValues,
+    buildCompositeId,
     generateEntityId as genEntityId
 } from "./entity-helpers";
 import { sanitizeAndConvertDates, serializeDataToServer } from "../data-transformer";
@@ -42,14 +43,16 @@ export class EntityPersistService {
     async deleteEntity(collectionPath: string, entityId: string | number, _databaseId?: string): Promise<void> {
         const collection = getCollectionByPath(collectionPath);
         const table = getTableForCollection(collection);
-        const idInfo = getIdFieldInfo(collection);
+        const idInfoArray = getPrimaryKeys(collection);
+        const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!idField) {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
-        const parsedId = parseIdValue(entityId, idInfo.type);
+        const parsedIdObj = parseIdValues(entityId, idInfoArray);
+        const parsedId = parsedIdObj[idInfo.fieldName];
 
         await this.db
             .delete(table)
@@ -91,8 +94,10 @@ export class EntityPersistService {
 
                         // Handle many-to-many with junction table
                         if (relation.cardinality === "many" && relation.through) {
-                            const parentIdInfo = getIdFieldInfo(currentCollection);
-                            const parsedParentId = parseIdValue(currentEntityId, parentIdInfo.type);
+                            const parentIdInfoArray = getPrimaryKeys(currentCollection);
+                            const parentIdInfo = parentIdInfoArray[0];
+                            const parsedParentIdObj = parseIdValues(currentEntityId, parentIdInfoArray);
+                            const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
 
                             (effectiveValues as Record<string, unknown>).__junction_table_info = {
                                 parentCollection: currentCollection,
@@ -126,8 +131,10 @@ export class EntityPersistService {
                             throw new Error(`Relation '${relationKey}' lacks configuration for path-based saving.`);
                         }
 
-                        const parentIdInfo = getIdFieldInfo(currentCollection);
-                        const parsedParentId = parseIdValue(currentEntityId, parentIdInfo.type);
+                        const parentIdInfoArray = getPrimaryKeys(currentCollection);
+                        const parentIdInfo = parentIdInfoArray[0];
+                        const parsedParentIdObj = parseIdValues(currentEntityId, parentIdInfoArray);
+                        const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
 
                         const existingValue = (effectiveValues as Record<string, unknown>)[targetColumnName];
                         if (existingValue !== undefined && existingValue !== null && existingValue !== parsedParentId) {
@@ -146,12 +153,16 @@ export class EntityPersistService {
 
         const collection = getCollectionByPath(effectiveCollectionPath);
         const table = getTableForCollection(collection);
-        const idInfo = getIdFieldInfo(collection);
-        const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+        const idInfoArray = getPrimaryKeys(collection);
+        const primaryKeyFields = idInfoArray.map(info => info.fieldName);
 
-        if (!idField) {
-            throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${effectiveCollectionPath}'`);
-        }
+        // Build an object mapping required for dynamic returning
+        const returningKeys: Record<string, AnyPgColumn> = {};
+        idInfoArray.forEach(info => {
+            const field = table[info.fieldName as keyof typeof table] as AnyPgColumn;
+            if (!field) throw new Error(`Primary key field '${info.fieldName}' not found in table for collection '${effectiveCollectionPath}'`);
+            returningKeys[info.fieldName] = field;
+        });
 
         // Separate relations that require special handling
         const relationValues: Record<string, any> = {};
@@ -186,23 +197,36 @@ export class EntityPersistService {
 
             if (entityId) {
                 // Update existing entity
-                currentId = parseIdValue(entityId, idInfo.type);
-                await tx
-                    .update(table)
-                    .set(entityData)
-                    .where(eq(idField, currentId));
+                currentId = entityId; // `entityId` is already the formatted composite or singular string
+                const idValues = parseIdValues(entityId, idInfoArray);
+
+                let updateQuery = tx.update(table).set(entityData);
+                const conditions = [];
+                for (const info of idInfoArray) {
+                    const field = table[info.fieldName as keyof typeof table] as AnyPgColumn;
+                    conditions.push(eq(field, idValues[info.fieldName]));
+                }
+
+                await updateQuery.where(and(...conditions));
             } else {
                 const dataForInsert = { ...entityData };
-                if (idInfo.fieldName in dataForInsert) {
-                    delete (dataForInsert as Record<string, unknown>)[idInfo.fieldName];
+
+                // If the user's data contains the primary keys, we shouldn't delete them if they are part of a composite key
+                // but we should delete purely auto-generated single IDs
+                if (idInfoArray.length === 1) {
+                    const singleIdField = idInfoArray[0].fieldName;
+                    if (singleIdField in dataForInsert) {
+                        delete (dataForInsert as Record<string, unknown>)[singleIdField];
+                    }
                 }
 
                 const result = await tx
                     .insert(table)
                     .values(dataForInsert)
-                    .returning({ id: idField });
+                    .returning(returningKeys);
 
-                currentId = result[0].id as string | number;
+                const resultRow = result[0];
+                currentId = buildCompositeId(resultRow, idInfoArray);
             }
 
             // Handle inverse relation updates

@@ -10,20 +10,26 @@ const mockAuthorsTable = {
     _def: { tableName: "authors" }
 };
 const mockPostsTable = {
-    id: { name: "id" },
+    id: { name: "id", dataType: "number" },
     title: { name: "title" },
-    author_id: { name: "author_id" },
+    author_id: { name: "author_id", dataType: "number" },
     _def: { tableName: "posts" }
 };
 const mockTagsTable = {
-    id: { name: "id" },
+    id: { name: "id", dataType: "number" },
     name: { name: "name" },
     _def: { tableName: "tags" }
 };
 const mockPostsTagsTable = {
-    post_id: { name: "post_id" },
-    tag_id: { name: "tag_id" },
+    post_id: { name: "post_id", dataType: "number" },
+    tag_id: { name: "tag_id", dataType: "number" },
     _def: { tableName: "posts_tags" }
+};
+const mockProjectUsersTable = {
+    project_id: { name: "project_id" },
+    id: { name: "id" },
+    email: { name: "email" },
+    _def: { tableName: "project_users" }
 };
 
 // --- Correctly typed Mock Entity Collections ---
@@ -37,6 +43,18 @@ const tagsCollection: EntityCollection = {
         name: { type: "string" }
     },
     idField: "id",
+};
+
+const projectUsersCollection: EntityCollection = {
+    slug: "project_users",
+    name: "Project Users",
+    dbPath: "project_users",
+    properties: {
+        project_id: { type: "string" },
+        id: { type: "string" },
+        email: { type: "string" }
+    },
+    primaryKeys: ["project_id", "id"]
 };
 
 const postsCollection: EntityCollection = {
@@ -111,6 +129,7 @@ describe("EntityService", () => {
             if (path.startsWith("authors")) return authorsCollection;
             if (path.startsWith("posts")) return postsCollection;
             if (path.startsWith("tags")) return tagsCollection;
+            if (path.startsWith("project_users")) return projectUsersCollection;
             return undefined;
         });
         jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
@@ -118,9 +137,10 @@ describe("EntityService", () => {
             if (dbPath === "posts") return mockPostsTable as any;
             if (dbPath === "tags") return mockTagsTable as any;
             if (dbPath === "posts_tags") return mockPostsTagsTable as any;
+            if (dbPath === "project_users") return mockProjectUsersTable as any;
             return undefined;
         });
-        jest.spyOn(collectionRegistry, "getCollections").mockReturnValue([authorsCollection, postsCollection, tagsCollection]);
+        jest.spyOn(collectionRegistry, "getCollections").mockReturnValue([authorsCollection, postsCollection, tagsCollection, projectUsersCollection]);
 
         db = {
             select: jest.fn().mockReturnThis(),
@@ -161,6 +181,26 @@ describe("EntityService", () => {
                 __type: "relation"
             });
         });
+
+        it("should parse a composite ID and use both parts in the WHERE clause", async () => {
+            const mockUser = {
+                project_id: "proj1",
+                id: "user1",
+                email: "test@test.com"
+            };
+            db.limit.mockResolvedValue([mockUser] as any);
+
+            const entity = await entityService.fetchEntity("project_users", "proj1:::user1");
+
+            // Check that we fetched the actual mocked user
+            expect(entity?.id).toBe("proj1:::user1");
+            expect(entity?.values.email).toBe("test@test.com");
+
+            expect(db.select).toHaveBeenCalled();
+            expect(db.from).toHaveBeenCalled();
+            expect(db.where).toHaveBeenCalled();
+            expect(db.limit).toHaveBeenCalledWith(1);
+        });
     });
 
     describe("saveEntity (create)", () => {
@@ -196,6 +236,42 @@ describe("EntityService", () => {
                 path: "authors",
                 __type: "relation"
             });
+        });
+
+        it("should save an entity with composite primary keys in UPSERT/onConflictDoUpdate mode", async () => {
+            const valuesToSave = {
+                project_id: "proj1",
+                id: "user1",
+                email: "new@test.com"
+            };
+
+            const returnedSaved = {
+                project_id: "proj1",
+                id: "user1",
+                email: "new@test.com"
+            };
+
+            const mockWhere = jest.fn().mockResolvedValue([returnedSaved]);
+            const mockSet = jest.fn().mockReturnValue({
+                where: mockWhere
+            });
+
+            // Intercept update chain
+            db.update.mockReturnValue({
+                set: mockSet
+            } as any);
+
+            // Mock fetch back (the final step of saveEntity)
+            db.limit.mockResolvedValue([returnedSaved] as any);
+
+            const savedEntity = await entityService.saveEntity("project_users", valuesToSave, "proj1:::user1");
+
+            expect(db.update).toHaveBeenCalled();
+            expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({ email: "new@test.com" }));
+            expect(mockWhere).toHaveBeenCalled();
+
+            expect(savedEntity.id).toBe("proj1:::user1");
+            expect(savedEntity.values.email).toBe("new@test.com");
         });
     });
 
@@ -255,7 +331,7 @@ describe("EntityService - Comprehensive Tests", () => {
 
     // Extended mock tables for more complex scenarios
     const mockUsersTable = {
-        id: { name: "id" },
+        id: { name: "id", dataType: "number" },
         email: { name: "email" },
         name: { name: "name" },
         created_at: { name: "created_at" },
@@ -306,7 +382,7 @@ describe("EntityService - Comprehensive Tests", () => {
     };
 
     const mockTagsTable = {
-        id: { name: "id" },
+        id: { name: "id", dataType: "number" },
         name: { name: "name" },
         _def: { tableName: "tags" }
     };
@@ -542,6 +618,21 @@ describe("EntityService - Comprehensive Tests", () => {
                 }
             };
             jest.spyOn(collectionRegistry, "getCollectionByPath").mockReturnValue(stringIdCollection);
+            jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
+                if (dbPath === "users") return {
+                    id: { name: "id", dataType: "string" },
+                    email: { name: "email" },
+                    name: { name: "name" },
+                    _def: { tableName: "users" }
+                } as any;
+                if (dbPath === "companies") return mockCompaniesTable as any;
+                if (dbPath === "projects") return mockProjectsTable as any;
+                if (dbPath === "tasks") return mockTasksTable as any;
+                if (dbPath === "tags") return mockTagsTable as any;
+                if (dbPath === "categories") return mockCategoriesTable as any;
+                if (dbPath === "project_tags") return mockProjectTagsTable as any;
+                return undefined;
+            });
 
             const mockUser = { id: "uuid-123", email: "test@example.com", name: "Test User" };
             db.limit.mockResolvedValue([mockUser]);

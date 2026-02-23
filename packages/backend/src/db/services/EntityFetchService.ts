@@ -7,8 +7,9 @@ import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
     getCollectionByPath,
     getTableForCollection,
-    getIdFieldInfo,
-    parseIdValue,
+    getPrimaryKeys,
+    parseIdValues,
+    buildCompositeId,
     collectionRegistry
 } from "./entity-helpers";
 import { parseDataFromServer } from "../data-transformer";
@@ -48,14 +49,16 @@ export class EntityFetchService {
     ): Promise<Entity<M> | undefined> {
         const collection = getCollectionByPath(collectionPath);
         const table = getTableForCollection(collection);
-        const idInfo = getIdFieldInfo(collection);
+        const idInfoArray = getPrimaryKeys(collection);
+        const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!idField) {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
-        const parsedId = parseIdValue(entityId, idInfo.type);
+        const parsedIdObj = parseIdValues(entityId, idInfoArray);
+        const parsedId = parsedIdObj[idInfo.fieldName];
 
         const result = await this.db
             .select()
@@ -138,7 +141,8 @@ export class EntityFetchService {
     ): Promise<Entity<M>[]> {
         const collection = getCollectionByPath(collectionPath);
         const table = getTableForCollection(collection);
-        const idInfo = getIdFieldInfo(collection);
+        const idInfoArray = getPrimaryKeys(collection);
+        const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!idField) {
@@ -232,7 +236,8 @@ export class EntityFetchService {
             } else {
                 const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
                 if (startAfterId !== undefined) {
-                    const parsedStartAfterId = parseIdValue(startAfterId, idInfo.type);
+                    const parsedStartAfterIdObj = parseIdValues(startAfterId, idInfoArray);
+        const parsedStartAfterId = parsedStartAfterIdObj[idInfo.fieldName];
                     startAfterConditions.push(lt(idField, parsedStartAfterId));
                 }
             }
@@ -267,7 +272,7 @@ export class EntityFetchService {
         results: any[],
         collection: EntityCollection,
         collectionPath: string,
-        idInfo: { fieldName: string; type: string },
+        idInfo: { fieldName: string; type: "string" | "number" },
         databaseId?: string
     ): Promise<Entity<M>[]> {
         if (results.length === 0) return [];
@@ -539,13 +544,14 @@ export class EntityFetchService {
 
         const collection = getCollectionByPath(collectionPath);
         const table = getTableForCollection(collection);
-        const idInfo = getIdFieldInfo(collection);
+        const idInfoArray = getPrimaryKeys(collection);
+        const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
         const field = table[fieldName as keyof typeof table] as AnyPgColumn;
 
         if (!field) return true;
 
-        const parsedExcludeId = excludeEntityId ? parseIdValue(excludeEntityId, idInfo.type) : undefined;
+        const parsedExcludeId = excludeEntityId ? parseIdValues(excludeEntityId, idInfoArray)[idInfo.fieldName] : undefined;
         const conditions = DrizzleConditionBuilder.buildUniqueFieldCondition(
             field,
             value,

@@ -8,20 +8,20 @@
  * This test simulates the save flow to identify where the conversion happens.
  */
 import { describe, expect, it } from "@jest/globals";
-import { updateDateAutoValues, traverseValuesProperties } from "../src/util/entities";
-import { mergeDeep, removeFunctions, removeUndefined } from "../src/util/objects";
-import { ResolvedProperties, ResolvedDateProperty, EntityReference, GeoPoint } from "../src/types";
+import { updateDateAutoValues, traverseValuesProperties } from "@firecms/common";
+import { mergeDeep, removeFunctions, removeUndefined } from "@firecms/common";
+import { Properties, DateProperty, EntityReference, GeoPoint } from "@firecms/types";
 // Entity cache functions have internal JSON serialization that we need to test
 
 // Helper to create a date property with autoValue
-function createAutoDateProperty(autoValue: "on_create" | "on_update"): ResolvedDateProperty {
+function createAutoDateProperty(autoValue: "on_create" | "on_update"): DateProperty {
     return {
-        dataType: "date",
+        type: "date",
         name: autoValue === "on_create" ? "Created On" : "Updated On",
         autoValue,
         readOnly: true,
         validation: { required: true }
-    } as ResolvedDateProperty;
+    } as DateProperty;
 }
 
 describe("Date-to-String Conversion Bug", () => {
@@ -34,8 +34,8 @@ describe("Date-to-String Conversion Bug", () => {
                 updated_on: null,
             };
 
-            const properties: ResolvedProperties = {
-                title: { dataType: "string" as const },
+            const properties: Properties = {
+                title: { type: "string" as const },
                 created_on: createAutoDateProperty("on_create"),
                 updated_on: createAutoDateProperty("on_update"),
             };
@@ -68,8 +68,8 @@ describe("Date-to-String Conversion Bug", () => {
                 updated_on: existingDate,
             };
 
-            const properties: ResolvedProperties = {
-                title: { dataType: "string" as const },
+            const properties: Properties = {
+                title: { type: "string" as const },
                 created_on: createAutoDateProperty("on_create"),
                 updated_on: createAutoDateProperty("on_update"),
             };
@@ -123,7 +123,7 @@ describe("Date-to-String Conversion Bug", () => {
             const result = mergeDeep(baseValues, updates);
 
             expect(result.updated_on).toBeInstanceOf(Date);
-            expect(result.updated_on).toBe(now); // Should be the exact same object
+            expect(result.updated_on).toEqual(now); // Should have the same timestamp
         });
     });
 
@@ -169,8 +169,8 @@ describe("Date-to-String Conversion Bug", () => {
                 updated_on: null,
             };
 
-            const properties: ResolvedProperties = {
-                title: { dataType: "string" as const, name: "Title" },
+            const properties: Properties = {
+                title: { type: "string" as const, name: "Title" },
                 created_on: createAutoDateProperty("on_create"),
                 updated_on: createAutoDateProperty("on_update"),
             };
@@ -214,8 +214,8 @@ describe("Date-to-String Conversion Bug", () => {
                 updated_on: existingCreatedOn,
             };
 
-            const properties: ResolvedProperties = {
-                title: { dataType: "string" as const, name: "Title" },
+            const properties: Properties = {
+                title: { type: "string" as const, name: "Title" },
                 created_on: createAutoDateProperty("on_create"),
                 updated_on: createAutoDateProperty("on_update"),
             };

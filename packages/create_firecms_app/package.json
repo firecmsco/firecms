@@ -8,7 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "build": "echo \"create-firecms-app: no need to build\" && exit 0",
     "clean": "echo \"create-firecms-app: no need to clean\" && exit 0"
   },

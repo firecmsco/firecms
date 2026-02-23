@@ -146,10 +146,9 @@ function getYupStringSchema({
             );
         }
         const entries = enumToObjectEntries(property.enum);
-        schema = schema.oneOf(
-            (validation?.required ? entries : [...entries, null])
-                .map((enumValueConfig) => enumValueConfig?.id ?? null)
-        );
+        const oneOfValues = (validation?.required ? entries : [...entries, null])
+            .map((enumValueConfig) => enumValueConfig?.id ?? null);
+        schema = schema.oneOf(oneOfValues);
     }
 
     if (validation) {

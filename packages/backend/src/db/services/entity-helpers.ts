@@ -1,4 +1,4 @@
-import { PgTable } from "drizzle-orm/pg-core";
+import { PgTable, AnyPgColumn } from "drizzle-orm/pg-core";
 import { EntityCollection, Property } from "@firecms/types";
 import { collectionRegistry } from "../../collections/registry";
 
@@ -23,36 +23,94 @@ export function getTableForCollection(collection: EntityCollection): PgTable<any
     return table;
 }
 
-export function getIdFieldInfo(collection: EntityCollection): { fieldName: string; type: string } {
-    const idFieldName = collection.idField ?? "id";
-    const idFieldConfig = collection.properties[idFieldName] as Property;
+export function getPrimaryKeys(collection: EntityCollection): { fieldName: string; type: "string" | "number" }[] {
+    const table = getTableForCollection(collection);
 
-    if (!idFieldConfig) {
-        throw new Error(`ID field '${idFieldName}' not found in properties for collection '${collection.slug || collection.dbPath}'`);
+    // If explicitly defined in config
+    if (collection.primaryKeys && collection.primaryKeys.length > 0) {
+        return collection.primaryKeys.map(key => {
+            const idCol = table[key as keyof typeof table] as AnyPgColumn;
+            if (!idCol) {
+                throw new Error(`Primary key '${key}' not found in Drizzle schema for collection '${collection.slug || collection.dbPath}'`);
+            }
+            const type = idCol.dataType === "number" || (idCol as any).columnType === "PgSerial" || (idCol as any).columnType === "PgInteger" ? "number" : "string";
+            return { fieldName: key, type };
+        });
     }
 
-    return {
-        fieldName: idFieldName,
-        type: idFieldConfig.type
-    };
+    // Otherwise infer from Drizzle schema
+    const keys: { fieldName: string; type: "string" | "number" }[] = [];
+    for (const [key, colRaw] of Object.entries(table)) {
+        const col = colRaw as AnyPgColumn;
+        if (col && typeof col === "object" && "primary" in col && col.primary) {
+            const type = col.dataType === "number" || (col as any).columnType === "PgSerial" || (col as any).columnType === "PgInteger" ? "number" : "string";
+            keys.push({ fieldName: key, type });
+        }
+    }
+
+    // Default to 'id' if no primary keys are found and it exists in the schema
+    // This maintains backwards compatibility
+    if (keys.length === 0 && "id" in table) {
+        const idCol = table["id" as keyof typeof table] as AnyPgColumn;
+        const type = idCol.dataType === "number" || (idCol as any).columnType === "PgSerial" || (idCol as any).columnType === "PgInteger" ? "number" : "string";
+        keys.push({ fieldName: "id", type });
+    }
+
+    return keys;
 }
 
-export function parseIdValue(idValue: string | number, idType: string): string | number {
-    if (idType === "number") {
-        if (typeof idValue === "number") {
-            return idValue;
-        }
+export function parseIdValues(idValue: string | number, primaryKeys: { fieldName: string; type: "string" | "number" }[]): Record<string, string | number> {
+    const result: Record<string, string | number> = {};
 
-        const parsed = parseInt(String(idValue), 10);
-        if (isNaN(parsed)) {
-            throw new Error(`Invalid numeric ID: ${idValue}`);
-        }
-        return parsed;
-    } else if (idType === "string") {
-        return String(idValue);
-    } else {
-        throw new Error(`Unsupported ID type: ${idType}`);
+    if (primaryKeys.length === 0) {
+        return result;
     }
+
+    if (primaryKeys.length === 1) {
+        const pk = primaryKeys[0];
+        if (pk.type === "number") {
+            const parsed = typeof idValue === "number" ? idValue : parseInt(String(idValue), 10);
+            if (isNaN(parsed)) {
+                throw new Error(`Invalid numeric ID: ${idValue}`);
+            }
+            result[pk.fieldName] = parsed;
+        } else {
+            result[pk.fieldName] = String(idValue);
+        }
+        return result;
+    }
+
+    // Composite key - split by :::
+    const parts = String(idValue).split(":::");
+    if (parts.length !== primaryKeys.length) {
+        throw new Error(`Composite ID parts mismatch. Expected ${primaryKeys.length}, got ${parts.length} for ID: ${idValue}`);
+    }
+
+    for (let i = 0; i < primaryKeys.length; i++) {
+        const pk = primaryKeys[i];
+        const val = parts[i];
+        if (pk.type === "number") {
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error(`Invalid numeric ID component: ${val}`);
+            }
+            result[pk.fieldName] = parsed;
+        } else {
+            result[pk.fieldName] = val;
+        }
+    }
+
+    return result;
+}
+
+export function buildCompositeId(values: Record<string, any>, primaryKeys: { fieldName: string; type: "string" | "number" }[]): string {
+    if (primaryKeys.length === 0) {
+        return "";
+    }
+    if (primaryKeys.length === 1) {
+        return String(values[primaryKeys[0].fieldName] ?? "");
+    }
+    return primaryKeys.map(pk => String(values[pk.fieldName] ?? "")).join(":::");
 }
 
 export function generateEntityId(): string {

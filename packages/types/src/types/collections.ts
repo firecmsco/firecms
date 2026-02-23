@@ -29,10 +29,13 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     slug: string;
 
     /**
-     * Field used to identify the entity in this collection.
+     * Fields used to identify the entity in this collection (Primary Keys).
      * If not specified, the default `id` field will be used.
+     * Use an array of strings for composite primary keys.
+     * E.g. `["user_id", "role_id"]`
      */
-    idField?: Extract<keyof M, string>;
+    primaryKeys?: Extract<keyof M, string>[];
+
 
     /**
      * Name of the collection, typically plural.

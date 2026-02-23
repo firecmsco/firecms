@@ -29,13 +29,7 @@ import {
     useBackendUserManagement,
     createUserManagementAdminViews
 } from "@firecms/auth";
-import {
-    useFirestoreDelegate,
-    useInitialiseFirebase
-} from "@firecms/firebase";
 import { collections } from "shared";
-import { firestoreCollections } from "./collections";
-import { firebaseConfig } from "./firebase_config";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -77,24 +71,12 @@ export function App() {
         [userManagement, authController.getAuthToken]
     );
 
-    // Initialize Firebase for Firestore
-    const { firebaseApp, firebaseConfigLoading } = useInitialiseFirebase({
-        firebaseConfig
-    });
-
-    // Firestore delegate for Firestore collections
-    const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp,
-        localTextSearchEnabled: true
-    });
-
     // PostgreSQL delegate with WebSocket connection - pass auth token getter
     // Only create with getAuthToken once auth is ready to prevent premature connections
     const postgresDelegate = usePostgresClientDataSource({
         websocketUrl: API_URL.replace(/^http/, "ws"),
         getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
     });
-
 
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
@@ -106,20 +88,10 @@ export function App() {
 
     // Build collections from both PostgreSQL and Firestore sources
     const collectionsBuilder = useCallback(() => {
-        // PostgreSQL collections (default datasource)
-        const postgresCollections = [...collections];
-
-        // Firestore collections with datasource override
-        const firestoreCollectionsWithOverride = firestoreCollections.map(c => ({
-            ...c,
-            overrides: { dataSourceDelegate: firestoreDelegate }
-        }));
-
         return [
-            ...postgresCollections,
-            ...firestoreCollectionsWithOverride
+            ...collections,
         ];
-    }, [firestoreDelegate]);
+    }, []);
 
     const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
 
@@ -153,7 +125,7 @@ export function App() {
                 >
                     {({ loading }) => {
                         // Show loading while initializing
-                        if (loading || authController.initialLoading || firebaseConfigLoading) {
+                        if (loading || authController.initialLoading) {
                             return <CircularProgressCenter size={"large"} />;
                         }
 

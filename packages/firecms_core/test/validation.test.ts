@@ -12,77 +12,77 @@ import {
     CustomFieldValidator
 } from "../src/form/validation";
 import {
-    ResolvedProperty,
-    ResolvedProperties,
-    ResolvedStringProperty,
-    ResolvedNumberProperty,
-    ResolvedBooleanProperty,
-    ResolvedDateProperty,
-    ResolvedArrayProperty,
-    ResolvedMapProperty,
-    ResolvedReferenceProperty,
+    Property,
+    Properties,
+    StringProperty,
+    NumberProperty,
+    BooleanProperty,
+    DateProperty,
+    ArrayProperty,
+    MapProperty,
+    ReferenceProperty,
     GeoPoint,
     EntityReference
-} from "../src/types";
+} from "@firecms/types";
 
 // Helper to create a minimal resolved property
-function createStringProperty(overrides: Partial<ResolvedStringProperty> = {}): ResolvedStringProperty {
+function createStringProperty(overrides: Partial<StringProperty> = {}): StringProperty {
     return {
-        dataType: "string",
+        type: "string",
         ...overrides
-    } as ResolvedStringProperty;
+    } as StringProperty;
 }
 
-function createNumberProperty(overrides: Partial<ResolvedNumberProperty> = {}): ResolvedNumberProperty {
+function createNumberProperty(overrides: Partial<NumberProperty> = {}): NumberProperty {
     return {
-        dataType: "number",
+        type: "number",
         ...overrides
-    } as ResolvedNumberProperty;
+    } as NumberProperty;
 }
 
-function createBooleanProperty(overrides: Partial<ResolvedBooleanProperty> = {}): ResolvedBooleanProperty {
+function createBooleanProperty(overrides: Partial<BooleanProperty> = {}): BooleanProperty {
     return {
-        dataType: "boolean",
+        type: "boolean",
         ...overrides
-    } as ResolvedBooleanProperty;
+    } as BooleanProperty;
 }
 
-function createDateProperty(overrides: Partial<ResolvedDateProperty> = {}): ResolvedDateProperty {
+function createDateProperty(overrides: Partial<DateProperty> = {}): DateProperty {
     return {
-        dataType: "date",
+        type: "date",
         ...overrides
-    } as ResolvedDateProperty;
+    } as DateProperty;
 }
 
-function createArrayProperty(of: ResolvedProperty, overrides: Partial<ResolvedArrayProperty> = {}): ResolvedArrayProperty {
+function createArrayProperty(of: Property, overrides: Partial<ArrayProperty> = {}): ArrayProperty {
     return {
-        dataType: "array",
+        type: "array",
         of,
         ...overrides
-    } as ResolvedArrayProperty;
+    } as ArrayProperty;
 }
 
-function createMapProperty(properties: ResolvedProperties, overrides: Partial<ResolvedMapProperty> = {}): ResolvedMapProperty {
+function createMapProperty(properties: Properties, overrides: Partial<MapProperty> = {}): MapProperty {
     return {
-        dataType: "map",
+        type: "map",
         properties,
         ...overrides
-    } as ResolvedMapProperty;
+    } as MapProperty;
 }
 
-function createReferenceProperty(path: string, overrides: Partial<ResolvedReferenceProperty> = {}): ResolvedReferenceProperty {
+function createReferenceProperty(path: string, overrides: Partial<ReferenceProperty> = {}): ReferenceProperty {
     return {
-        dataType: "reference",
+        type: "reference",
         path,
         ...overrides
-    } as ResolvedReferenceProperty;
+    } as ReferenceProperty;
 }
 
-function createGeoPointProperty(overrides: Partial<ResolvedProperty> = {}): ResolvedProperty {
+function createGeoPointProperty(overrides: Partial<Property> = {}): Property {
     return {
-        dataType: "geopoint",
+        type: "geopoint",
         ...overrides
-    } as ResolvedProperty;
+    } as Property;
 }
 
 // ============================================================================
@@ -358,7 +358,7 @@ describe("String Validation", () => {
     describe("Enum validation", () => {
         it("should validate against enum values", async () => {
             const property = createStringProperty({
-                enumValues: [
+                enum: [
                     { id: "draft", label: "Draft" },
                     { id: "published", label: "Published" },
                     { id: "archived", label: "Archived" }
@@ -376,7 +376,7 @@ describe("String Validation", () => {
 
         it("should allow null for non-required enum", async () => {
             const property = createStringProperty({
-                enumValues: [
+                enum: [
                     { id: "draft", label: "Draft" },
                     { id: "published", label: "Published" }
                 ]
@@ -391,7 +391,7 @@ describe("String Validation", () => {
 
         it("should reject null for required enum", async () => {
             const property = createStringProperty({
-                enumValues: [
+                enum: [
                     { id: "draft", label: "Draft" },
                     { id: "published", label: "Published" }
                 ],
@@ -1071,7 +1071,7 @@ describe("GeoPoint Validation", () => {
 describe("getYupEntitySchema", () => {
 
     it("should create a complete entity schema", async () => {
-        const properties: ResolvedProperties = {
+        const properties: Properties = {
             title: createStringProperty({ validation: { required: true } }),
             count: createNumberProperty({ validation: { min: 0 } }),
             active: createBooleanProperty(),
@@ -1096,7 +1096,7 @@ describe("getYupEntitySchema", () => {
     });
 
     it("should validate complex nested entities", async () => {
-        const properties: ResolvedProperties = {
+        const properties: Properties = {
             name: createStringProperty({ validation: { required: true } }),
             profile: createMapProperty({
                 bio: createStringProperty({ validation: { max: 500 } }),
@@ -1128,7 +1128,7 @@ describe("getYupEntitySchema", () => {
     it("should pass custom field validator to nested properties", async () => {
         const customValidator = jest.fn().mockResolvedValue(true);
 
-        const properties: ResolvedProperties = {
+        const properties: Properties = {
             slug: createStringProperty({ validation: { unique: true } })
         };
 
@@ -1147,7 +1147,7 @@ describe("getYupEntitySchema", () => {
 describe("Error Handling", () => {
 
     it("should throw for unsupported data types", () => {
-        const property = { dataType: "unsupported" } as any;
+        const property = { type: "unsupported" } as any;
 
         expect(() => mapPropertyToYup({
             property,
@@ -1156,7 +1156,10 @@ describe("Error Handling", () => {
     });
 
     it("should throw for property builders (unresolved properties)", () => {
-        const propertyBuilder = () => ({ dataType: "string" });
+        const propertyBuilder = {
+            type: "string",
+            dynamicProps: () => ({ validation: { required: true } })
+        } as any;
 
         expect(() => mapPropertyToYup({
             property: propertyBuilder as any,
@@ -1250,7 +1253,7 @@ describe("Edge Cases", () => {
 
     it("should handle empty array of enum values", async () => {
         const property = createStringProperty({
-            enumValues: []
+            enum: []
         });
         const schema = mapPropertyToYup({
             property,
@@ -1263,8 +1266,8 @@ describe("Edge Cases", () => {
     });
 
     it("should handle array with undefined of property", async () => {
-        const property: ResolvedArrayProperty = {
-            dataType: "array",
+        const property: ArrayProperty = {
+            type: "array",
             of: undefined as any
         };
         const schema = mapPropertyToYup({

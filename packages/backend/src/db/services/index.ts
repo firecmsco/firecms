@@ -7,8 +7,9 @@ export { RelationService } from "./RelationService";
 export {
     getCollectionByPath,
     getTableForCollection,
-    getIdFieldInfo,
-    parseIdValue,
+    getPrimaryKeys,
+    parseIdValues,
+    buildCompositeId,
     generateEntityId,
     collectionRegistry
 } from "./entity-helpers";

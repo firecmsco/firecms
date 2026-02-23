@@ -1,4 +1,5 @@
 import { EntityCollection, NumberProperty, Property, Relation, RelationProperty, SecurityOperation, SecurityRule, StringProperty } from "@firecms/types";
+import { getPrimaryKeys } from "./db/services/entity-helpers";
 import {
     getEnumVarName,
     getTableName,
@@ -10,14 +11,14 @@ import {
 // --- Helper Functions ---
 
 const isNumericId = (collection: EntityCollection): boolean => {
-    const idField = collection.idField ?? "id";
+    const idField = (collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id"));
     const idProp = collection.properties?.[idField] as Property | undefined;
     if (idProp?.type === "number") return true;
     return !collection.customId;
 };
 
 const getDrizzleIdColumn = (collection: EntityCollection): string => {
-    const idField = collection.idField ?? "id";
+    const idField = (collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id"));
     if (collection.customId) {
         const idType = isNumericId(collection) ? "integer" : "varchar";
         return `    ${idField}: ${idType}(\"${toSnakeCase(idField)}\").primaryKey()`;
@@ -43,7 +44,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         }
         case "number": {
             const numProp = prop as NumberProperty;
-            const isId = propName === (collection.idField ?? "id");
+            const isId = propName === ((collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id")));
             columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
             break;
         }
@@ -88,7 +89,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
 
             const fkColumnName = toSnakeCase(relation.localKey);
             const targetTableVar = getTableVarName(getTableName(targetCollection));
-            const targetIdField = targetCollection.idField ?? "id";
+            const targetIdField = (targetCollection.primaryKeys && targetCollection.primaryKeys.length > 0 ? targetCollection.primaryKeys[0] : (targetCollection.idField ?? "id"));
             const baseColumn = isNumericId(targetCollection) ? `integer(\"${fkColumnName}\")` : `varchar(\"${fkColumnName}\")`;
 
             const onUpdate = relation.onUpdate ? `onUpdate: \"${relation.onUpdate}\"` : "";
@@ -345,8 +346,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
 
             const sourceColType = isNumericId(sourceCollection) ? "integer" : "varchar";
             const targetColType = isNumericId(targetCollection) ? "integer" : "varchar";
-            const sourceId = sourceCollection.idField ?? "id";
-            const targetId = targetCollection.idField ?? "id";
+            const sourceId = (sourceCollection.primaryKeys && sourceCollection.primaryKeys.length > 0 ? sourceCollection.primaryKeys[0] : (sourceCollection.idField ?? "id"));
+            const targetId = (targetCollection.primaryKeys && targetCollection.primaryKeys.length > 0 ? targetCollection.primaryKeys[0] : (targetCollection.idField ?? "id"));
 
             schemaContent += `export const ${tableVarName} = pgTable(\"${tableName}\", {\n`;
             schemaContent += `    ${sourceColumn}: ${sourceColType}(\"${toSnakeCase(sourceColumn)}\").notNull().references(() => ${getTableVarName(getTableName(sourceCollection))}.${sourceId}, ${refOptions}),\n`;
@@ -359,7 +360,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
             schemaContent += getDrizzleIdColumn(collection);
             const columns = new Set<string>();
             Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
-                if (propName === (collection.idField ?? "id")) return;
+                if (propName === ((collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id")))) return;
                 const columnString = getDrizzleColumn(propName, prop as Property, collection);
                 if (columnString) columns.add(columnString);
             });
@@ -397,8 +398,8 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 const targetCollection = relation.target();
                 const sourceTableVar = getTableVarName(getTableName(sourceCollection));
                 const targetTableVar = getTableVarName(getTableName(targetCollection));
-                const sourceId = sourceCollection.idField ?? "id";
-                const targetId = targetCollection.idField ?? "id";
+                const sourceId = (sourceCollection.primaryKeys && sourceCollection.primaryKeys.length > 0 ? sourceCollection.primaryKeys[0] : (sourceCollection.idField ?? "id"));
+                const targetId = (targetCollection.primaryKeys && targetCollection.primaryKeys.length > 0 ? targetCollection.primaryKeys[0] : (targetCollection.idField ?? "id"));
 
                 if (!relation?.through)
                     throw new Error("Internal, the relation should have a through property. Relations passed to this script should sanitized first with sanitizeRelation().");
@@ -420,9 +421,9 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
 
                     if (rel.cardinality === "one") {
                         if (rel.direction === "owning" && rel.localKey) {
-                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${rel.localKey}],\n        references: [${targetTableVar}.${target.idField ?? "id"}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
+                            tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${rel.localKey}],\n        references: [${targetTableVar}.${(target.primaryKeys && target.primaryKeys.length > 0 ? target.primaryKeys[0] : (target.idField ?? "id"))}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
                         } else if (rel.direction === "inverse" && rel.foreignKeyOnTarget) {
-                            const sourceIdField = collection.idField ?? "id";
+                            const sourceIdField = (collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id"));
                             tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${rel.foreignKeyOnTarget}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
                         } else if (rel.direction === "inverse" && !rel.foreignKeyOnTarget) {
                             // Handle inverse one-to-one relations where the FK is on the target table
@@ -440,7 +441,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                                 );
 
                                 if (correspondingRelation && correspondingRelation.localKey) {
-                                    const sourceIdField = collection.idField ?? "id";
+                                    const sourceIdField = (collection.primaryKeys && collection.primaryKeys.length > 0 ? collection.primaryKeys[0] : (collection.idField ?? "id"));
                                     tableRelations.push(`    ${relationKey}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${sourceIdField}],\n        references: [${targetTableVar}.${correspondingRelation.localKey}],\n        relationName: \"${drizzleRelationName}\"\n    })`);
                                 }
                             } catch (e) {

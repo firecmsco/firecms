@@ -8,7 +8,7 @@ describe("EntityService - Error Handling & Edge Cases", () => {
     let db: jest.Mocked<NodePgDatabase<any>>;
 
     const mockTable = {
-        id: { name: "id" },
+        id: { name: "id", dataType: "number" },
         name: { name: "name" },
         _def: { tableName: "test_table" }
     };
@@ -74,18 +74,7 @@ describe("EntityService - Error Handling & Edge Cases", () => {
             ).rejects.toThrow("Table not found for dbPath: test_table");
         });
 
-        it("should throw error when ID field is missing from collection properties", async () => {
-            const invalidCollection = {
-                ...testCollection,
-                properties: { name: { type: "string" } }, // Missing id field
-                idField: "id"
-            };
-            jest.spyOn(collectionRegistry, "getCollectionByPath").mockReturnValue(invalidCollection);
 
-            await expect(
-                entityService.fetchEntity("test", 1)
-            ).rejects.toThrow("ID field 'id' not found in properties");
-        });
     });
 
     describe("ID Type Validation", () => {
