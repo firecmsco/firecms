@@ -3,7 +3,7 @@ import {
     buildConditionContext,
     evaluateCondition,
     registerConditionOperations
-} from "../conditions";
+} from "../src/util/conditions";
 import { ConditionContext, ResolvedProperty } from "../../types";
 
 describe("Property Conditions", () => {

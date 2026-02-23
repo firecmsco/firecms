@@ -32,7 +32,7 @@
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "prepublishOnly": "run-s build",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "browserslist": {
     "production": [

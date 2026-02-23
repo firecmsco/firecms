@@ -28,13 +28,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     slug: string;
 
-    /**
-     * Fields used to identify the entity in this collection (Primary Keys).
-     * If not specified, the default `id` field will be used.
-     * Use an array of strings for composite primary keys.
-     * E.g. `["user_id", "role_id"]`
-     */
-    primaryKeys?: Extract<keyof M, string>[];
+
 
 
     /**
@@ -299,15 +293,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     selectionController?: SelectionController<M>;
 
     /**
-     * If this property is not set, the property will be created by the
-     * datasource.
-     * You can set the value to true to allow the users to choose the ID.
-     * You can also pass a set of values (as an EnumValues object) to allow them
-     * to pick from only those.
-     */
-    customId?: EnumValues | "optional";
-
-    /**
      * Force a filter in this view. If applied, the rest of the filters will
      * be disabled. Filters applied with this prop cannot be changed.
      * e.g. `forceFilter: { age: [">=", 18] }`
@@ -389,7 +374,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * If set to true, the form will be auto-saved when the user changes
      * the value of a field.
      * Defaults to false.
-     * You can't use this prop if you are using a `customId`
+     * When a new entity is created, this property can be updated to generated a new ID
      */
     formAutoSave?: boolean;
 

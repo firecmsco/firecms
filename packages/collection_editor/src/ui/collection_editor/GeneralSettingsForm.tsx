@@ -235,52 +235,7 @@ export function GeneralSettingsForm({
                             </FieldCaption>
                         </div>
 
-                        {/* Document ID generation */}
-                        <div>
-                            <Select
-                                name="customId"
-                                label="Document IDs generation"
-                                position={"item-aligned"}
-                                size={"large"}
-                                fullWidth={true}
-                                disabled={typeof values.customId === "object"}
-                                onValueChange={(v) => {
-                                    if (v === "code_defined")
-                                        throw new Error("This should not happen");
-                                    if (v === "false") setFieldValue("customId", false);
-                                    else if (v === "true") setFieldValue("customId", true);
-                                    else if (v === "optional") setFieldValue("customId", "optional");
-                                }}
-                                value={
-                                    typeof values.customId === "object" ? "code_defined" :
-                                        values.customId === (true as any) ? "true" :
-                                            values.customId === "optional" ? "optional" : "false"
-                                }
-                                renderValue={(value: any) => {
-                                    if (value === "code_defined")
-                                        return "Code defined";
-                                    else if (value === "true")
-                                        return "Users must define an ID";
-                                    else if (value === "optional")
-                                        return "Users can define an ID, but it is not required";
-                                    else
-                                        return "Document ID is generated automatically";
-                                }}
-                            >
-                                <SelectItem value={"false"}>
-                                    Document ID is generated automatically
-                                </SelectItem>
-                                <SelectItem value={"true"}>
-                                    Users must define an ID
-                                </SelectItem>
-                                <SelectItem value={"optional"}>
-                                    Users can define an ID, but it is not required
-                                </SelectItem>
-                            </Select>
-                            <FieldCaption>
-                                Configure how document IDs are generated when creating new entities.
-                            </FieldCaption>
-                        </div>
+
                     </ExpandablePanel>
                 </fieldset>
 

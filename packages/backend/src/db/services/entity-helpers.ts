@@ -26,16 +26,18 @@ export function getTableForCollection(collection: EntityCollection): PgTable<any
 export function getPrimaryKeys(collection: EntityCollection): { fieldName: string; type: "string" | "number" }[] {
     const table = getTableForCollection(collection);
 
-    // If explicitly defined in config
-    if (collection.primaryKeys && collection.primaryKeys.length > 0) {
-        return collection.primaryKeys.map(key => {
-            const idCol = table[key as keyof typeof table] as AnyPgColumn;
-            if (!idCol) {
-                throw new Error(`Primary key '${key}' not found in Drizzle schema for collection '${collection.slug || collection.dbPath}'`);
-            }
-            const type = idCol.dataType === "number" || (idCol as any).columnType === "PgSerial" || (idCol as any).columnType === "PgInteger" ? "number" : "string";
-            return { fieldName: key, type };
-        });
+    // Fallback to explicitly defined isId properties
+    if (collection.properties) {
+        const idProps = Object.entries(collection.properties)
+            .filter(([_, prop]) => prop.isId)
+            .map(([key, prop]) => ({
+                fieldName: key,
+                type: prop.type === "number" ? "number" as const : "string" as const
+            }));
+
+        if (idProps.length > 0) {
+            return idProps;
+        }
     }
 
     // Otherwise infer from Drizzle schema

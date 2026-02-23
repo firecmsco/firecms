@@ -186,16 +186,9 @@
 //         fields: customizationController.propertyConfigs
 //     }), [entity?.values, path]);
 //
-//     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
-//         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
-//
 //     const initialEntityId = useMemo(() => {
 //         if (status === "new" || status === "copy") {
-//             if (mustSetCustomId) {
-//                 return undefined;
-//             } else {
-//                 return dataSource.generateEntityId(path);
-//             }
+//             return dataSource.generateEntityId(path);
 //         } else {
 //             return entity?.id;
 //         }
@@ -209,7 +202,7 @@
 //     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
 //     const [savingError, setSavingError] = React.useState<Error | undefined>();
 //
-//     const [customIdLoading, setCustomIdLoading] = React.useState<boolean>(false);
+
 //
 //     // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
 //     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
@@ -237,26 +230,9 @@
 //     };
 //
 //     const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
-//
-//         if (mustSetCustomId && !entityId) {
-//             console.error("Missing custom Id");
-//             setEntityIdError(true);
-//             formexController.setSubmitting(false);
-//             return;
-//         }
-//
-//         setSavingError(undefined);
-//         setEntityIdError(false);
-//
 //         if (status === "existing") {
 //             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-//         } else if (status === "new" || status === "copy") {
-//             if (inputCollection.customId) {
-//                 if (inputCollection.customId !== "optional" && !entityId) {
-//                     throw Error("Form misconfiguration when saving, entityId should be set");
-//                 }
-//             }
-//         } else {
+//         } else if (status !== "new" && status !== "copy") {
 //             throw Error("New FormType added, check EntityForm");
 //         }
 //
@@ -465,15 +441,7 @@
 //                     </Alert>
 //                 </div>
 //
-//                 {!hideId &&
-//                     <CustomIdField customId={inputCollection.customId}
-//                                    entityId={entityId}
-//                                    status={status}
-//                                    onChange={setEntityId}
-//                                    error={entityIdError}
-//                                    loading={customIdLoading}
-//                                    entity={entity}/>}
-//
+
 //                 {entityId && <InnerForm
 //                     {...formex}
 //                     initialValues={formex.initialValues}

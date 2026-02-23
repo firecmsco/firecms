@@ -77,3 +77,24 @@ export function getLocalChangesBackup(collection: EntityCollection) {
 
     return collection.localChangesBackup;
 }
+
+/**
+ * Returns the primary keys for an entity collection by inspecting the properties
+ * and finding any properties with `isId: true`.
+ * Fallbacks to `["id"]` if no properties are marked as `isId: true`.
+ * @param collection
+ */
+export function getPrimaryKeys<M extends Record<string, any>>(collection: EntityCollection<M>): Extract<keyof M, string>[] {
+    const properties = collection.properties;
+    if (!properties) {
+        return ["id"] as any;
+    }
+    const ids = Object.entries(properties)
+        .filter(([key, prop]) => typeof prop === "object" && prop !== null && "isId" in prop && prop.isId === true)
+        .map(([key]) => key);
+
+    if (ids.length > 0) {
+        return ids as Extract<keyof M, string>[];
+    }
+    return ["id"] as any;
+}

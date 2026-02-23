@@ -9,7 +9,6 @@ const locales = buildEnumValues({
 export const localeCollection = buildCollection({
     slug: "locale",
     dbPath: "locale",
-    customId: locales,
     name: "Locales",
     singularName: "Locales",
     properties: {

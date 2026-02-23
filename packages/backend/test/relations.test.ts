@@ -254,8 +254,8 @@ describe("Comprehensive Relations Test Suite", () => {
 
             // Should create junction table
             expect(cleanResult).toContain(`export const authorBooks = pgTable("author_books"`);
-            expect(cleanResult).toContain(`author_id: integer("author_id").notNull().references(() => authors.id, { onDelete: "cascade" })`);
-            expect(cleanResult).toContain(`book_id: integer("book_id").notNull().references(() => books.id, { onDelete: "cascade" })`);
+            expect(cleanResult).toContain(`author_id: varchar("author_id").notNull().references(() => authors.id, { onDelete: "cascade" })`);
+            expect(cleanResult).toContain(`book_id: varchar("book_id").notNull().references(() => books.id, { onDelete: "cascade" })`);
             expect(cleanResult).toContain(`export const authorsRelations = drizzleRelations(authors, ({ one, many }) => ({ books: many(authorBooks, { relationName: "books" }) }));`);
         });
 
@@ -356,7 +356,7 @@ describe("Comprehensive Relations Test Suite", () => {
             const cleanResult = cleanSchema(result);
 
             // Should create FK on profiles table
-            expect(cleanResult).toContain(`author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })`);
+            expect(cleanResult).toContain(`author_id: varchar("author_id").references(() => authors.id, { onDelete: "set null" })`);
 
             // Should create owning relation on profiles
             expect(cleanResult).toContain(`export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => ({ author: one(authors, { fields: [profiles.author_id], references: [authors.id], relationName: "author" }) }));`);
@@ -395,7 +395,7 @@ describe("Comprehensive Relations Test Suite", () => {
             const cleanResult = cleanSchema(result);
 
             // Should create FK on posts table
-            expect(cleanResult).toContain(`category_id: integer("category_id").references(() => categories.id, { onDelete: "set null" })`);
+            expect(cleanResult).toContain(`category_id: varchar("category_id").references(() => categories.id, { onDelete: "set null" })`);
             // Should create owning relation on posts
             expect(cleanResult).toContain(`export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({ category: one(categories, { fields: [posts.category_id], references: [categories.id], relationName: "category" }) }));`);
         });
@@ -447,11 +447,11 @@ describe("Comprehensive Relations Test Suite", () => {
             const cleanResult = cleanSchema(result);
 
             // Check owning relation from author to publisher
-            expect(cleanResult).toContain(`publisher_id: integer("publisher_id").references(() => publishers.id, { onDelete: "set null" })`);
+            expect(cleanResult).toContain(`publisher_id: varchar("publisher_id").references(() => publishers.id, { onDelete: "set null" })`);
             expect(cleanResult).toContain(`publisher: one(publishers, { fields: [authors.publisher_id], references: [publishers.id], relationName: "publisher" })`);
 
             // Check owning relation from book to author
-            expect(cleanResult).toContain(`author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })`);
+            expect(cleanResult).toContain(`author_id: varchar("author_id").references(() => authors.id, { onDelete: "set null" })`);
             expect(cleanResult).toContain(`author: one(authors, { fields: [books.author_id], references: [authors.id], relationName: "author" })`);
         });
     });
@@ -542,17 +542,16 @@ describe("Comprehensive Relations Test Suite", () => {
 
             // Should handle self-referencing relations
             expect(cleanResult).toContain("export const userFriends = pgTable(\"user_friends\"");
-            expect(cleanResult).toContain("user_id: integer(\"user_id\").notNull().references(() => users.id, { onDelete: \"cascade\" })");
-            expect(cleanResult).toContain("friend_id: integer(\"friend_id\").notNull().references(() => users.id, { onDelete: \"cascade\" })");
+            expect(cleanResult).toContain("user_id: varchar(\"user_id\").notNull().references(() => users.id, { onDelete: \"cascade\" })");
+            expect(cleanResult).toContain("friend_id: varchar(\"friend_id\").notNull().references(() => users.id, { onDelete: \"cascade\" })");
         });
 
         it("should handle mixed ID types in relations", async () => {
             const productsCollection: EntityCollection = {
                 slug: "products",
                 name: "Products",
-                idField: "sku",
                 properties: {
-                    sku: { type: "string" },
+                    sku: { type: "string", isId: true },
                     name: { type: "string" },
                     categories: { type: "relation", relationName: "categories" }
                 },
@@ -582,11 +581,11 @@ describe("Comprehensive Relations Test Suite", () => {
             const result = await generateSchema([productsCollection, categoriesCollection]);
             const cleanResult = cleanSchema(result);
 
-            // Generator incorrectly creates serial for string idField. Test reflects this behavior.
-            expect(cleanResult).toContain("sku: serial(\"sku\").primaryKey()");
-            expect(cleanResult).toContain("id: serial(\"id\").primaryKey()");
-            expect(cleanResult).toContain("product_sku: integer(\"product_sku\").notNull().references(() => products.sku, { onDelete: \"cascade\" })");
-            expect(cleanResult).toContain("category_id: integer(\"category_id\").notNull().references(() => categories.id, { onDelete: \"cascade\" })");
+            // The primary key should be sku
+            expect(cleanResult).toContain("sku: varchar(\"sku\").primaryKey()");
+            expect(cleanResult).not.toContain("id: serial(\"id\").primaryKey()");
+            expect(cleanResult).toContain("product_sku: varchar(\"product_sku\").notNull().references(() => products.sku, { onDelete: \"cascade\" })");
+            expect(cleanResult).toContain("category_id: varchar(\"category_id\").notNull().references(() => categories.id, { onDelete: \"cascade\" })");
         });
 
         it("should handle circular references", async () => {
@@ -633,7 +632,7 @@ describe("Comprehensive Relations Test Suite", () => {
             // The 'owning' relation on bCollection should correctly generate the FK
             expect(cleanResult).toContain("export const aEntities = pgTable(\"a_entities\"");
             expect(cleanResult).toContain("export const bEntities = pgTable(\"b_entities\"");
-            expect(cleanResult).toContain("a_entity_id: integer(\"a_entity_id\").references(() => aEntities.id, { onDelete: \"set null\" })");
+            expect(cleanResult).toContain("a_entity_id: varchar(\"a_entity_id\").references(() => aEntities.id, { onDelete: \"set null\" })");
             // Check that both drizzle relations are generated
             expect(cleanResult).toContain("export const aEntitiesRelations = drizzleRelations(aEntities, ({ one, many }) => ({ b_entities: many(bEntities, { relationName: \"b_entities\" }) }));");
             expect(cleanResult).toContain("export const bEntitiesRelations = drizzleRelations(bEntities, ({ one, many }) => ({ a_entity: one(aEntities, { fields: [bEntities.a_entity_id], references: [aEntities.id], relationName: \"a_entity\" }) }));");

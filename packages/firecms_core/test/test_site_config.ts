@@ -17,7 +17,7 @@ export const productsCollection = buildCollection({
         {
             key: "custom_view",
             name: "Test custom view",
-            Builder: ({}) => null
+            Builder: ({ }) => null
         }
     ],
     properties: {
@@ -168,7 +168,6 @@ export const productsCollection = buildCollection({
 const localeCollection = buildCollection({
     slug: "locales",
     dbPath: "locales",
-    customId: locales,
     name: "Locales",
     singularName: "Locale",
     properties: {
@@ -209,13 +208,13 @@ const pricesCollection = buildCollection({
 
 const productCallbacks: EntityCallbacks<any> = {
     onPreSave: ({
-                    collection,
-                    path,
-                    entityId,
-                    values,
-                    previousValues,
-                    status
-                }) => {
+        collection,
+        path,
+        entityId,
+        values,
+        previousValues,
+        status
+    }) => {
         console.log(previousValues);
         values.uppercase_name = (values.name as string).toUpperCase();
         return values;

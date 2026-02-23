@@ -39,7 +39,6 @@ import {
     removeEntityFromMemoryCache,
     saveEntityToCache
 } from "../util/entity_cache";
-import { CustomIdField } from "./components/CustomIdField";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
@@ -196,10 +195,6 @@ export function EntityForm<M extends Record<string, any>>({
     children
 }: EntityFormProps<M>) {
 
-    if (collection.customId && collection.formAutoSave) {
-        console.warn(`The collection ${collection.slug} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
-    }
-
     const sideEntityController = useSideEntityController();
     const collectionRegistryController = useCollectionRegistryController();
 
@@ -239,18 +234,12 @@ export function EntityForm<M extends Record<string, any>>({
 
     const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
-    const [customIdLoading, setCustomIdLoading] = useState<boolean>(false);
 
-    const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
-        (Boolean(collection.customId) && collection.customId !== "optional");
+
 
     const initialEntityId: string | number | undefined = useMemo(() => {
         if (status === "new" || status === "copy") {
-            if (mustSetCustomId) {
-                return undefined;
-            } else {
-                return dataSource.generateEntityId(path, collection);
-            }
+            return dataSource.generateEntityId(path, collection);
         } else {
             return entityIdProp;
         }
@@ -260,7 +249,7 @@ export function EntityForm<M extends Record<string, any>>({
     const [entityIdError, setEntityIdError] = useState<boolean>(false);
     const [savingError, setSavingError] = useState<Error | undefined>();
 
-    const autoSave = collection.formAutoSave && !collection.customId;
+    const autoSave = collection.formAutoSave;
 
     const baseInitialValues = useMemo(() => getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs), [authController, collection, path, status, entity, customizationController.propertyConfigs]);
 
@@ -276,25 +265,14 @@ export function EntityForm<M extends Record<string, any>>({
 
     const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
 
-        if (mustSetCustomId && !entityId) {
-            console.error("Missing custom Id");
-            setEntityIdError(true);
-            formexController.setSubmitting(false);
-            return;
-        }
+
 
         setSavingError(undefined);
         setEntityIdError(false);
 
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-        } else if (status === "new" || status === "copy") {
-            if (collection.customId) {
-                if (collection.customId !== "optional" && !entityId) {
-                    throw Error("Form misconfiguration when saving, entityId should be set");
-                }
-            }
-        } else {
+        } else if (status !== "new" && status !== "copy") {
             throw Error("New FormType added, check EntityForm");
         }
 
@@ -588,7 +566,6 @@ export function EntityForm<M extends Record<string, any>>({
     const onIdUpdate = collection.callbacks?.onIdUpdate;
     const doOnIdUpdate = useCallback(async () => {
         if (onIdUpdate && formex.values && (status === "new" || status === "copy")) {
-            setCustomIdLoading(true);
             try {
                 const updatedId = await onIdUpdate({
                     collection: collection,
@@ -602,7 +579,6 @@ export function EntityForm<M extends Record<string, any>>({
                 onIdUpdateError?.(e);
                 console.error(e);
             }
-            setCustomIdLoading(false);
         }
     }, [entityId, formex.values, status, onIdUpdate, collection, path, context, onIdUpdateError]);
 
@@ -670,7 +646,9 @@ export function EntityForm<M extends Record<string, any>>({
                             !!underlyingChanges &&
                             Object.keys(underlyingChanges).includes(key) &&
                             formex.touched[key];
-                        const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
+                        const isNew = status === "new" || status === "copy";
+                        const isIdAndAuto = Boolean(property.isId) && (property.type === "string" || property.type === "number") && Boolean((property as any).autoValue);
+                        const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled) || (!isNew && Boolean(property.isId)) || (isNew && isIdAndAuto);
                         const hidden = isHidden(property);
                         if (hidden) return null;
                         const widthPercentage = property.widthPercentage ?? 100;
@@ -764,17 +742,7 @@ export function EntityForm<M extends Record<string, any>>({
                 This entity does not exist in the database
             </Alert>}
 
-            {!Builder && !collection.hideIdFromForm &&
-                <CustomIdField customId={collection.customId}
-                    entityId={entityId}
-                    status={status}
-                    onChange={setEntityId}
-                    error={entityIdError}
-                    loading={customIdLoading}
-                    entity={entity} />
-            }
-
-            {(!mustSetCustomId || entityId) && formContext && <>
+            {formContext && <>
                 <div className="mt-12 flex flex-col gap-8" ref={formRef}>
                     {formFields()}
                     <ErrorFocus containerRef={formRef} />

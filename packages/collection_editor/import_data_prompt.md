@@ -6,7 +6,6 @@ This is a sample schema that includes a lot of different sample properties:
 ```json5
 {
   path: "showcase",
-  customId: false,
   icon: "bento",
   name: "Showcase",
   properties: {

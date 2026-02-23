@@ -213,7 +213,7 @@ export class AstSchemaEditor {
         } else {
             // Update root level properties gracefully
             for (const key of Object.keys(collectionData)) {
-                if (key === "relations" || key === "customId") continue; // Kept via other AST functions or handled separately.
+                if (key === "relations") continue; // Kept via other AST functions or handled separately.
 
                 let prop = collectionObj.getProperty(key) as PropertyAssignment;
 

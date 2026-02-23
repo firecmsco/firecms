@@ -5,7 +5,6 @@ import * as util from "util";
 const testCollection = buildCollection({
     slug: "test_entity",
     dbPath: "test_entity",
-    customId: false,
     name: "Test entities",
     properties: {
         mainSaturation: {
@@ -24,9 +23,9 @@ const testCollection = buildCollection({
                         }
                     },
                     value: buildProperty(({
-                                              values,
-                                              index
-                                          }) => {
+                        values,
+                        index
+                    }) => {
                         if (!index) {
                             return null;
                         }
@@ -42,28 +41,28 @@ const testCollection = buildCollection({
                             })
                         } else if (parentValue === "fromTo") {
                             return ({
-                                    name: "Saturation available range",
-                                    type: "map",
-                                    properties: {
-                                        from: {
-                                            name: "From",
-                                            type: "number",
-                                            validation: {
-                                                min: 0,
-                                                max: 100
-                                            }
-                                        },
-                                        to: {
-                                            name: "To",
-                                            type: "number",
-                                            clearable: true,
-                                            validation: {
-                                                min: 0,
-                                                max: 100
-                                            }
-                                        },
-                                    }
+                                name: "Saturation available range",
+                                type: "map",
+                                properties: {
+                                    from: {
+                                        name: "From",
+                                        type: "number",
+                                        validation: {
+                                            min: 0,
+                                            max: 100
+                                        }
+                                    },
+                                    to: {
+                                        name: "To",
+                                        type: "number",
+                                        clearable: true,
+                                        validation: {
+                                            min: 0,
+                                            max: 100
+                                        }
+                                    },
                                 }
+                            }
                             )
                         } else {
                             return {

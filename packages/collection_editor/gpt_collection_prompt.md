@@ -6,7 +6,6 @@ instructions describing the collection and generate the appropriate json.
 ```json5
 {
   path: "showcase",
-  customId: false,
   icon: "bento",
   name: "Showcase",
   properties: {

@@ -7,10 +7,10 @@ import { camelCase } from "./utils/strings";
 import { clone } from "@firecms/formex";
 
 export function GetCodeDialog({
-                                  collection,
-                                  onOpenChange,
-                                  open
-                              }: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
+    collection,
+    onOpenChange,
+    open
+}: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
 
     const snackbarController = useSnackbarController();
 
@@ -18,8 +18,8 @@ export function GetCodeDialog({
         ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode({ ...collection }), null, "\t")
         : "No collection selected";
     return <Dialog open={open}
-                   onOpenChange={onOpenChange}
-                   maxWidth={"4xl"}>
+        onOpenChange={onOpenChange}
+        maxWidth={"4xl"}>
         <DialogTitle variant={"h6"}>Code for {collection.name}</DialogTitle>
         <DialogContent>
 
@@ -27,8 +27,8 @@ export function GetCodeDialog({
                 If you want to customise the collection in code, you can add this collection code to your CMS
                 app configuration.
                 More info in the <a
-                rel="noopener noreferrer"
-                href={"https://firecms.co/docs/cloud/quickstart"}>docs</a>.
+                    rel="noopener noreferrer"
+                    href={"https://firecms.co/docs/cloud/quickstart"}>docs</a>.
             </Typography>
             <Highlight
                 theme={themes.vsDark}
@@ -36,21 +36,21 @@ export function GetCodeDialog({
                 language="typescript"
             >
                 {({
-                      className,
-                      style,
-                      tokens,
-                      getLineProps,
-                      getTokenProps
-                  }) => (
+                    className,
+                    style,
+                    tokens,
+                    getLineProps,
+                    getTokenProps
+                }) => (
                     <pre style={style} className={"p-4 rounded-xs text-sm"}>
-        {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({ line })}>
-                {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token })} />
-                ))}
-            </div>
-        ))}
-      </pre>
+                        {tokens.map((line, i) => (
+                            <div key={i} {...getLineProps({ line })}>
+                                {line.map((token, key) => (
+                                    <span key={key} {...getTokenProps({ token })} />
+                                ))}
+                            </div>
+                        ))}
+                    </pre>
                 )}
             </Highlight>
 
@@ -68,7 +68,7 @@ export function GetCodeDialog({
                     })
                     return navigator.clipboard.writeText(code);
                 }}>
-                <ContentCopyIcon size={"small"}/>
+                <ContentCopyIcon size={"small"} />
                 Copy to clipboard
             </Button>
             <Button onClick={() => onOpenChange(false)}>Close</Button>
@@ -122,7 +122,6 @@ function collectionToCode(collection: EntityCollection): object {
         collectionGroup: collection.collectionGroup,
         icon: collection.icon,
         group: collection.group,
-        customId: collection.customId,
         filter: collection.filter,
         sort: collection.sort,
         properties: Object.entries({
@@ -131,8 +130,10 @@ function collectionToCode(collection: EntityCollection): object {
             .map(([key, value]) => ({
                 [key]: propertyCleanup(value)
             }))
-            .reduce((a, b) => ({ ...a,
-...b }), {}),
+            .reduce((a, b) => ({
+                ...a,
+                ...b
+            }), {}),
         // subcollections: (collection.subcollections ?? []).map(collectionToCode)
     }
 

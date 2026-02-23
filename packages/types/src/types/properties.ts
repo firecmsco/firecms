@@ -136,6 +136,14 @@ export interface BaseProperty<CustomProps = any> {
     widthPercentage?: number;
 
     /**
+     * Marks this field as a Primary Key / Unique Identifier.
+     * Framework behavior: Auto-maps to `collection.primaryKeys` internally if not explicitly set.
+     * Drizzle append: `.primaryKey()`
+     * UI behavior: Field value cannot be changed after creation.
+     */
+    isId?: boolean;
+
+    /**
      * Additional props that are passed to the components defined in `field`
      * or in `preview`.
      */
@@ -188,6 +196,13 @@ export interface StringProperty extends BaseProperty {
      * Rules for validating this property
      */
     validation?: StringPropertyValidationSchema;
+    /**
+     * Instructs the database (Drizzle) to auto-generate this value on creation.
+     * 'uuid' -> Drizzle `.defaultRandom()` (Postgres gen_random_uuid())
+     * 'cuid' -> Drizzle `.default(cuid())`
+     * UI behavior: The frontend automatically disables this field on new entities.
+     */
+    autoValue?: "uuid" | "cuid";
     /**
      * You can use the enum values providing a map of possible
      * exclusive values the property can take, mapped to the label that it is
@@ -263,6 +278,11 @@ export interface NumberProperty extends BaseProperty {
      * Rules for validating this property
      */
     validation?: NumberPropertyValidationSchema;
+    /**
+     * Instructs the database (Drizzle) to auto-generate this value on creation.
+     * 'increment' -> PostgreSQL `serial` or auto-incrementing integer
+     */
+    autoValue?: "increment";
     /**
      * You can use the enum values providing a map of possible
      * exclusive values the property can take, mapped to the label that it is

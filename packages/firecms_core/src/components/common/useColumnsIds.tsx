@@ -112,12 +112,8 @@ export function getFormFieldKeys(collection: EntityCollection): string[] {
         ...additionalFields.map((field) => field.key)
     ];
 
-    // remove the id key
-    const idField = collection.idField ?? "id";
-    const formFieldKeys = allKeys.filter(key => key !== idField);
-
     if (collection.propertiesOrder) {
-        return collection.propertiesOrder.filter(key => formFieldKeys.includes(key));
+        return collection.propertiesOrder.filter(key => allKeys.includes(key));
     }
-    return formFieldKeys;
+    return allKeys;
 }

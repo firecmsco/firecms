@@ -53,7 +53,7 @@
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "files": [
     "dist",

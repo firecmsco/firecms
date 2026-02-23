@@ -5,11 +5,12 @@ const projectUsersCollection: EntityCollection = {
     singularName: "Project User",
     slug: "project_users",
     dbPath: "project_users",
-    primaryKeys: ["project_id", "id"],
+
     properties: {
         project_id: {
             name: "Project ID",
             type: "string",
+            isId: true,
             validation: {
                 required: true
             }
@@ -17,6 +18,7 @@ const projectUsersCollection: EntityCollection = {
         id: {
             name: "User ID",
             type: "string",
+            isId: true,
             validation: {
                 required: true
             }
