@@ -1,0 +1,5 @@
+# TypeScript Rules
+- NEVER use the `any` type under any circumstances.
+- Avoid `as any` type casting at all costs.
+- Always use rigorous, strictly-defined types (e.g., `unknown`, specific interfaces, or generics).
+- If you are ever tempted to use `any` to bypass a type-checking error, STOP and fix the underlying type mismatch properly.

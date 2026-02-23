@@ -47,6 +47,12 @@
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
+    "./vitePlugin": {
+      "development": "./src/vitePlugin.ts",
+      "types": "./src/vitePlugin.ts",
+      "import": "./src/vitePlugin.ts",
+      "require": "./src/vitePlugin.ts"
+    },
     "./package.json": "./package.json"
   },
   "dependencies": {

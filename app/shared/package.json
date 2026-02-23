@@ -21,10 +21,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./collections": {
-      "types": "./dist/collections.d.ts",
-      "import": "./dist/collections.js"
     }
   }
 }

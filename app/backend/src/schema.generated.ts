@@ -4,6 +4,7 @@ import { primaryKey, pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnu
 import { relations as drizzleRelations, sql } from 'drizzle-orm';
 
 export const postsStatus = pgEnum("posts_status", ['draft', 'review', 'published', 'archived']);
+export const projectUsersRole = pgEnum("project_users_role", ['admin', 'editor', 'viewer']);
 
 export const authors = pgTable("authors", {
     id: serial("id").primaryKey(),
@@ -44,6 +45,13 @@ export const profiles = pgTable("profiles", {
     bio: varchar("bio"),
     website: varchar("website"),
     author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
+});
+
+export const projectUsers = pgTable("project_users", {
+    project_id: serial("project_id").primaryKey(),
+    id: varchar("id").notNull(),
+    email: varchar("email").notNull(),
+    role: projectUsersRole("role")
 });
 
 export const tags = pgTable("tags", {
@@ -92,7 +100,7 @@ export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
     posts: many(posts, { relationName: "posts" })
 }));
 
-export const tables = { authors, posts, postsTags, privateNotes, profiles, tags };
-export const enums = { postsStatus };
+export const tables = { authors, posts, postsTags, privateNotes, profiles, projectUsers, tags };
+export const enums = { postsStatus, projectUsersRole };
 export const relations = { authorsRelations, postsRelations, postsTagsRelations, profilesRelations, tagsRelations };
 

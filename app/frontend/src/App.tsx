@@ -29,7 +29,7 @@ import {
     useBackendUserManagement,
     createUserManagementAdminViews
 } from "@firecms/auth";
-import { collections } from "shared";
+import { collections } from "virtual:firecms-collections";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";

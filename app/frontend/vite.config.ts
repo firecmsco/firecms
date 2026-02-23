@@ -4,6 +4,7 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
+import { firecmsCollectionsPlugin } from "@firecms/core/vitePlugin";
 
 export default defineConfig({
     server: {
@@ -25,6 +26,7 @@ export default defineConfig({
         svgr(),
         react({}),
         tailwindcss(),
+        firecmsCollectionsPlugin({ collectionsDir: "../shared/collections" })
     ],
     css: {
         preprocessorOptions: {

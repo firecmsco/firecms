@@ -22,6 +22,13 @@
       "when": 1771631924814,
       "tag": "0002_fancy_maestro",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1771810229544,
+      "tag": "0003_early_lily_hollister",
+      "breakpoints": true
     }
   ]
 }

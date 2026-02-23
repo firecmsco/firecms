@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
-import { tables } from "./src/schema.generated.js";
+import { tables } from "./src/schema.generated";
 import { getTableName, Table } from "drizzle-orm";
 
 // Note: Run from app/backend with DOTENV_CONFIG_PATH=../.env or ensure .env is in the app/ folder
