@@ -89,8 +89,24 @@
 
 <script>
     function initializeCookieBanner() {
+        // Helper to get cookie value by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        // Helper to set cookie on root domain
+        function setConsentCookie(value) {
+            // Set cookie for 1 year on the root domain (.firecms.co)
+            const maxAge = 365 * 24 * 60 * 60;
+            const domain = window.location.hostname.includes('firecms.co') ? '; domain=.firecms.co' : '';
+            document.cookie = `cookie-consent=${value}; path=/; max-age=${maxAge}${domain}; samesite=lax; secure`;
+        }
+
         // Check if user has already made a choice
-        const cookieConsent = localStorage.getItem("cookie-consent");
+        const cookieConsent = getCookie("cookie-consent");
         const banner = document.getElementById("cookie-banner");
 
         if (!banner) return;
@@ -133,7 +149,7 @@
             acceptBtn.parentNode?.replaceChild(newAcceptBtn, acceptBtn);
 
             newAcceptBtn.addEventListener("click", () => {
-                localStorage.setItem("cookie-consent", "accepted");
+                setConsentCookie("accepted");
                 closeModal();
                 // Enable Google Analytics tracking (Consent Mode v2)
                 if (typeof window.gtag !== "undefined") {
@@ -155,7 +171,7 @@
             declineBtn.parentNode?.replaceChild(newDeclineBtn, declineBtn);
 
             newDeclineBtn.addEventListener("click", () => {
-                localStorage.setItem("cookie-consent", "declined");
+                setConsentCookie("declined");
                 closeModal();
                 // Disable Google Analytics tracking (Consent Mode v2)
                 if (typeof window.gtag !== "undefined") {

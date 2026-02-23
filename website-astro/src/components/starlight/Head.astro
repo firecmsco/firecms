@@ -72,8 +72,9 @@ const breadcrumbSchema = {
     });
 
 
-    // Check if user has already consented
-    const cookieConsent = localStorage.getItem("cookie-consent");
+    // Check if user has already consented via root domain cookie
+    const match = document.cookie.match(/(^|;)\s*cookie-consent\s*=\s*([^;]+)/);
+    const cookieConsent = match ? match[2] : null;
     if (cookieConsent === "accepted") {
         window.gtag("consent", "update", {
             ad_storage: "granted",
