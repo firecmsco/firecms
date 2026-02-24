@@ -337,7 +337,8 @@ function getYupRelationSchema({
     name,
     entityId
 }: PropertyContext<RelationProperty>): AnySchema {
-    let schema: ObjectSchema<any> = yup.object().nullable() as ObjectSchema<any>;
+    const isMany = property.relation?.cardinality === "many";
+    let schema: AnySchema<any> = isMany ? yup.array().of(yup.object()).nullable() : yup.object().nullable();
     const validation = property.validation;
 
     if (validation) {
@@ -345,7 +346,12 @@ function getYupRelationSchema({
             schema = schema.test(
                 "required",
                 validation?.requiredMessage ? validation.requiredMessage : "Required",
-                (value) => value !== undefined && value !== null
+                (value: any) => {
+                    if (isMany) {
+                        return value !== undefined && value !== null && Array.isArray(value) && value.length > 0;
+                    }
+                    return value !== undefined && value !== null;
+                }
             );
         }
         if (validation.unique && customFieldValidator && name)

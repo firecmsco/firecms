@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Form Validation and Enum Selection', () => {
+test.describe('Test Entities Form Validation', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
@@ -22,43 +22,36 @@ test.describe('Form Validation and Enum Selection', () => {
         await page.waitForTimeout(2000);
     });
 
-    test('Validate required fields and enum selection (Posts)', async ({ page }) => {
-        // Go to Posts collection
-        await page.goto('/c/posts');
+    test('Validate required fields and enum selection (Test Entities)', async ({ page }) => {
+        await page.goto('/c/test_entities');
 
         // Wait for table to load
-        await expect(page.getByText('Add Post', { exact: false }).first()).toBeVisible({ timeout: 15000 });
+        await expect(page.getByText('Add Test Entity', { exact: false }).first()).toBeVisible({ timeout: 15000 });
 
-        // Click Add Post
-        await page.getByText('Add Post', { exact: false }).first().click();
+        // Click Add Entity
+        await page.getByText('Add Test Entity', { exact: false }).first().click();
 
         // Wait for the side sheet
-        await page.locator('#form_field_title textarea:not([aria-hidden="true"])').waitFor({ state: 'visible', timeout: 10000 });
+        await page.locator('label').filter({ hasText: /^Plain/ }).locator('..').locator('input, textarea').first().waitFor({ state: 'visible', timeout: 10000 });
 
-        // Try to save WITHOUT filling required fields
+        // Try to save WITHOUT filling required fields (like ID which is auto-id, but Enum String is required)
         const createBtn = page.getByText('Create and close', { exact: false }).first();
         await createBtn.click();
 
         // The form should NOT have closed, and there should be a validation error somewhere.
-        // Wait briefly to see if it closes
         await page.waitForTimeout(1000);
         await expect(createBtn).toBeVisible(); // Still visible because of validation error
 
-        // Now fill required fields (title, content)
-        // ID is auto generated, wait, is ID required? We'll see.
-        const postTitle = `Validation Test ${Date.now()}`;
+        // Now fill required fields (string_enum)
+        const entityLabel = `Validation Test ${Date.now()}`;
 
-        await page.locator('#form_field_title textarea:not([aria-hidden="true"])').fill(postTitle);
-        // Multiline text
-        await page.locator('#form_field_content textarea:not([aria-hidden="true"])').fill("This is a multiline text \n It proves we can type in here.");
+        await page.locator('label').filter({ hasText: /^Plain text string/i }).locator('..').locator('input, textarea').first().fill(entityLabel);
 
-        // Test Enum selection (Status)
-        // FireCMS enums are often Select components.
-        const statusField = page.locator('#form_field_status');
+        // Test Enum selection (string_enum) which is required
+        const statusField = page.locator('label').filter({ hasText: /^Enum String/i }).locator('..');
         if (await statusField.isVisible()) {
             await statusField.click(); // Opens dropdown
-            // Click 'Published' option
-            await page.getByRole('listbox').getByText('Published').click();
+            await page.getByRole('option', { name: 'Option A' }).click();
             await page.waitForTimeout(500);
         }
 
@@ -68,18 +61,14 @@ test.describe('Form Validation and Enum Selection', () => {
         // Form should close after successful creation
         await expect(createBtn).not.toBeVisible({ timeout: 10000 });
 
-        // The newly created post title should be in the table
-        await expect(page.getByText(postTitle).first()).toBeVisible();
-
-        // Check the enum value by looking for the label in the table
-        await expect(page.getByText('Published').first()).toBeVisible();
+        // The newly created entity should be in the table
+        await expect(page.getByText(entityLabel).first()).toBeVisible();
 
         // Teardown
-        // Force a clean navigation to clear any lingering popups or URL filter query parameters
-        await page.goto('/c/posts');
+        await page.goto('/c/test_entities');
         await page.waitForTimeout(1000);
-        await page.locator('.flex.min-w-full').filter({ hasText: postTitle }).locator('button:has-text("edit")').first().click({ force: true });
-        await page.locator('#form_field_title textarea:not([aria-hidden="true"])').first().waitFor({ state: 'visible', timeout: 10000 });
+        await page.locator('.flex.min-w-full').filter({ hasText: entityLabel }).locator('button:has-text("edit")').first().click({ force: true });
+        await page.locator('label').filter({ hasText: /^Plain text/i }).locator('..').locator('input, textarea').first().waitFor({ state: 'visible', timeout: 10000 });
         await page.getByRole('dialog').locator('button').filter({ hasText: /delete/i }).first().click({ force: true });
         await page.locator('button').filter({ hasText: /OK|Delete/i }).last().click({ force: true });
     });
