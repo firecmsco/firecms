@@ -136,9 +136,9 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                     const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
                                     saveEntityToMemoryCache(key, values);
                                     if (entityId)
-                                        navigate(location.pathname);
+                                        navigate(location.pathname + location.search);
                                     else
-                                        navigate(location.pathname + "#new");
+                                        navigate(location.pathname + location.search + "#new");
                                 }}>
                                 <OpenInFullIcon size={"smallest"} />
                             </IconButton>}

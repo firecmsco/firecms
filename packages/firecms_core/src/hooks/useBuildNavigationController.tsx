@@ -487,8 +487,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const urlPathToDataPath = useCallback((path: string): string => {
         const decodedPath = decodeURIComponent(path);
-        if (decodedPath.startsWith(fullCollectionPath))
-            return decodedPath.replace(fullCollectionPath, "");
+        const withoutHash = decodedPath.split("#")[0];
+        const cleanPath = withoutHash.split("?")[0];
+        if (cleanPath.startsWith(fullCollectionPath))
+            return cleanPath.replace(fullCollectionPath, "");
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
@@ -565,9 +567,27 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 }
 
 function encodePath(input: string) {
-    return encodeURIComponent(removeInitialAndTrailingSlashes(input))
-        .replaceAll("%2F", "/")
-        .replaceAll("%23", "#");
+    const cleanInput = removeInitialAndTrailingSlashes(input);
+    const [pathPart, rest] = cleanInput.split("?", 2);
+
+    let encodedPath = encodeURIComponent(pathPart).replaceAll("%2F", "/");
+    let result = encodedPath;
+
+    if (rest !== undefined) {
+        const [searchPart, hashPart] = rest.split("#", 2);
+        result += `?${searchPart}`;
+        if (hashPart !== undefined) {
+            result += `#${hashPart}`;
+        }
+    } else {
+        const [pathOnly, hashOnly] = cleanInput.split("#", 2);
+        if (hashOnly !== undefined) {
+            encodedPath = encodeURIComponent(pathOnly).replaceAll("%2F", "/");
+            result = `${encodedPath}#${hashOnly}`;
+        }
+    }
+
+    return result;
 }
 
 function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {

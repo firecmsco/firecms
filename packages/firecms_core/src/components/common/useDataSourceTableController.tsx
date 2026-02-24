@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
@@ -94,7 +95,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [searchString, setSearchString] = React.useState<string | undefined>();
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                sortBy?: [string, "asc" | "desc"]) => {
+        sortBy?: [string, "asc" | "desc"]) => {
         if (!dataSource.isFilterCombinationValid)
             return true;
         return dataSource.isFilterCombinationValid({
@@ -106,8 +107,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     }, []);
 
     const onScroll = ({
-                          scrollOffset
-                      }: {
+        scrollOffset
+    }: {
         scrollOffset: number
     }) => {
         if (scrollRestoration) {
@@ -128,13 +129,29 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         return initialSort;
     }, [initialSort, forceFilter]);
 
+    const location = useLocation();
+
     const {
         filterValues: initialFilterUrl,
         sortBy: initialSortUrl,
-    } = parseFilterAndSort(window.location.search);
+    } = parseFilterAndSort(location.search);
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
+
+    useEffect(() => {
+        if (updateUrl) {
+            const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
+            if (!forceFilter) {
+                setFilterValues(urlFilterValues as any);
+            }
+            if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
+                console.warn("URL sort is not compatible with the force filter.");
+            } else {
+                setSortBy(urlSortBy as any);
+            }
+        }
+    }, [location.search, updateUrl, forceFilter, checkFilterCombination]);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 

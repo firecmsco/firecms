@@ -99,8 +99,8 @@ function getNestedPropertiesDepth(property: ResolvedProperty, accumulator: numbe
 }
 
 export const useBuildSideEntityController = (navigation: NavigationController,
-                                             sideDialogsController: SideDialogsController,
-                                             authController: AuthController
+    sideDialogsController: SideDialogsController,
+    authController: AuthController
 ): SideEntityController => {
 
     const location = useLocation();
@@ -121,9 +121,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
+                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController, location.search));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController))
+                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController, location.search))
                 }
             }
             initialised.current = true;
@@ -143,7 +143,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
+                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController, location.search);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -156,7 +156,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
+                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController, location.search);
             }
             return sidePanelProps;
         });
@@ -183,17 +183,18 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
         sideDialogsController.open(
             propsToSidePanel({
-                    selectedTab: defaultSelectedView,
-                    ...props
-                },
+                selectedTab: defaultSelectedView,
+                ...props
+            },
                 navigation.buildUrlCollectionPath,
                 navigation.resolveIdsFrom,
                 smallLayout,
                 customizationController,
-                authController
+                authController,
+                location.search
             ));
 
-    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, authController.user]);
+    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, authController.user, location.search]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 
@@ -201,9 +202,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
+        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController, location.search));
 
-    }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout, authController.user]);
+    }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout, authController.user, location.search]);
 
     return {
         close,
@@ -265,18 +266,19 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
 }
 
 const propsToSidePanel = (props: EntitySidePanelProps,
-                          buildUrlCollectionPath: (path: string) => string,
-                          resolveIdsFrom: (pathWithAliases: string) => string,
-                          smallLayout: boolean,
-                          customizationController: CustomizationController,
-                          authController: AuthController
+    buildUrlCollectionPath: (path: string) => string,
+    resolveIdsFrom: (pathWithAliases: string) => string,
+    smallLayout: boolean,
+    customizationController: CustomizationController,
+    authController: AuthController,
+    locationSearch: string
 ): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
     const urlPath = props.entityId
-        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}#${SIDE_URL_HASH}`)
-        : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
+        : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`);
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,
