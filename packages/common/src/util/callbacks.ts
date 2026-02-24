@@ -98,25 +98,7 @@ export const mergeCallbacks = (
         };
     }
 
-    // Handle onIdUpdate - returns string or Promise<string>
-    if (baseCallbacks.onIdUpdate || pluginCallbacks.onIdUpdate) {
-        mergedCallbacks.onIdUpdate = async (props) => {
-            let id = props.entityId || "";
 
-            if (baseCallbacks.onIdUpdate) {
-                id = await Promise.resolve(baseCallbacks.onIdUpdate(props));
-            }
-
-            if (pluginCallbacks.onIdUpdate) {
-                id = await Promise.resolve(pluginCallbacks.onIdUpdate({
-                    ...props,
-                    entityId: id
-                }));
-            }
-
-            return id;
-        };
-    }
 
     return Object.keys(mergedCallbacks).length > 0 ? mergedCallbacks : undefined;
 };

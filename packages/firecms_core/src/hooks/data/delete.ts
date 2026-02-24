@@ -15,12 +15,12 @@ import {
 export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER extends User = User> =
     DeleteEntityProps<M>
     & {
-    callbacks?: EntityCallbacks<M, USER>;
-    onDeleteSuccess?: (entity: Entity<M>) => void;
-    onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
-    onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
-    onDeleteSuccessHookError?: (entity: Entity<M>, e: Error) => void;
-}
+        callbacks?: EntityCallbacks<M, USER>;
+        onDeleteSuccess?: (entity: Entity<M>) => void;
+        onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
+        onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
+        onDeleteSuccessHookError?: (entity: Entity<M>, e: Error) => void;
+    }
 
 /**
  * This function is in charge of deleting an entity in the datasource.
@@ -44,20 +44,20 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
  * @group Hooks and utilities
  */
 export async function deleteEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
-                                                                                                          dataSource,
-                                                                                                          entity,
-                                                                                                          collection,
-                                                                                                          callbacks,
-                                                                                                          onDeleteSuccess,
-                                                                                                          onDeleteFailure,
-                                                                                                          onPreDeleteHookError,
-                                                                                                          onDeleteSuccessHookError,
-                                                                                                          context
-                                                                                                      }: DeleteEntityWithCallbacksProps<M> & {
-                                                                                                          collection: EntityCollection<M>,
-                                                                                                          dataSource: DataSource,
-                                                                                                          context: FireCMSContext<USER>
-                                                                                                      }
+    dataSource,
+    entity,
+    collection,
+    callbacks,
+    onDeleteSuccess,
+    onDeleteFailure,
+    onPreDeleteHookError,
+    onDeleteSuccessHookError,
+    context
+}: DeleteEntityWithCallbacksProps<M> & {
+    collection: EntityCollection<M>,
+    dataSource: DataSource,
+    context: FireCMSContext<USER>
+}
 ): Promise<boolean> {
 
     console.debug("Deleting entity", entity.path, entity.id);
@@ -70,31 +70,12 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         context
     };
 
-    if (callbacks?.onPreDelete) {
-        try {
-            await callbacks.onPreDelete(entityDeleteProps);
-        } catch (e: any) {
-            console.error(e);
-            if (onPreDeleteHookError)
-                onPreDeleteHookError(entity, e);
-            return false;
-        }
-    }
     return dataSource.deleteEntity({
         entity,
         collection
     }).then(() => {
         onDeleteSuccess && onDeleteSuccess(entity);
-        try {
-            if (callbacks?.onDelete) {
-                callbacks.onDelete(entityDeleteProps);
-            }
-            return true;
-        } catch (e: any) {
-            if (onDeleteSuccessHookError)
-                onDeleteSuccessHookError(entity, e);
-            return false;
-        }
+        return true;
     }).catch((e) => {
         if (onDeleteFailure) onDeleteFailure(entity, e);
         return false;

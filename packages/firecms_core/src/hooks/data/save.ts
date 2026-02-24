@@ -40,94 +40,40 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @group Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M extends Record<string, any>>({
-                                                                                                    collection,
-                                                                                                    path,
-                                                                                                    entityId,
-                                                                                                    values,
-                                                                                                    previousValues,
-                                                                                                    status,
-                                                                                                    dataSource,
-                                                                                                    context,
-                                                                                                    onSaveSuccess,
-                                                                                                    onSaveFailure,
-                                                                                                    onPreSaveHookError,
-                                                                                                    onSaveSuccessHookError
-                                                                                                }: SaveEntityWithCallbacksProps<M> & {
-                                                                                                    collection: EntityCollection ,
-                                                                                                    dataSource: DataSource,
-                                                                                                    context: FireCMSContext,
-                                                                                                }
+    collection,
+    path,
+    entityId,
+    values,
+    previousValues,
+    status,
+    dataSource,
+    context,
+    onSaveSuccess,
+    onSaveFailure,
+    onPreSaveHookError,
+    onSaveSuccessHookError
+}: SaveEntityWithCallbacksProps<M> & {
+    collection: EntityCollection,
+    dataSource: DataSource,
+    context: FireCMSContext,
+}
 ): Promise<void> {
 
     if (status !== "new" && !entityId) {
         throw new Error("Entity id must be specified when updating an existing entity");
-    }
-    let updatedValues: Partial<EntityValues<M>>;
-
-    const customizationController = context.customizationController;
-
-    const callbacks = collection.callbacks;
-    if (callbacks?.onPreSave) {
-        try {
-            updatedValues = await callbacks.onPreSave({
-                collection,
-                path,
-                entityId,
-                values,
-                previousValues,
-                status,
-                context
-            });
-        } catch (e: any) {
-            console.error(e);
-            if (onPreSaveHookError)
-                onPreSaveHookError(e);
-            return;
-        }
-    } else {
-        updatedValues = values;
     }
 
     return dataSource.saveEntity({
         collection,
         path,
         entityId,
-        values: updatedValues,
+        values,
         previousValues,
         status
     }).then((entity) => {
-        try {
-            if (callbacks?.onSaveSuccess) {
-                callbacks.onSaveSuccess({
-                    collection: collection,
-                    path,
-                    entityId: entity.id,
-                    values: updatedValues,
-                    previousValues,
-                    status,
-                    context
-                });
-            }
-        } catch (e: any) {
-            if (onSaveSuccessHookError)
-                onSaveSuccessHookError(e);
-        }
         if (onSaveSuccess)
             onSaveSuccess(entity);
-    })
-        .catch((e) => {
-            if (callbacks?.onSaveFailure) {
-
-                callbacks.onSaveFailure({
-                    collection: collection,
-                    path,
-                    entityId,
-                    values: updatedValues,
-                    previousValues,
-                    status,
-                    context
-                });
-            }
-            if (onSaveFailure) onSaveFailure(e);
-        });
+    }).catch((e) => {
+        if (onSaveFailure) onSaveFailure(e);
+    });
 }

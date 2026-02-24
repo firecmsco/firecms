@@ -38,40 +38,40 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * attributes.
      * @see useNavigation
      */
-    navigation: NavigationController;
+    navigation?: NavigationController;
 
     /**
      * Controller to open the side dialog displaying entity forms
      * @see useSideEntityController
      */
-    sideEntityController: SideEntityController;
+    sideEntityController?: SideEntityController;
 
     /**
      * Controller used to open side dialogs
      * This is the controller used internally by side entity dialogs
      * or reference dialogs.
      */
-    sideDialogsController: SideDialogsController;
+    sideDialogsController?: SideDialogsController;
 
     /**
      * Controller used to open regular dialogs
      */
-    dialogsController: DialogsController;
+    dialogsController?: DialogsController;
 
     /**
      * Used auth controller
      */
-    authController: AuthControllerType;
+    authController?: AuthControllerType;
 
     /**
      * This controller holds the customization options for the CMS.
      */
-    customizationController: CustomizationController;
+    customizationController?: CustomizationController;
 
     /**
      * Use this controller to display snackbars
      */
-    snackbarController: SnackbarController;
+    snackbarController?: SnackbarController;
 
     /**
      * Use this controller to access data stored in the browser for the user
@@ -97,6 +97,6 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * If you are using the FireCMS user management plugin, this
      * section will be implemented automatically.
      */
-    userManagement: InternalUserManagement<USER>
+    userManagement?: InternalUserManagement<USER>;
 
 };

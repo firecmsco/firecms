@@ -8,6 +8,8 @@ import { ApiConfig, FireCMSRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
+import { createCallbacksTestRouter } from "./test_callbacks_route";
+import { PostgresDataSourceDelegate } from "../services/dataSourceDelegate";
 
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
@@ -236,6 +238,10 @@ export class FireCMSApiServer {
         if (this.config.collectionsDir) {
             const schemaEditorRoutes = createSchemaEditorRoutes(this.config.collectionsDir);
             this.router.use(`${basePath}/schema-editor`, schemaEditorRoutes);
+        }
+
+        if (this.dataSource instanceof PostgresDataSourceDelegate) {
+            this.router.use(basePath, createCallbacksTestRouter(this.dataSource));
         }
 
         // OpenAPI/Swagger documentation endpoint

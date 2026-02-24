@@ -22,13 +22,16 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
     private entityService: EntityService;
     private realtimeService: RealtimeService;
+    private user?: User;
 
     constructor(
         private db: DrizzleClient,
-        realtimeService: RealtimeService
+        realtimeService: RealtimeService,
+        user?: User
     ) {
         this.entityService = new EntityService(db);
         this.realtimeService = realtimeService;
+        this.user = user;
     }
 
     /**
@@ -52,7 +55,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         order
     }: FetchCollectionProps<M>): Promise<Entity<M>[]> {
 
-        return this.entityService.fetchCollection<M>(path, {
+        const entities = await this.entityService.fetchCollection<M>(path, {
             filter,
             orderBy,
             order,
@@ -61,6 +64,23 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             databaseId: collection?.databaseId,
             searchString
         });
+
+        if (collection?.callbacks?.onFetch) {
+            const contextForCallback = {
+                user: this.user
+            } as any; // Backend context
+            return Promise.all(entities.map(async (entity) => {
+                const fetched = await collection.callbacks!.onFetch!({
+                    collection,
+                    path,
+                    entity,
+                    context: contextForCallback
+                });
+                return fetched;
+            }));
+        }
+
+        return entities;
     }
 
     listenCollection<M extends Record<string, any>>({
@@ -148,11 +168,25 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         databaseId,
         collection
     }: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
-        return this.entityService.fetchEntity<M>(
+        let entity = await this.entityService.fetchEntity<M>(
             path,
             entityId,
             databaseId || collection?.databaseId
         );
+
+        if (entity && collection?.callbacks?.onFetch) {
+            const contextForCallback = {
+                user: this.user
+            } as any; // Backend context
+            entity = await collection.callbacks.onFetch({
+                collection,
+                path,
+                entity,
+                context: contextForCallback
+            });
+        }
+
+        return entity;
     }
 
     listenEntity<M extends Record<string, any>>({
@@ -213,22 +247,76 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         status
     }: SaveEntityProps<M>): Promise<Entity<M>> {
 
-        const savedEntity = await this.entityService.saveEntity<M>(
-            path,
-            values,
-            entityId,
-            collection?.databaseId
-        );
+        let updatedValues = values;
+        const contextForCallback = {
+            user: this.user
+        } as any;
 
-        // Notify real-time subscribers
-        await this.realtimeService.notifyEntityUpdate(
-            path,
-            savedEntity.id.toString(),
-            savedEntity,
-            collection?.databaseId
-        );
+        if (collection?.callbacks?.onPreSave) {
+            let previousValues: Partial<Entity<M>["values"]> | undefined;
+            if (status === "existing" && entityId) {
+                const existing = await this.fetchEntity({ path, entityId, collection });
+                if (existing) {
+                    previousValues = existing.values as Partial<Entity<M>["values"]>;
+                }
+            }
+            updatedValues = await collection.callbacks.onPreSave({
+                collection,
+                path,
+                entityId,
+                values,
+                previousValues,
+                status,
+                context: contextForCallback
+            });
+        }
 
-        return savedEntity;
+        try {
+            const savedEntity = await this.entityService.saveEntity<M>(
+                path,
+                updatedValues,
+                entityId,
+                collection?.databaseId
+            );
+
+            if (collection?.callbacks?.onSaveSuccess) {
+                let previousValues: Partial<Entity<M>["values"]> | undefined = undefined;
+                // Currently, we don't fetch previousValues again, we could reuse it if we fetched it in onPreSave
+                // But for exact accuracy we'd need to store it. Assuming optional for now.
+                await collection.callbacks.onSaveSuccess({
+                    collection: collection as EntityCollection<M>, // Cast necessary as EntityCollection is generic but base is not
+                    path,
+                    entityId: savedEntity.id,
+                    values: updatedValues,
+                    previousValues,
+                    status,
+                    context: contextForCallback
+                });
+            }
+
+            // Notify real-time subscribers
+            await this.realtimeService.notifyEntityUpdate(
+                path,
+                savedEntity.id.toString(),
+                savedEntity,
+                collection?.databaseId
+            );
+
+            return savedEntity;
+        } catch (error) {
+            if (collection?.callbacks?.onSaveFailure) {
+                await collection.callbacks.onSaveFailure({
+                    collection: collection as EntityCollection<M>,
+                    path,
+                    entityId: entityId || "unknown", // It might have failed before ID generation
+                    values: updatedValues,
+                    previousValues: undefined, // Needs proper previousValues propagation
+                    status,
+                    context: contextForCallback
+                });
+            }
+            throw error;
+        }
     }
 
     async deleteEntity<M extends Record<string, any>>({
@@ -238,11 +326,35 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         console.log("🗑️ [DataSourceDelegate] Starting delete for entity:", entity.id, "in path:", entity.path);
 
+        const contextForCallback = {
+            user: this.user
+        } as any;
+
+        if (collection?.callbacks?.onPreDelete) {
+            await collection.callbacks.onPreDelete({
+                collection: collection as EntityCollection<M>,
+                path: entity.path,
+                entityId: entity.id,
+                entity,
+                context: contextForCallback
+            });
+        }
+
         await this.entityService.deleteEntity(
             entity.path,
             entity.id,
             entity.databaseId || collection?.databaseId
         );
+
+        if (collection?.callbacks?.onDelete) {
+            await collection.callbacks.onDelete({
+                collection: collection as EntityCollection<M>,
+                path: entity.path,
+                entityId: entity.id,
+                entity,
+                context: contextForCallback
+            });
+        }
 
         console.log("🗑️ [DataSourceDelegate] Entity deleted from database, now notifying real-time subscribers");
 
@@ -335,7 +447,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                     // So we can just call the method on a new instance that interprets `this.entityService` as `txEntityService`.
 
                     // Let's create a partial clone
-                    const txDelegate = new PostgresDataSourceDelegate(tx, this.realtimeService);
+                    const txDelegate = new PostgresDataSourceDelegate(tx, this.realtimeService, user);
                     // Force inject the transactional entity service
                     // @ts-ignore
                     txDelegate.entityService = txEntityService;

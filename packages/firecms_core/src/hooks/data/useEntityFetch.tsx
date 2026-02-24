@@ -61,18 +61,6 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
         setDataLoading(true);
 
         const onEntityUpdate = async (updatedEntity?: Entity<M> | null) => {
-            if (collection.callbacks?.onFetch && updatedEntity) {
-                try {
-                    updatedEntity = await collection.callbacks.onFetch({
-                        collection,
-                        path,
-                        entity: updatedEntity,
-                        context
-                    });
-                } catch (e: any) {
-                    console.error(e);
-                }
-            }
             CACHE[`${path}/${entityId}`] = updatedEntity ?? undefined;
             setEntity(updatedEntity ?? undefined);
             setDataLoading(false);

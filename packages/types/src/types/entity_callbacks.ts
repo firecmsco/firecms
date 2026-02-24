@@ -57,15 +57,6 @@ export type EntityCallbacks<M extends Record<string, any> = any, USER extends Us
      */
     onDelete?(entityDeleteProps: EntityOnDeleteProps<M, USER>): void;
 
-    /**
-     * Callback fired when any value in the form changes. You can use it
-     * to define the ID of a `new` entity based on the current values.
-     * The returned string will be used as the ID of the entity.
-     *
-     * @param idUpdateProps
-     */
-    onIdUpdate?(idUpdateProps: EntityIdUpdateProps<M>): string | number | Promise<string | number>;
-
 }
 
 /**
@@ -103,8 +94,8 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, USER ex
 export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER extends User = User> =
     Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
-    entityId?: string | number;
-}
+        entityId?: string | number;
+    }
 /**
  * Parameters passed to hooks before an entity is saved
  * @group Models
@@ -112,8 +103,8 @@ export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER exten
 export type EntityOnSaveFailureProps<M extends Record<string, any> = any, USER extends User = User> =
     Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
-    entityId?: string | number;
-}
+        entityId?: string | number;
+    }
 
 /**
  * Parameters passed to hooks when an entity is saved
@@ -190,34 +181,4 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER e
     context: FireCMSContext<USER>;
 }
 
-/**
- * Parameters passed to hooks when an entity is deleted
- * @group Models
- */
-export interface EntityIdUpdateProps<M extends Record<string, any> = any> {
 
-    /**
-     * collection of the entity being deleted
-     */
-    collection: EntityCollection<M>;
-
-    /**
-     * Path of the parent collection
-     */
-    path: string;
-
-    /**
-     * Current entity id
-     */
-    entityId?: string | number;
-
-    /**
-     * Entity values
-     */
-    values: EntityValues<M>;
-
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext;
-}

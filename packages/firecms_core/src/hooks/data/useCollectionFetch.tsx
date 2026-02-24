@@ -91,20 +91,6 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         setDataLoading(true);
 
         const onEntitiesUpdate = async (entities: Entity<M>[]) => {
-            if (collection.callbacks?.onFetch) {
-                try {
-                    entities = await Promise.all(
-                        entities.map((entity) =>
-                            collection.callbacks!.onFetch!({
-                                collection,
-                                path,
-                                entity,
-                                context
-                            })));
-                } catch (e: any) {
-                    console.error(e);
-                }
-            }
             setDataLoading(false);
             setDataLoadingError(undefined);
             setData(entities.map(e => ({

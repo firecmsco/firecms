@@ -524,13 +524,7 @@ export function EntityForm<M extends Record<string, any>>({
         onFormContextReady?.(formContext);
     }, [formex.version, collection, entityId, path]);
 
-    const onIdUpdateError = useCallback((error: any) => {
-        snackbarController.open({
-            type: "error",
-            message: "Error updating id, check the console"
-        });
-        console.error(error);
-    }, [snackbarController]);
+
 
     const pluginActions: React.ReactNode[] = [];
     const plugins = customizationController.plugins;
@@ -563,28 +557,7 @@ export function EntityForm<M extends Record<string, any>>({
         ?? collection.singularName
         ?? collection.name;
 
-    const onIdUpdate = collection.callbacks?.onIdUpdate;
-    const doOnIdUpdate = useCallback(async () => {
-        if (onIdUpdate && formex.values && (status === "new" || status === "copy")) {
-            try {
-                const updatedId = await onIdUpdate({
-                    collection: collection,
-                    path,
-                    entityId,
-                    values: formex.values,
-                    context
-                });
-                setEntityId(updatedId);
-            } catch (e) {
-                onIdUpdateError?.(e);
-                console.error(e);
-            }
-        }
-    }, [entityId, formex.values, status, onIdUpdate, collection, path, context, onIdUpdateError]);
 
-    useEffect(() => {
-        doOnIdUpdate();
-    }, [doOnIdUpdate]);
 
     useEffect(() => {
         if (!autoSave) {
