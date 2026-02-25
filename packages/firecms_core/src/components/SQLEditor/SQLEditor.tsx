@@ -638,12 +638,12 @@ export const SQLEditor = () => {
                     <div className="flex items-center flex-grow overflow-hidden mr-4">
                         <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
                             {tabs.map(tab => (
-                                <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-4">
+                                <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
                                     <span className="truncate">{tab.name}</span>
                                     {tabs.length > 1 && (
                                         <button
                                             onClick={(e) => handleCloseTab(tab.id, e)}
-                                            className="ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                            className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
                                         >
                                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                         </button>

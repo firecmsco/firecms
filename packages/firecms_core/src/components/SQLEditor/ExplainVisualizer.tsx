@@ -46,7 +46,7 @@ export const ExplainVisualizer: React.FC<ExplainVisualizerProps> = ({ plan, isRo
                 <div className="absolute left-2.5 top-5 w-3 h-px bg-surface-200 dark:bg-surface-800 -z-10"></div>
             )}
 
-            <div className={cls("border rounded-md bg-white dark:bg-surface-900 shadow-xs relative z-10 w-[420px] max-w-full", defaultBorderMixin)}>
+            <div className={cls("border rounded-md bg-white dark:bg-surface-900 text-text-primary dark:text-text-primary-dark shadow-xs relative z-10 w-[420px] max-w-full", defaultBorderMixin)}>
                 <div
                     className={cls("px-4 py-3 flex justify-between items-center cursor-pointer select-none")}
                     onClick={() => setExpanded(!expanded)}
@@ -71,11 +71,11 @@ export const ExplainVisualizer: React.FC<ExplainVisualizerProps> = ({ plan, isRo
 
                     <div className="flex space-x-6 items-center">
                         <div className="flex flex-col text-right">
-                            <span className="text-[10px] uppercase text-text-disabled font-semibold tracking-wide leading-tight mb-0.5">Cost</span>
+                            <span className="text-[10px] uppercase text-text-disabled dark:text-text-disabled-dark font-semibold tracking-wide leading-tight mb-0.5">Cost</span>
                             <span className={cls("font-mono font-medium text-[13px] leading-none", costColor)}>{cost.toFixed(2)}</span>
                         </div>
                         <div className="flex flex-col text-right">
-                            <span className="text-[10px] uppercase text-text-disabled font-semibold tracking-wide leading-tight mb-0.5">Rows</span>
+                            <span className="text-[10px] uppercase text-text-disabled dark:text-text-disabled-dark font-semibold tracking-wide leading-tight mb-0.5">Rows</span>
                             <span className="font-mono text-[13px] text-text-secondary dark:text-text-secondary-dark leading-none">{plan["Plan Rows"]}</span>
                         </div>
                     </div>

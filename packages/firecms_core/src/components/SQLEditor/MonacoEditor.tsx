@@ -53,9 +53,19 @@ export const MonacoEditor = ({
             },
         });
 
-        // Register custom autocomplete for tables and columns
+        // Register custom autocomplete for tables, columns, and SQL keywords
+        const sqlKeywords = [
+            "SELECT", "FROM", "WHERE", "INSERT INTO", "VALUES", "UPDATE", "SET",
+            "DELETE FROM", "JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN",
+            "ON", "GROUP BY", "HAVING", "ORDER BY", "ASC", "DESC", "LIMIT", "OFFSET",
+            "AS", "AND", "OR", "NOT", "IN", "BETWEEN", "LIKE", "IS NULL", "IS NOT NULL",
+            "CREATE TABLE", "ALTER TABLE", "DROP TABLE", "PRIMARY KEY", "FOREIGN KEY",
+            "COUNT", "SUM", "AVG", "MIN", "MAX", "DISTINCT", "UNION", "ALL", "EXISTS",
+            "CASE", "WHEN", "THEN", "ELSE", "END", "CAST", "COALESCE"
+        ];
+
         monaco.languages.registerCompletionItemProvider("pgsql", {
-            triggerCharacters: ["."],
+            triggerCharacters: [".", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
             provideCompletionItems: (model, position) => {
                 const word = model.getWordUntilPosition(position);
                 const range = {
@@ -110,6 +120,18 @@ export const MonacoEditor = ({
                             });
                         });
                     }
+
+                    // Provide SQL keywords
+                    sqlKeywords.forEach(keyword => {
+                        suggestions.push({
+                            label: keyword,
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: keyword + " ",
+                            range,
+                            detail: "SQL Keyword",
+                            sortText: "3"
+                        });
+                    });
 
                     // Heuristic: Suggest columns for tables that are mentioned in the current editor text
                     const fullText = model.getValue();
