@@ -16,19 +16,50 @@ import {
     Alert,
     Tabs,
     Tab,
-    defaultBorderMixin
+    defaultBorderMixin,
+    Select,
+    SelectItem,
+    Menu,
+    MenuItem
 } from "@firecms/ui";
 import { useDataSource, useSnackbarController } from "../../hooks";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { ConfirmationDialog } from "../ConfirmationDialog";
+import { ExplainVisualizer } from "./ExplainVisualizer";
 
 export interface TableInfo {
     schemaName: string;
     tableName: string;
     columns: string[];
 }
+
+const QueryLoadingView = () => {
+    const [elapsed, setElapsed] = useState(0);
+
+    useEffect(() => {
+        const start = Date.now();
+        const interval = setInterval(() => {
+            setElapsed(Date.now() - start);
+        }, 100);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div className="flex-grow flex items-center justify-center">
+            <div className="text-center">
+                <CircularProgress size="medium" />
+                <Typography variant="body2" className="mt-4 text-text-secondary dark:text-text-secondary-dark font-mono tracking-tight animate-pulse">
+                    EXECUTING QUERY...
+                </Typography>
+                <div className="mt-2 text-xs font-mono text-text-disabled dark:text-text-disabled-dark">
+                    {(elapsed / 1000).toFixed(1)}s elapsed
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const STORAGE_KEY_TABS = "firecms_sql_tabs";
 const STORAGE_KEY_ACTIVE_TAB = "firecms_sql_active_tab";
@@ -41,6 +72,10 @@ export const SQLEditor = () => {
     const [schemas, setSchemas] = useState<Record<string, TableInfo[]>>({});
     const [isSchemaLoading, setIsSchemaLoading] = useState(true);
     const [schemaError, setSchemaError] = useState<string | null>(null);
+
+    // Connection state
+    const [selectedRole, setSelectedRole] = useState("postgres");
+    const [selectedDatabase, setSelectedDatabase] = useState("default");
 
     const fetchSchema = useCallback(async () => {
         if (!dataSource.executeSql) {
@@ -414,6 +449,36 @@ export const SQLEditor = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    const handleExportMarkdown = () => {
+        if (!results || results.length === 0) return;
+
+        const headers = Object.keys(results[0]);
+        const headerRow = `| ${headers.join(" | ")} |`;
+        const dividerRow = `| ${headers.map(() => "---").join(" | ")} |`;
+        const dataRows = results.map(row =>
+            `| ${headers.map(header => {
+                const val = row[header];
+                if (val === null) return "null";
+                if (val === undefined) return "";
+                // Replace pipes and newlines to avoid breaking the markdown table
+                return String(val).replace(/\|/g, "\\|").replace(/\n/g, " ");
+            }).join(" | ")} |`
+        );
+
+        const markdown = [headerRow, dividerRow, ...dataRows].join("\n");
+        navigator.clipboard.writeText(markdown).then(() => {
+            snackbarController.open({
+                type: "success",
+                message: "Results copied as Markdown!"
+            });
+        }).catch(() => {
+            snackbarController.open({
+                type: "error",
+                message: "Failed to copy Markdown to clipboard."
+            });
+        });
+    };
+
     const renderResults = () => {
         if (loading) {
             return (
@@ -438,14 +503,32 @@ export const SQLEditor = () => {
 
         if (!results) {
             return (
-                <div className="flex-grow flex items-center justify-center">
-                    <div className="text-center max-w-sm px-6">
-                        <svg className="w-12 h-12 mx-auto text-surface-400 dark:text-surface-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                        <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark font-medium">Ready to execute.</Typography>
-                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark mt-2 block italic">Press Cmd + Enter to run your query</Typography>
+                <div className="flex-grow flex items-center justify-center text-text-disabled dark:text-text-disabled-dark">
+                    <div className="text-center">
+                        <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                        <Typography variant="body2">Run a query to see results</Typography>
                     </div>
                 </div>
             );
+        }
+
+        // Check for EXPLAIN (FORMAT JSON) response
+        if (results.length === 1 && results[0]["QUERY PLAN"] && Array.isArray(results[0]["QUERY PLAN"])) {
+            try {
+                const plan = results[0]["QUERY PLAN"][0].Plan;
+                if (plan) {
+                    return (
+                        <div className="flex-grow overflow-auto p-4 bg-surface-50 dark:bg-surface-900 flex flex-col items-start">
+                            <Typography variant="caption" className="font-bold text-text-secondary mb-4 tracking-wider uppercase">Visual Execution Plan</Typography>
+                            <div className="pb-12">
+                                <ExplainVisualizer plan={plan} />
+                            </div>
+                        </div>
+                    );
+                }
+            } catch (e) {
+                console.warn("Failed to parse EXPLAIN JSON output:", e);
+            }
         }
 
         if (results.length === 0) {
@@ -500,11 +583,19 @@ export const SQLEditor = () => {
                             <span className="font-mono text-text-secondary dark:text-text-secondary-dark">{execTime}ms</span>
                         </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar items-center px-2">
                         <Button
                             size="small"
                             variant="text"
-                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark"
+                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
+                            onClick={handleExportMarkdown}
+                        >
+                            Copy Markdown
+                        </Button>
+                        <Button
+                            size="small"
+                            variant="text"
+                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
                             onClick={handleExportJSON}
                         >
                             Export JSON
@@ -512,7 +603,7 @@ export const SQLEditor = () => {
                         <Button
                             size="small"
                             variant="text"
-                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark"
+                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
                             onClick={handleExportCSV}
                         >
                             Export CSV
@@ -522,6 +613,9 @@ export const SQLEditor = () => {
             </div>
         );
     };
+
+    const activeSnippet = snippets.find(s => s.sql === activeTab.sql);
+    const isFavorite = activeSnippet?.isFavorite || false;
 
     return (
         <div className="flex h-full w-full bg-white dark:bg-surface-950 overflow-hidden text-text-primary dark:text-text-primary-dark">
@@ -565,12 +659,13 @@ export const SQLEditor = () => {
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                         </IconButton>
                     </div>
-                    <div className="flex space-x-1 shrink-0">
+                    <div className="flex shrink-0 items-center justify-end">
                         <Tooltip title="Format SQL">
-                            <IconButton onClick={handlePrettify} size="small">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                            </IconButton>
+                            <button onClick={handlePrettify} className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none flex items-center justify-center">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                            </button>
                         </Tooltip>
+
                         <Button
                             variant="text"
                             size="small"
@@ -579,16 +674,40 @@ export const SQLEditor = () => {
                         >
                             Explain
                         </Button>
-                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 self-center mx-2"></div>
-                        <div className="flex items-center space-x-2 mr-2">
-                            <Typography variant="caption" className="text-[10px] font-bold uppercase text-text-disabled">Limit 1000</Typography>
+
+                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                        <div className="flex items-center space-x-2 px-4 cursor-pointer" onClick={() => setAutoLimit(!autoLimit)}>
+                            <Typography variant="caption" className="text-text-secondary cursor-pointer select-none">Limit 1000</Typography>
                             <input
                                 type="checkbox"
                                 checked={autoLimit}
                                 onChange={(e) => setAutoLimit(e.target.checked)}
-                                className="w-3 h-3 rounded border-surface-300 text-primary focus:ring-primary"
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-3.5 h-3.5 rounded border-surface-300 text-primary focus:ring-primary cursor-pointer"
                             />
                         </div>
+
+                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                        <Tooltip title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}>
+                            <IconButton
+                                size="small"
+                                onClick={() => {
+                                    if (!activeSnippet) {
+                                        snackbarController.open({
+                                            type: "info",
+                                            message: "Please save the snippet first before favoriting."
+                                        });
+                                        return;
+                                    }
+                                    saveSnippets(snippets.map(s => s.id === activeSnippet.id ? { ...s, isFavorite: !s.isFavorite } : s));
+                                }}
+                            >
+                                <svg className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-current' : 'text-text-disabled dark:text-text-disabled-dark hover:text-text-primary'}`} fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </IconButton>
+                        </Tooltip>
+
                         <Button
                             variant="text"
                             size="small"
@@ -596,19 +715,43 @@ export const SQLEditor = () => {
                         >
                             Save
                         </Button>
-                        <Button
-                            onClick={() => handleRun()}
-                            disabled={loading}
-                            size="small"
-                            color="primary"
-                        >
-                            {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
-                            Run
-                        </Button>
-                    </div>
-                </div>
 
-                {/* Editor Area */}
+                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                        <div className="flex items-center space-x-2 pl-3">
+                            <Select
+                                value={selectedDatabase}
+                                onValueChange={setSelectedDatabase as any}
+                                size="small"
+                                position="popper"
+                            >
+                                <SelectItem value="default">Database (Default)</SelectItem>
+                            </Select>
+
+                            <Select
+                                value={selectedRole}
+                                onValueChange={setSelectedRole as any}
+                                size="small"
+                                position="popper"
+                                renderValue={(val) => `Role: ${val}`}
+                            >
+                                <SelectItem value="postgres">postgres (Admin)</SelectItem>
+                                <SelectItem value="authenticated">authenticated</SelectItem>
+                                <SelectItem value="anon">anon</SelectItem>
+                            </Select>
+
+                            <Button
+                                onClick={() => handleRun()}
+                                disabled={loading}
+                                size="small"
+                                color="primary"
+                            >
+                                {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
+                                Run
+                            </Button>
+                        </div>
+                    </div>
+                </div>     {/* Editor Area */}
                 <div className="h-1/2 shrink-0 relative flex flex-col">
                     <MonacoEditor
                         value={sql}

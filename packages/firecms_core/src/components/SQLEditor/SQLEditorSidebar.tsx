@@ -14,6 +14,7 @@ export interface Snippet {
     name: string;
     sql: string;
     createdAt: number;
+    isFavorite?: boolean;
 }
 
 interface SQLEditorSidebarProps {
@@ -60,40 +61,87 @@ export const SQLEditorSidebar = ({
                     />
                 )}
 
-                {activeTab === "snippets" && (
-                    <div className="flex flex-col h-full">
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Saved Snippets</Typography>
-                        </div>
-                        <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
-                            {snippets.length === 0 ? (
-                                <div className="p-4 text-center">
-                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">No saved snippets yet.</Typography>
-                                </div>
-                            ) : (
-                                snippets.map(snippet => (
-                                    <div
-                                        key={snippet.id}
-                                        className={cls("group p-2 rounded border hover:border-surface-400 dark:hover:border-surface-600 bg-white dark:bg-surface-900 transition-all cursor-pointer relative", defaultBorderMixin)}
-                                        onClick={() => onSelectSnippet(snippet.sql)}
-                                    >
-                                        <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
-                                        <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate">{snippet.sql}</Typography>
-                                        <button
-                                            className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                onDeleteSnippet(snippet.id);
-                                            }}
-                                        >
-                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                        </button>
+                {activeTab === "snippets" && (() => {
+                    const favorites = snippets.filter(s => s.isFavorite);
+                    const others = snippets.filter(s => !s.isFavorite);
+
+                    return (
+                        <div className="flex flex-col h-full">
+                            <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Saved Snippets</Typography>
+                            </div>
+                            <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
+                                {snippets.length === 0 ? (
+                                    <div className="p-4 text-center">
+                                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">No saved snippets yet.</Typography>
                                     </div>
-                                ))
-                            )}
+                                ) : (
+                                    <>
+                                        {favorites.length > 0 && (
+                                            <div className="mb-4">
+                                                <Typography variant="caption" className="text-[10px] font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark mb-2 px-1 flex items-center">
+                                                    <svg className="w-3 h-3 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" /></svg>
+                                                    Favorites
+                                                </Typography>
+                                                <div className="space-y-2">
+                                                    {favorites.map(snippet => (
+                                                        <div
+                                                            key={snippet.id}
+                                                            className={cls("group p-2 rounded border hover:border-surface-400 dark:hover:border-surface-600 bg-white dark:bg-surface-900 transition-all cursor-pointer relative", defaultBorderMixin)}
+                                                            onClick={() => onSelectSnippet(snippet.sql)}
+                                                        >
+                                                            <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
+                                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate">{snippet.sql}</Typography>
+                                                            <button
+                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    onDeleteSnippet(snippet.id);
+                                                                }}
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {others.length > 0 && (
+                                            <div>
+                                                {favorites.length > 0 && (
+                                                    <Typography variant="caption" className="text-[10px] font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark mb-2 px-1 mt-4">
+                                                        Others
+                                                    </Typography>
+                                                )}
+                                                <div className="space-y-2">
+                                                    {others.map(snippet => (
+                                                        <div
+                                                            key={snippet.id}
+                                                            className={cls("group p-2 rounded border hover:border-surface-400 dark:hover:border-surface-600 bg-white dark:bg-surface-900 transition-all cursor-pointer relative", defaultBorderMixin)}
+                                                            onClick={() => onSelectSnippet(snippet.sql)}
+                                                        >
+                                                            <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
+                                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate">{snippet.sql}</Typography>
+                                                            <button
+                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    onDeleteSnippet(snippet.id);
+                                                                }}
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    );
+                })()}
 
                 {activeTab === "history" && (
                     <div className="flex flex-col h-full">
