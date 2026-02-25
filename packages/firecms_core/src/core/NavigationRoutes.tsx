@@ -21,6 +21,8 @@ export type NavigationRoutesProps = {
 
 };
 
+
+
 /**
  * This component is in charge of rendering
  * all the related routes (entity collection root views, custom views

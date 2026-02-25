@@ -1,25 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { registerE2EUser } from './auth.setup';
 
 test.describe('Test Entities Datagrid Operations', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.goto('/');
-
-        const createAccountBtn = page.getByText('Create account', { exact: true }).first();
-        if (await createAccountBtn.isVisible()) {
-            await createAccountBtn.click();
-            await page.waitForTimeout(500);
-
-            const randomEmail = `test_${Date.now()}@firecms.co`;
-            await page.getByPlaceholder('Display Name (optional)').fill('E2E Tester');
-            await page.getByPlaceholder('Email').fill(randomEmail);
-            await page.getByPlaceholder('Password').fill('Password123!');
-
-            await page.getByText('Create account', { exact: true }).last().click();
-        }
-
-        await expect(page.getByText('Private Notes', { exact: true })).toBeVisible({ timeout: 15000 });
-        await page.waitForTimeout(2000);
+        await registerE2EUser(page);
     });
 
     test('DataGrid Features: Search, Filter, Sort, and Relations (Test Entities & Tags)', async ({ page }) => {

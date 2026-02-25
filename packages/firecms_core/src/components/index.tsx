@@ -42,3 +42,5 @@ export * from "./FieldCaption";
 export * from "./EntityPreview";
 
 export * from "./AIIcon";
+export * from "./SQLEditor/SQLEditor";
+export * from "./Debug/UIStyleGuide";

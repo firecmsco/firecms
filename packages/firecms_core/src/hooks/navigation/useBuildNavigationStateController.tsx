@@ -22,6 +22,8 @@ import {
 import { resolveCollections, resolveCMSViews } from "./useNavigationResolution";
 import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";
 import { CollectionRegistry } from "@firecms/common";
+import { useAdminModeController } from "../useAdminModeController";
+import React from "react";
 
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
@@ -36,6 +38,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     viewsOrder?: string[];
     collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
     cmsUrlController: CMSUrlController;
+    adminMode?: "developer" | "editor";
 };
 
 export function useBuildNavigationStateController<EC extends EntityCollection, USER extends User>(
@@ -54,7 +57,8 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         disabled,
         navigationGroupMappings,
         collectionRegistryController,
-        cmsUrlController
+        cmsUrlController,
+        adminMode = "editor"
     } = props;
 
     const viewsRef = useRef<CMSView[] | undefined>();
@@ -142,25 +146,6 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
                     group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
                 });
                 return acc;
-            }, [] as NavigationEntry[]),
-
-            ...(adminViews ?? []).reduce((acc, view) => {
-                if (view.hideFromNavigation) return acc;
-
-                const pathKey = view.slug;
-                const groupName = NAVIGATION_ADMIN_GROUP_NAME;
-
-                acc.push({
-                    id: `admin:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(pathKey),
-                    name: view.name.trim(),
-                    type: "admin",
-                    slug: view.slug,
-                    view,
-                    description: view.description?.trim(),
-                    group: groupName
-                });
-                return acc;
             }, [] as NavigationEntry[])
         ];
 
@@ -214,7 +199,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
             groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
         };
-    }, [navigationGroupMappings, cmsUrlController.buildCMSUrlPath, cmsUrlController.buildUrlCollectionPath, pluginGroups, plugins]);
+    }, [navigationGroupMappings, cmsUrlController.buildCMSUrlPath, cmsUrlController.buildUrlCollectionPath, pluginGroups, plugins, adminMode]);
 
     const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
         if (!plugins) {
@@ -284,12 +269,16 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
             }
 
             const navigationEntriesOrder = computedTopLevelNav.navigationEntries.map(e => e.id);
+            console.log("adminMode is", adminMode, "computed top level nav:", computedTopLevelNav.navigationEntries.length);
+            console.log("old order", navigationEntriesOrderRef.current, "new order", navigationEntriesOrder);
             if (!equal(navigationEntriesOrderRef.current, navigationEntriesOrder)) {
                 navigationEntriesOrderRef.current = navigationEntriesOrder;
                 shouldUpdateTopLevelNav = true;
             }
 
+            console.log("shouldUpdateTopLevelNav", shouldUpdateTopLevelNav, "equal", equal(topLevelNavigation, computedTopLevelNav));
             if (shouldUpdateTopLevelNav && !equal(topLevelNavigation, computedTopLevelNav)) {
+                console.log("ACTUALLY SETTING top level navigation");
                 setTopLevelNavigation(computedTopLevelNav);
             }
         } catch (e) {
@@ -320,7 +309,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
     useEffect(() => {
         refreshNavigation();
-    }, [refreshNavigation]);
+    }, [refreshNavigation, adminMode]);
 
     return {
         views: viewsRef.current,

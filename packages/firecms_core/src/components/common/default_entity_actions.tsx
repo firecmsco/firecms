@@ -5,20 +5,20 @@ import { addRecentId } from "../EntityCollectionView/utils";
 import { navigateToEntity, resolveDefaultSelectedView } from "@firecms/common";
 
 export const editEntityAction: EntityAction = {
-    icon: <EditIcon size={"small"}/>,
+    icon: <EditIcon size={"small"} />,
     key: "edit",
     name: "Edit",
     collapsed: false,
     isEnabled: ({ entity }) => Boolean(entity),
     onClick({
-                entity,
-                collection,
-                path,
-                context,
-                highlightEntity,
-                unhighlightEntity,
-                openEntityMode
-            }): Promise<void> {
+        entity,
+        collection,
+        path,
+        context,
+        highlightEntity,
+        unhighlightEntity,
+        openEntityMode
+    }): Promise<void> {
 
         if (!entity) {
             throw new Error("INTERNAL: editEntityAction: Entity is undefined");
@@ -48,9 +48,9 @@ export const editEntityAction: EntityAction = {
             collection,
             entityId: entity.id,
             path: newFullIdPath,
-            sideEntityController: context.sideEntityController,
+            sideEntityController: context.sideEntityController!,
             onClose: () => unhighlightEntity?.(entity),
-            navigation: context.navigation,
+            navigation: context.navigation!,
             selectedTab: defaultSelectedView
         });
 
@@ -59,19 +59,19 @@ export const editEntityAction: EntityAction = {
 }
 
 export const copyEntityAction: EntityAction = {
-    icon: <FileCopyIcon size={"small"}/>,
+    icon: <FileCopyIcon size={"small"} />,
     name: "Copy",
     key: "copy",
     isEnabled: ({ entity }) => Boolean(entity),
     onClick({
-                entity,
-                collection,
-                context,
-                path,
-                highlightEntity,
-                unhighlightEntity,
-                openEntityMode
-            }): Promise<void> {
+        entity,
+        collection,
+        context,
+        path,
+        highlightEntity,
+        unhighlightEntity,
+        openEntityMode
+    }): Promise<void> {
         if (!entity) {
             throw new Error("INTERNAL: copyEntityAction: Entity is undefined");
         }
@@ -88,9 +88,9 @@ export const copyEntityAction: EntityAction = {
             entityId: entity.id,
             path: usedPath,
             copy: true,
-            sideEntityController: context.sideEntityController,
+            sideEntityController: context.sideEntityController!,
             onClose: () => unhighlightEntity?.(entity),
-            navigation: context.navigation
+            navigation: context.navigation!
         });
 
         return Promise.resolve(undefined);
@@ -98,21 +98,24 @@ export const copyEntityAction: EntityAction = {
 }
 
 export const deleteEntityAction: EntityAction = {
-    icon: <DeleteIcon size={"small"}/>,
+    icon: <DeleteIcon size={"small"} />,
     name: "Delete",
     key: "delete",
     isEnabled: ({ entity }) => Boolean(entity),
     onClick({
-                entity,
-                path,
-                collection,
-                context,
-                selectionController,
-                onCollectionChange,
-                navigateBack
-            }): Promise<void> {
+        entity,
+        path,
+        collection,
+        context,
+        selectionController,
+        onCollectionChange,
+        navigateBack
+    }): Promise<void> {
         if (!entity) {
             throw new Error("INTERNAL: deleteEntityAction: Entity is undefined");
+        }
+        if (!context.dialogsController) {
+            throw new Error("INTERNAL: deleteEntityAction: context.dialogsController is undefined");
         }
         const { closeDialog } = context.dialogsController.open({
             key: "delete_entity_dialog_" + entity.id,
@@ -133,7 +136,7 @@ export const deleteEntityAction: EntityAction = {
                         onCollectionChange?.();
                         navigateBack?.();
                     }}
-                    onClose={closeDialog}/>;
+                    onClose={closeDialog} />;
             }
         })
         return Promise.resolve(undefined);

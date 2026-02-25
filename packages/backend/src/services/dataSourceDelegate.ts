@@ -400,6 +400,10 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         );
     }
 
+    async executeSql(sql: string): Promise<any[]> {
+        return this.entityService.executeSql(sql);
+    }
+
     private generateSubscriptionId(): string {
         return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
@@ -431,11 +435,23 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             return async (...args: any[]) => {
                 // @ts-ignore
                 return await originalDb.transaction(async (tx) => {
+                    // Defensive checks for user properties
+                    let userId = user.uid;
+                    if (!userId) {
+                        console.warn(`[DataSourceDelegate] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, user);
+                        userId = 'anonymous';
+                    }
+
+                    let userRoles = user.roles ?? [];
+                    if (!user.roles) {
+                        console.warn(`[DataSourceDelegate] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
+                    }
+                    const rolesString = userRoles.map(r => r.id).join(",");
+
                     // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
-                    await tx.execute(sql`SELECT set_config('app.user_id', ${user.uid}, true)`);
-                    const rolesString = (user.roles ?? []).map(r => r.id).join(",");
+                    await tx.execute(sql`SELECT set_config('app.user_id', ${userId}, true)`);
                     await tx.execute(sql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
-                    await tx.execute(sql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: user.uid, roles: (user.roles ?? []).map(r => r.id) })}, true)`);
+                    await tx.execute(sql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles.map(r => r.id) })}, true)`);
 
                     // Create a temporary delegate using the transaction client
                     // We need to instantiate a new EntityService with the tx
@@ -464,6 +480,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         authenticatedDelegate.deleteEntity = wrapMethod("deleteEntity");
         authenticatedDelegate.checkUniqueField = wrapMethod("checkUniqueField");
         authenticatedDelegate.countEntities = wrapMethod("countEntities");
+        authenticatedDelegate.executeSql = wrapMethod("executeSql");
 
         // Listen methods use websockets/realtime service which handles auth differently (via connection params usually),
         // OR we might need to think about how listen works with RLS.

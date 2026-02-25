@@ -214,6 +214,10 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
 
         isFilterCombinationValid(): boolean {
             return true; // PostgreSQL supports complex filter combinations
+        },
+
+        async executeSql(sql: string): Promise<any[]> {
+            return client.executeSql(sql);
         }
     }), [client]);
 

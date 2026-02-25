@@ -21,7 +21,7 @@ export type { BackendUserManagementConfig, UserManagement } from "./hooks/useBac
 // Components
 export { FireCMSLoginView } from "./components/FireCMSLoginView";
 export type { FireCMSLoginViewProps } from "./components/FireCMSLoginView";
-export { createUserManagementAdminViews } from "./components/AdminViews";
+export { createUserManagementAdminViews, UsersView, RolesView } from "./components/AdminViews";
 
 // API utilities
 export { setApiUrl, getApiUrl, AuthApiError } from "./api";

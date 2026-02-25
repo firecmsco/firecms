@@ -1,29 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { registerE2EUser } from './auth.setup';
 
 test.describe('E2E testing for FireCMS UI', () => {
 
     test.beforeEach(async ({ page }) => {
-        // Navigate to the dashboard (or login page) and login if required
-        await page.goto('/');
-
-        const createAccountBtn = page.getByText('Create account', { exact: true }).first();
-        await createAccountBtn.waitFor({ state: 'visible', timeout: 10000 });
-        await createAccountBtn.click();
-        await page.waitForTimeout(500); // Wait for modal animation
-
-        const randomEmail = `test_${Date.now()}@firecms.co`;
-        await page.getByPlaceholder('Display Name (optional)').fill('E2E Tester');
-        await page.getByPlaceholder('Email').fill(randomEmail);
-        await page.getByPlaceholder('Password').fill('Password123!');
-
-        // The submit button in registration mode is "Create account"
-        await page.getByText('Create account', { exact: true }).last().click();
-
-        // Wait for navigation to dash
-        await expect(page.getByText('Private Notes', { exact: true })).toBeVisible({ timeout: 15000 });
-
-        // IMPORTANT: wait for the auth token to be persisted to localStorage so full page reload works
-        await page.waitForTimeout(2000);
+        await registerE2EUser(page);
     });
 
     test('Creates a Private Note and verifies user_id is auto-populated', async ({ page }) => {

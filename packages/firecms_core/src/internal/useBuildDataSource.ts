@@ -376,6 +376,10 @@ export function useBuildDataSource({
 
         needsInitTextSearch: Boolean(delegate.initTextSearch),
 
+        executeSql: delegate.executeSql ? (sql: string) => {
+            return delegate.executeSql!(sql);
+        } : undefined,
+
     };
 
 }

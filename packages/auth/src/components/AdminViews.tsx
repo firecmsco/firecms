@@ -42,14 +42,14 @@ interface AdminViewsProps {
 export function createUserManagementAdminViews({ userManagement, apiUrl, getAuthToken }: AdminViewsProps): CMSView[] {
     return [
         {
-            slug: "users",
+            slug: "dev/users",
             name: "CMS Users",
             group: "Admin",
             icon: "face",
             view: <UsersView userManagement={userManagement} apiUrl={apiUrl} getAuthToken={getAuthToken} />
         },
         {
-            slug: "roles",
+            slug: "dev/roles",
             name: "Roles",
             group: "Admin",
             icon: "gpp_good",
@@ -83,7 +83,7 @@ function RoleChip({ role }: { role: Role }) {
 // ============================================
 // UsersView Component
 // ============================================
-function UsersView({ userManagement, apiUrl, getAuthToken }: {
+export function UsersView({ userManagement, apiUrl, getAuthToken }: {
     userManagement: UserManagement;
     apiUrl: string;
     getAuthToken: () => Promise<string>;
@@ -412,7 +412,7 @@ function UserDetailsForm({
 // ============================================
 // RolesView Component
 // ============================================
-function RolesView({ userManagement }: { userManagement: UserManagement }) {
+export function RolesView({ userManagement }: { userManagement: UserManagement }) {
     const { roles, saveRole, deleteRole, loading, allowDefaultRolesCreation } = userManagement;
     const snackbarController = useSnackbarController();
 

@@ -533,6 +533,14 @@ export class PostgresDataSourceClient {
         });
     }
 
+    async executeSql(sql: string): Promise<any[]> {
+        const response = await this.sendMessage({
+            type: "EXECUTE_SQL",
+            payload: { sql }
+        });
+        return response.result || [];
+    }
+
     async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
         const response = await this.sendMessage({
             type: "CHECK_UNIQUE_FIELD",

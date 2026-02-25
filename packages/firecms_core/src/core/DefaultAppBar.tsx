@@ -15,7 +15,7 @@ import {
     Skeleton,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useLargeLayout, useModeController, useCMSUrlController } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController } from "../hooks";
 import { User } from "@firecms/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
@@ -81,6 +81,7 @@ export const DefaultAppBar = function DefaultAppBar({
     const breadcrumbs = useBreadcrumbsController();
 
     const authController = useAuthController();
+    const adminModeController = useAdminModeController();
     const {
         mode,
         setMode
@@ -126,7 +127,7 @@ export const DefaultAppBar = function DefaultAppBar({
             {navigation && <div className="mr-2 hidden lg:block">
                 <Link
                     className="visited:text-inherit dark:visited:text-inherit block"
-                    to={navigation?.basePath ?? "/"}
+                    to={adminModeController.mode === "developer" ? "/dev" : (navigation?.basePath ?? "/")}
                 >
                     <div className={"flex flex-row gap-4"}>
                         {!hasDrawer && (logo
@@ -178,10 +179,38 @@ export const DefaultAppBar = function DefaultAppBar({
                 </div>
             </div>}
 
+            {startAdornment}
+
 
             {startAdornment}
 
             <div className={"grow"} />
+
+            {/* Admin Mode Toggle */}
+            <div className="flex bg-transparent p-0 rounded-full items-center mr-2 lg:mr-4">
+                <button
+                    onClick={() => navigate("/")}
+                    className={cls(
+                        "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200",
+                        adminModeController.mode === "editor"
+                            ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/20"
+                            : "text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
+                    )}
+                >
+                    Editor
+                </button>
+                <button
+                    onClick={() => navigate("/dev")}
+                    className={cls(
+                        "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200 ml-1",
+                        adminModeController.mode === "developer"
+                            ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/20"
+                            : "text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
+                    )}
+                >
+                    Dev
+                </button>
+            </div>
 
             {endAdornment &&
                 <ErrorBoundary>

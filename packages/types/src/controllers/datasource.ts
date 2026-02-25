@@ -239,6 +239,11 @@ export interface DataSource {
      */
     needsInitTextSearch: boolean;
 
+    /**
+     * Execute raw SQL (if supported by the datasource)
+     */
+    executeSql?(sql: string): Promise<any[]>;
+
 }
 
 export type FilterCombinationValidProps = {
@@ -428,4 +433,9 @@ export interface DataSourceDelegate {
         collection: EntityCollection,
         parentCollectionIds?: string[]
     }) => Promise<boolean>;
+
+    /**
+     * Execute raw SQL (if supported by the delegate)
+     */
+    executeSql?(sql: string): Promise<any[]>;
 }

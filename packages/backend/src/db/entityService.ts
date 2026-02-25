@@ -167,6 +167,17 @@ export class EntityService implements EntityRepository {
         return this.persistService.generateEntityId();
     }
 
+    /**
+     * Execute raw SQL
+     */
+    async executeSql(sql: string): Promise<any[]> {
+        console.debug("Executing raw SQL:", sql);
+        const result: any = await this.db.execute(sql as any);
+        const rows = result.rows || result;
+        console.debug(`SQL executed successfully. Returned ${Array.isArray(rows) ? rows.length : 'non-array'} rows.`);
+        return rows;
+    }
+
     // =============================================================
     // SERVICE ACCESSORS
     // =============================================================

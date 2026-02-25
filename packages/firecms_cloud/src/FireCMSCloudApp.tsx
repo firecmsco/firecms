@@ -23,6 +23,10 @@ import {
     useBuildCollectionRegistryController,
     useBuildCMSUrlController,
     useBuildNavigationStateController,
+    useBuildAdminModeController,
+    useAdminModeController,
+    AdminModeControllerProvider,
+    DeveloperHomePage,
     User,
     EntityCollection
 } from "@firecms/core";
@@ -101,6 +105,7 @@ export function FireCMSCloudApp({
 }: FireCMSCloudAppProps) {
 
     const modeController = useBuildModeController();
+    const adminModeController = useBuildAdminModeController();
 
     const {
         firebaseApp: backendFirebaseApp,
@@ -306,6 +311,7 @@ export function FireCMSClientWithController({
 }) {
 
     const [notValidUser, setNotValidUser] = useState<User | undefined>();
+    const adminModeController = useAdminModeController();
 
     const {
         firebaseApp: clientFirebaseApp,
@@ -532,6 +538,8 @@ function FireCMSAppAuthenticated({
     logo?: string;
 }) {
 
+    const adminModeController = useAdminModeController();
+
     if (!authController.user) {
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
@@ -693,7 +701,8 @@ function FireCMSAppAuthenticated({
         dataSourceDelegate: firestoreDelegate,
         plugins,
         collectionRegistryController,
-        cmsUrlController
+        cmsUrlController,
+        adminMode: adminModeController.mode
     });
 
     return (
@@ -753,9 +762,13 @@ function FireCMSAppAuthenticated({
                                                 <FireCMSCloudDrawer />
                                             </Drawer>
                                             <NavigationRoutes
-                                                homePage={appConfig?.HomePage
-                                                    ? <appConfig.HomePage />
-                                                    : <FireCMSCloudHomePage />}
+                                                homePage={
+                                                    adminModeController.mode === "developer"
+                                                        ? <DeveloperHomePage />
+                                                        : (appConfig?.HomePage
+                                                            ? <appConfig.HomePage />
+                                                            : <FireCMSCloudHomePage />)
+                                                }
                                             >
                                                 {adminRoutes}
                                             </NavigationRoutes>
@@ -769,7 +782,7 @@ function FireCMSAppAuthenticated({
                                         key={"datatalk_provider_" + projectConfig.projectId}
                                         config={dataTalkConfig}>
                                         {component}
-                                    </DataTalkProvider>
+                                    </DataTalkProvider>;
                                 }
 
                                 return component;
@@ -790,7 +803,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
 
     const views = [
         {
-            path: "users",
+            path: "dev/users",
             name: "CMS Users",
             group: "Admin",
             icon: "face",
@@ -798,7 +811,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
             view: <UsersView />
         },
         {
-            path: "roles",
+            path: "dev/roles",
             name: "Roles",
             group: "Admin",
             icon: "gpp_good",
@@ -806,7 +819,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
             view: <RolesView />
         },
         {
-            path: "settings",
+            path: "dev/settings",
             name: "Project settings",
             group: "Admin",
             icon: "settings",

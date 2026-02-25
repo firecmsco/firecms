@@ -103,11 +103,31 @@ export function createPostgresWebSocket(
                     }
                 }
 
+                // Helper to get correctly scoped delegate for the current request
+                const getScopedDelegate = async () => {
+                    const session = clientSessions.get(clientId);
+                    if (session?.user && "withAuth" in dataSourceDelegate && typeof (dataSourceDelegate as any).withAuth === "function") {
+                        try {
+                            // Map AccessTokenPayload back to User interface ( uid instead of userId, and roles as Role objects)
+                            const userForAuth: any = {
+                                uid: session.user.userId,
+                                roles: (session.user.roles || []).map(r => ({ id: r, name: r }))
+                            };
+                            return await (dataSourceDelegate as any).withAuth(userForAuth);
+                        } catch (e) {
+                            console.error("Failed to create authenticated delegate for WS request", e);
+                            return dataSourceDelegate;
+                        }
+                    }
+                    return dataSourceDelegate;
+                };
+
                 switch (type) {
                     case "FETCH_COLLECTION": {
                         console.debug("📋 [WebSocket Server] Processing FETCH_COLLECTION request");
                         const request: FetchCollectionProps = payload;
-                        const entities = await dataSourceDelegate.fetchCollection(request);
+                        const delegate = await getScopedDelegate();
+                        const entities = await delegate.fetchCollection(request);
                         console.debug("📋 [WebSocket Server] FETCH_COLLECTION result - entities count:", entities.length);
                         const response = {
                             type: "FETCH_COLLECTION_SUCCESS",
@@ -122,7 +142,8 @@ export function createPostgresWebSocket(
                     case "FETCH_ENTITY": {
                         console.debug("📄 [WebSocket Server] Processing FETCH_ENTITY request");
                         const request: FetchEntityProps = payload;
-                        const entity = await dataSourceDelegate.fetchEntity(request);
+                        const delegate = await getScopedDelegate();
+                        const entity = await delegate.fetchEntity(request);
                         console.debug("📄 [WebSocket Server] FETCH_ENTITY result:", entity);
                         const response = {
                             type: "FETCH_ENTITY_SUCCESS",
@@ -138,7 +159,8 @@ export function createPostgresWebSocket(
                         console.debug("💾 [WebSocket Server] Processing SAVE_ENTITY request");
                         const request: SaveEntityProps = payload;
                         console.debug("💾 [WebSocket Server] Saving entity with request:", inspect(request, { depth: null, colors: true }));
-                        const entity = await dataSourceDelegate.saveEntity(request);
+                        const delegate = await getScopedDelegate();
+                        const entity = await delegate.saveEntity(request);
                         console.debug("💾 [WebSocket Server] SAVE_ENTITY result:", inspect(entity, { depth: null, colors: true }));
                         const response = {
                             type: "SAVE_ENTITY_SUCCESS",
@@ -154,7 +176,8 @@ export function createPostgresWebSocket(
                         console.debug("🗑️ [WebSocket Server] Processing DELETE_ENTITY request");
                         const request: DeleteEntityProps = payload;
                         console.debug("🗑️ [WebSocket Server] Deleting entity:", request.entity);
-                        await dataSourceDelegate.deleteEntity(request);
+                        const delegate = await getScopedDelegate();
+                        await delegate.deleteEntity(request);
                         console.debug("🗑️ [WebSocket Server] DELETE_ENTITY completed successfully");
                         const response = {
                             type: "DELETE_ENTITY_SUCCESS",
@@ -175,7 +198,8 @@ export function createPostgresWebSocket(
                             entityId,
                             collection
                         } = payload;
-                        const isUnique = await dataSourceDelegate.checkUniqueField(path, name, value, entityId, collection);
+                        const delegate = await getScopedDelegate();
+                        const isUnique = await delegate.checkUniqueField(path, name, value, entityId, collection);
                         console.debug("🔍 [WebSocket Server] CHECK_UNIQUE_FIELD result:", isUnique);
                         const response = {
                             type: "CHECK_UNIQUE_FIELD_SUCCESS",
@@ -193,7 +217,8 @@ export function createPostgresWebSocket(
                             path,
                             collection
                         } = payload;
-                        const id = dataSourceDelegate.generateEntityId(path, collection);
+                        const delegate = await getScopedDelegate();
+                        const id = delegate.generateEntityId(path, collection);
                         console.debug("🆔 [WebSocket Server] GENERATE_ENTITY_ID result:", id);
                         const response = {
                             type: "GENERATE_ENTITY_ID_SUCCESS",
@@ -207,12 +232,30 @@ export function createPostgresWebSocket(
 
                     case "COUNT_ENTITIES": {
                         const request: FetchCollectionProps = payload;
-                        const count = await dataSourceDelegate.countEntities!(request);
+                        const delegate = await getScopedDelegate();
+                        const count = await delegate.countEntities!(request);
                         const response = {
                             type: "COUNT_ENTITIES_SUCCESS",
                             payload: { count },
                             requestId
                         };
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
+                    case "EXECUTE_SQL": {
+                        console.debug("⚡ [WebSocket Server] Processing EXECUTE_SQL request");
+                        const { sql } = payload;
+                        const delegate = await getScopedDelegate();
+                        // @ts-ignore
+                        const result = await delegate.executeSql(sql);
+                        console.debug(`⚡ [WebSocket Server] SQL executed. Returned ${Array.isArray(result) ? result.length : 'non-array'} rows.`);
+                        const response = {
+                            type: "EXECUTE_SQL_SUCCESS",
+                            payload: { result },
+                            requestId
+                        };
+                        console.debug("⚡ [WebSocket Server] Sending EXECUTE_SQL_SUCCESS response");
                         ws.send(JSON.stringify(response));
                     }
                         break;
