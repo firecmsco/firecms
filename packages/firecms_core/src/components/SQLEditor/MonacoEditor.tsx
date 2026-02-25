@@ -1,14 +1,16 @@
 import React, { useRef } from "react";
 import Editor, { Monaco, OnMount } from "@monaco-editor/react";
-import { cls } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
+import { useModeController } from "../../hooks";
 
 export type MonacoEditorProps = {
     value: string;
     onChange: (value: string | undefined) => void;
-    onRun?: () => void;
+    onRun?: (selectedText?: string) => void;
     className?: string;
     readOnly?: boolean;
     autoFocus?: boolean;
+    schemas?: Record<string, { schemaName: string, tableName: string, columns: string[] }[]>;
 };
 
 export const MonacoEditor = ({
@@ -18,11 +20,16 @@ export const MonacoEditor = ({
     className,
     readOnly = false,
     autoFocus = true,
+    schemas
 }: MonacoEditorProps) => {
+    const { mode } = useModeController();
     const editorRef = useRef<any>(null);
     const monacoRef = useRef<Monaco | null>(null);
     const onRunRef = useRef(onRun);
     onRunRef.current = onRun;
+
+    const schemasRef = useRef(schemas);
+    schemasRef.current = schemas;
 
     const handleEditorOnMount: OnMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -35,8 +42,112 @@ export const MonacoEditor = ({
             contextMenuGroupId: "operation",
             contextMenuOrder: 0,
             run: () => {
-                if (onRunRef.current) onRunRef.current();
+                if (onRunRef.current) {
+                    const selection = editor.getSelection();
+                    let selectedText: string | undefined = undefined;
+                    if (selection && !selection.isEmpty()) {
+                        selectedText = editor.getModel()?.getValueInRange(selection)?.trim();
+                    }
+                    onRunRef.current(selectedText || undefined);
+                }
             },
+        });
+
+        // Register custom autocomplete for tables and columns
+        monaco.languages.registerCompletionItemProvider("pgsql", {
+            triggerCharacters: ["."],
+            provideCompletionItems: (model, position) => {
+                const word = model.getWordUntilPosition(position);
+                const range = {
+                    startLineNumber: position.lineNumber,
+                    endLineNumber: position.lineNumber,
+                    startColumn: word.startColumn,
+                    endColumn: word.endColumn,
+                };
+
+                const textUntilPosition = model.getValueInRange({
+                    startLineNumber: position.lineNumber,
+                    startColumn: 1,
+                    endLineNumber: position.lineNumber,
+                    endColumn: position.column
+                });
+
+                // Check if user is typing `tableName.`
+                const match = textUntilPosition.match(/([a-zA-Z0-9_]+)\.$/);
+                const tableNameMatch = match ? match[1] : null;
+
+                const suggestions: any[] = [];
+                const allSchemas = schemasRef.current || {};
+
+                if (tableNameMatch) {
+                    // Provide columns for the matched table
+                    for (const [, tables] of Object.entries(allSchemas)) {
+                        const table = tables.find(t => t.tableName === tableNameMatch);
+                        if (table) {
+                            table.columns.forEach(col => {
+                                suggestions.push({
+                                    label: col,
+                                    kind: monaco.languages.CompletionItemKind.Field,
+                                    insertText: col,
+                                    range,
+                                    detail: `Column`,
+                                    sortText: "1"
+                                });
+                            });
+                        }
+                    }
+                } else {
+                    // Provide table names
+                    for (const [sName, tables] of Object.entries(allSchemas)) {
+                        tables.forEach(table => {
+                            suggestions.push({
+                                label: table.tableName,
+                                kind: monaco.languages.CompletionItemKind.Class,
+                                insertText: table.tableName,
+                                range,
+                                detail: `Table (${sName})`,
+                                sortText: "2"
+                            });
+                        });
+                    }
+
+                    // Heuristic: Suggest columns for tables that are mentioned in the current editor text
+                    const fullText = model.getValue();
+                    const activeTables = new Set<string>();
+                    for (const [, tables] of Object.entries(allSchemas)) {
+                        tables.forEach(table => {
+                            const regex = new RegExp(`\\b${table.tableName}\\b`, 'i');
+                            if (regex.test(fullText)) {
+                                activeTables.add(table.tableName);
+                            }
+                        });
+                    }
+
+                    const addedColumns = new Set<string>();
+                    for (const [, tables] of Object.entries(allSchemas)) {
+                        tables.forEach(table => {
+                            if (activeTables.has(table.tableName)) {
+                                table.columns.forEach(col => {
+                                    if (!addedColumns.has(col)) {
+                                        addedColumns.add(col);
+                                        suggestions.push({
+                                            label: col,
+                                            kind: monaco.languages.CompletionItemKind.Field,
+                                            insertText: col,
+                                            range,
+                                            detail: `Column (${table.tableName})`,
+                                            sortText: "1" // Prioritize columns from active tables
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+
+                return { suggestions };
+
+            }
         });
 
         if (autoFocus) {
@@ -45,14 +156,14 @@ export const MonacoEditor = ({
     };
 
     return (
-        <div className={cls("relative w-full h-full border border-gray-700 rounded-md overflow-hidden", className)}>
+        <div className={cls("relative w-full h-full overflow-hidden", className)}>
             <Editor
                 height="100%"
                 defaultLanguage="pgsql"
                 value={value}
                 onChange={onChange}
                 onMount={handleEditorOnMount}
-                theme="vs-dark"
+                theme={mode === "dark" ? "vs-dark" : "vs"}
                 options={{
                     minimap: { enabled: false },
                     fontSize: 14,

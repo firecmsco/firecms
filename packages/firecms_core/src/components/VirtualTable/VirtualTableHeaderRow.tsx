@@ -123,7 +123,8 @@ export const VirtualTableHeaderRow = ({
     data,
     cellRenderer: CellRenderer,
     rowHeight = 54,
-    draggingColumnId
+    draggingColumnId,
+    headerHeight = 48
 }: VirtualTableContextProps<any>) => {
 
     const columnRefs = useMemo(() => columns.map(() => createRef<HTMLDivElement>()), [columns.length]);
@@ -208,7 +209,8 @@ export const VirtualTableHeaderRow = ({
     return (
         <>
             <div
-                className={cls(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-surface-50 dark:bg-surface-900")}>
+                className={cls(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 border-b bg-surface-50 dark:bg-surface-900")}
+                style={{ height: headerHeight }}>
                 {columns.map((column, columnIndex) => {
                     const filterForThisProperty: [VirtualTableWhereFilterOp, any] | undefined =
                         column && filter && filter[column.key]

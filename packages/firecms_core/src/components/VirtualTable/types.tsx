@@ -24,6 +24,7 @@ export type VirtualTableRowProps<T> = {
 export type VirtualTableContextProps<T extends any> = {
     data?: T[];
     rowHeight?: number,
+    headerHeight?: number,
     columns: VirtualTableColumn[];
     cellRenderer: React.ComponentType<CellRendererParams<T>>;
     currentSort: "asc" | "desc" | undefined;

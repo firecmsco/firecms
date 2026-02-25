@@ -12,23 +12,164 @@ import {
     DialogActions,
     DialogTitle,
     TextField,
-    Tooltip
+    Tooltip,
+    Alert,
+    Tabs,
+    Tab,
+    defaultBorderMixin
 } from "@firecms/ui";
 import { useDataSource, useSnackbarController } from "../../hooks";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
+import { VirtualTable, VirtualTableColumn } from "../VirtualTable";
+import { ConfirmationDialog } from "../ConfirmationDialog";
+
+export interface TableInfo {
+    schemaName: string;
+    tableName: string;
+    columns: string[];
+}
+
+const STORAGE_KEY_TABS = "firecms_sql_tabs";
+const STORAGE_KEY_ACTIVE_TAB = "firecms_sql_active_tab";
 
 export const SQLEditor = () => {
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
 
-    const [sql, setSql] = useState<string>("SELECT * FROM ");
-    const [results, setResults] = useState<any[] | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [execTime, setExecTime] = useState<number | null>(null);
+    // Schema state
+    const [schemas, setSchemas] = useState<Record<string, TableInfo[]>>({});
+    const [isSchemaLoading, setIsSchemaLoading] = useState(true);
+    const [schemaError, setSchemaError] = useState<string | null>(null);
 
-    // UI state
+    const fetchSchema = useCallback(async () => {
+        if (!dataSource.executeSql) {
+            setSchemaError("SQL execution not supported by this data source");
+            setIsSchemaLoading(false);
+            return;
+        }
+
+        setIsSchemaLoading(true);
+        setSchemaError(null);
+        try {
+            console.log("Fetching database schema for SQLEditor...");
+            const sql = `
+                SELECT 
+                    table_schema as schema, 
+                    table_name as "table", 
+                    column_name as "column"
+                FROM 
+                    information_schema.columns
+                WHERE 
+                    table_schema NOT IN ('information_schema', 'pg_catalog')
+                ORDER BY 
+                    schema, "table", ordinal_position;
+            `;
+            const result = await dataSource.executeSql(sql);
+
+            const processGrouped = (data: any[]) => {
+                const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: any) => {
+                    const schema = curr.schema || curr.SCHEMA || curr.table_schema || "public";
+                    const table = curr.table || curr.TABLE || curr.table_name;
+                    const column = curr.column || curr.COLUMN || curr.column_name;
+
+                    if (!acc[schema]) acc[schema] = [];
+                    let tableInfo = acc[schema].find(t => t.tableName === table);
+                    if (!tableInfo) {
+                        tableInfo = { schemaName: schema, tableName: table, columns: [] };
+                        acc[schema].push(tableInfo);
+                    }
+                    tableInfo.columns.push(column);
+                    return acc;
+                }, {});
+                setSchemas(grouped);
+            };
+
+            if (!result || !Array.isArray(result)) {
+                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as any).rows)) {
+                    processGrouped((result as any).rows);
+                } else {
+                    setSchemaError(`Unexpected data format: ${typeof result}`);
+                }
+            } else if (result.length === 0) {
+                setSchemaError("No tables found in the database.");
+            } else {
+                processGrouped(result);
+            }
+
+        } catch (e: any) {
+            console.error("Schema fetch error:", e);
+            setSchemaError("Failed to fetch schema: " + (e.message || String(e)));
+        } finally {
+            setIsSchemaLoading(false);
+        }
+    }, [dataSource]);
+
+    useEffect(() => {
+        fetchSchema();
+    }, [fetchSchema]);
+
+    // Tabbed interface state
+    const [tabs, setTabs] = useState<Array<{
+        id: string,
+        name: string,
+        sql: string,
+        results: any[] | null,
+        loading: boolean,
+        error: string | null,
+        execTime: number | null
+    }>>(() => {
+        const saved = localStorage.getItem(STORAGE_KEY_TABS);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return parsed.map((t: any) => ({
+                ...t,
+                results: null,
+                loading: false,
+                error: null,
+                execTime: null
+            }));
+        }
+        return [{
+            id: "1",
+            name: "Query 1",
+            sql: "SELECT * FROM ",
+            results: null,
+            loading: false,
+            error: null,
+            execTime: null
+        }];
+    });
+    const [activeTabId, setActiveTabId] = useState<string>(() => {
+        return localStorage.getItem(STORAGE_KEY_ACTIVE_TAB) || "1";
+    });
+
+    const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+
+    // Helper to update active tab state
+    const updateActiveTab = useCallback((update: Partial<typeof activeTab>) => {
+        setTabs(prev => prev.map(t => t.id === activeTabId ? { ...t, ...update } : t));
+    }, [activeTabId]);
+
+    const sql = activeTab.sql;
+    const results = activeTab.results;
+    const loading = activeTab.loading;
+    const error = activeTab.error;
+    const execTime = activeTab.execTime;
+
+    const setSql = (newSql: string) => updateActiveTab({ sql: newSql });
+    const setResults = (newResults: any[] | null) => updateActiveTab({ results: newResults });
+    const setLoading = (newLoading: boolean) => updateActiveTab({ loading: newLoading });
+    const setError = (newError: string | null) => updateActiveTab({ error: newError });
+
+    const [autoLimit, setAutoLimit] = useState(true);
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+    const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+    const [columnWidths, setColumnWidths] = useState<Record<string, Record<string, number>>>(() => {
+        const saved = localStorage.getItem("firecms_sql_column_widths");
+        return saved ? JSON.parse(saved) : {};
+    });
     const [snippets, setSnippets] = useState<Snippet[]>([]);
     const [history, setHistory] = useState<string[]>([]);
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
@@ -43,6 +184,20 @@ export const SQLEditor = () => {
         if (savedHistory) setHistory(JSON.parse(savedHistory));
     }, []);
 
+    // Save tabs and active tab to local storage
+    useEffect(() => {
+        const sanitizedTabs = tabs.map(t => ({
+            id: t.id,
+            name: t.name,
+            sql: t.sql
+        }));
+        localStorage.setItem(STORAGE_KEY_TABS, JSON.stringify(sanitizedTabs));
+    }, [tabs]);
+
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY_ACTIVE_TAB, activeTabId);
+    }, [activeTabId]);
+
     const saveSnippets = (newSnippets: Snippet[]) => {
         setSnippets(newSnippets);
         localStorage.setItem("firecms_sql_snippets", JSON.stringify(newSnippets));
@@ -53,34 +208,136 @@ export const SQLEditor = () => {
         localStorage.setItem("firecms_sql_history", JSON.stringify(newHistory.slice(-50)));
     };
 
-    const handleRun = useCallback(async () => {
-        if (!sql.trim()) return;
+    const handleDeleteSnippet = (id: string) => {
+        saveSnippets(snippets.filter(s => s.id !== id));
+    };
 
-        setLoading(true);
-        setError(null);
-        setResults(null);
+    const handleAddTab = () => {
+        const newId = Math.random().toString(36).substr(2, 9);
+
+        // Find the next available query number
+        let maxNumber = 0;
+        tabs.forEach(tab => {
+            const match = tab.name.match(/^Query (\d+)$/);
+            if (match) {
+                const num = parseInt(match[1], 10);
+                if (num > maxNumber) maxNumber = num;
+            }
+        });
+        const name = `Query ${maxNumber + 1}`;
+        setTabs(prev => [...prev, {
+            id: newId,
+            name,
+            sql: "SELECT * FROM ",
+            results: null,
+            loading: false,
+            error: null,
+            execTime: null
+        }]);
+        setActiveTabId(newId);
+    };
+
+    const handleCloseTab = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (tabs.length === 1) return;
+
+        const tabIndex = tabs.findIndex(t => t.id === id);
+        const newTabs = tabs.filter(t => t.id !== id);
+        setTabs(newTabs);
+
+        if (activeTabId === id) {
+            // Find a new active tab: the one at the same index, or the last one if we closed the last
+            const nextIndex = Math.min(tabIndex, newTabs.length - 1);
+            if (newTabs[nextIndex]) {
+                setActiveTabId(newTabs[nextIndex].id);
+            }
+        }
+    };
+
+    const handleColumnResize = useCallback(({ key, width }: { key: string, width: number }) => {
+        setColumnWidths(prev => {
+            const newWidths = {
+                ...prev,
+                [activeTab.sql]: {
+                    ...(prev[activeTab.sql] || {}),
+                    [key]: width
+                }
+            };
+            localStorage.setItem("firecms_sql_column_widths", JSON.stringify(newWidths));
+            return newWidths;
+        });
+    }, [activeTab.sql]);
+
+    const handlePrettify = () => {
+        // Simple formatting for now
+        const formatted = activeTab.sql
+            .replace(/\s+/g, " ")
+            .replace(/\s?,\s?/g, ", ")
+            .replace(/\s?=\s?/g, " = ")
+            .trim();
+        setSql(formatted);
+    };
+
+    const handleExplain = async () => {
+        const explainSql = `EXPLAIN (FORMAT JSON, ANALYZE) ${activeTab.sql}`;
+        updateActiveTab({ loading: true, error: null, results: null });
+        const start = performance.now();
+        try {
+            if (dataSource.executeSql) {
+                const result = await dataSource.executeSql(explainSql);
+                updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
+            }
+        } catch (e: any) {
+            updateActiveTab({ error: e.message || "An error occurred while explaining the query." });
+        } finally {
+            updateActiveTab({ loading: false });
+        }
+    };
+
+    const executeRun = useCallback(async (sqlOverride?: string) => {
+        let sqlToRun = sqlOverride || activeTab.sql;
+        if (autoLimit && sqlToRun.toUpperCase().includes("SELECT") && !sqlToRun.toUpperCase().includes("LIMIT")) {
+            sqlToRun = `${sqlToRun.trim()} LIMIT 1000`;
+        }
+
+        updateActiveTab({ loading: true, error: null, results: null });
         const start = performance.now();
 
         try {
             if (dataSource.executeSql) {
-                const result = await dataSource.executeSql(sql);
-                setResults(result);
-                setExecTime(Math.round(performance.now() - start));
+                const result = await dataSource.executeSql(sqlToRun);
+                updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
 
-                // Add to history if not already most recent
-                if (history[history.length - 1] !== sql) {
-                    saveHistory([...history, sql]);
+                if (history[history.length - 1] !== activeTab.sql) {
+                    saveHistory([...history, activeTab.sql]);
                 }
             } else {
-                setError("SQL execution is not supported by the current data source.");
+                updateActiveTab({ error: "SQL execution is not supported by the current data source." });
             }
         } catch (e: any) {
-            console.error(e);
-            setError(e.message || "An error occurred while executing the query.");
+            updateActiveTab({ error: e.message || "An error occurred while executing the query." });
         } finally {
-            setLoading(false);
+            updateActiveTab({ loading: false });
         }
-    }, [sql, dataSource.executeSql, history]);
+    }, [activeTab.sql, autoLimit, dataSource, history, updateActiveTab]);
+
+    const handleRun = useCallback(async (selectedText?: string) => {
+        const sqlTarget = selectedText || activeTab.sql;
+        if (!sqlTarget.trim()) return;
+
+        // Destructive operation check
+        const destructiveKeywords = ["DELETE", "DROP", "TRUNCATE", "UPDATE"];
+        const hasDestructive = destructiveKeywords.some(kw => sqlTarget.toUpperCase().includes(kw));
+        const hasWhere = sqlTarget.toUpperCase().includes("WHERE");
+
+        if (hasDestructive && (!hasWhere || sqlTarget.toUpperCase().includes("DROP") || sqlTarget.toUpperCase().includes("TRUNCATE"))) {
+            setPendingAction(() => () => executeRun(selectedText));
+            setIsConfirmDialogOpen(true);
+            return;
+        }
+
+        executeRun(selectedText);
+    }, [activeTab.sql, executeRun]);
 
     // Global keybindings
     useEffect(() => {
@@ -124,10 +381,6 @@ export const SQLEditor = () => {
         });
     };
 
-    const handleDeleteSnippet = (id: string) => {
-        saveSnippets(snippets.filter(s => s.id !== id));
-    };
-
     const handleExportCSV = () => {
         if (!results || results.length === 0) return;
 
@@ -148,6 +401,19 @@ export const SQLEditor = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    const handleExportJSON = () => {
+        if (!results || results.length === 0) return;
+
+        const json = JSON.stringify(results, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `query_results_${new Date().toISOString().slice(0, 19)}.json`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+
     const renderResults = () => {
         if (loading) {
             return (
@@ -163,9 +429,9 @@ export const SQLEditor = () => {
         if (error) {
             return (
                 <div className="flex-grow p-6 overflow-auto">
-                    <div className="border border-red-500/20 bg-red-500/5 p-4 rounded-md">
-                        <Typography color="error" className="font-mono text-sm whitespace-pre-wrap">{error}</Typography>
-                    </div>
+                    <Alert color="error">
+                        <Typography variant="body2" className="font-mono text-xs whitespace-pre-wrap">{error}</Typography>
+                    </Alert>
                 </div>
             );
         }
@@ -191,45 +457,39 @@ export const SQLEditor = () => {
             );
         }
 
-        const columns = Object.keys(results[0]);
+        const savedWidths = columnWidths[activeTab.sql] || {};
+        const columns: VirtualTableColumn[] = Object.keys(results[0]).map(key => ({
+            key,
+            title: key,
+            width: savedWidths[key] ?? 150,
+            sortable: false,
+            resizable: true
+        }));
 
         return (
             <div className="flex-grow flex flex-col overflow-hidden">
-                <div className="flex-grow overflow-auto no-scrollbar">
-                    <table className="min-w-full border-collapse">
-                        <thead className="sticky top-0 z-10 bg-white dark:bg-surface-950">
-                            <tr>
-                                {columns.map((col) => (
-                                    <th
-                                        key={col}
-                                        className="px-4 py-2 text-left text-[11px] font-bold text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider border-b border-r border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-900"
-                                    >
-                                        {col}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-surface-200 dark:divide-surface-800">
-                            {results.map((row, i) => (
-                                <tr key={i} className="hover:bg-surface-100 dark:hover:bg-surface-900 transition-colors">
-                                    {columns.map((col) => {
-                                        const value = row[col];
-                                        const displayValue = typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? "");
-                                        return (
-                                            <td key={col} className="px-4 py-1.5 whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono border-r border-surface-200/50 dark:border-surface-800/50">
-                                                <div className="max-w-[300px] truncate" title={displayValue}>
-                                                    {displayValue === "" ? <span className="text-text-disabled dark:text-text-disabled-dark italic text-[11px]">NULL</span> : displayValue}
-                                                </div>
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="flex-grow">
+                    <VirtualTable
+                        data={results}
+                        columns={columns}
+                        rowHeight={32}
+                        headerHeight={32}
+                        onColumnResizeEnd={handleColumnResize}
+                        cellRenderer={({ rowData, column }) => {
+                            const value = rowData ? rowData[column.key] : null;
+                            const displayValue = typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? "");
+                            return (
+                                <div className="px-4 py-1.5 h-full flex items-center whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono">
+                                    <div className="truncate" title={displayValue}>
+                                        {displayValue === "" ? <span className="text-text-disabled dark:text-text-disabled-dark italic text-[11px]">NULL</span> : displayValue}
+                                    </div>
+                                </div>
+                            );
+                        }}
+                    />
                 </div>
 
-                <div className="p-2 px-4 border-t border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-900 flex justify-between items-center shrink-0">
+                <div className={cls("p-2 px-4 border-t bg-surface-50 dark:bg-surface-900 flex justify-between items-center shrink-0", defaultBorderMixin)}>
                     <div className="flex space-x-4">
                         <div className="flex items-center text-[11px]">
                             <span className="font-bold text-text-disabled dark:text-text-disabled-dark mr-2 uppercase tracking-tighter">Rows:</span>
@@ -240,14 +500,24 @@ export const SQLEditor = () => {
                             <span className="font-mono text-text-secondary dark:text-text-secondary-dark">{execTime}ms</span>
                         </div>
                     </div>
-                    <Button
-                        size="small"
-                        variant="text"
-                        className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark"
-                        onClick={handleExportCSV}
-                    >
-                        Export CSV
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button
+                            size="small"
+                            variant="text"
+                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark"
+                            onClick={handleExportJSON}
+                        >
+                            Export JSON
+                        </Button>
+                        <Button
+                            size="small"
+                            variant="text"
+                            className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark"
+                            onClick={handleExportCSV}
+                        >
+                            Export CSV
+                        </Button>
+                    </div>
                 </div>
             </div>
         );
@@ -255,37 +525,84 @@ export const SQLEditor = () => {
 
     return (
         <div className="flex h-full w-full bg-white dark:bg-surface-950 overflow-hidden text-text-primary dark:text-text-primary-dark">
-            {/* Sidebar */}
             <SQLEditorSidebar
                 snippets={snippets}
                 history={history}
                 onSelectSnippet={setSql}
                 onTableClick={(tableName) => setSql(`SELECT * FROM ${tableName} LIMIT 100;`)}
                 onDeleteSnippet={handleDeleteSnippet}
+                schemas={schemas}
+                isSchemaLoading={isSchemaLoading}
+                schemaError={schemaError}
+                onRetrySchema={fetchSchema}
             />
 
             {/* Main Area */}
             <div className="flex-grow flex flex-col min-w-0">
                 {/* Toolbar */}
-                <div className="h-14 shrink-0 flex items-center justify-between px-6 border-b border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-950">
-                    <div className="flex items-center">
-                        <Typography variant="subtitle2" className="mr-2">SQL Editor</Typography>
-                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-2"></div>
-                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark font-mono text-[11px] ml-2">New Query.sql</Typography>
+                <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                    <div className="flex items-center flex-grow overflow-hidden mr-4">
+                        <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
+                            {tabs.map(tab => (
+                                <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-4">
+                                    <span className="truncate">{tab.name}</span>
+                                    {tabs.length > 1 && (
+                                        <button
+                                            onClick={(e) => handleCloseTab(tab.id, e)}
+                                            className="ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                        >
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                        </button>
+                                    )}
+                                </Tab>
+                            ))}
+                        </Tabs>
+                        <IconButton
+                            size="small"
+                            onClick={handleAddTab}
+                            className="ml-2"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                        </IconButton>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1 shrink-0">
+                        <Tooltip title="Format SQL">
+                            <IconButton onClick={handlePrettify} size="small">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                            </IconButton>
+                        </Tooltip>
                         <Button
                             variant="text"
+                            size="small"
+                            onClick={handleExplain}
+                            disabled={loading}
+                        >
+                            Explain
+                        </Button>
+                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 self-center mx-2"></div>
+                        <div className="flex items-center space-x-2 mr-2">
+                            <Typography variant="caption" className="text-[10px] font-bold uppercase text-text-disabled">Limit 1000</Typography>
+                            <input
+                                type="checkbox"
+                                checked={autoLimit}
+                                onChange={(e) => setAutoLimit(e.target.checked)}
+                                className="w-3 h-3 rounded border-surface-300 text-primary focus:ring-primary"
+                            />
+                        </div>
+                        <Button
+                            variant="text"
+                            size="small"
                             onClick={() => setIsSaveDialogOpen(true)}
                         >
-                            Save Snippet
+                            Save
                         </Button>
                         <Button
-                            onClick={handleRun}
+                            onClick={() => handleRun()}
                             disabled={loading}
+                            size="small"
                             color="primary"
                         >
-                            {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
+                            {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
                             Run
                         </Button>
                     </div>
@@ -297,41 +614,55 @@ export const SQLEditor = () => {
                         value={sql}
                         onChange={(v) => setSql(v || "")}
                         onRun={handleRun}
+                        schemas={schemas}
                     />
                 </div>
 
                 {/* Results Area */}
-                <div className="flex-grow flex flex-col border-t border-surface-200 dark:border-surface-800 overflow-hidden">
-                    <div className="p-3 px-6 bg-surface-50 dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800 shrink-0 flex items-center">
+                <div className={cls("flex-grow flex flex-col border-t overflow-hidden", defaultBorderMixin)}>
+                    <div className={cls("p-3 px-6 bg-surface-50 dark:bg-surface-900 border-b shrink-0 flex items-center", defaultBorderMixin)}>
                         <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">Query Results</Typography>
                     </div>
                     {renderResults()}
                 </div>
             </div>
 
-            {/* Save Dialog */}
             <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+                <DialogTitle>Save SQL Snippet</DialogTitle>
                 <DialogContent>
-                    <DialogTitle>Save SQL Snippet</DialogTitle>
-                    <div className="py-4 space-y-4">
+                    <div className="py-4 flex flex-col gap-4">
                         <TextField
                             label="Snippet Name"
                             autoFocus
                             placeholder="e.g., Get All Users"
                             value={newSnippetName}
                             onChange={(e) => setNewSnippetName(e.target.value)}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') handleSaveSnippet();
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleSaveSnippet();
+                                }
                             }}
                         />
                         <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark block">This will be saved to your local storage.</Typography>
                     </div>
-                    <DialogActions>
-                        <Button variant="text" onClick={() => setIsSaveDialogOpen(false)}>Cancel</Button>
-                        <Button color="primary" onClick={handleSaveSnippet} disabled={!newSnippetName.trim()}>Save Snippet</Button>
-                    </DialogActions>
                 </DialogContent>
+                <DialogActions>
+                    <Button variant="text" onClick={() => setIsSaveDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={handleSaveSnippet} color="primary" disabled={!newSnippetName.trim()}>Save</Button>
+                </DialogActions>
             </Dialog>
+            {/* Confirmation Dialog */}
+            <ConfirmationDialog
+                open={isConfirmDialogOpen}
+                onCancel={() => setIsConfirmDialogOpen(false)}
+                title="Dangerous Operation Detected"
+                body="The query you are about to run contains potentially destructive operations (DELETE, DROP, TRUNCATE, or UPDATE without WHERE). Are you sure you want to proceed?"
+                onAccept={() => {
+                    if (pendingAction) pendingAction();
+                    setIsConfirmDialogOpen(false);
+                }}
+            />
         </div >
     );
 };

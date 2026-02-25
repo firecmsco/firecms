@@ -44,8 +44,8 @@
     ".": {
       "development": "./src/index.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.umd.js"
     },
     "./vitePlugin": {
       "development": "./src/vitePlugin.ts",

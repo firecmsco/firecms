@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import {
     Typography,
     cls,
-    IconButton
+    defaultBorderMixin,
+    Tabs,
+    Tab
 } from "@firecms/ui";
 import { SchemaBrowser } from "./SchemaBrowser";
+import { TableInfo } from "./SQLEditor";
 
 export interface Snippet {
     id: string;
@@ -19,6 +22,10 @@ interface SQLEditorSidebarProps {
     snippets: Snippet[];
     history: string[];
     onDeleteSnippet: (id: string) => void;
+    schemas: Record<string, TableInfo[]>;
+    isSchemaLoading: boolean;
+    schemaError: string | null;
+    onRetrySchema: () => void;
 }
 
 export const SQLEditorSidebar = ({
@@ -26,44 +33,36 @@ export const SQLEditorSidebar = ({
     onTableClick,
     snippets,
     history,
-    onDeleteSnippet
+    onDeleteSnippet,
+    schemas,
+    isSchemaLoading,
+    schemaError,
+    onRetrySchema
 }: SQLEditorSidebarProps) => {
     const [activeTab, setActiveTab] = useState<"schema" | "snippets" | "history">("schema");
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-surface-950 border-r border-surface-200 dark:border-surface-800 w-[260px] flex-shrink-0">
-            <div className="flex border-b border-surface-200 dark:border-surface-800">
-                <button
-                    onClick={() => setActiveTab("schema")}
-                    className={cls("flex-1 py-3 text-xs font-medium uppercase tracking-wider transition-colors",
-                        activeTab === "schema" ? "text-primary border-b-2 border-primary bg-surface-50 dark:bg-surface-900" : "text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark hover:bg-surface-100 dark:hover:bg-surface-900")}
-                >
-                    Schema
-                </button>
-                <button
-                    onClick={() => setActiveTab("snippets")}
-                    className={cls("flex-1 py-3 text-xs font-medium uppercase tracking-wider transition-colors",
-                        activeTab === "snippets" ? "text-primary border-b-2 border-primary bg-surface-50 dark:bg-surface-900" : "text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark hover:bg-surface-100 dark:hover:bg-surface-900")}
-                >
-                    Snippets
-                </button>
-                <button
-                    onClick={() => setActiveTab("history")}
-                    className={cls("flex-1 py-3 text-xs font-medium uppercase tracking-wider transition-colors",
-                        activeTab === "history" ? "text-primary border-b-2 border-primary bg-surface-50 dark:bg-surface-900" : "text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark hover:bg-surface-100 dark:hover:bg-surface-900")}
-                >
-                    History
-                </button>
-            </div>
+        <div className={cls("flex flex-col h-full bg-white dark:bg-surface-950 border-r w-[260px] flex-shrink-0", defaultBorderMixin)}>
+            <Tabs value={activeTab} onValueChange={setActiveTab as any} variant="underline">
+                <Tab value="schema">Schema</Tab>
+                <Tab value="snippets">Snippets</Tab>
+                <Tab value="history">History</Tab>
+            </Tabs>
 
             <div className="flex-grow overflow-hidden relative">
                 {activeTab === "schema" && (
-                    <SchemaBrowser onTableClick={onTableClick} />
+                    <SchemaBrowser
+                        onTableClick={onTableClick}
+                        schemas={schemas}
+                        isSchemaLoading={isSchemaLoading}
+                        schemaError={schemaError}
+                        onRetrySchema={onRetrySchema}
+                    />
                 )}
 
                 {activeTab === "snippets" && (
                     <div className="flex flex-col h-full">
-                        <div className="p-3 border-b border-surface-200 dark:border-surface-800 flex justify-between items-center bg-surface-50 dark:bg-surface-900">
+                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Saved Snippets</Typography>
                         </div>
                         <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
@@ -75,7 +74,7 @@ export const SQLEditorSidebar = ({
                                 snippets.map(snippet => (
                                     <div
                                         key={snippet.id}
-                                        className="group p-2 rounded border border-surface-200 dark:border-surface-800 hover:border-surface-400 dark:hover:border-surface-600 bg-white dark:bg-surface-900 transition-all cursor-pointer relative"
+                                        className={cls("group p-2 rounded border hover:border-surface-400 dark:hover:border-surface-600 bg-white dark:bg-surface-900 transition-all cursor-pointer relative", defaultBorderMixin)}
                                         onClick={() => onSelectSnippet(snippet.sql)}
                                     >
                                         <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
@@ -98,7 +97,7 @@ export const SQLEditorSidebar = ({
 
                 {activeTab === "history" && (
                     <div className="flex flex-col h-full">
-                        <div className="p-3 border-b border-surface-200 dark:border-surface-800 flex justify-between items-center bg-surface-50 dark:bg-surface-900">
+                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Execution History</Typography>
                         </div>
                         <div className="flex-grow overflow-y-auto p-1 space-y-1 no-scrollbar">

@@ -1,101 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Typography,
     CircularProgress,
     cls,
-    IconButton
+    IconButton,
+    defaultBorderMixin
 } from "@firecms/ui";
-import { useDataSource } from "../../hooks";
+import { TableInfo } from "./SQLEditor";
 
-interface TableInfo {
-    schemaName: string;
-    tableName: string;
-    columns: string[];
-}
-
-export const SchemaBrowser = ({ onTableClick }: { onTableClick?: (tableName: string) => void }) => {
-    const dataSource = useDataSource();
-    const [loading, setLoading] = useState(true);
-    const [schemas, setSchemas] = useState<Record<string, TableInfo[]>>({});
-    const [error, setError] = useState<string | null>(null);
+export const SchemaBrowser = ({
+    onTableClick,
+    schemas,
+    isSchemaLoading,
+    schemaError,
+    onRetrySchema
+}: {
+    onTableClick?: (tableName: string) => void,
+    schemas: Record<string, TableInfo[]>,
+    isSchemaLoading: boolean,
+    schemaError: string | null,
+    onRetrySchema: () => void
+}) => {
     const [expandedSchemas, setExpandedSchemas] = useState<Record<string, boolean>>({ public: true });
     const [expandedTables, setExpandedTables] = useState<Record<string, boolean>>({});
 
-    useEffect(() => {
-        fetchSchema();
-    }, []);
-
-    const fetchSchema = async () => {
-        if (!dataSource.executeSql) {
-            setError("SQL execution not supported by this data source");
-            setLoading(false);
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-        try {
-            console.log("Fetching database schema...");
-            const sql = `
-                SELECT 
-                    table_schema as schema, 
-                    table_name as "table", 
-                    column_name as "column"
-                FROM 
-                    information_schema.columns
-                WHERE 
-                    table_schema NOT IN ('information_schema', 'pg_catalog')
-                ORDER BY 
-                    schema, "table", ordinal_position;
-            `;
-            const result = await dataSource.executeSql(sql);
-            console.debug("Schema fetch result:", result);
-
-            const processGrouped = (data: any[]) => {
-                const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: any) => {
-                    const schema = curr.schema || curr.SCHEMA || curr.table_schema || "public";
-                    const table = curr.table || curr.TABLE || curr.table_name;
-                    const column = curr.column || curr.COLUMN || curr.column_name;
-
-                    if (!acc[schema]) acc[schema] = [];
-                    let tableInfo = acc[schema].find(t => t.tableName === table);
-                    if (!tableInfo) {
-                        tableInfo = { schemaName: schema, tableName: table, columns: [] };
-                        acc[schema].push(tableInfo);
-                    }
-                    tableInfo.columns.push(column);
-                    return acc;
-                }, {});
-                setSchemas(grouped);
-            };
-
-            if (!result || !Array.isArray(result)) {
-                console.error("Expected array from executeSql, got:", typeof result, result);
-                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as any).rows)) {
-                    processGrouped((result as any).rows);
-                } else {
-                    setError(`Unexpected data format: ${typeof result}`);
-                }
-            } else if (result.length === 0) {
-                setError("No tables found in the database.");
-            } else {
-                processGrouped(result);
-            }
-
-        } catch (e: any) {
-            console.error(e);
-            setError("Failed to fetch schema: " + (e.message || String(e)));
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading) return <div className="p-4 flex justify-center"><CircularProgress size="small" /></div>;
-    if (error) return (
+    if (isSchemaLoading) return <div className="p-4 flex justify-center"><CircularProgress size="small" /></div>;
+    if (schemaError) return (
         <div className="p-4">
-            <div className="text-red-500 text-sm mb-2 font-medium">{error}</div>
+            <div className="text-red-500 text-sm mb-2 font-medium">{schemaError}</div>
             <button
-                onClick={fetchSchema}
+                onClick={onRetrySchema}
                 className="text-xs text-primary hover:underline font-medium"
             >
                 Try again
@@ -105,9 +39,9 @@ export const SchemaBrowser = ({ onTableClick }: { onTableClick?: (tableName: str
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            <div className="p-3 border-b border-surface-200 dark:border-surface-800 flex justify-between items-center bg-surface-50 dark:bg-surface-900">
+            <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                 <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark">Database Schema</Typography>
-                <IconButton size="small" onClick={fetchSchema} title="Refresh schema">
+                <IconButton size="small" onClick={onRetrySchema} title="Refresh schema">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 </IconButton>
             </div>
@@ -150,7 +84,7 @@ export const SchemaBrowser = ({ onTableClick }: { onTableClick?: (tableName: str
                                         </div>
 
                                         {expandedTables[`${schemaName}.${table.tableName}`] && (
-                                            <div className="ml-6 mt-1 space-y-0.5 border-l border-surface-200 dark:border-surface-800">
+                                            <div className={cls("ml-6 mt-1 space-y-0.5 border-l", defaultBorderMixin)}>
                                                 {table.columns.map(col => (
                                                     <div key={col} className="flex items-center p-1 group pl-2">
                                                         <svg className="w-3 h-3 mr-1 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16" /></svg>

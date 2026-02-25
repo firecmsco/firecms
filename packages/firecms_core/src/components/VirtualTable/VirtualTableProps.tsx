@@ -65,11 +65,13 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * Callback when a column is resized
      */
     onColumnResize?: (params: OnVirtualTableColumnResizeParams) => void;
+    onColumnResizeEnd?: (params: OnVirtualTableColumnResizeParams) => void;
 
     /**
      * Size of the table
      */
     rowHeight?: number,
+    headerHeight?: number,
 
     /**
      * In case this table should have some filters set by default
