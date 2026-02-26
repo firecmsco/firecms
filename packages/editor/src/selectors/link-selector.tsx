@@ -38,16 +38,35 @@ export const LinkSelector = ({
 
     // Autofocus on input by default
     useEffect(() => {
-        inputRef.current && inputRef.current?.focus();
-    });
+        if (open && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [open]);
 
     if (!editor) return null;
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        const value = inputRef.current?.value;
+        if (!value) return;
+        const url = getUrlFromString(value);
+        if (url) {
+            editor.chain().focus().setLink({ href: url }).run();
+            onOpenChange(false);
+        }
+    };
+
+    const handleRemoveLink = () => {
+        editor.chain().focus().unsetLink().run();
+        onOpenChange(false);
+    };
 
     return (
         <Popover modal={true}
                  open={open}
                  onOpenChange={onOpenChange}
                  trigger={<Button variant="text"
+                                  type="button"
                                   className="gap-2 rounded-none"
                                   color={"text"}>
                      <p className={cls("underline decoration-stone-400 underline-offset-4", {
@@ -57,14 +76,8 @@ export const LinkSelector = ({
                      </p>
                  </Button>}>
             <form
-                onSubmit={(e) => {
-                    const target = e.currentTarget as HTMLFormElement;
-                    e.preventDefault();
-                    const input = target[0] as HTMLInputElement;
-                    const url = getUrlFromString(input.value);
-                    url && editor.chain().focus().setLink({ href: url }).run();
-                }}
-                className="flex p-1"
+                onSubmit={handleSubmit}
+                className="flex p-1 gap-1"
             >
                 <input
                     ref={inputRef}
@@ -80,14 +93,13 @@ export const LinkSelector = ({
                         type="button"
                         color={"text"}
                         className="flex items-center"
-                        onClick={() => {
-                            editor.chain().focus().unsetLink().run();
-                        }}
+                        onClick={handleRemoveLink}
                     >
                         <DeleteIcon size="small"/>
                     </Button>
                 ) : (
                     <Button size={"small"}
+                            type="submit"
                             variant={"text"}>
                         <CheckIcon size="small"/>
                     </Button>
