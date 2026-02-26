@@ -239,7 +239,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [columns, onColumnResize, onColumnResizeEnd]);
 
         // saving the current filter as a ref as a workaround for header closure
-        const filterRef = useRef<VirtualTableFilterValues<any> | undefined>();
+        const filterRef = useRef<VirtualTableFilterValues<any> | undefined>(undefined);
 
         useEffect(() => {
             filterRef.current = filterInput;
@@ -460,6 +460,9 @@ const SortableCellWrapper = ({
         disabled: !isDraggable || frozen
     });
 
+    // Remove tabIndex from attributes to avoid capturing focus before cell content
+    const { tabIndex: _tabIndex, ...attrsWithoutTabIndex } = attributes;
+
     const style = {
         // Only use translate, ignore any scale transforms
         transform: transform ? `translateX(${transform.x}px)` : undefined,
@@ -478,7 +481,7 @@ const SortableCellWrapper = ({
                 "flex-shrink-0",
                 frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
             )}
-            {...attributes}
+            {...attrsWithoutTabIndex}
         >
             {children}
         </div>
@@ -494,7 +497,7 @@ function MemoizedList({
     itemSize,
     includeAddColumn
 }: {
-    outerRef: RefObject<HTMLDivElement>;
+    outerRef: RefObject<HTMLDivElement | null>;
     width: number;
     height: number;
     itemCount: number;

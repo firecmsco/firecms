@@ -77,7 +77,7 @@ export interface EntityEditViewProps<M extends Record<string, any> = any> {
     onSaved?: (params: OnUpdateParams) => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
-    barActions?: (params: BarActionsParams) => React.ReactNode;
+    barActions?: (params: BarActionsParams) => any;
     formProps?: Partial<EntityFormProps<M>>,
 }
 
@@ -187,7 +187,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins;
-    const pluginActionsTop: React.ReactNode[] = [];
+    const pluginActionsTop: any[] = [];
 
     if (plugins && collection) {
         const actionProps: PluginFormActionProps = {
@@ -241,7 +241,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const mainViewVisible = selectedTab === MAIN_TAB_VALUE || Boolean(selectedSecondaryForm);
 
-    const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
+    const customViewsView: any[] | undefined = customViews && resolvedEntityViews
         .filter(e => !e.includeActions)
         .map((customView) => {
 
@@ -441,7 +441,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
-            className={cls("h-14 items-center flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+            className={cls("h-14 items-center flex overflow-hidden w-full h-14 border-b pl-2 pr-2 pt-1 flex bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
 
             {barActions?.({
                 path,

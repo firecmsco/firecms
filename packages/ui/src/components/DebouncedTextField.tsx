@@ -4,7 +4,7 @@ import { TextField, TextFieldProps } from "./index";
 
 export function DebouncedTextField<T extends string | number>(props: TextFieldProps<T>) {
 
-    const previousEventRef = React.useRef<ChangeEvent<any>>();
+    const previousEventRef = React.useRef<ChangeEvent<any>>(undefined);
     const [internalValue, setInternalValue] = React.useState(props.value);
 
     const deferredValue = useDeferredValue(internalValue);
@@ -28,6 +28,6 @@ export function DebouncedTextField<T extends string | number>(props: TextFieldPr
     }, []);
 
     return <TextField {...props}
-                      onChange={internalOnChange}
-                      value={internalValue}/>
+        onChange={internalOnChange}
+        value={internalValue} />
 }

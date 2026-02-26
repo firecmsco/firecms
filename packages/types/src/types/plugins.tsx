@@ -112,6 +112,19 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     collectionView?: {
 
         /**
+         * Custom component to render when a collection loading error occurs.
+         * If provided, this replaces the default error view in all collection view modes
+         * (table, card, kanban).
+         * Return `null` from the component to fall back to the default error view.
+         */
+        CollectionError?: React.ComponentType<{
+            path: string;
+            collection: EC;
+            parentCollectionIds?: string[];
+            error: Error;
+        }>;
+
+        /**
          * Use this component to add custom actions to the entity collections
          * toolbar.
          */
@@ -227,6 +240,11 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * Add custom actions to the top of the form
          */
         ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
+
+        /**
+         * Add custom content above the entity title in the form view
+         */
+        BeforeTitle?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
         fieldBuilder?: <T>(props: PluginFieldBuilderParams<any, EC>) => React.ComponentType<FieldProps<any>> | null;
 

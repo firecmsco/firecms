@@ -72,21 +72,21 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
 }) as typeof PropertyFieldBindingInternal;
 
 function PropertyFieldBindingInternal<M extends Record<string, any> = any>
-({
-     propertyKey,
-     property,
-     context,
-     includeDescription,
-     underlyingValueHasChanged,
-     disabled: disabledProp,
-     partOfArray,
-     partOfBlock,
-     minimalistView,
-     autoFocus,
-     index,
-     size,
-     onPropertyChange,
- }: PropertyFieldBindingProps<M>): ReactElement<PropertyFieldBindingProps<M>> {
+    ({
+        propertyKey,
+        property,
+        context,
+        includeDescription,
+        underlyingValueHasChanged,
+        disabled: disabledProp,
+        partOfArray,
+        partOfBlock,
+        minimalistView,
+        autoFocus,
+        index,
+        size,
+        onPropertyChange,
+    }: PropertyFieldBindingProps<M>): ReactElement<PropertyFieldBindingProps<M>> {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -135,7 +135,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                     }
                     const configProperty = resolveProperty({
                         propertyKey,
-                        property: propertyConfig.property,
+                        property: propertyConfig.property as any,
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
@@ -143,7 +143,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                         index,
                         authController
                     });
-                    Component = configProperty?.Field as ComponentType<FieldProps>;
+                    Component = configProperty?.Field as ComponentType<FieldProps> | undefined;
                 }
                 if (!Component) {
                     console.warn(`No field component found for property ${propertyKey}`);
@@ -173,7 +173,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                 return <FieldInternal
                     Component={Component as ComponentType<FieldProps>}
                     componentProps={componentProps}
-                    formexFieldProps={fieldProps}/>;
+                    formexFieldProps={fieldProps} />;
             }}
         </Field>
     );
@@ -183,33 +183,33 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
 type ResolvedPropertyFieldBindingProps<M extends Record<string, any> = any> =
     Omit<PropertyFieldBindingProps<M>, "property">
     & {
-    property: Property
-};
+        property: Property
+    };
 
 function FieldInternal<CustomProps, M extends Record<string, any>>
-({
-     Component,
-     componentProps: {
-         propertyKey,
-         property,
-         includeDescription,
-         underlyingValueHasChanged,
-         partOfArray,
-         partOfBlock,
-         minimalistView,
-         autoFocus,
-         context,
-         disabled,
-         size,
-         onPropertyChange
-     },
-     formexFieldProps
- }:
- {
-     Component: ComponentType<FieldProps>,
-     componentProps: ResolvedPropertyFieldBindingProps<M>,
-     formexFieldProps: FormexFieldProps<any, any>
- }) {
+    ({
+        Component,
+        componentProps: {
+            propertyKey,
+            property,
+            includeDescription,
+            underlyingValueHasChanged,
+            partOfArray,
+            partOfBlock,
+            minimalistView,
+            autoFocus,
+            context,
+            disabled,
+            size,
+            onPropertyChange
+        },
+        formexFieldProps
+    }:
+        {
+            Component: ComponentType<FieldProps>,
+            componentProps: ResolvedPropertyFieldBindingProps<M>,
+            formexFieldProps: FormexFieldProps<any, any>
+        }) {
 
     const { plugins } = useCustomizationController();
 
@@ -270,7 +270,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
     return (
         <ErrorBoundary>
 
-            <UsedComponent {...cmsFieldProps}/>
+            <UsedComponent {...cmsFieldProps} />
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <Typography variant={"caption"} className={"ml-3.5"}>
@@ -285,7 +285,7 @@ const shouldPropertyReRender = (property: Property, plugins?: FireCMSPlugin[]): 
     if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
         return true;
     }
-    if (isPropertyBuilder(property)) {
+    if (isPropertyBuilder(property as any)) {
         return true;
     }
     const defAProperty = property as Property;

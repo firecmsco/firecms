@@ -1,6 +1,6 @@
 {
   "name": "@firecms/e2e",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0",
   "private": true,
   "scripts": {
     "test": "playwright test"

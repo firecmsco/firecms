@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { useDataSource, useFireCMSContext } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
@@ -126,13 +127,29 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         return sort;
     }, [sort, forceFilter]);
 
+    const location = useLocation();
+
     const {
         filterValues: filterUrl,
         sortBy: sortUrl
-    } = parseFilterAndSort(window.location.search);
+    } = parseFilterAndSort(location.search);
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? filterUrl : undefined) ?? filter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? sortUrl : undefined) ?? sortInternal);
+
+    useEffect(() => {
+        if (updateUrl) {
+            const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
+            if (!forceFilter) {
+                setFilterValues(urlFilterValues as any);
+            }
+            if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
+                console.warn("URL sort is not compatible with the force filter.");
+            } else {
+                setSortBy(urlSortBy as any);
+            }
+        }
+    }, [location.search, updateUrl, forceFilter, checkFilterCombination]);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 

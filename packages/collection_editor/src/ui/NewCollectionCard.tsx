@@ -3,11 +3,11 @@ import { AddIcon, Card, cls, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export function NewCollectionCard({
-                                      group,
-                                      context
-                                  }: PluginHomePageAdditionalCardsProps) {
+    group,
+    context
+}: PluginHomePageAdditionalCardsProps) {
 
-    if (!context.navigation.topLevelNavigation)
+    if (!context.navigation?.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
     const authController = useAuthController();
@@ -21,21 +21,21 @@ export function NewCollectionCard({
 
     return (
         <Card className={cls("h-full p-4 min-h-[124px]")}
-              onClick={collectionEditorController && canCreateCollections
-                  ? () => collectionEditorController.createCollection({
-                      initialValues: group ? { group } : undefined,
-                      parentCollectionIds: [],
-                      redirect: true,
-                      sourceClick: "new_collection_card"
-                  })
-                  : undefined}>
+            onClick={collectionEditorController && canCreateCollections
+                ? () => collectionEditorController.createCollection({
+                    initialValues: group ? { group } : undefined,
+                    parentCollectionIds: [],
+                    redirect: true,
+                    sourceClick: "new_collection_card"
+                })
+                : undefined}>
 
             <div
                 className="flex items-center justify-center h-full w-full grow flex-col">
-                <AddIcon color="primary" size={"large"}/>
+                <AddIcon color="primary" size={"large"} />
                 <Typography color="primary"
-                            variant={"caption"}
-                            className={"font-medium"}>{"Add new collection".toUpperCase()}</Typography>
+                    variant={"caption"}
+                    className={"font-medium"}>{"Add new collection".toUpperCase()}</Typography>
 
                 {!canCreateCollections &&
                     <Typography variant={"caption"}>You don&apos;t have permissions to create

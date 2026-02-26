@@ -527,6 +527,7 @@ export function EntityForm<M extends Record<string, any>>({
 
 
     const pluginActions: React.ReactNode[] = [];
+    const pluginBeforeTitle: React.ReactNode[] = [];
     const plugins = customizationController.plugins;
 
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
@@ -689,6 +690,8 @@ export function EntityForm<M extends Record<string, any>>({
 
     const formView = <ErrorBoundary>
         <>
+            {pluginBeforeTitle}
+
             {!Builder && <div className={"w-full flex flex-col items-start my-4 lg:my-6"}>
                 <Typography
                     className={"my-4 grow line-clamp-1 " + (collection.hideIdFromForm ? "mb-6" : "")}

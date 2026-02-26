@@ -1,7 +1,8 @@
 import Moveable from "react-moveable";
 import { useEditor } from "../components";
+import React from "react";
 
-export const ImageResizer = (): JSX.Element | null => {
+export const ImageResizer = (): React.ReactElement | null => {
   const { editor } = useEditor();
 
   if (!editor?.isActive("image")) return null;
@@ -42,9 +43,9 @@ export const ImageResizer = (): JSX.Element | null => {
           // dist,
           delta,
         }: // direction,
-        // clientX,
-        // clientY,
-        any) => {
+          // clientX,
+          // clientY,
+          any) => {
           delta[0] && (target!.style.width = `${width}px`);
           delta[1] && (target!.style.height = `${height}px`);
         }}
@@ -65,8 +66,8 @@ export const ImageResizer = (): JSX.Element | null => {
           // delta,
           transform,
         }: // clientX,
-        // clientY,
-        any) => {
+          // clientY,
+          any) => {
           target!.style.transform = transform;
         }}
       />

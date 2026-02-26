@@ -4,6 +4,20 @@ on:
   push:
     tags:
       - 'v*' # Triggers on version tags like v3.0.1, v3.0.1-pre.0, etc.
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: 'npm dist-tag to publish under (latest, pre, next, canary, beta, alpha)'
+        required: false
+        default: 'latest'
+        type: choice
+        options:
+          - latest
+          - pre
+          - next
+          - canary
+          - beta
+          - alpha
 
 jobs:
   publish:
@@ -29,6 +43,13 @@ jobs:
       - name: Determine dist-tag
         id: dist-tag
         run: |
+          # If triggered manually, use the input value
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "tag=${{ inputs.dist_tag }}" >> $GITHUB_OUTPUT
+            echo "Using manual dist-tag: ${{ inputs.dist_tag }}"
+            exit 0
+          fi
+
           TAG_NAME=${GITHUB_REF#refs/tags/}
           echo "Publishing tag: $TAG_NAME"
           

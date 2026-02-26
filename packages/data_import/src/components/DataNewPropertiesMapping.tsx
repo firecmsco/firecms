@@ -25,7 +25,7 @@ export interface DataPropertyMappingProps {
         property: Property | null,
         propertyKey: string | null,
         importKey: string
-    }) => React.ReactNode;
+    }) => any;
 }
 
 export function DataNewPropertiesMapping({

@@ -254,7 +254,7 @@ export function PropertyFormDialog({
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
-    const formexRef = useRef<FormexController<PropertyWithId>>();
+    const formexRef = useRef<FormexController<PropertyWithId>>(undefined);
     const getController = (helpers: FormexController<PropertyWithId>) => {
         formexRef.current = helpers;
     };
@@ -416,6 +416,7 @@ function PropertyEditFormFields({
             updateIds={!existing}
             disabled={disabled}
             getData={getData}
+            propertyNamespace={propertyNamespace}
             showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "multi_select" ||
         selectedFieldConfigId === "multi_number_select") {
@@ -425,6 +426,7 @@ function PropertyEditFormFields({
             disabled={disabled}
             allowDataInference={allowDataInference}
             getData={getData}
+            propertyNamespace={propertyNamespace}
             showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "file_upload") {
         childComponent =

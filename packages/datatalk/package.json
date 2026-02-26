@@ -1,53 +1,53 @@
 {
-  "name": "@firecms/datatalk",
-  "version": "4.0.0-alpha.1",
-  "description": "Talk to your Firestore data",
-  "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
-    }
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
-  },
-  "dependencies": {
-    "@firecms/core": "4.0.0-alpha.1",
-    "@firecms/types": "4.0.0-alpha.1",
-    "@firecms/data_export": "4.0.0-alpha.1",
-    "@firecms/collection_editor": "4.0.0-alpha.1",
-    "@firecms/data_import": "4.0.0-alpha.1",
-    "@firecms/data_import_export": "4.0.0-alpha.1",
-    "@firecms/firebase": "4.0.0-alpha.1",
-    "@firecms/formex": "4.0.0-alpha.1",
-    "@firecms/schema_inference": "4.0.0-alpha.1",
-    "@firecms/ui": "4.0.0-alpha.1",
-    "@monaco-editor/react": "^4.7.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.19.17",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4"
-  },
-  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
+    "name": "@firecms/datatalk",
+    "version": "4.0.0",
+    "description": "Talk to your Firestore data",
+    "type": "module",
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "development": "./src/index.ts",
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.umd.js"
+        }
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    },
+    "peerDependencies": {
+        "react": ">=19.0.0",
+        "react-dom": ">=19.0.0"
+    },
+    "dependencies": {
+        "@firecms/core": "4.0.0",
+        "@firecms/types": "4.0.0",
+        "@firecms/data_export": "4.0.0",
+        "@firecms/collection_editor": "4.0.0",
+        "@firecms/data_import": "4.0.0",
+        "@firecms/data_import_export": "4.0.0",
+        "@firecms/firebase": "4.0.0",
+        "@firecms/formex": "4.0.0",
+        "@firecms/schema_inference": "4.0.0",
+        "@firecms/ui": "4.0.0",
+        "@monaco-editor/react": "^4.7.0"
+    },
+    "devDependencies": {
+        "@types/node": "20.19.17",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
 }

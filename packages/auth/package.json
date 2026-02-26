@@ -1,7 +1,7 @@
 {
     "name": "@firecms/auth",
     "type": "module",
-    "version": "4.0.0-alpha.1",
+    "version": "4.0.0",
     "publishConfig": {
         "access": "public"
     },
@@ -11,13 +11,13 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@firecms/core": "4.0.0-alpha.1",
-        "@firecms/types": "4.0.0-alpha.1",
-        "@firecms/ui": "4.0.0-alpha.1"
+        "@firecms/core": "4.0.0",
+        "@firecms/types": "4.0.0",
+        "@firecms/ui": "4.0.0"
     },
     "peerDependencies": {
-        "react": ">=18.0.0",
-        "react-dom": ">=18.0.0"
+        "react": ">=19.0.0",
+        "react-dom": ">=19.0.0"
     },
     "exports": {
         ".": {
@@ -30,8 +30,8 @@
     },
     "devDependencies": {
         "@types/node": "^20.19.17",
-        "@types/react": "^18.3.24",
-        "@types/react-dom": "^18.3.7",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
         "typescript": "^5.9.3",
         "vite": "^7.2.4"
     },

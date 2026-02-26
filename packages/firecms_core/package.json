@@ -1,166 +1,166 @@
 {
-  "name": "@firecms/core",
-  "type": "module",
-  "version": "4.0.0-alpha.1",
-  "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-  "funding": {
-    "url": "https://github.com/sponsors/firecmsco"
-  },
-  "author": "FireCMS",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/firecmsco/firecms.git",
-    "directory": "packages/firecms_core"
-  },
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
-  "source": "src/index.ts",
-  "engines": {
-    "node": ">=14"
-  },
-  "keywords": [
-    "firebase",
-    "cms",
-    "admin",
-    "admin panel",
-    "firebase panel",
-    "firestore",
-    "headless",
-    "headless cms",
-    "content manager"
-  ],
-  "scripts": {
-    "watch": "vite build --watch",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
-    "prepublishOnly": "run-s build",
-    "test:lint": "eslint \"src/**\" --quiet",
-    "test": "jest --passWithNoTests",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-    "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
-  },
-  "exports": {
-    ".": {
-      "development": "./src/index.ts",
-      "import": "./dist/index.es.js",
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.umd.js"
+    "name": "@firecms/core",
+    "type": "module",
+    "version": "4.0.0",
+    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+    "funding": {
+        "url": "https://github.com/sponsors/firecmsco"
     },
-    "./vitePlugin": {
-      "development": "./src/vitePlugin.ts",
-      "types": "./src/vitePlugin.ts",
-      "import": "./src/vitePlugin.ts",
-      "require": "./src/vitePlugin.ts"
+    "author": "FireCMS",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/firecmsco/firecms.git",
+        "directory": "packages/firecms_core"
     },
-    "./package.json": "./package.json"
-  },
-  "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/modifiers": "^9.0.0",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@firecms/common": "4.0.0-alpha.1",
-    "@firecms/editor": "4.0.0-alpha.1",
-    "@firecms/formex": "4.0.0-alpha.1",
-    "@firecms/types": "4.0.0-alpha.1",
-    "@firecms/ui": "4.0.0-alpha.1",
-    "@monaco-editor/react": "^4.7.0",
-    "@radix-ui/react-portal": "^1.1.10",
-    "clsx": "^2.1.1",
-    "compressorjs": "^1.2.1",
-    "date-fns": "^3.6.0",
-    "fast-equals": "5.3.0",
-    "fuse.js": "^7.1.0",
-    "history": "^5.3.0",
-    "json-logic-js": "^2.0.5",
-    "markdown-it": "^14.1.0",
-    "notistack": "^3.0.2",
-    "object-hash": "^3.0.0",
-    "prism-react-renderer": "^2.4.1",
-    "react-dropzone": "^14.3.8",
-    "react-transition-group": "^4.4.5",
-    "react-use-measure": "^2.1.7",
-    "react-window": "^1.8.11",
-    "vite-plugin-static-copy": "3.1.4",
-    "yup": "^1.7.1"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "react-router": "^6.28.0",
-    "react-router-dom": "^6.28.0"
-  },
-  "devDependencies": {
-    "@jest/globals": "^30.2.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/jest": "^29.5.14",
-    "@types/json-logic-js": "^2.0.8",
-    "@types/node": "^20.19.17",
-    "@types/object-hash": "^3.0.6",
-    "@types/react": "^18.3.20",
-    "@types/react-dom": "^18.3.6",
-    "@types/react-measure": "^2.0.12",
-    "@vitejs/plugin-react": "^4.3.4",
-    "babel-plugin-react-compiler": "beta",
-    "cross-env": "^7.0.3",
-    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^30.2.0",
-    "npm-run-all": "^4.1.5",
-    "react-router": "^6.30.2",
-    "react-router-dom": "^6.30.2",
-    "ts-jest": "^29.4.5",
-    "ts-node": "^10.9.2",
-    "tsd": "^0.31.2",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4"
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
-  "publishConfig": {
-    "access": "public"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+    "main": "./dist/index.umd.js",
+    "module": "./dist/index.es.js",
+    "types": "./dist/index.d.ts",
+    "source": "src/index.ts",
+    "engines": {
+        "node": ">=14"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
+    "keywords": [
+        "firebase",
+        "cms",
+        "admin",
+        "admin panel",
+        "firebase panel",
+        "firestore",
+        "headless",
+        "headless cms",
+        "content manager"
     ],
-    "testEnvironment": "jsdom",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/src/components/",
-      "objects.test.ts",
-      "navigation.test.ts",
-      "resolutions.test.ts"
+    "scripts": {
+        "watch": "vite build --watch",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "prepublishOnly": "run-s build",
+        "test:lint": "eslint \"src/**\" --quiet",
+        "test": "jest --passWithNoTests",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+        "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
+    },
+    "exports": {
+        ".": {
+            "development": "./src/index.ts",
+            "import": "./dist/index.es.js",
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.umd.js"
+        },
+        "./vitePlugin": {
+            "development": "./src/vitePlugin.ts",
+            "types": "./src/vitePlugin.ts",
+            "import": "./src/vitePlugin.ts",
+            "require": "./src/vitePlugin.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/modifiers": "^9.0.0",
+        "@dnd-kit/sortable": "^10.0.0",
+        "@firecms/common": "4.0.0",
+        "@firecms/editor": "4.0.0",
+        "@firecms/formex": "4.0.0",
+        "@firecms/types": "4.0.0",
+        "@firecms/ui": "4.0.0",
+        "@monaco-editor/react": "^4.7.0",
+        "@radix-ui/react-portal": "^1.1.10",
+        "clsx": "^2.1.1",
+        "compressorjs": "^1.2.1",
+        "date-fns": "^3.6.0",
+        "fast-equals": "5.3.0",
+        "fuse.js": "^7.1.0",
+        "history": "^5.3.0",
+        "json-logic-js": "^2.0.5",
+        "markdown-it": "^14.1.0",
+        "notistack": "^3.0.2",
+        "object-hash": "^3.0.0",
+        "prism-react-renderer": "^2.4.1",
+        "react-dropzone": "^14.3.8",
+        "react-transition-group": "^4.4.5",
+        "react-use-measure": "^2.1.7",
+        "react-window": "^1.8.11",
+        "vite-plugin-static-copy": "3.1.4",
+        "yup": "^1.7.1"
+    },
+    "peerDependencies": {
+        "react": ">=19.0.0",
+        "react-dom": ">=19.0.0",
+        "react-router": "^6.28.0",
+        "react-router-dom": "^6.28.0"
+    },
+    "devDependencies": {
+        "@jest/globals": "^30.2.0",
+        "@testing-library/react": "^16.3.0",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/jest": "^29.5.14",
+        "@types/json-logic-js": "^2.0.8",
+        "@types/node": "^20.19.17",
+        "@types/object-hash": "^3.0.6",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "@types/react-measure": "^2.0.12",
+        "@vitejs/plugin-react": "^4.3.4",
+        "babel-plugin-react-compiler": "beta",
+        "cross-env": "^7.0.3",
+        "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^30.2.0",
+        "npm-run-all": "^4.1.5",
+        "react-router": "^6.30.2",
+        "react-router-dom": "^6.30.2",
+        "ts-jest": "^29.4.5",
+        "ts-node": "^10.9.2",
+        "tsd": "^0.31.2",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "files": [
+        "dist",
+        "src"
     ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/setupTests.ts"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
-      "^@firecms/ui$": "<rootDir>/../ui/src/index.ts",
-      "^@firecms/common$": "<rootDir>/../common/src/index.ts",
-      "^@firecms/types$": "<rootDir>/../types/src/index.ts",
-      "^@firecms/formex$": "<rootDir>/../formex/src/index.ts",
-      "^@firecms/editor$": "<rootDir>/../editor/src/index.ts"
+    "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
+    "publishConfig": {
+        "access": "public"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ],
+        "testEnvironment": "jsdom",
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/src/components/",
+            "objects.test.ts",
+            "navigation.test.ts",
+            "resolutions.test.ts"
+        ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/test/setupTests.ts"
+        ],
+        "moduleNameMapper": {
+            "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+            "^@firecms/ui$": "<rootDir>/../ui/src/index.ts",
+            "^@firecms/common$": "<rootDir>/../common/src/index.ts",
+            "^@firecms/types$": "<rootDir>/../types/src/index.ts",
+            "^@firecms/formex$": "<rootDir>/../formex/src/index.ts",
+            "^@firecms/editor$": "<rootDir>/../editor/src/index.ts"
+        }
     }
-  }
 }

@@ -30,7 +30,7 @@ const privateNotesCollection: EntityCollection = {
     callbacks: {
         onPreSave: ({ values, context, status }) => {
             if (status === "new" && !values.user_id) {
-                values.user_id = context.authController.user?.uid;
+                values.user_id = context.authController?.user?.uid;
             }
             return values;
         }

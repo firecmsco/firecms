@@ -6,7 +6,7 @@ import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 
 export const RolesView = React.memo(
-    function RolesView({ children }: { children?: React.ReactNode }) {
+    function RolesView({ children }: { children?: React.ReactNode | any }) {
 
         const { collections } = useCollectionRegistryController();
         const [dialogOpen, setDialogOpen] = useState(false);

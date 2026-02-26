@@ -16,9 +16,11 @@ import { AppCheckOptions, FirestoreIndexesBuilder, FirestoreTextSearchController
 export type FireCMSAppConfig = {
 
     /**
-     * Customization schema version.
+     * Customization schema version. Used to detect the federation contract:
+     * - "1": React ^18.x, Firebase ^12.x, @firecms/* ^3.x
+     * - "2": (future) Next major dependency set
      */
-    version: "1";
+    version: "1" | "2";
 
     /**
      * List of the mapped collections in the CMS.

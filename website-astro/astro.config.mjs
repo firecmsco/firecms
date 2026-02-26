@@ -81,6 +81,10 @@ export default defineConfig({
                             slug: "docs/cloud/migrating_from_v2"
                         },
                         {
+                            label: "Migrating from v3.0 to v3.1",
+                            slug: "docs/cloud/migrating_from_v3_to_v3_1"
+                        },
+                        {
                             label: "Eject Collections",
                             slug: "docs/cloud/eject_collections"
                         },

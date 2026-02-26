@@ -3,7 +3,7 @@
 import React from "react";
 import { SnackbarProvider } from "@firecms/core";
 
-export function Providers({ children }: React.PropsWithChildren): JSX.Element {
+export function Providers({ children }: React.PropsWithChildren): React.ReactElement {
     return (
         <SnackbarProvider>
             {children}

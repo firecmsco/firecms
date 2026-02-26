@@ -69,9 +69,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const urlsHook = useNavigationURLs(basePath, baseCollectionPath, collectionRegistryRef);
 
-    const viewsRef = useRef<CMSView[] | undefined>();
-    const adminViewsRef = useRef<CMSView[] | undefined>();
-    const navigationEntriesOrderRef = useRef<string[] | undefined>();
+    const viewsRef = useRef<CMSView[] | undefined>(undefined);
+    const adminViewsRef = useRef<CMSView[] | undefined>(undefined);
+    const navigationEntriesOrderRef = useRef<string[] | undefined>(undefined);
 
     const [initialised, setInitialised] = useState<boolean>(false);
 

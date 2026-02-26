@@ -431,12 +431,17 @@ export const EntityCollectionView = React.memo(
 
         // View mode change: update URL + save to local persistence
         const onViewModeChange = useCallback((mode: ViewMode) => {
+            analyticsController.onAnalyticsEvent?.("view_mode_changed", {
+                path: path,
+                from: viewMode,
+                to: mode
+            });
             setViewMode(mode);
             // Save to local persistence for next visit
             if (userConfigPersistence) {
                 onCollectionModifiedForUser(path, { defaultViewMode: mode } as PartialEntityCollection<M>);
             }
-        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, path]);
+        }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, path, analyticsController, viewMode]);
 
         const createEnabled = canCreateEntity(collection, authController, path, null);
 
@@ -502,10 +507,20 @@ export const EntityCollectionView = React.memo(
             return Boolean((property as any).enum);
         }, [collection.kanban?.columnProperty, resolvedCollection.properties]);
 
-        // Check if a plugin can configure Kanban (has KanbanSetupComponent)
-        const hasKanbanConfigPlugin = useMemo(() => {
-            return customizationController.plugins?.some(plugin => plugin.collectionView?.KanbanSetupComponent) ?? false;
-        }, [customizationController.plugins]);
+        // Compute the effective enabled views:
+        // - Start from collection.enabledViews (defaults to all three)
+        // - Filter out kanban if no enum properties exist
+        const hasEnumProperty = useMemo(() => {
+            return Object.values(resolvedCollection.properties).some((p: any) => p.type === "string" && p.enum);
+        }, [resolvedCollection.properties]);
+
+        const enabledViews: ViewMode[] = useMemo(() => {
+            const configured = collection.enabledViews ?? ["table", "cards", "kanban"];
+            if (!hasEnumProperty) {
+                return configured.filter(v => v !== "kanban");
+            }
+            return configured;
+        }, [collection.enabledViews, hasEnumProperty]);
 
         // Compute available enum properties for kanban column selection
         const kanbanPropertyOptions: KanbanPropertyOption[] = useMemo(() => {
@@ -555,12 +570,16 @@ export const EntityCollectionView = React.memo(
 
         // Handle kanban property change
         const onKanbanPropertyChange = useCallback((property: string) => {
+            analyticsController.onAnalyticsEvent?.("kanban_property_changed", {
+                path: path,
+                property
+            });
             setSelectedKanbanProperty(property);
             // Save to local persistence
             if (userConfigPersistence) {
                 onCollectionModifiedForUser(path, { kanbanColumnProperty: property } as any);
             }
-        }, [userConfigPersistence, onCollectionModifiedForUser, path]);
+        }, [userConfigPersistence, onCollectionModifiedForUser, path, analyticsController]);
 
         const getPropertyFor = useCallback(({
             propertyKey,
@@ -804,8 +823,7 @@ export const EntityCollectionView = React.memo(
             <ViewModeToggle
                 viewMode={viewMode}
                 onViewModeChange={onViewModeChange}
-                kanbanEnabled={kanbanEnabled}
-                hasKanbanConfigPlugin={hasKanbanConfigPlugin}
+                enabledViews={enabledViews}
                 size={viewMode === "table" ? tableSize : viewMode === "cards" ? cardSize : undefined}
                 onSizeChanged={viewMode === "table" ? onTableSizeChanged : viewMode === "cards" ? setCardSize : undefined}
                 open={viewModePopoverOpen}
@@ -815,6 +833,24 @@ export const EntityCollectionView = React.memo(
                 onKanbanPropertyChange={onKanbanPropertyChange}
             />
         );
+
+        // Compute plugin-provided error view for collection loading errors
+        const pluginErrorView = useMemo(() => {
+            const error = tableController.dataLoadingError;
+            if (!error || !customizationController.plugins) return null;
+            for (const plugin of customizationController.plugins) {
+                if (plugin.collectionView?.CollectionError) {
+                    const CollectionError = plugin.collectionView.CollectionError;
+                    return <CollectionError
+                        path={path}
+                        collection={collection}
+                        parentCollectionIds={parentCollectionIds}
+                        error={error}
+                    />;
+                }
+            }
+            return null;
+        }, [tableController.dataLoadingError, customizationController.plugins, path, collection, parentCollectionIds]);
 
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
@@ -954,9 +990,16 @@ export const EntityCollectionView = React.memo(
                         onColumnsOrderChange={(newColumns) => {
                             // Extract property keys from the new column order
                             // Filter to only include actual property columns (not frozen columns, not additional fields, etc.)
+                            // Deduplicate to clean up any previously duplicated keys
+                            const seenKeys = new Set<string>();
                             const newPropertiesOrder = newColumns
                                 .filter(col => !col.frozen && getPropertyInPath(collection.properties, col.key))
-                                .map(col => col.key);
+                                .map(col => col.key)
+                                .filter(key => {
+                                    if (seenKeys.has(key)) return false;
+                                    seenKeys.add(key);
+                                    return true;
+                                });
 
                             // Optimistically update local state to prevent UI flickering
                             setLocalPropertiesOrder(newPropertiesOrder);

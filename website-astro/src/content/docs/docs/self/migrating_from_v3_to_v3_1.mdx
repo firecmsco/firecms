@@ -7,14 +7,36 @@ sidebar_label: Migrating from v3.0 to v3.1
 This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
 FireCMS v3.1 introduces important updates that require configuration changes and offers exciting new features.
 
+## Before You Start
+
+- Ensure you are currently on **FireCMS v3.0.x**
+- Back up your project or commit your current state to version control
+- Ensure you are using **Node.js 18+**
+
+## Update FireCMS Packages
+
+Update all `@firecms/*` packages to version **3.1**:
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Make sure to include **all** `@firecms/*` packages listed in your `package.json`. Mixing v3.0 and v3.1 packages will cause issues.
+
+---
+
 ## TailwindCSS v4 Migration
 
-The most significant change in v3.1 is the migration from **TailwindCSS v3 to v4**. This involves updating your 
+The most significant change in v3.1 is the migration from **TailwindCSS v3 to v4**. This involves updating your
 TailwindCSS configuration and ensuring that your styles are compatible with the new version.
+
+:::caution
+This is a **breaking change**. Your project will not work correctly until you complete all steps in this section.
+:::
 
 ### Update Dependencies
 
-Update your FireCMS packages and install TailwindCSS v4:
+Install TailwindCSS v4 and the Vite plugin:
 
 ```bash
 npm i tailwindcss@4 @tailwindcss/vite
@@ -69,6 +91,11 @@ Update your `index.css` file to reflect these changes:
 }
 ```
 
+:::warning
+If you skip this step, your custom theme colors will **not be applied** and FireCMS will fall back to its default palette.
+The `--fcms-primary-dark` and `--fcms-primary-bg` variables are no longer needed — they are computed automatically from `--color-primary`.
+:::
+
 ### Updated index.css Structure
 
 Your `index.css` file should now look like this:
@@ -99,6 +126,16 @@ Remove the following files from your project as they are no longer needed:
 - `tailwind.config.js`
 - `postcss.config.js`
 
+### Verify Your Migration
+
+After completing all steps, run:
+
+```bash
+npm run build
+```
+
+The build should complete without errors. If you see CSS-related warnings, double-check that your `index.css` matches the structure above.
+
 ---
 
 ## New Collection View Modes
@@ -107,7 +144,7 @@ FireCMS v3.1 introduces new ways to visualize your collection data beyond the tr
 
 ### Cards View
 
-The **Cards view** displays your entities as visual cards, making it easier to browse content-heavy collections 
+The **Cards view** displays your entities as visual cards, making it easier to browse content-heavy collections
 such as blog posts, products, or media libraries. Each card shows a preview of the entity with its key fields.
 
 ### Kanban/Board View
@@ -136,6 +173,7 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Enhanced suggestion menu behavior
 - Small UI adjustments and visual update to dialogs
 - Removed font-mono from map preview
+- TipTap V3 migration for improved markdown editor performance
 
 ### Collection Editor
 - Added inline editing for property editing
@@ -153,6 +191,10 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Local changes can now be applied manually
 - Clearing unsaved changes indicator when feature is not enabled
 
+:::note
+`enableLocalChangesBackup` defaults to **true**, matching the previous behavior. Set it to `false` in your collection config if you want to disable local backup of unsaved changes.
+:::
+
 ### Storage & Images
 - New image resizing capabilities
 - Replaced internal compressing library with compressor.js
@@ -162,7 +204,6 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Fixed dates losing focus while typing
 - Fixed select enum filters UI glitch
 - Fixed full screen entity views with encoded characters in their ID
-- TipTap V3 migration for improved markdown editor performance
 
 ---
 
@@ -177,9 +218,9 @@ You can now use AI to generate and modify collections directly in the collection
 Enable it by passing a `generateCollection` callback to the collection editor plugin:
 
 ```typescript
-import { 
-    useCollectionEditorPlugin, 
-    buildCollectionGenerationCallback 
+import {
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
 } from "@firecms/collection_editor";
 import { useFirebaseAuthController } from "@firecms/firebase";
 
@@ -261,3 +302,18 @@ DataTalk automatically reads your collection schema from the navigation controll
 :::note
 AI features require a valid FireCMS PRO license. The API endpoints authenticate using your Firebase auth token.
 :::
+
+---
+
+## Troubleshooting
+
+### `Cannot find namespace 'JSX'`
+If you see TypeScript errors like `error TS2503: Cannot find namespace 'JSX'`, update your return type annotations from `JSX.Element` to `React.ReactElement` or simply remove the explicit return type and let TypeScript infer it.
+
+### Styles not applying after migration
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
+- Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
+
+### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will cause type mismatches and runtime errors.

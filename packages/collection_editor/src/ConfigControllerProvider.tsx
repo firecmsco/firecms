@@ -47,7 +47,7 @@ export interface ConfigControllerProviderProps {
         View: React.ComponentType<{
             path: string
         }>,
-        icon: React.ReactNode
+        icon: React.ReactNode | any
     };
 
     pathSuggestions?: string[];
@@ -79,7 +79,7 @@ export const ConfigControllerProvider = React.memo(
         onAnalyticsEvent,
         pathSuggestions,
         generateCollection
-    }: PropsWithChildren<ConfigControllerProviderProps>) {
+    }: ConfigControllerProviderProps & { children?: any }) {
 
         const urlController = useCMSUrlController();
         const navigate = useNavigate();
@@ -273,6 +273,7 @@ export const ConfigControllerProvider = React.memo(
                         extraView={extraView}
                         getUser={getUser}
                         generateCollection={generateCollection}
+                        onAnalyticsEvent={onAnalyticsEvent}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
@@ -292,11 +293,21 @@ export const ConfigControllerProvider = React.memo(
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
                         collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
-                        getData={getData && currentPropertyDialog?.editedCollectionId
-                            ? () => {
-                                console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = urlController.resolveDatabasePathsFrom(currentPropertyDialog.editedCollectionId!)
-                                return getData(resolvedPath, []);
+                        getData={currentPropertyDialog?.existingEntities || (getData && currentPropertyDialog?.editedCollectionId)
+                            ? async () => {
+                                let data: object[] = [];
+                                // First, use existing entities if available (already loaded in table)
+                                if (currentPropertyDialog?.existingEntities) {
+                                    data = currentPropertyDialog.existingEntities.map(e => e.values);
+                                }
+                                // If getData is available and we have a path, also fetch from database
+                                if (getData && currentPropertyDialog?.editedCollectionId) {
+                                    console.debug("Get data for property, path:", currentPropertyDialog?.editedCollectionId);
+                                    const resolvedPath = urlController.resolveDatabasePathsFrom(currentPropertyDialog.editedCollectionId!);
+                                    const fetchedData = await getData(resolvedPath, []);
+                                    data.push(...fetchedData);
+                                }
+                                return data;
                             }
                             : undefined}
                         onPropertyChanged={({

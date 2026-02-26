@@ -8,7 +8,7 @@ export interface EntityTableCellActionsProps {
     showExpandIcon: boolean | undefined;
     selected: boolean | undefined;
     openPopup?: (cellRect: DOMRect | undefined) => void;
-    children?: React.ReactNode;
+    children?: any;
 }
 
 export function EntityTableCellActions({
@@ -28,7 +28,7 @@ export function EntityTableCellActions({
         }
     }, []);
 
-    const iconRef = useRef<HTMLButtonElement>();
+    const iconRef = useRef<HTMLButtonElement>(undefined);
     useEffect(() => {
         if (iconRef.current && selected) {
             iconRef.current.focus({ preventScroll: true });

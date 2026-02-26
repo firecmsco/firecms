@@ -1,3 +1,37 @@
+## [3.1.0] - 2026-02-20
+
+- **AI Integration**:
+  - Introduced AI-driven collection generation and data enhancement features.
+  - Added new AI icon and integrated AI capabilities into the collection editor.
+- **Kanban View**:
+  - Added full support for Kanban boards with customizable columns.
+  - Implemented drag-and-drop column reordering and optimistic updates.
+  - Added Kanban configuration options including column colors.
+
+- **Collection Features**:
+  - Added `display` view to collection editor.
+  - Implemented drag-and-drop column reordering in data tables with persistence.
+  - Enhanced collection inference with optional filter and sort parameters.
+- **UI/UX Improvements**:
+  - Added View Mode Toggle (List, Grid, Table) for better data visualization control.
+  - Implemented collapsible drawer navigation groups.
+  - Added full-screen blocking modal support for Cookie Banner.
+  - Harmonized button colors and restyled Tab components.
+  - Replaced `AutorenewIcon` with `FindInPageIcon` for better clarity.
+  - Enabled smooth scrolling behavior.
+- **Storage**:
+  - Added support for fully-qualified storage URLs.
+  - Added `includeBucketUrl` and `imageResize` options for file uploads.
+- **User Management**:
+  - Added `updateUserFields` method for direct Firestore updates.
+- **Fixes**:
+  - Updated Firebase dependency to v12.7.0.
+  - Security updates for Next.js (CVE-2025-66478).
+  - Fixed date autovalues validation bugs.
+  - Fixed issues with object merging and local changes.
+  - Improved Text Search integration with Typesense.
+  - Fixed layout and styling in FormEnhanceAction.
+
 ## [3.0.0] - 2025-12-01
 
 - **Editor Enhancements**:

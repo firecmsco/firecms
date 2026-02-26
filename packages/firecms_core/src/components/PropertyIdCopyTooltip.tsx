@@ -8,7 +8,7 @@ export function PropertyIdCopyTooltip({
                                       }: {
     propertyKey: string,
     className?: string,
-    children: React.ReactNode
+    children: any
 }) {
     return <Tooltip title={<PropertyIdCopyTooltipContent propertyKey={propertyKey}/>}
                     delayDuration={800}

@@ -17,7 +17,9 @@ import {
     DebouncedTextField,
     Dialog,
     ExpandablePanel,
+    HistoryIcon,
     IconButton,
+    SearchIcon,
     Select,
     SelectItem,
     TextField,
@@ -183,10 +185,10 @@ export function GeneralSettingsForm({
                         {/* Collection ID */}
                         <div className={"col-span-12"}>
                             <Field name={"slug"}
-                                as={DebouncedTextField}
-                                disabled={!isNewCollection}
-                                label={"Collection ID"}
-                                error={showErrors && Boolean(errors.slug)} />
+                             as={DebouncedTextField}
+                             disabled={!isNewCollection}
+                             label={"Collection ID"}
+                             error={showErrors && Boolean(errors.slug)} />
                             <FieldCaption error={touched.slug && Boolean(errors.slug)}>
                                 {touched.slug && Boolean(errors.slug) ? errors.slug : "This ID identifies this collection. Typically the same as the path."}
                             </FieldCaption>
@@ -222,9 +224,9 @@ export function GeneralSettingsForm({
                                 position={"start"}
                                 size={"large"}
                                 allowIndeterminate={true}
-                                label={values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
+                                label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
                                     values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
-                                )}
+                                )}</span>}
                                 onValueChange={(v) => setFieldValue("history", v)}
                                 value={values.history === undefined ? null : values.history}
                             />

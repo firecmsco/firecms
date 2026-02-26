@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
-    body?: React.ReactNode;
+    body?: any;
     title?: string;
     handleOk: () => void;
     handleCancel: () => void;

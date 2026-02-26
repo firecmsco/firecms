@@ -1,6 +1,6 @@
 {
   "name": "@firecms/schema_inference",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@firecms/types": "4.0.0-alpha.1",
+    "@firecms/types": "4.0.0",
     "@types/node": "^20.17.14",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
@@ -35,7 +35,7 @@
   },
   "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
   "dependencies": {
-    "axios": "1.13.2",
+    "axios": "1.13.5",
     "vite-plugin-static-copy": "3.1.4"
   }
 }

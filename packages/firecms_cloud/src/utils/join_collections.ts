@@ -118,6 +118,8 @@ export function mergeCollection(target: EntityCollection,
 }
 
 function mergeProperty(target: Property, source: Property): Property {
+    if (!source) return target;
+    if (!target) return source;
     if (isPropertyBuilder(source)) {
         return source;
     } else if (isPropertyBuilder(target)) {

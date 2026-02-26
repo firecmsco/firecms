@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useRef, useState, useEffect } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
@@ -6,6 +6,8 @@ import { defaultBorderMixin } from "../styles";
 export type TabVariant = "standard" | "underline" | "invisible";
 
 const TabsContext = createContext<{ variant: TabVariant }>({ variant: "standard" });
+import { IconButton } from "./IconButton";
+import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 
 export type TabsProps = {
     value: string,
@@ -21,24 +23,105 @@ export function Tabs({
     onValueChange,
     className,
     innerClassName,
-    variant = "standard",
     children
 }: TabsProps) {
-    return (
-        <TabsContext.Provider value={{ variant }}>
-            <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={className}>
-                <TabsPrimitive.List className={cls(
-                    variant === "standard" && "border " + defaultBorderMixin + " bg-surface-50 dark:bg-surface-900 rounded-md p-1",
-                    variant === "underline" && "border-b " + defaultBorderMixin + " w-full",
-                    variant === "invisible" && "",
-                    "gap-2 inline-flex h-10 items-center justify-center text-surface-600 dark:text-surface-400",
-                    innerClassName)
-                }>
-                    {children}
-                </TabsPrimitive.List>
-            </TabsPrimitive.Root>
-        </TabsContext.Provider>
-    );
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [showLeftScroll, setShowLeftScroll] = useState(false);
+    const [showRightScroll, setShowRightScroll] = useState(false);
+    const [isScrollable, setIsScrollable] = useState(false);
+
+    const checkScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+            setShowLeftScroll(scrollLeft > 0);
+            setShowRightScroll(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+            setIsScrollable(scrollWidth > clientWidth);
+        }
+    };
+
+    useEffect(() => {
+        checkScroll();
+        window.addEventListener("resize", checkScroll);
+
+        let observer: ResizeObserver;
+        if (scrollContainerRef.current) {
+            observer = new ResizeObserver(checkScroll);
+            observer.observe(scrollContainerRef.current);
+            if (scrollContainerRef.current.firstElementChild) {
+                observer.observe(scrollContainerRef.current.firstElementChild);
+            }
+        }
+
+        return () => {
+            window.removeEventListener("resize", checkScroll);
+            observer?.disconnect();
+        };
+    }, [children]);
+
+    const scroll = (direction: "left" | "right") => {
+        if (scrollContainerRef.current) {
+            const container = scrollContainerRef.current;
+            const scrollAmount = Math.max(container.clientWidth / 2, 200);
+            const targetScroll = container.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount);
+
+            container.scrollTo({
+                left: targetScroll,
+                behavior: "smooth"
+            });
+            // checkScroll will be called by onScroll event
+        }
+    };
+
+    return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={cls("flex flex-row items-center min-w-0", className)}>
+        {isScrollable && (
+            <button
+                type="button"
+                disabled={!showLeftScroll}
+                onClick={() => scroll("left")}
+                className={cls(
+                    "flex-shrink-0 z-10 flex items-center justify-center rounded-md px-0.5 py-1.5 transition-all h-10 w-6",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400",
+                    "disabled:pointer-events-none disabled:opacity-0",
+                    "text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-800",
+                    "mr-1 bg-surface-50 dark:bg-surface-900 border", defaultBorderMixin
+                )}
+            >
+                <ChevronLeftIcon size="small" />
+            </button>
+        )}
+        <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-x-auto no-scrollbar min-w-0"
+            onScroll={checkScroll}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+            <TabsPrimitive.List className={cls(
+                "border",
+                defaultBorderMixin,
+                "gap-2",
+                "inline-flex h-10 items-center justify-center rounded-md bg-surface-50 p-1 text-surface-600 dark:bg-surface-900 dark:text-surface-400",
+                innerClassName)
+            }>
+                {children}
+            </TabsPrimitive.List>
+        </div>
+        {isScrollable && (
+            <button
+                type="button"
+                disabled={!showRightScroll}
+                onClick={() => scroll("right")}
+                className={cls(
+                    "flex-shrink-0 z-10 flex items-center justify-center rounded-md px-0.5 py-1.5 transition-all h-10 w-6",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400",
+                    "disabled:pointer-events-none disabled:opacity-0",
+                    "text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-800",
+                    "ml-1 bg-surface-50 dark:bg-surface-900 border", defaultBorderMixin
+                )}
+            >
+                <ChevronRightIcon size="small" />
+            </button>
+        )}
+    </TabsPrimitive.Root>
 }
 
 export type TabProps = {

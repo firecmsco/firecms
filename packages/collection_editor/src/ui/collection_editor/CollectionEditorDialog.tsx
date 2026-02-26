@@ -87,7 +87,7 @@ export interface CollectionEditorDialogProps {
         View: React.ComponentType<{
             path: string
         }>,
-        icon: React.ReactNode
+        icon: React.ReactNode | any
     };
     getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
@@ -107,6 +107,10 @@ export interface CollectionEditorDialogProps {
      * The plugin is API-agnostic - the consumer provides the implementation.
      */
     generateCollection?: CollectionGenerationCallback;
+    /**
+     * Optional analytics callback
+     */
+    onAnalyticsEvent?: (event: string, params?: object) => void;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -298,7 +302,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     existingEntities,
     initialView: initialViewProp,
     expandKanban,
-    generateCollection
+    generateCollection,
+    onAnalyticsEvent
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -646,6 +651,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             existingCollection={values}
                             onGenerated={handleAIGenerated}
                             generateCollection={generateCollection}
+                            onAnalyticsEvent={onAnalyticsEvent}
                         />
                     )}
                     <Tabs value={currentView}
@@ -685,7 +691,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             onContinue={onWelcomeScreenContinue}
                             existingCollectionPaths={existingPaths}
                             parentCollection={parentCollection}
-                            generateCollection={generateCollection} />}
+                            generateCollection={generateCollection}
+                            onAnalyticsEvent={onAnalyticsEvent} />}
 
                     {currentView === "import_data_mapping" && importConfig &&
                         <CollectionEditorImportMapping importConfig={importConfig}
@@ -884,7 +891,9 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
     const propertiesResult: Properties = {};
     if (properties) {
         Object.keys(properties).forEach((key) => {
-            propertiesResult[key] = applyPropertiesConfig(properties[key], propertyConfigs);
+            const prop = properties[key];
+            if (prop == null) return;
+            propertiesResult[key] = applyPropertiesConfig(prop, propertyConfigs);
         });
     }
 
@@ -896,7 +905,7 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
 
 function applyPropertiesConfig(property: Property, propertyConfigs: Record<string, PropertyConfig>) {
     let internalProperty = property;
-    if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
+    if (propertyConfigs && internalProperty && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
         if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
             internalProperty = propertyConfig.property;

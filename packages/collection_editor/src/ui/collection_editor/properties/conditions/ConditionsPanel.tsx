@@ -4,7 +4,7 @@ import { ExpandablePanel, SettingsIcon, Typography } from "@firecms/ui";
 
 export function ConditionsPanel({
     children
-}: PropsWithChildren<{}>) {
+}: { children?: any }) {
 
     return (
         <ExpandablePanel

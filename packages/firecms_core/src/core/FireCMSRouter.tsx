@@ -5,7 +5,7 @@ export function FireCMSRouter({
                            children,
                            basePath
                        }: {
-    children: React.ReactNode,
+    children: any,
     basePath?: string;
 }) {
     return <RouterProvider router={createBrowserRouter([

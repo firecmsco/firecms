@@ -29,7 +29,8 @@ export function AutoSetUpCollectionsButton({
 }) {
 
     const configController = useCollectionsConfigController();
-    const setupLoading = configController.collectionsSetup?.status === "ongoing";
+    const collectionsSetupStatus = configController.collectionsSetup?.status;
+    const setupLoading = collectionsSetupStatus === "ongoing";
 
     const [setUpRequested, setSetupRequested] = React.useState(false);
     const snackbarController = useSnackbarController();

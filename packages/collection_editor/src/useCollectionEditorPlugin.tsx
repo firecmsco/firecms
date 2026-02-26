@@ -42,7 +42,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
         View: React.ComponentType<{
             path: string
         }>,
-        icon: React.ReactNode
+        icon: React.ReactNode | any
     };
 
     collectionInference?: CollectionInference;
@@ -95,7 +95,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         key: "collection_editor",
         loading: collectionConfigController.loading,
         provider: {
-            Component: ConfigControllerProvider,
+            Component: ConfigControllerProvider as any,
             props: {
                 collectionConfigController,
                 configPermissions,

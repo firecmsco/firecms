@@ -34,6 +34,23 @@ lerna version prerelease --preid next --no-private  # 3.0.1 → 3.0.2-next.0
 lerna version prerelease --preid canary --no-private # 3.0.1 → 3.0.2-canary.0
 ```
 
+## Automatic Canary Releases (push-to-publish)
+
+Canary versions are published **automatically** on every push to the `canary` branch. No manual version bumping needed.
+
+The CI workflow (`.github/workflows/publish-canary.yml`) will:
+1. Build all packages
+2. Generate a version like `3.1.0-canary.<short-git-sha>` (e.g., `3.1.0-canary.a1b2c3d`)
+3. Publish to npm with the `canary` dist-tag
+
+Install the latest canary with:
+
+```bash
+npm install @firecms/core@canary
+```
+
+> **Note:** If multiple pushes happen quickly to the same branch, earlier runs are automatically cancelled.
+
 ## What Happens
 
 When you run `lerna version`:

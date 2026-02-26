@@ -1,4 +1,4 @@
-import { ArrayProperty, DefaultFieldConfig, Property, PropertyConfig } from "@firecms/types";
+import { ArrayProperty, DefaultFieldConfig, NumberProperty, Property, PropertyConfig, StringProperty } from "@firecms/types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -404,16 +404,21 @@ export function getDefaultFieldId(property: Property) {
             return "custom_array";
         } else if (isPropertyBuilder(of)) {
             return "repeat";
-        } else if (of?.type === "string" && of.enum) {
-            return "multi_select";
-        } else if (of?.type === "number" && of.enum) {
-            return "multi_number_select";
-        } else if (of?.type === "string" && of.storage) {
-            return "multi_file_upload";
-        } else if (of?.type === "reference") {
-            return "multi_references";
+        } else if (of) {
+            const ofProperty = of as Property;
+            if (ofProperty.type === "string" && (ofProperty as StringProperty).enum) {
+                return "multi_select";
+            } else if (ofProperty.type === "number" && (ofProperty as NumberProperty).enum) {
+                return "multi_number_select";
+            } else if (ofProperty.type === "string" && (ofProperty as StringProperty).storage) {
+                return "multi_file_upload";
+            } else if (ofProperty.type === "reference") {
+                return "multi_references";
         } else if (of?.type === "relation") {
             throw new Error("The 'relation' type is not supported inside arrays. Use 'reference' instead.");
+            } else {
+                return "repeat";
+            }
         } else {
             return "repeat";
         }

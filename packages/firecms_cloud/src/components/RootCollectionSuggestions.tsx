@@ -4,6 +4,7 @@ import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } f
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
+import { RootCollectionInfo } from "../api/projects";
 
 export function RootCollectionSuggestions({
     introMode,
@@ -12,7 +13,7 @@ export function RootCollectionSuggestions({
 }: {
     introMode?: "new_project" | "existing_project",
     onAnalyticsEvent?: (event: string, data?: object) => void;
-    rootPathSuggestions?: string[]; // undefined means loading
+    rootPathSuggestions?: RootCollectionInfo[]; // undefined means loading
 }) {
 
     const collectionRegistry = useCollectionRegistryController();
@@ -28,7 +29,7 @@ export function RootCollectionSuggestions({
         : true;
 
     const existingPaths = (collectionRegistry.collections ?? []).map(c => c.dbPath);
-    const filteredSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+    const filteredSuggestions = (rootPathSuggestions ?? []).filter((info) => !existingPaths.includes(info.path));
 
     const loading = filteredSuggestions === undefined;
     const showSuggestions = (filteredSuggestions ?? []).length > 0;
@@ -59,17 +60,18 @@ export function RootCollectionSuggestions({
 
                 {loading && <CircularProgress size={"smallest"} />}
 
-                {!loading && (filteredSuggestions ?? []).map((path) => {
+                {!loading && (filteredSuggestions ?? []).map((info) => {
                     return (
-                        <div key={path} className={"shrink-0"}>
+                        <div key={info.path} className={"shrink-0"}>
                             <Chip
                                 icon={<AddIcon size={"small"} />}
                                 colorScheme={"cyanLighter"}
                                 onClick={collectionEditorController && canCreateCollections
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: {
-                                            path,
-                                            name: prettifyIdentifier(path)
+                                            path: info.path,
+                                            name: prettifyIdentifier(info.path),
+                                            databaseId: info.databaseId
                                         },
                                         parentCollectionIds: [],
                                         redirect: true,
@@ -77,7 +79,7 @@ export function RootCollectionSuggestions({
                                     })
                                     : undefined}
                                 size="small">
-                                {path}
+                                {info.path}
                             </Chip>
                         </div>
                     );
@@ -89,3 +91,4 @@ export function RootCollectionSuggestions({
         </div>
     </Collapse>
 }
+

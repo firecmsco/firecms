@@ -1,55 +1,55 @@
 {
-  "name": "my-firecms-project",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "@firecms/core": "^3.0.0",
-    "@firecms/firebase": "^3.0.0",
-    "@firecms/ui": "^3.0.0",
-    "firebase": "^12.7.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router": "^6.26.2",
-    "react-router-dom": "^6.26.2"
-  },
-  "scripts": {
-    "dev": "vite --mode development",
-    "build": "vite build && tsc",
-    "preview": "vite build && vite preview",
-    "deploy": "vite build && firebase deploy --only hosting --project [REPLACE_WITH_PROJECT_ID]"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "@tailwindcss/typography": "^0.5.15",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "@typescript-eslint/parser": "^8.8.1",
-    "@vitejs/plugin-react": "^4.3.2",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.12.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-n": "^17.11.1",
-    "eslint-plugin-promise": "^7.1.0",
-    "eslint-plugin-react": "^7.37.1",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-refresh": "^0.4.12",
-    "tailwindcss": "^4.1.14",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.8",
-    "vite-plugin-svgr": "^4.2.0"
-  }
+    "name": "my-firecms-project",
+    "version": "4.0.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@firecms/core": "4.0.0",
+        "@firecms/firebase": "4.0.0",
+        "@firecms/ui": "4.0.0",
+        "firebase": "^12.9.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-router": "^6.26.2",
+        "react-router-dom": "^6.26.2"
+    },
+    "scripts": {
+        "dev": "vite --mode development",
+        "build": "vite build && tsc",
+        "preview": "vite build && vite preview",
+        "deploy": "vite build && firebase deploy --only hosting --project [REPLACE_WITH_PROJECT_ID]"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.18",
+        "@tailwindcss/typography": "^0.5.15",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "@typescript-eslint/eslint-plugin": "^8.8.1",
+        "@typescript-eslint/parser": "^8.8.1",
+        "@vitejs/plugin-react": "^4.3.2",
+        "autoprefixer": "^10.4.20",
+        "eslint": "^9.12.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-n": "^17.11.1",
+        "eslint-plugin-promise": "^7.1.0",
+        "eslint-plugin-react": "^7.37.1",
+        "eslint-plugin-react-hooks": "^5.1.0",
+        "eslint-plugin-react-refresh": "^0.4.12",
+        "tailwindcss": "^4.1.14",
+        "typescript": "^5.7.3",
+        "vite": "^5.4.8",
+        "vite-plugin-svgr": "^4.2.0"
+    }
 }

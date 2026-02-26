@@ -39,7 +39,7 @@ export function useBuildCloudUserManagement({
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
-    const firestoreRef = useRef<Firestore>();
+    const firestoreRef = useRef<Firestore>(undefined);
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);

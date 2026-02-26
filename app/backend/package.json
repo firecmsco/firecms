@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "firecms-app-shared": "workspace:*",
-    "@firecms/backend": "4.0.0-alpha.1",
-    "@firecms/mongodb": "4.0.0-alpha.1",
+    "@firecms/backend": "4.0.0",
+    "@firecms/mongodb": "4.0.0",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",

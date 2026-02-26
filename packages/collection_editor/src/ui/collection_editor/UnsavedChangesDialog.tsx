@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
-    body?: React.ReactNode;
+    body?: React.ReactNode | any;
     title?: string;
     handleOk: () => void;
     handleCancel: () => void;
@@ -27,7 +27,7 @@ export function UnsavedChangesDialog({
 
             <DialogTitle>{title ?? "Unsaved changes"}</DialogTitle>
             <DialogContent className={"mt-4"}>
-                {body && <Typography>
+                {Boolean(body) && <Typography>
                     {body}
                 </Typography>}
                 <Typography>

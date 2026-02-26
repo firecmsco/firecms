@@ -1,7 +1,7 @@
 import { useModeController } from "@firecms/core";
 
 import Editor from "@monaco-editor/react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export type AutoHeightEditorProps = {
     value?: string;
@@ -12,12 +12,12 @@ export type AutoHeightEditorProps = {
 };
 
 export function AutoHeightEditor({
-                                     value,
-                                     onChange,
-                                     maxWidth,
-                                     loading,
-                                     ...props
-                                 }: AutoHeightEditorProps): JSX.Element {
+    value,
+    onChange,
+    maxWidth,
+    loading,
+    ...props
+}: AutoHeightEditorProps): React.ReactElement {
     const editorRef = useRef<any>(null);
 
     function handleEditorDidMount(editor: any, monaco: any) {

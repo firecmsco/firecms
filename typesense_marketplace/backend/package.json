@@ -1,0 +1,31 @@
+{
+  "name": "@firecms/typesense-marketplace",
+  "version": "1.0.0",
+  "description": "FireCMS Typesense Search - Google Cloud Marketplace Solution",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "deploy": "npm run build && firebase deploy --only functions"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.3.0",
+    "firebase-functions": "^5.0.0",
+    "@google-cloud/pubsub": "^4.3.0",
+    "@google-cloud/secret-manager": "^5.0.0",
+    "googleapis": "^134.0.0",
+    "typesense": "^1.8.0",
+    "http-proxy-middleware": "^3.0.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  },
+  "private": true
+}

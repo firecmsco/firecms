@@ -4,7 +4,12 @@ import { EntityCollection } from "@firecms/core";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
-const rootCollectionsCache: { [key: string]: string[] } = {};
+export type RootCollectionInfo = {
+    path: string;
+    databaseId?: string;
+};
+
+const rootCollectionsCache: { [key: string]: RootCollectionInfo[] } = {};
 
 export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
 
@@ -129,7 +134,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     async function getRootCollections(projectId: string,
         googleAccessToken?: string,
         serviceAccount?: object,
-        retries = 10): Promise<string[]> {
+        retries = 10): Promise<RootCollectionInfo[]> {
         if (rootCollectionsCache[projectId]) {
             return rootCollectionsCache[projectId];
         }
@@ -137,7 +142,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         const firebaseAccessToken = await getBackendAuthToken();
 
         async function retry() {
-            // wait 2 seconds
+            // wait 5 seconds
             await new Promise(resolve => setTimeout(resolve, 5000));
             console.debug("Retrying getRootCollections", retries);
             return getRootCollections(projectId, googleAccessToken, serviceAccount, retries - 1);
@@ -153,10 +158,53 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 }),
             })
             .then(async (res) => {
-                if (res.status >= 300) {
-                    return await retry();
+                // Don't retry on 429 (quota exhausted) or 403 (forbidden) — these won't resolve with retries
+                if (res.status === 429) {
+                    console.warn("Quota exhausted for getRootCollections, returning empty", { projectId });
+                    return [];
                 }
-                const result = await handleApiResponse<string[]>(res, projectId);
+                if (res.status === 403) {
+                    console.warn("Permission denied for getRootCollections", { projectId });
+                    return [];
+                }
+                if (res.status >= 300) {
+                    if (retries > 0) {
+                        return await retry();
+                    }
+                    return [];
+                }
+                const data = await handleApiResponse<{
+                    collections?: string[];
+                    collectionsWithDB?: Array<{ path: string; databaseId?: string }>;
+                    databaseId?: string;
+                } | string[]>(res, projectId);
+
+                console.debug("getRootCollections response:", data);
+
+                // Use new format if available, otherwise fall back to legacy format
+                let result: RootCollectionInfo[];
+
+                if (Array.isArray(data)) {
+                    // Very old format: plain array of strings
+                    result = data.map(path => ({ path: path as string }));
+                } else if (data && typeof data === 'object') {
+                    if (data.collectionsWithDB && Array.isArray(data.collectionsWithDB)) {
+                        result = data.collectionsWithDB;
+                    } else if (data.collections && Array.isArray(data.collections)) {
+                        // Legacy format: just path strings
+                        result = data.collections.map(path => ({
+                            path,
+                            databaseId: data.databaseId
+                        }));
+                    } else {
+                        console.warn("Unexpected getRootCollections response format:", data);
+                        result = [];
+                    }
+                } else {
+                    console.warn("Unexpected getRootCollections response type:", typeof data, data);
+                    result = [];
+                }
+
                 rootCollectionsCache[projectId] = result;
                 return result;
             })

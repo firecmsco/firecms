@@ -44,7 +44,7 @@ type CollectionEditorFormProps = {
     onPropertyError: (propertyKey: string, namespace: string | undefined, error?: Record<string, any>) => void;
     setDirty?: (dirty: boolean) => void;
     reservedGroups?: string[];
-    extraIcon: React.ReactNode;
+    extraIcon: React.ReactNode | any;
     getUser?: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
     doCollectionInference?: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;

@@ -18,7 +18,7 @@ export interface AIModifiedPathsContextType {
 
 const AIModifiedPathsContext = createContext<AIModifiedPathsContextType | null>(null);
 
-export function AIModifiedPathsProvider({ children }: { children: React.ReactNode }) {
+export function AIModifiedPathsProvider({ children }: { children: React.ReactNode | any }) {
     const [modifiedPaths, setModifiedPaths] = useState<Set<string>>(new Set());
     const [generationCounter, setGenerationCounter] = useState(0);
 

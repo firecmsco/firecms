@@ -61,9 +61,9 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         adminMode = "editor"
     } = props;
 
-    const viewsRef = useRef<CMSView[] | undefined>();
-    const adminViewsRef = useRef<CMSView[] | undefined>();
-    const navigationEntriesOrderRef = useRef<string[] | undefined>();
+    const viewsRef = useRef<CMSView[] | undefined>(undefined);
+    const adminViewsRef = useRef<CMSView[] | undefined>(undefined);
+    const navigationEntriesOrderRef = useRef<string[] | undefined>(undefined);
 
     const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);

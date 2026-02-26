@@ -118,9 +118,9 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
+                        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController))
+                        sideDialogsController.open(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search))
                 }
             }
             initialised.current = true;
@@ -140,7 +140,7 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
+                const panelProps = propsToSidePanel(lastPanel, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -153,7 +153,7 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
+                return propsToSidePanel(sidePanelProps.additional, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search);
             }
             return sidePanelProps;
         });
@@ -187,10 +187,11 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
                 cmsUrlController.resolveDatabasePathsFrom,
                 smallLayout,
                 customizationController,
-                authController
+                authController,
+                location.search
             ));
 
-    }, [sideDialogsController, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, authController.user]);
+    }, [sideDialogsController, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, authController.user, location.search]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 
@@ -198,9 +199,9 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
+        sideDialogsController.replace(propsToSidePanel(props, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search));
 
-    }, [cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, sideDialogsController, smallLayout, authController.user]);
+    }, [cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, sideDialogsController, smallLayout, authController.user, location.search]);
 
     return {
         close,
@@ -264,14 +265,15 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     resolveIdsFrom: (pathWithAliases: string) => string,
     smallLayout: boolean,
     customizationController: CustomizationController,
-    authController: AuthController
+    authController: AuthController,
+    locationSearch: string
 ): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
     const urlPath = props.entityId
-        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}#${SIDE_URL_HASH}`)
-        : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
+        : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`);
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,

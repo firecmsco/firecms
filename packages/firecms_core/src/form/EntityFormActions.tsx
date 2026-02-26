@@ -82,7 +82,7 @@ type ActionsViewProps<M extends object> = {
     sideEntityController: SideEntityController,
     disabled: boolean,
     status: "new" | "existing" | "copy",
-    pluginActions?: React.ReactNode[],
+    pluginActions?: any[],
     openEntityMode: "side_panel" | "full_screen";
     navigateBack: () => void;
     formContext: FormContext,

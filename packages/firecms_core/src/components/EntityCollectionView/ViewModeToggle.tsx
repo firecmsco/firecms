@@ -22,16 +22,11 @@ export type ViewModeToggleProps = {
     viewMode?: ViewMode;
     onViewModeChange?: (mode: ViewMode) => void;
     /**
-     * Whether Kanban view mode is available for this collection.
-     * Should be true when collection.kanban is set with a valid enum property.
+     * Which view modes are enabled for this collection.
+     * Only these modes will appear in the toggle.
+     * Defaults to all three: ["table", "cards", "kanban"].
      */
-    kanbanEnabled?: boolean;
-    /**
-     * Whether a plugin exists that can configure Kanban (e.g., collection editor).
-     * When true, Kanban option is always shown (enabled or not based on kanbanEnabled).
-     * When false, Kanban option is shown but disabled.
-     */
-    hasKanbanConfigPlugin?: boolean;
+    enabledViews?: ViewMode[];
     /**
      * Current size for card/table views
      */
@@ -62,11 +57,12 @@ export type ViewModeToggleProps = {
     onKanbanPropertyChange?: (property: string) => void;
 }
 
+const ALL_VIEW_MODES: ViewMode[] = ["table", "cards", "kanban"];
+
 export function ViewModeToggle({
     viewMode = "table",
     onViewModeChange,
-    kanbanEnabled = false,
-    hasKanbanConfigPlugin = false,
+    enabledViews = ALL_VIEW_MODES,
     size,
     onSizeChanged,
     open,
@@ -101,7 +97,7 @@ export function ViewModeToggle({
 
     // Build toggle options - always include kanban
     const viewModeOptions: ToggleButtonOption<ViewMode>[] = useMemo(() => {
-        const options: ToggleButtonOption<ViewMode>[] = [
+        const allOptions: ToggleButtonOption<ViewMode>[] = [
             {
                 value: "table",
                 label: "List",
@@ -119,7 +115,7 @@ export function ViewModeToggle({
             }
         ];
 
-        return options;
+        return allOptions;
     }, []);
 
     return (
@@ -136,11 +132,13 @@ export function ViewModeToggle({
         >
             <div className="p-3 flex flex-col gap-3 min-w-[240px]">
                 {/* View mode toggle using ToggleButtonGroup */}
-                <ToggleButtonGroup
-                    value={viewMode}
-                    onValueChange={onViewModeChange}
-                    options={viewModeOptions}
-                />
+                {viewModeOptions.length > 1 && (
+                    <ToggleButtonGroup
+                        value={viewMode}
+                        onValueChange={onViewModeChange}
+                        options={viewModeOptions}
+                    />
+                )}
 
                 {/* Size selector */}
                 {showSizeSelector && (
@@ -194,4 +192,3 @@ export function ViewModeToggle({
         </Popover>
     );
 }
-

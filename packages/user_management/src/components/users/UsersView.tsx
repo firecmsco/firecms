@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import { useUserManagement } from "../../hooks/useUserManagement";
 import { User } from "@firecms/core";
 
-export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
+export const UsersView = function UsersView({ children }: { children?: React.ReactNode | any }) {
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | undefined>();
@@ -38,25 +38,25 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
             <div
                 className="flex items-center mt-12">
                 <Typography gutterBottom variant="h4"
-                            className="grow"
-                            component="h4">
+                    className="grow"
+                    component="h4">
                     Users
                 </Typography>
                 <Button
                     size={"large"}
-                    startIcon={<AddIcon/>}
+                    startIcon={<AddIcon />}
                     onClick={handleAddUser}>
                     Add user
                 </Button>
             </div>
 
-            <UsersTable onUserClicked={onUserClicked}/>
+            <UsersTable onUserClicked={onUserClicked} />
 
             <UserDetailsForm
                 key={selectedUser?.uid ?? `new-${newFormKey}`}
                 open={dialogOpen}
                 user={selectedUser}
-                handleClose={handleClose}/>
+                handleClose={handleClose} />
 
         </Container>
     )

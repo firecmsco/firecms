@@ -103,7 +103,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
 
     if (!props || !collection) {
-        return <div className={"w-full"}/>;
+        return <div className={"w-full"} />;
     }
 
     return (
@@ -117,32 +117,34 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     onValuesModified={onValuesModified}
                     onSaved={onUpdate}
                     barActions={({
-                                     status,
-                                     values
-                                 }) => <>
-                        <IconButton
-                            className="self-center"
-                            onClick={onClose}>
-                            <CloseIcon size={"small"}/>
-                        </IconButton>
-                        {allowFullScreen && <IconButton
-                            className="self-center"
-                            onClick={() => {
-                                const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
-                                saveEntityToMemoryCache(key, values);
-                                if (entityId)
-                                    navigate(location.pathname);
-                                else
-                                    navigate(location.pathname + "#new");
-                            }}>
-                            <OpenInFullIcon size={"small"}/>
-                        </IconButton>}
-                    </>}
+                        status,
+                        values
+                    }) => <>
+                            <IconButton
+                                className="self-center"
+                                size={"smallest"}
+                                onClick={onClose}>
+                                <CloseIcon size={"smallest"} />
+                            </IconButton>
+                            {allowFullScreen && <IconButton
+                                className="self-center"
+                                size={"smallest"}
+                                onClick={() => {
+                                    const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+                                    saveEntityToMemoryCache(key, values);
+                                    if (entityId)
+                                        navigate(location.pathname + location.search);
+                                    else
+                                        navigate(location.pathname + location.search + "#new");
+                                }}>
+                                <OpenInFullIcon size={"smallest"} />
+                            </IconButton>}
+                        </>}
                     onTabChange={({
-                                      entityId,
-                                      selectedTab,
-                                      collection,
-                                  }) => {
+                        entityId,
+                        selectedTab,
+                        collection,
+                    }) => {
                         sideEntityController.replace({
                             path: path,
                             entityId,

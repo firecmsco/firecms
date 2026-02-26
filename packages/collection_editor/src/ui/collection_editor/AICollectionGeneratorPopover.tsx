@@ -39,7 +39,7 @@ export interface AICollectionGeneratorPopoverProps {
     /**
      * Optional custom trigger button. If not provided, a default AI button is used.
      */
-    trigger?: React.ReactNode;
+    trigger?: React.ReactNode | any;
 
     /**
      * Size of the button
@@ -50,6 +50,11 @@ export interface AICollectionGeneratorPopoverProps {
      * Whether to show the label text
      */
     showLabel?: boolean;
+
+    /**
+     * Optional analytics callback
+     */
+    onAnalyticsEvent?: (event: string, params?: object) => void;
 }
 
 export function AICollectionGeneratorPopover({
@@ -58,7 +63,8 @@ export function AICollectionGeneratorPopover({
     generateCollection,
     trigger,
     size = "small",
-    showLabel = true
+    showLabel = true,
+    onAnalyticsEvent
 }: AICollectionGeneratorPopoverProps) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [prompt, setPrompt] = useState("");
@@ -76,6 +82,9 @@ export function AICollectionGeneratorPopover({
 
         setLoading(true);
         setError(null);
+
+        const mode = existingCollection ? "modify" : "create";
+        onAnalyticsEvent?.("ai_collection_generate_start", { mode });
 
         try {
             const collectionsContext = existingCollections.map(c => ({
@@ -103,6 +112,10 @@ export function AICollectionGeneratorPopover({
             onGenerated(result.collection, result.operations);
             setMenuOpen(false);
             setPrompt("");
+            onAnalyticsEvent?.("ai_collection_generate_success", {
+                mode,
+                operationsCount: result.operations?.length
+            });
             snackbarController.open({
                 type: "success",
                 message: existingCollection
@@ -115,6 +128,10 @@ export function AICollectionGeneratorPopover({
                 ? e.message
                 : "Failed to generate collection. Please try again.";
             setError(errorMessage);
+            onAnalyticsEvent?.("ai_collection_generate_error", {
+                mode,
+                error: errorMessage
+            });
             snackbarController.open({
                 type: "error",
                 message: errorMessage

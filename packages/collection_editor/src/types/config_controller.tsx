@@ -2,7 +2,7 @@ import { EntityCollection, NavigationGroupMapping, Property } from "@firecms/cor
 import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {
-    status: "ongoing" | "complete";
+    status: "ongoing" | "complete" | "error";
     error: string | null;
 }
 

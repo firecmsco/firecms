@@ -21,7 +21,7 @@ export function ImportNewPropertyFieldPreview({
     includeName?: boolean,
     onEditClick?: () => void,
     onPropertyNameChanged?: (propertyKey: string, value: string) => void,
-    propertyTypeView?: React.ReactNode
+    propertyTypeView?: any
 }) {
 
     const { propertyConfigs } = useCustomizationController();

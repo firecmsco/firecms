@@ -11,7 +11,7 @@ export function createHistoryEntry<T = any>({
     collection
 }: NewHistoryEntryParams<T>) {
 
-    const uid = context.authController.user?.uid;
+    const uid = context.authController?.user?.uid;
     const dataSource = context.dataSource;
     const changedFields = previousValues ? findChangedFields(previousValues as object, values as object) : null;
 

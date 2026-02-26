@@ -691,7 +691,7 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@originjs/vite-plugin-federation": "^1.3.5",
+    "@originjs/vite-plugin-federation": "^1.4.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/react": "^18.2.71",
     "@types/react-dom": "^18.2.22",
@@ -848,6 +848,161 @@ FireCMS 3.0 is now deployed in our own service, and reachable through [app.firec
 You can still deploy it in your own Firebase project. The same build you generate for running the
 CMS locally can be deployed to Firebase hosting, or any other hosting service.
 
+
+## Migrating from v3.0 to v3.1 (Cloud)
+
+This migration guide applies to **FireCMS Cloud** projects that deploy custom code using the CLI
+(`firecms deploy`).
+
+### Do I Need to Do Anything?
+
+**All FireCMS Cloud users get every new feature automatically** — Kanban board, Cards view,
+AI collection generation, and more are already live in your project. No update needed.
+
+If you deploy **custom code** via the CLI (`firecms deploy`), your existing build will continue to
+work exactly as before. However, we strongly encourage you to update your local dependencies to
+Tailwind CSS v4 and React 19. React 18 is still supported today, but **will be deprecated in a
+future release**, so updating now will save you effort later.
+
+---
+
+### Recommended Updates
+
+#### Update FireCMS Packages
+
+Update all `@firecms/*` packages in your `package.json` to version **3.1**:
+
+```bash
+npm i @firecms/cloud@3.1.0
+```
+
+---
+
+#### Migrate to Tailwind CSS v4
+
+FireCMS 3.1 ships with **Tailwind CSS v4** support. While your existing Tailwind v3 setup will
+continue to work, we recommend upgrading for faster builds and simpler configuration.
+
+##### 1. Install Tailwind CSS v4 and the Vite plugin
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+##### 2. Update your `vite.config.ts`
+
+Add the new Tailwind CSS Vite plugin:
+
+```typescript
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+##### 3. Update your `index.css`
+
+Replace your existing CSS with the new v4 format:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::note
+The old CSS variable names (`--fcms-primary`, `--fcms-primary-dark`, `--fcms-primary-bg`) have been
+replaced. Use `--color-primary` and `--color-secondary` instead — dark and background variants are
+now computed automatically.
+:::
+
+##### 4. Clean up old config files
+
+Remove these files from your project — they are no longer needed:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+#### Upgrade to React 19
+
+FireCMS 3.1 supports **React 19** while maintaining backward compatibility with React 18.3.
+We recommend upgrading now — **React 18 support will be removed in a future release**.
+
+```bash
+npm i react@19 react-dom@19
+npm i -D @types/react@19 @types/react-dom@19
+```
+
+:::tip
+If you see TypeScript errors like `Cannot find namespace 'JSX'` after upgrading, replace explicit
+`JSX.Element` return types with `React.ReactElement` or remove the return type annotation entirely.
+:::
+
+---
+
+### What's New in v3.1
+
+These features are already available in your FireCMS Cloud project — no update required:
+
+- **Kanban Board view** — drag-and-drop entities grouped by enum properties
+- **Cards view** — visual card layout for content-heavy collections
+- **AI Collection Generation** — generate schemas from natural language
+- **Drag-and-drop column reordering** — rearrange table columns by dragging, order is saved automatically
+- **Duplicate collections** — clone an existing collection to create a new one with the same schema
+- **Entity History improvements** — previous values, "last edited by" indicator, per-collection toggles
+- **New filter UI** — redesigned filter view for a cleaner experience
+- **Timezone support for dates** — correct timezone handling, no more midnight auto-conversion
+- **Enum conditions** — dynamically filter enum values based on other properties
+- **Collapsible drawer groups** — cleaner sidebar navigation
+- **TipTap V3** — improved rich-text editor
+- **Image resizing** — built-in image resizing on upload
+
+For custom code projects, updating also unlocks:
+
+- **Tailwind CSS v4** — faster builds, simpler config
+- **React 19** — latest React features and performance
+
+Check the [changelog](/docs/changelog) for the complete list of changes.
+
+---
+
+### Troubleshooting
+
+#### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will
+cause type mismatches and runtime errors.
+
+#### Styles not applying after Tailwind v4 migration
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
+- Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
+
+#### `Cannot find namespace 'JSX'`
+Update your return type annotations from `JSX.Element` to `React.ReactElement` or remove the
+explicit return type and let TypeScript infer it.
 
 ## Eject Collections from UI to Code
 
@@ -4268,7 +4423,7 @@ const productsCollection = buildCollection({
 | Option           | Type                                | Description                                                                                                                               |
 | ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `defaultEnabled` | `boolean`                           | If `true`, the history view will be enabled for all collections by default. Each collection can override this by setting its `history` property. |
-| `getUser`        | `(uslug: docs/string) => User \| null` | Optional function to get the user object (display name, photo, etc.) from a user ID to display in the history log.                        |
+| `getUser`        | `(userId: string) => User \| null` | Optional function to get the user object (display name, photo, etc.) from a user ID to display in the history log.                        |
 
 ### Collection Configuration
 
@@ -4737,14 +4892,36 @@ type `ExtraData`.
 This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
 FireCMS v3.1 introduces important updates that require configuration changes and offers exciting new features.
 
+### Before You Start
+
+- Ensure you are currently on **FireCMS v3.0.x**
+- Back up your project or commit your current state to version control
+- Ensure you are using **Node.js 18+**
+
+### Update FireCMS Packages
+
+Update all `@firecms/*` packages to version **3.1**:
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Make sure to include **all** `@firecms/*` packages listed in your `package.json`. Mixing v3.0 and v3.1 packages will cause issues.
+
+---
+
 ### TailwindCSS v4 Migration
 
-The most significant change in v3.1 is the migration from **TailwindCSS v3 to v4**. This involves updating your 
+The most significant change in v3.1 is the migration from **TailwindCSS v3 to v4**. This involves updating your
 TailwindCSS configuration and ensuring that your styles are compatible with the new version.
+
+:::caution
+This is a **breaking change**. Your project will not work correctly until you complete all steps in this section.
+:::
 
 #### Update Dependencies
 
-Update your FireCMS packages and install TailwindCSS v4:
+Install TailwindCSS v4 and the Vite plugin:
 
 ```bash
 npm i tailwindcss@4 @tailwindcss/vite
@@ -4796,6 +4973,11 @@ Update your `index.css` file to reflect these changes:
 }
 ```
 
+:::warning
+If you skip this step, your custom theme colors will **not be applied** and FireCMS will fall back to its default palette.
+The `--fcms-primary-dark` and `--fcms-primary-bg` variables are no longer needed — they are computed automatically from `--color-primary`.
+:::
+
 #### Updated index.css Structure
 
 Your `index.css` file should now look like this:
@@ -4826,6 +5008,16 @@ Remove the following files from your project as they are no longer needed:
 - `tailwind.config.js`
 - `postcss.config.js`
 
+#### Verify Your Migration
+
+After completing all steps, run:
+
+```bash
+npm run build
+```
+
+The build should complete without errors. If you see CSS-related warnings, double-check that your `index.css` matches the structure above.
+
 ---
 
 ### New Collection View Modes
@@ -4834,7 +5026,7 @@ FireCMS v3.1 introduces new ways to visualize your collection data beyond the tr
 
 #### Cards View
 
-The **Cards view** displays your entities as visual cards, making it easier to browse content-heavy collections 
+The **Cards view** displays your entities as visual cards, making it easier to browse content-heavy collections
 such as blog posts, products, or media libraries. Each card shows a preview of the entity with its key fields.
 
 #### Kanban/Board View
@@ -4863,6 +5055,7 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Enhanced suggestion menu behavior
 - Small UI adjustments and visual update to dialogs
 - Removed font-mono from map preview
+- TipTap V3 migration for improved markdown editor performance
 
 #### Collection Editor
 - Added inline editing for property editing
@@ -4880,6 +5073,10 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Local changes can now be applied manually
 - Clearing unsaved changes indicator when feature is not enabled
 
+:::note
+`enableLocalChangesBackup` defaults to **true**, matching the previous behavior. Set it to `false` in your collection config if you want to disable local backup of unsaved changes.
+:::
+
 #### Storage & Images
 - New image resizing capabilities
 - Replaced internal compressing library with compressor.js
@@ -4889,7 +5086,6 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Fixed dates losing focus while typing
 - Fixed select enum filters UI glitch
 - Fixed full screen entity views with encoded characters in their ID
-- TipTap V3 migration for improved markdown editor performance
 
 ---
 
@@ -4942,7 +5138,7 @@ const dataTalkConfig = useBuildDataTalkConfig({
     userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
     getAuthToken: authController.getAuthToken,
     loadSamplePrompts: true
-    // apiEndpoint defaults to https://api.firecms.co/datatalk
+    // apiEndpoint defaults to https://api.firecms.co
 });
 
 // Add DataTalk as a view in your navigation
@@ -4977,6 +5173,21 @@ DataTalk automatically reads your collection schema from the navigation controll
 :::note
 AI features require a valid FireCMS PRO license. The API endpoints authenticate using your Firebase auth token.
 :::
+
+---
+
+### Troubleshooting
+
+#### `Cannot find namespace 'JSX'`
+If you see TypeScript errors like `error TS2503: Cannot find namespace 'JSX'`, update your return type annotations from `JSX.Element` to `React.ReactElement` or simply remove the explicit return type and let TypeScript infer it.
+
+#### Styles not applying after migration
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
+- Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
+
+#### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will cause type mismatches and runtime errors.
 
 ## Migrating from previous beta versions
 
@@ -5097,7 +5308,7 @@ This is a sample `package.json` with the new config:
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@originjs/vite-plugin-federation": "^1.3.5",
+    "@originjs/vite-plugin-federation": "^1.4.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/react": "^18.2.71",
     "@types/react-dom": "^18.2.22",
@@ -5755,6 +5966,27 @@ Users can still switch between views using the view selector in the collection t
 
 ---
 
+### Restricting Available Views
+
+By default, all three view modes are available. Use `enabledViews` to restrict which views appear in the selector:
+
+```typescript
+const ordersCollection = buildCollection({
+    path: "orders",
+    name: "Orders",
+    enabledViews: ["table", "kanban"], // Cards view won't be available
+    properties: {
+        // ...
+    }
+});
+```
+
+:::note
+The Kanban view is automatically available whenever your collection has at least one string property with `enumValues`. If no enum properties exist, Kanban will not appear in the selector even if included in `enabledViews`.
+:::
+
+---
+
 ### Table View
 
 The default view mode. Displays entities in a spreadsheet-like grid with support for:
@@ -5804,9 +6036,13 @@ Displays entities as cards organized into columns based on an enum property. Dra
 
 ![Kanban View in Action](/img/blog/kanban_view.png)
 
-#### Enable Kanban View
+#### Auto-Detection
 
-Set `defaultViewMode: "kanban"` and configure the `kanban` property with the enum field that defines your columns:
+The Kanban view is **automatically available** for any collection that has at least one string property with `enumValues` defined. No additional configuration is required — just define your enum property and the Board option will appear in the view selector.
+
+#### Setting a Default Column Property
+
+When your collection has multiple enum properties, you can set which one is used for columns by default with the `kanban` config. Users can switch between enum properties from the view selector.
 
 ```typescript
 const tasksCollection = buildCollection({
@@ -5814,7 +6050,7 @@ const tasksCollection = buildCollection({
     name: "Tasks",
     defaultViewMode: "kanban",
     kanban: {
-        columnProperty: "status" // Must be a string property with enumValues
+        columnProperty: "status" // Optional: pre-selects which enum to group by
     },
     properties: {
         title: buildProperty({ dataType: "string", name: "Task" }),
@@ -15246,6 +15482,40 @@ firecms deploy
 
 
 ## Changelog
+### [3.1.0] - 2026-02-20
+
+- **AI Integration**:
+  - Introduced AI-driven collection generation and data enhancement features.
+  - Added new AI icon and integrated AI capabilities into the collection editor.
+- **Kanban View**:
+  - Added full support for Kanban boards with customizable columns.
+  - Implemented drag-and-drop column reordering and optimistic updates.
+  - Added Kanban configuration options including column colors.
+
+- **Collection Features**:
+  - Added `display` view to collection editor.
+  - Implemented drag-and-drop column reordering in data tables with persistence.
+  - Enhanced collection inference with optional filter and sort parameters.
+- **UI/UX Improvements**:
+  - Added View Mode Toggle (List, Grid, Table) for better data visualization control.
+  - Implemented collapsible drawer navigation groups.
+  - Added full-screen blocking modal support for Cookie Banner.
+  - Harmonized button colors and restyled Tab components.
+  - Replaced `AutorenewIcon` with `FindInPageIcon` for better clarity.
+  - Enabled smooth scrolling behavior.
+- **Storage**:
+  - Added support for fully-qualified storage URLs.
+  - Added `includeBucketUrl` and `imageResize` options for file uploads.
+- **User Management**:
+  - Added `updateUserFields` method for direct Firestore updates.
+- **Fixes**:
+  - Updated Firebase dependency to v12.7.0.
+  - Security updates for Next.js (CVE-2025-66478).
+  - Fixed date autovalues validation bugs.
+  - Fixed issues with object merging and local changes.
+  - Improved Text Search integration with Typesense.
+  - Fixed layout and styling in FormEnhanceAction.
+
 ### [3.0.0] - 2025-12-01
 
 - **Editor Enhancements**:

@@ -15,9 +15,9 @@ export type NavigationRoutesProps = {
     /**
      * In case you need to override the home page
      */
-    homePage?: React.ReactNode;
+    homePage?: any;
 
-    children?: React.ReactNode | React.ReactNode[]
+    children?: any | any[]
 
 };
 
@@ -53,7 +53,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
          */
         const baseLocation = state && state.base_location ? state.base_location : location;
 
-        const cmsViews: React.ReactNode[] = [];
+        const cmsViews: any[] = [];
         if (navigationState.views) {
             navigationState.views.forEach((cmsView) => {
                 if (Array.isArray(cmsView.slug))

@@ -1,0 +1,47 @@
+{
+  "name": "@firecms/mcp-server",
+  "version": "3.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "MCP server for FireCMS Cloud — manage projects, collections, users, and AI features via the Model Context Protocol",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "firecms-mcp": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@firecms/cli": "^3.1.0",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "axios": "^1.7.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "firecms",
+    "mcp",
+    "model-context-protocol",
+    "firebase",
+    "firestore",
+    "cms",
+    "ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FireCMSco/firecms"
+  }
+}

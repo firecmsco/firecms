@@ -22,7 +22,7 @@ export interface SnackbarController {
      */
     open: (props: {
         type: SnackbarMessageType;
-        message: React.ReactNode;
+        message: React.ReactNode | any;
         autoHideDuration?: number;
     }) => void;
 

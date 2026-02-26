@@ -50,7 +50,7 @@ export function useBuildFireCMSBackend({
 
     const [projects, setProjects] = useState<FireCMSProject[]>();
 
-    const firestoreRef = useRef<Firestore>();
+    const firestoreRef = useRef<Firestore>(undefined);
 
     const updateFirebaseUser = useCallback( (firebaseUser: FirebaseUser | null) => {
         onUserChange?.(firebaseUser);
