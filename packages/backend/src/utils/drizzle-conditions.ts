@@ -634,8 +634,8 @@ export class DrizzleConditionBuilder {
 
         for (const [key, prop] of Object.entries(properties)) {
             // Only include string properties that don't have enum defined
-            // PostgreSQL enum columns don't support ILIKE, so we skip them
-            if (prop.type === "string" && !prop.enum) {
+            // PostgreSQL enum and uuid columns don't support ILIKE, so we skip them
+            if (prop.type === "string" && !prop.enum && prop.isId !== "uuid") {
                 const fieldColumn = table[key as keyof typeof table] as AnyPgColumn;
                 if (fieldColumn) {
                     searchConditions.push(ilike(fieldColumn, `%${searchString}%`));

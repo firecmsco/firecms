@@ -471,3 +471,70 @@ describe("generateDrizzleSchema V2 improvements", () => {
         expect(result).toContain("(true) AND (auth.roles() ~ 'admin')");
     });
 });
+
+describe("generateDrizzleSchema ID Generation", () => {
+    const cleanSchema = (schema: string) => {
+        return schema
+            .replace(/\/\/.*$/gm, "")
+            .replace(/\/\*[\s\S]*?\*\//g, "")
+            .replace(/\n{2,}/g, "\n")
+            .replace(/\s+/g, " ")
+            .trim();
+    };
+
+    it("should generate a UUID primary key when isId is 'uuid'", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "items",
+            name: "Items",
+            properties: {
+                custom_id: { type: "string", isId: "uuid" }
+            }
+        }];
+        const result = await generateSchema(collections);
+        const cleanResult = cleanSchema(result);
+
+        expect(cleanResult).toContain("custom_id: uuid(\"custom_id\").primaryKey().defaultRandom()");
+    });
+
+    it("should generate a serial primary key when isId is 'increment'", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "tickets",
+            name: "Tickets",
+            properties: {
+                ticket_id: { type: "number", isId: "increment" }
+            }
+        }];
+        const result = await generateSchema(collections);
+        const cleanResult = cleanSchema(result);
+
+        expect(cleanResult).toContain("ticket_id: integer(\"ticket_id\").generatedByDefaultAsIdentity().primaryKey()");
+    });
+
+    it("should generate a custom SQL primary key when isId is a sql string", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "events",
+            name: "Events",
+            properties: {
+                event_id: { type: "string", isId: "sql`gen_random_uuid()`" }
+            }
+        }];
+        const result = await generateSchema(collections);
+        const cleanResult = cleanSchema(result);
+
+        expect(cleanResult).toContain("event_id: varchar(\"event_id\").primaryKey().default(sql`gen_random_uuid()`)");
+    });
+
+    it("should generate a normal text primary key when isId is simply true", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "users",
+            name: "Users",
+            properties: {
+                user_name: { type: "string", isId: true }
+            }
+        }];
+        const result = await generateSchema(collections);
+        const cleanResult = cleanSchema(result);
+
+        expect(cleanResult).toContain("user_name: varchar(\"user_name\").primaryKey()");
+    });
+});

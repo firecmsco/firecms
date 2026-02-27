@@ -68,7 +68,7 @@ export function TextFieldBinding<T extends string | number>({
     const label = (
         <LabelWithIcon
             icon={getIconForProperty(property, "small")}
-            required={property.validation?.required}
+            required={property.validation?.required || property.isId === true}
             title={property.name ?? propertyKey} />
     );
     return (<>
@@ -112,7 +112,7 @@ export function TextFieldBinding<T extends string | number>({
                     className={property.widthPercentage !== undefined ? "mt-8" : undefined}
                     label={<LabelWithIcon
                         icon={getIconForProperty(property, "small")}
-                        required={property.validation?.required}
+                        required={property.validation?.required || property.isId === true}
                         title={property.name ?? propertyKey} />}
                     type={inputType}
                     disabled={disabled}

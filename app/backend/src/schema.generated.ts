@@ -50,11 +50,13 @@ export const profiles = pgTable("profiles", {
 });
 
 export const projectUsers = pgTable("project_users", {
-    project_id: varchar("project_id").primaryKey().notNull(),
-    id: varchar("id").primaryKey().notNull(),
+    project_id: varchar("project_id").notNull(),
+    id: varchar("id").notNull(),
     email: varchar("email").notNull(),
     role: projectUsersRole("role")
-});
+}, (table) => ({
+    pk: primaryKey({ columns: [table.project_id, table.id] })
+}));
 
 export const tags = pgTable("tags", {
     id: integer("id").primaryKey().notNull(),

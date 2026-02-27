@@ -17,7 +17,6 @@ import {
     useBuildModeController,
     useBuildAdminModeController,
     AdminModeControllerProvider,
-    DeveloperHomePage,
     useBuildCollectionRegistryController,
     useBuildCMSUrlController,
     useBuildNavigationStateController,
@@ -240,11 +239,7 @@ export function FireCMSFirebaseApp({
                                             <AppBar title={name} logo={usedLogo} />
                                             <Drawer />
                                             <NavigationRoutes
-                                                homePage={
-                                                    adminModeController.mode === "developer"
-                                                        ? <DeveloperHomePage />
-                                                        : (components?.HomePage ? <components.HomePage /> : undefined)
-                                                } />
+                                                homePage={components?.HomePage ? <components.HomePage /> : undefined} />
                                             <SideDialogs />
                                         </Scaffold>
                                     );

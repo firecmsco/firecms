@@ -11,11 +11,9 @@ const testEntitiesCollection: EntityCollection = {
         id: {
             name: "ID",
             type: "number",
-            isId: true,
-            validation: {
-                required: true
-            }
+            isId: true
         },
+
         // --- String Types ---
         string_plain: {
             name: "Plain Text String",

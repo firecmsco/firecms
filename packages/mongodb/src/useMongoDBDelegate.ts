@@ -421,8 +421,6 @@ export function useMongoDBDelegate({
          */
         fetchEntity: fetchEntity,
 
-        generateEntityId: generateEntityId,
-
         /**
          * Listen to a entities in a given path
          * @param path

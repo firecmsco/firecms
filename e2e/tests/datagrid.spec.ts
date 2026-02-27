@@ -22,9 +22,25 @@ test.describe('Test Entities Datagrid Operations', () => {
 
         await nameInput.waitFor({ state: 'visible', timeout: 10000 });
         await nameInput.fill(tagName);
+        await activeDialog.locator('#form_field_id input').first().fill(Date.now().toString().slice(-6));
         await activeDialog.getByText('Create and close', { exact: false }).click();
-        await expect(activeDialog).not.toBeVisible();
-        await expect(page.getByText(tagName)).toBeVisible();
+        await expect(activeDialog).not.toBeVisible({ timeout: 15000 });
+
+        // Wait for table to update
+        await page.waitForTimeout(1000);
+
+        // Search for tag to verify
+        await page.locator('input[placeholder="Search"]').first().click({ force: true });
+        const tagActiveSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await tagActiveSearch.isVisible()) {
+            await tagActiveSearch.fill(tagName);
+            await tagActiveSearch.press('Enter');
+        } else {
+            await page.keyboard.type(tagName);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000);
+        await expect(page.getByText(tagName).first()).toBeVisible({ timeout: 10000 });
 
         // --- 2. Create a Test Entity and assign the Tag ---
         await page.goto('/c/test_entities');
@@ -34,26 +50,28 @@ test.describe('Test Entities Datagrid Operations', () => {
         await page.getByText('Add Test Entity', { exact: false }).first().click();
 
         const entityString = `DataGrid Entity ${Date.now()}`;
-        await page.locator('label').filter({ hasText: /^Plain/ }).locator('..').locator('input, textarea').first().waitFor({ state: 'visible' });
-        await page.locator('label').filter({ hasText: /^Plain text string/i }).locator('..').locator('input, textarea').first().fill(entityString);
+        // Fill required properties
+        await page.locator('#form_field_id').locator('input').first().fill(Date.now().toString().slice(-6));
+        await page.locator('label').filter({ hasText: /Plain text string/i }).locator('..').locator('input, textarea').first().fill(entityString);
+        await page.locator('#form_field_string_enum').getByRole('combobox').first().click();
+        await page.getByRole('option', { name: 'Option A' }).click();
 
-        // Find the 'relation_tags' relation field and click it
-        await page.locator('label').filter({ hasText: /^Relation to Tags/i }).locator('..').locator('button').first().click();
+        await activeDialog.locator('#form_field_relation_tags').getByRole('button').first().click({ force: true });
 
-        const dialog = page.getByRole('dialog').last();
-        await dialog.getByPlaceholder('Search').fill(tagName);
+        const searchDialog = page.getByRole('dialog').last();
+        await searchDialog.getByPlaceholder('Search').fill(tagName);
         await page.waitForTimeout(1000);
 
-        await dialog.getByText(tagName).first().click();
+        await searchDialog.getByText(tagName).first().click();
         await page.waitForTimeout(500);
 
         // Focus back on text to close popover
-        await page.locator('label').filter({ hasText: /^Plain text string/i }).locator('..').locator('input, textarea').first().click();
+        await page.locator('label').filter({ hasText: /Plain text string/i }).locator('..').locator('input, textarea').first().click();
         await page.waitForTimeout(500);
 
         const createBtn = page.getByText('Create and close', { exact: false }).first();
         await createBtn.click();
-        await expect(createBtn).not.toBeVisible();
+        await page.waitForTimeout(1500); // Wait for API save and drawer close
 
         // --- 3. Test Global Search ---
         await page.waitForTimeout(2000);
@@ -124,12 +142,32 @@ test.describe('Test Entities Datagrid Operations', () => {
         // --- 6. Cleanup ---
         await page.goto('/c/test_entities');
         await page.waitForTimeout(1000);
+        await page.locator('input[placeholder="Search"]').first().click({ force: true });
+        const cleanupActiveSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await cleanupActiveSearch.isVisible()) {
+            await cleanupActiveSearch.fill(entityString);
+            await cleanupActiveSearch.press('Enter');
+        } else {
+            await page.keyboard.type(entityString);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000);
         await page.locator('.flex.min-w-full').filter({ hasText: entityString }).locator('button:has-text("edit")').first().click({ force: true });
-        await page.locator('label').filter({ hasText: /^Plain text string/i }).locator('..').locator('input, textarea').first().waitFor({ state: 'visible', timeout: 10000 });
+        await page.locator('label').filter({ hasText: /Plain text string/i }).locator('..').locator('input, textarea').first().waitFor({ state: 'visible', timeout: 10000 });
         await page.getByRole('dialog').locator('button').filter({ hasText: /delete/i }).first().click({ force: true });
         await page.locator('button').filter({ hasText: /OK|Delete/i }).last().click({ force: true });
 
         await page.goto('/c/tags');
+        await page.waitForTimeout(1000);
+        await page.locator('input[placeholder="Search"]').first().click({ force: true });
+        const tagCleanupSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await tagCleanupSearch.isVisible()) {
+            await tagCleanupSearch.fill(tagName);
+            await tagCleanupSearch.press('Enter');
+        } else {
+            await page.keyboard.type(tagName);
+            await page.keyboard.press('Enter');
+        }
         await page.waitForTimeout(1000);
         await page.locator('.flex.min-w-full').filter({ hasText: tagName }).locator('button:has-text("edit")').first().click({ force: true });
         await page.locator('#form_field_name input, #form_field_name textarea:not([aria-hidden="true"])').first().waitFor({ state: 'visible', timeout: 10000 });

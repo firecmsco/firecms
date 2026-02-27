@@ -40,8 +40,7 @@ const privateNotesCollection: EntityCollection = {
         id: {
             name: "ID",
             type: "string",
-            isId: true,
-            autoValue: "uuid"
+            isId: "uuid"
         },
         title: {
             name: "Title",
@@ -57,7 +56,6 @@ const privateNotesCollection: EntityCollection = {
             name: "User ID",
             type: "string",
             disabled: true,
-            validation: { required: true },
             description: "The ID of the user who owns this note"
         },
         is_locked: {

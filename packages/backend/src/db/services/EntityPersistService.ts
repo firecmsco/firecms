@@ -202,7 +202,14 @@ export class EntityPersistService {
 
                 await updateQuery.where(and(...conditions));
             } else {
-                const dataForInsert = { ...entityData };
+                const dataForInsert = { ...entityData } as any;
+
+                // Strip empty primary keys so the database defaults (e.g. uuid_gen(), auto-increment) can trigger
+                for (const info of idInfoArray) {
+                    if (dataForInsert[info.fieldName] === "" || dataForInsert[info.fieldName] === null || dataForInsert[info.fieldName] === undefined) {
+                        delete dataForInsert[info.fieldName];
+                    }
+                }
 
                 const result = await tx
                     .insert(table)

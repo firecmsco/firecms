@@ -54,7 +54,8 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     const objectSchema: any = {};
     Object.entries(properties as Record<string, Property>)
         .forEach(([name, property]) => {
-            const isIdAndAuto = Boolean(property.isId) && (property.type === "string" || property.type === "number") && Boolean((property as any).autoValue);
+            const isStringOrNumber = property.type === "string" || property.type === "number";
+            const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string";
             if (entityId === undefined && isIdAndAuto) {
                 return; // Skip validation for auto-generated IDs on new entities
             }
@@ -162,8 +163,10 @@ function getYupStringSchema({
     let schema: StringSchema<any> = yup.string().nullable();
     const validation = property.validation;
 
+    const isRequired = validation?.required || property.isId === true;
+
     if (property.enum) {
-        if (validation?.required) {
+        if (isRequired) {
             schema = schema.test(
                 "required",
                 validation?.requiredMessage ? validation.requiredMessage : "Required",
@@ -171,19 +174,20 @@ function getYupStringSchema({
             );
         }
         const entries = enumToObjectEntries(property.enum);
-        const oneOfValues = (validation?.required ? entries : [...entries, null])
+        const oneOfValues = (isRequired ? entries : [...entries, null])
             .map((enumValueConfig) => enumValueConfig?.id ?? null);
         schema = schema.oneOf(oneOfValues);
     }
 
+    if (isRequired && !property.enum) {
+        schema = schema.test(
+            "required",
+            validation?.requiredMessage ? validation.requiredMessage : "Required",
+            (value) => value !== undefined && value !== null && value !== ""
+        );
+    }
+
     if (validation) {
-        if (validation.required) {
-            schema = schema.test(
-                "required",
-                validation?.requiredMessage ? validation.requiredMessage : "Required",
-                (value) => value !== undefined && value !== null && value !== ""
-            );
-        }
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique", "This value already exists and should be unique",
                 (value, context) =>
@@ -227,14 +231,17 @@ function getYupNumberSchema({
     const validation = property.validation;
     let schema: NumberSchema<any> = yup.number().nullable().typeError("Must be a number");
 
+    const isRequired = validation?.required || property.isId === true;
+
+    if (isRequired) {
+        schema = schema.test(
+            "required",
+            validation?.requiredMessage ? validation.requiredMessage : "Required",
+            (value) => value !== undefined && value !== null
+        );
+    }
+
     if (validation) {
-        if (validation.required) {
-            schema = schema.test(
-                "required",
-                validation.requiredMessage ? validation.requiredMessage : "Required",
-                (value) => value !== undefined && value !== null
-            );
-        }
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
                 "This value already exists and should be unique",

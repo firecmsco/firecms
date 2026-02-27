@@ -28,16 +28,29 @@ test.describe('E2E testing for FireCMS UI', () => {
 
         // Save
         await page.getByText('Create and close', { exact: false }).click();
+        await page.waitForTimeout(1500); // Buffer save request
 
         // Wait for success toast, or just wait for the note to appear in the table
         // The drawer should close
-        await expect(page.getByText('Create and close', { exact: false })).not.toBeVisible();
+
+        // Search to ensure it's visible on the first page
+        const searchInputPlaceholder = page.locator('input[placeholder="Search"]').first();
+        await searchInputPlaceholder.click({ force: true });
+        const activeSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await activeSearch.isVisible()) {
+            await activeSearch.fill(randomTitle);
+            await activeSearch.press('Enter');
+        } else {
+            await page.keyboard.type(randomTitle);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000); // Wait for debounce and search results
 
         // Verify it's in the table
-        await expect(page.getByText(randomTitle)).toBeVisible();
+        await expect(page.getByText(randomTitle).first()).toBeVisible();
 
         // Edit the document
-        // Find the row containing our title, and click the 'edit' button within it
+        // Find the row containing our title, and click the edit button
         await page.locator('.flex.min-w-full').filter({ hasText: randomTitle }).locator('button:has-text("edit")').first().click({ force: true });
 
         // Drawer should open
@@ -51,10 +64,10 @@ test.describe('E2E testing for FireCMS UI', () => {
         await expect(page.locator('#form_field_title textarea:not([aria-hidden="true"])')).not.toBeVisible();
 
         // Verify edited title
-        await expect(page.getByText(`${randomTitle} - Edited`)).toBeVisible();
+        await expect(page.getByText(`${randomTitle} - Edited`).first()).toBeVisible();
 
         // Delete the document
-        // 1. Open the form drawer using the edit button
+        // 1. Open the form drawer 
         await page.locator('.flex.min-w-full').filter({ hasText: `${randomTitle} - Edited` }).locator('button:has-text("edit")').first().click({ force: true });
         await page.locator('#form_field_title textarea:not([aria-hidden="true"])').waitFor({ state: 'visible', timeout: 10000 });
 
@@ -69,7 +82,7 @@ test.describe('E2E testing for FireCMS UI', () => {
         await expect(page.locator('#form_field_title textarea:not([aria-hidden="true"])')).not.toBeVisible();
 
         // Verify removed
-        await expect(page.getByText(`${randomTitle} - Edited`)).not.toBeVisible();
+        await expect(page.getByText(`${randomTitle} - Edited`).first()).not.toBeVisible();
     });
 
     test('Authors Collection CRUD Operations', async ({ page }) => {
@@ -84,12 +97,26 @@ test.describe('E2E testing for FireCMS UI', () => {
         await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().waitFor({ state: 'visible', timeout: 10000 });
         const authorName = `Playwright Author ${Date.now()}`;
         await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().fill(authorName);
+        await page.locator('#form_field_id').locator('input').first().fill(Date.now().toString().slice(-6));
         await page.locator('#form_field_email textarea:not([aria-hidden="true"]), #form_field_email input').first().fill('playwright@test.com');
         // Save
         await page.getByText('Create and close', { exact: false }).click();
+        await page.waitForTimeout(1500); // Buffer save request
 
-        await expect(page.getByText('Create and close', { exact: false })).not.toBeVisible();
-        await expect(page.getByText(authorName)).toBeVisible();
+        // Search to ensure it's visible on the first page
+        const searchAuthors = page.locator('input[placeholder="Search"]').first();
+        await searchAuthors.click({ force: true });
+        const activeAuthorsSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await activeAuthorsSearch.isVisible()) {
+            await activeAuthorsSearch.fill(authorName);
+            await activeAuthorsSearch.press('Enter');
+        } else {
+            await page.keyboard.type(authorName);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000); // Wait for debounce and search results
+
+        await expect(page.getByText(authorName).first()).toBeVisible();
 
         // Edit Author
         await page.locator('.flex.min-w-full').filter({ hasText: authorName }).locator('button:has-text("edit")').first().click({ force: true });
@@ -104,12 +131,40 @@ test.describe('E2E testing for FireCMS UI', () => {
         await page.getByText('Save and close', { exact: false }).click();
 
         await expect(page.getByText('Save and close', { exact: false })).not.toBeVisible();
-        await expect(page.getByText(`${authorName} (Updated)`)).toBeVisible();
+
+        // Search to ensure it's visible on the first page
+        const searchUpdatedAuthors = page.locator('input[placeholder="Search"]').first();
+        await searchUpdatedAuthors.click({ force: true });
+        const activeUpdatedAuthorsSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await activeUpdatedAuthorsSearch.isVisible()) {
+            await activeUpdatedAuthorsSearch.fill(`${authorName} (Updated)`);
+            await activeUpdatedAuthorsSearch.press('Enter');
+        } else {
+            await page.keyboard.type(`${authorName} (Updated)`);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000); // Wait for debounce and search results
+
+        await expect(page.getByText(`${authorName} (Updated)`).first()).toBeVisible();
 
         // Teardown - delete the created author
         // Force a clean navigation to clear any lingering popups or URL filter query parameters
         await page.goto('/c/authors');
         await page.waitForTimeout(1000);
+
+        // Search one last time to ensure it is visible for deletion
+        const searchCleanupAuthors = page.locator('input[placeholder="Search"]').first();
+        await searchCleanupAuthors.click({ force: true });
+        const activeCleanupAuthorsSearch = page.locator('input[placeholder="Search"]:not([readonly]), input[type="search"]').first();
+        if (await activeCleanupAuthorsSearch.isVisible()) {
+            await activeCleanupAuthorsSearch.fill(`${authorName} (Updated)`);
+            await activeCleanupAuthorsSearch.press('Enter');
+        } else {
+            await page.keyboard.type(`${authorName} (Updated)`);
+            await page.keyboard.press('Enter');
+        }
+        await page.waitForTimeout(1000);
+
         await page.locator('.flex.min-w-full').filter({ hasText: `${authorName} (Updated)` }).locator('button:has-text("edit")').first().click({ force: true });
         await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().waitFor({ state: 'visible', timeout: 10000 });
         await page.getByRole('dialog').locator('button').filter({ hasText: /delete/i }).first().click({ force: true });

@@ -4,7 +4,6 @@
   "packages": [
     "packages/auth",
     "packages/firecms",
-    "packages/firecms_cloud",
     "packages/firecms_core",
     "packages/backend",
     "packages/postgresql",
@@ -26,17 +25,12 @@
     "packages/collection_editor",
     "packages/collection_editor_firebase",
     "packages/schema_inference",
-    "packages/user_management",
     "packages/formex",
     "packages/types",
     "packages/common",
     "app/frontend",
     "app/backend",
-    "packages/media_manager",
-    "examples/example_cloud",
-    "examples/example",
-    "examples/example_next",
-    "examples/example_pro"
+    "packages/media_manager"
   ],
   "npmClient": "pnpm"
 }

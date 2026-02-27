@@ -619,8 +619,9 @@ export function EntityForm<M extends Record<string, any>>({
                             Object.keys(underlyingChanges).includes(key) &&
                             formex.touched[key];
                         const isNew = status === "new" || status === "copy";
-                        const isIdAndAuto = Boolean(property.isId) && (property.type === "string" || property.type === "number") && Boolean((property as any).autoValue);
-                        const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled) || (!isNew && Boolean(property.isId)) || (isNew && isIdAndAuto);
+                        const isStringOrNumber = property.type === "string" || property.type === "number";
+                        const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string";
+                        const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled) || (!isNew && "isId" in property && Boolean(property.isId)) || (isNew && isIdAndAuto);
                         const hidden = isHidden(property);
                         if (hidden) return null;
                         const widthPercentage = property.widthPercentage ?? 100;

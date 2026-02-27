@@ -1283,3 +1283,54 @@ describe("Edge Cases", () => {
         await expect(schema.validate(["anything"])).resolves.toEqual(["anything"]);
     });
 });
+
+// ============================================================================
+// ID VALIDATION TESTS
+// ============================================================================
+
+describe("ID Validation", () => {
+    it("should ignore required validation when isId is a generator string like 'uuid'", async () => {
+        const property = createStringProperty({
+            isId: "uuid",
+            validation: { required: true }
+        });
+        const schema = getYupEntitySchema(undefined, { custom_id: property });
+
+        // Because isId is a string, getYupEntitySchema skips generating validation for it
+        await expect(schema.validate({ custom_id: null })).resolves.toEqual({ custom_id: null });
+        await expect(schema.validate({})).resolves.toEqual({});
+        await expect(schema.validate({ custom_id: "my-uuid" })).resolves.toEqual({ custom_id: "my-uuid" });
+    });
+
+    it("should ignore required validation when isId is a custom generator SQL string", async () => {
+        const property = createStringProperty({
+            isId: "sql`gen_random_uuid()`",
+            validation: { required: true }
+        });
+        const schema = getYupEntitySchema(undefined, { event_id: property });
+
+        await expect(schema.validate({})).resolves.toEqual({});
+    });
+
+    it("should ignore required validation for number ID properties when isId is 'increment'", async () => {
+        const property = createNumberProperty({
+            isId: "increment",
+            validation: { required: true }
+        });
+        const schema = getYupEntitySchema(undefined, { ticket_id: property });
+
+        await expect(schema.validate({})).resolves.toEqual({});
+        await expect(schema.validate({ ticket_id: 10 })).resolves.toEqual({ ticket_id: 10 });
+    });
+
+    it("should enforce required validation when isId is simply true, even without validation config", async () => {
+        const property = createStringProperty({
+            isId: true
+        });
+        const schema = getYupEntitySchema(undefined, { user_name: property });
+
+        // The property must be provided manually since isId is just 'true'
+        await expect(schema.validate({})).rejects.toThrow();
+        await expect(schema.validate({ user_name: "manual-id" })).resolves.toEqual({ user_name: "manual-id" });
+    });
+});

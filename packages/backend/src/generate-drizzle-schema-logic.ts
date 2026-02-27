@@ -12,7 +12,7 @@ import {
 
 const getPrimaryKeyProp = (collection: EntityCollection): { name: string, type: "string" | "number" } => {
     if (collection.properties) {
-        const idPropEntry = Object.entries(collection.properties).find(([_, prop]) => (prop as Property).isId);
+        const idPropEntry = Object.entries(collection.properties).find(([_, prop]) => "isId" in (prop as object) && Boolean((prop as any).isId));
         if (idPropEntry) {
             return { name: idPropEntry[0], type: (idPropEntry[1] as Property).type === "number" ? "number" : "string" };
         }
@@ -34,10 +34,10 @@ const getPrimaryKeyName = (collection: EntityCollection): string => {
 };
 
 const isIdProperty = (propName: string, prop: Property, collection: EntityCollection): boolean => {
-    if (prop.isId) return true;
+    if ("isId" in prop && Boolean(prop.isId)) return true;
 
-    // We only fallback to "id" if NO property is explicitly marked with `isId: true`
-    const hasExplicitId = Object.values(collection.properties ?? {}).some(p => (p as Property).isId);
+    // We only fallback to "id" if NO property is explicitly marked with `isId: true` or a generator string
+    const hasExplicitId = Object.values(collection.properties ?? {}).some(p => "isId" in (p as object) && Boolean((p as any).isId));
     return !hasExplicitId && propName === "id";
 };
 
@@ -51,7 +51,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             if (stringProp.enum) {
                 const enumName = getEnumVarName(getTableName(collection), propName);
                 columnDefinition = `${enumName}(\"${colName}\")`;
-            } else if (stringProp.autoValue === "uuid") {
+            } else if ("isId" in stringProp && stringProp.isId === "uuid") {
                 columnDefinition = `uuid(\"${colName}\")`;
             } else {
                 columnDefinition = `varchar(\"${colName}\")`;
@@ -59,10 +59,17 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             if (isIdProperty(propName, prop, collection)) {
                 columnDefinition += `.primaryKey()`;
             }
-            if (stringProp.autoValue === "uuid") {
-                columnDefinition += `.defaultRandom()`;
-            } else if (stringProp.autoValue === "cuid") {
-                columnDefinition += `.default(sql\`cuid()\`)`;
+            if ("isId" in stringProp) {
+                if (stringProp.isId === "uuid") {
+                    columnDefinition += `.defaultRandom()`;
+                } else if (stringProp.isId === "cuid") {
+                    columnDefinition += `.default(sql\`cuid()\`)`;
+                } else if (typeof stringProp.isId === "string") {
+                    const sqlContent = stringProp.isId.startsWith("sql`") && stringProp.isId.endsWith("`")
+                        ? stringProp.isId.substring(4, stringProp.isId.length - 1)
+                        : stringProp.isId;
+                    columnDefinition += `.default(sql\`${sqlContent}\`)`;
+                }
             }
             if (stringProp.validation?.unique) {
                 columnDefinition += `.unique()`;
@@ -73,8 +80,14 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const numProp = prop as NumberProperty;
             const isId = isIdProperty(propName, prop, collection);
 
-            if (numProp.autoValue === "increment") {
-                columnDefinition = `serial(\"${colName}\")`;
+            if ("isId" in numProp && numProp.isId === "increment") {
+                columnDefinition = `integer(\"${colName}\").generatedByDefaultAsIdentity()`;
+            } else if ("isId" in numProp && typeof numProp.isId === "string") {
+                columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
+                const sqlContent = numProp.isId.startsWith("sql`") && numProp.isId.endsWith("`")
+                    ? numProp.isId.substring(4, numProp.isId.length - 1)
+                    : numProp.isId;
+                columnDefinition += `.default(sql\`${sqlContent}\`)`;
             } else {
                 columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
             }

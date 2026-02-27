@@ -29,7 +29,7 @@ export function getPrimaryKeys(collection: EntityCollection): { fieldName: strin
     // Fallback to explicitly defined isId properties
     if (collection.properties) {
         const idProps = Object.entries(collection.properties)
-            .filter(([_, prop]) => prop.isId)
+            .filter(([_, prop]) => "isId" in (prop as object) && Boolean((prop as any).isId))
             .map(([key, prop]) => ({
                 fieldName: key,
                 type: prop.type === "number" ? "number" as const : "string" as const

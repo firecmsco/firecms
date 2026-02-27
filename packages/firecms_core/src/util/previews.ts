@@ -19,7 +19,11 @@ export function getEntityPreviewKeys(
     } else {
         listProperties = allProperties;
         return listProperties
-            .filter(key => !targetCollection.properties[key]?.isId && key !== "id")
+            .filter(key => {
+                const prop = targetCollection.properties[key];
+                const isIdProp = prop && typeof prop === "object" && "isId" in prop && Boolean((prop as any).isId);
+                return !isIdProp && key !== "id";
+            })
             .filter(key => {
                 const property = targetCollection.properties[key];
                 return property && !isPropertyBuilder(property) && !isReferenceProperty(property) && !isRelationProperty(property);
