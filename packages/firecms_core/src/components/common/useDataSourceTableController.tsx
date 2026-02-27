@@ -139,20 +139,6 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
 
-    useEffect(() => {
-        if (updateUrl) {
-            const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
-            if (!forceFilter) {
-                setFilterValues(urlFilterValues as any);
-            }
-            if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
-                console.warn("URL sort is not compatible with the force filter.");
-            } else {
-                setSortBy(urlSortBy as any);
-            }
-        }
-    }, [location.search, updateUrl, forceFilter, checkFilterCombination]);
-
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
     const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
