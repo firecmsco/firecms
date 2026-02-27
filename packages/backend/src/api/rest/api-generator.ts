@@ -90,11 +90,9 @@ export class RestApiGenerator {
                 const dataSource = req.dataSource || this.dataSource;
 
                 const path = collection.dbPath || collection.slug;
-                const entityId = dataSource.generateEntityId?.(path, collection) ?? crypto.randomUUID();
                 // Use existing saveEntity from DataSourceDelegate
                 const entity = await dataSource.saveEntity({
                     path,
-                    entityId,
                     values: req.body,
                     collection,
                     status: "new"

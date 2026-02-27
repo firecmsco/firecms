@@ -9,8 +9,7 @@ import {
     getTableForCollection,
     getPrimaryKeys,
     parseIdValues,
-    buildCompositeId,
-    generateEntityId as genEntityId
+    buildCompositeId
 } from "./entity-helpers";
 import { sanitizeAndConvertDates, serializeDataToServer } from "../data-transformer";
 import { RelationService } from "./RelationService";
@@ -30,12 +29,6 @@ export class EntityPersistService {
         this.fetchService = new EntityFetchService(db);
     }
 
-    /**
-     * Generate a new entity ID
-     */
-    generateEntityId(): string {
-        return genEntityId();
-    }
 
     /**
      * Delete an entity by ID
@@ -210,15 +203,6 @@ export class EntityPersistService {
                 await updateQuery.where(and(...conditions));
             } else {
                 const dataForInsert = { ...entityData };
-
-                // If the user's data contains the primary keys, we shouldn't delete them if they are part of a composite key
-                // but we should delete purely auto-generated single IDs
-                if (idInfoArray.length === 1) {
-                    const singleIdField = idInfoArray[0].fieldName;
-                    if (singleIdField in dataForInsert) {
-                        delete (dataForInsert as Record<string, unknown>)[singleIdField];
-                    }
-                }
 
                 const result = await tx
                     .insert(table)

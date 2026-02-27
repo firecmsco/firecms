@@ -19,6 +19,8 @@ export * from "./useDialogsController";
 export * from "./useSideDialogsController";
 export * from "./useAdminModeController";
 export * from "./useBuildAdminModeController";
+export * from "./useEffectiveRoleController";
+export * from "./useBuildEffectiveRoleController";
 export * from "./useSideEntityController";
 export * from "./useFireCMSContext";
 export * from "./useSnackbarController";

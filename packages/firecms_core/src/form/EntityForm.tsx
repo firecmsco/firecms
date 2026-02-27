@@ -239,7 +239,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const initialEntityId: string | number | undefined = useMemo(() => {
         if (status === "new" || status === "copy") {
-            return dataSource.generateEntityId(path, collection);
+            return undefined;
         } else {
             return entityIdProp;
         }
@@ -574,12 +574,10 @@ export function EntityForm<M extends Record<string, any>>({
     }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
         [dataSource, path, entityId]);
 
-    const validationSchema = useMemo(() => entityId
-        ? getYupEntitySchema(
-            entityId,
-            collection.properties,
-            uniqueFieldValidator)
-        : undefined,
+    const validationSchema = useMemo(() => getYupEntitySchema(
+        entityId,
+        collection.properties,
+        uniqueFieldValidator),
         [entityId, collection.properties, uniqueFieldValidator]);
 
     useOnAutoSave(autoSave, formex, lastSavedValues, save);

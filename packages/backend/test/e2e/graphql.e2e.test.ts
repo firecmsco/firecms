@@ -45,8 +45,7 @@ describe("GraphQL E2E Tests", () => {
                 values: args.values,
                 path: args.path
             })),
-            deleteEntity: jest.fn().mockResolvedValue(true),
-            generateEntityId: jest.fn().mockReturnValue("generated-id")
+            deleteEntity: jest.fn().mockResolvedValue(true)
         };
 
         server = await FireCMSApiServer.create({
@@ -149,7 +148,7 @@ describe("GraphQL E2E Tests", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.errors).toBeUndefined();
-        expect(res.body.data.createBook.id).toBe("generated-id");
+        expect(res.body.data.createBook.id).toBe("new-b1");
         expect(res.body.data.createBook.title).toBe("Foundation");
 
         expect(mockDataSource.saveEntity).toHaveBeenCalledWith(

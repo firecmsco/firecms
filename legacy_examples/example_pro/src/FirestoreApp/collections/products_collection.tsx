@@ -70,26 +70,26 @@ const productAdditionalField: AdditionalFieldDelegate<Product> = {
     key: "spanish_title",
     name: "Spanish title",
     Builder: ({
-                  entity,
-                  context
-              }) =>
+        entity,
+        context
+    }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
                 path: `${entity.path}/${entity.id}/locales`,
                 entityId: "es",
                 collection: localeCollection
             }).then((entity) => entity?.values.name)
-        }/>
+        } />
 };
 
 export const productCallbacks: EntityCallbacks<Product> = {
     onPreSave: ({
-                    collection,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
+        collection,
+        path,
+        entityId,
+        values,
+        status
+    }) => {
         values.uppercase_name = values?.name?.toUpperCase();
         return values;
     },
@@ -103,7 +103,7 @@ export const productCallbacks: EntityCallbacks<Product> = {
     },
 
     onPreDelete: (props) => {
-        const email = props.context.authController.user?.email;
+        const email = props.context.user?.email ?? props.context.authController?.user?.email;
         if (!email || !email.endsWith("@camberi.com"))
             throw Error("Product deletion not allowed in this demo");
     }
@@ -146,13 +146,13 @@ export const productsCollection = buildCollection<Product>({
     entityActions: [{
         key: "sync_price",
         name: "Sync price",
-        icon: <SyncIcon size={"small"}/>,
+        icon: <SyncIcon size={"small"} />,
         onClick: async ({
-                            entity,
-                            context,
-                            formContext,
-                            view
-                        }) => {
+            entity,
+            context,
+            formContext,
+            view
+        }) => {
 
             const currentPrice = formContext?.values?.price ?? entity?.values?.price;
             console.log("Syncing price for entity", entity?.id, "with price", currentPrice);

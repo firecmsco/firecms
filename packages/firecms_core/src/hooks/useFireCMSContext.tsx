@@ -10,6 +10,7 @@ import { useUserConfigurationPersistence } from "./useUserConfigurationPersisten
 import { useDialogsController } from "./useDialogsController";
 import { useCustomizationController } from "./useCustomizationController";
 import { useAnalyticsController } from "./useAnalyticsController";
+import { useEffectiveRoleController } from "./useEffectiveRoleController";
 import React, { useEffect } from "react";
 import { useInternalUserManagementController } from "./useInternalUserManagementController";
 
@@ -44,6 +45,7 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
     const dialogsController = useDialogsController();
     const customizationController = useCustomizationController();
     const analyticsController = useAnalyticsController();
+    const effectiveRoleController = useEffectiveRoleController();
     const userManagement = useInternalUserManagementController<USER>();
 
     const fireCMSContextRef = React.useRef<FireCMSContext<USER, AuthControllerType>>({
@@ -58,7 +60,8 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
         dialogsController,
         customizationController,
         analyticsController,
-        userManagement
+        userManagement,
+        effectiveRoleController
     });
 
     React.useEffect(() => {
@@ -74,9 +77,10 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
             dialogsController,
             customizationController,
             analyticsController,
-            userManagement
+            userManagement,
+            effectiveRoleController
         };
-    }, [authController, dialogsController, navigation, sideDialogsController]);
+    }, [authController, dialogsController, navigation, sideDialogsController, effectiveRoleController]);
 
     return fireCMSContextRef.current;
 }

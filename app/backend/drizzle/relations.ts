@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { authors, posts, profiles, postsTags, tags } from "./schema";
+import { authors, posts, profiles, postsTags, tags, testEntities, tagsTestEntities } from "./schema";
 
 export const postsRelations = relations(posts, ({one, many}) => ({
 	author: one(authors, {
@@ -34,4 +34,20 @@ export const postsTagsRelations = relations(postsTags, ({one}) => ({
 
 export const tagsRelations = relations(tags, ({many}) => ({
 	postsTags: many(postsTags),
+	tagsTestEntities: many(tagsTestEntities),
+}));
+
+export const tagsTestEntitiesRelations = relations(tagsTestEntities, ({one}) => ({
+	testEntity: one(testEntities, {
+		fields: [tagsTestEntities.testEntitieId],
+		references: [testEntities.id]
+	}),
+	tag: one(tags, {
+		fields: [tagsTestEntities.testEntityTagId],
+		references: [tags.id]
+	}),
+}));
+
+export const testEntitiesRelations = relations(testEntities, ({many}) => ({
+	tagsTestEntities: many(tagsTestEntities),
 }));

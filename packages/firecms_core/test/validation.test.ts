@@ -1146,25 +1146,29 @@ describe("getYupEntitySchema", () => {
 
 describe("Error Handling", () => {
 
-    it("should throw for unsupported data types", () => {
+    it("should return a failing schema for unsupported data types", async () => {
         const property = { type: "unsupported" } as any;
 
-        expect(() => mapPropertyToYup({
+        const schema = mapPropertyToYup({
             property,
             entityId: "test-entity"
-        })).toThrow("Unsupported data type in yup mapping");
+        });
+
+        await expect(schema.validate("anything")).rejects.toThrow("Unsupported data type: unknown");
     });
 
-    it("should throw for property builders (unresolved properties)", () => {
+    it("should return a failing schema for property builders (unresolved properties)", async () => {
         const propertyBuilder = {
             type: "string",
             dynamicProps: () => ({ validation: { required: true } })
         } as any;
 
-        expect(() => mapPropertyToYup({
+        const schema = mapPropertyToYup({
             property: propertyBuilder as any,
             entityId: "test-entity"
-        })).toThrow("Trying to create a yup mapping from a property builder");
+        });
+
+        await expect(schema.validate("anything")).rejects.toThrow("Invalid property configuration: property builder should be resolved");
     });
 });
 

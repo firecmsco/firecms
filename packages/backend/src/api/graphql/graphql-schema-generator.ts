@@ -238,10 +238,8 @@ export class GraphQLSchemaGenerator {
                 resolve: async (_, args, context: any) => {
                     const ds = context.dataSource || this.dataSource;
                     const path = collection.dbPath || collection.slug;
-                    const entityId = ds.generateEntityId?.(path, collection) ?? crypto.randomUUID();
                     const entity = await ds.saveEntity({
                         path,
-                        entityId,
                         values: args.input,
                         collection,
                         status: "new"

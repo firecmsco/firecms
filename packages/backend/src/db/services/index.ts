@@ -10,6 +10,5 @@ export {
     getPrimaryKeys,
     parseIdValues,
     buildCompositeId,
-    generateEntityId,
     collectionRegistry
 } from "./entity-helpers";

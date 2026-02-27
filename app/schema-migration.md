@@ -139,11 +139,29 @@ Make sure your `.env` file contains the `DATABASE_URL`:
 DATABASE_URL=postgresql://user:password@localhost:5432/firecms
 ```
 
-### Migration Already Applied
+### Recovering from Failed Migrations (`DrizzleQueryError`)
 
-If you see errors about migrations already existing, you may need to:
-- Check `./drizzle` folder for existing migration files
-- Use `db:pull` to sync your schema with the current database state
+If `db:migrate` fails (e.g., "column cannot be cast automatically" or "type already exists"), your database is in a stuck state. Here is how to recover:
+
+#### Option 1: Fix the SQL Migration (Recommended)
+Drizzle generated raw SQL that PostgreSQL rejected. You can manually fix the SQL file.
+1. Open the pending `drizzle/000X_filename.sql` file.
+2. Modify the SQL to be valid. For example, add a `USING id::text::uuid` clause to an `ALTER COLUMN`, or wrap a type creation in `DO $$ BEGIN IF NOT EXISTS... END IF; $$;`.
+3. Run `pnpm run db:migrate` again.
+
+#### Option 2: The "Force Sync" (Development Only)
+If your migration journal is hopelessly out of sync and you are in development:
+1. Delete the `drizzle/` folder entirely (wiping migration history).
+2. Delete the `__drizzle_migrations` table in your PostgreSQL database.
+3. Run `pnpm run db:generate` to generate a fresh init SQL file.
+4. **DO NOT** run `db:migrate`. Instead, run `pnpm run db:push`. This forces Drizzle to realign the database schema with your current collections without relying on the broken migration history.
+
+#### Option 3: The "Nuclear" Drop (Wipes Data)
+If a specific table is corrupted and you don't care about the data (local dev):
+1. Delete the failed `drizzle/000X_filename.sql` file.
+2. Use a PostgreSQL client (e.g. `pnpm run db:studio` or TablePlus) and run `DROP TABLE "my_table" CASCADE;`.
+3. Run `pnpm run db:generate` to generate a fresh creation script for that table.
+4. Run `pnpm run db:migrate`.
 
 ### Development with --watch Mode
 

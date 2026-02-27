@@ -42,18 +42,22 @@ export type CustomFieldValidator = (props: {
 interface PropertyContext<P extends Property> {
     property: P,
     parentProperty?: MapProperty | ArrayProperty,
-    entityId: string | number,
+    entityId?: string | number,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
 export function getYupEntitySchema<M extends Record<string, any>>(
-    entityId: string | number,
+    entityId: string | number | undefined,
     properties: Properties,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties as Record<string, Property>)
         .forEach(([name, property]) => {
+            const isIdAndAuto = Boolean(property.isId) && (property.type === "string" || property.type === "number") && Boolean((property as any).autoValue);
+            if (entityId === undefined && isIdAndAuto) {
+                return; // Skip validation for auto-generated IDs on new entities
+            }
             objectSchema[name] = mapPropertyToYup({
                 property: property as Property,
                 customFieldValidator,

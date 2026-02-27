@@ -14,6 +14,15 @@ import { FireCMSContext } from "../firecms_context";
 import { InternalUserManagement } from "./internal_user_management";
 
 /**
+ * Controller to simulate different roles when dev mode is active.
+ * @group Models
+ */
+export interface EffectiveRoleController {
+    effectiveRole: string | null;
+    setEffectiveRole: (role: string | null) => void;
+}
+
+/**
  * Use this callback to build entity collections dynamically.
  * You can use the user to decide which collections to show.
  * You can also use the data source to fetch additional data to build the
@@ -185,6 +194,11 @@ export type FireCMSProps<USER extends User> = {
             path: string,
         }>;
 
-    }
+    };
+
+    /**
+     * Controller to simulate different roles when dev mode is active.
+     */
+    effectiveRoleController?: EffectiveRoleController;
 
 };

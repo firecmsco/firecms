@@ -575,12 +575,6 @@ export function useFirestoreDelegate({
 
         }, [firebaseApp]),
 
-        generateEntityId: useCallback((path: string): string => {
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
-            const firestore = getFirestore(firebaseApp);
-            return doc(collectionClause(firestore, path)).id;
-        }, [firebaseApp]),
-
         countEntities: useCallback(async ({
             path,
             filter,

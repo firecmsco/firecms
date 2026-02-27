@@ -12,7 +12,7 @@ import {
     UserConfigurationPersistence
 } from "./controllers";
 import { User } from "./users";
-import { InternalUserManagement } from "./types";
+import { InternalUserManagement, EffectiveRoleController } from "./types";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -64,6 +64,11 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
     authController?: AuthControllerType;
 
     /**
+     * Set by the backend when callbacks are executed on the server.
+     */
+    user?: USER;
+
+    /**
      * This controller holds the customization options for the CMS.
      */
     customizationController?: CustomizationController;
@@ -98,5 +103,10 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * section will be implemented automatically.
      */
     userManagement?: InternalUserManagement<USER>;
+
+    /**
+     * Controller to simulate different roles when dev mode is active.
+     */
+    effectiveRoleController?: EffectiveRoleController;
 
 };

@@ -555,16 +555,6 @@ export class PostgresDataSourceClient {
         return response.isUnique;
     }
 
-    generateEntityId(path: string, collection?: EntityCollection): Promise<string> {
-        return this.sendMessage({
-            type: "GENERATE_ENTITY_ID",
-            payload: {
-                path,
-                collection
-            }
-        }).then(response => response.id);
-    }
-
     async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
         const response = await this.sendMessage({
             type: "COUNT_ENTITIES",

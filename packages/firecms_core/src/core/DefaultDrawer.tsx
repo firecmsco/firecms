@@ -1,10 +1,10 @@
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip } from "@firecms/ui";
+import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, TextField } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { FireCMSLogo } from "../components";
@@ -38,6 +38,8 @@ export function DefaultDrawer({
     const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
     const largeLayout = useLargeLayout();
     const navigate = useNavigate();
+    const adminModeController = useAdminModeController();
+    const effectiveRoleController = useEffectiveRoleController();
 
     if (!navigationState.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -119,11 +121,29 @@ export function DefaultDrawer({
                             onClick={(event) => {
                                 event.preventDefault();
                                 navigate(entry.url);
+                                setAdminMenuOpen(false);
                             }}
                             key={entry.id}>
                             {<IconForView collectionOrView={entry.view} />}
                             {entry.name}
                         </MenuItem>)}
+
+                    {adminModeController.mode === "developer" && (
+                        <div className="px-4 py-3 mt-2 border-t border-surface-200 dark:border-surface-700">
+                            <Typography variant="caption" className="block mb-2 text-surface-500 font-semibold uppercase tracking-wider">
+                                Role Override
+                            </Typography>
+                            <TextField
+                                value={effectiveRoleController?.effectiveRole ?? ""}
+                                onChange={(e) => {
+                                    const val = e.target.value.trim();
+                                    effectiveRoleController?.setEffectiveRole(val ? val : null);
+                                }}
+                                placeholder="e.g. admin, user"
+                                size="small"
+                            />
+                        </div>
+                    )}
 
                 </Menu>}
             </div>

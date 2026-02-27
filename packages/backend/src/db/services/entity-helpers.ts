@@ -115,8 +115,4 @@ export function buildCompositeId(values: Record<string, any>, primaryKeys: { fie
     return primaryKeys.map(pk => String(values[pk.fieldName] ?? "")).join(":::");
 }
 
-export function generateEntityId(): string {
-    return Date.now().toString() + Math.random().toString(36).substring(2, 7);
-}
-
 export { collectionRegistry };

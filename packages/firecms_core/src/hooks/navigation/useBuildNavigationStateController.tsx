@@ -23,7 +23,8 @@ import { resolveCollections, resolveCMSViews } from "./useNavigationResolution";
 import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";
 import { CollectionRegistry } from "@firecms/common";
 import { useAdminModeController } from "../useAdminModeController";
-import React from "react";
+import { EffectiveRoleController } from "@firecms/types";
+import React, { useMemo } from "react";
 
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
@@ -39,6 +40,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
     cmsUrlController: CMSUrlController;
     adminMode?: "developer" | "editor";
+    effectiveRoleController?: EffectiveRoleController;
 };
 
 export function useBuildNavigationStateController<EC extends EntityCollection, USER extends User>(
@@ -58,7 +60,8 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         navigationGroupMappings,
         collectionRegistryController,
         cmsUrlController,
-        adminMode = "editor"
+        adminMode = "editor",
+        effectiveRoleController
     } = props;
 
     const viewsRef = useRef<CMSView[] | undefined>(undefined);
@@ -144,6 +147,34 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
                     view,
                     description: view.description?.trim(),
                     group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                });
+                return acc;
+            }, [] as NavigationEntry[]),
+
+            ...(adminViews ?? []).reduce((acc, adminView) => {
+                if (adminView.hideFromNavigation) return acc;
+
+                const pathKey = adminView.slug;
+                let groupName = getGroup(adminView);
+
+                if (finalNavigationGroupMappings) {
+                    for (const pluginGroupDef of finalNavigationGroupMappings) {
+                        if (pluginGroupDef.entries.includes(pathKey)) {
+                            groupName = pluginGroupDef.name;
+                            break;
+                        }
+                    }
+                }
+
+                acc.push({
+                    id: `admin:${pathKey}`,
+                    url: cmsUrlController.buildCMSUrlPath(pathKey),
+                    name: adminView.name.trim(),
+                    type: "admin",
+                    slug: adminView.slug,
+                    view: adminView,
+                    description: adminView.description?.trim(),
+                    group: groupName ?? NAVIGATION_ADMIN_GROUP_NAME
                 });
                 return acc;
             }, [] as NavigationEntry[])
@@ -232,9 +263,22 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
     }, [plugins, computeTopNavigation, viewsOrder, collectionRegistryController.collectionRegistryRef]);
 
+    const resolvedAuthController = useMemo(() => {
+        if (adminMode === "developer" && effectiveRoleController?.effectiveRole && authController.user) {
+            return {
+                ...authController,
+                user: {
+                    ...authController.user,
+                    roles: [effectiveRoleController.effectiveRole]
+                }
+            };
+        }
+        return authController;
+    }, [adminMode, effectiveRoleController?.effectiveRole, authController]);
+
     const refreshNavigation = useCallback(async () => {
 
-        if (disabled || authController.initialLoading)
+        if (disabled || resolvedAuthController.initialLoading)
             return;
 
         console.debug("Refreshing navigation");
@@ -243,9 +287,9 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
-                    resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
-                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
+                    resolveCollections(collectionsProp, collectionPermissions, resolvedAuthController, dataSourceDelegate, plugins),
+                    resolveCMSViews(viewsProp, resolvedAuthController, dataSourceDelegate, plugins),
+                    resolveCMSViews(adminViewsProp, resolvedAuthController, dataSourceDelegate)
                 ]
             );
 
@@ -292,8 +336,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     }, [
         collectionsProp,
         collectionPermissions,
-        authController.user,
-        authController.initialLoading,
+        resolvedAuthController,
         disabled,
         viewsProp,
         adminViewsProp,

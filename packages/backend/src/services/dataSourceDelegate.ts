@@ -4,6 +4,7 @@ import { RealtimeService } from "./realtimeService";
 import { DrizzleClient } from "../db/interfaces";
 import { User } from "@firecms/types";
 import { sql } from "drizzle-orm";
+import { collectionRegistry } from "../collections/registry";
 import {
     DataSourceDelegate,
     DeleteEntityProps,
@@ -23,6 +24,18 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     private entityService: EntityService;
     private realtimeService: RealtimeService;
     private user?: User;
+
+    /**
+     * When true, realtime notifications are deferred until after the
+     * wrapping transaction commits.  Set by `withAuth` → `wrapMethod`.
+     */
+    _deferNotifications = false;
+    _pendingNotifications: Array<{
+        path: string;
+        entityId: string;
+        entity: Entity | null;
+        databaseId?: string;
+    }> = [];
 
     constructor(
         private db: DrizzleClient,
@@ -247,21 +260,28 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         status
     }: SaveEntityProps<M>): Promise<Entity<M>> {
 
+        // Resolve the collection from the backend registry so callbacks (which are
+        // functions and can't survive JSON serialization over WebSocket) are available.
+        const registryCollection = collectionRegistry.getCollectionByPath(path);
+        const resolvedCollection = (registryCollection
+            ? { ...collection, ...registryCollection, callbacks: registryCollection.callbacks ?? collection?.callbacks }
+            : collection) as EntityCollection<M> | undefined;
+
         let updatedValues = values;
         const contextForCallback = {
             user: this.user
         } as any;
 
-        if (collection?.callbacks?.onPreSave) {
+        if (resolvedCollection?.callbacks?.onPreSave) {
             let previousValues: Partial<Entity<M>["values"]> | undefined;
             if (status === "existing" && entityId) {
-                const existing = await this.fetchEntity({ path, entityId, collection });
+                const existing = await this.fetchEntity({ path, entityId, collection: resolvedCollection });
                 if (existing) {
                     previousValues = existing.values as Partial<Entity<M>["values"]>;
                 }
             }
-            updatedValues = await collection.callbacks.onPreSave({
-                collection,
+            updatedValues = await resolvedCollection.callbacks.onPreSave({
+                collection: resolvedCollection,
                 path,
                 entityId,
                 values,
@@ -276,15 +296,13 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                 path,
                 updatedValues,
                 entityId,
-                collection?.databaseId
+                resolvedCollection?.databaseId
             );
 
-            if (collection?.callbacks?.onSaveSuccess) {
+            if (resolvedCollection?.callbacks?.onSaveSuccess) {
                 let previousValues: Partial<Entity<M>["values"]> | undefined = undefined;
-                // Currently, we don't fetch previousValues again, we could reuse it if we fetched it in onPreSave
-                // But for exact accuracy we'd need to store it. Assuming optional for now.
-                await collection.callbacks.onSaveSuccess({
-                    collection: collection as EntityCollection<M>, // Cast necessary as EntityCollection is generic but base is not
+                await resolvedCollection.callbacks.onSaveSuccess({
+                    collection: resolvedCollection as EntityCollection<M>,
                     path,
                     entityId: savedEntity.id,
                     values: updatedValues,
@@ -294,23 +312,32 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                 });
             }
 
-            // Notify real-time subscribers
-            await this.realtimeService.notifyEntityUpdate(
-                path,
-                savedEntity.id.toString(),
-                savedEntity,
-                collection?.databaseId
-            );
+            // Notify real-time subscribers (deferred if inside a transaction)
+            if (this._deferNotifications) {
+                this._pendingNotifications.push({
+                    path,
+                    entityId: savedEntity.id.toString(),
+                    entity: savedEntity,
+                    databaseId: resolvedCollection?.databaseId
+                });
+            } else {
+                await this.realtimeService.notifyEntityUpdate(
+                    path,
+                    savedEntity.id.toString(),
+                    savedEntity,
+                    resolvedCollection?.databaseId
+                );
+            }
 
             return savedEntity;
         } catch (error) {
-            if (collection?.callbacks?.onSaveFailure) {
-                await collection.callbacks.onSaveFailure({
-                    collection: collection as EntityCollection<M>,
+            if (resolvedCollection?.callbacks?.onSaveFailure) {
+                await resolvedCollection.callbacks.onSaveFailure({
+                    collection: resolvedCollection as EntityCollection<M>,
                     path,
-                    entityId: entityId || "unknown", // It might have failed before ID generation
+                    entityId: entityId || "unknown",
                     values: updatedValues,
-                    previousValues: undefined, // Needs proper previousValues propagation
+                    previousValues: undefined,
                     status,
                     context: contextForCallback
                 });
@@ -326,13 +353,19 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         console.log("🗑️ [DataSourceDelegate] Starting delete for entity:", entity.id, "in path:", entity.path);
 
+        // Resolve from backend registry to restore callbacks lost during WebSocket serialization
+        const registryCollection = collectionRegistry.getCollectionByPath(entity.path);
+        const resolvedCollection = (registryCollection
+            ? { ...collection, ...registryCollection, callbacks: registryCollection.callbacks ?? collection?.callbacks }
+            : collection) as EntityCollection<M> | undefined;
+
         const contextForCallback = {
             user: this.user
         } as any;
 
-        if (collection?.callbacks?.onPreDelete) {
-            await collection.callbacks.onPreDelete({
-                collection: collection as EntityCollection<M>,
+        if (resolvedCollection?.callbacks?.onPreDelete) {
+            await resolvedCollection.callbacks.onPreDelete({
+                collection: resolvedCollection as EntityCollection<M>,
                 path: entity.path,
                 entityId: entity.id,
                 entity,
@@ -343,12 +376,12 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         await this.entityService.deleteEntity(
             entity.path,
             entity.id,
-            entity.databaseId || collection?.databaseId
+            entity.databaseId || resolvedCollection?.databaseId
         );
 
-        if (collection?.callbacks?.onDelete) {
-            await collection.callbacks.onDelete({
-                collection: collection as EntityCollection<M>,
+        if (resolvedCollection?.callbacks?.onDelete) {
+            await resolvedCollection.callbacks.onDelete({
+                collection: resolvedCollection as EntityCollection<M>,
                 path: entity.path,
                 entityId: entity.id,
                 entity,
@@ -358,13 +391,22 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         console.log("🗑️ [DataSourceDelegate] Entity deleted from database, now notifying real-time subscribers");
 
-        // Use the EXACT SAME notification system as saveEntity - this is the key!
-        await this.realtimeService.notifyEntityUpdate(
-            entity.path,
-            entity.id.toString(),
-            null, // null indicates deletion
-            entity.databaseId || collection?.databaseId
-        );
+        // Notify real-time subscribers (deferred if inside a transaction)
+        if (this._deferNotifications) {
+            this._pendingNotifications.push({
+                path: entity.path,
+                entityId: entity.id.toString(),
+                entity: null,
+                databaseId: entity.databaseId || resolvedCollection?.databaseId
+            });
+        } else {
+            await this.realtimeService.notifyEntityUpdate(
+                entity.path,
+                entity.id.toString(),
+                null,
+                entity.databaseId || resolvedCollection?.databaseId
+            );
+        }
 
         console.log("🗑️ [DataSourceDelegate] Real-time notification sent for deletion");
     }
@@ -385,9 +427,6 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         );
     }
 
-    generateEntityId(path: string, collection?: EntityCollection): string {
-        return this.entityService.generateEntityId();
-    }
 
     async countEntities<M extends Record<string, any>>({
         path,
@@ -433,8 +472,14 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         const wrapMethod = (methodName: keyof PostgresDataSourceDelegate) => {
             const originalMethod = this[methodName] as Function;
             return async (...args: any[]) => {
+                // Collect deferred notifications so we can flush them after the
+                // transaction commits.  This is critical: notifyEntityUpdate
+                // refetches from a *separate* connection and therefore cannot see
+                // uncommitted writes inside the transaction.
+                const pendingNotifications: PostgresDataSourceDelegate["_pendingNotifications"] = [];
+
                 // @ts-ignore
-                return await originalDb.transaction(async (tx) => {
+                const result = await originalDb.transaction(async (tx) => {
                     // Defensive checks for user properties
                     let userId = user.uid;
                     if (!userId) {
@@ -454,22 +499,35 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                     await tx.execute(sql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles.map(r => r.id) })}, true)`);
 
                     // Create a temporary delegate using the transaction client
-                    // We need to instantiate a new EntityService with the tx
                     const txEntityService = new EntityService(tx);
 
-                    // Creates a lightweight copy of the delegate to invoke the method on
-                    // We can't use 'this' directly because it might be bound to the original db
-                    // But wait, the methods in THIS class mainly delegate to this.entityService.
-                    // So we can just call the method on a new instance that interprets `this.entityService` as `txEntityService`.
-
-                    // Let's create a partial clone
                     const txDelegate = new PostgresDataSourceDelegate(tx, this.realtimeService, user);
                     // Force inject the transactional entity service
                     // @ts-ignore
                     txDelegate.entityService = txEntityService;
+                    // Defer realtime notifications — they'll be flushed post-commit
+                    txDelegate._deferNotifications = true;
+                    txDelegate._pendingNotifications = pendingNotifications;
 
                     return await originalMethod.apply(txDelegate, args);
                 });
+
+                // Transaction committed — now flush deferred realtime notifications
+                // so subscribers refetch data that includes the committed changes.
+                for (const notification of pendingNotifications) {
+                    try {
+                        await this.realtimeService.notifyEntityUpdate(
+                            notification.path,
+                            notification.entityId,
+                            notification.entity,
+                            notification.databaseId
+                        );
+                    } catch (e) {
+                        console.error("[DataSourceDelegate] Error flushing deferred notification:", e);
+                    }
+                }
+
+                return result;
             };
         };
 

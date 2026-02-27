@@ -1,6 +1,7 @@
 export * from "./SnackbarProvider";
 export * from "./ModeController";
 export * from "./AdminModeController";
+export * from "./EffectiveRoleController";
 export * from "./AuthControllerContext";
 export * from "./DataSourceContext";
 export * from "./NavigationContext";

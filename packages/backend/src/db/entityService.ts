@@ -160,12 +160,6 @@ export class EntityService implements EntityRepository {
         return this.persistService.deleteEntity(collectionPath, entityId, databaseId);
     }
 
-    /**
-     * Generate a new entity ID
-     */
-    generateEntityId(): string {
-        return this.persistService.generateEntityId();
-    }
 
     /**
      * Execute raw SQL

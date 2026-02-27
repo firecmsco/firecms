@@ -27,6 +27,8 @@ import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
+import { EffectiveRoleControllerContext } from "../contexts/EffectiveRoleController";
+import { useBuildEffectiveRoleController } from "../hooks/useBuildEffectiveRoleController";
 
 /**
  * If you are using independent components of the CMS
@@ -60,7 +62,8 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         cmsUrlController,
         navigationStateController,
         apiKey,
-        userManagement: _userManagement
+        userManagement: _userManagement,
+        effectiveRoleController
     } = props;
 
     if (_pluginsProp) {
@@ -114,6 +117,9 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         collectionRegistryController,
         authController
     });
+
+    const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
+    const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
 
     if (accessResponse?.message) {
         console.warn(accessResponse.message);
@@ -174,14 +180,16 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                                             <NavigationStateContext.Provider value={navigationStateController}>
                                                 <CMSUrlContext.Provider value={cmsUrlController}>
                                                     <InternalUserManagementContext.Provider value={userManagement}>
-                                                        <DialogsProvider>
-                                                            <BreadcrumbsProvider>
-                                                                <FireCMSInternal
-                                                                    loading={loading}>
-                                                                    {children}
-                                                                </FireCMSInternal>
-                                                            </BreadcrumbsProvider>
-                                                        </DialogsProvider>
+                                                        <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
+                                                            <DialogsProvider>
+                                                                <BreadcrumbsProvider>
+                                                                    <FireCMSInternal
+                                                                        loading={loading}>
+                                                                        {children}
+                                                                    </FireCMSInternal>
+                                                                </BreadcrumbsProvider>
+                                                            </DialogsProvider>
+                                                        </EffectiveRoleControllerContext.Provider>
                                                     </InternalUserManagementContext.Provider>
                                                 </CMSUrlContext.Provider>
                                             </NavigationStateContext.Provider>

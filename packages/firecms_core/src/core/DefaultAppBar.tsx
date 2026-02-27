@@ -20,6 +20,7 @@ import { User } from "@firecms/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
+
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
     /**
@@ -127,7 +128,7 @@ export const DefaultAppBar = function DefaultAppBar({
             {navigation && <div className="mr-2 hidden lg:block">
                 <Link
                     className="visited:text-inherit dark:visited:text-inherit block"
-                    to={adminModeController.mode === "developer" ? "/dev" : (navigation?.basePath ?? "/")}
+                    to={navigation?.basePath ?? "/"}
                 >
                     <div className={"flex flex-row gap-4"}>
                         {!hasDrawer && (logo
@@ -186,10 +187,15 @@ export const DefaultAppBar = function DefaultAppBar({
 
             <div className={"grow"} />
 
+
+
             {/* Admin Mode Toggle */}
             <div className="flex bg-transparent p-0 rounded-full items-center mr-2 lg:mr-4">
                 <button
-                    onClick={() => navigate("/")}
+                    onClick={() => {
+                        adminModeController.setMode("editor");
+                        navigate(navigation?.basePath ?? "/");
+                    }}
                     className={cls(
                         "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200",
                         adminModeController.mode === "editor"
@@ -200,7 +206,10 @@ export const DefaultAppBar = function DefaultAppBar({
                     Editor
                 </button>
                 <button
-                    onClick={() => navigate("/dev")}
+                    onClick={() => {
+                        adminModeController.setMode("developer");
+                        navigate(navigation?.basePath ?? "/");
+                    }}
                     className={cls(
                         "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200 ml-1",
                         adminModeController.mode === "developer"

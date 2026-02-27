@@ -225,10 +225,6 @@ export interface EntityRepository {
         databaseId?: string
     ): Promise<boolean>;
 
-    /**
-     * Generate a new entity ID
-     */
-    generateEntityId(): string;
 }
 
 // =============================================================================

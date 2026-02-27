@@ -211,24 +211,6 @@ export function createPostgresWebSocket(
                     }
                         break;
 
-                    case "GENERATE_ENTITY_ID": {
-                        console.debug("🆔 [WebSocket Server] Processing GENERATE_ENTITY_ID request");
-                        const {
-                            path,
-                            collection
-                        } = payload;
-                        const delegate = await getScopedDelegate();
-                        const id = delegate.generateEntityId(path, collection);
-                        console.debug("🆔 [WebSocket Server] GENERATE_ENTITY_ID result:", id);
-                        const response = {
-                            type: "GENERATE_ENTITY_ID_SUCCESS",
-                            payload: { id },
-                            requestId
-                        };
-                        console.debug("🆔 [WebSocket Server] Sending GENERATE_ENTITY_ID_SUCCESS response");
-                        ws.send(JSON.stringify(response));
-                    }
-                        break;
 
                     case "COUNT_ENTITIES": {
                         const request: FetchCollectionProps = payload;

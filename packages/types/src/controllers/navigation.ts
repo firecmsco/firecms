@@ -250,6 +250,29 @@ export interface CMSView {
 }
 
 /**
+ * A composable section that can be rendered on the home page.
+ * Use this to add custom content alongside the auto-generated
+ * navigation groups.
+ * @group Models
+ */
+export interface HomePageSection {
+    /**
+     * Unique key for this section.
+     */
+    key: string;
+
+    /**
+     * Title displayed as the section header.
+     */
+    title: string;
+
+    /**
+     * Arbitrary React content rendered inside the section.
+     */
+    children: React.ReactNode;
+}
+
+/**
  * Used to group navigation entries in the main navigation.
  */
 export interface NavigationGroupMapping {

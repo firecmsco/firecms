@@ -9,6 +9,7 @@ import {
 } from "../../hooks";
 import {
     CMSAnalyticsEvent,
+    HomePageSection,
     NavigationEntry,
     NavigationGroupMapping,
     PluginGenericProps,
@@ -37,11 +38,15 @@ export const ADMIN_GROUP_NAME = "Admin";
 export function DefaultHomePage({
     additionalActions,
     additionalChildrenStart,
-    additionalChildrenEnd
+    additionalChildrenEnd,
+    sections,
+    hiddenGroups
 }: {
     additionalActions?: React.ReactNode;
     additionalChildrenStart?: React.ReactNode;
     additionalChildrenEnd?: React.ReactNode;
+    sections?: HomePageSection[];
+    hiddenGroups?: string[];
 }) {
 
     const context = useFireCMSContext();
@@ -158,9 +163,9 @@ export function DefaultHomePage({
         const admin = allProcessed.find((g) => g.name === ADMIN_GROUP_NAME);
         return {
             adminGroupData: admin || null,
-            items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME)
+            items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME && !hiddenGroups?.includes(g.name))
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups]);
 
     // Update state only when processedGroups actually changes
     // Skip update if DnD just made a local change (dirty flag is set)
@@ -587,6 +592,16 @@ export function DefaultHomePage({
                 )}
 
                 {additionalPluginSections}
+
+                {sections && sections.map((section) => (
+                    <NavigationGroup
+                        key={section.key}
+                        group={section.title}
+                    >
+                        {section.children}
+                    </NavigationGroup>
+                ))}
+
                 {additionalPluginChildrenEnd}
                 {additionalChildrenEnd}
             </Container>

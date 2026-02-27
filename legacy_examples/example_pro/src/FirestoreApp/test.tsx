@@ -12,12 +12,12 @@ type Product = {
 
 const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
-                    collection,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
+        collection,
+        path,
+        entityId,
+        values,
+        status
+    }) => {
         values.uppercase_name = values.name?.toUpperCase();
         return values;
     },
@@ -31,14 +31,14 @@ const productCallbacks = buildEntityCallbacks({
     },
 
     onPreDelete: ({
-                      collection,
-                      path,
-                      entityId,
-                      entity,
-                      context
-                  }: EntityOnDeleteProps<Product>
+        collection,
+        path,
+        entityId,
+        entity,
+        context
+    }: EntityOnDeleteProps<Product>
     ) => {
-        if (context.authController.user)
+        if (context.user || context.authController?.user)
             throw Error("Product deletion not allowed");
     },
 

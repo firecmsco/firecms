@@ -1,5 +1,4 @@
 import { EntityCollection } from "@firecms/types";
-import { resolveCollectionRelations } from "@firecms/common";
 import tagsCollection from "./tags";
 
 const testEntitiesCollection: EntityCollection = {
