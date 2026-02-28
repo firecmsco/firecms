@@ -1,0 +1,23 @@
+---
+import "@/styles/index.css";
+import "@fontsource/poppins";
+import "@fontsource/playfair-display";
+import "@fontsource/jetbrains-mono";
+import { CMSRoute } from "@/cms/CMSRoute";
+
+export const prerender = false;
+---
+
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FireCMS Astro Example</title>
+    <meta name="description" content="FireCMS e-commerce and blog demo built with Astro" />
+  </head>
+  <body>
+    <div id="cms-root">
+      <CMSRoute client:only="react" />
+    </div>
+  </body>
+</html>
