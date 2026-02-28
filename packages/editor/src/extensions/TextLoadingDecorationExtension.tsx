@@ -1,15 +1,5 @@
-import { Plugin, PluginKey } from "@tiptap/pm/state";
-import { Decoration, DecorationSet } from "@tiptap/pm/view";
-import { Command, Extension } from "@tiptap/core";
-
-declare module "@tiptap/core" {
-    interface Commands<ReturnType> {
-        textLoadingDecoration: {
-            toggleLoadingDecoration: (loadingHtml?: string) => ReturnType;
-            removeLoadingDecoration: () => ReturnType;
-        };
-    }
-}
+import { Plugin, PluginKey, Transaction, EditorState } from "prosemirror-state";
+import { Decoration, DecorationSet } from "prosemirror-view";
 
 // Define and export the plugin key
 export const loadingDecorationKey = new PluginKey<LoadingDecorationState>("loadingDecoration");
@@ -19,118 +9,99 @@ interface LoadingDecorationState {
     hasDecoration: boolean;
 }
 
- // this decoration is used to display streaming content from an LLM, called withing the slash command
-const TextLoadingDecorationExtension = Extension.create({
-    name: "loadingDecoration",
+export const textLoadingCommands = {
+    toggleLoadingDecoration: (state: EditorState, dispatch: ((tr: Transaction) => void) | undefined, loadingHtml?: string): boolean => {
+        const { selection } = state;
+        const pos = selection.from;
 
-    addOptions() {
-        return {
-            pluginKey: loadingDecorationKey
-        };
+        if (!dispatch) return false;
+
+        const tr = state.tr.setMeta(loadingDecorationKey, {
+            pos,
+            type: "loadingDecoration",
+            remove: false,
+            loadingHtml
+        });
+
+        dispatch(tr);
+        return true;
     },
 
-    addProseMirrorPlugins() {
-        const pluginKey = this.options.pluginKey;
+    removeLoadingDecoration: (state: EditorState, dispatch: ((tr: Transaction) => void) | undefined): boolean => {
+        if (!dispatch) return false;
 
-        return [
-            new Plugin<LoadingDecorationState>({
-                key: pluginKey,
+        const tr = state.tr.setMeta(loadingDecorationKey, {
+            pos: 0, // We can pass any position as it will remove the entire decoration set
+            type: "loadingDecoration",
+            remove: true
+        });
 
-                state: {
-                    init() {
+        dispatch(tr);
+        return true;
+    }
+};
+
+/**
+ * This plugin is used to display streaming content from an LLM.
+ */
+export const textLoadingDecorationPlugin = () => {
+    return new Plugin<LoadingDecorationState>({
+        key: loadingDecorationKey,
+
+        state: {
+            init() {
+                return {
+                    decorationSet: DecorationSet.empty,
+                    hasDecoration: false
+                };
+            },
+
+            apply(tr, oldState) {
+                const action = tr.getMeta(loadingDecorationKey);
+
+                if (action?.type === "loadingDecoration") {
+                    const { pos, remove, loadingHtml } = action;
+
+                    if (remove) {
                         return {
                             decorationSet: DecorationSet.empty,
                             hasDecoration: false
                         };
-                    },
+                    }
 
-                    apply(tr, oldState) {
-                        const action = tr.getMeta(pluginKey);
+                    const decoration = Decoration.widget(pos, () => {
+                        const container = document.createElement("span");
+                        container.className = "loading-decoration";
 
-                        if (action?.type === "loadingDecoration") {
-                            const { pos, remove, loadingHtml } = action;
-
-                            if (remove) {
-                                return {
-                                    decorationSet: DecorationSet.empty,
-                                    hasDecoration: false
-                                };
-                            }
-
-                            const decoration = Decoration.widget(pos, () => {
-                                const container = document.createElement("span");
-                                container.className = "loading-decoration";
-
-                                // Sanitize and append HTML
-                                if (loadingHtml) {
-                                    container.innerHTML = loadingHtml;
-                                } else {
-                                    const span = document.createElement("span");
-                                    span.innerText = "loading...";
-                                    container.appendChild(span);
-                                }
-
-                                return container;
-                            });
-
-                            return {
-                                decorationSet: DecorationSet.empty.add(tr.doc, [decoration]),
-                                hasDecoration: true
-                            };
+                        // Sanitize and append HTML
+                        if (loadingHtml) {
+                            container.innerHTML = loadingHtml;
+                        } else {
+                            const span = document.createElement("span");
+                            span.innerText = "loading...";
+                            container.appendChild(span);
                         }
 
-                        return {
-                            decorationSet: oldState.decorationSet.map(tr.mapping, tr.doc),
-                            hasDecoration: oldState.hasDecoration
-                        };
-                    }
-                },
+                        return container;
+                    });
 
-                props: {
-                    decorations(state) {
-                        return this.getState(state)?.decorationSet || DecorationSet.empty;
-                    }
+                    return {
+                        decorationSet: DecorationSet.empty.add(tr.doc, [decoration]),
+                        hasDecoration: true
+                    };
                 }
-            })
-        ];
-    },
 
-    addCommands() {
-        return {
-            toggleLoadingDecoration: (loadingHtml?: string): Command => ({ state, dispatch }) => {
-                const { selection } = state;
-                const pos = selection.from;
-
-                if (!dispatch) return false;
-
-                const pluginKey = this.options.pluginKey;
-
-                const tr = state.tr.setMeta(pluginKey, {
-                    pos,
-                    type: "loadingDecoration",
-                    remove: false,
-                    loadingHtml
-                });
-
-                dispatch(tr);
-                return true;
-            },
-
-            removeLoadingDecoration: (): Command => ({ state, dispatch }) => {
-                if (!dispatch) return false;
-
-                const pluginKey = this.options.pluginKey;
-                const tr = state.tr.setMeta(pluginKey, {
-                    pos: 0, // We can pass any position as it will remove the entire decoration set
-                    type: "loadingDecoration",
-                    remove: true
-                });
-
-                dispatch(tr);
-                return true;
+                return {
+                    decorationSet: oldState.decorationSet.map(tr.mapping, tr.doc),
+                    hasDecoration: oldState.hasDecoration
+                };
             }
-        };
-    }
-});
+        },
 
-export default TextLoadingDecorationExtension;
+        props: {
+            decorations(state) {
+                return this.getState(state)?.decorationSet || DecorationSet.empty;
+            }
+        }
+    });
+};

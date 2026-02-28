@@ -1,10 +1,11 @@
-import { useEditor } from "../components";
 import { useEffect, useRef, } from "react";
 import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils";
+import { schema } from "../schema";
 
 export function isValidUrl(url: string) {
     try {
-        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     } catch (e) {
@@ -30,11 +31,11 @@ interface LinkSelectorProps {
 }
 
 export const LinkSelector = ({
-                                 open,
-                                 onOpenChange
-                             }: LinkSelectorProps) => {
+    open,
+    onOpenChange
+}: LinkSelectorProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const { editor } = useEditor();
+    const { state, view } = useProseMirrorContext();
 
     // Autofocus on input by default
     useEffect(() => {
@@ -43,7 +44,7 @@ export const LinkSelector = ({
         }
     }, [open]);
 
-    if (!editor) return null;
+    if (!state || !view) return null;
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -51,30 +52,35 @@ export const LinkSelector = ({
         if (!value) return;
         const url = getUrlFromString(value);
         if (url) {
-            editor.chain().focus().setLink({ href: url }).run();
+            setMark(schema.marks.link, { href: url })(view.state, view.dispatch);
+            view.focus();
             onOpenChange(false);
         }
     };
 
     const handleRemoveLink = () => {
-        editor.chain().focus().unsetLink().run();
+        unsetMark(schema.marks.link)(view.state, view.dispatch);
+        view.focus();
         onOpenChange(false);
     };
 
+    const isActive = isMarkActive(state, schema.marks.link);
+    const href = getMarkAttributes(state, schema.marks.link).href || "";
+
     return (
         <Popover modal={true}
-                 open={open}
-                 onOpenChange={onOpenChange}
-                 trigger={<Button variant="text"
-                                  type="button"
-                                  className="gap-2 rounded-none"
-                                  color={"text"}>
-                     <p className={cls("underline decoration-stone-400 underline-offset-4", {
-                         "text-blue-500": editor.isActive("link"),
-                     })}>
-                         Link
-                     </p>
-                 </Button>}>
+            open={open}
+            onOpenChange={onOpenChange}
+            trigger={<Button variant="text"
+                type="button"
+                className="gap-2 rounded-none"
+                color={"text"}>
+                <p className={cls("underline decoration-stone-400 underline-offset-4", {
+                    "text-blue-500": isActive,
+                })}>
+                    Link
+                </p>
+            </Button>}>
             <form
                 onSubmit={handleSubmit}
                 className="flex p-1 gap-1"
@@ -83,10 +89,10 @@ export const LinkSelector = ({
                     ref={inputRef}
                     autoFocus={open}
                     placeholder="Paste a link"
-                    defaultValue={editor.getAttributes("link").href || ""}
-                    className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}/>
+                    defaultValue={href}
+                    className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)} />
 
-                {editor.getAttributes("link").href ? (
+                {href ? (
                     <Button
                         size={"small"}
                         variant="text"
@@ -95,13 +101,13 @@ export const LinkSelector = ({
                         className="flex items-center"
                         onClick={handleRemoveLink}
                     >
-                        <DeleteIcon size="small"/>
+                        <DeleteIcon size="small" />
                     </Button>
                 ) : (
                     <Button size={"small"}
-                            type="submit"
-                            variant={"text"}>
-                        <CheckIcon size="small"/>
+                        type="submit"
+                        variant={"text"}>
+                        <CheckIcon size="small" />
                     </Button>
                 )}
             </form>

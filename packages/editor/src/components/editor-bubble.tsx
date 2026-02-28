@@ -1,58 +1,118 @@
-import { useCurrentEditor } from "@tiptap/react";
-import { forwardRef, type ReactNode, useMemo } from "react";
-// @ts-ignore
-import { BubbleMenu, type BubbleMenuProps } from "@tiptap/react/menus";
-import { NodeSelection } from "@tiptap/pm/state";
+import { forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
+import { NodeSelection } from "prosemirror-state";
 
-export interface EditorBubbleProps extends Omit<BubbleMenuProps, "editor"> {
+export interface EditorBubbleProps {
     children: ReactNode;
-    // Temporary backward-compat: map v2 tippyOptions.placement -> v3 options.placement
-    tippyOptions?: { placement?: any };
+    options?: any;
+    className?: string;
 }
 
 export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
-    ({ children, tippyOptions, options, ...rest }, ref) => {
-        const { editor } = useCurrentEditor();
+    ({ children, options, className }, ref) => {
+        const { view, state } = useProseMirrorContext();
+        const menuRef = useRef<HTMLDivElement>(null);
+        const [show, setShow] = useState(false);
 
-        const bubbleMenuProps: Omit<BubbleMenuProps, "editor" | "children"> = useMemo(() => {
-            const shouldShow: BubbleMenuProps["shouldShow"] = ({ editor, state }:any) => {
+        useEffect(() => {
+            if (!view || !state) return;
+
+            // Delay evaluation slightly to let selection settle
+            const timer = setTimeout(() => {
                 const { selection } = state;
-                const { empty } = selection as any;
+                const { empty } = selection;
 
-                // don't show bubble menu if:
-                // - the selected node is an image
-                // - the selection is empty
-                // - the selection is a node selection (for drag handles)
-                if (editor.isActive("image") || empty || selection instanceof NodeSelection) {
-                    return false;
+                // check if image is selected
+                let isImage = false;
+                state.doc.nodesBetween(selection.from, selection.to, (node) => {
+                    if (node.type.name === "image") isImage = true;
+                });
+
+                if (isImage || empty || selection instanceof NodeSelection) {
+                    setShow(false);
+                    return;
                 }
-                return true;
+
+                setShow(true);
+            }, 0);
+
+            return () => clearTimeout(timer);
+        }, [view, state]);
+
+        useEffect(() => {
+            if (!show || !view || !state || !menuRef.current) return;
+
+            const { from, to } = state.selection;
+
+            // Fallback for end selection coords
+            let start = view.coordsAtPos(from);
+            let end = view.coordsAtPos(to);
+
+            const virtualEl = {
+                getBoundingClientRect() {
+                    const top = Math.min(start.top, end.top);
+                    const bottom = Math.max(start.bottom, end.bottom);
+                    const left = Math.min(start.left, end.left);
+                    const right = Math.max(start.right, end.right);
+                    return {
+                        width: right - left,
+                        height: bottom - top,
+                        x: left,
+                        y: top,
+                        top,
+                        left,
+                        right,
+                        bottom,
+                    };
+                }
             };
 
-            const mergedOptions = {
-                ...options,
-                // map deprecated tippy placement if provided
-                placement: tippyOptions?.placement ?? options?.placement,
-            } as BubbleMenuProps["options"];
+            const cleanup = autoUpdate(virtualEl as any, menuRef.current, () => {
+                if (!menuRef.current) return;
 
-            return {
-                shouldShow,
-                options: mergedOptions,
-                ...rest,
-            };
-        }, [rest, options, tippyOptions?.placement]);
+                // Recompute coords in case of scroll
+                try {
+                    start = view.coordsAtPos(state.selection.from);
+                    end = view.coordsAtPos(state.selection.to);
+                } catch (e) {
+                    // Ignore error if selection is out of bounds
+                }
 
-        if (!editor) return null;
+                computePosition(virtualEl as any, menuRef.current, {
+                    placement: options?.placement || "top",
+                    middleware: [offset(options?.offset || 8), flip(), shift()],
+                    strategy: "fixed"
+                }).then(({ x, y }) => {
+                    if (menuRef.current) {
+                        Object.assign(menuRef.current.style, {
+                            left: `${x}px`,
+                            top: `${y}px`,
+                            visibility: "visible",
+                        });
+                    }
+                });
+            });
+            return () => cleanup();
+        }, [show, view, state, options]);
+
+        if (!show) return null;
 
         return (
-            // We need to add this because of https://github.com/ueberdosis/tiptap/issues/2658
-            <div ref={ref}>
-                <BubbleMenu editor={editor} {...bubbleMenuProps}>
-                    {children}
-                </BubbleMenu>
+            <div
+                ref={menuRef}
+                className={className}
+                style={{ position: "fixed", zIndex: 9999, visibility: "hidden" }}
+                onMouseDown={(e) => {
+                    e.preventDefault(); // Don't lose focus inside ProseMirror
+                }}
+            >
+                {children}
             </div>
         );
     }
 );
+
+EditorBubble.displayName = "EditorBubble";
 
 export default EditorBubble;

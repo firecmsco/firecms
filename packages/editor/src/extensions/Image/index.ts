@@ -1,13 +1,10 @@
-import { cls, defaultBorderMixin } from "@firecms/ui";
 import { Decoration, DecorationSet, EditorView } from "prosemirror-view";
 import { Plugin, PluginKey } from "prosemirror-state";
+import { schema } from "../../schema";
 
 export type UploadFn = (image: File) => Promise<string>;
 
 export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<FileReader>, pos: number, upload: UploadFn, image: File) {
-
-    const { schema } = view.state;
-
     // @ts-ignore
     const plugin = view.state.plugins.find((p: Plugin) => p.key === ImagePluginKey.key);
     if (!plugin) {
@@ -18,7 +15,8 @@ export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<Fi
 
     const placeholder = document.createElement("div");
     const imageElement = document.createElement("img");
-    imageElement.setAttribute("class", "opacity-40 rounded-lg border " + defaultBorderMixin);
+    // basic styling for loading state
+    imageElement.setAttribute("class", "opacity-40 rounded-lg border");
     imageElement.src = readerEvent.target?.result as string;
     placeholder.appendChild(imageElement);
 
@@ -76,7 +74,6 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     }
 
                     images.forEach(image => {
-
                         const position = view.posAtCoords({
                             left: event.clientX,
                             top: event.clientY
@@ -85,7 +82,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, position.pos, upload, image);
+                            await onFileRead(view, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     });
@@ -100,13 +97,12 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
                 items.forEach((item) => {
                     const image = item.getAsFile();
-                    if (image) {
+                    if (image && /image/i.test(item.type)) {
                         anyImageFound = true;
-
                         const reader = new FileReader();
 
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, pos, upload, image);
+                            await onFileRead(view, readerEvent, pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     }
@@ -132,7 +128,6 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
             };
         }
     });
+
     return plugin;
 };
-
-
