@@ -12,8 +12,8 @@ export const ImageComponent: React.FC<ReactNodeViewProps> = ({ node, view, getPo
             alt={node.attrs.alt || ""}
             title={node.attrs.title || ""}
             className={cls(
-                "rounded-lg border border-solid border-gray-200 dark:border-gray-800 max-w-full",
-                selected ? "ring-2 ring-primary border-primary" : ""
+                "rounded-lg max-w-full !m-0",
+                selected ? "" : ""
             )}
         />
     );

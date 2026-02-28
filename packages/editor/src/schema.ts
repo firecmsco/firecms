@@ -161,7 +161,7 @@ const nodes: { [key: string]: NodeSpec } = {
         ],
         toDOM(node) {
             let { src, alt, title } = node.attrs;
-            return ["img", { src, alt, title, class: "rounded-lg border border-solid border-gray-200 dark:border-gray-800 max-w-full" }];
+            return ["img", { src, alt, title, class: "rounded-lg max-w-full !m-0" }];
         },
     },
     bullet_list: {

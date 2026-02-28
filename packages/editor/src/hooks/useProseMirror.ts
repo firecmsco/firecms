@@ -5,14 +5,21 @@ import { schema } from "../schema";
 import { corePlugins } from "../plugins";
 import { parser } from "../markdown";
 import { nodeViews } from "../nodeViews";
+import { createDropImagePlugin } from "../extensions/Image";
 
 interface UseProseMirrorProps {
     initialContent?: string | any;
     onChange?: (state: EditorState, view: EditorView) => void;
     editable?: boolean;
+    handleImageUpload?: (file: File) => Promise<string>;
 }
 
-export function useProseMirror({ initialContent, onChange, editable = true }: UseProseMirrorProps) {
+export function useProseMirror({ initialContent, onChange, editable = true, handleImageUpload }: UseProseMirrorProps) {
+    const plugins = [...corePlugins];
+    if (handleImageUpload) {
+        plugins.push(createDropImagePlugin(handleImageUpload));
+    }
+
     const defaultState = EditorState.create({
         doc: typeof initialContent === "string"
             ? parser.parse(initialContent)
@@ -20,7 +27,7 @@ export function useProseMirror({ initialContent, onChange, editable = true }: Us
                 ? schema.nodeFromJSON(initialContent)
                 : schema.node("doc", null, [schema.node("paragraph")]),
         schema,
-        plugins: corePlugins
+        plugins
     });
 
     const [state, setState] = useState<EditorState>(defaultState);

@@ -284,6 +284,14 @@ export function globalDragDropPlugin() {
 
             const handleDragOver = (event: DragEvent) => {
                 if (!editorView.editable || !editorView.dragging) return;
+
+                // If it's a native slice drag (no explicitly captured node from our drag handle)
+                // then we bail out here and let ProseMirror native drop logic and native dropcursor handle it
+                if (!(editorView.dragging as any).node) {
+                    removeCursor();
+                    return;
+                }
+
                 event.preventDefault(); // browser requires this to allow drop
 
                 const editorRect = editorView.dom.getBoundingClientRect();
@@ -341,6 +349,12 @@ export function globalDragDropPlugin() {
 
             const handleDrop = (event: DragEvent) => {
                 if (!editorView.editable || !editorView.dragging) return;
+
+                if (!(editorView.dragging as any).node) {
+                    removeCursor();
+                    return;
+                }
+
                 event.preventDefault();
                 removeCursor();
                 editorView.dom.classList.remove("dragging");
@@ -400,8 +414,11 @@ export function globalDragDropPlugin() {
                         // 3. Force insertion. tr.replace slices and splits lists. tr.insert preserves the explicit boundary.
                         tr = tr.insert(mappedTarget, nodeToInsert);
                     } else if (slice) {
-                        // Generic text drag highlighting
-                        tr = tr.replace(mappedTarget, mappedTarget, slice);
+                        // For generic slices (e.g native image dragging), we MUST use dropPoint
+                        // so ProseMirror finds a schema-valid depth to insert the node structure natively.
+                        const point = dropPoint(tr.doc, mappedTarget, slice);
+                        const finalTarget = point !== null ? point : mappedTarget;
+                        tr = tr.replace(finalTarget, finalTarget, slice);
                     }
 
                     if (!tr.doc.eq(beforeInsert)) {

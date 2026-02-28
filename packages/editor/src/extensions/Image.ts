@@ -61,7 +61,14 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
         },
         props: {
             handleDOMEvents: {
-                drop: (view, event) => {
+                dragover: (view: EditorView, event: DragEvent) => {
+                    if (event.dataTransfer?.types?.includes("Files")) {
+                        event.preventDefault();
+                        return true;
+                    }
+                    return false;
+                },
+                drop: (view: EditorView, event: DragEvent) => {
                     if (!event.dataTransfer?.files || event.dataTransfer?.files.length === 0) {
                         return false;
                     }
@@ -76,7 +83,6 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     }
 
                     images.forEach(image => {
-
                         const position = view.posAtCoords({
                             left: event.clientX,
                             top: event.clientY
@@ -93,7 +99,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     return true;
                 }
             },
-            handlePaste(view, event, slice) {
+            handlePaste(view: EditorView, event: ClipboardEvent, slice: any) {
                 const items = Array.from(event.clipboardData?.items || []);
                 const pos = view.state.selection.from;
                 let anyImageFound = false;
@@ -102,9 +108,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     const image = item.getAsFile();
                     if (image) {
                         anyImageFound = true;
-
                         const reader = new FileReader();
-
                         reader.onload = async (readerEvent) => {
                             await onFileRead(view as any, readerEvent, pos, upload, image);
                         };
@@ -119,7 +123,6 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
             }
         },
         view(editorView) {
-            // This is needed to immediately apply the decoration updates
             return {
                 update(view, prevState) {
                     const prevDecos = plugin.getState(prevState);
@@ -132,6 +135,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
             };
         }
     });
+
     return plugin;
 };
 

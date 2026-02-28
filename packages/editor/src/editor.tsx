@@ -68,6 +68,7 @@ export const FireCMSEditor = ({
   const { state, view, editorRef } = useProseMirror({
     initialContent: content,
     editable: !disabled,
+    handleImageUpload,
     onChange: (newState, editorView) => {
       if (onMarkdownContentChange) {
         const markdown = addLineBreakAfterImages(serializer.serialize(newState.doc));
@@ -179,7 +180,6 @@ const cssStyles = `
     filter: brightness(90%);
   }
   &.ProseMirror-selectednode {
-    outline: 3px solid #5abbf7;
     filter: brightness(90%);
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000) !important;
   }

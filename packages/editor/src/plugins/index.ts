@@ -9,6 +9,8 @@ import { splitListItem, liftListItem, sinkListItem } from "prosemirror-schema-li
 import { schema } from "../schema";
 import { Plugin } from "prosemirror-state";
 import { gapCursor } from "prosemirror-gapcursor";
+import { dropCursor } from "prosemirror-dropcursor";
+import { markdownInputRules } from "./inputrules";
 
 const customKeymap = {
     "Mod-z": undo,
@@ -41,10 +43,12 @@ export const corePlugins: Plugin[] = [
     history(),
     keymap(customKeymap),
     keymap(baseKeymap),
+    dropCursor({ width: 2, color: "#5abbf7" }),
     globalDragDropPlugin(),
     gapCursor(),
     slashCommandPlugin(),
     dragHandlePlugin(),
     highlightDecorationPlugin(),
-    textLoadingDecorationPlugin()
+    textLoadingDecorationPlugin(),
+    markdownInputRules
 ];
