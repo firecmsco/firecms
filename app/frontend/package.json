@@ -20,7 +20,6 @@
         "@firecms/schema_inference": "4.0.0",
         "@firecms/types": "4.0.0",
         "@firecms/ui": "4.0.0",
-        "@firecms/user_management": "4.0.0",
         "@fontsource/comic-neue": "^5.2.5",
         "@fontsource/jetbrains-mono": "^5.2.5",
         "@fontsource/noto-serif": "^5.2.6",

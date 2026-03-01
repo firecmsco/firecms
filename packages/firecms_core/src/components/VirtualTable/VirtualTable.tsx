@@ -50,23 +50,28 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
         <VirtualListContext.Consumer>
             {(virtualTableProps) => {
                 const customView = virtualTableProps.customView;
+                const headerHeight = virtualTableProps.headerHeight ?? 48;
                 return (
                     <>
                         <div
                             id={"virtual-table"}
                             style={{
                                 position: "relative",
-                                height: "100%"
+                                height: "100%",
+                                zIndex: 0
                             }}>
                             <div
                                 ref={ref}
                                 {...rest}
                                 style={{
                                     ...rest?.style,
+                                    height: (typeof rest?.style?.height === "number" ? rest.style.height : parseFloat((rest?.style?.height as string) || "0")) + headerHeight,
                                     minHeight: "100%",
                                     position: "relative"
                                 }}>
-                                <VirtualTableHeaderRow {...virtualTableProps} />
+                                <div style={{ position: "sticky", top: 0, zIndex: 10 }}>
+                                    <VirtualTableHeaderRow {...virtualTableProps} />
+                                </div>
                                 {!customView && children}
                             </div>
 

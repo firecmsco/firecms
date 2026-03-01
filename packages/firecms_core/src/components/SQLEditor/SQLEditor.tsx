@@ -27,7 +27,10 @@ import { useDataSource, useSnackbarController } from "../../hooks";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { VirtualTable, VirtualTableColumn } from "../VirtualTable";
+import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
 import { ConfirmationDialog } from "../ConfirmationDialog";
+import { parseFirst } from "pgsql-ast-parser";
+import { determineTableAndPK } from "../../util/sql_utils";
 import { ExplainVisualizer } from "./ExplainVisualizer";
 
 export interface TableColumnInfo {
@@ -160,7 +163,8 @@ export const SQLEditor = () => {
         results: any[] | null,
         loading: boolean,
         error: string | null,
-        execTime: number | null
+        execTime: number | null,
+        lastExecutedSql: string | null
     }>>(() => {
         const saved = localStorage.getItem(STORAGE_KEY_TABS);
         if (saved) {
@@ -170,7 +174,8 @@ export const SQLEditor = () => {
                 results: null,
                 loading: false,
                 error: null,
-                execTime: null
+                execTime: null,
+                lastExecutedSql: null
             }));
         }
         return [{
@@ -180,7 +185,8 @@ export const SQLEditor = () => {
             results: null,
             loading: false,
             error: null,
-            execTime: null
+            execTime: null,
+            lastExecutedSql: null
         }];
     });
     const [activeTabId, setActiveTabId] = useState<string>(() => {
@@ -208,6 +214,89 @@ export const SQLEditor = () => {
     const [autoLimit, setAutoLimit] = useState(true);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
     const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+    // Inline editing state
+    const [editingCell, setEditingCell] = useState<{ rowIndex: number, columnKey: string, initialValue: any } | null>(null);
+
+    const handleDoubleClick = useCallback((rowIndex: number, columnKey: string, initialValue: any, rowData: any) => {
+        if (!activeTab.lastExecutedSql) {
+            snackbarController.open({
+                type: "error",
+                message: "Cannot edit rows: The underlying query is missing."
+            });
+            return;
+        }
+
+        const resolution = determineTableAndPK(activeTab.lastExecutedSql, columnKey, schemas);
+
+        if (resolution.error || !resolution.primaryKey) {
+            snackbarController.open({
+                type: "error",
+                message: resolution.error || "Could not resolve table/primary key"
+            });
+            return;
+        }
+
+        const pk = resolution.primaryKey;
+        if (rowData[pk] === undefined || rowData[pk] === null) {
+            snackbarController.open({
+                type: "error",
+                message: `Row is missing primary key "${pk}", cannot safely update.`
+            });
+            return;
+        }
+
+        setEditingCell({ rowIndex, columnKey, initialValue });
+    }, [activeTab.lastExecutedSql, schemas, snackbarController]);
+
+    const handleCellSave = useCallback(async (newValue: string | null, rowData: any, columnKey: string, rowIndex: number) => {
+        if (!editingCell || !activeTab.lastExecutedSql) return;
+
+        setEditingCell(null); // Optimistically close
+
+        if (newValue === editingCell.initialValue) return;
+
+        const resolution = determineTableAndPK(activeTab.lastExecutedSql, columnKey, schemas);
+        if (resolution.error || !resolution.tableName || !resolution.primaryKey) {
+            snackbarController.open({ type: "error", message: resolution.error || "Resolution failed." });
+            return;
+        }
+
+        const tableName = resolution.tableName;
+        const pk = resolution.primaryKey;
+        const pkValue = rowData[pk];
+
+        const formatValue = (val: any) => {
+            if (val === null || val === undefined) return "NULL";
+            if (typeof val === "number") return val;
+            if (typeof val === "boolean") return val ? "TRUE" : "FALSE";
+            return `'${String(val).replace(/'/g, "''")}'`;
+        };
+
+        const updateSql = `UPDATE "${tableName}" SET "${columnKey}" = ${formatValue(newValue)} WHERE "${pk}" = ${formatValue(pkValue)};`;
+
+        try {
+            if (dataSource.executeSql) {
+                await dataSource.executeSql(updateSql);
+
+                const newResults = [...(activeTab.results || [])];
+                if (newResults[rowIndex]) {
+                    newResults[rowIndex] = { ...newResults[rowIndex], [columnKey]: newValue };
+                }
+                updateActiveTab({ results: newResults });
+
+                snackbarController.open({
+                    type: "success",
+                    message: "Row updated successfully."
+                });
+            }
+        } catch (e: any) {
+            snackbarController.open({
+                type: "error",
+                message: `Failed to update: ${e.message}`
+            });
+        }
+    }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController]);
 
     const [columnWidths, setColumnWidths] = useState<Record<string, Record<string, number>>>(() => {
         const saved = localStorage.getItem("firecms_sql_column_widths");
@@ -275,7 +364,8 @@ export const SQLEditor = () => {
             results: null,
             loading: false,
             error: null,
-            execTime: null
+            execTime: null,
+            lastExecutedSql: null
         }]);
         setActiveTabId(newId);
     };
@@ -349,7 +439,11 @@ export const SQLEditor = () => {
         try {
             if (dataSource.executeSql) {
                 const result = await dataSource.executeSql(sqlToRun);
-                updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
+                updateActiveTab({
+                    results: result,
+                    execTime: Math.round(performance.now() - start),
+                    lastExecutedSql: sqlToRun
+                });
 
                 if (history[history.length - 1] !== activeTab.sql) {
                     saveHistory([...history, activeTab.sql]);
@@ -558,19 +652,42 @@ export const SQLEditor = () => {
         }));
 
         return (
-            <div className="flex-grow flex flex-col overflow-hidden">
-                <div className="flex-grow">
+            <div className="flex-grow flex flex-col overflow-hidden min-h-0">
+                <div className="flex-grow relative h-full">
                     <VirtualTable
                         data={results}
                         columns={columns}
                         rowHeight={32}
                         headerHeight={32}
                         onColumnResizeEnd={handleColumnResize}
-                        cellRenderer={({ rowData, column }) => {
+                        cellRenderer={({ rowData, column, rowIndex }) => {
+                            const isEditing = editingCell?.rowIndex === rowIndex && editingCell?.columnKey === column.key;
                             const value = rowData ? rowData[column.key] : null;
                             const displayValue = typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? "");
+
+                            if (isEditing) {
+                                return (
+                                    <div className="absolute inset-x-0 -inset-y-0.5 z-10 bg-surface-50 dark:bg-surface-900 border border-primary dark:border-primary-dark shadow-md overflow-y-auto max-h-[200px] flex px-2 py-1 items-start text-[13px] font-mono">
+                                        <VirtualTableInput
+                                            error={undefined}
+                                            value={displayValue}
+                                            multiline={true}
+                                            focused={true}
+                                            disabled={false}
+                                            updateValue={(newValue) => {
+                                                handleCellSave(newValue, rowData, column.key, rowIndex);
+                                            }}
+                                            onBlur={() => setEditingCell(null)}
+                                        />
+                                    </div>
+                                );
+                            }
+
                             return (
-                                <div className="px-4 py-1.5 h-full flex items-center whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono">
+                                <div
+                                    className="px-4 py-1.5 h-full flex items-center whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono cursor-text"
+                                    onDoubleClick={() => handleDoubleClick(rowIndex, column.key, displayValue, rowData)}
+                                >
                                     <div className="truncate" title={displayValue}>
                                         {displayValue === "" ? <span className="text-text-disabled dark:text-text-disabled-dark italic text-[11px]">NULL</span> : displayValue}
                                     </div>
@@ -778,7 +895,7 @@ export const SQLEditor = () => {
                             onPanelSizeChange={setEditorHeight}
                             minPanelSizePx={100}
                             firstPanel={
-                                <div className="h-full w-full relative flex flex-col">
+                                <div className="h-full w-full relative flex flex-col min-h-0">
                                     <MonacoEditor
                                         value={sql}
                                         onChange={(v) => setSql(v || "")}
@@ -788,14 +905,17 @@ export const SQLEditor = () => {
                                 </div>
                             }
                             secondPanel={
-                                <div className="h-full w-full flex flex-col bg-surface-50 dark:bg-surface-950 overflow-hidden">
+                                <div className="h-full w-full flex flex-col bg-surface-50 dark:bg-surface-950 overflow-hidden min-h-0">
                                     <div className={cls("p-2 px-4 bg-surface-100 dark:bg-surface-900 border-b shrink-0 flex items-center", defaultBorderMixin)}>
                                         <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">Query Results</Typography>
                                     </div>
-                                    {renderResults()}
+                                    <div className="flex-grow flex flex-col min-h-0 overflow-hidden">
+                                        {renderResults()}
+                                    </div>
                                 </div>
                             }
                         />
+
                     </div>
                 }
             />

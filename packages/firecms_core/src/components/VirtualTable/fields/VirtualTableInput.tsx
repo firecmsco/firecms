@@ -10,6 +10,7 @@ export function VirtualTableInput(props: {
     focused: boolean;
     disabled: boolean;
     updateValue: (newValue: (string | null)) => void;
+    onBlur?: () => void;
 }) {
 
     const ref = React.useRef<HTMLTextAreaElement>(null);
@@ -37,7 +38,7 @@ export function VirtualTableInput(props: {
         const emptyInitialValue = !value;
         if (emptyInitialValue && !internalValue)
             return;
-        if (internalValue !== value) {
+        if (internalValue !== value && internalValue !== prevValue.current) {
             prevValue.current = internalValue;
             updateValue(internalValue);
         }
@@ -85,6 +86,7 @@ export function VirtualTableInput(props: {
             onBlur={() => {
                 focusedState.current = false;
                 doUpdate();
+                if (props.onBlur) props.onBlur();
             }}
         />
     );
