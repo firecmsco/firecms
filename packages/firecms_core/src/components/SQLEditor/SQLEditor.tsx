@@ -20,7 +20,8 @@ import {
     Select,
     SelectItem,
     Menu,
-    MenuItem
+    MenuItem,
+    ResizablePanels
 } from "@firecms/ui";
 import { useDataSource, useSnackbarController } from "../../hooks";
 import { MonacoEditor } from "./MonacoEditor";
@@ -621,163 +622,183 @@ export const SQLEditor = () => {
         );
     };
 
+    const [sidebarSize, setSidebarSize] = useState(20);
+    const [editorHeight, setEditorHeight] = useState(50);
+
     const activeSnippet = snippets.find(s => s.sql === activeTab.sql);
     const isFavorite = activeSnippet?.isFavorite || false;
 
     return (
         <div className="flex h-full w-full bg-white dark:bg-surface-950 overflow-hidden text-text-primary dark:text-text-primary-dark">
-            <SQLEditorSidebar
-                snippets={snippets}
-                history={history}
-                onSelectSnippet={setSql}
-                onTableClick={setSql}
-                onDeleteSnippet={handleDeleteSnippet}
-                schemas={schemas}
-                isSchemaLoading={isSchemaLoading}
-                schemaError={schemaError}
-                onRetrySchema={fetchSchema}
-            />
-
-            {/* Main Area */}
-            <div className="flex-grow flex flex-col min-w-0">
-                {/* Toolbar */}
-                <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                    <div className="flex items-center flex-grow overflow-hidden mr-4">
-                        <div className="flex items-center no-scrollbar overflow-x-auto min-w-0">
-                            <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
-                                {tabs.map(tab => (
-                                    <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
-                                        <span className="truncate">{tab.name}</span>
-                                        {tabs.length > 1 && (
-                                            <button
-                                                onClick={(e) => handleCloseTab(tab.id, e)}
-                                                className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
-                                            >
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                            </button>
-                                        )}
-                                    </Tab>
-                                ))}
-                            </Tabs>
-                            <IconButton
-                                size="small"
-                                onClick={handleAddTab}
-                                className="ml-1 flex-shrink-0"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                            </IconButton>
-                        </div>
-                    </div>
-                    <div className="flex shrink-0 items-center justify-end">
-                        <Tooltip title="Format SQL">
-                            <button onClick={handlePrettify} className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none flex items-center justify-center">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                            </button>
-                        </Tooltip>
-
-                        <Button
-                            variant="text"
-                            size="small"
-                            onClick={handleExplain}
-                            disabled={loading}
-                        >
-                            Explain
-                        </Button>
-
-                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
-
-                        <div className="flex items-center space-x-2 px-4 cursor-pointer" onClick={() => setAutoLimit(!autoLimit)}>
-                            <Typography variant="caption" className="text-text-secondary cursor-pointer select-none">Limit 1000</Typography>
-                            <input
-                                type="checkbox"
-                                checked={autoLimit}
-                                onChange={(e) => setAutoLimit(e.target.checked)}
-                                onClick={(e) => e.stopPropagation()}
-                                className="w-3.5 h-3.5 rounded border-surface-300 text-primary focus:ring-primary cursor-pointer"
-                            />
-                        </div>
-
-                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
-
-                        <Tooltip title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}>
-                            <IconButton
-                                size="small"
-                                onClick={() => {
-                                    if (!activeSnippet) {
-                                        snackbarController.open({
-                                            type: "info",
-                                            message: "Please save the snippet first before favoriting."
-                                        });
-                                        return;
-                                    }
-                                    saveSnippets(snippets.map(s => s.id === activeSnippet.id ? { ...s, isFavorite: !s.isFavorite } : s));
-                                }}
-                            >
-                                <svg className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-current' : 'text-text-disabled dark:text-text-disabled-dark hover:text-text-primary'}`} fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                            </IconButton>
-                        </Tooltip>
-
-                        <Button
-                            variant="text"
-                            size="small"
-                            onClick={() => setIsSaveDialogOpen(true)}
-                        >
-                            Save
-                        </Button>
-
-                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
-
-                        <div className="flex items-center space-x-2 pl-3">
-                            <Select
-                                value={selectedDatabase}
-                                onValueChange={setSelectedDatabase as any}
-                                size="small"
-                                position="popper"
-                            >
-                                <SelectItem value="default">Database (Default)</SelectItem>
-                            </Select>
-
-                            <Select
-                                value={selectedRole}
-                                onValueChange={setSelectedRole as any}
-                                size="small"
-                                position="popper"
-                                renderValue={(val) => `Role: ${val}`}
-                            >
-                                <SelectItem value="postgres">postgres (Admin)</SelectItem>
-                                <SelectItem value="authenticated">authenticated</SelectItem>
-                                <SelectItem value="anon">anon</SelectItem>
-                            </Select>
-
-                            <Button
-                                onClick={() => handleRun()}
-                                disabled={loading}
-                                size="small"
-                                color="primary"
-                            >
-                                {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
-                                Run
-                            </Button>
-                        </div>
-                    </div>
-                </div>     {/* Editor Area */}
-                <div className="h-1/2 shrink-0 relative flex flex-col">
-                    <MonacoEditor
-                        value={sql}
-                        onChange={(v) => setSql(v || "")}
-                        onRun={handleRun}
+            <ResizablePanels
+                orientation="horizontal"
+                panelSizePercent={sidebarSize}
+                onPanelSizeChange={setSidebarSize}
+                minPanelSizePx={220}
+                firstPanel={
+                    <SQLEditorSidebar
+                        snippets={snippets}
+                        history={history}
+                        onSelectSnippet={setSql}
+                        onTableClick={setSql}
+                        onDeleteSnippet={handleDeleteSnippet}
                         schemas={schemas}
+                        isSchemaLoading={isSchemaLoading}
+                        schemaError={schemaError}
+                        onRetrySchema={fetchSchema}
                     />
-                </div>
+                }
+                secondPanel={
+                    <div className="flex-grow flex flex-col min-w-0 h-full w-full">
+                        {/* Toolbar */}
+                        <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                            <div className="flex items-center flex-grow overflow-hidden mr-4">
+                                <div className="flex items-center no-scrollbar overflow-x-auto min-w-0">
+                                    <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
+                                        {tabs.map(tab => (
+                                            <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
+                                                <span className="truncate">{tab.name}</span>
+                                                {tabs.length > 1 && (
+                                                    <button
+                                                        onClick={(e) => handleCloseTab(tab.id, e)}
+                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                                    >
+                                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                                    </button>
+                                                )}
+                                            </Tab>
+                                        ))}
+                                    </Tabs>
+                                    <IconButton
+                                        size="small"
+                                        onClick={handleAddTab}
+                                        className="ml-1 flex-shrink-0"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                    </IconButton>
+                                </div>
+                            </div>
+                            <div className="flex shrink-0 items-center justify-end pr-2 gap-1.5">
+                                <Tooltip title="Format SQL">
+                                    <button onClick={handlePrettify} className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none flex items-center justify-center">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                                    </button>
+                                </Tooltip>
 
-                {/* Results Area */}
-                <div className={cls("flex-grow flex flex-col border-t overflow-hidden", defaultBorderMixin)}>
-                    <div className={cls("p-3 px-6 bg-surface-50 dark:bg-surface-900 border-b shrink-0 flex items-center", defaultBorderMixin)}>
-                        <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">Query Results</Typography>
+                                <Button
+                                    variant="text"
+                                    size="small"
+                                    onClick={handleExplain}
+                                    disabled={loading}
+                                >
+                                    Explain
+                                </Button>
+
+                                <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                                <div className="flex items-center space-x-2 px-2 cursor-pointer" onClick={() => setAutoLimit(!autoLimit)}>
+                                    <Typography variant="caption" className="text-[11px] text-text-secondary cursor-pointer select-none">Limit 1000</Typography>
+                                    <input
+                                        type="checkbox"
+                                        checked={autoLimit}
+                                        onChange={(e) => setAutoLimit(e.target.checked)}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="w-3.5 h-3.5 rounded border-surface-300 text-primary focus:ring-primary cursor-pointer"
+                                    />
+                                </div>
+
+                                <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                                <Tooltip title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => {
+                                            if (!activeSnippet) {
+                                                snackbarController.open({
+                                                    type: "info",
+                                                    message: "Please save the snippet first before favoriting."
+                                                });
+                                                return;
+                                            }
+                                            saveSnippets(snippets.map(s => s.id === activeSnippet.id ? { ...s, isFavorite: !s.isFavorite } : s));
+                                        }}
+                                    >
+                                        <svg className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-current' : 'text-text-disabled dark:text-text-disabled-dark hover:text-text-primary'}`} fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                                    </IconButton>
+                                </Tooltip>
+
+                                <Button
+                                    variant="text"
+                                    size="small"
+                                    onClick={() => setIsSaveDialogOpen(true)}
+                                >
+                                    Save
+                                </Button>
+
+                                <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
+
+                                <Menu
+                                    trigger={
+                                        <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors bg-surface-100 hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 rounded border border-transparent mr-2">
+                                            <svg className="w-3.5 h-3.5 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                                            <span className="max-w-[80px] truncate">{selectedRole}</span>
+                                        </button>
+                                    }
+                                >
+                                    <div className="px-3 py-1.5 border-b border-surface-200 dark:border-surface-800 mb-1">
+                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Database</Typography>
+                                    </div>
+                                    <MenuItem dense onClick={() => setSelectedDatabase("default")} className={cls("text-xs", selectedDatabase === "default" && "text-primary dark:text-primary-dark")}>
+                                        default
+                                    </MenuItem>
+
+                                    <div className="px-3 py-1.5 border-y border-surface-200 dark:border-surface-800 mb-1 mt-1">
+                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Role</Typography>
+                                    </div>
+                                    <MenuItem dense onClick={() => setSelectedRole("postgres")} className={cls("text-xs", selectedRole === "postgres" && "text-primary dark:text-primary-dark")}>postgres (Admin)</MenuItem>
+                                    <MenuItem dense onClick={() => setSelectedRole("authenticated")} className={cls("text-xs", selectedRole === "authenticated" && "text-primary dark:text-primary-dark")}>authenticated</MenuItem>
+                                    <MenuItem dense onClick={() => setSelectedRole("anon")} className={cls("text-xs", selectedRole === "anon" && "text-primary dark:text-primary-dark")}>anon</MenuItem>
+                                </Menu>
+
+                                <Button
+                                    onClick={() => handleRun()}
+                                    disabled={loading}
+                                    size="small"
+                                    color="primary"
+                                >
+                                    {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
+                                    Run
+                                </Button>
+                            </div>
+                        </div>
+
+                        <ResizablePanels
+                            orientation="vertical"
+                            panelSizePercent={editorHeight}
+                            onPanelSizeChange={setEditorHeight}
+                            minPanelSizePx={100}
+                            firstPanel={
+                                <div className="h-full w-full relative flex flex-col">
+                                    <MonacoEditor
+                                        value={sql}
+                                        onChange={(v) => setSql(v || "")}
+                                        onRun={handleRun}
+                                        schemas={schemas}
+                                    />
+                                </div>
+                            }
+                            secondPanel={
+                                <div className="h-full w-full flex flex-col bg-surface-50 dark:bg-surface-950 overflow-hidden">
+                                    <div className={cls("p-2 px-4 bg-surface-100 dark:bg-surface-900 border-b shrink-0 flex items-center", defaultBorderMixin)}>
+                                        <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">Query Results</Typography>
+                                    </div>
+                                    {renderResults()}
+                                </div>
+                            }
+                        />
                     </div>
-                    {renderResults()}
-                </div>
-            </div>
+                }
+            />
 
             <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
                 <DialogTitle>Save SQL Snippet</DialogTitle>
@@ -815,6 +836,6 @@ export const SQLEditor = () => {
                     setIsConfirmDialogOpen(false);
                 }}
             />
-        </div >
+        </div>
     );
 };

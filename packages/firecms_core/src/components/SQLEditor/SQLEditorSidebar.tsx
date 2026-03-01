@@ -43,7 +43,7 @@ export const SQLEditorSidebar = ({
     const [activeTab, setActiveTab] = useState<"schema" | "snippets" | "history">("schema");
 
     return (
-        <div className={cls("flex flex-col h-full bg-white dark:bg-surface-950 border-r w-[260px] flex-shrink-0", defaultBorderMixin)}>
+        <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
             <Tabs value={activeTab} onValueChange={setActiveTab as any} variant="underline">
                 <Tab value="schema">Schema</Tab>
                 <Tab value="snippets">Snippets</Tab>

@@ -31,6 +31,7 @@ export * from "./Menubar";
 export * from "./MultiSelect";
 export * from "./Paper";
 export * from "./RadioGroup";
+export * from "./ResizablePanels";
 export * from "./SearchBar";
 export * from "./Select";
 export * from "./Separator";
