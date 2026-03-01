@@ -7,7 +7,7 @@ import { EntityStatus } from "./entities";
 import { FireCMSContext } from "../firecms_context";
 import { NavigationGroupMapping, CMSView } from "../controllers";
 import { User } from "../users";
-import { InternalUserManagement } from "./internal_user_management";
+import { UserManagementDelegate } from "./user_management_delegate";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -43,7 +43,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         props?: PROPS;
     };
 
-    userManagement?: InternalUserManagement
+    userManagement?: UserManagementDelegate;
 
     /**
      * Views to be automatically added to the navigation.

@@ -1,4 +1,4 @@
 import React from "react";
-import { InternalUserManagement } from "@firecms/types";
+import { UserManagementDelegate } from "@firecms/types";
 
-export const InternalUserManagementContext = React.createContext<InternalUserManagement<any>>({} as InternalUserManagement);
+export const InternalUserManagementContext = React.createContext<UserManagementDelegate<any> | undefined>(undefined);

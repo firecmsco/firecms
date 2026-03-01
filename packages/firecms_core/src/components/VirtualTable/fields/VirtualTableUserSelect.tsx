@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
+import { EntityCollection, PermissionsBuilder, User, UserManagementDelegate } from "@firecms/types";
 import { useInternalUserManagementController } from "../../../hooks";
 import { UserDisplay } from "../../UserDisplay";
 
@@ -24,7 +25,9 @@ export function VirtualTableUserSelect(props: {
         multiple
     } = props;
 
-    const { users, getUser } = useInternalUserManagementController();
+    const userManagementContext = useInternalUserManagementController<User>();
+    const users = userManagementContext?.users ?? [];
+    const getUser = userManagementContext?.getUser;
 
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
@@ -45,8 +48,8 @@ export function VirtualTableUserSelect(props: {
     }, [updateValue]);
 
     const renderValue = (userId: string) => {
-        const user = getUser(userId);
-        return <UserDisplay user={user}  />;
+        const user = getUser?.(userId) || null;
+        return <UserDisplay user={user} />;
     };
 
     return (
@@ -57,12 +60,22 @@ export function VirtualTableUserSelect(props: {
                 position={"item-aligned"}
                 disabled={disabled}
                 includeClear={false}
-                useChips={false}
+                useChips={true} // Changed to true to allow custom rendering of chips
                 value={validValue
                     ? (internalValue as string[])
                     : ([])}
-                onValueChange={onChange}>
-                {users?.map((user) => (
+                onValueChange={onChange}
+                renderValues={(ids) => {
+                    return <div className={"flex flex-row overflow-hidden flex-wrap max-w-full gap-2 items-center"}>
+                        {ids.map((id) => {
+                            const user = users.find((user: User) => user.uid === id) || getUser?.(id) || null;
+                            if (!user) return <div key={id}>{id}</div>;
+                            return <UserDisplay key={id} user={user} />;
+                        })}
+                    </div>;
+                }}
+            >
+                {users?.map((user: User) => (
                     <MultiSelectItem
                         key={user.uid}
                         value={user.uid}>
@@ -84,12 +97,12 @@ export function VirtualTableUserSelect(props: {
                     : ""}
                 onValueChange={onChange}
                 renderValue={renderValue}>
-                {users?.map((user) => (
+                {users?.map((user: User) => (
                     <SelectItem
                         key={user.uid}
                         value={user.uid}>
                         <UserDisplay
-                            user={user}/>
+                            user={user} />
                     </SelectItem>
                 ))}
             </Select>

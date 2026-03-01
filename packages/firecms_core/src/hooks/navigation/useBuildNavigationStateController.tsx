@@ -23,8 +23,10 @@ import { resolveCollections, resolveCMSViews } from "./useNavigationResolution";
 import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";
 import { CollectionRegistry } from "@firecms/common";
 import { useAdminModeController } from "../useAdminModeController";
-import { EffectiveRoleController } from "@firecms/types";
+import { EffectiveRoleController, UserManagementDelegate } from "@firecms/types";
 import React, { useMemo } from "react";
+import { UsersView, RolesView } from "../../components/admin";
+import { AccountCircleIcon, SecurityIcon } from "@firecms/ui";
 
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
@@ -41,6 +43,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     cmsUrlController: CMSUrlController;
     adminMode?: "developer" | "editor";
     effectiveRoleController?: EffectiveRoleController;
+    userManagement?: UserManagementDelegate<USER>;
 };
 
 export function useBuildNavigationStateController<EC extends EntityCollection, USER extends User>(
@@ -61,7 +64,8 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         collectionRegistryController,
         cmsUrlController,
         adminMode = "editor",
-        effectiveRoleController
+        effectiveRoleController,
+        userManagement
     } = props;
 
     const viewsRef = useRef<CMSView[] | undefined>(undefined);
@@ -285,11 +289,33 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
         try {
 
-            const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
+            const injectedAdminViews: CMSView[] = [];
+            if (userManagement) {
+                injectedAdminViews.push({
+                    slug: "users",
+                    name: "Users",
+                    group: NAVIGATION_ADMIN_GROUP_NAME,
+                    icon: <AccountCircleIcon />,
+                    view: <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+                });
+                if (userManagement.roles) {
+                    injectedAdminViews.push({
+                        slug: "roles",
+                        name: "Roles",
+                        group: NAVIGATION_ADMIN_GROUP_NAME,
+                        icon: <SecurityIcon />,
+                        view: <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+                    });
+                }
+            }
+
+            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, resolvedAuthController, dataSourceDelegate);
+            const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViews];
+
+            const [resolvedCollections = [], resolvedViews] = await Promise.all(
                 [
                     resolveCollections(collectionsProp, collectionPermissions, resolvedAuthController, dataSourceDelegate, plugins),
-                    resolveCMSViews(viewsProp, resolvedAuthController, dataSourceDelegate, plugins),
-                    resolveCMSViews(adminViewsProp, resolvedAuthController, dataSourceDelegate)
+                    resolveCMSViews(viewsProp, resolvedAuthController, dataSourceDelegate, plugins)
                 ]
             );
 

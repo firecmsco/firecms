@@ -33,9 +33,7 @@ import { usePostgresClientDataSource } from "@firecms/postgresql";
 import {
     useFireCMSAuthController,
     FireCMSLoginView,
-    useBackendUserManagement,
-    UsersView,
-    RolesView
+    useBackendUserManagement
 } from "@firecms/auth";
 import { collections } from "virtual:firecms-collections";
 import { StorageIcon, PersonIcon, ShieldIcon } from "@firecms/ui";
@@ -93,28 +91,7 @@ export function App() {
         }
     ];
 
-    const adminViews: CMSView[] = [
-        {
-            slug: "users",
-            name: "Users",
-            group: "Admin",
-            icon: "person",
-            description: "Manage CMS users",
-            view: <UsersView
-                userManagement={userManagement}
-                apiUrl={API_URL}
-                getAuthToken={authController.getAuthToken}
-            />
-        },
-        {
-            slug: "roles",
-            name: "Roles",
-            group: "Admin",
-            icon: "shield",
-            description: "Configure access control",
-            view: <RolesView userManagement={userManagement} />
-        }
-    ];
+    // adminViews are now auto-injected by core based on userManagement
 
     const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
 
@@ -130,12 +107,12 @@ export function App() {
         plugins: [dataEnhancementPlugin, collectionEditorPlugin],
         collections: collectionsBuilder,
         views: adminModeController.mode === "developer" ? devViews : undefined,
-        adminViews: adminViews,
         authController,
         dataSourceDelegate: postgresDelegate,
         collectionRegistryController,
         cmsUrlController,
-        adminMode: adminModeController.mode
+        adminMode: adminModeController.mode,
+        userManagement: userManagement
     });
 
     return (

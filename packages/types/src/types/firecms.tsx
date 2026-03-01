@@ -11,7 +11,7 @@ import {
     UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController
 } from "../controllers";
 import { FireCMSContext } from "../firecms_context";
-import { InternalUserManagement } from "./internal_user_management";
+import { UserManagementDelegate } from "./user_management_delegate";
 
 /**
  * Controller to simulate different roles when dev mode is active.
@@ -183,7 +183,7 @@ export type FireCMSProps<USER extends User> = {
      * If you are using the FireCMS user management plugin, this
      * prop will be implemented automatically.
      */
-    userManagement?: InternalUserManagement
+    userManagement?: UserManagementDelegate;
 
     components?: {
 

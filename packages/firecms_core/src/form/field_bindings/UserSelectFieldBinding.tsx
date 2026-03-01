@@ -6,7 +6,7 @@ import { CloseIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { PropertyIdCopyTooltip } from "../../components";
 import { useInternalUserManagementController } from "../../hooks";
 import { UserDisplay } from "../../components/UserDisplay";
-import { FieldProps, StringProperty } from "@firecms/types";
+import { FieldProps, StringProperty, User } from "@firecms/types";
 
 type UserSelectProps = FieldProps<StringProperty>;
 
@@ -19,20 +19,22 @@ type UserSelectProps = FieldProps<StringProperty>;
  * @group Form fields
  */
 export function UserSelectFieldBinding({
-                                           propertyKey,
-                                           value,
-                                           setValue,
-                                           error,
-                                           showError,
-                                           disabled,
-                                           autoFocus,
-                                           touched,
-                                           property,
-                                           includeDescription,
-                                           size = "large"
-                                       }: UserSelectProps) {
+    propertyKey,
+    value,
+    setValue,
+    error,
+    showError,
+    disabled,
+    autoFocus,
+    touched,
+    property,
+    includeDescription,
+    size = "large"
+}: UserSelectProps) {
 
-    const { users, getUser } = useInternalUserManagementController();
+    const userManagementContext = useInternalUserManagementController<User>();
+    const users = userManagementContext?.users ?? [];
+    const getUser = userManagementContext?.getUser;
 
     const handleClearClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -62,7 +64,7 @@ export function UserSelectFieldBinding({
                     property.clearable && !disabled && value && <IconButton
                         size="small"
                         onClick={handleClearClick}>
-                        <CloseIcon size={"small"}/>
+                        <CloseIcon size={"small"} />
                     </IconButton>
                 }
                 onValueChange={(updatedValue: string) => {
@@ -70,24 +72,24 @@ export function UserSelectFieldBinding({
                     return setValue(newValue);
                 }}
                 renderValue={(userId: string) => {
-                    const user = getUser(userId);
+                    const user = users.find((u: User) => u.uid === userId) || getUser?.(userId) || null;
                     return <UserDisplay user={user} />;
                 }}
             >
-                {users && users.map((user) => {
+                {users && users.map((user: User) => {
                     return <SelectItem
                         key={user.uid}
                         value={user.uid}>
-                        <UserDisplay user={user}  />
+                        <UserDisplay user={user} />
                     </SelectItem>
                 })}
             </Select>
 
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             disabled={disabled}
-                             property={property}/>
+                showError={showError}
+                error={error}
+                disabled={disabled}
+                property={property} />
 
         </>
     );

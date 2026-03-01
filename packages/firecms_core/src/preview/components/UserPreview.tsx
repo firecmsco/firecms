@@ -3,7 +3,7 @@ import { useInternalUserManagementController } from "../../hooks";
 import { UserDisplay } from "../../components/UserDisplay";
 import { EmptyValue } from "./EmptyValue";
 import { Typography } from "@firecms/ui";
-import { PropertyPreviewProps, StringProperty } from "@firecms/types";
+import { PropertyPreviewProps, StringProperty, User } from "@firecms/types";
 
 /**
  * Preview component for displaying user information.
@@ -12,16 +12,16 @@ import { PropertyPreviewProps, StringProperty } from "@firecms/types";
  * @group Preview components
  */
 export function UserPreview({ value }: PropertyPreviewProps<StringProperty>) {
-    const { getUser } = useInternalUserManagementController();
+    const getUser = useInternalUserManagementController<User>()?.getUser;
 
     if (!value) {
-        return <EmptyValue/>;
+        return <EmptyValue />;
     }
 
-    const user = getUser(value);
+    const user = getUser?.(value);
     if (!user) {
         return <Typography variant={"caption"} color={"secondary"}>User not found: {value}</Typography>;
     }
 
-    return <UserDisplay user={user}/>;
+    return <UserDisplay user={user} />;
 }

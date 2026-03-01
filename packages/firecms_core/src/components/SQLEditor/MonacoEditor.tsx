@@ -10,7 +10,7 @@ export type MonacoEditorProps = {
     className?: string;
     readOnly?: boolean;
     autoFocus?: boolean;
-    schemas?: Record<string, { schemaName: string, tableName: string, columns: string[] }[]>;
+    schemas?: Record<string, { schemaName: string, tableName: string, columns: { name: string, dataType: string }[] }[]>;
 };
 
 export const MonacoEditor = ({
@@ -96,9 +96,9 @@ export const MonacoEditor = ({
                         if (table) {
                             table.columns.forEach(col => {
                                 suggestions.push({
-                                    label: col,
+                                    label: col.name,
                                     kind: monaco.languages.CompletionItemKind.Field,
-                                    insertText: col,
+                                    insertText: col.name,
                                     range,
                                     detail: `Column`,
                                     sortText: "1"
@@ -150,12 +150,12 @@ export const MonacoEditor = ({
                         tables.forEach(table => {
                             if (activeTables.has(table.tableName)) {
                                 table.columns.forEach(col => {
-                                    if (!addedColumns.has(col)) {
-                                        addedColumns.add(col);
+                                    if (!addedColumns.has(col.name)) {
+                                        addedColumns.add(col.name);
                                         suggestions.push({
-                                            label: col,
+                                            label: col.name,
                                             kind: monaco.languages.CompletionItemKind.Field,
-                                            insertText: col,
+                                            insertText: col.name,
                                             range,
                                             detail: `Column (${table.tableName})`,
                                             sortText: "1" // Prioritize columns from active tables

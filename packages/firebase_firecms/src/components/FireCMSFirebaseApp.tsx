@@ -81,6 +81,7 @@ export function FireCMSFirebaseApp({
     firestoreIndexesBuilder,
     components,
     localTextSearchEnabled = false,
+    userManagement
 }: FireCMSFirebaseAppProps) {
 
     /**
@@ -170,15 +171,16 @@ export function FireCMSFirebaseApp({
     });
 
     const navigationStateController = useBuildNavigationStateController({
-        authController,
         collections,
         views,
         adminViews,
+        authController,
         dataSourceDelegate: firestoreDelegate,
         plugins,
         collectionRegistryController,
         cmsUrlController,
-        adminMode: adminModeController.mode
+        adminMode: adminModeController.mode,
+        userManagement: userManagement as any
     });
 
     if (firebaseConfigLoading || !firebaseApp || loading) {
@@ -205,6 +207,7 @@ export function FireCMSFirebaseApp({
                         dateTimeFormat={dateTimeFormat}
                         dataSourceDelegate={firestoreDelegate}
                         storageSource={storageSource}
+                        userManagement={userManagement}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                         locale={locale}
                         onAnalyticsEvent={onAnalyticsEvent}

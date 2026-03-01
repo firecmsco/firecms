@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
-import { InternalUserManagement, User } from "@firecms/types";
+import { User, UserManagementDelegate } from "@firecms/types";
 
 /**
  * Use this hook to get the internal user management of the app.
@@ -12,4 +12,6 @@ import { InternalUserManagement, User } from "@firecms/types";
  *
  * @group Hooks and utilities
  */
-export const useInternalUserManagementController = <USER extends User = User>(): InternalUserManagement<USER> => useContext(InternalUserManagementContext);
+export function useInternalUserManagementController<USER extends User>(): UserManagementDelegate<USER> | undefined {
+    return useContext(InternalUserManagementContext);
+}

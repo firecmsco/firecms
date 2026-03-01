@@ -29,10 +29,15 @@ import { VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { ConfirmationDialog } from "../ConfirmationDialog";
 import { ExplainVisualizer } from "./ExplainVisualizer";
 
+export interface TableColumnInfo {
+    name: string;
+    dataType: string;
+}
+
 export interface TableInfo {
     schemaName: string;
     tableName: string;
-    columns: string[];
+    columns: TableColumnInfo[];
 }
 
 const QueryLoadingView = () => {
@@ -92,7 +97,8 @@ export const SQLEditor = () => {
                 SELECT 
                     table_schema as schema, 
                     table_name as "table", 
-                    column_name as "column"
+                    column_name as "column",
+                    data_type as "data_type"
                 FROM 
                     information_schema.columns
                 WHERE 
@@ -107,6 +113,7 @@ export const SQLEditor = () => {
                     const schema = curr.schema || curr.SCHEMA || curr.table_schema || "public";
                     const table = curr.table || curr.TABLE || curr.table_name;
                     const column = curr.column || curr.COLUMN || curr.column_name;
+                    const dataType = curr.data_type || curr.DATA_TYPE || "";
 
                     if (!acc[schema]) acc[schema] = [];
                     let tableInfo = acc[schema].find(t => t.tableName === table);
@@ -114,7 +121,7 @@ export const SQLEditor = () => {
                         tableInfo = { schemaName: schema, tableName: table, columns: [] };
                         acc[schema].push(tableInfo);
                     }
-                    tableInfo.columns.push(column);
+                    tableInfo.columns.push({ name: column, dataType });
                     return acc;
                 }, {});
                 setSchemas(grouped);
@@ -623,7 +630,7 @@ export const SQLEditor = () => {
                 snippets={snippets}
                 history={history}
                 onSelectSnippet={setSql}
-                onTableClick={(tableName) => setSql(`SELECT * FROM ${tableName} LIMIT 100;`)}
+                onTableClick={setSql}
                 onDeleteSnippet={handleDeleteSnippet}
                 schemas={schemas}
                 isSchemaLoading={isSchemaLoading}
@@ -636,28 +643,30 @@ export const SQLEditor = () => {
                 {/* Toolbar */}
                 <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                     <div className="flex items-center flex-grow overflow-hidden mr-4">
-                        <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
-                            {tabs.map(tab => (
-                                <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
-                                    <span className="truncate">{tab.name}</span>
-                                    {tabs.length > 1 && (
-                                        <button
-                                            onClick={(e) => handleCloseTab(tab.id, e)}
-                                            className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
-                                        >
-                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                        </button>
-                                    )}
-                                </Tab>
-                            ))}
-                        </Tabs>
-                        <IconButton
-                            size="small"
-                            onClick={handleAddTab}
-                            className="ml-2"
-                        >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                        </IconButton>
+                        <div className="flex items-center no-scrollbar overflow-x-auto min-w-0">
+                            <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
+                                {tabs.map(tab => (
+                                    <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
+                                        <span className="truncate">{tab.name}</span>
+                                        {tabs.length > 1 && (
+                                            <button
+                                                onClick={(e) => handleCloseTab(tab.id, e)}
+                                                className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                            >
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        )}
+                                    </Tab>
+                                ))}
+                            </Tabs>
+                            <IconButton
+                                size="small"
+                                onClick={handleAddTab}
+                                className="ml-1 flex-shrink-0"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                            </IconButton>
+                        </div>
                     </div>
                     <div className="flex shrink-0 items-center justify-end">
                         <Tooltip title="Format SQL">

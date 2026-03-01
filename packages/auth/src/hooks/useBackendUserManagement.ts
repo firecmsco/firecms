@@ -25,6 +25,7 @@ export interface UserManagement<USER extends User = User> {
 
     usersError?: Error;
     rolesError?: Error;
+    bootstrapAdmin?: () => Promise<void>;
 }
 
 export interface BackendUserManagementConfig {
@@ -370,6 +371,23 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         };
     }, [roles]);
 
+    /**
+     * Bootstrap default admin
+     */
+    const bootstrapAdmin = useCallback(async (): Promise<void> => {
+        try {
+            await apiRequest("/bootstrap", "POST");
+            // Reload users and roles after successful bootstrap
+            const data = await apiRequest("/roles");
+            const loadedRoles = data.roles.map(convertRole);
+            setRoles(loadedRoles);
+            await loadUsers(loadedRoles);
+        } catch (error) {
+            console.error("Failed to bootstrap admin:", error);
+            throw error;
+        }
+    }, [apiRequest, loadUsers]);
+
     return {
         loading,
         users,
@@ -385,6 +403,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         defineRolesFor,
         getUser,
         usersError,
-        rolesError
+        rolesError,
+        bootstrapAdmin
     };
 }

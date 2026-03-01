@@ -7,7 +7,8 @@ import {
     FireCMSContext,
     FireCMSPlugin,
     FireCMSProps,
-    User
+    User,
+    UserManagementDelegate
 } from "@firecms/types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
@@ -74,9 +75,10 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const userManagement = plugins?.find((p: FireCMSPlugin) => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
-        users: [],
-        getUser: (uid: string) => null
-    };
+            loading: false,
+            users: [],
+            getUser: (uid: string) => null
+        } as unknown as UserManagementDelegate<USER>;
 
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);

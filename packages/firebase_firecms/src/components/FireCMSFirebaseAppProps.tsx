@@ -11,6 +11,7 @@ import {
     Locale,
     PropertyConfig
 } from "@firecms/core";
+import { UserManagementDelegate } from "@firecms/types";
 import { FirebaseApp } from "@firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";
 import {
@@ -168,6 +169,11 @@ export type FireCMSFirebaseAppProps = {
     localTextSearchEnabled?: boolean;
 
     components?: ComponentsRegistry;
+
+    /**
+     * Delegate for user and role management. Provides the admin views if specified.
+     */
+    userManagement?: UserManagementDelegate;
 
 };
 
