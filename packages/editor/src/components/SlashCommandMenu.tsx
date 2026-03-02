@@ -24,6 +24,7 @@ import { EditorView } from "prosemirror-view";
 import { EditorAIController } from "../types";
 import { onFileRead, UploadFn } from "../extensions/Image";
 import { textLoadingCommands } from "../extensions/TextLoadingDecorationExtension";
+import { parser } from "../markdown";
 
 interface SuggestionItem {
     title: string;
@@ -184,8 +185,23 @@ const autocompleteSuggestionItem: SuggestionItem = {
             }
         });
 
-        // Insert text result at cursor
-        view.dispatch(view.state.tr.insertText(result));
+        // Insert parsed text result at cursor natively
+        try {
+            // The AI controller might stream literal "\n" characters depending on its JSON decoding layer.
+            // We need to un-escape these back to genuine newlines so MarkdownIt block-parsing works.
+            const unescapedResult = result.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+
+            const parsedDoc = parser.parse(unescapedResult);
+            if (parsedDoc) {
+                const tr = view.state.tr.replaceWith(view.state.selection.from, view.state.selection.from, parsedDoc.content);
+                view.dispatch(tr);
+            } else {
+                view.dispatch(view.state.tr.insertText(unescapedResult));
+            }
+        } catch (e) {
+            console.error(e);
+            view.dispatch(view.state.tr.insertText(result));
+        }
     }
 };
 

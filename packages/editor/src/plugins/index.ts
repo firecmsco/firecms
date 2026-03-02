@@ -11,6 +11,7 @@ import { Plugin } from "prosemirror-state";
 import { gapCursor } from "prosemirror-gapcursor";
 import { dropCursor } from "prosemirror-dropcursor";
 import { markdownInputRules } from "./inputrules";
+import { placeholderPlugin } from "./placeholderPlugin";
 
 const customKeymap = {
     "Mod-z": undo,
@@ -43,12 +44,12 @@ export const corePlugins: Plugin[] = [
     history(),
     keymap(customKeymap),
     keymap(baseKeymap),
-    dropCursor({ width: 2, color: "#5abbf7" }),
     globalDragDropPlugin(),
     gapCursor(),
     slashCommandPlugin(),
     dragHandlePlugin(),
     highlightDecorationPlugin(),
     textLoadingDecorationPlugin(),
-    markdownInputRules
+    markdownInputRules,
+    placeholderPlugin("Press '/' for commands")
 ];
