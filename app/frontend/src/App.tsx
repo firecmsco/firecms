@@ -23,6 +23,7 @@ import {
     useBuildAdminModeController,
     AdminModeControllerProvider,
     SQLEditor,
+    RLSEditor,
     DefaultHomePage,
     NavigationCard,
     IconForView
@@ -88,6 +89,14 @@ export function App() {
             icon: "storage",
             description: "Execute raw SQL queries",
             view: <SQLEditor />
+        },
+        {
+            slug: "rls",
+            name: "RLS Studio",
+            group: "Developer",
+            icon: <ShieldIcon className="w-5 h-5" />,
+            description: "Row Level Security Policies",
+            view: <RLSEditor />
         }
     ];
 

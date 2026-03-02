@@ -9,5 +9,6 @@ export * from "./preview";
 export * from "./hooks";
 export * from "./components/admin";
 export * from "./components";
+export * from "./components/RLSEditor";
 export * from "./util";
 export * from "./contexts";
