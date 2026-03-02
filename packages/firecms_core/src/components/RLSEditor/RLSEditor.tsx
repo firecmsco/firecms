@@ -10,9 +10,14 @@ import {
     Chip,
     Button,
     Tooltip,
-    ResizablePanels
+    ResizablePanels,
+    SecurityIcon,
+    RefreshIcon,
+    WarningIcon,
+    KeyIcon
 } from "@firecms/ui";
 import { useDataSource, useSnackbarController, useCollectionRegistryController } from "../../hooks";
+import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
     policyname: string;
@@ -22,6 +27,7 @@ export interface PostgresPolicy {
     cmd: "SELECT" | "INSERT" | "UPDATE" | "DELETE" | "ALL";
     qual: string | null; // USING clause
     with_check: string | null; // WITH CHECK clause
+    status?: "live" | "code_only" | "both";
 }
 
 export interface TableRLSStatus {
@@ -40,7 +46,24 @@ export const RLSEditor = () => {
     const [error, setError] = useState<string | null>(null);
     const [tables, setTables] = useState<TableRLSStatus[]>([]);
     const [selectedTable, setSelectedTable] = useState<string | null>(null);
-    const [sidebarSize, setSidebarSize] = useState(20);
+    const [activeTab, setActiveTab] = useState(0);
+
+    const [editingPolicy, setEditingPolicy] = useState<PostgresPolicy | "new" | null>(null);
+
+    const [sidebarSize, setSidebarSize] = useState(() => {
+        try {
+            const saved = localStorage.getItem("firecms_rls_editor_sidebar_size");
+            return saved !== null ? parseFloat(saved) : 20;
+        } catch (e) {
+            return 20;
+        }
+    });
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("firecms_rls_editor_sidebar_size", sidebarSize.toString());
+        } catch (e) { }
+    }, [sidebarSize]);
 
     const fetchRLSData = useCallback(async () => {
         if (!dataSource.executeSql) {
@@ -150,6 +173,10 @@ export const RLSEditor = () => {
     }, [dataSource, selectedTable]);
 
     useEffect(() => {
+        setEditingPolicy(null);
+    }, [selectedTable]);
+
+    useEffect(() => {
         fetchRLSData();
     }, [fetchRLSData]);
 
@@ -169,15 +196,61 @@ export const RLSEditor = () => {
         ) || null;
     }, [activeTableData, collectionRegistry.collections]);
 
-    const renderPolicyTag = (label: string, value: string, color: "primary" | "secondary" | "success" | "warning" | "error" = "primary") => {
+    const mergedPolicies = useMemo(() => {
+        if (!activeTableData) return [];
+
+        const policiesMap: Record<string, PostgresPolicy> = {};
+
+        // Load live policies
+        (activeTableData.policies || []).forEach(p => {
+            policiesMap[p.policyname] = { ...p, status: "live" };
+        });
+
+        // Merge code-based policies
+        if (activeCollection && activeCollection.securityRules) {
+            activeCollection.securityRules.forEach((rule: any) => {
+                const ruleName = rule.name;
+                if (!ruleName) return;
+
+                if (policiesMap[ruleName]) {
+                    // It exists in Postgres, but we have a code definition (potentially edited)
+                    policiesMap[ruleName] = {
+                        policyname: ruleName,
+                        tablename: activeTableData.tableName,
+                        permissive: (rule.mode || "permissive").toUpperCase() as any,
+                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                        roles: rule.roles || ["public"],
+                        qual: rule.using || null,
+                        with_check: rule.withCheck || null,
+                        status: "both"
+                    };
+                } else {
+                    policiesMap[ruleName] = {
+                        policyname: ruleName,
+                        tablename: activeTableData.tableName,
+                        permissive: (rule.mode || "permissive").toUpperCase() as any,
+                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                        roles: rule.roles || ["public"],
+                        qual: rule.using || null,
+                        with_check: rule.withCheck || null,
+                        status: "code_only"
+                    };
+                }
+            });
+        }
+
+        return Object.values(policiesMap).sort((a, b) => a.policyname.localeCompare(b.policyname));
+    }, [activeTableData, activeCollection]);
+
+    const renderPolicyTag = (label: string, value: string) => {
         return (
-            <div className="flex flex-col border border-surface-200 dark:border-surface-800 rounded bg-surface-50 dark:bg-surface-900 overflow-hidden">
-                <div className="bg-surface-200 dark:bg-surface-800 px-2 py-1 text-[10px] uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark hidden sm:block">
-                    {label}
-                </div>
-                <div className="p-2 font-mono text-sm break-all">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface-100 dark:bg-surface-800 border border-surface-200 dark:border-surface-700/50">
+                <span className="text-[10px] uppercase text-text-secondary dark:text-text-secondary-dark font-medium tracking-wider">
+                    {label}:
+                </span>
+                <span className="font-mono text-xs text-text-primary dark:text-text-primary-dark break-all">
                     {value}
-                </div>
+                </span>
             </div>
         );
     };
@@ -191,9 +264,9 @@ export const RLSEditor = () => {
                 minPanelSizePx={220}
                 firstPanel={
                     <div className={cls("flex flex-col h-full w-full bg-surface-50 dark:bg-surface-900 border-r", defaultBorderMixin)}>
-                        <div className={cls("p-4 border-b", defaultBorderMixin)}>
+                        <div className={cls("px-4 py-3 border-b", defaultBorderMixin)}>
                             <Typography variant="subtitle1" className="flex items-center gap-2">
-                                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                <SecurityIcon size="small" />
                                 RLS Studio
                             </Typography>
                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1 block">
@@ -215,7 +288,7 @@ export const RLSEditor = () => {
                                             className={cls(
                                                 "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center justify-between group",
                                                 isSelected
-                                                    ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light font-medium"
+                                                    ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
                                                     : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
                                             )}
                                         >
@@ -251,9 +324,9 @@ export const RLSEditor = () => {
                             <Button
                                 size="small"
                                 variant="text"
-                                className="text-[10px] uppercase text-text-secondary dark:text-text-secondary-dark"
+                                className="text-[11px] text-text-secondary dark:text-text-secondary-dark"
                                 onClick={fetchRLSData}
-                                startIcon={<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>}
+                                startIcon={<RefreshIcon size="smallest" />}
                             >
                                 Refresh
                             </Button>
@@ -266,6 +339,50 @@ export const RLSEditor = () => {
                             <div className="flex-grow flex items-center justify-center text-text-disabled h-full">
                                 <Typography variant="body2">Select a table to view its security policies</Typography>
                             </div>
+                        ) : editingPolicy ? (
+                            <PolicyEditor
+                                policy={editingPolicy === "new" ? undefined : editingPolicy}
+                                schema={activeTableData.schemaName}
+                                table={activeTableData.tableName}
+                                onSave={async (newPolicy) => {
+                                    if (!activeCollection) return;
+                                    const rule: any = {
+                                        name: newPolicy.policyname,
+                                        operation: newPolicy.cmd?.toLowerCase(),
+                                        mode: newPolicy.permissive?.toLowerCase(),
+                                        using: newPolicy.qual || undefined,
+                                        withCheck: newPolicy.with_check || undefined,
+                                        roles: newPolicy.roles
+                                    };
+
+                                    const existingRules = activeCollection.securityRules || [];
+                                    let newRules;
+                                    if (editingPolicy === "new") {
+                                        newRules = [...existingRules, rule];
+                                    } else {
+                                        newRules = existingRules.map((r: any) => r.name === editingPolicy.policyname ? rule : r);
+                                    }
+
+                                    try {
+                                        const response = await fetch(`http://localhost:3001/api/schema-editor/collection/save`, {
+                                            method: "POST",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify({
+                                                collectionId: (activeCollection as any).id || (activeCollection as any).path || (activeCollection as any).alias || activeTableData.tableName,
+                                                collectionData: { securityRules: newRules }
+                                            })
+                                        });
+                                        if (!response.ok) throw new Error("Failed to save policy");
+
+                                        snackbarController.open({ type: "success", message: "Policy saved successfully" });
+                                        setEditingPolicy(null);
+                                        fetchRLSData();
+                                    } catch (e: any) {
+                                        snackbarController.open({ type: "error", message: e.message });
+                                    }
+                                }}
+                                onCancel={() => setEditingPolicy(null)}
+                            />
                         ) : (
                             <div className="flex-grow flex flex-col overflow-hidden">
                                 <div className="p-6 pb-2 shrink-0">
@@ -282,12 +399,7 @@ export const RLSEditor = () => {
                                             variant="filled"
                                             color="primary"
                                             disabled={!activeCollection}
-                                            onClick={() => {
-                                                snackbarController.open({
-                                                    type: "info",
-                                                    message: "RLS Creation coming soon"
-                                                });
-                                            }}
+                                            onClick={() => setEditingPolicy("new")}
                                         >
                                             Create Policy
                                         </Button>
@@ -299,7 +411,7 @@ export const RLSEditor = () => {
                                             color="warning"
                                             className="mb-6"
                                         >
-                                            <Typography variant="body2" className="font-medium mb-1">
+                                            <Typography variant="body2" className="mb-1">
                                                 Table not managed by Rebase
                                             </Typography>
                                             <Typography variant="caption" className="opacity-80">
@@ -309,13 +421,13 @@ export const RLSEditor = () => {
                                     )}
 
                                     {activeTableData && !activeTableData.rlsEnabled && (
-                                        <div className={cls("p-4 sm:p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/50 rounded-lg flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between", defaultBorderMixin)}>
-                                            <div className="flex gap-4 items-start">
-                                                <div className="mt-1 bg-yellow-100 dark:bg-yellow-900/50 p-1.5 rounded-md text-yellow-600 dark:text-yellow-500 shrink-0">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                        <div className={cls("p-4 sm:p-5 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/50 rounded-lg flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between", defaultBorderMixin)}>
+                                            <div className="flex gap-3 items-start">
+                                                <div className="mt-1 bg-yellow-100 dark:bg-yellow-900/50 p-1.5 rounded-md shrink-0 flex items-center justify-center">
+                                                    <WarningIcon size="small" />
                                                 </div>
                                                 <div>
-                                                    <Typography variant="subtitle2" className="text-yellow-800 dark:text-yellow-500 font-medium">
+                                                    <Typography variant="subtitle2" className="text-yellow-800 dark:text-yellow-500">
                                                         Row Level Security (RLS) is disabled
                                                     </Typography>
                                                     <Typography variant="body2" className="text-yellow-700 dark:text-yellow-600/90 mt-1 max-w-2xl">
@@ -325,14 +437,54 @@ export const RLSEditor = () => {
                                             </div>
                                             <Button
                                                 size="medium"
-                                                onClick={() => snackbarController.open({ type: "info", message: "Enabling RLS will be available soon." })}
+                                                onClick={() => setEditingPolicy("new")}
                                                 className="whitespace-nowrap bg-yellow-100 hover:bg-yellow-200 text-yellow-800 dark:bg-yellow-900/50 dark:hover:bg-yellow-900 dark:text-yellow-500 border-none shrink-0"
                                                 disabled={!activeCollection}
                                             >
-                                                Enable RLS
+                                                Create Policy
                                             </Button>
                                         </div>
                                     )}
+
+                                    {activeTableData && mergedPolicies && mergedPolicies.length > 0 && (
+                                        <div className="mt-8 flex flex-col gap-3">
+                                            <Typography variant="subtitle2" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider mb-1">Active Policies</Typography>
+                                            {mergedPolicies.map(policy => (
+                                                <div key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 bg-white dark:bg-surface-950 border rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4", defaultBorderMixin)}>
+                                                    <div className="flex flex-col gap-2 min-w-0">
+                                                        <div className="flex items-center gap-2">
+                                                            <KeyIcon size="small" className="text-text-secondary shrink-0" />
+                                                            <Typography variant="body2" className="truncate">{policy.policyname}</Typography>
+                                                            {policy.status === "code_only" && (
+                                                                <Tooltip title="This policy is defined in your code but hasn't been applied to the database yet.">
+                                                                    <div className="px-1.5 py-0.5 rounded text-[10px] uppercase bg-primary/10 text-primary border border-primary/20 shrink-0">
+                                                                        Unapplied
+                                                                    </div>
+                                                                </Tooltip>
+                                                            )}
+                                                            {policy.status === "live" && (
+                                                                <Tooltip title="This policy is live in the database but missing from your codebase schema.">
+                                                                    <div className="px-1.5 py-0.5 rounded text-[10px] uppercase bg-orange-500/10 text-orange-600 border border-orange-500/20 shrink-0">
+                                                                        DB Only
+                                                                    </div>
+                                                                </Tooltip>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-1.5 text-sm">
+                                                            {renderPolicyTag("Action", policy.cmd)}
+                                                            {renderPolicyTag("Roles", Array.isArray(policy.roles) ? policy.roles.join(", ") : policy.roles)}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex gap-2 shrink-0">
+                                                        <Button size="small" variant="text" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
                                 </div>
                             </div>
                         )}

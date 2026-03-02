@@ -739,8 +739,34 @@ export const SQLEditor = () => {
         );
     };
 
-    const [sidebarSize, setSidebarSize] = useState(20);
-    const [editorHeight, setEditorHeight] = useState(50);
+    const [sidebarSize, setSidebarSize] = useState(() => {
+        try {
+            const saved = localStorage.getItem("firecms_sql_editor_sidebar_size");
+            return saved !== null ? parseFloat(saved) : 20;
+        } catch (e) {
+            return 20;
+        }
+    });
+    const [editorHeight, setEditorHeight] = useState(() => {
+        try {
+            const saved = localStorage.getItem("firecms_sql_editor_height");
+            return saved !== null ? parseFloat(saved) : 50;
+        } catch (e) {
+            return 50;
+        }
+    });
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("firecms_sql_editor_sidebar_size", sidebarSize.toString());
+        } catch (e) { }
+    }, [sidebarSize]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("firecms_sql_editor_height", editorHeight.toString());
+        } catch (e) { }
+    }, [editorHeight]);
 
     const activeSnippet = snippets.find(s => s.sql === activeTab.sql);
     const isFavorite = activeSnippet?.isFavorite || false;

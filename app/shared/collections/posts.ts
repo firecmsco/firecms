@@ -102,6 +102,17 @@ const postsCollection: EntityCollection = {
                 }
             ]
         }
+    ],
+    securityRules: [
+        {
+            name: "Enable read access for all users",
+            operation: "select",
+            mode: "permissive",
+            using: "true",
+            roles: [
+                "public"
+            ]
+        }
     ]
 };
 
