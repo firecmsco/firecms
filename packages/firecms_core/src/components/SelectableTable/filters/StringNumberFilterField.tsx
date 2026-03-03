@@ -61,6 +61,17 @@ export function StringNumberFilterField({
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp | "is-null">(fieldOperation === "==" && fieldValue === null ? "is-null" : fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | null | undefined>(fieldValue);
 
+    React.useEffect(() => {
+        if (value) {
+            const [op, val] = value;
+            setOperation(op === "==" && val === null ? "is-null" : op);
+            setInternalValue(val);
+        } else {
+            setOperation(possibleOperations[0]);
+            setInternalValue(undefined);
+        }
+    }, [value, possibleOperations[0]]);
+
     const isNullOperation = operation === "is-null";
 
     function updateFilter(op: VirtualTableWhereFilterOp | "is-null", val: string | number | string[] | number[] | null | undefined) {

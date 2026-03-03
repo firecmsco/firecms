@@ -58,6 +58,17 @@ export function ReferenceFilterField({
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<EntityReference | EntityReference[] | undefined | null>(fieldValue);
 
+    React.useEffect(() => {
+        if (value) {
+            const [op, val] = value;
+            setOperation(op);
+            setInternalValue(val);
+        } else {
+            setOperation(possibleOperations[0] as VirtualTableWhereFilterOp);
+            setInternalValue(undefined);
+        }
+    }, [value, possibleOperations[0]]);
+
     const selectedEntityIds = internalValue
         ? (Array.isArray(internalValue) ? internalValue.map((ref) => {
             if (!(ref?.isEntityReference && ref?.isEntityReference())) {
