@@ -22,13 +22,11 @@ import {
     useBackendStorageSource,
     useBuildAdminModeController,
     AdminModeControllerProvider,
-    SQLEditor,
-    RLSEditor,
     DefaultHomePage,
     NavigationCard,
     IconForView
 } from "@firecms/core";
-import { useLocalCollectionsConfigController, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useLocalCollectionsConfigController, useCollectionEditorPlugin, StudioLayout, CollectionStudioView } from "@firecms/studio";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
 import {
@@ -72,48 +70,48 @@ export function App() {
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
     const collectionConfigController = useLocalCollectionsConfigController(API_URL, collections);
+    const configPermissions = useCallback(() => ({ createCollections: true, editCollections: true, deleteCollections: true }), []);
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
-        configPermissions: () => ({ createCollections: true, editCollections: true, deleteCollections: true })
+        configPermissions
     });
 
     const collectionsBuilder = useCallback(() => {
         return [...collections];
     }, []);
 
-    const devViews: CMSView[] = [
+    const navigate = useNavigate();
+
+    const devViews: CMSView[] = React.useMemo(() => [
         {
-            slug: "data",
-            name: "Data",
+            slug: "studio",
+            name: "Studio",
             group: "Developer",
-            icon: "storage",
-            description: "Execute raw SQL queries",
-            view: <SQLEditor />
-        },
-        {
-            slug: "rls",
-            name: "RLS Studio",
-            group: "Developer",
-            icon: <ShieldIcon className="w-5 h-5" />,
-            description: "Row Level Security Policies",
-            view: <RLSEditor />
+            icon: <StorageIcon className="w-5 h-5" />,
+            description: "Database tools: SQL, RLS, Schema",
+            view: <StudioLayout
+                schemaView={
+                    <CollectionStudioView
+                        configController={collectionConfigController}
+                        handleClose={() => navigate("/")}
+                    />
+                }
+            />
         }
-    ];
+    ], [navigate, collectionConfigController]);
 
     // adminViews are now auto-injected by core based on userManagement
 
-    const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
-
-    const navigate = useNavigate();
-
-    const cmsUrlController = useBuildCMSUrlController({
+    const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence }); const cmsUrlController = useBuildCMSUrlController({
         basePath: "/",
         baseCollectionPath: "/c",
         collectionRegistryController
     });
 
+    const plugins = React.useMemo(() => [dataEnhancementPlugin, collectionEditorPlugin], [dataEnhancementPlugin, collectionEditorPlugin]);
+
     const navigationStateController = useBuildNavigationStateController({
-        plugins: [dataEnhancementPlugin, collectionEditorPlugin],
+        plugins,
         collections: collectionsBuilder,
         views: adminModeController.mode === "developer" ? devViews : undefined,
         authController,

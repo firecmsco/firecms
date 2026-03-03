@@ -33,7 +33,7 @@
         "@firecms/core": "4.0.0",
         "@firecms/types": "4.0.0",
         "@firecms/data_export": "4.0.0",
-        "@firecms/collection_editor": "4.0.0",
+        "@firecms/studio": "4.0.0",
         "@firecms/data_import": "4.0.0",
         "@firecms/data_import_export": "4.0.0",
         "@firecms/firebase": "4.0.0",

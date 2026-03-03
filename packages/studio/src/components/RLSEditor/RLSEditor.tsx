@@ -16,7 +16,7 @@ import {
     WarningIcon,
     KeyIcon
 } from "@firecms/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController } from "../../hooks";
+import { useDataSource, useSnackbarController, useCollectionRegistryController } from "@firecms/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {

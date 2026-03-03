@@ -11,7 +11,7 @@
     "source": "src/index.ts",
     "dependencies": {
         "@firebase/auth": "*",
-        "@firecms/collection_editor": "4.0.0",
+        "@firecms/studio": "4.0.0",
         "@firecms/core": "4.0.0",
         "@firecms/types": "4.0.0",
         "@firecms/data_enhancement": "4.0.0",

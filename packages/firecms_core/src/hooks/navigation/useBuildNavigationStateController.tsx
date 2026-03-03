@@ -280,6 +280,30 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         return authController;
     }, [adminMode, effectiveRoleController?.effectiveRole, authController]);
 
+    // Extract injectedAdminViews to a memoized hook before refreshNavigation
+    const injectedAdminViews: CMSView[] = useMemo(() => {
+        const views: CMSView[] = [];
+        if (userManagement) {
+            views.push({
+                slug: "users",
+                name: "Users",
+                group: NAVIGATION_ADMIN_GROUP_NAME,
+                icon: <AccountCircleIcon />,
+                view: <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+            });
+            if (userManagement.roles) {
+                views.push({
+                    slug: "roles",
+                    name: "Roles",
+                    group: NAVIGATION_ADMIN_GROUP_NAME,
+                    icon: <SecurityIcon />,
+                    view: <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+                });
+            }
+        }
+        return views;
+    }, [userManagement]);
+
     const refreshNavigation = useCallback(async () => {
 
         if (disabled || resolvedAuthController.initialLoading)
@@ -288,26 +312,6 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         console.debug("Refreshing navigation");
 
         try {
-
-            const injectedAdminViews: CMSView[] = [];
-            if (userManagement) {
-                injectedAdminViews.push({
-                    slug: "users",
-                    name: "Users",
-                    group: NAVIGATION_ADMIN_GROUP_NAME,
-                    icon: <AccountCircleIcon />,
-                    view: <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
-                });
-                if (userManagement.roles) {
-                    injectedAdminViews.push({
-                        slug: "roles",
-                        name: "Roles",
-                        group: NAVIGATION_ADMIN_GROUP_NAME,
-                        icon: <SecurityIcon />,
-                        view: <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
-                    });
-                }
-            }
 
             const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, resolvedAuthController, dataSourceDelegate);
             const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViews];
@@ -330,10 +334,12 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
             }
 
             if (!equal(viewsRef.current, resolvedViews)) {
+                console.log("views differ", viewsRef.current, resolvedViews);
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;
             }
             if (!equal(adminViewsRef.current, resolvedAdminViews)) {
+                console.log("adminViews differ", adminViewsRef.current, resolvedAdminViews);
                 adminViewsRef.current = resolvedAdminViews;
                 shouldUpdateTopLevelNav = true;
             }
@@ -373,7 +379,8 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         navigationLoading,
         topLevelNavigation,
         onNavigationEntriesOrderUpdate,
-        collectionRegistryController.collectionRegistryRef
+        collectionRegistryController.collectionRegistryRef,
+        injectedAdminViews
     ]);
 
     useEffect(() => {

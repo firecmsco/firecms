@@ -23,14 +23,11 @@ import {
     MenuItem,
     ResizablePanels
 } from "@firecms/ui";
-import { useDataSource, useSnackbarController } from "../../hooks";
+import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog } from "@firecms/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
-import { VirtualTable, VirtualTableColumn } from "../VirtualTable";
-import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
-import { ConfirmationDialog } from "../ConfirmationDialog";
 import { parseFirst } from "pgsql-ast-parser";
-import { determineTableAndPK } from "../../util/sql_utils";
+import { determineTableAndPK } from "../../utils/sql_utils";
 import { ExplainVisualizer } from "./ExplainVisualizer";
 
 export interface TableColumnInfo {
@@ -674,7 +671,7 @@ export const SQLEditor = () => {
                                             multiline={true}
                                             focused={true}
                                             disabled={false}
-                                            updateValue={(newValue) => {
+                                            updateValue={(newValue: string | null) => {
                                                 handleCellSave(newValue, rowData, column.key, rowIndex);
                                             }}
                                             onBlur={() => setEditingCell(null)}

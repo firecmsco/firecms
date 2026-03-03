@@ -4,6 +4,7 @@ import { PersistedCollection } from "./types/persisted_collection";
 
 
 
+import React, { useMemo } from "react";
 export function useLocalCollectionsConfigController(
     apiUrl: string = "http://localhost:3001",
     baseCollections: EntityCollection[] = [],
@@ -42,41 +43,41 @@ export function useLocalCollectionsConfigController(
         }
     };
 
-    return {
+    return useMemo(() => ({
         loading: false,
         readOnly: options?.readOnly ?? false,
         readOnlyReason: "Local collection editing is only available in development mode.",
         collections: parsedCollections,
-        getCollection: (id) => {
+        getCollection: (id: string) => {
             const found = parsedCollections.find(c => (c as any).id === id || c.slug === id);
             if (found) return found;
             throw Error(`Collection ${id} not found in local mode`);
         },
 
-        saveCollection: async ({ id, collectionData }) => {
+        saveCollection: async ({ id, collectionData }: any) => {
             await request("/collection/save", { collectionId: id, collectionData });
         },
-        updateCollection: async ({ id, collectionData }) => {
+        updateCollection: async ({ id, collectionData }: any) => {
             await request("/collection/save", { collectionId: id, collectionData });
         },
-        deleteCollection: async ({ id }) => {
+        deleteCollection: async ({ id }: any) => {
             await request("/collection/delete", { collectionId: id });
         },
 
-        saveProperty: async ({ path, propertyKey, property, newPropertiesOrder }) => {
+        saveProperty: async ({ path, propertyKey, property, newPropertiesOrder }: any) => {
             await request("/property/save", { collectionId: path, propertyKey, propertyConfig: property });
             if (newPropertiesOrder) {
                 await request("/collection/save", { collectionId: path, collectionData: { propertiesOrder: newPropertiesOrder } });
             }
         },
-        deleteProperty: async ({ path, propertyKey, newPropertiesOrder }) => {
+        deleteProperty: async ({ path, propertyKey, newPropertiesOrder }: any) => {
             await request("/property/delete", { collectionId: path, propertyKey });
             if (newPropertiesOrder) {
                 await request("/collection/save", { collectionId: path, collectionData: { propertiesOrder: newPropertiesOrder } });
             }
         },
 
-        updatePropertiesOrder: async ({ collection, fullPath, newPropertiesOrder }) => {
+        updatePropertiesOrder: async ({ collection, fullPath, newPropertiesOrder }: any) => {
             const collectionId = (collection as any).id || fullPath.split("/").pop();
             await request("/collection/save", { collectionId, collectionData: { propertiesOrder: newPropertiesOrder } });
         },
@@ -86,5 +87,5 @@ export function useLocalCollectionsConfigController(
 
         navigationEntries: [],
         saveNavigationEntries: async () => { },
-    };
+    }), [apiUrl, parsedCollections, options?.readOnly]);
 }

@@ -1,5 +1,5 @@
 {
-    "name": "@firecms/collection_editor",
+    "name": "@firecms/studio",
     "type": "module",
     "version": "4.0.0",
     "main": "./dist/index.umd.js",
@@ -16,7 +16,9 @@
         "@firecms/schema_inference": "4.0.0",
         "@firecms/ui": "4.0.0",
         "@firecms/types": "4.0.0",
+        "@monaco-editor/react": "^4.7.0",
         "json5": "^2.2.3",
+        "pgsql-ast-parser": "12.0.2",
         "prism-react-renderer": "^2.4.1"
     },
     "peerDependencies": {

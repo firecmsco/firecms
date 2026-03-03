@@ -62,6 +62,7 @@ import { getFullIdPath } from "./util";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
 import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
+import { CollectionRLSTab } from "./CollectionRLSTab";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -169,7 +170,8 @@ type EditorView = "welcome"
     | "properties"
     | "loading"
     | "extra_view"
-    | "extend";
+    | "extend"
+    | "rls";
 
 export function CollectionEditor(props: CollectionEditorDialogProps & {
     handleCancel: () => void,
@@ -641,11 +643,35 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     };
 
-    return <DialogContent fullHeight={true}>
+    return <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950">
         <Formex value={formController}>
 
             <>
-                {!isNewCollection && <div className={cls("px-4 py-2 w-full flex items-center justify-end gap-2 bg-surface-50 dark:bg-surface-950 border-b", defaultBorderMixin)}>
+                {!isNewCollection && <div className={cls("px-4 py-2 w-full flex shrink-0 items-center justify-between gap-4 bg-white dark:bg-surface-950 border-b", defaultBorderMixin)}>
+                    <div className="flex items-center gap-4">
+                        <Typography variant="subtitle1" className="font-semibold px-2">
+                            {values.name || values.slug || "Collection"}
+                        </Typography>
+                        <Tabs value={currentView}
+                            className="bg-transparent"
+                            onValueChange={(v) => setCurrentView(v as EditorView)}>
+                            <Tab value={"general"}>
+                                General
+                            </Tab>
+                            <Tab value={"display"}>
+                                Display
+                            </Tab>
+                            <Tab value={"properties"}>
+                                Properties
+                            </Tab>
+                            <Tab value={"rls"}>
+                                RLS
+                            </Tab>
+                            <Tab value={"extend"}>
+                                Extend
+                            </Tab>
+                        </Tabs>
+                    </div>
                     {generateCollection && (
                         <AICollectionGeneratorPopover
                             existingCollection={values}
@@ -654,122 +680,112 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             onAnalyticsEvent={onAnalyticsEvent}
                         />
                     )}
-                    <Tabs value={currentView}
-                        onValueChange={(v) => setCurrentView(v as EditorView)}>
-                        <Tab value={"general"}>
-                            General
-                        </Tab>
-                        <Tab value={"display"}>
-                            Display
-                        </Tab>
-                        <Tab value={"properties"}>
-                            Properties
-                        </Tab>
-                        <Tab value={"extend"}>
-                            Extend
-                        </Tab>
-                    </Tabs>
                 </div>}
 
                 <form noValidate
                     onSubmit={formController.handleSubmit}
-                    className={cls(
-                        isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
-                        "grow flex flex-col relative")}>
+                    className="flex-grow flex flex-col min-h-0 relative">
 
-                    {currentView === "loading" &&
-                        <CircularProgressCenter />}
+                    <div className="flex-grow flex flex-col min-h-0 overflow-y-auto no-scrollbar relative w-full h-full">
 
-                    {currentView === "extra_view" &&
-                        usedPath &&
-                        extraView?.View &&
-                        <extraView.View path={usedPath} />}
+                        {currentView === "loading" &&
+                            <CircularProgressCenter />}
 
-                    {currentView === "welcome" &&
-                        <CollectionEditorWelcomeView
-                            path={usedPath}
-                            onContinue={onWelcomeScreenContinue}
-                            existingCollectionPaths={existingPaths}
-                            parentCollection={parentCollection}
-                            generateCollection={generateCollection}
-                            onAnalyticsEvent={onAnalyticsEvent} />}
+                        {currentView === "extra_view" &&
+                            usedPath &&
+                            extraView?.View &&
+                            <extraView.View path={usedPath} />}
 
-                    {currentView === "import_data_mapping" && importConfig &&
-                        <CollectionEditorImportMapping importConfig={importConfig}
-                            collectionEditable={collectionEditable}
-                            propertyConfigs={propertyConfigs} />}
+                        {currentView === "welcome" &&
+                            <CollectionEditorWelcomeView
+                                path={usedPath}
+                                onContinue={onWelcomeScreenContinue}
+                                existingCollectionPaths={existingPaths}
+                                parentCollection={parentCollection}
+                                generateCollection={generateCollection}
+                                onAnalyticsEvent={onAnalyticsEvent} />}
 
-                    {currentView === "import_data_preview" && importConfig &&
-                        <CollectionEditorImportDataPreview importConfig={importConfig}
-                            properties={values.properties as Properties}
-                            propertiesOrder={values.propertiesOrder as string[]} />}
+                        {currentView === "import_data_mapping" && importConfig &&
+                            <CollectionEditorImportMapping importConfig={importConfig}
+                                collectionEditable={collectionEditable}
+                                propertyConfigs={propertyConfigs} />}
 
-                    {currentView === "import_data_saving" && importConfig &&
-                        <ImportSaveInProgress importConfig={importConfig}
-                            collection={values}
-                            path={usedPath}
-                            onImportSuccess={async (importedCollection) => {
-                                snackbarController.open({
-                                    type: "info",
-                                    message: "Data imported successfully"
-                                });
-                                await saveCollection(values);
-                                handleClose(importedCollection);
-                            }}
-                        />}
+                        {currentView === "import_data_preview" && importConfig &&
+                            <CollectionEditorImportDataPreview importConfig={importConfig}
+                                properties={values.properties as Properties}
+                                propertiesOrder={values.propertiesOrder as string[]} />}
 
-                    {currentView === "general" &&
-                        <GeneralSettingsForm
-                            existingPaths={existingPaths}
-                            existingIds={existingIds}
-                            parentCollection={parentCollection}
-                            isNewCollection={isNewCollection} />
-                    }
+                        {currentView === "import_data_saving" && importConfig &&
+                            <ImportSaveInProgress importConfig={importConfig}
+                                collection={values}
+                                path={usedPath}
+                                onImportSuccess={async (importedCollection) => {
+                                    snackbarController.open({
+                                        type: "info",
+                                        message: "Data imported successfully"
+                                    });
+                                    await saveCollection(values);
+                                    handleClose(importedCollection);
+                                }}
+                            />}
 
-                    {currentView === "display" &&
-                        <DisplaySettingsForm expandKanban={expandKanban} />
-                    }
+                        {currentView === "general" &&
+                            <GeneralSettingsForm
+                                existingPaths={existingPaths}
+                                existingIds={existingIds}
+                                parentCollection={parentCollection}
+                                isNewCollection={isNewCollection} />
+                        }
 
-                    {currentView === "extend" && collection &&
-                        <ExtendSettingsForm
-                            collection={collection}
-                            parentCollection={parentCollection}
-                            configController={configController}
-                            collectionInference={collectionInference}
-                            getUser={getUser}
-                            parentCollectionIds={parentCollectionIds}
-                            isMergedCollection={!isNewCollection && isMergedCollection}
-                            onResetToCode={() => setDeleteRequested(true)} />
-                    }
+                        {currentView === "display" &&
+                            <DisplaySettingsForm expandKanban={expandKanban} />
+                        }
 
-                    {currentView === "properties" &&
-                        <CollectionPropertiesEditorForm
-                            showErrors={submitCount > 0}
-                            isNewCollection={isNewCollection}
-                            reservedGroups={reservedGroups}
-                            onPropertyError={(propertyKey, namespace, error) => {
-                                const current = removeUndefined({
-                                    ...propertyErrorsRef.current,
-                                    [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
-                                }, true);
-                                propertyErrorsRef.current = current;
-                                formController.validate();
-                            }}
-                            getUser={getUser}
-                            getData={getDataWithPath}
-                            doCollectionInference={doCollectionInference}
-                            propertyConfigs={propertyConfigs}
-                            collectionEditable={collectionEditable}
-                            extraIcon={extraView?.icon &&
-                                <IconButton
-                                    color={"primary"}
-                                    onClick={() => setCurrentView("extra_view")}>
-                                    {extraView.icon}
-                                </IconButton>} />
-                    }
+                        {currentView === "extend" && collection &&
+                            <ExtendSettingsForm
+                                collection={collection}
+                                parentCollection={parentCollection}
+                                configController={configController}
+                                collectionInference={collectionInference}
+                                getUser={getUser}
+                                parentCollectionIds={parentCollectionIds}
+                                isMergedCollection={!isNewCollection && isMergedCollection}
+                                onResetToCode={() => setDeleteRequested(true)} />
+                        }
 
-                    <DialogActions
-                        position={"absolute"}>
+                        {currentView === "rls" &&
+                            <CollectionRLSTab />
+                        }
+
+                        {currentView === "properties" &&
+                            <CollectionPropertiesEditorForm
+                                showErrors={submitCount > 0}
+                                isNewCollection={isNewCollection}
+                                reservedGroups={reservedGroups}
+                                onPropertyError={(propertyKey, namespace, error) => {
+                                    const current = removeUndefined({
+                                        ...propertyErrorsRef.current,
+                                        [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
+                                    }, true);
+                                    propertyErrorsRef.current = current;
+                                    formController.validate();
+                                }}
+                                getUser={getUser}
+                                getData={getDataWithPath}
+                                doCollectionInference={doCollectionInference}
+                                propertyConfigs={propertyConfigs}
+                                collectionEditable={collectionEditable}
+                                extraIcon={extraView?.icon &&
+                                    <IconButton
+                                        color={"primary"}
+                                        onClick={() => setCurrentView("extra_view")}>
+                                        {extraView.icon}
+                                    </IconButton>} />
+                        }
+
+                    </div>
+
+                    <div className="shrink-0 w-full p-4 sm:px-6 sm:py-4 border-t border-surface-200 dark:border-surface-800 flex items-center justify-between gap-4 bg-white dark:bg-surface-900">
                         {error && <ErrorView error={error} />}
 
                         {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
@@ -864,7 +880,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             {configController?.readOnly ? "Update collection (Read-only)" : "Update collection"}
                         </LoadingButton>}
 
-                    </DialogActions>
+                    </div>
                 </form>
             </>
 
@@ -879,7 +895,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 delete any data</b>, only
                 the stored config, and reset to the code state.</>} />
 
-    </DialogContent>
+    </div>
 
 }
 

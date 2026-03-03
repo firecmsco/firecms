@@ -2,12 +2,9 @@ import { deleteField, DocumentSnapshot } from "@firebase/firestore";
 import {
     Properties,
     Property,
-    PropertyConfig,
-    removeFunctions,
-    removePropsIfExisting,
     sortProperties,
 } from "@firecms/core";
-import { PersistedCollection } from "@firecms/collection_editor";
+import { PersistedCollection } from "@firecms/studio";
 import { COLLECTION_PATH_SEPARATOR, stripCollectionPath } from "@firecms/common";
 
 export function buildCollectionId(idOrPath: string, parentCollectionIds?: string[]): string {
@@ -16,20 +13,7 @@ export function buildCollectionId(idOrPath: string, parentCollectionIds?: string
     return [...parentCollectionIds.map(stripCollectionPath), stripCollectionPath(idOrPath)].join(COLLECTION_PATH_SEPARATOR);
 }
 
-export function setUndefinedToDelete(data: any): any {
-    if (Array.isArray(data)) {
-        return data.map(v => setUndefinedToDelete(v));
-    } else if (data == null) {
-        return null;
-    } else if (typeof data === "object") {
-        return Object.entries(data)
-            .map(([key, value]) => ({ [key]: setUndefinedToDelete(value) }))
-            .reduce((a, b) => ({ ...a, ...b }), {});
-    } else if (data === undefined) {
-        return deleteField();
-    }
-    return data;
-}
+
 
 export const docsToCollectionTree = (docs: DocumentSnapshot[]): PersistedCollection[] => {
 
@@ -72,82 +56,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     } as PersistedCollection;
 }
 
-export function prepareCollectionForPersistence<M extends {
-    [Key: string]: any
-}>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
 
-    const {
-        properties: inputProperties,
-        ...rest
-    } = collection;
-    const cleanedProperties = inputProperties ? cleanPropertyConfigs(inputProperties, propertyConfigs) : undefined;
-    const properties = cleanedProperties ? setUndefinedToDelete(removeFunctions(cleanedProperties)) : undefined;
-    let newCollection: Partial<PersistedCollection> = {};
-    if (rest) {
-        newCollection = {
-            ...rest
-        };
-    }
-    if (properties) {
-        newCollection.properties = properties;
-    }
-    if (rest.propertiesOrder || properties) {
-        newCollection.propertiesOrder = removeDuplicates(rest.propertiesOrder ?? Object.keys(properties));
-    }
-
-    delete newCollection.permissions;
-    if (newCollection.entityViews) {
-        newCollection.entityViews = newCollection.entityViews.filter(view => typeof view === "string");
-    }
-    if (newCollection.entityActions) {
-        newCollection.entityActions = newCollection.entityActions.filter(action => typeof action === "string");
-    }
-
-
-    delete newCollection.additionalFields;
-    delete newCollection.callbacks;
-    delete newCollection.Actions;
-    delete newCollection.selectionController;
-    delete newCollection.subcollections;
-    delete newCollection.exportable;
-    return newCollection;
-}
-
-function cleanPropertyConfigs(properties: Properties, propertyConfigs: Record<string, PropertyConfig>) {
-    const res: Record<string, Property> = {};
-    Object.entries(properties).forEach(([key, property]) => {
-        if (typeof property === "object") {
-
-            const config = property.propertyConfig ? propertyConfigs[property.propertyConfig] : undefined;
-
-            let cleanProperty: any;
-            if (config?.property) {
-                cleanProperty = removePropsIfExisting(property, config?.property);
-            } else {
-                cleanProperty = property;
-            }
-
-            // Normalize enum values to array format for persistence (preserves order in Firestore)
-            if (cleanProperty.enumValues) {
-                cleanProperty.enumValues = normalizeEnumValuesToArray(cleanProperty.enumValues, false);
-            }
-            // Handle array properties with enum values in the "of" property
-            if (cleanProperty.dataType === "array" && cleanProperty.of?.enumValues) {
-                cleanProperty.of = {
-                    ...cleanProperty.of,
-                    enumValues: normalizeEnumValuesToArray(cleanProperty.of.enumValues, false)
-                };
-            }
-
-            res[key] = { ...cleanProperty };
-        }
-    });
-    return res;
-}
-
-function removeDuplicates<T>(array: T[]): T[] {
-    return [...new Set(array)];
-}
 
 /**
  * Converts enum values from object format to array format.
@@ -160,9 +69,9 @@ function removeDuplicates<T>(array: T[]): T[] {
  * @returns Array of EnumValueConfig objects
  */
 function normalizeEnumValuesToArray(
-    enumValues: any,
+    enumValues: unknown,
     sortObjectFormat: boolean = false
-): any[] {
+): unknown[] {
     if (Array.isArray(enumValues)) {
         // Already an array - preserve order! This order is intentional
         // (e.g., user reordered Kanban columns)
@@ -204,7 +113,7 @@ function normalizePropertiesEnumValues(
     const result: Properties = {};
     Object.entries(properties).forEach(([key, property]) => {
         if (typeof property === "object" && property !== null) {
-            const normalizedProperty = { ...property } as any;
+            const normalizedProperty = { ...property } as Record<string, unknown>;
 
             // Handle direct enumValues
             if (normalizedProperty.enumValues) {
@@ -215,25 +124,28 @@ function normalizePropertiesEnumValues(
             }
 
             // Handle array properties with enum values in "of"
-            if (normalizedProperty.dataType === "array" && normalizedProperty.of?.enumValues) {
-                normalizedProperty.of = {
-                    ...normalizedProperty.of,
-                    enumValues: normalizeEnumValuesToArray(
-                        normalizedProperty.of.enumValues,
-                        sortObjectFormat
-                    )
-                };
+            if (normalizedProperty.dataType === "array" && typeof normalizedProperty.of === "object" && normalizedProperty.of !== null) {
+                const ofProp = normalizedProperty.of as Record<string, unknown>;
+                if (ofProp.enumValues) {
+                    normalizedProperty.of = {
+                        ...ofProp,
+                        enumValues: normalizeEnumValuesToArray(
+                            ofProp.enumValues,
+                            sortObjectFormat
+                        )
+                    };
+                }
             }
 
             // Handle map properties recursively
             if (normalizedProperty.dataType === "map" && normalizedProperty.properties) {
                 normalizedProperty.properties = normalizePropertiesEnumValues(
-                    normalizedProperty.properties,
+                    normalizedProperty.properties as Properties,
                     sortObjectFormat
                 );
             }
 
-            result[key] = normalizedProperty;
+            result[key] = normalizedProperty as unknown as Property;
         } else {
             result[key] = property;
         }

@@ -6,7 +6,7 @@
     "dependencies": {
         "@apollo/client": "^3.12.6",
         "@firecms/auth": "4.0.0",
-        "@firecms/collection_editor": "4.0.0",
+        "@firecms/studio": "4.0.0",
         "@firecms/core": "4.0.0",
         "@firecms/data_enhancement": "4.0.0",
         "@firecms/data_export": "4.0.0",

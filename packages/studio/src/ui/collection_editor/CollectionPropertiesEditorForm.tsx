@@ -409,7 +409,7 @@ export function CollectionPropertiesEditorForm({
         <div className={"grid grid-cols-12 gap-2 h-full bg-surface dark:bg-surface-dark"}>
             <div className={cls(
                 "bg-surface-50 dark:bg-surface-900",
-                "p-4 md:p-8 pb-20 md:pb-20",
+                "p-4 md:p-8",
                 "col-span-12 lg:col-span-5 h-full overflow-auto",
                 !asDialog && "border-r " + defaultBorderMixin
             )}>
@@ -496,7 +496,7 @@ export function CollectionPropertiesEditorForm({
             </div>
 
             {!asDialog &&
-                <div className={"col-span-12 lg:col-span-7 p-4 md:py-8 md:px-4 h-full overflow-auto pb-20 md:pb-20"}>
+                <div className={"col-span-12 lg:col-span-7 p-4 md:py-8 md:px-4 h-full overflow-auto"}>
                     <div
                         className="sticky top-8 min-h-full w-full flex flex-col justify-center">
 

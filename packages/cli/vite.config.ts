@@ -34,7 +34,7 @@ export default defineConfig(() => ({
             "@firecms/types": path.resolve(__dirname, "../types/src"),
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@firecms/collection_editor": path.resolve(__dirname, "../collection_editor/src"),
+            "@firecms/studio": path.resolve(__dirname, "../studio/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
             "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),

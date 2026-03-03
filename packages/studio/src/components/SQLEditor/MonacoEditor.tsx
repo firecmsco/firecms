@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import Editor, { Monaco, OnMount } from "@monaco-editor/react";
 import { cls, defaultBorderMixin } from "@firecms/ui";
-import { useModeController } from "../../hooks";
+import { useModeController } from "@firecms/core";
 
 export type MonacoEditorProps = {
     value: string;

@@ -58,9 +58,18 @@ export { MissingReferenceWidget } from "./ui/MissingReferenceWidget";
 
 export * from "./ui/collection_editor/util";
 
+export { CollectionEditorDialog, type CollectionEditorDialogProps } from "./ui/collection_editor/CollectionEditorDialog";
+export { CollectionStudioView, type CollectionStudioViewProps } from "./ui/collection_editor/CollectionStudioView";
+
 export {
     PropertyForm,
     PropertyFormDialog,
     type PropertyFormProps,
     type OnPropertyChangedParams
 } from "./ui/collection_editor/PropertyEditView";
+
+export * from "./components/SQLEditor/SQLEditor";
+export * from "./components/RLSEditor/RLSEditor";
+export * from "./components/RLSEditor/PolicyEditor";
+export * from "./utils/sql_utils";
+export { StudioLayout, type StudioLayoutProps, type StudioView } from "./components/StudioLayout";

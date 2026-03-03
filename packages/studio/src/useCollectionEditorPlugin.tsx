@@ -91,7 +91,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         generateCollection
     }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
-    return {
+    return React.useMemo(() => ({
         key: "collection_editor",
         loading: collectionConfigController.loading,
         provider: {
@@ -131,7 +131,20 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         form: {
             ActionsTop: EditorEntityAction,
         }
-    };
+    }), [
+        collectionConfigController.loading,
+        collectionConfigController,
+        configPermissions,
+        collectionInference,
+        reservedGroups,
+        extraView,
+        getUser,
+        getData,
+        onAnalyticsEvent,
+        pathSuggestions,
+        generateCollection,
+        includeIntroView
+    ]);
 }
 
 export function IntroWidget() {
