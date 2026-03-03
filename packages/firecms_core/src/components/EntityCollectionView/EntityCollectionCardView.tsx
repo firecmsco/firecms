@@ -61,17 +61,17 @@ function getGridColumnsClass(size: CollectionSize): string {
  * Alternative to the EntityCollectionTable for visual browsing.
  */
 export function EntityCollectionCardView<M extends Record<string, any> = any>({
-                                                                                  collection,
-                                                                                  tableController,
-                                                                                  onEntityClick,
-                                                                                  selectionController,
-                                                                                  selectionEnabled = true,
-                                                                                  highlightedEntities,
-                                                                                  emptyComponent,
-                                                                                  onScroll,
-                                                                                  initialScroll,
-                                                                                  size = "m"
-                                                                              }: EntityCollectionCardViewProps<M>) {
+    collection,
+    tableController,
+    onEntityClick,
+    selectionController,
+    selectionEnabled = true,
+    highlightedEntities,
+    emptyComponent,
+    onScroll,
+    initialScroll,
+    size = "m"
+}: EntityCollectionCardViewProps<M>) {
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
@@ -185,16 +185,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
         );
     }
 
-    // Show error state
-    if (dataLoadingError) {
-        return (
-            <div className="flex-1 flex items-center justify-center p-8">
-                <Typography className="text-red-500">
-                    Error loading data: {dataLoadingError.message}
-                </Typography>
-            </div>
-        );
-    }
+
 
     const gridColumnsClass = getGridColumnsClass(size);
 
@@ -230,7 +221,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
                     className="flex items-center justify-center py-8"
                 >
                     {dataLoading && (
-                        <CircularProgress size="small"/>
+                        <CircularProgress size="small" />
                     )}
                     {!dataLoading && noMoreToLoad && data.length > 0 && (
                         <Typography variant="caption" color="secondary">

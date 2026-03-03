@@ -52,6 +52,7 @@ import { useUserConfigurationPersistence } from "../../hooks/useUserConfiguratio
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { EntityCollectionCardView } from "./EntityCollectionCardView";
 import { EntityCollectionBoardView } from "./EntityCollectionBoardView";
+import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner";
 import { ViewModeToggle, KanbanPropertyOption } from "./ViewModeToggle";
 import {
     AddIcon,
@@ -899,9 +900,11 @@ export const EntityCollectionView = React.memo(
                 />
 
                 {/* View content - only the view-specific content changes */}
-                {tableController.dataLoadingError && pluginErrorView
-                    ? pluginErrorView
-                    : viewMode === "kanban" && enabledViews.includes("kanban") ? (
+                {tableController.dataLoadingError && pluginErrorView}
+                {tableController.dataLoadingError && !pluginErrorView && (
+                    <CollectionDataErrorBanner error={tableController.dataLoadingError} />
+                )}
+                {viewMode === "kanban" && enabledViews.includes("kanban") ? (
                     <EntityCollectionBoardView
                         key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
                         collection={collection}
