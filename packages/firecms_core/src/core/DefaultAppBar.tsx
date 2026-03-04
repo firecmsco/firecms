@@ -147,6 +147,8 @@ export const DefaultAppBar = function DefaultAppBar({
                 </Link>
             </div>}
 
+
+
             {(breadcrumbs.breadcrumbs ?? []).length > 0 && <div className="mr-8 hidden lg:block">
                 <div className={"flex flex-row gap-2 items-center"}>
                     {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
@@ -189,42 +191,33 @@ export const DefaultAppBar = function DefaultAppBar({
 
 
 
-            {/* Admin Mode Toggle */}
-            <div className="flex bg-transparent p-0 rounded-full items-center mr-2 lg:mr-4">
-                <button
-                    onClick={() => {
-                        adminModeController.setMode("editor");
-                        navigate(navigation?.basePath ?? "/");
-                    }}
-                    className={cls(
-                        "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200",
-                        adminModeController.mode === "editor"
-                            ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/20"
-                            : "text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
-                    )}
-                >
-                    Editor
-                </button>
-                <button
-                    onClick={() => {
-                        adminModeController.setMode("developer");
-                        navigate(navigation?.basePath ?? "/");
-                    }}
-                    className={cls(
-                        "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-colors duration-200 ml-1",
-                        adminModeController.mode === "developer"
-                            ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/20"
-                            : "text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
-                    )}
-                >
-                    Dev
-                </button>
-            </div>
-
             {endAdornment &&
                 <ErrorBoundary>
                     {endAdornment}
                 </ErrorBoundary>}
+
+            {navigation && (
+                <div className="mr-2 hidden sm:flex bg-surface-100 dark:bg-surface-800 rounded-lg p-0.5 border border-surface-200 dark:border-surface-700">
+                    <button
+                        onClick={() => {
+                            adminModeController.setMode("content");
+                            navigate(navigation?.basePath ?? "/");
+                        }}
+                        className={cls("px-3 py-1 text-xs font-semibold rounded-md transition-all", adminModeController.mode === "content" ? "bg-white dark:bg-surface-900 shadow-sm text-primary dark:text-primary-400" : "text-surface-500 hover:text-surface-900 dark:hover:text-white")}
+                    >
+                        Content
+                    </button>
+                    <button
+                        onClick={() => {
+                            adminModeController.setMode("studio");
+                            navigate(navigation?.basePath ?? "/");
+                        }}
+                        className={cls("px-3 py-1 text-xs font-semibold rounded-md transition-all", adminModeController.mode === "studio" ? "bg-white dark:bg-surface-900 shadow-sm text-primary dark:text-primary-400" : "text-surface-500 hover:text-surface-900 dark:hover:text-white")}
+                    >
+                        Studio
+                    </button>
+                </div>
+            )}
 
             {includeModeToggle &&
                 <Menu

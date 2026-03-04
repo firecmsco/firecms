@@ -7,10 +7,10 @@ import { AdminModeController } from "./index";
  */
 export function useBuildAdminModeController(): AdminModeController {
 
-    const savedMode = typeof window !== "undefined" ? localStorage.getItem("rebase-admin-mode") as "developer" | "editor" | null : null;
-    const [mode, setMode] = useState<"developer" | "editor">(savedMode ?? "editor");
+    const savedMode = typeof window !== "undefined" ? localStorage.getItem("rebase-admin-mode") as "content" | "studio" | "settings" | null : null;
+    const [mode, setMode] = useState<"content" | "studio" | "settings">(savedMode ?? "content");
 
-    const setModeInternal = useCallback((newMode: "developer" | "editor") => {
+    const setModeInternal = useCallback((newMode: "content" | "studio" | "settings") => {
         if (typeof window !== "undefined") {
             localStorage.setItem("rebase-admin-mode", newMode);
         }

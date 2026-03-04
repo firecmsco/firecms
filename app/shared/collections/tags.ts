@@ -10,12 +10,16 @@ const tagsCollection: EntityCollection = {
     properties: {
         id: {
             type: "number",
-            validation: { required: true }
+            validation: {
+                required: true
+            }
         },
         name: {
-            name: "Tag Name",
+            name: "Tag Name!",
             type: "string",
-            validation: { required: true }
+            validation: {
+                required: true
+            }
         }
     },
     relations: [

@@ -107,7 +107,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         height: "100dvh",
                         ...style
                     }}>
-
                     {appBarChildren}
 
                     <DrawerWrapper

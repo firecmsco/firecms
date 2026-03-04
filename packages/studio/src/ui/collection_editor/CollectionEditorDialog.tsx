@@ -112,6 +112,10 @@ export interface CollectionEditorDialogProps {
      * Optional analytics callback
      */
     onAnalyticsEvent?: (event: string, params?: object) => void;
+    /**
+     * If true, it indicates that the editor is rendered inline (not in a dialog) and therefore updates headers and footers to adapt to the layout.
+     */
+    fullScreen?: boolean;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -305,7 +309,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     initialView: initialViewProp,
     expandKanban,
     generateCollection,
-    onAnalyticsEvent
+    onAnalyticsEvent,
+    fullScreen
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -446,7 +451,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 saveCollection(newCollectionState).then((success) => {
                     if (success) {
                         aiModifiedPaths?.clearAllPaths();
-                        formexController.resetForm();
+                        formexController.resetForm({ values: newCollectionState });
                         handleClose(newCollectionState);
                     }
                 });
@@ -649,9 +654,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             <>
                 {!isNewCollection && <div className={cls("px-4 py-2 w-full flex shrink-0 items-center justify-between gap-4 bg-white dark:bg-surface-950 border-b", defaultBorderMixin)}>
                     <div className="flex items-center gap-4">
-                        <Typography variant="subtitle1" className="font-semibold px-2">
+                        {!fullScreen && <Typography variant="subtitle1" className="font-semibold px-2">
                             {values.name || values.slug || "Collection"}
-                        </Typography>
+                        </Typography>}
                         <Tabs value={currentView}
                             className="bg-transparent"
                             onValueChange={(v) => setCurrentView(v as EditorView)}>
@@ -672,14 +677,36 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             </Tab>
                         </Tabs>
                     </div>
-                    {generateCollection && (
-                        <AICollectionGeneratorPopover
-                            existingCollection={values}
-                            onGenerated={handleAIGenerated}
-                            generateCollection={generateCollection}
-                            onAnalyticsEvent={onAnalyticsEvent}
-                        />
-                    )}
+                    <div className="flex items-center gap-4">
+                        {generateCollection && (
+                            <AICollectionGeneratorPopover
+                                existingCollection={values}
+                                onGenerated={handleAIGenerated}
+                                generateCollection={generateCollection}
+                                onAnalyticsEvent={onAnalyticsEvent}
+                            />
+                        )}
+                        {fullScreen && !isNewCollection && (
+                            <div className="flex items-center gap-2">
+                                <Button variant={"text"}
+                                    color={"neutral"}
+                                    size="small"
+                                    onClick={() => handleCancel()}>
+                                    Cancel
+                                </Button>
+                                <LoadingButton
+                                    variant="filled"
+                                    color="primary"
+                                    type="submit"
+                                    size="small"
+                                    disabled={isSubmitting || configController?.readOnly}
+                                    loading={isSubmitting}
+                                >
+                                    {configController?.readOnly ? "Update (Read-only)" : "Update"}
+                                </LoadingButton>
+                            </div>
+                        )}
+                    </div>
                 </div>}
 
                 <form noValidate
@@ -822,13 +849,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             Back
                         </Button>}
 
-                        <Button variant={"text"}
-                            color={"neutral"}
-                            onClick={() => {
-                                handleCancel();
-                            }}>
-                            Cancel
-                        </Button>
+                        {(!fullScreen || isNewCollection) && (
+                            <Button variant={"text"}
+                                color={"neutral"}
+                                onClick={() => {
+                                    handleCancel();
+                                }}>
+                                Cancel
+                            </Button>
+                        )}
 
                         {currentView === "welcome" &&
                             <Button variant={"text"} onClick={() => onWelcomeScreenContinue()}>
@@ -870,7 +899,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 {currentView === "properties" && "Create collection"}
                             </LoadingButton>}
 
-                        {!isNewCollection && <LoadingButton
+                        {!isNewCollection && !fullScreen && <LoadingButton
                             variant="filled"
                             color="primary"
                             type="submit"

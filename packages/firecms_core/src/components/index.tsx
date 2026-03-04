@@ -44,3 +44,4 @@ export * from "./EntityPreview";
 
 export * from "./AIIcon";
 export * from "./Debug/UIStyleGuide";
+export * from "./AdminModeSyncer";

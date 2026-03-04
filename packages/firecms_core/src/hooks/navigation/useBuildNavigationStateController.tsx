@@ -41,7 +41,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     viewsOrder?: string[];
     collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
     cmsUrlController: CMSUrlController;
-    adminMode?: "developer" | "editor";
+    adminMode?: "content" | "studio" | "settings";
     effectiveRoleController?: EffectiveRoleController;
     userManagement?: UserManagementDelegate<USER>;
 };
@@ -63,7 +63,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         navigationGroupMappings,
         collectionRegistryController,
         cmsUrlController,
-        adminMode = "editor",
+        adminMode = "content",
         effectiveRoleController,
         userManagement
     } = props;
@@ -142,9 +142,10 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
                     }
                 }
 
+                const basePathKey = Array.isArray(pathKey) ? pathKey[0] : pathKey;
                 acc.push({
                     id: `view:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(pathKey),
+                    url: cmsUrlController.buildCMSUrlPath(basePathKey),
                     name: view.name.trim(),
                     type: "view",
                     slug: view.slug,
@@ -268,7 +269,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     }, [plugins, computeTopNavigation, viewsOrder, collectionRegistryController.collectionRegistryRef]);
 
     const resolvedAuthController = useMemo(() => {
-        if (adminMode === "developer" && effectiveRoleController?.effectiveRole && authController.user) {
+        if (adminMode === "studio" && effectiveRoleController?.effectiveRole && authController.user) {
             return {
                 ...authController,
                 user: {
@@ -288,7 +289,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
                 slug: "users",
                 name: "Users",
                 group: NAVIGATION_ADMIN_GROUP_NAME,
-                icon: <AccountCircleIcon />,
+                icon: "support_agent",
                 view: <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
             });
             if (userManagement.roles) {
@@ -296,7 +297,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
                     slug: "roles",
                     name: "Roles",
                     group: NAVIGATION_ADMIN_GROUP_NAME,
-                    icon: <SecurityIcon />,
+                    icon: "admin_panel_settings",
                     view: <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
                 });
             }

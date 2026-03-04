@@ -1,12 +1,19 @@
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 
-import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
+import "typeface-rubik";
 
 import {
+    FireCMSLoginView,
+    useBackendUserManagement,
+    useFireCMSAuthController
+} from "@firecms/auth";
+import {
+    AdminModeControllerProvider,
+    AdminModeSyncer,
     AppBar,
     CircularProgressCenter,
+    DefaultHomePage,
     Drawer,
     FireCMS,
     ModeControllerProvider,
@@ -14,29 +21,19 @@ import {
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    useBuildLocalConfigurationPersistence,
-    useBuildModeController,
-    useBuildCollectionRegistryController,
-    useBuildCMSUrlController,
-    useBuildNavigationStateController,
     useBackendStorageSource,
     useBuildAdminModeController,
-    AdminModeControllerProvider,
-    DefaultHomePage,
-    NavigationCard,
-    IconForView
+    useBuildCMSUrlController,
+    useBuildCollectionRegistryController,
+    useBuildLocalConfigurationPersistence,
+    useBuildModeController,
+    useBuildNavigationStateController
 } from "@firecms/core";
-import { useLocalCollectionsConfigController, useCollectionEditorPlugin, StudioLayout, CollectionStudioView } from "@firecms/studio";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { usePostgresClientDataSource } from "@firecms/postgresql";
-import {
-    useFireCMSAuthController,
-    FireCMSLoginView,
-    useBackendUserManagement
-} from "@firecms/auth";
+import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@firecms/studio";
+import { CMSView } from "@firecms/types";
 import { collections } from "virtual:firecms-collections";
-import { StorageIcon, PersonIcon, ShieldIcon } from "@firecms/ui";
-import { CMSView, HomePageSection } from "@firecms/types";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -80,40 +77,45 @@ export function App() {
         return [...collections];
     }, []);
 
-    const navigate = useNavigate();
-
-    const devViews: CMSView[] = React.useMemo(() => [
-        {
-            slug: "studio",
-            name: "Studio",
-            group: "Developer",
-            icon: <StorageIcon className="w-5 h-5" />,
-            description: "Database tools: SQL, RLS, Schema",
-            view: <StudioLayout
-                schemaView={
-                    <CollectionStudioView
-                        configController={collectionConfigController}
-                        handleClose={() => navigate("/")}
-                    />
-                }
-            />
-        }
-    ], [navigate, collectionConfigController]);
-
-    // adminViews are now auto-injected by core based on userManagement
-
-    const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence }); const cmsUrlController = useBuildCMSUrlController({
+    const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
+    const cmsUrlController = useBuildCMSUrlController({
         basePath: "/",
         baseCollectionPath: "/c",
         collectionRegistryController
     });
+
+    const devViews: CMSView[] = React.useMemo(() => [
+        {
+            slug: "sql",
+            name: "SQL Console",
+            group: "Database",
+            icon: "terminal",
+            description: "Execute SQL queries",
+            view: <SQLEditor />
+        },
+        {
+            slug: "rls",
+            name: "RLS Policies",
+            group: "Database",
+            icon: "security",
+            description: "Row Level Security",
+            view: <RLSEditor />
+        },
+        {
+            slug: ["schema", "schema/*"] as any,
+            name: "Edit collections",
+            group: "Schema",
+            icon: "view_list",
+            view: <CollectionsStudioView configController={collectionConfigController} />
+        }
+    ], [collectionConfigController]);
 
     const plugins = React.useMemo(() => [dataEnhancementPlugin, collectionEditorPlugin], [dataEnhancementPlugin, collectionEditorPlugin]);
 
     const navigationStateController = useBuildNavigationStateController({
         plugins,
         collections: collectionsBuilder,
-        views: adminModeController.mode === "developer" ? devViews : undefined,
+        views: devViews,
         authController,
         dataSourceDelegate: postgresDelegate,
         collectionRegistryController,
@@ -124,6 +126,7 @@ export function App() {
 
     return (
         <SnackbarProvider>
+            <AdminModeSyncer devViews={devViews} />
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
                     <FireCMS
@@ -150,35 +153,14 @@ export function App() {
                                 );
                             }
 
-                            const isDev = adminModeController.mode === "developer";
-                            const devSection: HomePageSection = {
-                                key: "developer",
-                                title: "Developer Dashboard",
-                                children: (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {devViews.map(view => (
-                                            <NavigationCard
-                                                key={view.slug as string}
-                                                name={view.name}
-                                                description={view.description}
-                                                icon={<IconForView collectionOrView={view} />}
-                                                actions={null}
-                                                onClick={() => navigate(cmsUrlController.buildCMSUrlPath(view.slug as string))}
-                                            />
-                                        ))}
-                                    </div>
-                                )
-                            };
+
 
                             return (
                                 <Scaffold autoOpenDrawer={false}>
                                     <AppBar title={"Rebase"} />
                                     <Drawer />
                                     <NavigationRoutes
-                                        homePage={<DefaultHomePage
-                                            sections={isDev ? [devSection] : undefined}
-                                            hiddenGroups={isDev ? ["Developer"] : undefined}
-                                        />}
+                                        homePage={<DefaultHomePage />}
                                     />
                                     <SideDialogs />
                                 </Scaffold>

@@ -4,12 +4,11 @@ import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCM
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, TextField } from "@firecms/ui";
+import { cls, Tooltip } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { FireCMSLogo } from "../components";
 import { useApp } from "../app/useApp";
-import { IconForView } from "../util";
 
 /**
  * Default drawer used in the CMS
@@ -50,10 +49,16 @@ export function DefaultDrawer({
     }: NavigationResult = navigationState.topLevelNavigation;
 
     const adminViews = navigationEntries.filter(e => e.type === "admin") ?? [];
-    const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
+
+    let groupsToRender = groups;
+    if (adminModeController.mode === "studio") {
+        groupsToRender = groups.filter(g => g === "Database" || g === "Schema" || g === "Admin");
+    } else {
+        groupsToRender = groups.filter(g => g !== "Database" && g !== "Schema");
+    }
 
     // Collapsible groups state - using "drawer" namespace for independent state from home page
-    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupsWithoutAdmin, "drawer");
+    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupsToRender, "drawer");
 
     const onItemClick = (view: NavigationEntry) => {
         const eventName: CMSAnalyticsEvent = view.type === "collection"
@@ -75,7 +80,7 @@ export function DefaultDrawer({
                         maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
                     }}>
 
-                    {groupsWithoutAdmin.map((group) => {
+                    {groupsToRender.map((group) => {
                         const entriesInGroup = Object.values(navigationEntries).filter(e => e.group === group);
                         return (
                             <DrawerNavigationGroup
@@ -93,60 +98,7 @@ export function DefaultDrawer({
                     })}
 
                 </div>
-
-                {adminViews.length > 0 && <Menu
-                    side={"right"}
-                    open={adminMenuOpen}
-                    onOpenChange={setAdminMenuOpen}
-                    trigger={
-                        <IconButton
-                            shape={"square"}
-                            className={"m-4 text-surface-900 dark:text-white w-fit"}>
-                            <Tooltip title={"Admin"}
-                                open={tooltipsOpen}
-                                side={"right"} sideOffset={28}>
-                                <MoreVertIcon />
-                            </Tooltip>
-                            {drawerOpen && <div
-                                className={cls(
-                                    drawerOpen ? "opacity-100" : "opacity-0 hidden",
-                                    "mx-4 font-inherit text-inherit"
-                                )}>
-                                ADMIN
-                            </div>}
-                        </IconButton>}
-                >
-                    {adminViews.map((entry) =>
-                        <MenuItem
-                            onClick={(event) => {
-                                event.preventDefault();
-                                navigate(entry.url);
-                                setAdminMenuOpen(false);
-                            }}
-                            key={entry.id}>
-                            {<IconForView collectionOrView={entry.view} />}
-                            {entry.name}
-                        </MenuItem>)}
-
-                    {adminModeController.mode === "developer" && (
-                        <div className="px-4 py-3 mt-2 border-t border-surface-200 dark:border-surface-700">
-                            <Typography variant="caption" className="block mb-2 text-surface-500 font-semibold uppercase tracking-wider">
-                                Role Override
-                            </Typography>
-                            <TextField
-                                value={effectiveRoleController?.effectiveRole ?? ""}
-                                onChange={(e) => {
-                                    const val = e.target.value.trim();
-                                    effectiveRoleController?.setEffectiveRole(val ? val : null);
-                                }}
-                                placeholder="e.g. admin, user"
-                                size="small"
-                            />
-                        </div>
-                    )}
-
-                </Menu>}
-            </div>
+            </div >
 
         </>
     );
@@ -157,7 +109,7 @@ export function DefaultDrawer({
  * It expands when the drawer is open.
  *
  * @param logo
-
+ 
  */
 export function DrawerLogo({ logo }: {
     logo?: string;

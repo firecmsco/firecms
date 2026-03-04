@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import {
+    useAdminModeController,
     useCollapsedGroups,
     useCustomizationController,
     useFireCMSContext,
@@ -52,6 +53,8 @@ export function DefaultHomePage({
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationStateController();
+    const adminModeController = useAdminModeController();
+    const adminMode = adminModeController.mode;
 
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");
@@ -127,18 +130,29 @@ export function DefaultHomePage({
                 ...new Set(src.map((e) => e.group ?? DEFAULT_GROUP_NAME))
             ];
             allProcessed = ordered
+                .filter(g =>
+                    (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
+                    (adminMode === "studio" && g !== DEFAULT_GROUP_NAME)
+                )
                 .map((name) => ({
                     name,
                     entries: entriesByGroup[name] || []
                 }))
                 .filter((g) => g.entries.length);
         } else {
-            allProcessed = groupOrderFromNavController.map((g) => ({
+            const filteredGroupOrder = groupOrderFromNavController.filter(g =>
+                (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
+                (adminMode === "studio" && g !== DEFAULT_GROUP_NAME)
+            );
+
+            allProcessed = filteredGroupOrder.map((g) => ({
                 name: g,
                 entries: entriesByGroup[g] || []
             }));
             Object.keys(entriesByGroup).forEach((g) => {
-                if (!groupOrderFromNavController.includes(g))
+                const shouldInclude = (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
+                    (adminMode === "studio" && g !== DEFAULT_GROUP_NAME);
+                if (!filteredGroupOrder.includes(g) && shouldInclude)
                     allProcessed.push({
                         name: g,
                         entries: entriesByGroup[g]
@@ -165,7 +179,7 @@ export function DefaultHomePage({
             adminGroupData: admin || null,
             items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME && !hiddenGroups?.includes(g.name))
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups, adminMode]);
 
     // Update state only when processedGroups actually changes
     // Skip update if DnD just made a local change (dirty flag is set)

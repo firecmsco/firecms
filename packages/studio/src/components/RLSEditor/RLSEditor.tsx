@@ -59,6 +59,8 @@ export const RLSEditor = () => {
         }
     });
 
+    const [expandedSchemas, setExpandedSchemas] = useState<Record<string, boolean>>({ public: true });
+
     useEffect(() => {
         try {
             localStorage.setItem("firecms_rls_editor_sidebar_size", sidebarSize.toString());
@@ -185,6 +187,17 @@ export const RLSEditor = () => {
         return tables.find(t => `${t.schemaName}.${t.tableName}` === selectedTable) || null;
     }, [selectedTable, tables]);
 
+    const groupedTables = useMemo(() => {
+        const groups: Record<string, TableRLSStatus[]> = {};
+        tables.forEach(table => {
+            if (!groups[table.schemaName]) {
+                groups[table.schemaName] = [];
+            }
+            groups[table.schemaName].push(table);
+        });
+        return groups;
+    }, [tables]);
+
     const activeCollection = useMemo(() => {
         if (!activeTableData) return null;
         return collectionRegistry.collections?.find((c: any) =>
@@ -277,39 +290,59 @@ export const RLSEditor = () => {
                         <div className="flex-grow overflow-y-auto w-full no-scrollbar px-2 py-4 space-y-1">
                             {isLoading && tables.length === 0 ? (
                                 <div className="flex justify-center p-4"><CircularProgress size="small" /></div>
+                            ) : Object.keys(groupedTables).length === 0 ? (
+                                <div className="p-4 text-center">
+                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">No tables found</Typography>
+                                </div>
                             ) : (
-                                tables.map(table => {
-                                    const key = `${table.schemaName}.${table.tableName}`;
-                                    const isSelected = selectedTable === key;
-                                    return (
-                                        <button
-                                            key={key}
-                                            onClick={() => setSelectedTable(key)}
-                                            className={cls(
-                                                "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center justify-between group",
-                                                isSelected
-                                                    ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
-                                                    : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
-                                            )}
+                                Object.entries(groupedTables).map(([schemaName, schemaTables]) => (
+                                    <div key={schemaName} className="mb-2">
+                                        <div
+                                            className="flex items-center p-1.5 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors group mb-1"
+                                            onClick={() => setExpandedSchemas(prev => ({ ...prev, [schemaName]: !prev[schemaName] }))}
                                         >
-                                            <span className="truncate">{table.tableName}</span>
-                                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                                                {table.rlsEnabled ? (
-                                                    <Tooltip title="RLS Enabled">
-                                                        <div className="w-2 h-2 rounded-full bg-green-500" />
-                                                    </Tooltip>
-                                                ) : (
-                                                    <Tooltip title="RLS Disabled (Warning)">
-                                                        <div className="w-2 h-2 rounded-full bg-orange-400 opacity-50" />
-                                                    </Tooltip>
-                                                )}
-                                                <span className="text-xs opacity-50 group-hover:opacity-100 min-w-[1.2rem] text-right">
-                                                    {table.policies.length}
-                                                </span>
+                                            <svg className={cls("w-3.5 h-3.5 mr-1.5 transition-transform text-text-secondary dark:text-text-secondary-dark", expandedSchemas[schemaName] ? "rotate-90" : "")} fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
+                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark font-semibold uppercase tracking-wider text-[11px] truncate flex-grow group-hover:text-text-primary dark:group-hover:text-text-primary-dark transition-colors">{schemaName}</Typography>
+                                        </div>
+
+                                        {expandedSchemas[schemaName] && (
+                                            <div className="space-y-0.5 ml-2">
+                                                {schemaTables.map(table => {
+                                                    const key = `${table.schemaName}.${table.tableName}`;
+                                                    const isSelected = selectedTable === key;
+                                                    return (
+                                                        <button
+                                                            key={key}
+                                                            onClick={() => setSelectedTable(key)}
+                                                            className={cls(
+                                                                "w-full text-left px-3 py-1.5 rounded-md text-sm transition-colors flex items-center justify-between group",
+                                                                isSelected
+                                                                    ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
+                                                                    : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
+                                                            )}
+                                                        >
+                                                            <span className="truncate">{table.tableName}</span>
+                                                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                                                                {table.rlsEnabled ? (
+                                                                    <Tooltip title="RLS Enabled">
+                                                                        <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                                                    </Tooltip>
+                                                                ) : (
+                                                                    <Tooltip title="RLS Disabled (Warning)">
+                                                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-400 opacity-50" />
+                                                                    </Tooltip>
+                                                                )}
+                                                                <span className="text-[10px] opacity-40 group-hover:opacity-100 min-w-[1.2rem] text-right font-medium">
+                                                                    {table.policies.length}
+                                                                </span>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
-                                        </button>
-                                    );
-                                })
+                                        )}
+                                    </div>
+                                ))
                             )}
                         </div>
                     </div>
