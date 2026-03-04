@@ -1,5 +1,25 @@
 import React from "react";
-import { Property } from "./properties";
+import { ArrayProperty, MapProperty, Property } from "./properties";
+
+import { BooleanProperty, DateProperty, GeopointProperty, NumberProperty, ReferenceProperty, RelationProperty, StringProperty } from "./properties";
+
+export type ConfigProperty =
+    | (Omit<StringProperty, "name"> & { name?: string })
+    | (Omit<NumberProperty, "name"> & { name?: string })
+    | (Omit<BooleanProperty, "name"> & { name?: string })
+    | (Omit<DateProperty, "name"> & { name?: string })
+    | (Omit<GeopointProperty, "name"> & { name?: string })
+    | (Omit<ReferenceProperty, "name"> & { name?: string })
+    | (Omit<RelationProperty, "name"> & { name?: string })
+    | (Omit<ArrayProperty, "name" | "of" | "oneOf"> & {
+        name?: string;
+        of?: ConfigProperty | ConfigProperty[];
+        oneOf?: { properties: Record<string, ConfigProperty>; typeField?: string; valueField?: string; propertiesOrder?: string[] }
+    })
+    | (Omit<MapProperty, "name" | "properties"> & {
+        name?: string;
+        properties?: Record<string, ConfigProperty>
+    });
 
 /**
  * This is the configuration object for a property.
@@ -24,7 +44,7 @@ export type PropertyConfig = {
      * This property or builder will be used as the base values for the resulting property.
      * You can also use a builder function to generate the base property.
      */
-    property: Property;
+    property: ConfigProperty;
 
     /**
      * Optional icon to be used in the field selector.

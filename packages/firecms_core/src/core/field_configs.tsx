@@ -414,8 +414,8 @@ export function getDefaultFieldId(property: Property) {
                 return "multi_file_upload";
             } else if (ofProperty.type === "reference") {
                 return "multi_references";
-        } else if (of?.type === "relation") {
-            throw new Error("The 'relation' type is not supported inside arrays. Use 'reference' instead.");
+            } else if (of?.type === "relation") {
+                throw new Error("The 'relation' type is not supported inside arrays. Use 'reference' instead.");
             } else {
                 return "repeat";
             }

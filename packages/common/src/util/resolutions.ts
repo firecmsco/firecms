@@ -117,12 +117,9 @@ export function resolveProperty<M extends Record<string, any> = any>(props: Reso
             return resolvedProperty;
         }
         if (customField.property) {
-            const configProperty = customField.property;
-            if ("propertyConfig" in configProperty) {
-                delete configProperty.propertyConfig;
-            }
+            const { propertyConfig: _unused, ...restConfigProperty } = customField.property;
             const customFieldProperty = resolveProperty({
-                property: configProperty,
+                property: { name: "", ...restConfigProperty } as Property,
                 ignoreMissingFields,
                 ...rest
             });
@@ -169,11 +166,11 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty): 
  * @param value
  */
 export function resolveProperties<M extends Record<string, any>>({
-                                                                     propertyKey,
-                                                                     properties,
-                                                                     ignoreMissingFields,
-                                                                     ...props
-                                                                 }: {
+    propertyKey,
+    properties,
+    ignoreMissingFields,
+    ...props
+}: {
     propertyKey?: string,
     properties: Properties,
     values?: Partial<M>,
@@ -203,11 +200,11 @@ export function resolveProperties<M extends Record<string, any>>({
 }
 
 export function resolveArrayProperties<M>({
-                                              propertyKey,
-                                              property,
-                                              ignoreMissingFields = false,
-                                              ...props
-                                          }: {
+    propertyKey,
+    property,
+    ignoreMissingFields = false,
+    ...props
+}: {
     propertyKey?: string,
     property: ArrayProperty,
     values?: Partial<M>,
@@ -280,11 +277,11 @@ export function resolveArrayProperties<M>({
 }
 
 export function getArrayResolvedProperties({
-                                               propertyKey,
-                                               propertyValue,
-                                               property,
-                                               ...props
-                                           }: {
+    propertyKey,
+    propertyValue,
+    property,
+    ...props
+}: {
     propertyValue: any,
     propertyKey?: string,
     property: ArrayProperty,
@@ -318,12 +315,12 @@ export function getArrayResolvedProperties({
 export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
     if (typeof input === "object") {
         return Object.entries(input).map(([id, value]) =>
-            (typeof value === "string"
-                ? {
-                    id,
-                    label: value
-                }
-                : value));
+        (typeof value === "string"
+            ? {
+                id,
+                label: value
+            }
+            : value));
     } else if (Array.isArray(input)) {
         return input as EnumValueConfig[];
     } else {
@@ -357,8 +354,8 @@ export function resolvedSelectedEntityView<M extends Record<string, any>>(
     canEdit?: boolean,
 ) {
     const resolvedEntityViews = customViews ? customViews
-            .map(e => resolveEntityView(e, customizationController.entityViews))
-            .filter((e): e is EntityCustomView<M> => Boolean(e))
+        .map(e => resolveEntityView(e, customizationController.entityViews))
+        .filter((e): e is EntityCustomView<M> => Boolean(e))
         // .filter((e) => canEdit || !e.includeActions)
         : [];
 

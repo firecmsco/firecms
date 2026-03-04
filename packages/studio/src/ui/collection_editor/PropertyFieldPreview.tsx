@@ -20,14 +20,16 @@ import {
 import { editableProperty } from "../../utils/entities";
 
 export function PropertyFieldPreview({
-                                         property,
-                                         onClick,
-                                         hasError,
-                                         includeName,
-                                         includeEditButton,
-                                         selected
-                                     }: {
+    property,
+    propertyKey,
+    onClick,
+    hasError,
+    includeName,
+    includeEditButton,
+    selected
+}: {
     property: Property,
+    propertyKey?: string,
     hasError?: boolean,
     selected?: boolean,
     includeName?: boolean,
@@ -49,7 +51,7 @@ export function PropertyFieldPreview({
             onClick={onClick}
             className="flex flex-row w-full cursor-pointer">
             <div className={"m-4"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig} />
             </div>
             <Paper
                 className={cls(
@@ -68,29 +70,36 @@ export function PropertyFieldPreview({
 
                     {includeName &&
                         <ErrorBoundary>
-                            <Typography variant="label"
+                            <div className="flex items-center gap-2">
+                                <Typography variant="label"
+                                    component="span"
+                                    className="pr-2">
+                                    {property.name || propertyKey || "\u00a0"}
+                                </Typography>
+                                {property.name && propertyKey && property.name !== propertyKey && (
+                                    <Typography variant="caption"
                                         component="span"
-                                        className="grow pr-2">
-                                {property.name
-                                    ? property.name
-                                    : "\u00a0"
-                                }
-                            </Typography>
+                                        color="secondary"
+                                        className="font-mono">
+                                        {propertyKey}
+                                    </Typography>
+                                )}
+                            </div>
                         </ErrorBoundary>}
 
                     <div className="flex flex-row items-center">
                         <ErrorBoundary>
                             <Typography className="grow pr-2"
-                                        variant={includeName ? "body2" : "label"}
-                                        component="span"
-                                        color="secondary">
+                                variant={includeName ? "body2" : "label"}
+                                component="span"
+                                color="secondary">
                                 {propertyConfig?.name}
                             </Typography>
                         </ErrorBoundary>
                         <ErrorBoundary>
                             <Typography variant="body2"
-                                        component="span"
-                                        color="disabled">
+                                component="span"
+                                color="disabled">
                                 {property.type}
                             </Typography>
                         </ErrorBoundary>
@@ -108,11 +117,11 @@ export function PropertyFieldPreview({
 }
 
 export function NonEditablePropertyPreview({
-                                               name,
-                                               selected,
-                                               onClick,
-                                               property
-                                           }: {
+    name,
+    selected,
+    onClick,
+    property
+}: {
     name: string,
     selected: boolean,
     onClick?: () => void,
@@ -128,12 +137,12 @@ export function NonEditablePropertyPreview({
             onClick={onClick}
             className="flex flex-row w-full cursor-pointer">
             <div className={"relative m-4"}>
-                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig}/>}
+                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig} />}
                 {!propertyConfig && <div
                     className={"h-8 w-8 flex items-center justify-center rounded-full shadow-2xs text-white bg-surface-500"}>
-                    <FunctionsIcon color={"inherit"} size={"small"}/>
+                    <FunctionsIcon color={"inherit"} size={"small"} />
                 </div>}
-                <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
+                <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"} />
             </div>
             <Paper
                 className={cls(
@@ -147,8 +156,8 @@ export function NonEditablePropertyPreview({
 
                 <div className="w-full flex flex-col">
                     <Typography variant="label"
-                                component="span"
-                                className="grow pr-2">
+                        component="span"
+                        className="grow pr-2">
                         {property?.name
                             ? property.name
                             : name
@@ -157,32 +166,32 @@ export function NonEditablePropertyPreview({
 
                     <div className="flex flex-row items-center">
                         {propertyConfig && <Typography className="grow pr-2"
-                                                       variant={"body2"}
-                                                       component="span"
-                                                       color="secondary">
+                            variant={"body2"}
+                            component="span"
+                            color="secondary">
                             {propertyConfig?.name}
                         </Typography>}
 
                         {property && !isPropertyBuilder(property) && <ErrorBoundary>
                             <Typography variant="body2"
-                                        component="span"
-                                        color="disabled">
+                                component="span"
+                                color="disabled">
                                 {property.type}
                             </Typography>
                         </ErrorBoundary>}
 
                         {property && isPropertyBuilder(property) && <ErrorBoundary>
                             <Typography variant="body2"
-                                        component="span"
-                                        color="disabled">
+                                component="span"
+                                color="disabled">
                                 This property is defined as a property builder in code
                             </Typography>
                         </ErrorBoundary>}
 
                         {!property && <ErrorBoundary>
                             <Typography variant="body2"
-                                        component="span"
-                                        color="disabled">
+                                component="span"
+                                color="disabled">
                                 This field is defined as an additional field in code
                             </Typography>
                         </ErrorBoundary>}

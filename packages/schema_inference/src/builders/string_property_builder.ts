@@ -10,11 +10,13 @@ const VIDEO_EXTENSIONS = [".avi", ".mp4"];
 const emailRegEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 export function buildStringProperty({
+    name,
     totalDocsCount,
     valuesResult
 }: InferencePropertyBuilderProps): Property {
 
     let stringProperty: Property = {
+        name: name ?? "",
         type: "string",
 
     };
@@ -77,7 +79,7 @@ export function buildStringProperty({
             stringProperty = {
                 ...stringProperty,
                 ...config
-            };
+            } as StringProperty;
     }
 
     return stringProperty;

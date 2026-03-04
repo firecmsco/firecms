@@ -14,12 +14,12 @@ type CommonPropertyFieldsProps = {
 
 export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPropertyFieldsProps>(
     function CommonPropertyFields({
-                                      showErrors,
-                                      disabledId,
-                                      disabled,
-                                      autoUpdateId,
-                                      isNewProperty
-                                  }, ref) {
+        showErrors,
+        disabledId,
+        disabled,
+        autoUpdateId,
+        isNewProperty
+    }, ref) {
 
         const {
             errors,
@@ -61,7 +61,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         placeholder={"Field name"}
                         required
                         disabled={disabled}
-                        error={Boolean(nameError)}/>
+                        error={Boolean(nameError)} />
 
                     <FieldCaption error={Boolean(nameError)}>
                         {nameError}
@@ -69,9 +69,8 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                 </div>
 
                 <div>
-                    <Field
+                    <DebouncedTextField
                         name={id}
-                        as={DebouncedTextField}
                         label={"ID"}
                         value={values[id]}
                         onChange={(e: any) => {
@@ -86,7 +85,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         disabled={disabledId || disabled}
                         required
                         size="small"
-                        error={Boolean(idError)}/>
+                        error={Boolean(idError)} />
                     <FieldCaption error={Boolean(idError)}>
                         {idError}
                     </FieldCaption>
@@ -94,10 +93,10 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
 
                 <div>
                     <Field name={description}
-                           as={DebouncedTextField}
-                           label={"Description"}
-                           disabled={disabled}
-                           error={Boolean(descriptionError)}/>
+                        as={DebouncedTextField}
+                        label={"Description"}
+                        disabled={disabled}
+                        error={Boolean(descriptionError)} />
                     <FieldCaption error={Boolean(descriptionError)}>
                         {descriptionError}
                     </FieldCaption>

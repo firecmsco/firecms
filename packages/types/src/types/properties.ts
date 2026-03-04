@@ -78,7 +78,7 @@ export interface BaseProperty<CustomProps = any> {
     /**
      * Property name (e.g. Product)
      */
-    name?: string;
+    name: string;
 
     /**
      * Property description, always displayed under the field

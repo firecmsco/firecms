@@ -277,7 +277,7 @@ function buildPropertyFromCount(
         if (highVariability) {
             result = {
                 type: "map",
-                name: title,
+                name: title ?? key ?? "",
                 keyValue: true,
                 properties: {}
             };
@@ -289,7 +289,7 @@ function buildPropertyFromCount(
         );
         result = {
             type: "map",
-            name: title,
+            name: title ?? key ?? "",
             properties
         };
     } else if (mostProbableType === "array") {
@@ -304,7 +304,7 @@ function buildPropertyFromCount(
         );
         result = {
             type: "array",
-            name: title,
+            name: title ?? key ?? "",
             of
         };
     }

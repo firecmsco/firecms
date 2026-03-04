@@ -184,11 +184,13 @@ export function GeneralSettingsForm({
 
                         {/* Collection ID */}
                         <div className={"col-span-12"}>
-                            <Field name={"slug"}
-                             as={DebouncedTextField}
-                             disabled={!isNewCollection}
-                             label={"Collection ID"}
-                             error={showErrors && Boolean(errors.slug)} />
+                            <DebouncedTextField
+                                name={"slug"}
+                                value={values.slug ?? ""}
+                                onChange={(e: any) => setFieldValue("slug", e.target.value)}
+                                disabled={!isNewCollection}
+                                label={"Collection ID"}
+                                error={showErrors && Boolean(errors.slug)} />
                             <FieldCaption error={touched.slug && Boolean(errors.slug)}>
                                 {touched.slug && Boolean(errors.slug) ? errors.slug : "This ID identifies this collection. Typically the same as the path."}
                             </FieldCaption>
