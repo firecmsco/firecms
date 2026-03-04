@@ -20,9 +20,6 @@ import {
     DialogActions,
     DialogContent,
     getColorSchemeForSeed,
-    IconButton,
-    RefreshIcon,
-    Tooltip,
     Typography
 } from "@firecms/ui";
 import { getPropertyInPath, resolveCollection, resolveEnumValues } from "../../util";
@@ -38,6 +35,7 @@ import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 import { useBoardDataController } from "./useBoardDataController";
+import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner";
 
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;
@@ -579,8 +577,6 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
     // Check for loading error
     const hasError = Boolean(dataLoadingError);
-    const errorMessage = dataLoadingError?.message || "";
-    const indexUrl = errorMessage.match(/https:\/\/console\.firebase\.google\.com[^\s]+/)?.[0];
 
     // Error: no enum properties available for Kanban columns
     if (!columnProperty || enumColumns.length === 0) {
@@ -622,33 +618,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         <div className="flex-1 flex flex-col overflow-hidden">
             {/* Error banner - only show when no data loaded */}
             {hasError && allEntities.length === 0 && (
-                <div
-                    className="flex items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
-                    <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1">
-                        <strong>Error:</strong>{" "}
-                        {indexUrl
-                            ? "A Firestore index is required for this query."
-                            : errorMessage}
-                    </Typography>
-                    <Tooltip title="Refresh data">
-                        <IconButton
-                            size="small"
-                            onClick={() => boardDataController.refreshAll()}
-                        >
-                            <RefreshIcon size="small" />
-                        </IconButton>
-                    </Tooltip>
-                    {indexUrl && (
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            color="error"
-                            onClick={() => window.open(indexUrl, "_blank")}
-                        >
-                            Create Index
-                        </Button>
-                    )}
-                </div>
+                <CollectionDataErrorBanner
+                    error={dataLoadingError}
+                    onRetry={() => boardDataController.refreshAll()}
+                />
             )}
 
             {/* Backfill info bar - non-blocking */}
