@@ -98,7 +98,7 @@ That's it! FireCMS Cloud automatically connects to your Typesense instance.
 ### Using Typesense in Self-Hosted FireCMS
 
 ```typescript
-import { buildFireCMSSearchController, useFirestoreDelegate } from "@firecms/firebase";
+import { buildFireCMSSearchController, useFirestoreDataSource } from "@firecms/firebase";
 
 const textSearchControllerBuilder = buildFireCMSSearchController({
   region: "us-central1",  // Your extension's region
@@ -106,7 +106,7 @@ const textSearchControllerBuilder = buildFireCMSSearchController({
 });
 
 export function App() {
-  const firestoreDelegate = useFirestoreDelegate({
+  const firestoreDelegate = useFirestoreDataSource({
     firebaseApp,
     textSearchControllerBuilder
   });
@@ -220,7 +220,7 @@ const algoliaSearchController = buildExternalSearchController({
 export function App() {
 
     // ...
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp,
         textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
@@ -243,7 +243,7 @@ You can use local text search in FireCMS Cloud, or in self-hosted versions.
 
 For FireCMS Cloud, you just need to enable it in the UI.
 
-For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDelegate`.
+For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDataSource`.
 Then you need to mark each collection with `textSearchEnabled: true`.
 
 If you have declared an external indexing provider, the local text search will be

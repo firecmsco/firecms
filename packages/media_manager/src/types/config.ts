@@ -1,4 +1,4 @@
-import { DataSourceDelegate, StorageSource } from "@firecms/core";
+import { DataSource, StorageSource } from "@firecms/core";
 
 /**
  * Configuration for a thumbnail size.
@@ -42,9 +42,9 @@ export interface MediaManagerConfig {
 
     /**
      * Data source delegate for metadata persistence.
-     * Typically useFirestoreDelegate() or similar.
+     * Typically useFirestoreDataSource() or similar.
      */
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
 
     /**
      * Path in storage where media files will be uploaded.

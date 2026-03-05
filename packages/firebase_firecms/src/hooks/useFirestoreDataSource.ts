@@ -1,18 +1,17 @@
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCollection,
     EntityReference,
-    FetchCollectionDelegateProps,
-    FetchEntityDelegateProps,
+    FetchCollectionProps,
+    FetchEntityProps,
     FilterCombination,
     FilterValues,
     GeoPoint,
-    ListenCollectionDelegateProps,
-    ListenEntityDelegateProps,
-    CollectionRegistryController,
-    SaveEntityDelegateProps,
+    ListenCollectionProps,
+    ListenEntityProps,
+    SaveEntityProps,
     WhereFilterOp
 } from "@firecms/core";
 import {
@@ -78,7 +77,7 @@ export type FirestoreIndexesBuilder = (params: {
     collection: EntityCollection<any>,
 }) => FilterCombination<string>[] | undefined
 
-export type FirestoreDelegate = DataSourceDelegate & {
+export type FirestoreDataSource = DataSource & {
 
     initTextSearch: (props: {
         path: string,
@@ -93,12 +92,12 @@ export type FirestoreDelegate = DataSourceDelegate & {
  * @param textSearchControllerBuilder
  * @group Firebase
  */
-export function useFirestoreDelegate({
+export function useFirestoreDataSource({
     firebaseApp,
     textSearchControllerBuilder,
     firestoreIndexesBuilder,
     localTextSearchEnabled
-}: FirestoreDataSourceProps): FirestoreDelegate {
+}: FirestoreDataSourceProps): FirestoreDataSource {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>(undefined);
 
@@ -123,7 +122,7 @@ export function useFirestoreDelegate({
         collectionGroup = false,
         databaseId?: string) => {
 
-        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
         const collectionReference: Query = collectionGroup ? collectionGroupClause(firestore, path) : collectionClause(firestore, path);
@@ -157,7 +156,7 @@ export function useFirestoreDelegate({
         entityId: string | number,
         databaseId?: string
     ): Promise<Entity<M> | undefined> => {
-        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
@@ -177,9 +176,8 @@ export function useFirestoreDelegate({
             collection,
             onUpdate,
             onError,
-            collectionRegistryController
-        }: ListenEntityDelegateProps<M>): () => void => {
-        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        }: ListenEntityProps<M>): () => void => {
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const databaseId = collection?.databaseId;
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -203,16 +201,14 @@ export function useFirestoreDelegate({
         databaseId,
         searchString,
         onUpdate,
-        collectionRegistryController
     }: {
         path: string,
         databaseId?: string,
         searchString: string;
         onUpdate: (entities: Entity<M>[]) => void,
-        collectionRegistryController?: CollectionRegistryController
     }): () => void => {
 
-        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const textSearchController = searchControllerRef.current;
         if (!textSearchController)
@@ -248,7 +244,6 @@ export function useFirestoreDelegate({
                     return listenEntity({
                         path,
                         entityId,
-                        collectionRegistryController,
                         onUpdate: (entity: Entity<any> | null) => {
                             if (entity?.values) {
                                 if (entity.id && !addedEntitiesSet.has(entity.id)) {
@@ -287,7 +282,7 @@ export function useFirestoreDelegate({
         }) => {
             console.debug("Init text search controller", searchControllerRef.current, props.path);
             if (!searchControllerRef.current) {
-                console.warn("You are trying to use text search, but have not provided a text search controller in `useFirestoreDelegate`. You can also set the flag `localTextSearchEnabled` to use local search in `useFirestoreDelegate`. Local text search can incur in performance issues and higher costs for large datasets.");
+                console.warn("You are trying to use text search, but have not provided a text search controller in `useFirestoreDataSource`. You can also set the flag `localTextSearchEnabled` to use local search in `useFirestoreDataSource`. Local text search can incur in performance issues and higher costs for large datasets.");
                 return false;
             }
             try {
@@ -321,8 +316,7 @@ export function useFirestoreDelegate({
             orderBy,
             order,
             collection,
-            collectionRegistryController
-        }: FetchCollectionDelegateProps<M>
+        }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
 
             const isCollectionGroup = collection?.collectionGroup ?? false;
@@ -373,8 +367,7 @@ export function useFirestoreDelegate({
                 onUpdate,
                 onError,
                 collection,
-                collectionRegistryController
-            }: ListenCollectionDelegateProps<M>
+            }: ListenCollectionProps<M>
         ): () => void => {
 
             console.debug("Listening collection", {
@@ -389,7 +382,7 @@ export function useFirestoreDelegate({
             });
 
             if (!firebaseApp) {
-                throw Error("useFirestoreDelegate Firebase not initialised");
+                throw Error("useFirestoreDataSource Firebase not initialised");
             }
 
             const isCollectionGroup = collection?.collectionGroup ?? false;
@@ -401,13 +394,11 @@ export function useFirestoreDelegate({
                     searchString,
                     onUpdate,
                     databaseId,
-                    collectionRegistryController
                 });
             }
 
             const resolvedPath = path;
             console.debug("Resolved path for listening", {
-                collectionRegistryController,
                 path,
                 resolvedPath
             });
@@ -435,8 +426,7 @@ export function useFirestoreDelegate({
             path,
             entityId,
             collection,
-            collectionRegistryController
-        }: FetchEntityDelegateProps<M>
+        }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => {
             const resolvedPath = path;
             return getAndBuildEntity(resolvedPath, entityId, collection?.databaseId);
@@ -472,10 +462,9 @@ export function useFirestoreDelegate({
                 values: valuesProp,
                 collection,
                 status,
-                collectionRegistryController
-            }: SaveEntityDelegateProps<M>): Promise<Entity<M>> => {
+            }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             console.debug("1", {
                 path,
@@ -535,7 +524,7 @@ export function useFirestoreDelegate({
                 entity
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             const databaseId = entity.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -561,7 +550,7 @@ export function useFirestoreDelegate({
             collection?: EntityCollection<any>
         ): Promise<boolean> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -581,9 +570,8 @@ export function useFirestoreDelegate({
             order,
             orderBy,
             collection,
-            collectionRegistryController
-        }: FetchCollectionDelegateProps): Promise<number> => {
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        }: FetchCollectionProps<any>): Promise<number> => {
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
             const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
             const resolvedPath = path;
@@ -597,16 +585,14 @@ export function useFirestoreDelegate({
             collection,
             filterValues,
             sortBy,
-            collectionRegistryController
         }: {
             path: string,
             collection: EntityCollection<any>,
             filterValues: FilterValues<any>,
             sortBy?: [string, "asc" | "desc"],
-            collectionRegistryController: CollectionRegistryController
         }): boolean => {
 
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             // If no indexes are defined, we assume the query is valid.
             // If there is no index in Firestore, and error message will be shown

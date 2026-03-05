@@ -1,4 +1,4 @@
-import { DataSourceDelegate } from "./datasource";
+import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
 import { Role, User } from "../users";
 
@@ -83,7 +83,7 @@ export type Authenticator<USER extends User = User> = (props: {
     /**
      * Connector to your database, e.g. your Firestore database
      */
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
 
     /**
      * Used storage implementation

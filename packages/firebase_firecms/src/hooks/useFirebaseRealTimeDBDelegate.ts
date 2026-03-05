@@ -16,17 +16,17 @@ import {
 } from "@firebase/database";
 import { useCallback } from "react";
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
-    FetchCollectionDelegateProps,
+    FetchCollectionProps,
     FetchEntityProps,
-    ListenCollectionDelegateProps,
+    ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
 } from "@firecms/core";
 
-export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataSourceDelegate {
+export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataSource {
 
     const fetchCollection = useCallback(async <M extends Record<string, any>>({
         path,
@@ -36,7 +36,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         orderBy,
         order,
         searchString
-    }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]> => {
+    }: FetchCollectionProps<M>): Promise<Entity<M>[]> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -67,7 +67,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         path,
         onUpdate,
         // Realtime Database does not directly support onError in onValue
-    }: ListenCollectionDelegateProps<M>): () => void => {
+    }: ListenCollectionProps<M>): () => void => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
@@ -175,7 +175,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         await remove(ref(database, `${entity.path}/${entity.id}`));
     }, [firebaseApp]);
 
-    // Implementing additional methods required by DataSourceDelegate
+    // Implementing additional methods required by DataSource
     const checkUniqueField = useCallback(async (slug: string, name: string, value: any, entityId?: string | number): Promise<boolean> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");

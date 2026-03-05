@@ -6,11 +6,11 @@
  */
 
 import { Db, MongoClient } from "mongodb";
-import { DataSourceDelegate, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@firecms/types";
 
 import { MongoEntityService, EntityRepository } from "./db/MongoEntityService";
 import { MongoRealtimeService, RealtimeProvider } from "./services/MongoRealtimeService";
-import { MongoDataSourceDelegate } from "./services/MongoDataSourceDelegate";
+import { MongoDataSource } from "./services/MongoDataSource";
 import { MongoDBConnection, DatabaseConnection } from "./connection";
 
 // =============================================================================
@@ -66,8 +66,8 @@ export interface MongoBackendInstance extends BackendInstance {
     db: Db;
     /** The MongoDB client */
     client: MongoClient;
-    /** MongoDB DataSourceDelegate for use with FireCMS */
-    dataSourceDelegate: DataSourceDelegate;
+    /** MongoDB DataSource for use with FireCMS */
+    dataSource: DataSource;
     /** Entity service for direct database operations */
     entityService: MongoEntityService;
     /** Realtime service for subscriptions */
@@ -118,7 +118,7 @@ export class MongoCollectionRegistry implements CollectionRegistryInterface {
  * - MongoEntityService (implements EntityRepository)
  * - MongoRealtimeService (implements RealtimeProvider)
  * - MongoCollectionRegistry (implements CollectionRegistryInterface)
- * - MongoDataSourceDelegate (for FireCMS integration)
+ * - MongoDataSource (for FireCMS integration)
  *
  * @example
  * ```typescript
@@ -153,7 +153,7 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
     // Create services
     const entityService = new MongoEntityService(db);
     const realtimeService = new MongoRealtimeService(db);
-    const dataSourceDelegate = new MongoDataSourceDelegate(db, realtimeService);
+    const dataSource = new MongoDataSource(db, realtimeService);
     const mongoConnection = new MongoDBConnection(db, client);
 
     return {
@@ -166,16 +166,16 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
         // MongoDB-specific accessors
         db,
         client,
-        dataSourceDelegate,
+        dataSource,
         entityService,
         realtimeService
     };
 }
 
 /**
- * Create a MongoDB DataSourceDelegate.
+ * Create a MongoDB DataSource.
  *
- * This is a convenience function when you only need the DataSourceDelegate
+ * This is a convenience function when you only need the DataSource
  * without the full backend instance.
  *
  * @example
@@ -188,9 +188,9 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
 export function createMongoDelegate(
     db: Db,
     realtimeService?: MongoRealtimeService
-): MongoDataSourceDelegate {
+): MongoDataSource {
     const realtime = realtimeService ?? new MongoRealtimeService(db);
-    return new MongoDataSourceDelegate(db, realtime);
+    return new MongoDataSource(db, realtime);
 }
 
 /**

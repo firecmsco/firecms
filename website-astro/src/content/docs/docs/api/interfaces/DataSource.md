@@ -14,7 +14,7 @@ title: "DataSource"
 Defined in: [types/datasource.ts:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
 Component in charge of communicating with the data source.
-Usually you won't need to implement this interface, but a [DataSourceDelegate](DataSourceDelegate) instead.
+Usually you won't need to implement this interface, but a [DataSource](DataSource) instead.
 
 ## Properties
 

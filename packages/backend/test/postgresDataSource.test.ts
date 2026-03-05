@@ -1,6 +1,6 @@
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { PostgresDataSourceDelegate } from '../src/services/dataSourceDelegate';
+import { PostgresDataSource } from '../src/services/postgresDataSource';
 import { RealtimeService } from '../src/services/realtimeService';
 import { EntityService } from '../src/db/entityService';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -26,12 +26,12 @@ const mockRealtimeService = {
 } as unknown as RealtimeService;
 
 
-describe('PostgresDataSourceDelegate', () => {
-    let delegate: PostgresDataSourceDelegate;
+describe('PostgresDataSource', () => {
+    let delegate: PostgresDataSource;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        delegate = new PostgresDataSourceDelegate(mockDb, mockRealtimeService);
+        delegate = new PostgresDataSource(mockDb, mockRealtimeService);
     });
 
     it('should initialize correctly', () => {

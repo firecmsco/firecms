@@ -15,7 +15,7 @@ import {
     EntityCollectionsBuilder,
     CMSViewsBuilder,
     UserConfigurationPersistence,
-    DataSourceDelegate
+    DataSource
 } from "@firecms/types";
 
 import { useNavigationURLs } from "./navigation/useNavigationURLs";
@@ -32,7 +32,7 @@ export type BuildNavigationContextProps<EC extends EntityCollection, USER extend
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
     plugins?: FireCMSPlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
@@ -54,7 +54,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         viewsOrder,
         plugins,
         userConfigPersistence,
-        dataSourceDelegate,
+        dataSource,
         disabled,
         navigationGroupMappings
     } = props;
@@ -262,9 +262,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, authController, dataSourceDelegate, plugins),
-                    resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
-                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
+                    resolveCollections(collectionsProp, authController, dataSource, plugins),
+                    resolveCMSViews(viewsProp, authController, dataSource, plugins),
+                    resolveCMSViews(adminViewsProp, authController, dataSource)
                 ]
             );
 

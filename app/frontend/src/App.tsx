@@ -117,7 +117,7 @@ export function App() {
         collections: collectionsBuilder,
         views: devViews,
         authController,
-        dataSourceDelegate: postgresDelegate,
+        dataSource: postgresDelegate,
         collectionRegistryController,
         cmsUrlController,
         adminMode: adminModeController.mode,
@@ -135,7 +135,7 @@ export function App() {
                         navigationStateController={navigationStateController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
-                        dataSourceDelegate={postgresDelegate}
+                        dataSource={postgresDelegate}
                         storageSource={storageSource}
                     >
                         {({ loading }) => {

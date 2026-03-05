@@ -1,6 +1,6 @@
 import express, { Express, Router } from "express";
 import { FireCMSApiServer } from "../src/api/server";
-import { PostgresDataSourceDelegate } from "../src/services/dataSourceDelegate";
+import { PostgresDataSource } from "../src/services/dataSource";
 
 // Mock dependencies
 jest.mock("graphql-http/lib/use/express", () => ({
@@ -10,7 +10,7 @@ jest.mock("graphql-http/lib/use/express", () => ({
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
 describe("FireCMSApiServer", () => {
-    let mockDataSource: jest.Mocked<PostgresDataSourceDelegate>;
+    let mockDataSource: jest.Mocked<PostgresDataSource>;
     let mockCollections: any[];
 
     beforeEach(async () => {

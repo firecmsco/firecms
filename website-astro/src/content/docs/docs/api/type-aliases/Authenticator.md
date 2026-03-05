@@ -33,9 +33,9 @@ Implement this function to allow access to specific users.
 
 AuthController
 
-#### dataSourceDelegate
+#### dataSource
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSource`](../interfaces/DataSource)
 
 Connector to your database, e.g. your Firestore database
 

@@ -29,7 +29,7 @@ import {
     useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase,
 } from "../hooks";
 import { CenteredView } from "@firecms/ui";
@@ -132,7 +132,7 @@ export function FireCMSFirebaseApp({
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp,
         textSearchControllerBuilder: textSearchControllerBuilder,
         firestoreIndexesBuilder: firestoreIndexesBuilder,
@@ -156,7 +156,7 @@ export function FireCMSFirebaseApp({
     } = useValidateAuthenticator({
         authController,
         authenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -175,7 +175,7 @@ export function FireCMSFirebaseApp({
         views,
         adminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         plugins,
         collectionRegistryController,
         cmsUrlController,
@@ -205,7 +205,7 @@ export function FireCMSFirebaseApp({
                         navigationStateController={navigationStateController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
-                        dataSourceDelegate={firestoreDelegate}
+                        dataSource={firestoreDelegate}
                         storageSource={storageSource}
                         userManagement={userManagement}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

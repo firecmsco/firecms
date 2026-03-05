@@ -10,25 +10,25 @@ import {
     GraphQLFieldConfig,
     GraphQLInputObjectType,
 } from "graphql";
-import { DataSourceDelegate, EntityCollection, Property } from "@firecms/types";
+import { DataSource, EntityCollection, Property } from "@firecms/types";
 
 /**
- * Lightweight GraphQL schema generator that leverages existing DataSourceDelegate
+ * Lightweight GraphQL schema generator that leverages existing DataSource
  * No duplication - uses your existing data layer and services
  */
 export class GraphQLSchemaGenerator {
     private collections: EntityCollection[];
-    private dataSource: DataSourceDelegate;
+    private dataSource: DataSource;
     private typeRegistry = new Map<string, GraphQLObjectType>();
     private inputTypeRegistry = new Map<string, GraphQLInputObjectType>();
 
-    constructor(collections: EntityCollection[], dataSource: DataSourceDelegate) {
+    constructor(collections: EntityCollection[], dataSource: DataSource) {
         this.collections = collections;
         this.dataSource = dataSource;
     }
 
     /**
-     * Generate complete GraphQL schema using existing DataSourceDelegate
+     * Generate complete GraphQL schema using existing DataSource
      */
     generateSchema(): GraphQLSchema {
         // Create all types first
@@ -158,7 +158,7 @@ export class GraphQLSchemaGenerator {
     }
 
     /**
-     * Create Query type using existing DataSourceDelegate methods
+     * Create Query type using existing DataSource methods
      */
     private createQueryType(): GraphQLObjectType {
         const fields: Record<string, GraphQLFieldConfig<any, any>> = {};
@@ -217,7 +217,7 @@ export class GraphQLSchemaGenerator {
     }
 
     /**
-     * Create Mutation type using existing DataSourceDelegate methods
+     * Create Mutation type using existing DataSource methods
      */
     private createMutationType(): GraphQLObjectType {
         const fields: Record<string, GraphQLFieldConfig<any, any>> = {};

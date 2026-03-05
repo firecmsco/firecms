@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -13,7 +13,7 @@ import {
 } from "@firecms/types";
 import { PostgresDataSourceClient, PostgresDataSourceConfig } from "./postgres_client";
 
-export interface PostgresDataSourceDelegate extends DataSourceDelegate {
+export interface PostgresDataSource extends DataSource {
     client: PostgresDataSourceClient;
 }
 
@@ -78,7 +78,7 @@ function cmsToDelegateModel(data: any): any {
     });
 }
 
-export function usePostgresClientDataSource(config: PostgresDataSourceConfig): PostgresDataSourceDelegate {
+export function usePostgresClientDataSource(config: PostgresDataSourceConfig): PostgresDataSource {
     const client = useMemo(() => new PostgresDataSourceClient(config), [config.websocketUrl]);
 
     // Update auth token getter when it changes (e.g., when auth loading completes)

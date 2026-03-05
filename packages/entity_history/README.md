@@ -81,7 +81,7 @@ export function App() {
     // ...
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController: authController
     });
 

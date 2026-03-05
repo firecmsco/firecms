@@ -138,7 +138,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import {
     useFirebaseAuthController,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase,
     useValidateAuthenticator
 } from "@firecms/firebase";
@@ -157,7 +157,7 @@ function App() {
         firebaseConfig
     });
 
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp
     });
 
@@ -181,7 +181,7 @@ function App() {
     });
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController: authController
     });
 
@@ -208,7 +208,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: collectionEditorPlugin.collectionPermissions,
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         plugins
     });
 
@@ -220,7 +220,7 @@ function App() {
         disabled: collectionEditorPlugin.loading,
         authController: authController,
         authenticator: customAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -236,7 +236,7 @@ function App() {
         <FireCMS
             navigationController={navigationController}
             authController={authController}
-            dataSourceDelegate={firestoreDelegate}
+            dataSource={firestoreDelegate}
         >
             {({
                   context,
@@ -281,7 +281,7 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 <FireCMS
     navigationController={navigationController}
     authController={authController}
-    dataSourceDelegate={firestoreDelegate}
+    dataSource={firestoreDelegate}
     plugins={[userManagementPlugin, collectionEditorPlugin]}
 >
     {/* Your application components */}
@@ -307,7 +307,7 @@ const {
     disabled: collectionEditorPlugin.loading,
     authController: authController,
     authenticator: customAuthenticator,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource: storageSource
 });
 
@@ -337,7 +337,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: collectionEditorPlugin.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ```
 
@@ -477,7 +477,7 @@ import {
   FirebaseSignInProvider,
   useFirebaseAuthController,
   useFirebaseStorageSource,
-  useFirestoreDelegate,
+  useFirestoreDataSource,
   useInitialiseFirebase
 } from "@firecms/firebase";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
@@ -526,7 +526,7 @@ export function App() {
   /**
    * Delegate used for fetching and saving data in Firestore
    */
-  const firestoreDelegate = useFirestoreDelegate({
+  const firestoreDelegate = useFirestoreDataSource({
     firebaseApp
   })
 
@@ -559,14 +559,14 @@ export function App() {
     notAllowedError
   } = useValidateAuthenticator({
     authController,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource
   });
 
   const navigationController = useBuildNavigationController({
     collections: collectionsBuilder,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
   });
 
   const collectionEditorPlugin = useCollectionEditorPlugin({
@@ -590,7 +590,7 @@ export function App() {
                       navigationController={navigationController}
                       authController={authController}
                       userConfigPersistence={userConfigPersistence}
-                      dataSourceDelegate={firestoreDelegate}
+                      dataSource={firestoreDelegate}
                       storageSource={storageSource}
                       plugins={[
                         collectionEditorPlugin

@@ -1,19 +1,19 @@
 /**
- * MongoDataSourceDelegate Tests
+ * MongoDataSource Tests
  * 
- * Tests for the DataSourceDelegate implementation that integrates with FireCMS.
+ * Tests for the DataSource implementation that integrates with FireCMS.
  */
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { MongoClient, Db, ObjectId } from "mongodb";
-import { MongoDataSourceDelegate } from "../src/services/MongoDataSourceDelegate";
+import { MongoDataSource } from "../src/services/MongoDataSource";
 import { EntityCollection } from "@firecms/types";
 
-describe("MongoDataSourceDelegate", () => {
+describe("MongoDataSource", () => {
     let mongoServer: MongoMemoryServer;
     let client: MongoClient;
     let db: Db;
-    let delegate: MongoDataSourceDelegate;
+    let delegate: MongoDataSource;
 
     const mockCollection: EntityCollection = {
         name: "users",
@@ -30,7 +30,7 @@ describe("MongoDataSourceDelegate", () => {
         client = new MongoClient(uri);
         await client.connect();
         db = client.db("test");
-        delegate = new MongoDataSourceDelegate(db);
+        delegate = new MongoDataSource(db);
     });
 
     afterAll(async () => {

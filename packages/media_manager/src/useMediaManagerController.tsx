@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { DataSourceDelegate, StorageSource } from "@firecms/core";
+import { DataSource, StorageSource } from "@firecms/core";
 import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types";
 import Compressor from "compressorjs";
 
 export interface UseMediaManagerControllerProps {
     storageSource: StorageSource;
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
     storagePath: string;
     collectionPath: string;
     bucket?: string;
@@ -23,7 +23,7 @@ const DEFAULT_THUMBNAIL_PATH = "thumbs";
  */
 export function useMediaManagerController({
     storageSource,
-    dataSourceDelegate,
+    dataSource,
     storagePath,
     collectionPath,
     bucket,
@@ -56,7 +56,7 @@ export function useMediaManagerController({
         setError(undefined);
         try {
             console.log("Fetching media assets from:", collectionPath);
-            const entities = await dataSourceDelegate.fetchCollection<Record<string, any>>({
+            const entities = await dataSource.fetchCollection<Record<string, any>>({
                 path: collectionPath,
                 orderBy: "createdAt",
                 order: "desc"
@@ -109,7 +109,7 @@ export function useMediaManagerController({
         } finally {
             setLoading(false);
         }
-    }, [dataSourceDelegate, collectionPath, fetchDownloadURL]);
+    }, [dataSource, collectionPath, fetchDownloadURL]);
 
     // Initial load
     useEffect(() => {
@@ -212,7 +212,7 @@ export function useMediaManagerController({
         console.log("Saving asset data to database:", assetData);
 
         // Save metadata to database
-        const entity = await dataSourceDelegate.saveEntity<Record<string, any>>({
+        const entity = await dataSource.saveEntity<Record<string, any>>({
             path: collectionPath,
             values: assetData,
             status: "new"
@@ -240,7 +240,7 @@ export function useMediaManagerController({
 
         setAssets(prev => [newAsset, ...prev]);
         return newAsset;
-    }, [storageSource, dataSourceDelegate, storagePath, collectionPath, bucket, thumbnailSizes, thumbnailPath]);
+    }, [storageSource, dataSource, storagePath, collectionPath, bucket, thumbnailSizes, thumbnailPath]);
 
     // Delete an asset
     const deleteAsset = useCallback(async (assetId: string | number): Promise<void> => {
@@ -259,7 +259,7 @@ export function useMediaManagerController({
         }
 
         // Delete from database
-        await dataSourceDelegate.deleteEntity({
+        await dataSource.deleteEntity({
             entity: {
                 id: assetId,
                 path: collectionPath,
@@ -271,7 +271,7 @@ export function useMediaManagerController({
         if (selectedAsset?.id === assetId) {
             setSelectedAsset(undefined);
         }
-    }, [assets, storageSource, dataSourceDelegate, collectionPath, selectedAsset]);
+    }, [assets, storageSource, dataSource, collectionPath, selectedAsset]);
 
     // Update asset metadata
     const updateAsset = useCallback(async (
@@ -294,7 +294,7 @@ export function useMediaManagerController({
 
         console.log("Updating asset:", assetId, cleanData);
 
-        await dataSourceDelegate.saveEntity({
+        await dataSource.saveEntity({
             path: collectionPath,
             entityId: assetId,
             values: cleanData,
@@ -309,7 +309,7 @@ export function useMediaManagerController({
         if (selectedAsset?.id === assetId) {
             setSelectedAsset(prev => prev ? { ...prev, ...cleanData } : prev);
         }
-    }, [assets, dataSourceDelegate, collectionPath, selectedAsset]);
+    }, [assets, dataSource, collectionPath, selectedAsset]);
 
     // Search assets (client-side filtering for now)
     const searchAssets = useCallback((query: string) => {

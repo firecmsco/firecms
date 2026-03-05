@@ -1,23 +1,23 @@
 import { Router, Response, NextFunction } from "express";
-import { DataSourceDelegate, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@firecms/types";
 import { ApiResponse, QueryOptions, FireCMSRequest } from "../types";
 
 /**
- * Lightweight REST API generator that leverages existing FireCMS DataSourceDelegate
+ * Lightweight REST API generator that leverages existing FireCMS DataSource
  */
 export class RestApiGenerator {
     private collections: EntityCollection[];
     private router: Router;
-    private dataSource: DataSourceDelegate;
+    private dataSource: DataSource;
 
-    constructor(collections: EntityCollection[], dataSource: DataSourceDelegate) {
+    constructor(collections: EntityCollection[], dataSource: DataSource) {
         this.collections = collections;
         this.dataSource = dataSource;
         this.router = Router();
     }
 
     /**
-     * Generate REST routes using existing DataSourceDelegate
+     * Generate REST routes using existing DataSource
      */
     generateRoutes(): Router {
         this.collections.forEach(collection => {
@@ -90,7 +90,7 @@ export class RestApiGenerator {
                 const dataSource = req.dataSource || this.dataSource;
 
                 const path = collection.dbPath || collection.slug;
-                // Use existing saveEntity from DataSourceDelegate
+                // Use existing saveEntity from DataSource
                 const entity = await dataSource.saveEntity({
                     path,
                     values: req.body,
@@ -126,7 +126,7 @@ export class RestApiGenerator {
                     throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
                 }
 
-                // Use existing saveEntity from DataSourceDelegate
+                // Use existing saveEntity from DataSource
                 const entity = await dataSource.saveEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
@@ -163,7 +163,7 @@ export class RestApiGenerator {
                     throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
                 }
 
-                // Use existing deleteEntity from DataSourceDelegate (expects the full entity)
+                // Use existing deleteEntity from DataSource (expects the full entity)
                 await dataSource.deleteEntity({
                     entity: existingEntity,
                     collection
@@ -363,8 +363,8 @@ export class RestApiGenerator {
     /**
      * Fetch raw collection data without Entity wrapper
      */
-    private async fetchRawCollection(dataSource: DataSourceDelegate, collection: EntityCollection, queryOptions: QueryOptions) {
-        // Use existing fetchCollection from DataSourceDelegate
+    private async fetchRawCollection(dataSource: DataSource, collection: EntityCollection, queryOptions: QueryOptions) {
+        // Use existing fetchCollection from DataSource
         const entities = await dataSource.fetchCollection({
             path: collection.dbPath || collection.slug,
             collection,
@@ -382,7 +382,7 @@ export class RestApiGenerator {
     /**
      * Count raw entities for a collection
      */
-    private async countRawEntities(dataSource: DataSourceDelegate, collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
+    private async countRawEntities(dataSource: DataSource, collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
         return dataSource.countEntities ? await dataSource.countEntities({
             path: collection.dbPath || collection.slug,
             collection,
@@ -393,8 +393,8 @@ export class RestApiGenerator {
     /**
      * Fetch single entity raw data without Entity wrapper
      */
-    private async fetchRawEntity(dataSource: DataSourceDelegate, collection: EntityCollection, entityId: string) {
-        // Use existing fetchEntity from DataSourceDelegate
+    private async fetchRawEntity(dataSource: DataSource, collection: EntityCollection, entityId: string) {
+        // Use existing fetchEntity from DataSource
         const entity = await dataSource.fetchEntity({
             path: collection.dbPath || collection.slug,
             entityId,

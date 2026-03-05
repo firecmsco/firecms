@@ -3,13 +3,13 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataSourceDelegate, User, EntityCollection } from "@firecms/types";
+import { DataSource, User, EntityCollection } from "@firecms/types";
 import { ApiConfig, FireCMSRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
 import { createCallbacksTestRouter } from "./test_callbacks_route";
-import { PostgresDataSourceDelegate } from "../services/dataSourceDelegate";
+import { PostgresDataSource } from "../services/postgresDataSource";
 
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
@@ -19,9 +19,9 @@ export class FireCMSApiServer {
     private app: Express;
     private router: Router;
     private config: ApiConfig;
-    private dataSource: DataSourceDelegate;
+    private dataSource: DataSource;
 
-    private constructor(config: ApiConfig & { dataSource: DataSourceDelegate }) {
+    private constructor(config: ApiConfig & { dataSource: DataSource }) {
         this.config = {
             basePath: "/api",
             enableGraphQL: true,
@@ -44,7 +44,7 @@ export class FireCMSApiServer {
     /**
      * Factory method to create an asynchronously initialized ApiServer instance
      */
-    public static async create(config: ApiConfig & { dataSource: DataSourceDelegate }): Promise<FireCMSApiServer> {
+    public static async create(config: ApiConfig & { dataSource: DataSource }): Promise<FireCMSApiServer> {
         // Auto-discover collections if a directory is provided and collections aren't explicitly passed
         if (config.collectionsDir && (!config.collections || config.collections.length === 0)) {
             config.collections = await FireCMSApiServer.loadCollectionsFromDirectory(config.collectionsDir);
@@ -184,7 +184,7 @@ export class FireCMSApiServer {
             res.json({ data: collectionsMetadata });
         });
 
-        // GraphQL endpoint - uses existing DataSourceDelegate
+        // GraphQL endpoint - uses existing DataSource
         if (this.config.enableGraphQL) {
             const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections || [], this.dataSource);
             const schema = schemaGenerator.generateSchema();
@@ -240,7 +240,7 @@ export class FireCMSApiServer {
             this.router.use(`${basePath}/schema-editor`, schemaEditorRoutes);
         }
 
-        if (this.dataSource instanceof PostgresDataSourceDelegate) {
+        if (this.dataSource instanceof PostgresDataSource) {
             this.router.use(basePath, createCallbacksTestRouter(this.dataSource));
         }
 

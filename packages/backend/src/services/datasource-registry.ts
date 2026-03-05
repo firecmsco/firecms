@@ -5,13 +5,13 @@
  * Allows different databases for different collections.
  *
  * Usage:
- * - Single DB: Pass a single DataSourceDelegate → maps to "(default)"
- * - Multiple DBs: Pass a map of { dbId: DataSourceDelegate }
+ * - Single DB: Pass a single DataSource → maps to "(default)"
+ * - Multiple DBs: Pass a map of { dbId: DataSource }
  * - Collections use `databaseId` property to specify which datasource to use
  * - Collections without `databaseId` fallback to "(default)"
  */
 
-import { DataSourceDelegate } from "@firecms/types";
+import { DataSource } from "@firecms/types";
 
 /**
  * The default datasource identifier used when:
@@ -27,30 +27,30 @@ export interface DatasourceRegistry {
     /**
      * Register a datasource delegate with an ID
      * @param id - Unique identifier for this datasource (e.g., "analytics", "users")
-     * @param delegate - The DataSourceDelegate instance
+     * @param delegate - The DataSource instance
      */
-    register(id: string, delegate: DataSourceDelegate): void;
+    register(id: string, delegate: DataSource): void;
 
     /**
      * Get the default datasource delegate (id = "(default)")
      * @throws Error if no default datasource is registered
      */
-    getDefault(): DataSourceDelegate;
+    getDefault(): DataSource;
 
     /**
      * Get a datasource delegate by ID
      * @param id - Datasource identifier, or undefined/null for default
-     * @returns The DataSourceDelegate, or undefined if not found
+     * @returns The DataSource, or undefined if not found
      */
-    get(id: string | undefined | null): DataSourceDelegate | undefined;
+    get(id: string | undefined | null): DataSource | undefined;
 
     /**
      * Get a datasource delegate by ID, with fallback to default
      * @param id - Datasource identifier, or undefined/null for default
-     * @returns The DataSourceDelegate (falls back to default if id not found)
+     * @returns The DataSource (falls back to default if id not found)
      * @throws Error if neither the specified nor default datasource exists
      */
-    getOrDefault(id: string | undefined | null): DataSourceDelegate;
+    getOrDefault(id: string | undefined | null): DataSource;
 
     /**
      * Check if a datasource with the given ID exists
@@ -72,14 +72,14 @@ export interface DatasourceRegistry {
  * Default implementation of DatasourceRegistry
  */
 export class DefaultDatasourceRegistry implements DatasourceRegistry {
-    private delegates = new Map<string, DataSourceDelegate>();
+    private delegates = new Map<string, DataSource>();
 
     /**
      * Create a DatasourceRegistry from either a single delegate or a map
-     * @param input - Single DataSourceDelegate (maps to "(default)") or Record<string, DataSourceDelegate>
+     * @param input - Single DataSource (maps to "(default)") or Record<string, DataSource>
      */
     static create(
-        input: DataSourceDelegate | Record<string, DataSourceDelegate>
+        input: DataSource | Record<string, DataSource>
     ): DefaultDatasourceRegistry {
         const registry = new DefaultDatasourceRegistry();
 
@@ -106,32 +106,32 @@ export class DefaultDatasourceRegistry implements DatasourceRegistry {
         return registry;
     }
 
-    register(id: string, delegate: DataSourceDelegate): void {
+    register(id: string, delegate: DataSource): void {
         if (this.delegates.has(id)) {
             console.warn(`[DatasourceRegistry] Overwriting datasource with id "${id}"`);
         }
         this.delegates.set(id, delegate);
     }
 
-    getDefault(): DataSourceDelegate {
+    getDefault(): DataSource {
         const delegate = this.delegates.get(DEFAULT_DATASOURCE_ID);
         if (!delegate) {
             throw new Error(
                 `[DatasourceRegistry] No default datasource registered. ` +
-                `Register one with id "${DEFAULT_DATASOURCE_ID}" or pass a single DataSourceDelegate.`
+                `Register one with id "${DEFAULT_DATASOURCE_ID}" or pass a single DataSource.`
             );
         }
         return delegate;
     }
 
-    get(id: string | undefined | null): DataSourceDelegate | undefined {
+    get(id: string | undefined | null): DataSource | undefined {
         if (id === undefined || id === null) {
             return this.delegates.get(DEFAULT_DATASOURCE_ID);
         }
         return this.delegates.get(id);
     }
 
-    getOrDefault(id: string | undefined | null): DataSourceDelegate {
+    getOrDefault(id: string | undefined | null): DataSource {
         // If no ID specified, return default
         if (id === undefined || id === null) {
             return this.getDefault();
@@ -164,14 +164,14 @@ export class DefaultDatasourceRegistry implements DatasourceRegistry {
 }
 
 /**
- * Type guard to check if an object is a DataSourceDelegate
+ * Type guard to check if an object is a DataSource
  */
-function isDataSourceDelegate(obj: unknown): obj is DataSourceDelegate {
+function isDataSourceDelegate(obj: unknown): obj is DataSource {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const delegate = obj as DataSourceDelegate;
-    // Check for required DataSourceDelegate properties
+    const delegate = obj as DataSource;
+    // Check for required DataSource properties
     return (
         typeof delegate.key === "string" &&
         typeof delegate.fetchCollection === "function" &&

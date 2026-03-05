@@ -10,11 +10,11 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { getTableName, isTable, Relations } from "drizzle-orm";
-import { DataSourceDelegate, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@firecms/types";
 
 import { EntityService } from "./db/entityService";
 import { RealtimeService, PostgresRealtimeProvider } from "./services/realtimeService";
-import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
+import { PostgresDataSource } from "./services/postgresDataSource";
 import { BackendCollectionRegistry, PostgresCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import {
     BackendInstance,
@@ -71,8 +71,8 @@ export interface PostgresBackendConfig extends BackendConfig {
 export interface PostgresBackendInstance extends BackendInstance {
     /** The Drizzle database connection */
     db: NodePgDatabase;
-    /** PostgreSQL DataSourceDelegate for use with FireCMS */
-    dataSourceDelegate: DataSourceDelegate;
+    /** PostgreSQL DataSource for use with FireCMS */
+    dataSource: DataSource;
     /** Entity service for direct database operations */
     entityService: EntityService;
 }
@@ -89,7 +89,7 @@ export interface PostgresBackendInstance extends BackendInstance {
  * - EntityService (implements EntityRepository)
  * - RealtimeService (implements RealtimeProvider)
  * - BackendCollectionRegistry (implements CollectionRegistryInterface)
- * - PostgresDataSourceDelegate (for FireCMS integration)
+ * - PostgresDataSource (for FireCMS integration)
  * 
  * @example
  * ```typescript
@@ -140,7 +140,7 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
     // Create services
     const entityService = new EntityService(db);
     const realtimeService = new RealtimeService(db);
-    const dataSourceDelegate = new PostgresDataSourceDelegate(db, realtimeService);
+    const dataSource = new PostgresDataSource(db, realtimeService);
     const postgresConnection = new PostgresConnection(db);
 
     return {
@@ -152,15 +152,15 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
 
         // PostgreSQL-specific accessors
         db,
-        dataSourceDelegate,
+        dataSource,
         entityService
     };
 }
 
 /**
- * Create a PostgreSQL DataSourceDelegate.
+ * Create a PostgreSQL DataSource.
  * 
- * This is a convenience function when you only need the DataSourceDelegate
+ * This is a convenience function when you only need the DataSource
  * without the full backend instance.
  * 
  * @example
@@ -173,9 +173,9 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
 export function createPostgresDelegate(
     db: NodePgDatabase,
     realtimeService?: RealtimeService
-): PostgresDataSourceDelegate {
+): PostgresDataSource {
     const realtime = realtimeService ?? new RealtimeService(db);
-    return new PostgresDataSourceDelegate(db, realtime);
+    return new PostgresDataSource(db, realtime);
 }
 
 /**

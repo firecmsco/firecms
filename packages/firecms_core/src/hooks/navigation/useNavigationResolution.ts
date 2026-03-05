@@ -2,7 +2,7 @@ import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    DataSourceDelegate,
+    DataSource,
     EntityCollection,
     EntityCollectionsBuilder,
     FireCMSPlugin,
@@ -38,7 +38,7 @@ export function applyPluginModifyCollection(resolvedCollections: EntityCollectio
 export async function resolveCollections(
     collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
     authController: AuthController,
-    dataSource: DataSourceDelegate,
+    dataSource: DataSource,
     plugins: FireCMSPlugin[] | undefined
 ): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
@@ -71,7 +71,7 @@ export async function resolveCollections(
 export async function resolveCMSViews(
     baseViews: CMSView[] | CMSViewsBuilder | undefined,
     authController: AuthController,
-    dataSource: DataSourceDelegate,
+    dataSource: DataSource,
     plugins?: FireCMSPlugin[]
 ) {
     let resolvedViews: CMSView[] = [];

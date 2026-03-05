@@ -67,7 +67,7 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 import {useBuildUserManagement} from "@firecms/user_management";
 
 const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
     rolesPath: "__FIRECMS/config/roles",
     allowDefaultRolesCreation: true,
@@ -94,7 +94,7 @@ function App() {
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         usersPath: "__FIRECMS/config/users",
         rolesPath: "__FIRECMS/config/roles",
         allowDefaultRolesCreation: true,
@@ -109,7 +109,7 @@ function App() {
         disabled: userManagement.loading,
         authController,
         authenticator: userManagement.authenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -121,7 +121,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions, // Optional, link collection permissions to user management
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         plugins
     });
 
@@ -152,7 +152,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ````
 
@@ -170,7 +170,7 @@ const {
     disabled: userManagement.loading,
     authController,
     authenticator: userManagement.authenticator,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource
 });
 ```
@@ -196,7 +196,7 @@ const navigationController = useBuildNavigationController({
     collections,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ```
 

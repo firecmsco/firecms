@@ -29,7 +29,7 @@ function MediaLibraryViewInternal() {
     const config = useMediaManagerConfig();
     const controller = useMediaManagerController({
         storageSource: config.storageSource,
-        dataSourceDelegate: config.dataSourceDelegate,
+        dataSource: config.dataSource,
         storagePath: config.storagePath ?? DEFAULT_STORAGE_PATH,
         collectionPath: config.collectionPath ?? DEFAULT_COLLECTION_PATH,
         bucket: config.bucket,
@@ -73,7 +73,7 @@ const MEDIA_VIEW = buildMediaView();
  * ```tsx
  * const { plugin: mediaManagerPlugin } = useMediaManagerPlugin({
  *     storageSource,
- *     dataSourceDelegate: firestoreDelegate,
+ *     dataSource: firestoreDelegate,
  *     storagePath: "media",
  *     collectionPath: "media_assets"
  * });

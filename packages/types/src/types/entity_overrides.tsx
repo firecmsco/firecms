@@ -1,6 +1,6 @@
-import { DataSourceDelegate, StorageSource } from "../controllers";
+import { DataSource, StorageSource } from "../controllers";
 
 export type EntityOverrides = {
-    dataSourceDelegate?: DataSourceDelegate;
+    dataSource?: DataSource;
     storageSource?: StorageSource;
 };

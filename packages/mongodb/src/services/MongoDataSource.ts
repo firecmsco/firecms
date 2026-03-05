@@ -1,13 +1,13 @@
 /**
  * MongoDB DataSource Delegate
  *
- * Implements the DataSourceDelegate interface for FireCMS frontend integration.
+ * Implements the DataSource interface for FireCMS frontend integration.
  * This is the main entry point for FireCMS to interact with MongoDB.
  */
 
 import { Db, ObjectId } from "mongodb";
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -23,10 +23,10 @@ import { MongoRealtimeService } from "./MongoRealtimeService";
 /**
  * MongoDB DataSource Delegate
  *
- * Implements the DataSourceDelegate interface for FireCMS.
+ * Implements the DataSource interface for FireCMS.
  * Provides all data operations needed by the FireCMS frontend.
  */
-export class MongoDataSourceDelegate implements DataSourceDelegate {
+export class MongoDataSource implements DataSource {
     key = "mongodb";
     initialised = true;
 

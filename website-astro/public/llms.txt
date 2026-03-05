@@ -1421,7 +1421,7 @@ import {
     FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase,
 } from "@firecms/firebase";
 import { useImportPlugin } from "@firecms/data_import";
@@ -1538,7 +1538,7 @@ export function FireCMSApp() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Delegate used for fetching and saving data in Firestore
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp
     });
 
@@ -1553,7 +1553,7 @@ export function FireCMSApp() {
 
     // controller in charge of user management
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
     });
 
     // Controller for managing authentication
@@ -1573,7 +1573,7 @@ export function FireCMSApp() {
         authenticator: userManagement.authenticator,
         authController,
         // authenticator: myAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -1591,7 +1591,7 @@ export function FireCMSApp() {
         collectionPermissions: userManagement.collectionPermissions,
         adminViews: userManagementAdminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
@@ -1617,7 +1617,7 @@ export function FireCMSApp() {
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                     plugins={[importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
@@ -1775,7 +1775,7 @@ Your users will need to interact with data and files, so you need to set up data
 FireCMS provides a Firestore delegate and Firebase storage source for these operations.
 
 ```jsx
-const firestoreDelegate = useFirestoreDelegate({
+const firestoreDelegate = useFirestoreDataSource({
     firebaseApp
 });
 const storageSource = useFirebaseStorageSource({
@@ -1856,7 +1856,7 @@ You can validate the user's access to the main view based on their authenticatio
     } = useValidateAuthenticator({
         authController,
         authenticator: myAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 ```
@@ -1871,7 +1871,7 @@ management system.
 
 ```jsx
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
     });
 ```
 
@@ -1893,7 +1893,7 @@ the `UserManagement` controller.
         authController,
         disabled: userManagement.loading,
         authenticator: userManagement.authenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 ````
@@ -1930,7 +1930,7 @@ These controllers enable theme mode toggling and local storage of user preferenc
 
 The internal navigation controller manages the app's navigation, leveraging the collections and permissions setup.
 Here you can define your collections, views, and admin views.
-You can also pass the `authController` and `dataSourceDelegate` to the `NavigationController`. Optionally, you can
+You can also pass the `authController` and `dataSource` to the `NavigationController`. Optionally, you can
 define the collection permissions in the `UserManagement` controller.
 
 ```jsx
@@ -1955,7 +1955,7 @@ define the collection permissions in the `UserManagement` controller.
         collections: collectionsBuilder,
         views,
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions
     });
@@ -1984,7 +1984,7 @@ the routing, but you are free to replace it with your own routing system.
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                     plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
@@ -3095,7 +3095,7 @@ const modeController = useBuildModeController();
 const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
 const authController: MongoAuthController = useMongoDBAuthController({ app });
-const mongoDataSourceDelegate = useMongoDBDelegate({
+const mongoDataSourceDelegate = useMongoDataSource({
   app,
   cluster: "mongodb-atlas",
   database: "todo"
@@ -3118,7 +3118,7 @@ Define the validation logic for your authenticator.
 const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
   authController,
   authenticator: () => true, // Replace with your logic
-  dataSourceDelegate: mongoDataSourceDelegate,
+  dataSource: mongoDataSourceDelegate,
   storageSource
 });
 ```
@@ -3131,7 +3131,7 @@ Set up the navigation controller with your collections.
 const navigationController = useBuildNavigationController({
   collections: [productsCollection],
   authController,
-  dataSourceDelegate: mongoDataSourceDelegate
+  dataSource: mongoDataSourceDelegate
 });
 ```
 
@@ -3149,7 +3149,7 @@ const MongoDBApp = () => {
   const modeController = useBuildModeController();
   const userConfigPersistence = useBuildLocalConfigurationPersistence();
   const authController: MongoAuthController = useMongoDBAuthController({ app });
-  const mongoDataSourceDelegate = useMongoDBDelegate({
+  const mongoDataSourceDelegate = useMongoDataSource({
     app,
     cluster: "mongodb-atlas",
     database: "todo"
@@ -3158,13 +3158,13 @@ const MongoDBApp = () => {
   const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
     authController,
     authenticator: () => true, // Replace with your logic
-    dataSourceDelegate: mongoDataSourceDelegate,
+    dataSource: mongoDataSourceDelegate,
     storageSource
   });
   const navigationController = useBuildNavigationController({
     collections: [productsCollection],
     authController,
-    dataSourceDelegate: mongoDataSourceDelegate
+    dataSource: mongoDataSourceDelegate
   });
 
   if (firebaseConfigLoading || !firebaseApp) {
@@ -3182,7 +3182,7 @@ const MongoDBApp = () => {
           navigationController={navigationController}
           authController={authController}
           userConfigPersistence={userConfigPersistence}
-          dataSourceDelegate={mongoDataSourceDelegate}
+          dataSource={mongoDataSourceDelegate}
           storageSource={storageSource}
         >
           {({ context, loading }) => {
@@ -3300,7 +3300,7 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 ```jsx
 
 const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
     rolesPath: "__FIRECMS/config/roles",
     allowDefaultRolesCreation: true,
@@ -3323,7 +3323,7 @@ function App() {
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         usersPath: "__FIRECMS/config/users",
         rolesPath: "__FIRECMS/config/roles",
         allowDefaultRolesCreation: true,
@@ -3338,7 +3338,7 @@ function App() {
         disabled: userManagement.loading,
         authController,
         authenticator: userManagement.authenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -3350,7 +3350,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions, // Optional, link collection permissions to user management
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         plugins
     });
 
@@ -3380,7 +3380,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ````
 
@@ -3398,7 +3398,7 @@ const {
     disabled: userManagement.loading,
     authController,
     authenticator: userManagement.authenticator,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource
 });
 ```
@@ -3423,7 +3423,7 @@ const navigationController = useBuildNavigationController({
     collections,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ```
 
@@ -3604,7 +3604,7 @@ function App() {
         firebaseConfig
     });
 
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp
     });
 
@@ -3628,7 +3628,7 @@ function App() {
     });
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController: authController
     });
 
@@ -3655,7 +3655,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: collectionEditorPlugin.collectionPermissions,
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         plugins
     });
 
@@ -3667,7 +3667,7 @@ function App() {
         disabled: collectionEditorPlugin.loading,
         authController: authController,
         authenticator: customAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -3683,7 +3683,7 @@ function App() {
         <FireCMS
             navigationController={navigationController}
             authController={authController}
-            dataSourceDelegate={firestoreDelegate}
+            dataSource={firestoreDelegate}
         >
             {({
                   context,
@@ -3727,7 +3727,7 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 <FireCMS
     navigationController={navigationController}
     authController={authController}
-    dataSourceDelegate={firestoreDelegate}
+    dataSource={firestoreDelegate}
     plugins={[userManagementPlugin, collectionEditorPlugin]}
 >
     {/* Your application components */}
@@ -3752,7 +3752,7 @@ const {
     disabled: collectionEditorPlugin.loading,
     authController: authController,
     authenticator: customAuthenticator,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource: storageSource
 });
 
@@ -3782,7 +3782,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: collectionEditorPlugin.collectionPermissions,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
 });
 ```
 
@@ -3935,7 +3935,7 @@ export function App() {
   /**
    * Delegate used for fetching and saving data in Firestore
    */
-  const firestoreDelegate = useFirestoreDelegate({
+  const firestoreDelegate = useFirestoreDataSource({
     firebaseApp
   })
 
@@ -3968,14 +3968,14 @@ export function App() {
     notAllowedError
   } = useValidateAuthenticator({
     authController,
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     storageSource
   });
 
   const navigationController = useBuildNavigationController({
     collections: collectionsBuilder,
     authController,
-    dataSourceDelegate: firestoreDelegate
+    dataSource: firestoreDelegate
   });
 
   const collectionEditorPlugin = useCollectionEditorPlugin({
@@ -3999,7 +3999,7 @@ export function App() {
                       navigationController={navigationController}
                       authController={authController}
                       userConfigPersistence={userConfigPersistence}
-                      dataSourceDelegate={firestoreDelegate}
+                      dataSource={firestoreDelegate}
                       storageSource={storageSource}
                       plugins={[
                         collectionEditorPlugin
@@ -4367,7 +4367,7 @@ You can also pass your own custom `getUser` function to fetch user details.
 export default function App() {
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController: authController
     });
 
@@ -4654,12 +4654,12 @@ const CustomStorageApp: React.FC = () => {
   const storageSource = useCustomStorageSource(customStorageConfig);
 
   // const authController = useFirebaseAuthController(); // your auth controller
-  // const dataSourceDelegate = {}; // Your data source delegate implementation
+  // const dataSource = {}; // Your data source delegate implementation
 
   const navigationController = useBuildNavigationController({
     collections: [productsCollection],
     // authController,
-    // dataSourceDelegate
+    // dataSource
   });
 
   // if (authLoading) {
@@ -4674,7 +4674,7 @@ const CustomStorageApp: React.FC = () => {
           userConfigPersistence={userConfigPersistence}
           storageSource={storageSource}
           // authController={authController}
-          // dataSourceDelegate={dataSourceDelegate}
+          // dataSource={dataSource}
         >
           {({ context, loading }) => {
             if (loading || authLoading) {
@@ -4741,9 +4741,9 @@ These controllers are designed to be easily extended and replaced with your own 
 FireCMS provides default implementations for Firebase, Firestore and Firebase Authentication,
 but you can replace them with your own implementations. We also provide an integration with MongoDB Atlas.
 
-### DataSourceDelegate
+### DataSource
 
-The `DataSourceDelegate` is the delegate responsible for managing the data source. The delegate will
+The `DataSource` is the delegate responsible for managing the data source. The delegate will
 be passed to FireCMS and will be used internally by the `DataSource`.
 
 You can retrieve the data source in any component using the `useDataSource` hook. You can also access the data source
@@ -4751,12 +4751,12 @@ from callbacks where there is a `context` object defined, under `context.dataSou
 
 FireCMS provides default implementations for:
 
-- Firebase `useFirestoreDelegate` (package `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (package `@firecms/mongodb`)
+- Firebase `useFirestoreDataSource` (package `@firecms/firebase`)
+- MongoDB `useMongoDataSource` (package `@firecms/mongodb`)
 
-#### Creating your own DataSourceDelegate
+#### Creating your own DataSource
 
-If you want to create your own `DataSourceDelegate`, you will need to implement the following methods:
+If you want to create your own `DataSource`, you will need to implement the following methods:
 
 **fetchCollection**: Used to fetch a collection of entities from your data source. Accepts various parameters
 like `path`, `filter`, `limit`, etc.
@@ -5211,7 +5211,7 @@ can be used as an auth controller, but with all the added logic for user managem
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     /**
@@ -5240,7 +5240,7 @@ can be used as an auth controller, but with all the added logic for user managem
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController
     });
 ```
@@ -5460,7 +5460,7 @@ easy to adapt your collections to the new format.
 
 ### Authenticator
 
-- The authenticator now returns a `dataSourceDelegate` instead of a `dataSource`. The difference is that you do
+- The authenticator now returns a `dataSource` instead of a `dataSource`. The difference is that you do
 not pass the `collection` prop anymore.
 
 ### Other
@@ -6777,7 +6777,7 @@ const textSearchControllerBuilder = buildFireCMSSearchController({
 });
 
 export function App() {
-  const firestoreDelegate = useFirestoreDelegate({
+  const firestoreDelegate = useFirestoreDataSource({
     firebaseApp,
     textSearchControllerBuilder
   });
@@ -6873,7 +6873,7 @@ const algoliaSearchController = buildExternalSearchController({
 export function App() {
 
     // ...
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp,
         textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
@@ -6895,7 +6895,7 @@ You can use local text search in FireCMS Cloud, or in self-hosted versions.
 
 For FireCMS Cloud, you just need to enable it in the UI.
 
-For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDelegate`.
+For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDataSource`.
 Then you need to mark each collection with `textSearchEnabled: true`.
 
 If you have declared an external indexing provider, the local text search will be
@@ -9592,7 +9592,7 @@ as access the `authentication` and `navigation` hooks.
         },
         collections,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 ```
 
@@ -15814,7 +15814,7 @@ field bindings.
  * Controller in charge of user management
  */
 const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
 /**
@@ -15843,7 +15843,7 @@ const authController: FirebaseAuthController = useFirebaseAuthController({
  * Controller in charge of user management
  */
 const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     authController
 });
 ```

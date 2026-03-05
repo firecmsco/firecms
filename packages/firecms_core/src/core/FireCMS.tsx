@@ -52,7 +52,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         locale,
         authController,
         storageSource,
-        dataSourceDelegate,
+        dataSource: dataSourceProp,
         plugins: _pluginsProp,
         onAnalyticsEvent,
         propertyConfigs,
@@ -105,7 +105,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const accessResponse = useProjectLog({
         apiKey,
         authController,
-        dataSourceDelegate,
+        dataSource: dataSourceProp,
         plugins
     });
 
@@ -113,7 +113,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
      * Controller in charge of fetching and persisting data
      */
     const dataSource = useBuildDataSource({
-        delegate: dataSourceDelegate,
+        delegate: dataSourceProp,
         propertyConfigs,
         // Used by DataSource internally for type resolution, pass the registry
         collectionRegistryController,

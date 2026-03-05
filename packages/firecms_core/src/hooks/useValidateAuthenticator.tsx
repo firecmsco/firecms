@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals";
 
-import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
+import { AuthController, Authenticator, DataSource, StorageSource, User } from "../index";
 
 /**
  * This hook is used internally for validating an authenticator.
@@ -9,7 +9,7 @@ import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User 
  * @param authController
  * @param authentication
  * @param storageSource
- * @param dataSourceDelegate
+ * @param dataSource
  */
 export function useValidateAuthenticator<USER extends User = any>
 ({
@@ -17,13 +17,13 @@ export function useValidateAuthenticator<USER extends User = any>
      authController,
      authenticator,
      storageSource,
-     dataSourceDelegate
+     dataSource
  }:
  {
      disabled?: boolean,
      authController: AuthController<USER>,
      authenticator?: boolean | Authenticator<USER>,
-     dataSourceDelegate: DataSourceDelegate;
+     dataSource: DataSource;
      storageSource: StorageSource;
  }): {
     canAccessMainView: boolean,
@@ -78,7 +78,7 @@ export function useValidateAuthenticator<USER extends User = any>
                 const allowed = await authenticator({
                     user: delegateUser,
                     authController,
-                    dataSourceDelegate,
+                    dataSource,
                     storageSource
                 });
                 if (!allowed) {
@@ -100,7 +100,7 @@ export function useValidateAuthenticator<USER extends User = any>
             setAuthVerified(true);
         }
 
-    }, [disabled, authController, authenticator, dataSourceDelegate, storageSource]);
+    }, [disabled, authController, authenticator, dataSource, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

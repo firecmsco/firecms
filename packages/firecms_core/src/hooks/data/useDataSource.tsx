@@ -10,10 +10,10 @@ export const useDataSource = (collection?: EntityCollection<any, any>): DataSour
     // const customizationController = useCustomizationController();
     // const navigationController = useCollectionRegistryController();
     const defaultDataSource = useContext(DataSourceContext);
-    // if (collection?.overrides?.dataSourceDelegate) {
+    // if (collection?.overrides?.dataSource) {
     //     console.trace("Using custom data source for collection " + collection.id);
     //     return useBuildDataSource({
-    //         delegate: collection.overrides.dataSourceDelegate,
+    //         delegate: collection.overrides.dataSource,
     //         propertyConfigs: customizationController?.propertyConfigs,
     //         navigationController: navigationController
     //     });

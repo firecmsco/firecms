@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import {
     AuthController,
     DataSource,
-    DataSourceDelegate,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -13,7 +12,8 @@ import {
     FireCMSContext,
     ListenCollectionProps,
     ListenEntityProps,
-    CollectionRegistryController, Properties,
+    CollectionRegistryController,
+    Properties,
     PropertyConfig,
     SaveEntityProps
 } from "@firecms/types";
@@ -30,7 +30,7 @@ export function useBuildDataSource({
     collectionRegistryController,
     authController
 }: {
-    delegate: DataSourceDelegate,
+    delegate: DataSource,
     propertyConfigs?: Record<string, PropertyConfig>;
     collectionRegistryController: CollectionRegistryController;
     authController: AuthController;
@@ -63,7 +63,7 @@ export function useBuildDataSource({
             order,
         }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
             return usedDelegate.fetchCollection<M>({
                 path,
                 filter,
@@ -73,7 +73,6 @@ export function useBuildDataSource({
                 orderBy,
                 order,
                 collection,
-                collectionRegistryController,
             });
         }, [delegate]),
 
@@ -110,7 +109,7 @@ export function useBuildDataSource({
             ): () => void => {
 
                 const collection = collectionProp ?? collectionRegistryController.getCollection(path);
-                const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+                const usedDelegate = collection?.overrides?.dataSource ?? delegate;
 
                 if (!usedDelegate.listenCollection)
                     throw Error("useBuildDataSource delegate not initialised");
@@ -126,7 +125,6 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     collection,
-                    collectionRegistryController
                 });
             }, [delegate, collectionRegistryController.getCollection, collectionRegistryController])
             : undefined,
@@ -144,12 +142,11 @@ export function useBuildDataSource({
             collection
         }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => {
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
             return usedDelegate.fetchEntity({
                 path,
                 entityId,
                 collection,
-                collectionRegistryController
             });
         }, [delegate.fetchEntity]),
 
@@ -172,7 +169,7 @@ export function useBuildDataSource({
                     onUpdate,
                     onError
                 }: ListenEntityProps<M>): () => void => {
-                const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+                const usedDelegate = collection?.overrides?.dataSource ?? delegate;
 
                 if (!usedDelegate.listenEntity)
                     throw Error("useBuildDataSource delegate not initialised");
@@ -183,7 +180,6 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     collection,
-                    collectionRegistryController,
                 })
             }, [delegate.listenEntity]) : undefined,
 
@@ -208,7 +204,7 @@ export function useBuildDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
             const collection = collectionProp ?? collectionRegistryController.getCollection(path);
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
 
             const properties: Properties | undefined = collection?.properties;
 
@@ -263,9 +259,8 @@ export function useBuildDataSource({
                 entityId,
                 values: finalValues,
                 status,
-                collectionRegistryController,
             });
-        }, [delegate.saveEntity, collectionRegistryController.getCollection]),
+        }, [delegate.saveEntity, delegate.currentTime, delegate.fetchCollection, collectionRegistryController.getCollection]),
 
         /**
          * Delete an entity
@@ -279,11 +274,10 @@ export function useBuildDataSource({
                 collection
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
             return usedDelegate.deleteEntity({
                 entity,
                 collection,
-                collectionRegistryController
             });
         }, [delegate.deleteEntity]),
 
@@ -304,7 +298,7 @@ export function useBuildDataSource({
             entityId?: string | number,
             collection?: EntityCollection
         ): Promise<boolean> => {
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
             return usedDelegate.checkUniqueField(path, name, value, entityId, collection);
         }, [delegate.checkUniqueField]),
 
@@ -322,14 +316,13 @@ export function useBuildDataSource({
             orderBy?: string,
             order?: "desc" | "asc",
         }): Promise<number> => {
-            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
             return usedDelegate.countEntities!({
                 path,
                 filter,
                 orderBy,
                 order,
                 collection,
-                collectionRegistryController
             });
         } : undefined,
 
@@ -352,7 +345,6 @@ export function useBuildDataSource({
                     databaseId,
                     filterValues,
                     sortBy,
-                    collectionRegistryController
                 }
             )
         }, [delegate.isFilterCombinationValid]),
@@ -363,7 +355,7 @@ export function useBuildDataSource({
             collection: EntityCollection,
             parentCollectionIds?: string[]
         }): Promise<boolean> => {
-            const usedDelegate = props.collection?.overrides?.dataSourceDelegate ?? delegate;
+            const usedDelegate = props.collection?.overrides?.dataSource ?? delegate;
             if (!usedDelegate.initTextSearch)
                 return false;
             return usedDelegate.initTextSearch(props)

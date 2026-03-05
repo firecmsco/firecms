@@ -21,4 +21,4 @@ export * from "./db/MongoConditionBuilder";
 
 // Services
 export * from "./services/MongoRealtimeService";
-export * from "./services/MongoDataSourceDelegate";
+export * from "./services/MongoDataSource";

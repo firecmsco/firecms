@@ -90,9 +90,9 @@ Component to render when a reference is missing
 
 ***
 
-### dataSourceDelegate
+### dataSource
 
-> **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> **dataSource**: [`DataSource`](../interfaces/DataSource)
 
 Defined in: [types/firecms.tsx:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 

@@ -25,7 +25,7 @@ can be used as an auth controller, but with all the added logic for user managem
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     /**
@@ -54,7 +54,7 @@ can be used as an auth controller, but with all the added logic for user managem
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController
     });
 ```

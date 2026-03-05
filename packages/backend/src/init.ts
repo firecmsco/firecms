@@ -1,9 +1,9 @@
-import { DataSourceDelegate, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@firecms/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "./collections/registry";
 import { getTableName, isTable, Relations } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
+import { PostgresDataSource } from "./services/postgresDataSource";
 import { RealtimeService } from "./services/realtimeService";
 import { DatasourceRegistry, DEFAULT_DATASOURCE_ID, DefaultDatasourceRegistry } from "./services/datasource-registry";
 import { Server } from "http";
@@ -60,7 +60,7 @@ export interface AuthConfig {
 
 /**
  * Configuration for a PostgreSQL datasource.
- * Use with `createPostgresDelegate()` to create a DataSourceDelegate.
+ * Use with `createPostgresDelegate()` to create a DataSource.
  */
 export interface PostgresDatasourceConfig {
     /** Drizzle database connection */
@@ -80,7 +80,7 @@ export interface PostgresDatasourceConfig {
  * Configuration for a single datasource.
  *
  * You can provide either:
- * - A `DataSourceDelegate` directly (for any database type)
+ * - A `DataSource` directly (for any database type)
  * - A `PostgresDatasourceConfig` (convenience for PostgreSQL)
  *
  * @example
@@ -90,7 +90,7 @@ export interface PostgresDatasourceConfig {
  * // Any database (using delegate directly)
  * myFirestoreDelegate
  */
-export type DatasourceConfig = DataSourceDelegate | PostgresDatasourceConfig;
+export type DatasourceConfig = DataSource | PostgresDatasourceConfig;
 
 export interface FireCMSBackendConfig {
     collections?: EntityCollection[];
@@ -172,7 +172,7 @@ export interface FireCMSBackendInstance {
      * Default datasource delegate (convenience accessor).
      * Equivalent to `datasourceRegistry.getDefault()`.
      */
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
 
     /**
      * Realtime services keyed by datasource ID.
@@ -235,12 +235,12 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     // ============ Initialize datasources ============
 
     const realtimeServices: Record<string, RealtimeService> = {};
-    const delegates: Record<string, DataSourceDelegate> = {};
+    const delegates: Record<string, DataSource> = {};
 
     for (const [datasourceId, dsConfig] of Object.entries(rawDatasourceConfigs)) {
         console.log(`📦 Initializing datasource: "${datasourceId}"`);
 
-        // Resolve the DataSourceDelegate from the config
+        // Resolve the DataSource from the config
         const {
             delegate,
             db,
@@ -275,10 +275,10 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 
             // Create realtime service and datasource delegate
             const realtimeService = new RealtimeService(db);
-            const dataSourceDelegate = new PostgresDataSourceDelegate(db, realtimeService);
+            const dataSource = new PostgresDataSource(db, realtimeService);
 
             realtimeServices[datasourceId] = realtimeService;
-            delegates[datasourceId] = dataSourceDelegate;
+            delegates[datasourceId] = dataSource;
         } else {
             console.warn(`⚠️ Skipping datasource "${datasourceId}" - invalid configuration`);
         }
@@ -416,7 +416,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
     createPostgresWebSocket(
         config.server,
         defaultRealtimeService,
-        defaultDataSourceDelegate as PostgresDataSourceDelegate,
+        defaultDataSourceDelegate as PostgresDataSource,
         config.auth
     );
 
@@ -424,7 +424,7 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 
     return {
         datasourceRegistry,
-        dataSourceDelegate: defaultDataSourceDelegate,
+        dataSource: defaultDataSourceDelegate,
         realtimeServices,
         realtimeService: defaultRealtimeService,
         userService,
@@ -436,13 +436,13 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
 }
 
 /**
- * Type guard to check if an object is a DataSourceDelegate
+ * Type guard to check if an object is a DataSource
  */
-function isDataSourceDelegate(obj: unknown): obj is DataSourceDelegate {
+function isDataSourceDelegate(obj: unknown): obj is DataSource {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const delegate = obj as DataSourceDelegate;
+    const delegate = obj as DataSource;
     return (
         typeof delegate.key === "string" &&
         typeof delegate.fetchCollection === "function" &&
@@ -470,7 +470,7 @@ function isPostgresDatasourceConfig(obj: unknown): obj is PostgresDatasourceConf
 
 /**
  * Type guard to check if a value is a single DatasourceConfig
- * (either a DataSourceDelegate or PostgresDatasourceConfig)
+ * (either a DataSource or PostgresDatasourceConfig)
  * vs a Record<string, DatasourceConfig>
  */
 function isDatasourceConfig(obj: unknown): obj is DatasourceConfig {
@@ -481,11 +481,11 @@ function isDatasourceConfig(obj: unknown): obj is DatasourceConfig {
  * Resolve a DatasourceConfig into its components
  */
 function resolveDatasourceConfig(config: DatasourceConfig): {
-    delegate?: DataSourceDelegate;
+    delegate?: DataSource;
     db?: NodePgDatabase;
     schema?: PostgresDatasourceConfig["schema"];
 } {
-    // If it's a DataSourceDelegate directly
+    // If it's a DataSource directly
     if (isDataSourceDelegate(config)) {
         return { delegate: config };
     }
@@ -541,7 +541,7 @@ export async function initializeFireCMSAPI(
     const apiServer = await FireCMSApiServer.create({
         collections,
         collectionsDir: config.collectionsDir,
-        dataSource: backend.dataSourceDelegate,
+        dataSource: backend.dataSource,
         basePath: config.basePath || "/api",
         enableGraphQL: config.enableGraphQL ?? true,
         enableREST: config.enableREST ?? true,

@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { App, BSON } from "realm-web";
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -50,11 +50,11 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
  * @param firebaseApp
  *
  */
-export function useMongoDBDelegate({
+export function useMongoDataSource({
     app,
     cluster,
     database,
-}: UseMongoDataSourceProps): DataSourceDelegate {
+}: UseMongoDataSourceProps): DataSource {
 
     const buildQuery = useCallback((
         filter: FilterValues<any> | undefined,

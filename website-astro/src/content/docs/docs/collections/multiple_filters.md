@@ -64,7 +64,7 @@ const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
 ## Adding your indexes in self-hosted FireCMS
 
 ```tsx
-import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase";
+import { FirestoreIndexesBuilder, useFirestoreDataSource } from "@firecms/firebase";
 
 // ...
 
@@ -95,7 +95,7 @@ import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase
     }
 
     // Delegate used for fetching and saving data in Firestore
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         // ...
         firestoreIndexesBuilder
     });

@@ -32,7 +32,7 @@ APIs directly, or a REST API.
 
 #### dataSource
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSource`](../interfaces/DataSource)
 
 #### user
 

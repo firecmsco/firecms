@@ -335,7 +335,7 @@ field bindings.
  * Controller in charge of user management
  */
 const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
 /**
@@ -364,7 +364,7 @@ const authController: FirebaseAuthController = useFirebaseAuthController({
  * Controller in charge of user management
  */
 const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
+    dataSource: firestoreDelegate,
     authController
 });
 ```

@@ -12,7 +12,7 @@ import {
     EntityCollectionsBuilder,
     CMSViewsBuilder,
     NavigationStateController,
-    DataSourceDelegate,
+    DataSource,
     CollectionRegistryController,
     CMSUrlController,
     User
@@ -32,7 +32,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
     plugins?: FireCMSPlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
@@ -55,7 +55,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         adminViews: adminViewsProp,
         viewsOrder,
         plugins,
-        dataSourceDelegate,
+        dataSource,
         disabled,
         navigationGroupMappings,
         collectionRegistryController,
@@ -311,13 +311,13 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
         try {
 
-            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, resolvedAuthController, dataSourceDelegate);
+            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, resolvedAuthController, dataSource);
             const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViews];
 
             const [resolvedCollections = [], resolvedViews] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, resolvedAuthController, dataSourceDelegate, plugins),
-                    resolveCMSViews(viewsProp, resolvedAuthController, dataSourceDelegate, plugins)
+                    resolveCollections(collectionsProp, resolvedAuthController, dataSource, plugins),
+                    resolveCMSViews(viewsProp, resolvedAuthController, dataSource, plugins)
                 ]
             );
 
@@ -370,7 +370,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         viewsProp,
         adminViewsProp,
         computeTopNavigation,
-        dataSourceDelegate,
+        dataSource,
         plugins,
         viewsOrder,
         navigationLoading,

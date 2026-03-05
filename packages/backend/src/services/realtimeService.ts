@@ -40,7 +40,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         };
     }>();
 
-    // Add callback storage for DataSourceDelegate subscriptions
+    // Add callback storage for DataSource subscriptions
     private subscriptionCallbacks = new Map<string, (data: any) => void>();
 
     constructor(private db: NodePgDatabase) {
@@ -48,12 +48,12 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         this.entityService = new EntityService(db);
     }
 
-    // Make subscriptions accessible for DataSourceDelegate
+    // Make subscriptions accessible for DataSource
     get subscriptions() {
         return this._subscriptions;
     }
 
-    // Add public method to register DataSourceDelegate subscriptions
+    // Add public method to register DataSource subscriptions
     registerDataSourceSubscription(subscriptionId: string, subscription: {
         clientId: string;
         type: "collection" | "entity";

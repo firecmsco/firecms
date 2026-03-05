@@ -1,15 +1,15 @@
 ---
-slug: "docs/api/interfaces/DataSourceDelegate"
-title: "DataSourceDelegate"
+slug: "docs/api/interfaces/DataSource"
+title: "DataSource"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DataSourceDelegate
+[@firecms/core](../README) / DataSource
 
-# Interface: DataSourceDelegate
+# Interface: DataSource
 
 Defined in: [types/datasource.ts:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -194,7 +194,7 @@ Count the number of entities in a collection
 
 ##### props
 
-[`FetchCollectionDelegateProps`](../type-aliases/FetchCollectionDelegateProps)\<`M`\>
+[`FetchCollectionProps`](../type-aliases/FetchCollectionProps)\<`M`\>
 
 #### Returns
 
@@ -248,7 +248,7 @@ Fetch data from a collection
 
 ##### path
 
-[`FetchCollectionDelegateProps`](../type-aliases/FetchCollectionDelegateProps)\<`M`\>
+[`FetchCollectionProps`](../type-aliases/FetchCollectionProps)\<`M`\>
 
 #### Returns
 
@@ -351,7 +351,7 @@ Listen to a collection in a given path. If you don't implement this method
 
 ##### path
 
-[`ListenCollectionDelegateProps`](../type-aliases/ListenCollectionDelegateProps)\<`M`\>
+[`ListenCollectionProps`](../type-aliases/ListenCollectionProps)\<`M`\>
 
 #### Returns
 
@@ -419,7 +419,7 @@ Save entity to the specified path
 
 ##### path
 
-[`SaveEntityDelegateProps`](../type-aliases/SaveEntityDelegateProps)\<`M`\>
+[`SaveEntityProps`](../type-aliases/SaveEntityProps)\<`M`\>
 
 #### Returns
 

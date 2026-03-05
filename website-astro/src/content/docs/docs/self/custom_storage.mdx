@@ -171,12 +171,12 @@ const CustomStorageApp: React.FC = () => {
   const storageSource = useCustomStorageSource(customStorageConfig);
 
   // const authController = useFirebaseAuthController(); // your auth controller
-  // const dataSourceDelegate = {}; // Your data source delegate implementation
+  // const dataSource = {}; // Your data source delegate implementation
 
   const navigationController = useBuildNavigationController({
     collections: [productsCollection],
     // authController,
-    // dataSourceDelegate
+    // dataSource
   });
 
   // if (authLoading) {
@@ -191,7 +191,7 @@ const CustomStorageApp: React.FC = () => {
           userConfigPersistence={userConfigPersistence}
           storageSource={storageSource}
           // authController={authController}
-          // dataSourceDelegate={dataSourceDelegate}
+          // dataSource={dataSource}
         >
           {({ context, loading }) => {
             if (loading || authLoading) {

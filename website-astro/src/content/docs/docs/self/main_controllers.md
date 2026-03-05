@@ -1,7 +1,7 @@
 ---
 slug: docs/self/controllers
 title: Building a custom backend
-description: Learn how to implement custom DataSourceDelegate, StorageSource, and AuthController for FireCMS with your own backend.
+description: Learn how to implement custom DataSource, StorageSource, and AuthController for FireCMS with your own backend.
 ---
 
 FireCMS internally uses 3 main controllers to manage the data, file storage and authentication.
@@ -10,9 +10,9 @@ These controllers are designed to be easily extended and replaced with your own 
 FireCMS provides default implementations for Firebase, Firestore and Firebase Authentication,
 but you can replace them with your own implementations. We also provide an integration with MongoDB Atlas.
 
-## DataSourceDelegate
+## DataSource
 
-The `DataSourceDelegate` is the delegate responsible for managing the data source. The delegate will
+The `DataSource` is the delegate responsible for managing the data source. The delegate will
 be passed to FireCMS and will be used internally by the `DataSource`.
 
 You can retrieve the data source in any component using the `useDataSource` hook. You can also access the data source
@@ -20,12 +20,12 @@ from callbacks where there is a `context` object defined, under `context.dataSou
 
 FireCMS provides default implementations for:
 
-- Firebase `useFirestoreDelegate` (package `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (package `@firecms/mongodb`)
+- Firebase `useFirestoreDataSource` (package `@firecms/firebase`)
+- MongoDB `useMongoDataSource` (package `@firecms/mongodb`)
 
-### Creating your own DataSourceDelegate
+### Creating your own DataSource
 
-If you want to create your own `DataSourceDelegate`, you will need to implement the following methods:
+If you want to create your own `DataSource`, you will need to implement the following methods:
 
 **fetchCollection**: Used to fetch a collection of entities from your data source. Accepts various parameters
 like `path`, `filter`, `limit`, etc.

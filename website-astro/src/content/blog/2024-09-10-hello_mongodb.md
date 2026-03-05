@@ -68,7 +68,7 @@ const authController: MongoAuthController = useMongoDBAuthController({
 const cluster = "mongodb-atlas"
 const database = "todo"
 
-const mongoDataSourceDelegate = useMongoDBDelegate({
+const mongoDataSourceDelegate = useMongoDataSource({
     app,
     cluster,
     database

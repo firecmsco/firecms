@@ -1,5 +1,5 @@
 import { RealtimeService } from "./services/realtimeService";
-import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
+import { PostgresDataSource } from "./services/postgresDataSource";
 import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "@firecms/types";
 import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
@@ -18,7 +18,7 @@ const clientSessions = new Map<string, ClientSession>();
 export function createPostgresWebSocket(
     server: Server,
     realtimeService: RealtimeService,
-    dataSourceDelegate: PostgresDataSourceDelegate,
+    dataSource: PostgresDataSource,
     authConfig?: AuthConfig
 ) {
     const wss = new WebSocketServer({ server });
@@ -106,20 +106,20 @@ export function createPostgresWebSocket(
                 // Helper to get correctly scoped delegate for the current request
                 const getScopedDelegate = async () => {
                     const session = clientSessions.get(clientId);
-                    if (session?.user && "withAuth" in dataSourceDelegate && typeof (dataSourceDelegate as any).withAuth === "function") {
+                    if (session?.user && "withAuth" in dataSource && typeof (dataSource as any).withAuth === "function") {
                         try {
                             // Map AccessTokenPayload back to User interface ( uid instead of userId, and roles as Role objects)
                             const userForAuth: any = {
                                 uid: session.user.userId,
                                 roles: (session.user.roles || []).map(r => ({ id: r, name: r }))
                             };
-                            return await (dataSourceDelegate as any).withAuth(userForAuth);
+                            return await (dataSource as any).withAuth(userForAuth);
                         } catch (e) {
                             console.error("Failed to create authenticated delegate for WS request", e);
-                            return dataSourceDelegate;
+                            return dataSource;
                         }
                     }
-                    return dataSourceDelegate;
+                    return dataSource;
                 };
 
                 switch (type) {

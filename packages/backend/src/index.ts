@@ -24,7 +24,7 @@ export * from "./db/entityService";
 export * from "./websocket";
 
 // Services
-export * from "./services/dataSourceDelegate";
+export * from "./services/postgresDataSource";
 export * from "./services/realtimeService";
 export * from "./services/datasource-registry";
 

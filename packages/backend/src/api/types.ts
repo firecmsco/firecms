@@ -1,9 +1,9 @@
-import { DataSourceDelegate, User, EntityCollection } from "@firecms/types";
+import { DataSource, User, EntityCollection } from "@firecms/types";
 import { Request } from "express";
 
 export interface FireCMSRequest extends Request {
     user?: User;
-    dataSource?: DataSourceDelegate;
+    dataSource?: DataSource;
 }
 
 export type AuthResult = boolean | User | { userId: string; roles?: string[];[key: string]: any };

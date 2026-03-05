@@ -23,7 +23,7 @@ import {
     FirebaseUserWrapper,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase,
 } from "@firecms/firebase";
 import { CenteredView } from "@firecms/ui";
@@ -80,7 +80,7 @@ function App() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Delegate used for fetching and saving data in Firestore
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp
     });
 
@@ -96,7 +96,7 @@ function App() {
     } = useValidateAuthenticator({
         authController,
         authenticator: myAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -104,7 +104,7 @@ function App() {
         disabled: authLoading,
         collections,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     if (firebaseConfigLoading || !firebaseApp) {
@@ -124,7 +124,7 @@ function App() {
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                 >
                     {({

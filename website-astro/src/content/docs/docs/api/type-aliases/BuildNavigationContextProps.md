@@ -94,9 +94,9 @@ resolving to an array of collections.
 
 ***
 
-### dataSourceDelegate
+### dataSource
 
-> **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> **dataSource**: [`DataSource`](../interfaces/DataSource)
 
 Defined in: [hooks/useBuildNavigationController.tsx:85](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 

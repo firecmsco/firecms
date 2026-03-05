@@ -32,7 +32,7 @@ Your users will need to interact with data and files, so you need to set up data
 FireCMS provides a Firestore delegate and Firebase storage source for these operations.
 
 ```jsx
-const firestoreDelegate = useFirestoreDelegate({
+const firestoreDelegate = useFirestoreDataSource({
     firebaseApp
 });
 const storageSource = useFirebaseStorageSource({
@@ -113,7 +113,7 @@ You can validate the user's access to the main view based on their authenticatio
     } = useValidateAuthenticator({
         authController,
         authenticator: myAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 ```
@@ -128,7 +128,7 @@ management system.
 
 ```jsx
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
     });
 ```
 
@@ -150,7 +150,7 @@ the `UserManagement` controller.
         authController,
         disabled: userManagement.loading,
         authenticator: userManagement.authenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 ````
@@ -188,7 +188,7 @@ These controllers enable theme mode toggling and local storage of user preferenc
 
 The internal navigation controller manages the app's navigation, leveraging the collections and permissions setup.
 Here you can define your collections, views, and admin views.
-You can also pass the `authController` and `dataSourceDelegate` to the `NavigationController`. Optionally, you can
+You can also pass the `authController` and `dataSource` to the `NavigationController`. Optionally, you can
 define the collection permissions in the `UserManagement` controller.
 
 ```jsx
@@ -213,7 +213,7 @@ define the collection permissions in the `UserManagement` controller.
         collections: collectionsBuilder,
         views,
         authController,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions
     });
@@ -242,7 +242,7 @@ the routing, but you are free to replace it with your own routing system.
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                     plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >

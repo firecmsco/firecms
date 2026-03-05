@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AuthController, DataSourceDelegate, FireCMSPlugin } from "@firecms/types";
+import { AuthController, DataSource, FireCMSPlugin } from "@firecms/types";
 
 export const DEFAULT_SERVER_DEV = "https://api-kdoe6pj3qq-ey.a.run.app";
 export const DEFAULT_SERVER = "https://api.firecms.co";
@@ -9,7 +9,7 @@ export type AccessResponse = {
     message?: string;
 }
 
-async function makeRequest(authController: AuthController, dataSourceKey: string, pluginKeys: string[] | undefined, apiKey?: string): Promise<AccessResponse> {
+async function makeRequest(authController: AuthController, dataSourceKey: string | undefined, pluginKeys: string[] | undefined, apiKey?: string): Promise<AccessResponse> {
     let idToken: string | null;
     try {
         idToken = await authController.getAuthToken();
@@ -39,19 +39,19 @@ async function makeRequest(authController: AuthController, dataSourceKey: string
 export interface UseProjectLogParams {
     apiKey?: string;
     authController: AuthController;
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
     plugins?: FireCMSPlugin<any, any, any>[];
 }
 
 export function useProjectLog({
-                                  authController,
-                                  dataSourceDelegate,
-                                  plugins,
-                                  apiKey
-                              }: UseProjectLogParams): AccessResponse | null {
+    authController,
+    dataSource,
+    plugins,
+    apiKey
+}: UseProjectLogParams): AccessResponse | null {
     const [accessResponse, setAccessResponse] = useState<AccessResponse | null>(null);
     const accessedUserRef = useRef<string | null>(null);
-    const dataSourceKey = dataSourceDelegate.key;
+    const dataSourceKey = dataSource.key;
     const pluginKeys = plugins?.map(plugin => plugin.key);
     useEffect(() => {
         if (authController.user && authController.user.uid !== accessedUserRef.current && !authController.initialLoading) {

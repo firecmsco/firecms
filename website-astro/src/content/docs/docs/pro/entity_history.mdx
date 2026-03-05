@@ -35,7 +35,7 @@ import { useEntityHistoryPlugin } from "@firecms/entity_history";
 export default function App() {
 
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController: authController
     });
 

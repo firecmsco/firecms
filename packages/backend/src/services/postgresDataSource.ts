@@ -6,7 +6,7 @@ import { User } from "@firecms/types";
 import { sql } from "drizzle-orm";
 import { collectionRegistry } from "../collections/registry";
 import {
-    DataSourceDelegate,
+    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -17,7 +17,7 @@ import {
     SaveEntityProps
 } from "@firecms/types";
 
-export class PostgresDataSourceDelegate implements DataSourceDelegate {
+export class PostgresDataSource implements DataSource {
     key = "postgres";
     initialised = true;
 
@@ -111,17 +111,17 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         const subscriptionId = this.generateSubscriptionId();
 
-        console.log("🔄 [DataSourceDelegate] Setting up collection subscription:", subscriptionId);
-        console.log("🔄 [DataSourceDelegate] Collection path:", path);
+        console.log("🔄 [DataSource] Setting up collection subscription:", subscriptionId);
+        console.log("🔄 [DataSource] Collection path:", path);
 
         // Create a wrapper callback that logs and calls the original callback
         const callbackWrapper = (entities: Entity<M>[]) => {
-            console.log("🔄 [DataSourceDelegate] Received collection update for path:", path);
-            console.log("🔄 [DataSourceDelegate] Updated entities count:", entities.length);
-            console.log("🔄 [DataSourceDelegate] Updated entity IDs:", entities.map(e => e.id));
-            console.log("🔄 [DataSourceDelegate] Calling onUpdate callback...");
+            console.log("🔄 [DataSource] Received collection update for path:", path);
+            console.log("🔄 [DataSource] Updated entities count:", entities.length);
+            console.log("🔄 [DataSource] Updated entity IDs:", entities.map(e => e.id));
+            console.log("🔄 [DataSource] Calling onUpdate callback...");
             onUpdate(entities);
-            console.log("🔄 [DataSourceDelegate] onUpdate callback completed");
+            console.log("🔄 [DataSource] onUpdate callback completed");
         };
 
         // Store the subscription in RealtimeService properly using the new public method
@@ -143,8 +143,8 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         // Store the callback for this subscription
         this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
 
-        console.log("🔄 [DataSourceDelegate] Subscription registered with RealtimeService");
-        console.log("🔄 [DataSourceDelegate] Total subscriptions:", this.realtimeService.subscriptions.size);
+        console.log("🔄 [DataSource] Subscription registered with RealtimeService");
+        console.log("🔄 [DataSource] Total subscriptions:", this.realtimeService.subscriptions.size);
 
         // Send initial data immediately
         this.fetchCollection({
@@ -157,21 +157,21 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             searchString,
             order
         }).then(entities => {
-            console.log("🔄 [DataSourceDelegate] Initial data fetched for subscription:", subscriptionId);
-            console.log("🔄 [DataSourceDelegate] Initial entities count:", entities.length);
+            console.log("🔄 [DataSource] Initial data fetched for subscription:", subscriptionId);
+            console.log("🔄 [DataSource] Initial entities count:", entities.length);
             callbackWrapper(entities);
         }).catch(error => {
-            console.error("🔄 [DataSourceDelegate] Error fetching initial data:", error);
+            console.error("🔄 [DataSource] Error fetching initial data:", error);
             if (onError) onError(error);
         });
 
-        console.log("🔄 [DataSourceDelegate] Collection subscription setup complete:", subscriptionId);
+        console.log("🔄 [DataSource] Collection subscription setup complete:", subscriptionId);
 
         return () => {
-            console.log("🔄 [DataSourceDelegate] Unsubscribing from collection:", subscriptionId);
+            console.log("🔄 [DataSource] Unsubscribing from collection:", subscriptionId);
             this.realtimeService.removeSubscriptionCallback(subscriptionId);
             this.realtimeService.subscriptions.delete(subscriptionId);
-            console.log("🔄 [DataSourceDelegate] Unsubscription complete");
+            console.log("🔄 [DataSource] Unsubscription complete");
         };
     }
 
@@ -211,11 +211,11 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     }: ListenEntityProps<M>): () => void {
 
         const subscriptionId = this.generateSubscriptionId();
-        console.log("🔄 [DataSourceDelegate] Setting up ENTITY subscription:", subscriptionId);
+        console.log("🔄 [DataSource] Setting up ENTITY subscription:", subscriptionId);
 
         // Create a wrapper callback that logs and calls the original callback
         const callbackWrapper = (entity: Entity<M> | null) => {
-            console.log("🔄 [DataSourceDelegate] Received entity update for path:", path, "ID:", entityId);
+            console.log("🔄 [DataSource] Received entity update for path:", path, "ID:", entityId);
             if (entity)
                 onUpdate(entity);
         };
@@ -246,7 +246,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         // Return the unsubscribe function
         return () => {
-            console.log("🔄 [DataSourceDelegate] Unsubscribing from entity:", subscriptionId);
+            console.log("🔄 [DataSource] Unsubscribing from entity:", subscriptionId);
             this.realtimeService.removeSubscriptionCallback(subscriptionId);
             this.realtimeService.subscriptions.delete(subscriptionId);
         };
@@ -351,7 +351,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         collection
     }: DeleteEntityProps<M>): Promise<void> {
 
-        console.log("🗑️ [DataSourceDelegate] Starting delete for entity:", entity.id, "in path:", entity.path);
+        console.log("🗑️ [DataSource] Starting delete for entity:", entity.id, "in path:", entity.path);
 
         // Resolve from backend registry to restore callbacks lost during WebSocket serialization
         const registryCollection = collectionRegistry.getCollectionByPath(entity.path);
@@ -389,7 +389,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             });
         }
 
-        console.log("🗑️ [DataSourceDelegate] Entity deleted from database, now notifying real-time subscribers");
+        console.log("🗑️ [DataSource] Entity deleted from database, now notifying real-time subscribers");
 
         // Notify real-time subscribers (deferred if inside a transaction)
         if (this._deferNotifications) {
@@ -408,7 +408,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             );
         }
 
-        console.log("🗑️ [DataSourceDelegate] Real-time notification sent for deletion");
+        console.log("🗑️ [DataSource] Real-time notification sent for deletion");
     }
 
     async checkUniqueField(
@@ -452,7 +452,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
      * Starts a transaction and sets the current_user_id and current_user_roles
      * configuration parameters for PostgreSQL Row Level Security.
      */
-    async withAuth(user: User): Promise<PostgresDataSourceDelegate> {
+    async withAuth(user: User): Promise<PostgresDataSource> {
         // We need to return a proxy that wraps every method in a transaction
         // But since we can't easily start a transaction and keep it open for multiple calls without a callback,
         // we'll implement a different approach:
@@ -469,27 +469,27 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         // Each await releases the event loop.
         // So we have to wrap each method.
 
-        const wrapMethod = (methodName: keyof PostgresDataSourceDelegate) => {
+        const wrapMethod = (methodName: keyof PostgresDataSource) => {
             const originalMethod = this[methodName] as Function;
             return async (...args: any[]) => {
                 // Collect deferred notifications so we can flush them after the
                 // transaction commits.  This is critical: notifyEntityUpdate
                 // refetches from a *separate* connection and therefore cannot see
                 // uncommitted writes inside the transaction.
-                const pendingNotifications: PostgresDataSourceDelegate["_pendingNotifications"] = [];
+                const pendingNotifications: PostgresDataSource["_pendingNotifications"] = [];
 
                 // @ts-ignore
                 const result = await originalDb.transaction(async (tx) => {
                     // Defensive checks for user properties
                     let userId = user.uid;
                     if (!userId) {
-                        console.warn(`[DataSourceDelegate] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, user);
+                        console.warn(`[DataSource] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, user);
                         userId = 'anonymous';
                     }
 
                     let userRoles = user.roles ?? [];
                     if (!user.roles) {
-                        console.warn(`[DataSourceDelegate] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
+                        console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
                     }
                     const rolesString = userRoles.map(r => r.id).join(",");
 
@@ -501,7 +501,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                     // Create a temporary delegate using the transaction client
                     const txEntityService = new EntityService(tx);
 
-                    const txDelegate = new PostgresDataSourceDelegate(tx, this.realtimeService, user);
+                    const txDelegate = new PostgresDataSource(tx, this.realtimeService, user);
                     // Force inject the transactional entity service
                     // @ts-ignore
                     txDelegate.entityService = txEntityService;
@@ -523,7 +523,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                             notification.databaseId
                         );
                     } catch (e) {
-                        console.error("[DataSourceDelegate] Error flushing deferred notification:", e);
+                        console.error("[DataSource] Error flushing deferred notification:", e);
                     }
                 }
 

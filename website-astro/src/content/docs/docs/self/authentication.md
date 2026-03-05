@@ -151,12 +151,12 @@ import { User } from "./collections/users"; // Make sure to import your User typ
 export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   user,
   authController,
-  dataSourceDelegate
+  dataSource
 }) => {
   if (!user?.email) return false;
 
   try {
-    const userEntities = await dataSourceDelegate.fetchCollection<User>({
+    const userEntities = await dataSource.fetchCollection<User>({
       path: "users",
       filter: { email: ["==", user.email] }
     });

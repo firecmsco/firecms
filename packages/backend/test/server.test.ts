@@ -1,14 +1,14 @@
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { FireCMSApiServer } from '../src/api/server';
-import { DataSourceDelegate, User } from '@firecms/types';
+import { DataSource, User } from '@firecms/types';
 import { ApiConfig } from '../src/api/types';
 import http from 'http';
 import { AddressInfo } from 'net';
 
-// Mock DataSourceDelegate
+// Mock DataSource
 const mockWithAuth = jest.fn();
-const mockDataSource: DataSourceDelegate & { withAuth: any } = {
+const mockDataSource: DataSource & { withAuth: any } = {
     key: 'test-postgres',
     fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'default-entity', values: { name: 'Default' } }];

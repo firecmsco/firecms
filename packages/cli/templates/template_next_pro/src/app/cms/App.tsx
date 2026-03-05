@@ -28,7 +28,7 @@ import {
     FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase
 } from "@firecms/firebase";
 
@@ -84,7 +84,7 @@ export function App() {
     /**
      * Delegate used for fetching and saving data in Firestore
      */
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp,
         localTextSearchEnabled: true
     })
@@ -107,7 +107,7 @@ export function App() {
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         authController
     });
 
@@ -127,7 +127,7 @@ export function App() {
         authController: userManagement,
         disabled: userManagement.loading,
         authenticator: userManagement.authenticator, // you can define your own authenticator here
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -138,7 +138,7 @@ export function App() {
         // views,
         adminViews: userManagementAdminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     /**
@@ -179,7 +179,7 @@ export function App() {
                     navigationController={navigationController}
                     authController={userManagement}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                     plugins={[
                         dataEnhancementPlugin,

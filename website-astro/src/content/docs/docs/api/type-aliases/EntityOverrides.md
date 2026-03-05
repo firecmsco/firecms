@@ -17,9 +17,9 @@ Defined in: [types/entity\_overrides.tsx:4](https://github.com/firecmsco/firecms
 
 ## Properties
 
-### dataSourceDelegate?
+### dataSource?
 
-> `optional` **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> `optional` **dataSource**: [`DataSource`](../interfaces/DataSource)
 
 Defined in: [types/entity\_overrides.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_overrides.tsx)
 

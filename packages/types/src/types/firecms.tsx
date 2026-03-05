@@ -7,7 +7,7 @@ import { FireCMSPlugin } from "./plugins";
 import { EntityAction } from "./entity_actions";
 import { User } from "../users";
 import {
-    AuthController, CMSAnalyticsEvent, CMSView, DataSourceDelegate, StorageSource,
+    AuthController, CMSAnalyticsEvent, CMSView, DataSource, StorageSource,
     UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController
 } from "../controllers";
 import { FireCMSContext } from "../firecms_context";
@@ -35,7 +35,7 @@ export interface EffectiveRoleController {
 export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSourceDelegate
+    dataSource: DataSource
 }) => EC[] | Promise<EC[]>;
 
 /**
@@ -50,7 +50,7 @@ export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollect
 export type CMSViewsBuilder = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSourceDelegate
+    dataSource: DataSource
 }) => CMSView[] | Promise<CMSView[]>;
 
 /**
@@ -134,7 +134,7 @@ export type FireCMSProps<USER extends User> = {
     /**
      * Connector to your database
      */
-    dataSourceDelegate: DataSourceDelegate;
+    dataSource: DataSource;
 
     /**
      * Connector to your file upload/fetch implementation

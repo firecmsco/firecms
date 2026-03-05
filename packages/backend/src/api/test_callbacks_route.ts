@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { PostgresDataSourceDelegate } from "../services/dataSourceDelegate";
+import { PostgresDataSource } from "../services/postgresDataSource";
 import { callbacksTestCollection } from "./collections_for_test/callbacks_test_collection";
 
-export const createCallbacksTestRouter = (dataSourceDelegate: PostgresDataSourceDelegate) => {
+export const createCallbacksTestRouter = (dataSource: PostgresDataSource) => {
     const router = express.Router();
 
     router.post("/test-crud", async (req: Request, res: Response) => {
@@ -20,7 +20,7 @@ export const createCallbacksTestRouter = (dataSourceDelegate: PostgresDataSource
 
             // 1. Create (Save) Entity
             console.log("\n1. Testing saveEntity (Creation)...");
-            const delegate = await dataSourceDelegate.withAuth(mockUser);
+            const delegate = await dataSource.withAuth(mockUser);
             const savedEntity = await delegate.saveEntity({
                 path,
                 collection,

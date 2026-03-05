@@ -3,12 +3,12 @@ import {
     DefaultDatasourceRegistry,
     DEFAULT_DATASOURCE_ID
 } from "../src/services/datasource-registry";
-import { DataSourceDelegate } from "@firecms/types";
+import { DataSource } from "@firecms/types";
 
 /**
- * Mock DataSourceDelegate for testing
+ * Mock DataSource for testing
  */
-function createMockDataSourceDelegate(key: string): DataSourceDelegate {
+function createMockDataSourceDelegate(key: string): DataSource {
     return {
         key,
         initialised: true,
@@ -94,8 +94,8 @@ describe("DatasourceRegistry", () => {
 
         describe("getOrDefault", () => {
             let registry: DefaultDatasourceRegistry;
-            let defaultDelegate: DataSourceDelegate;
-            let analyticsDelegate: DataSourceDelegate;
+            let defaultDelegate: DataSource;
+            let analyticsDelegate: DataSource;
 
             beforeEach(() => {
                 registry = new DefaultDatasourceRegistry();
@@ -187,7 +187,7 @@ describe("DatasourceRegistry", () => {
     });
 
     describe("DefaultDatasourceRegistry.create() factory", () => {
-        describe("with single DataSourceDelegate", () => {
+        describe("with single DataSource", () => {
             it('should register single delegate as "(default)"', () => {
                 const mockDelegate = createMockDataSourceDelegate("postgres");
 
@@ -245,7 +245,7 @@ describe("DatasourceRegistry", () => {
     });
 
     describe("type detection (isDataSourceDelegate)", () => {
-        it("should correctly identify a DataSourceDelegate", () => {
+        it("should correctly identify a DataSource", () => {
             const mockDelegate = createMockDataSourceDelegate("postgres");
 
             // The factory should recognize it as a single delegate
@@ -266,7 +266,7 @@ describe("DatasourceRegistry", () => {
         });
 
         it("should not mistakenly identify a map as a single delegate", () => {
-            // A map doesn't have the required DataSourceDelegate methods
+            // A map doesn't have the required DataSource methods
             const map = {
                 key: "not-a-delegate", // This looks like the key property but...
                 db1: createMockDataSourceDelegate("pg1")

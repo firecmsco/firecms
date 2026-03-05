@@ -27,7 +27,7 @@ import {
     FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDelegate,
+    useFirestoreDataSource,
     useInitialiseFirebase,
 } from "@firecms/firebase";
 import { useImportPlugin } from "@firecms/data_import";
@@ -144,7 +144,7 @@ export function FireCMSApp() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Delegate used for fetching and saving data in Firestore
-    const firestoreDelegate = useFirestoreDelegate({
+    const firestoreDelegate = useFirestoreDataSource({
         firebaseApp
     });
 
@@ -159,7 +159,7 @@ export function FireCMSApp() {
 
     // controller in charge of user management
     const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
     });
 
     // Controller for managing authentication
@@ -179,7 +179,7 @@ export function FireCMSApp() {
         authenticator: userManagement.authenticator,
         authController,
         // authenticator: myAuthenticator,
-        dataSourceDelegate: firestoreDelegate,
+        dataSource: firestoreDelegate,
         storageSource
     });
 
@@ -197,7 +197,7 @@ export function FireCMSApp() {
         collectionPermissions: userManagement.collectionPermissions,
         adminViews: userManagementAdminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSource: firestoreDelegate
     });
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
@@ -223,7 +223,7 @@ export function FireCMSApp() {
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
+                    dataSource={firestoreDelegate}
                     storageSource={storageSource}
                     plugins={[importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
