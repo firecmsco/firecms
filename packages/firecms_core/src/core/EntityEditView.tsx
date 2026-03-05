@@ -14,7 +14,6 @@ import {
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary, ErrorView } from "../components";
 import {
-    canEditEntity,
     getSubcollections,
     removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
@@ -22,7 +21,6 @@ import {
 } from "@firecms/common";
 import { CenteredView, CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import {
-    useAuthController,
     useCustomizationController,
     useEntityFetch,
     useFireCMSContext,
@@ -34,6 +32,7 @@ import { EntityFormProps } from "@firecms/types";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub, getEntityFromCache } from "../util";
+import { usePermissions } from "../hooks/usePermissions";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -107,7 +106,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         ? getEntityFromMemoryCache(props.path + "/" + entityId)
         : getEntityFromMemoryCache(props.path + "#new");
 
-    const authController = useAuthController();
+    const { canEdit: canEditHook } = usePermissions();
 
     const initialStatus = props.copy ? "copy" : (entityId ? "existing" : "new");
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
@@ -116,9 +115,9 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         if (status === "new" || status === "copy") {
             return true;
         } else {
-            return entity ? canEditEntity(props.collection, authController, props.path, entity ?? null) : undefined;
+            return entity ? canEditHook(props.collection, props.path, entity ?? null) : undefined;
         }
-    }, [authController, entity, status]);
+    }, [canEditHook, entity, status, props.collection, props.path]);
 
     if (!dataLoading && dataLoadingError) {
         return <CenteredView>

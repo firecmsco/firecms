@@ -42,3 +42,4 @@ export * from "./useBuildModeController";
 export * from "./useValidateAuthenticator";
 
 export * from "./useBackendStorageSource";
+export * from "./usePermissions";

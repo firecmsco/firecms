@@ -4,7 +4,7 @@ export * from "./entity_actions";
 export * from "./properties";
 export * from "./collections";
 export * from "./relations";
-export * from "./permissions";
+
 export * from "./locales";
 export * from "./fields";
 export * from "./property_config";

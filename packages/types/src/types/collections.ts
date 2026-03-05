@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
-import { Permissions, PermissionsBuilder } from "./permissions";
+
 import { EnumValues, Properties } from "./properties";
 import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
@@ -221,15 +221,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     pagination?: boolean | number;
 
-    /**
-     * Permissions the logged-in user can perform on this collection.
-     * If not specified everything defaults to `true`.
-     */
-    permissions?: Permissions | PermissionsBuilder<EntityCollection, USER, M>;
 
-    /**
-     * Are the entities in this collection selectable. Defaults to `true`
-     */
     selectionEnabled?: boolean;
 
     /**

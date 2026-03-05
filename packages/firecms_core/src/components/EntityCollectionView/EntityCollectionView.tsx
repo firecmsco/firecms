@@ -24,9 +24,6 @@ import {
 import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
 import {
-    canCreateEntity,
-    canDeleteEntity,
-    canEditEntity,
     getSubcollections,
     mergeDeep,
     mergeEntityActions,
@@ -44,7 +41,8 @@ import {
     useLargeLayout,
     useCollectionRegistryController,
     useCMSUrlController,
-    useSideEntityController
+    useSideEntityController,
+    usePermissions
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -168,6 +166,7 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const analyticsController = useAnalyticsController();
         const customizationController = useCustomizationController();
+        const { canCreate, canEdit, canDelete } = usePermissions();
 
         const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -185,7 +184,7 @@ export const EntityCollectionView = React.memo(
             collectionRef.current = collection;
         }, [collection]);
 
-        const canCreateEntities = canCreateEntity(collection, authController, path, null);
+        const canCreateEntities = canCreate(collection, path);
         const [highlightedEntity, setHighlightedEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
@@ -215,11 +214,11 @@ export const EntityCollectionView = React.memo(
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             const collection = collectionRef.current;
-            if (!canEditEntity(collection, authController, path, entity ?? null)) {
+            if (!canEdit(collection, path, entity ?? null)) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
-        }, [authController, path]);
+        }, [canEdit, path]);
 
         const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
         const hoverRow = !checkInlineEditing();
@@ -443,7 +442,7 @@ export const EntityCollectionView = React.memo(
             }
         }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, path, analyticsController, viewMode]);
 
-        const createEnabled = canCreateEntity(collection, authController, path, null);
+        const createEnabled = canCreate(collection, path);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
@@ -685,7 +684,7 @@ export const EntityCollectionView = React.memo(
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
-            const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : true;
+            const deleteEnabled = entity ? canDelete(collection, path, entity) : true;
             const actions: EntityAction[] = [editEntityAction];
             if (createEnabled)
                 actions.push(copyEntityAction);

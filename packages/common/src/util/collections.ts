@@ -2,7 +2,6 @@ import {
     DefaultSelectedViewBuilder,
     DefaultSelectedViewParams,
     EntityCollection,
-    PermissionsBuilder,
     Properties,
     Property,
 } from "@firecms/types";
@@ -95,25 +94,7 @@ export function resolveDefaultSelectedView(
     }
 }
 
-/**
- * If a collection is not applying permissions, we apply the given permissionsBuilder.
- * This is used to apply the role permissions to the collections, unless they are already
- * applying permissions.
- * @param collections
- * @param permissionsBuilder
- */
-export const applyPermissionsFunctionIfEmpty = (collections: EntityCollection[], permissionsBuilder?: PermissionsBuilder<any, any>): EntityCollection[] => {
 
-    return collections.map(collection => {
-        if (collection.permissions) {
-            return collection;
-        }
-        return ({
-            ...collection,
-            permissions: permissionsBuilder
-        });
-    });
-}
 
 export function getLocalChangesBackup(collection: EntityCollection) {
     if (!collection.localChangesBackup) {

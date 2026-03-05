@@ -143,13 +143,7 @@ export function EntityHistoryEntry({
                                 collection: {
                                     ...collection,
                                     subcollections: undefined,
-                                    entityViews: undefined,
-                                    permissions: {
-                                        create: false,
-                                        delete: false,
-                                        edit: false,
-                                        read: true
-                                    }
+                                    entityViews: undefined
                                 },
                                 updateUrl: true
                             });

@@ -10,7 +10,8 @@ import {
     Tooltip
 } from "@firecms/ui";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { canCreateEntity, canDeleteEntity, toArray } from "@firecms/common";
+import { toArray } from "@firecms/common";
+import { usePermissions } from "../../hooks/usePermissions";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -43,13 +44,13 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins ?? [];
 
-    const authController = useAuthController();
+    const { canCreate, canDelete } = usePermissions();
 
     const largeLayout = useLargeLayout();
 
     const selectedEntities = selectionController.selectedEntities;
 
-    const addButton = canCreateEntity(collection, authController, path, null) &&
+    const addButton = canCreate(collection, path) &&
         onNewClick && (largeLayout
             ? <Button
                 id={`add_entity_${path}`}
@@ -68,7 +69,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 <AddIcon size={"small"} />
             </Button>);
 
-    const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null);
+    const multipleDeleteEnabled = canDelete(collection, path, null);
 
     let multipleDeleteButton: React.ReactNode | undefined;
     if (selectionEnabled) {

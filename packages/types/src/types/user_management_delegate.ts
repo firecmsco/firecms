@@ -1,5 +1,5 @@
 import { Role, User } from "../users";
-import { PermissionsBuilder } from "./permissions";
+
 
 /**
  * Delegate to manage users, roles, and their permissions.
@@ -81,10 +81,7 @@ export interface UserManagementDelegate<USER extends User = User> {
      */
     includeCollectionConfigPermissions?: boolean;
 
-    /**
-     * Resolve permissions for a specific collection and user.
-     */
-    collectionPermissions?: PermissionsBuilder;
+
 
     /**
      * Optionally define roles for a given user. This is useful when the roles

@@ -11,7 +11,7 @@ import {
 } from "@firecms/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "@firecms/common";
+import { mergeEntityActions, resolveEntityAction } from "@firecms/common";
 import {
     Button,
     CircularProgress,
@@ -25,7 +25,6 @@ import {
     Typography
 } from "@firecms/ui";
 import {
-    useAuthController,
     useCustomizationController,
     useFireCMSContext,
     useSideEntityController,
@@ -34,24 +33,25 @@ import {
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 import { FormexController } from "@firecms/formex";
 import { ErrorTooltip } from "../components/ErrorTooltip";
+import { usePermissions } from "../hooks/usePermissions";
 
 export function EntityEditViewFormActions({
-                                              collection,
-                                              path,
-                                              entity,
-                                              layout,
-                                              savingError,
-                                              formex,
-                                              disabled,
-                                              status,
-                                              pluginActions,
-                                              openEntityMode,
-                                              showDefaultActions = true,
-                                              navigateBack,
-                                              formContext
-                                          }: EntityFormActionsProps) {
+    collection,
+    path,
+    entity,
+    layout,
+    savingError,
+    formex,
+    disabled,
+    status,
+    pluginActions,
+    openEntityMode,
+    showDefaultActions = true,
+    navigateBack,
+    formContext
+}: EntityFormActionsProps) {
 
-    const authController = useAuthController();
+    const { canCreate, canDelete } = usePermissions();
     const context = useFireCMSContext();
     const sideEntityController = useSideEntityController();
     const sideDialogContext = useSideDialogContext();
@@ -61,8 +61,8 @@ export function EntityEditViewFormActions({
         const customEntityActions = (collection.entityActions ?? [])
             .map(action => resolveEntityAction(action, customizationController.entityActions))
             .filter(Boolean) as EntityAction[];
-        const createEnabled = canCreateEntity(collection, authController, path, null);
-        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
+        const createEnabled = canCreate(collection, path);
+        const deleteEnabled = entity ? canDelete(collection, path, entity) : false;
         const actions: EntityAction[] = [];
         if (createEnabled)
             actions.push(copyEntityAction);
@@ -71,7 +71,7 @@ export function EntityEditViewFormActions({
         if (customEntityActions)
             return mergeEntityActions(actions, customEntityActions);
         return actions;
-    }, [authController, collection, path, customizationController.entityActions?.length]);
+    }, [canCreate, canDelete, collection, path, customizationController.entityActions?.length, entity]);
 
     const formActions = showDefaultActions ? entityActions.filter(a => a.includeInForm === undefined || a.includeInForm) : [];
 
@@ -128,21 +128,21 @@ type ActionsViewProps<M extends object> = {
 };
 
 function buildBottomActions<M extends object>({
-                                                  savingError,
-                                                  entity,
-                                                  formActions,
-                                                  collection,
-                                                  context,
-                                                  sideEntityController,
-                                                  disabled,
-                                                  status,
-                                                  sideDialogContext,
-                                                  pluginActions,
-                                                  openEntityMode,
-                                                  navigateBack,
-                                                  formContext,
-                                                  formex
-                                              }: ActionsViewProps<M>) {
+    savingError,
+    entity,
+    formActions,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    sideDialogContext,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext,
+    formex
+}: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
     const canClose = openEntityMode === "side_panel";
@@ -185,33 +185,33 @@ function buildBottomActions<M extends object>({
 
         {hasErrors ?
             <ErrorTooltip title={"This form has errors"}>
-                <ErrorIcon className="ml-4" color="error" size={"smallest"}/>
+                <ErrorIcon className="ml-4" color="error" size={"smallest"} />
             </ErrorTooltip> : null}
         <Button variant="text"
-                color="primary"
-                disabled={disabled || formex.isSubmitting}
-                type="reset">
+            color="primary"
+            disabled={disabled || formex.isSubmitting}
+            type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
         <Button variant={canClose ? "text" : "filled"}
-                color="primary"
-                type="submit"
-                disabled={disabled || formex.isSubmitting}
-                onClick={() => {
-                    sideDialogContext.setPendingClose(false);
-                }}>
+            color="primary"
+            type="submit"
+            disabled={disabled || formex.isSubmitting}
+            onClick={() => {
+                sideDialogContext.setPendingClose(false);
+            }}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
         </Button>
         {canClose && <LoadingButton variant="filled"
-                                    color="primary"
-                                    type="submit"
-                                    loading={formex.isSubmitting}
-                                    disabled={disabled}
-                                    onClick={() => {
-                                        sideDialogContext.setPendingClose?.(true);
-                                    }}>
+            color="primary"
+            type="submit"
+            loading={formex.isSubmitting}
+            disabled={disabled}
+            onClick={() => {
+                sideDialogContext.setPendingClose?.(true);
+            }}>
             {status === "existing" && "Save and close"}
             {status === "copy" && "Create copy and close"}
             {status === "new" && "Create and close"}
@@ -220,35 +220,35 @@ function buildBottomActions<M extends object>({
 }
 
 function buildSideActions<M extends object>({
-                                                savingError,
-                                                entity,
-                                                formActions,
-                                                collection,
-                                                context,
-                                                sideEntityController,
-                                                disabled,
-                                                status,
-                                                sideDialogContext,
-                                                pluginActions,
-                                                openEntityMode,
-                                                navigateBack,
-                                                formContext,
-                                                formex
-                                            }: ActionsViewProps<M>) {
+    savingError,
+    entity,
+    formActions,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    sideDialogContext,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext,
+    formex
+}: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
     return <div
         className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
         <LoadingButton fullWidth={true}
-                       variant="filled"
-                       color="primary"
-                       type="submit"
-                       size={"large"}
-                       startIcon={hasErrors ? <ErrorIcon/> : undefined}
-                       disabled={disabled || formex.isSubmitting}
-                       onClick={() => {
-                           sideDialogContext.setPendingClose?.(false);
-                       }}>
+            variant="filled"
+            color="primary"
+            type="submit"
+            size={"large"}
+            startIcon={hasErrors ? <ErrorIcon /> : undefined}
+            disabled={disabled || formex.isSubmitting}
+            onClick={() => {
+                sideDialogContext.setPendingClose?.(false);
+            }}>
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
@@ -275,7 +275,7 @@ function buildSideActions<M extends object>({
                 } satisfies EntityActionClickProps<any>;
                 const isEnabled = !action.isEnabled || action.isEnabled(props);
                 return (
-                    <EntityActionButton key={action.key} action={action} enabled={isEnabled} props={props}/>
+                    <EntityActionButton key={action.key} action={action} enabled={isEnabled} props={props} />
                 );
             })}
         </div>}
@@ -289,10 +289,10 @@ function buildSideActions<M extends object>({
 }
 
 function EntityActionButton({
-                                action,
-                                enabled,
-                                props
-                            }: {
+    action,
+    enabled,
+    props
+}: {
     action: EntityAction,
     enabled: boolean,
     props: EntityActionClickProps<any, any>
@@ -338,7 +338,7 @@ function EntityActionButton({
                     });
                 }
             }}>
-            {loading ? <CircularProgress size={"smallest"}/> : action.icon}
+            {loading ? <CircularProgress size={"smallest"} /> : action.icon}
         </IconButton>
     </Tooltip>;
 }

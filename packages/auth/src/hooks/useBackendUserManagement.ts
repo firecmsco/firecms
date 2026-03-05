@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { PermissionsBuilder, Role, User } from "@firecms/core";
+import { Role, User } from "@firecms/core";
 
 /**
  * UserManagement interface - compatible with @firecms/user_management
@@ -19,7 +19,6 @@ export interface UserManagement<USER extends User = User> {
     isAdmin?: boolean;
     allowDefaultRolesCreation?: boolean;
     includeCollectionConfigPermissions?: boolean;
-    collectionPermissions: PermissionsBuilder;
     defineRolesFor: (user: User) => Promise<Role[] | undefined> | Role[] | undefined;
     getUser: (uid: string) => User | null;
 
@@ -59,18 +58,6 @@ interface ApiRole {
     id: string;
     name: string;
     isAdmin?: boolean;
-    defaultPermissions?: {
-        read?: boolean;
-        create?: boolean;
-        edit?: boolean;
-        delete?: boolean;
-    };
-    collectionPermissions?: Record<string, {
-        read?: boolean;
-        create?: boolean;
-        edit?: boolean;
-        delete?: boolean;
-    }>;
     config?: Record<string, any>;
 }
 
@@ -102,8 +89,6 @@ function convertRole(apiRole: ApiRole): Role {
         id: apiRole.id,
         name: apiRole.name,
         isAdmin: apiRole.isAdmin ?? false,
-        defaultPermissions: apiRole.defaultPermissions ?? undefined,
-        collectionPermissions: apiRole.collectionPermissions ?? undefined,
         config: apiRole.config ?? undefined
     };
 }
@@ -293,8 +278,6 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             const data = await apiRequest(`/roles/${role.id}`, "PUT", {
                 name: role.name,
                 isAdmin: role.isAdmin,
-                defaultPermissions: role.defaultPermissions,
-                collectionPermissions: role.collectionPermissions,
                 config: role.config
             });
             const updated = convertRole(data.role);
@@ -305,8 +288,6 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 id: role.id,
                 name: role.name,
                 isAdmin: role.isAdmin ?? false,
-                defaultPermissions: role.defaultPermissions,
-                collectionPermissions: role.collectionPermissions,
                 config: role.config
             });
             const created = convertRole(data.role);
@@ -347,29 +328,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
      */
     const isAdmin = currentUser?.roles?.some(r => r.id === "admin") ?? false;
 
-    /**
-     * Collection permissions builder
-     */
-    const collectionPermissions = useCallback(({ user }: { user: User | null }) => {
-        if (!user) return { read: false, create: false, edit: false, delete: false };
 
-        const userRoles = user.roles ?? [];
-        const hasAdmin = userRoles.some(r => r.id === "admin");
-
-        if (hasAdmin) {
-            return { read: true, create: true, edit: true, delete: true };
-        }
-
-        // Aggregate permissions from all user roles
-        const roleObjects = roles.filter(r => userRoles.some(ur => ur.id === r.id));
-
-        return {
-            read: roleObjects.some(r => r.defaultPermissions?.read),
-            create: roleObjects.some(r => r.defaultPermissions?.create),
-            edit: roleObjects.some(r => r.defaultPermissions?.edit),
-            delete: roleObjects.some(r => r.defaultPermissions?.delete)
-        };
-    }, [roles]);
 
     /**
      * Bootstrap default admin
@@ -399,7 +358,6 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         isAdmin,
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
-        collectionPermissions,
         defineRolesFor,
         getUser,
         usersError,

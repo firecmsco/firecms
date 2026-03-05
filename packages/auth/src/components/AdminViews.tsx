@@ -455,8 +455,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
     const createDefaultRoles = () => {
         const defaultRoles: Role[] = [
             { id: "admin", name: "Admin", isAdmin: true },
-            { id: "editor", name: "Editor", isAdmin: false, defaultPermissions: { read: true, create: true, edit: true, delete: true } },
-            { id: "viewer", name: "Viewer", isAdmin: false, defaultPermissions: { read: true, create: false, edit: false, delete: false } }
+            { id: "editor", name: "Editor", isAdmin: false },
+            { id: "viewer", name: "Viewer", isAdmin: false }
         ];
         defaultRoles.forEach(role => saveRole(role));
     };
@@ -482,15 +482,9 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
                         <TableCell header className="w-16"></TableCell>
                         <TableCell header>Role</TableCell>
                         <TableCell header className="items-center">Is Admin</TableCell>
-                        <TableCell header>Default permissions</TableCell>
                     </TableHeader>
                     <TableBody>
                         {roles.map(role => {
-                            const canCreateAll = role.isAdmin || role.defaultPermissions?.create;
-                            const canReadAll = role.isAdmin || role.defaultPermissions?.read;
-                            const canUpdateAll = role.isAdmin || role.defaultPermissions?.edit;
-                            const canDeleteAll = role.isAdmin || role.defaultPermissions?.delete;
-
                             return (
                                 <TableRow key={role.id} onClick={() => handleEditRole(role)}>
                                     <TableCell style={{ width: "64px" }}>
@@ -513,14 +507,6 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
                                     </TableCell>
                                     <TableCell className="items-center">
                                         <Checkbox checked={role.isAdmin ?? false} />
-                                    </TableCell>
-                                    <TableCell>
-                                        <ul>
-                                            {canCreateAll && <li>Create</li>}
-                                            {canReadAll && <li>Read</li>}
-                                            {canUpdateAll && <li>Update</li>}
-                                            {canDeleteAll && <li>Delete</li>}
-                                        </ul>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -583,44 +569,15 @@ function RoleDetailsForm({
     handleClose: () => void;
 }) {
     const snackbarController = useSnackbarController();
-    const collectionRegistryController = useCollectionRegistryController();
-    const collections = collectionRegistryController.collections ?? [];
     const isNewRole = !roleProp;
 
     const [roleId, setRoleId] = useState(roleProp?.id || "");
     const [roleName, setRoleName] = useState(roleProp?.name || "");
     const [isAdmin, setIsAdmin] = useState(roleProp?.isAdmin ?? false);
-    const [canCreate, setCanCreate] = useState(roleProp?.defaultPermissions?.create ?? false);
-    const [canRead, setCanRead] = useState(roleProp?.defaultPermissions?.read ?? true);
-    const [canEdit, setCanEdit] = useState(roleProp?.defaultPermissions?.edit ?? false);
-    const [canDelete, setCanDelete] = useState(roleProp?.defaultPermissions?.delete ?? false);
-    const [collectionPermissions, setCollectionPermissions] = useState<Record<string, { read?: boolean; create?: boolean; edit?: boolean; delete?: boolean }>>(
-        roleProp?.collectionPermissions ?? {}
-    );
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState<{ id?: string; name?: string }>({});
     const [submitCount, setSubmitCount] = useState(0);
-
-    const setCollectionPermission = (collectionSlug: string, permission: string, value: boolean) => {
-        setCollectionPermissions(prev => ({
-            ...prev,
-            [collectionSlug]: {
-                ...prev[collectionSlug],
-                [permission]: value
-            }
-        }));
-    };
-
-    const setAllCollectionPermissions = (collectionSlug: string) => {
-        setCollectionPermissions(prev => ({
-            ...prev,
-            [collectionSlug]: { create: true, read: true, edit: true, delete: true }
-        }));
-    };
-
-    const getCollectionPermission = (collectionSlug: string, permission: string): boolean => {
-        return collectionPermissions[collectionSlug]?.[permission as keyof typeof collectionPermissions[string]] ?? false;
-    };
 
     const validate = () => {
         const newErrors: typeof errors = {};
@@ -638,26 +595,10 @@ function RoleDetailsForm({
 
         setIsSubmitting(true);
         try {
-            // Clean up collection permissions - only include non-empty entries
-            const cleanedCollectionPermissions = Object.fromEntries(
-                Object.entries(collectionPermissions).filter(([_, perms]) =>
-                    perms.create || perms.read || perms.edit || perms.delete
-                )
-            );
-
             await saveRole({
                 id: roleId,
                 name: roleName,
-                isAdmin,
-                defaultPermissions: isAdmin ? undefined : {
-                    create: canCreate,
-                    read: canRead,
-                    edit: canEdit,
-                    delete: canDelete
-                },
-                collectionPermissions: isAdmin || Object.keys(cleanedCollectionPermissions).length === 0
-                    ? undefined
-                    : cleanedCollectionPermissions
+                isAdmin
             });
             handleClose();
         } catch (error: any) {
@@ -719,112 +660,6 @@ function RoleDetailsForm({
                                 Admins have full access to all collections
                             </FieldCaption>
                         </div>
-
-                        {!isAdmin && (
-                            <div className="col-span-12">
-                                <Paper className="bg-inherit overflow-hidden">
-                                    <Table className="w-full rounded-md">
-                                        <TableHeader className="rounded-md">
-                                            <TableCell header></TableCell>
-                                            <TableCell header align="center">Create</TableCell>
-                                            <TableCell header align="center">Read</TableCell>
-                                            <TableCell header align="center">Edit</TableCell>
-                                            <TableCell header align="center">Delete</TableCell>
-                                            <TableCell header align="center"></TableCell>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {/* Default permissions row */}
-                                            <TableRow>
-                                                <TableCell><strong>All collections</strong></TableCell>
-                                                <TableCell align="center">
-                                                    <Tooltip title="Create entities in collections">
-                                                        <Checkbox
-                                                            checked={canCreate}
-                                                            onCheckedChange={(checked) => setCanCreate(Boolean(checked))}
-                                                        />
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Tooltip title="Access all data in every collection">
-                                                        <Checkbox
-                                                            checked={canRead}
-                                                            onCheckedChange={(checked) => setCanRead(Boolean(checked))}
-                                                        />
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Tooltip title="Update data in any collection">
-                                                        <Checkbox
-                                                            checked={canEdit}
-                                                            onCheckedChange={(checked) => setCanEdit(Boolean(checked))}
-                                                        />
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Tooltip title="Delete data in any collection">
-                                                        <Checkbox
-                                                            checked={canDelete}
-                                                            onCheckedChange={(checked) => setCanDelete(Boolean(checked))}
-                                                        />
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell align="center"></TableCell>
-                                            </TableRow>
-
-                                            {/* Per-collection permissions */}
-                                            {collections.map((col: EntityCollection) => (
-                                                <TableRow key={col.slug}>
-                                                    <TableCell>{col.name}</TableCell>
-                                                    <TableCell align="center">
-                                                        <Checkbox
-                                                            disabled={canCreate}
-                                                            checked={canCreate || getCollectionPermission(col.slug, 'create')}
-                                                            onCheckedChange={(checked: boolean) => setCollectionPermission(col.slug, 'create', Boolean(checked))}
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        <Checkbox
-                                                            disabled={canRead}
-                                                            checked={canRead || getCollectionPermission(col.slug, 'read')}
-                                                            onCheckedChange={(checked: boolean) => setCollectionPermission(col.slug, 'read', Boolean(checked))}
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        <Checkbox
-                                                            disabled={canEdit}
-                                                            checked={canEdit || getCollectionPermission(col.slug, 'edit')}
-                                                            onCheckedChange={(checked: boolean) => setCollectionPermission(col.slug, 'edit', Boolean(checked))}
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        <Checkbox
-                                                            disabled={canDelete}
-                                                            checked={canDelete || getCollectionPermission(col.slug, 'delete')}
-                                                            onCheckedChange={(checked: boolean) => setCollectionPermission(col.slug, 'delete', Boolean(checked))}
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        <Tooltip title="Allow all permissions in this collection">
-                                                            <Button
-                                                                className="color-inherit"
-                                                                onClick={() => setAllCollectionPermissions(col.slug)}
-                                                                variant="text"
-                                                                size="small"
-                                                            >
-                                                                All
-                                                            </Button>
-                                                        </Tooltip>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </Paper>
-                                <FieldCaption>
-                                    You can customize the permissions that users with this role can perform in each collection
-                                </FieldCaption>
-                            </div>
-                        )}
                     </div>
                 </DialogContent>
 

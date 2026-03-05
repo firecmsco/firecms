@@ -1,4 +1,4 @@
-import { Permissions } from "../types/permissions";
+
 
 export type Role = {
 
@@ -17,18 +17,7 @@ export type Role = {
      */
     isAdmin?: boolean;
 
-    /**
-     * Default permissions for all collections for this role.
-     * You can override this values at the collection level using
-     * {@link collectionPermissions}
-     */
-    defaultPermissions?: Permissions;
 
-    /**
-     * Record of stripped collection ids to their permissions.
-     * @see stripCollectionPath
-     */
-    collectionPermissions?: Record<string, Permissions>;
 
     /**
      * Permissions related to editing the collections

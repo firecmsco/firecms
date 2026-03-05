@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { cls } from "../util";
+import { defaultBorderMixin } from "../styles";
 
 export type ResizablePanelsProps = {
     firstPanel: React.ReactNode;
@@ -145,8 +146,9 @@ export function ResizablePanels({
             {showFirstPanel && showSecondPanel && (
                 <div
                     className={cls(
-                        "relative z-10 flex flex-shrink-0 items-center justify-center bg-surface-200 dark:bg-surface-800",
-                        isHorizontal ? "w-px h-full cursor-col-resize" : "h-px w-full cursor-row-resize"
+                        "relative z-10 flex flex-shrink-0 items-center justify-center",
+                        defaultBorderMixin,
+                        isHorizontal ? "border-l w-px h-full cursor-col-resize" : "border-t h-px w-full cursor-row-resize"
                     )}
                     onMouseDown={handleResizeStart}
                 >

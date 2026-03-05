@@ -10,6 +10,7 @@ const profilesCollection: EntityCollection = {
 
     properties: {
         id: {
+            name: "ID",
             type: "number",
             validation: { required: true }
         },

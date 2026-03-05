@@ -13,7 +13,6 @@ import {
     FireCMSPlugin,
     AuthController,
     EntityCollectionsBuilder,
-    PermissionsBuilder,
     CMSViewsBuilder,
     UserConfigurationPersistence,
     DataSourceDelegate
@@ -30,7 +29,6 @@ export type BuildNavigationContextProps<EC extends EntityCollection, USER extend
     baseCollectionPath?: string;
     authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
-    collectionPermissions?: PermissionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
@@ -51,7 +49,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         baseCollectionPath = DEFAULT_COLLECTION_PATH,
         authController,
         collections: collectionsProp,
-        collectionPermissions,
         views: viewsProp,
         adminViews: adminViewsProp,
         viewsOrder,
@@ -265,7 +262,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
+                    resolveCollections(collectionsProp, authController, dataSourceDelegate, plugins),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate, plugins),
                     resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
                 ]
@@ -312,7 +309,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     }, [
         collectionsProp,
-        collectionPermissions,
         authController.user,
         authController.initialLoading,
         disabled,

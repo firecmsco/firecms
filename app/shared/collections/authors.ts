@@ -10,6 +10,7 @@ const authorsCollection: EntityCollection = {
     icon: "Person",
     properties: {
         id: {
+            name: "ID",
             type: "number",
             validation: {
                 required: true

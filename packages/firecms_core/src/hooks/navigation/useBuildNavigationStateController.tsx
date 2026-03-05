@@ -10,7 +10,6 @@ import {
     FireCMSPlugin,
     AuthController,
     EntityCollectionsBuilder,
-    PermissionsBuilder,
     CMSViewsBuilder,
     NavigationStateController,
     DataSourceDelegate,
@@ -31,7 +30,6 @@ import { AccountCircleIcon, SecurityIcon } from "@firecms/ui";
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
-    collectionPermissions?: PermissionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
     dataSourceDelegate: DataSourceDelegate;
@@ -53,7 +51,6 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     const {
         authController,
         collections: collectionsProp,
-        collectionPermissions,
         views: viewsProp,
         adminViews: adminViewsProp,
         viewsOrder,
@@ -319,7 +316,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
             const [resolvedCollections = [], resolvedViews] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, collectionPermissions, resolvedAuthController, dataSourceDelegate, plugins),
+                    resolveCollections(collectionsProp, resolvedAuthController, dataSourceDelegate, plugins),
                     resolveCMSViews(viewsProp, resolvedAuthController, dataSourceDelegate, plugins)
                 ]
             );
@@ -368,7 +365,6 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
 
     }, [
         collectionsProp,
-        collectionPermissions,
         resolvedAuthController,
         disabled,
         viewsProp,

@@ -51,12 +51,10 @@ export function useBuildCollectionRegistryController(props: {
         let result: Partial<EntityCollection> | undefined = overriddenCollection;
         const subcollections = overriddenCollection.subcollections;
         const callbacks = overriddenCollection.callbacks;
-        const permissions = overriddenCollection.permissions;
         result = {
             ...result,
             subcollections: result?.subcollections ?? subcollections,
-            callbacks: result?.callbacks ?? callbacks,
-            permissions: result?.permissions ?? permissions
+            callbacks: result?.callbacks ?? callbacks
         };
 
         return { ...overriddenCollection, ...result } as EntityCollection;

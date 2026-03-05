@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
-import { EntityCollection, PermissionsBuilder, User, UserManagementDelegate } from "@firecms/types";
+import { EntityCollection, User, UserManagementDelegate } from "@firecms/types";
 import { useInternalUserManagementController } from "../../../hooks";
 import { UserDisplay } from "../../UserDisplay";
 

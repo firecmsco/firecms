@@ -12,7 +12,8 @@ import {
     useDataSource,
     useLargeLayout,
     useCMSUrlController,
-    useSideEntityController
+    useSideEntityController,
+    usePermissions
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
@@ -21,7 +22,6 @@ import { useSelectionController } from "../EntityCollectionView/useSelectionCont
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { canCreateEntity } from "@firecms/common";
 
 /**
  * @group Components
@@ -337,7 +337,7 @@ function EntitySelectionDialogActions({
     onNewClick: () => void
 }) {
 
-    const authController = useAuthController();
+    const { canCreate } = usePermissions();
 
     const largeLayout = useLargeLayout();
 
@@ -347,7 +347,7 @@ function EntitySelectionDialogActions({
             onNewClick();
         }
         : undefined;
-    const addButton = canCreateEntity(collection, authController, path, null) &&
+    const addButton = canCreate(collection, path) &&
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}

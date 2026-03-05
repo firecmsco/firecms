@@ -112,6 +112,7 @@ const testEntitiesCollection: EntityCollection = {
             name: "Array of Strings",
             type: "array",
             of: {
+                name: "String",
                 type: "string"
             }
         },
@@ -119,6 +120,7 @@ const testEntitiesCollection: EntityCollection = {
             name: "Array of Enums",
             type: "array",
             of: {
+                name: "Enum",
                 type: "string",
                 enum: [
                     { id: "cat", label: "Cat" },

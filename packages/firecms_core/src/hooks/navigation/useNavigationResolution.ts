@@ -6,18 +6,13 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     FireCMSPlugin,
-    PermissionsBuilder,
     User
 } from "@firecms/types";
-import { applyPermissionsFunctionIfEmpty, resolvePermissions } from "@firecms/common";
+import { canReadCollection } from "@firecms/common";
 
 export function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
     return resolvedCollections
-        .filter((c) => {
-            if (!c.permissions) return true;
-            const resolvedPermissions = resolvePermissions(c, authController, c.slug, null);
-            return resolvedPermissions?.read !== false;
-        })
+        .filter((c) => canReadCollection(c, authController))
         .map((c) => {
             if (!c.subcollections) return c;
             return {
@@ -42,7 +37,6 @@ export function applyPluginModifyCollection(resolvedCollections: EntityCollectio
 
 export async function resolveCollections(
     collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
-    collectionPermissions: PermissionsBuilder | undefined,
     authController: AuthController,
     dataSource: DataSourceDelegate,
     plugins: FireCMSPlugin[] | undefined
@@ -70,7 +64,6 @@ export async function resolveCollections(
         }
     }
 
-    resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
     return resolvedCollections;
 }

@@ -9,6 +9,7 @@ const tagsCollection: EntityCollection = {
     icon: "Tag",
     properties: {
         id: {
+            name: "ID",
             type: "number",
             validation: {
                 required: true

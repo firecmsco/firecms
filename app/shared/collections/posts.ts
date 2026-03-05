@@ -11,6 +11,7 @@ const postsCollection: EntityCollection = {
     icon: "Article",
     properties: {
         id: {
+            name: "ID",
             type: "number",
             validation: { required: true }
         },
