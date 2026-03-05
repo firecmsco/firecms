@@ -379,13 +379,15 @@ export function DefaultHomePage({
                     className="w-full sticky py-4 transition-all duration-400 ease-in-out top-0 z-10 flex flex-row gap-4"
                     style={{ top: direction === "down" ? -84 : 0 }}
                 >
-                    <SearchBar
-                        onTextSearch={updateSearch}
-                        placeholder="Search collections"
-                        autoFocus
-                        innerClassName="w-full"
-                        className="w-full grow"
-                    />
+                    {adminMode !== "studio" && (
+                        <SearchBar
+                            onTextSearch={updateSearch}
+                            placeholder="Search collections"
+                            autoFocus
+                            innerClassName="w-full"
+                            className="w-full grow"
+                        />
+                    )}
                     {additionalActions}
                     {additionalPluginActions}
                 </div>

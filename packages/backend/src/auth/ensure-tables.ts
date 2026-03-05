@@ -120,6 +120,29 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
             ON firecms_refresh_tokens(user_id)
         `);
 
+        // Migration: Add user_agent and ip_address to refresh tokens
+        await db.execute(sql`
+            ALTER TABLE firecms_refresh_tokens 
+            ADD COLUMN IF NOT EXISTS user_agent TEXT
+        `);
+
+        await db.execute(sql`
+            ALTER TABLE firecms_refresh_tokens 
+            ADD COLUMN IF NOT EXISTS ip_address TEXT
+        `);
+
+        // Migration: Ensure only ONE active session exists per user/device
+        await db.execute(sql`
+            ALTER TABLE firecms_refresh_tokens
+            ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
+        `).catch(e => {
+            // Ignore if constraint already exists or if data violates it (which we'll softly allow on legacy nodes)
+            // Postgres uniquely handles constraints differently than IF NOT EXISTS columns.
+            if (!e.message.includes('already exists') && !e.message.includes('could not create unique index')) {
+                console.error("Constraint migration issue:", e.message);
+            }
+        });
+
         // Create password reset tokens table
         await db.execute(sql`
             CREATE TABLE IF NOT EXISTS firecms_password_reset_tokens (

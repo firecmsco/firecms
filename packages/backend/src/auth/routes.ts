@@ -8,6 +8,24 @@ import { verifyGoogleIdToken, isGoogleOAuthConfigured } from "./google-oauth";
 import { requireAuth, AuthenticatedRequest } from "./middleware";
 import { EmailService, EmailConfig } from "../email";
 import { getPasswordResetTemplate, getEmailVerificationTemplate } from "../email/templates";
+import rateLimit from "express-rate-limit";
+
+// Rate limiting configurations
+const defaultAuthLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 50, // Limit each IP to 50 requests per `window` (here, per 15 minutes)
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: { message: "Too many requests from this IP, please try again after 15 minutes", code: "TOO_MANY_REQUESTS" } }
+});
+
+const strictAuthLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: { message: "Too many requests from this IP, please try again after 15 minutes", code: "TOO_MANY_REQUESTS" } }
+});
 
 export interface AuthRoutesConfig {
     db: NodePgDatabase;
@@ -67,7 +85,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
      * POST /auth/register
      * Create a new account with email/password
      */
-    router.post("/register", async (req: Request, res: Response): Promise<void> => {
+    router.post("/register", defaultAuthLimiter, async (req: Request, res: Response): Promise<void> => {
         try {
             const { email, password, displayName } = req.body;
 
@@ -119,7 +137,15 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             const refreshToken = generateRefreshToken();
 
             // Store refresh token
-            await refreshTokenService.createToken(user.id, hashRefreshToken(refreshToken), getRefreshTokenExpiry());
+            const userAgent = req.headers["user-agent"];
+            const ipAddress = req.ip;
+            await refreshTokenService.createToken(
+                user.id,
+                hashRefreshToken(refreshToken),
+                getRefreshTokenExpiry(),
+                userAgent,
+                ipAddress
+            );
 
             res.status(201).json({
                 user: {
@@ -145,7 +171,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
      * POST /auth/login
      * Login with email/password
      */
-    router.post("/login", async (req: Request, res: Response): Promise<void> => {
+    router.post("/login", defaultAuthLimiter, async (req: Request, res: Response): Promise<void> => {
         try {
             const { email, password } = req.body;
             console.log(`[AUTH] Login attempt for email: ${email}`);
@@ -188,7 +214,15 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             const refreshToken = generateRefreshToken();
 
             // Store refresh token
-            await refreshTokenService.createToken(user.id, hashRefreshToken(refreshToken), getRefreshTokenExpiry());
+            const userAgent = req.headers["user-agent"];
+            const ipAddress = req.ip;
+            await refreshTokenService.createToken(
+                user.id,
+                hashRefreshToken(refreshToken),
+                getRefreshTokenExpiry(),
+                userAgent,
+                ipAddress
+            );
             console.log(`[AUTH] Login successful for ${email}`);
 
             res.json({
@@ -275,7 +309,15 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             const refreshToken = generateRefreshToken();
 
             // Store refresh token
-            await refreshTokenService.createToken(user.id, hashRefreshToken(refreshToken), getRefreshTokenExpiry());
+            const userAgent = req.headers["user-agent"];
+            const ipAddress = req.ip;
+            await refreshTokenService.createToken(
+                user.id,
+                hashRefreshToken(refreshToken),
+                getRefreshTokenExpiry(),
+                userAgent,
+                ipAddress
+            );
 
             res.json({
                 user: {
@@ -301,7 +343,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
      * POST /auth/forgot-password
      * Request password reset email
      */
-    router.post("/forgot-password", async (req: Request, res: Response): Promise<void> => {
+    router.post("/forgot-password", strictAuthLimiter, async (req: Request, res: Response): Promise<void> => {
         try {
             const { email } = req.body;
 
@@ -374,7 +416,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
      * POST /auth/reset-password
      * Reset password using token
      */
-    router.post("/reset-password", async (req: Request, res: Response): Promise<void> => {
+    router.post("/reset-password", strictAuthLimiter, async (req: Request, res: Response): Promise<void> => {
         try {
             const { token, password } = req.body;
 
@@ -607,8 +649,17 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             const newRefreshToken = generateRefreshToken();
 
             // Rotate refresh token (delete old, create new)
+            const userAgentHeader = req.headers["user-agent"];
+            const userAgent = Array.isArray(userAgentHeader) ? userAgentHeader[0] : userAgentHeader;
+            const ipAddress = req.ip;
             await refreshTokenService.deleteByHash(tokenHash);
-            await refreshTokenService.createToken(storedToken.userId, hashRefreshToken(newRefreshToken), getRefreshTokenExpiry());
+            await refreshTokenService.createToken(
+                storedToken.userId,
+                hashRefreshToken(newRefreshToken),
+                getRefreshTokenExpiry(),
+                userAgent,
+                ipAddress
+            );
             console.log("[AUTH] Token refresh successful, new tokens issued");
 
             res.json({
@@ -645,6 +696,81 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
     });
 
     /**
+     * GET /auth/sessions
+     * Get active refresh tokens (sessions) for the current user
+     */
+    router.get("/sessions", requireAuth, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: { message: "Not authenticated", code: "UNAUTHORIZED" } });
+                return;
+            }
+
+            const currentRefreshToken = req.headers["x-refresh-token"] as string;
+            const currentTokenHash = currentRefreshToken ? hashRefreshToken(currentRefreshToken) : null;
+
+            const sessions = await refreshTokenService.listForUser(req.user.userId);
+
+            const mappedSessions = sessions.map(s => ({
+                id: s.id,
+                userAgent: s.userAgent,
+                ipAddress: s.ipAddress,
+                createdAt: s.createdAt,
+                isCurrentSession: currentTokenHash ? s.tokenHash === currentTokenHash : false
+            }));
+
+            res.json({ sessions: mappedSessions });
+        } catch (error: any) {
+            console.error("Get sessions error:", error);
+            res.status(500).json({ error: { message: "Failed to list sessions", code: "INTERNAL_ERROR" } });
+        }
+    });
+
+    /**
+     * DELETE /auth/sessions
+     * Delete all refresh tokens for the current user (remote logout every device)
+     */
+    router.delete("/sessions", requireAuth, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: { message: "Not authenticated", code: "UNAUTHORIZED" } });
+                return;
+            }
+
+            await refreshTokenService.deleteAllForUser(req.user.userId);
+            res.json({ success: true, message: "All sessions revoked successfully" });
+        } catch (error: any) {
+            console.error("Delete all sessions error:", error);
+            res.status(500).json({ error: { message: "Failed to delete all sessions", code: "INTERNAL_ERROR" } });
+        }
+    });
+
+    /**
+     * DELETE /auth/sessions/:id
+     * Delete a specific refresh token (remote logout)
+     */
+    router.delete("/sessions/:id", requireAuth, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: { message: "Not authenticated", code: "UNAUTHORIZED" } });
+                return;
+            }
+
+            const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+            if (!id) {
+                res.status(400).json({ error: { message: "Session ID is required", code: "INVALID_INPUT" } });
+                return;
+            }
+
+            await refreshTokenService.deleteById(id, req.user.userId);
+            res.json({ success: true, message: "Session revoked successfully" });
+        } catch (error: any) {
+            console.error("Delete session error:", error);
+            res.status(500).json({ error: { message: "Failed to delete session", code: "INTERNAL_ERROR" } });
+        }
+    });
+
+    /**
      * GET /auth/me
      * Get current authenticated user
      */
@@ -674,6 +800,53 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
         } catch (error: any) {
             console.error("Get user error:", error);
             res.status(500).json({ error: { message: "Failed to get user", code: "INTERNAL_ERROR" } });
+        }
+    });
+
+    /**
+     * PATCH /auth/me
+     * Update current authenticated user profile
+     */
+    router.patch("/me", requireAuth, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: { message: "Not authenticated", code: "UNAUTHORIZED" } });
+                return;
+            }
+
+            const { displayName, photoURL } = req.body;
+
+            // Optional: validate inputs if necessary
+
+            const updatedUser = await userService.updateUser(req.user.userId, {
+                displayName: displayName !== undefined ? displayName : undefined,
+                photoUrl: photoURL !== undefined ? photoURL : undefined,
+            });
+
+            if (!updatedUser) {
+                res.status(404).json({ error: { message: "User not found", code: "NOT_FOUND" } });
+                return;
+            }
+
+            const result = await userService.getUserWithRoles(req.user.userId);
+            if (!result) {
+                res.status(404).json({ error: { message: "User not found", code: "NOT_FOUND" } });
+                return;
+            }
+
+            res.json({
+                user: {
+                    uid: result.user.id,
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    photoURL: result.user.photoUrl,
+                    emailVerified: result.user.emailVerified,
+                    roles: result.roles.map(r => r.id)
+                }
+            });
+        } catch (error: any) {
+            console.error("Update user error:", error);
+            res.status(500).json({ error: { message: "Failed to update user", code: "INTERNAL_ERROR" } });
         }
     });
 

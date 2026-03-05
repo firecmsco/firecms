@@ -215,5 +215,75 @@ export async function verifyEmail(token: string): Promise<{ success: boolean; me
     return handleResponse<{ success: boolean; message: string }>(response);
 }
 
+/**
+ * Update current user profile
+ */
+export async function updateProfile(
+    accessToken: string,
+    displayName?: string,
+    photoURL?: string
+): Promise<{ user: UserInfo }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/me`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ displayName, photoURL })
+    });
+
+    return handleResponse<{ user: UserInfo }>(response);
+}
+
+/**
+ * Fetch active sessions for current user
+ */
+export async function fetchSessions(accessToken: string, currentRefreshToken?: string): Promise<{ sessions: any[] }> {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+    };
+    if (currentRefreshToken) {
+        headers["X-Refresh-Token"] = currentRefreshToken;
+    }
+
+    const response = await fetch(`${baseApiUrl}/api/auth/sessions`, {
+        method: "GET",
+        headers
+    });
+
+    return handleResponse<{ sessions: any[] }>(response);
+}
+
+/**
+ * Revoke a specific session
+ */
+export async function revokeSession(accessToken: string, sessionId: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/sessions/${sessionId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        }
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
+/**
+ * Revoke all sessions for current user
+ */
+export async function revokeAllSessions(accessToken: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${baseApiUrl}/api/auth/sessions`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        }
+    });
+
+    return handleResponse<{ success: boolean; message: string }>(response);
+}
+
 export { AuthApiError };
 

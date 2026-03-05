@@ -294,17 +294,42 @@ export class RoleService implements RoleRepository {
 export class RefreshTokenService {
     constructor(private db: NodePgDatabase) { }
 
-    async createToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
-        await this.db.insert(refreshTokens).values({
-            userId,
-            tokenHash,
-            expiresAt
-        });
+    async createToken(userId: string, tokenHash: string, expiresAt: Date, userAgent?: string, ipAddress?: string): Promise<void> {
+        // Fallback to empty string because UNIQUE constraints treat NULLs as strictly distinct in standard Postgres.
+        // We want (userId, NULL, NULL) to collide and overwrite, so we map undefined/null to empty strings.
+        const safeUserAgent = userAgent || "";
+        const safeIpAddress = ipAddress || "";
+
+        await this.db.insert(refreshTokens)
+            .values({
+                userId,
+                tokenHash,
+                expiresAt,
+                userAgent: safeUserAgent,
+                ipAddress: safeIpAddress
+            })
+            .onConflictDoUpdate({
+                // Target the composite unique index defined in schema
+                target: [refreshTokens.userId, refreshTokens.userAgent, refreshTokens.ipAddress],
+                set: {
+                    tokenHash,
+                    expiresAt,
+                    createdAt: new Date() // Reset creation time to appear at top of list
+                }
+            });
     }
 
-    async findByHash(tokenHash: string): Promise<{ userId: string; expiresAt: Date } | null> {
+    async findByHash(tokenHash: string): Promise<RefreshTokenInfo | null> {
         const [token] = await this.db
-            .select({ userId: refreshTokens.userId, expiresAt: refreshTokens.expiresAt })
+            .select({
+                id: refreshTokens.id,
+                userId: refreshTokens.userId,
+                tokenHash: refreshTokens.tokenHash,
+                expiresAt: refreshTokens.expiresAt,
+                createdAt: refreshTokens.createdAt,
+                userAgent: refreshTokens.userAgent,
+                ipAddress: refreshTokens.ipAddress
+            })
             .from(refreshTokens)
             .where(eq(refreshTokens.tokenHash, tokenHash));
 
@@ -317,6 +342,29 @@ export class RefreshTokenService {
 
     async deleteAllForUser(userId: string): Promise<void> {
         await this.db.delete(refreshTokens).where(eq(refreshTokens.userId, userId));
+    }
+
+    async listForUser(userId: string): Promise<RefreshTokenInfo[]> {
+        const tokens = await this.db
+            .select({
+                id: refreshTokens.id,
+                userId: refreshTokens.userId,
+                tokenHash: refreshTokens.tokenHash,
+                expiresAt: refreshTokens.expiresAt,
+                createdAt: refreshTokens.createdAt,
+                userAgent: refreshTokens.userAgent,
+                ipAddress: refreshTokens.ipAddress
+            })
+            .from(refreshTokens)
+            .where(eq(refreshTokens.userId, userId))
+            .orderBy(refreshTokens.createdAt);
+
+        return tokens;
+    }
+
+    async deleteById(id: string, userId: string): Promise<void> {
+        await this.db.delete(refreshTokens)
+            .where(sql`${refreshTokens.id} = ${id} AND ${refreshTokens.userId} = ${userId}`);
     }
 }
 
@@ -418,8 +466,8 @@ export class PostgresTokenRepository implements TokenRepository {
 
     // Refresh token operations
 
-    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
-        await this.refreshTokenService.createToken(userId, tokenHash, expiresAt);
+    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date, userAgent?: string, ipAddress?: string): Promise<void> {
+        await this.refreshTokenService.createToken(userId, tokenHash, expiresAt, userAgent, ipAddress);
     }
 
     async findRefreshTokenByHash(tokenHash: string): Promise<RefreshTokenInfo | null> {
@@ -432,6 +480,14 @@ export class PostgresTokenRepository implements TokenRepository {
 
     async deleteAllRefreshTokensForUser(userId: string): Promise<void> {
         await this.refreshTokenService.deleteAllForUser(userId);
+    }
+
+    async listRefreshTokensForUser(userId: string): Promise<RefreshTokenInfo[]> {
+        return this.refreshTokenService.listForUser(userId);
+    }
+
+    async deleteRefreshTokenById(id: string, userId: string): Promise<void> {
+        await this.refreshTokenService.deleteById(id, userId);
     }
 
     // Password reset token operations
@@ -569,8 +625,8 @@ export class PostgresAuthRepository implements AuthRepository {
 
     // Token operations (delegate to PostgresTokenRepository)
 
-    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
-        await this.tokenRepository.createRefreshToken(userId, tokenHash, expiresAt);
+    async createRefreshToken(userId: string, tokenHash: string, expiresAt: Date, userAgent?: string, ipAddress?: string): Promise<void> {
+        await this.tokenRepository.createRefreshToken(userId, tokenHash, expiresAt, userAgent, ipAddress);
     }
 
     async findRefreshTokenByHash(tokenHash: string): Promise<RefreshTokenInfo | null> {
@@ -583,6 +639,14 @@ export class PostgresAuthRepository implements AuthRepository {
 
     async deleteAllRefreshTokensForUser(userId: string): Promise<void> {
         await this.tokenRepository.deleteAllRefreshTokensForUser(userId);
+    }
+
+    async listRefreshTokensForUser(userId: string): Promise<RefreshTokenInfo[]> {
+        return this.tokenRepository.listRefreshTokensForUser(userId);
+    }
+
+    async deleteRefreshTokenById(id: string, userId: string): Promise<void> {
+        await this.tokenRepository.deleteRefreshTokenById(id, userId);
     }
 
     async createPasswordResetToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {

@@ -1,4 +1,4 @@
-import { pgTable, varchar, uuid, timestamp, boolean, jsonb, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, timestamp, boolean, jsonb, primaryKey, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -65,8 +65,12 @@ export const refreshTokens = pgTable("firecms_refresh_tokens", {
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     tokenHash: varchar("token_hash", { length: 255 }).notNull().unique(),
     expiresAt: timestamp("expires_at").notNull(),
+    userAgent: varchar("user_agent", { length: 500 }),
+    ipAddress: varchar("ip_address", { length: 45 }),
     createdAt: timestamp("created_at").defaultNow().notNull()
-});
+}, (table) => ({
+    uniqueDeviceSession: unique("unique_device_session").on(table.userId, table.userAgent, table.ipAddress)
+}));
 
 /**
  * Password reset tokens for forgot password flow

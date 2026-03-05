@@ -416,6 +416,71 @@ export function useFireCMSAuthController(
         }
     }, [clearSessionAndSignOut]);
 
+    // Update user profile
+    const updateProfile = useCallback(async (displayName?: string, photoURL?: string) => {
+        setAuthLoading(true);
+        setAuthProviderError(null);
+
+        try {
+            if (!tokensRef.current) {
+                throw new Error("User is not logged in");
+            }
+            const response = await authApi.updateProfile(tokensRef.current.accessToken, displayName, photoURL);
+
+            // Update local user state
+            let convertedUser = convertToUser(response.user);
+            if (defineRolesFor) {
+                const customRoles = await defineRolesFor(convertedUser);
+                if (customRoles) {
+                    convertedUser = { ...convertedUser, roles: customRoles };
+                }
+            }
+
+            // Update storage
+            const storedData = loadAuthFromStorage();
+            if (storedData) {
+                saveAuthToStorage(storedData.tokens, response.user);
+            }
+
+            setUser(convertedUser);
+            return convertedUser;
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        } finally {
+            setAuthLoading(false);
+        }
+    }, [defineRolesFor]);
+
+    // Fetch active sessions
+    const fetchSessions = useCallback(async () => {
+        try {
+            if (!tokensRef.current) {
+                throw new Error("User is not logged in");
+            }
+            const response = await authApi.fetchSessions(tokensRef.current.accessToken, tokensRef.current.refreshToken);
+            return response.sessions;
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        }
+    }, []);
+
+    // Revoke a session
+    const revokeSession = useCallback(async (sessionId: string) => {
+        try {
+            if (!tokensRef.current) {
+                throw new Error("User is not logged in");
+            }
+            await authApi.revokeSession(tokensRef.current.accessToken, sessionId);
+            // If the revoked session is the current one, the next API request will fail with 401
+            // and trigger an auto-logout. Otherwise, it just removes it from the DB.
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        }
+    }, []);
+
     // Restore auth state from localStorage on mount
     useEffect(() => {
         isMountedRef.current = true;
@@ -575,6 +640,12 @@ export function useFireCMSAuthController(
         };
     }, [initialLoading, refreshAccessToken, scheduleTokenRefresh, clearSessionAndSignOut]);
 
+
+    // Get currently configured API URL
+    const getApiUrl = useCallback(() => {
+        return authApi.getApiUrl();
+    }, []);
+
     // Cleanup on unmount
     useEffect(() => {
         return () => {
@@ -585,6 +656,20 @@ export function useFireCMSAuthController(
         };
     }, []);
 
+    // Revoke all sessions
+    const revokeAllSessions = useCallback(async () => {
+        try {
+            if (!tokensRef.current) {
+                throw new Error("User is not logged in");
+            }
+            await authApi.revokeAllSessions(tokensRef.current.accessToken);
+            clearSessionAndSignOut();
+        } catch (error: unknown) {
+            setAuthProviderError(error as Error);
+            throw error;
+        }
+    }, [clearSessionAndSignOut]);
+
     return {
         user,
         authLoading,
@@ -593,6 +678,7 @@ export function useFireCMSAuthController(
         authProviderError,
         loginSkipped,
         getAuthToken,
+        getApiUrl,
         signOut,
         emailPasswordLogin,
         register,
@@ -601,8 +687,11 @@ export function useFireCMSAuthController(
         forgotPassword,
         resetPassword,
         changePassword,
+        updateProfile,
+        fetchSessions,
+        revokeSession,
+        revokeAllSessions,
         extra,
         setExtra
     };
 }
-

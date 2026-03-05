@@ -13,12 +13,14 @@ import {
     Menu,
     MenuItem,
     Skeleton,
-    Typography
+    Typography,
+    SettingsIcon
 } from "@firecms/ui";
 import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController } from "../hooks";
 import { User } from "@firecms/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
+import { UserSettingsView } from "../components/UserSettingsView";
 
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
@@ -247,14 +249,20 @@ export const DefaultAppBar = function DefaultAppBar({
 
                 {dropDownActions}
 
-                {!dropDownActions && <MenuItem onClick={async () => {
-                    await authController.signOut();
-                    // replace current route with home
-                    navigate("/");
-                }}>
-                    <LogoutIcon />
-                    Log Out
-                </MenuItem>}
+                {!dropDownActions && <>
+                    <MenuItem onClick={() => navigate("/settings")}>
+                        <SettingsIcon />
+                        Account Settings
+                    </MenuItem>
+                    <MenuItem onClick={async () => {
+                        await authController.signOut();
+                        // replace current route with home
+                        navigate("/");
+                    }}>
+                        <LogoutIcon />
+                        Log Out
+                    </MenuItem>
+                </>}
 
             </Menu>
 

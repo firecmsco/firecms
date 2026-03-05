@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "@firecms/types";
-import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
+import { DefaultHomePage, ErrorBoundary, NotFoundPage, UserSettingsView } from "../components";
 import { useCMSUrlController, useNavigationStateController } from "../hooks";
 import { FireCMSRoute } from "../routes/FireCMSRoute";
 import { CustomCMSRoute } from "../routes/CustomCMSRoute";
@@ -100,6 +100,8 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                 {collectionRoute}
 
                 {cmsViews}
+
+                <Route path={"/settings"} element={<UserSettingsView />} />
 
                 {homeRoute}
 

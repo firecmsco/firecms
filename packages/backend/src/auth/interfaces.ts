@@ -75,8 +75,13 @@ export interface CreateRoleData {
  * Refresh token info
  */
 export interface RefreshTokenInfo {
+    id: string;
     userId: string;
+    tokenHash: string;
     expiresAt: Date;
+    createdAt: Date;
+    userAgent?: string | null;
+    ipAddress?: string | null;
 }
 
 /**
@@ -218,7 +223,7 @@ export interface TokenRepository {
     /**
      * Create a new refresh token
      */
-    createRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void>;
+    createRefreshToken(userId: string, tokenHash: string, expiresAt: Date, userAgent?: string, ipAddress?: string): Promise<void>;
 
     /**
      * Find a refresh token by hash
@@ -234,6 +239,16 @@ export interface TokenRepository {
      * Delete all refresh tokens for a user
      */
     deleteAllRefreshTokensForUser(userId: string): Promise<void>;
+
+    /**
+     * List all refresh tokens for a user
+     */
+    listRefreshTokensForUser(userId: string): Promise<RefreshTokenInfo[]>;
+
+    /**
+     * Delete a specific refresh token by its primary key ID
+     */
+    deleteRefreshTokenById(id: string, userId: string): Promise<void>;
 
     // Password reset tokens
 

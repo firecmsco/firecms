@@ -23,6 +23,16 @@ export type FireCMSAuthController = AuthController & {
     resetPassword: (token: string, password: string) => Promise<void>;
     /** Change password for authenticated user */
     changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
+    /** Update user profile */
+    updateProfile: (displayName?: string, photoURL?: string) => Promise<User>;
+    /** Fetch active sessions */
+    fetchSessions: () => Promise<any[]>;
+    /** Revoke a session */
+    revokeSession: (sessionId: string) => Promise<void>;
+    /** Revoke all active sessions */
+    revokeAllSessions: () => Promise<void>;
+    /** Get internal API URL */
+    getApiUrl?: () => string | undefined;
 }
 
 /**
