@@ -52,6 +52,24 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 /**
+ * Wrapper for fetch that catches generic network failures (like server down)
+ * and translates them to an AuthApiError.
+ */
+async function fetchWithHandling(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    try {
+        return await fetch(input, init);
+    } catch (error: any) {
+        if (error.name === "TypeError" && error.message.includes("Failed to fetch")) {
+            throw new AuthApiError(
+                "Failed to connect to the backend server. The backend might be down or failed to initialize (e.g., database connection timeout).",
+                "NETWORK_ERROR"
+            );
+        }
+        throw new AuthApiError("Network error: " + error.message, "NETWORK_ERROR");
+    }
+}
+
+/**
  * Register a new user with email/password
  */
 export async function register(
@@ -59,7 +77,7 @@ export async function register(
     password: string,
     displayName?: string
 ): Promise<AuthResponse> {
-    const response = await fetch(`${baseApiUrl}/api/auth/register`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, displayName })
@@ -72,7 +90,7 @@ export async function register(
  * Login with email/password
  */
 export async function login(email: string, password: string): Promise<AuthResponse> {
-    const response = await fetch(`${baseApiUrl}/api/auth/login`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -85,7 +103,7 @@ export async function login(email: string, password: string): Promise<AuthRespon
  * Login with Google ID token
  */
 export async function googleLogin(idToken: string): Promise<AuthResponse> {
-    const response = await fetch(`${baseApiUrl}/api/auth/google`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken })
@@ -100,17 +118,11 @@ export async function googleLogin(idToken: string): Promise<AuthResponse> {
 export async function refreshAccessToken(refreshToken: string): Promise<RefreshResponse> {
     console.log("[AUTH-API] Calling refresh endpoint...");
 
-    let response: Response;
-    try {
-        response = await fetch(`${baseApiUrl}/api/auth/refresh`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refreshToken })
-        });
-    } catch (networkError: any) {
-        console.error("[AUTH-API] Network error during refresh:", networkError.message);
-        throw new AuthApiError("Network error: " + networkError.message, "NETWORK_ERROR");
-    }
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken })
+    });
 
     console.log("[AUTH-API] Refresh response status:", response.status);
     return handleResponse<RefreshResponse>(response);
@@ -120,7 +132,7 @@ export async function refreshAccessToken(refreshToken: string): Promise<RefreshR
  * Logout and invalidate refresh token
  */
 export async function logout(refreshToken?: string): Promise<void> {
-    await fetch(`${baseApiUrl}/api/auth/logout`, {
+    await fetchWithHandling(`${baseApiUrl}/api/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken })
@@ -131,7 +143,7 @@ export async function logout(refreshToken?: string): Promise<void> {
  * Get current user info
  */
 export async function getCurrentUser(accessToken: string): Promise<{ user: UserInfo }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/me`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/me`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -146,7 +158,7 @@ export async function getCurrentUser(accessToken: string): Promise<{ user: UserI
  * Request password reset email
  */
 export async function forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/forgot-password`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
@@ -159,7 +171,7 @@ export async function forgotPassword(email: string): Promise<{ success: boolean;
  * Reset password using token from email
  */
 export async function resetPassword(token: string, password: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/reset-password`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password })
@@ -176,7 +188,7 @@ export async function changePassword(
     oldPassword: string,
     newPassword: string
 ): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/change-password`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/change-password`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -192,7 +204,7 @@ export async function changePassword(
  * Send email verification link
  */
 export async function sendVerificationEmail(accessToken: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/send-verification`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/send-verification`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -207,7 +219,7 @@ export async function sendVerificationEmail(accessToken: string): Promise<{ succ
  * Verify email address using token
  */
 export async function verifyEmail(token: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/verify-email?token=${encodeURIComponent(token)}`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/verify-email?token=${encodeURIComponent(token)}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
     });
@@ -223,7 +235,7 @@ export async function updateProfile(
     displayName?: string,
     photoURL?: string
 ): Promise<{ user: UserInfo }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/me`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/me`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -247,7 +259,7 @@ export async function fetchSessions(accessToken: string, currentRefreshToken?: s
         headers["X-Refresh-Token"] = currentRefreshToken;
     }
 
-    const response = await fetch(`${baseApiUrl}/api/auth/sessions`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/sessions`, {
         method: "GET",
         headers
     });
@@ -259,7 +271,7 @@ export async function fetchSessions(accessToken: string, currentRefreshToken?: s
  * Revoke a specific session
  */
 export async function revokeSession(accessToken: string, sessionId: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/sessions/${sessionId}`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/sessions/${sessionId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -274,7 +286,7 @@ export async function revokeSession(accessToken: string, sessionId: string): Pro
  * Revoke all sessions for current user
  */
 export async function revokeAllSessions(accessToken: string): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${baseApiUrl}/api/auth/sessions`, {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/sessions`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

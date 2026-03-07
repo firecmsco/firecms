@@ -203,6 +203,33 @@ export interface FireCMSBackendInstance {
 }
 
 export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
+    try {
+        return await _initializeFireCMSBackend(config);
+    } catch (error: any) {
+        console.error("❌ Critical error during FireCMS Backend initialization:", error);
+
+        const basePath = config.basePath || "/api";
+        config.app.use(basePath, (req, res, next) => {
+            res.status(503).json({
+                error: {
+                    message: "Backend initialization failed. Please check the backend server logs for more details. This is usually caused by a database connection failure.",
+                    code: "backend-init-failed"
+                }
+            });
+        });
+
+        // Return a mocked instance so the server still starts and serves the 503 errors
+        return {
+            __failed: true,
+            datasourceRegistry: DefaultDatasourceRegistry.create({}),
+            dataSource: {} as any,
+            realtimeServices: {},
+            realtimeService: {} as any,
+        } as unknown as FireCMSBackendInstance;
+    }
+}
+
+async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
     // Configure logging level automatically
     if (config.logging?.level) {
         configureLogLevel(config.logging.level);
@@ -533,6 +560,13 @@ export async function initializeFireCMSAPI(
     backend: FireCMSBackendInstance,
     config: Partial<ApiConfig> = {}
 ): Promise<FireCMSApiServer> {
+    if ((backend as any).__failed) {
+        console.warn("⚠️ Skipping REST/GraphQL API initialization because backend initialization failed.");
+        // Return a dummy api server
+        const express = await import("express");
+        return { getRouter: () => express.Router() } as any;
+    }
+
     console.log("🚀 Initializing FireCMS REST/GraphQL API (optional for external integrations)");
 
     // Get collections from the registry using the correct method

@@ -16,7 +16,7 @@ import {
     WarningIcon,
     KeyIcon
 } from "@firecms/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController } from "@firecms/core";
+import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@firecms/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
@@ -366,7 +366,7 @@ export const RLSEditor = () => {
                         </div>
                         {error ? (
                             <div className="p-6 h-full flex items-center justify-center">
-                                <Alert color="error">{error}</Alert>
+                                <ErrorView title="Failed to fetch RLS policies" error={error} onRetry={fetchRLSData} />
                             </div>
                         ) : !activeTableData ? (
                             <div className="flex-grow flex items-center justify-center text-text-disabled h-full">

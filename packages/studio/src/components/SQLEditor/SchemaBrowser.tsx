@@ -9,6 +9,7 @@ import {
     MenuItem
 } from "@firecms/ui";
 import { TableInfo } from "./SQLEditor";
+import { ErrorView } from "@firecms/core";
 
 export const SchemaBrowser = ({
     onTableClick,
@@ -28,14 +29,8 @@ export const SchemaBrowser = ({
 
     if (isSchemaLoading) return <div className="p-4 flex justify-center"><CircularProgress size="small" /></div>;
     if (schemaError) return (
-        <div className="p-4">
-            <div className="text-red-500 text-sm mb-2 font-medium">{schemaError}</div>
-            <button
-                onClick={onRetrySchema}
-                className="text-xs text-primary hover:underline font-medium"
-            >
-                Try again
-            </button>
+        <div className="p-2">
+            <ErrorView error={schemaError} onRetry={onRetrySchema} />
         </div>
     );
 

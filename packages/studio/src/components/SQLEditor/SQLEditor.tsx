@@ -23,7 +23,7 @@ import {
     MenuItem,
     ResizablePanels
 } from "@firecms/ui";
-import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog } from "@firecms/core";
+import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView } from "@firecms/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
@@ -592,10 +592,8 @@ export const SQLEditor = () => {
 
         if (error) {
             return (
-                <div className="flex-grow p-6 overflow-auto">
-                    <Alert color="error">
-                        <Typography variant="body2" className="font-mono text-xs whitespace-pre-wrap">{error}</Typography>
-                    </Alert>
+                <div className="flex-grow flex items-center justify-center p-6 overflow-auto">
+                    <ErrorView title="Query Error" error={error} />
                 </div>
             );
         }
