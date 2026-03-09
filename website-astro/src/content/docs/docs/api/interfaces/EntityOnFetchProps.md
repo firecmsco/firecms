@@ -1,15 +1,15 @@
 ---
-slug: "docs/api/interfaces/EntityOnFetchProps"
-title: "EntityOnFetchProps"
+slug: "docs/api/interfaces/EntityAfterReadProps"
+title: "EntityAfterReadProps"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityOnFetchProps
+[@firecms/core](../README) / EntityAfterReadProps
 
-# Interface: EntityOnFetchProps\<M, USER\>
+# Interface: EntityAfterReadProps\<M, USER\>
 
 Defined in: [types/entity\_callbacks.ts:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

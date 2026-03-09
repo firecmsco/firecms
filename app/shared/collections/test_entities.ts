@@ -11,7 +11,7 @@ const testEntitiesCollection: EntityCollection = {
         id: {
             name: "ID",
             type: "number",
-            isId: true
+            isId: "manual"
         },
 
         // --- String Types ---

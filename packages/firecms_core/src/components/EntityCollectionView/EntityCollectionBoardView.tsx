@@ -460,10 +460,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 collection,
                 dataSource,
                 context,
-                onSaveSuccess: () => {
+                afterSave: () => {
                 },
-                onSaveFailure: (e: Error) => console.error("Failed to save entity after reorder:", e),
-                onPreSaveHookError: (e: Error) => console.error("Pre-save hook error:", e)
+                afterSaveError: (e: Error) => console.error("Failed to save entity after reorder:", e)
             });
         } catch (e) {
             console.error("Error saving entity:", e);
@@ -520,11 +519,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         collection,
                         dataSource,
                         context,
-                        onSaveSuccess: () => {
+                        afterSave: () => {
                             console.log(`Saved entity ${entity.id}`);
                         },
-                        onSaveFailure: (e) => console.error("Backfill save failed:", e),
-                        onPreSaveHookError: (e) => console.error("Backfill pre-save error:", e)
+                        afterSaveError: (e) => console.error("Backfill save failed:", e)
                     }).then(() => {
                     })
                 );

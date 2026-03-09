@@ -1,15 +1,15 @@
 ---
-slug: "docs/api/interfaces/EntityOnDeleteProps"
-title: "EntityOnDeleteProps"
+slug: "docs/api/interfaces/EntityBeforeDeleteProps"
+title: "EntityBeforeDeleteProps"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityOnDeleteProps
+[@firecms/core](../README) / EntityBeforeDeleteProps
 
-# Interface: EntityOnDeleteProps\<M, USER\>
+# Interface: EntityBeforeDeleteProps\<M, USER\>
 
 Defined in: [types/entity\_callbacks.ts:171](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

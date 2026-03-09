@@ -3,9 +3,10 @@ import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
 import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
-import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/types";
+import { Entity, ListenCollectionProps, ListenEntityProps, DataSource } from "@firecms/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
+import { collectionRegistry } from "../collections/registry";
 
 type RealTimeListenCollectionProps = ListenCollectionProps & {
     subscriptionId: string
@@ -43,9 +44,15 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     // Add callback storage for DataSource subscriptions
     private subscriptionCallbacks = new Map<string, (data: any) => void>();
 
+    private dataSource?: DataSource;
+
     constructor(private db: NodePgDatabase) {
         super();
         this.entityService = new EntityService(db);
+    }
+
+    setDataSource(dataSource: DataSource) {
+        this.dataSource = dataSource;
     }
 
     // Make subscriptions accessible for DataSource
@@ -214,15 +221,30 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             });
 
             // Send initial data
-            const entities = await this.entityService.fetchCollection(request.path, {
-                filter: request.filter,
-                orderBy: request.orderBy,
-                order: request.order,
-                limit: request.limit,
-                startAfter: request.startAfter,
-                databaseId: request.collection?.databaseId,
-                searchString: request.searchString
-            });
+            let entities;
+            if (this.dataSource) {
+                const collection = collectionRegistry.getCollectionByPath(request.path);
+                entities = await this.dataSource.fetchCollection({
+                    path: request.path,
+                    collection: collection,
+                    filter: request.filter,
+                    orderBy: request.orderBy,
+                    order: request.order,
+                    limit: request.limit,
+                    startAfter: request.startAfter,
+                    searchString: request.searchString
+                });
+            } else {
+                entities = await this.entityService.fetchCollection(request.path, {
+                    filter: request.filter,
+                    orderBy: request.orderBy,
+                    order: request.order,
+                    limit: request.limit,
+                    startAfter: request.startAfter,
+                    databaseId: request.collection?.databaseId,
+                    searchString: request.searchString
+                });
+            }
 
             this.sendCollectionUpdate(clientId, subscriptionId, entities);
 
@@ -244,11 +266,21 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             });
 
             // Send initial data
-            const entity = await this.entityService.fetchEntity(
-                request.path,
-                request.entityId,
-                request.collection?.databaseId
-            );
+            let entity;
+            if (this.dataSource) {
+                const collection = collectionRegistry.getCollectionByPath(request.path);
+                entity = await this.dataSource.fetchEntity({
+                    path: request.path,
+                    entityId: request.entityId,
+                    collection: collection
+                });
+            } else {
+                entity = await this.entityService.fetchEntity(
+                    request.path,
+                    request.entityId,
+                    request.collection?.databaseId
+                );
+            }
 
             this.sendEntityUpdate(clientId, subscriptionId, entity || null);
 
@@ -331,27 +363,41 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     console.debug(`📋 [RealtimeService] Refetching collection for subscription: ${subscriptionId}, path: ${notifyPath}`);
 
                     let entities;
-                    if (collectionRequest.searchString) {
-                        entities = await this.entityService.searchEntities(
-                            notifyPath,
-                            collectionRequest.searchString,
-                            {
-                                filter: collectionRequest.filter,
-                                orderBy: collectionRequest.orderBy,
-                                order: collectionRequest.order,
-                                limit: collectionRequest.limit,
-                                databaseId: collectionRequest.databaseId
-                            }
-                        );
-                    } else {
-                        entities = await this.entityService.fetchCollection(notifyPath, {
+                    if (this.dataSource) {
+                        const collection = collectionRegistry.getCollectionByPath(notifyPath);
+                        entities = await this.dataSource.fetchCollection({
+                            path: notifyPath,
+                            collection: collection,
                             filter: collectionRequest.filter,
                             orderBy: collectionRequest.orderBy,
                             order: collectionRequest.order,
                             limit: collectionRequest.limit,
                             startAfter: collectionRequest.startAfter,
-                            databaseId: collectionRequest.databaseId
+                            searchString: collectionRequest.searchString
                         });
+                    } else {
+                        if (collectionRequest.searchString) {
+                            entities = await this.entityService.searchEntities(
+                                notifyPath,
+                                collectionRequest.searchString,
+                                {
+                                    filter: collectionRequest.filter,
+                                    orderBy: collectionRequest.orderBy,
+                                    order: collectionRequest.order,
+                                    limit: collectionRequest.limit,
+                                    databaseId: collectionRequest.databaseId
+                                }
+                            );
+                        } else {
+                            entities = await this.entityService.fetchCollection(notifyPath, {
+                                filter: collectionRequest.filter,
+                                orderBy: collectionRequest.orderBy,
+                                order: collectionRequest.order,
+                                limit: collectionRequest.limit,
+                                startAfter: collectionRequest.startAfter,
+                                databaseId: collectionRequest.databaseId
+                            });
+                        }
                     }
 
                     console.debug(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId} (path: ${notifyPath})`);
@@ -385,27 +431,41 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     console.debug(`📋 [RealtimeService] Refetching collection for DataSource subscription: ${subscriptionId}, path: ${notifyPath}`);
 
                     let entities;
-                    if (collectionRequest.searchString) {
-                        entities = await this.entityService.searchEntities(
-                            notifyPath,
-                            collectionRequest.searchString,
-                            {
-                                filter: collectionRequest.filter,
-                                orderBy: collectionRequest.orderBy,
-                                order: collectionRequest.order,
-                                limit: collectionRequest.limit,
-                                databaseId: collectionRequest.databaseId
-                            }
-                        );
-                    } else {
-                        entities = await this.entityService.fetchCollection(notifyPath, {
+                    if (this.dataSource) {
+                        const collection = collectionRegistry.getCollectionByPath(notifyPath);
+                        entities = await this.dataSource.fetchCollection({
+                            path: notifyPath,
+                            collection: collection,
                             filter: collectionRequest.filter,
                             orderBy: collectionRequest.orderBy,
                             order: collectionRequest.order,
                             limit: collectionRequest.limit,
                             startAfter: collectionRequest.startAfter,
-                            databaseId: collectionRequest.databaseId
+                            searchString: collectionRequest.searchString
                         });
+                    } else {
+                        if (collectionRequest.searchString) {
+                            entities = await this.entityService.searchEntities(
+                                notifyPath,
+                                collectionRequest.searchString,
+                                {
+                                    filter: collectionRequest.filter,
+                                    orderBy: collectionRequest.orderBy,
+                                    order: collectionRequest.order,
+                                    limit: collectionRequest.limit,
+                                    databaseId: collectionRequest.databaseId
+                                }
+                            );
+                        } else {
+                            entities = await this.entityService.fetchCollection(notifyPath, {
+                                filter: collectionRequest.filter,
+                                orderBy: collectionRequest.orderBy,
+                                order: collectionRequest.order,
+                                limit: collectionRequest.limit,
+                                startAfter: collectionRequest.startAfter,
+                                databaseId: collectionRequest.databaseId
+                            });
+                        }
                     }
 
                     console.debug(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);

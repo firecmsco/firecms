@@ -10,7 +10,7 @@ export const pagesCollection = buildCollection<Page>({
     slug: "pages",
     dbPath: "pages",
     callbacks: {
-        onPreSave: ({
+        beforeSave: ({
                         values,
                     }) => {
             const updatedSlug = slugify(values.title);

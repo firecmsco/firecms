@@ -207,7 +207,7 @@ const pricesCollection = buildCollection({
 });
 
 const productCallbacks: EntityCallbacks<any> = {
-    onPreSave: ({
+    beforeSave: ({
         collection,
         path,
         entityId,
@@ -220,14 +220,14 @@ const productCallbacks: EntityCallbacks<any> = {
         return values;
     },
 
-    onSaveSuccess: (props) => {
-        console.log("onSaveSuccess", props);
+    afterSave: (props) => {
+        console.log("afterSave", props);
     },
 
     onDelete: (props) => {
         console.log("onDelete", props);
     },
-    onPreDelete: () => {
+    beforeDelete: () => {
         throw Error("Product deletion not allowed in this demo");
     }
 };

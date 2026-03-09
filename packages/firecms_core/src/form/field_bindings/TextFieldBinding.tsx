@@ -63,7 +63,13 @@ export function TextFieldBinding<T extends string | number>({
 
     const isMultiline = Boolean(multiline);
 
-    const inputType = property.type === "number" ? "number" : undefined;
+    let inputType: "number" | "email" | "url" | undefined = undefined;
+    if (property.type === "number") {
+        inputType = "number";
+    } else if (property.type === "string") {
+        if (property.email) inputType = "email";
+        else if (property.url) inputType = "url";
+    }
 
     const label = (
         <LabelWithIcon

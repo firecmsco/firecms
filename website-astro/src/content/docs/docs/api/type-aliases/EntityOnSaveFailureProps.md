@@ -1,17 +1,17 @@
 ---
-slug: "docs/api/type-aliases/EntityOnSaveFailureProps"
-title: "EntityOnSaveFailureProps"
+slug: "docs/api/type-aliases/EntityAfterSaveErrorProps"
+title: "EntityAfterSaveErrorProps"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityOnSaveFailureProps
+[@firecms/core](../README) / EntityAfterSaveErrorProps
 
-# Type Alias: EntityOnSaveFailureProps\<M, USER\>
+# Type Alias: EntityAfterSaveErrorProps\<M, USER\>
 
-> **EntityOnSaveFailureProps**\<`M`, `USER`\> = `Omit`\<[`EntityOnSaveProps`](../interfaces/EntityOnSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
+> **EntityAfterSaveErrorProps**\<`M`, `USER`\> = `Omit`\<[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
 
 Defined in: [types/entity\_callbacks.ts:113](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

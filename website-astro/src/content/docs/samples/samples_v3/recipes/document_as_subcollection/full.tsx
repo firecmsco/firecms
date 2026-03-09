@@ -15,7 +15,7 @@ const unitsCollection = buildCollection<Unit>({
     customId: true,
     icon: "LocalLibrary",
     callbacks: {
-        onSaveSuccess: ({ context }) => {
+        afterSave: ({ context }) => {
             context.navigation.refreshNavigation();
         },
         onDelete: ({ context }) => {

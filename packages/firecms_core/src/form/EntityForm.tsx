@@ -232,6 +232,8 @@ export function EntityForm<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const analyticsController = useAnalyticsController();
 
+
+
     const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
 
@@ -277,9 +279,9 @@ export function EntityForm<M extends Record<string, any>>({
         }
 
         return save(values)
-            ?.then(_ => {
+            ?.then((savedEntity) => {
                 formexController.resetForm({
-                    values,
+                    values: savedEntity?.values || values,
                     submitCount: 0,
                     touched: {}
                 });
@@ -327,7 +329,7 @@ export function EntityForm<M extends Record<string, any>>({
                 saveEntityToCache(key, touchedValues);
             }
         },
-        validation: (values) => {
+        validation: async (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
                 .then(() => {
                     return {};
@@ -360,7 +362,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     }, [formex]);
 
-    const onPreSaveHookError = useCallback((e: Error) => {
+    const beforeSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
             message: "Error before saving: " + e?.message
@@ -368,7 +370,7 @@ export function EntityForm<M extends Record<string, any>>({
         console.error(e);
     }, [snackbarController]);
 
-    const onSaveSuccessHookError = useCallback((e: Error) => {
+    const afterSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
             message: "Error after saving (entity is saved): " + e?.message
@@ -386,7 +388,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }
 
-    const onSaveSuccess = (updatedEntity: Entity<M>) => {
+    const afterSave = (updatedEntity: Entity<M>) => {
 
         clearDirtyCache();
         onValuesModified?.(false, updatedEntity.values);
@@ -410,7 +412,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     };
 
-    const onSaveFailure = useCallback((e: Error) => {
+    const afterSaveError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
             title: "Error saving entity",
@@ -432,7 +434,7 @@ export function EntityForm<M extends Record<string, any>>({
         entityId: string | number | undefined,
         values: M,
         previousValues?: M,
-    }) => {
+    }): Promise<Entity<M>> => {
         return saveEntityWithCallbacks({
             path: path,
             entityId,
@@ -442,11 +444,9 @@ export function EntityForm<M extends Record<string, any>>({
             status,
             dataSource,
             context,
-            onSaveSuccess,
-            onSaveFailure,
-            onPreSaveHookError,
-            onSaveSuccessHookError
-        }).then();
+            afterSave,
+            afterSaveError
+        });
     };
 
     type EntityFormSaveParams<M extends Record<string, any>> = {
@@ -465,11 +465,12 @@ export function EntityForm<M extends Record<string, any>>({
         values,
         previousValues,
         autoSave
-    }: EntityFormSaveParams<M>): Promise<void> => {
+    }: EntityFormSaveParams<M>): Promise<Entity<M> | void> => {
         if (!status)
             return;
         if (autoSave) {
             setValuesToBeSaved(values);
+            return Promise.resolve();
         } else {
             return saveEntity({
                 collection,
@@ -482,20 +483,23 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const lastSavedValues = useRef<EntityValues<M> | undefined>(entity?.values);
-    const save = (values: EntityValues<M>): Promise<void> => {
-        lastSavedValues.current = values;
+    const save = async (values: EntityValues<M>): Promise<Entity<M> | void> => {
+        let valuesToSave = values;
+
+        lastSavedValues.current = valuesToSave;
         return onSaveEntityRequest({
             collection: collection,
             path,
             entityId,
-            values,
+            values: valuesToSave,
             previousValues: entity?.values,
             autoSave: autoSave ?? false
-        }).then(() => {
+        }).then((savedEntity) => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
             analyticsController.onAnalyticsEvent?.(eventName, { path });
+            return savedEntity;
         }).catch(e => {
             console.error(e);
             setSavingError(e);
@@ -620,7 +624,7 @@ export function EntityForm<M extends Record<string, any>>({
                             formex.touched[key];
                         const isNew = status === "new" || status === "copy";
                         const isStringOrNumber = property.type === "string" || property.type === "number";
-                        const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string";
+                        const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string" && property.isId !== "manual";
                         const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled) || (!isNew && "isId" in property && Boolean(property.isId)) || (isNew && isIdAndAuto);
                         const hidden = isHidden(property);
                         if (hidden) return null;
@@ -848,7 +852,7 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
     return errors;
 }
 
-function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<void>) {
+function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<Entity<any> | void>) {
     if (!autoSave) return;
     useEffect(() => {
         if (autoSave) {

@@ -303,6 +303,7 @@ async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<
             // Create realtime service and datasource delegate
             const realtimeService = new RealtimeService(db);
             const dataSource = new PostgresDataSource(db, realtimeService);
+            realtimeService.setDataSource(dataSource);
 
             realtimeServices[datasourceId] = realtimeService;
             delegates[datasourceId] = dataSource;

@@ -55,7 +55,7 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     Object.entries(properties as Record<string, Property>)
         .forEach(([name, property]) => {
             const isStringOrNumber = property.type === "string" || property.type === "number";
-            const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string";
+            const isIdAndAuto = isStringOrNumber && "isId" in property && typeof property.isId === "string" && property.isId !== "manual";
             if (entityId === undefined && isIdAndAuto) {
                 return; // Skip validation for auto-generated IDs on new entities
             }
@@ -163,7 +163,7 @@ function getYupStringSchema({
     let schema: StringSchema<any> = yup.string().nullable();
     const validation = property.validation;
 
-    const isRequired = validation?.required || property.isId === true;
+    const isRequired = validation?.required || property.isId === true || property.isId === "manual";
 
     if (property.enum) {
         if (isRequired) {
@@ -231,7 +231,7 @@ function getYupNumberSchema({
     const validation = property.validation;
     let schema: NumberSchema<any> = yup.number().nullable().typeError("Must be a number");
 
-    const isRequired = validation?.required || property.isId === true;
+    const isRequired = validation?.required || property.isId === true || property.isId === "manual";
 
     if (isRequired) {
         schema = schema.test(

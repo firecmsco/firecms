@@ -1,7 +1,7 @@
 import { EntityCallbacks, slugify } from "@firecms/core";
 
 const callbacks: EntityCallbacks = {
-    onPreSave: ({
+    beforeSave: ({
                     collection,
                     path,
                     entityId,

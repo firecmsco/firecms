@@ -59,7 +59,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             if (isIdProperty(propName, prop, collection)) {
                 columnDefinition += `.primaryKey()`;
             }
-            if ("isId" in stringProp) {
+            if ("isId" in stringProp && stringProp.isId !== "manual" && stringProp.isId !== true) {
                 if (stringProp.isId === "uuid") {
                     columnDefinition += `.defaultRandom()`;
                 } else if (stringProp.isId === "cuid") {
@@ -82,7 +82,7 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
 
             if ("isId" in numProp && numProp.isId === "increment") {
                 columnDefinition = `integer(\"${colName}\").generatedByDefaultAsIdentity()`;
-            } else if ("isId" in numProp && typeof numProp.isId === "string") {
+            } else if ("isId" in numProp && typeof numProp.isId === "string" && numProp.isId !== "manual") {
                 columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
                 const sqlContent = numProp.isId.startsWith("sql`") && numProp.isId.endsWith("`")
                     ? numProp.isId.substring(4, numProp.isId.length - 1)
@@ -314,7 +314,7 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     const hasRLS = collections.some(c => c.securityRules && c.securityRules.length > 0);
     const hasUuid = collections.some(c =>
         c.properties && Object.values(c.properties).some(
-            (p: any) => p.type === "string" && p.autoValue === "uuid"
+            (p: any) => p.type === "string" && (p.autoValue === "uuid" || p.isId === "uuid")
         )
     );
 

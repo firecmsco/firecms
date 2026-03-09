@@ -25,15 +25,15 @@ export interface DeleteEntityDialogProps<M extends Record<string, any>> {
 }
 
 export function DeleteEntityDialog<M extends Record<string, any>>({
-                                                                      entityOrEntitiesToDelete,
-                                                                      collection,
-                                                                      onClose,
-                                                                      open,
-                                                                      callbacks,
-                                                                      onEntityDelete,
-                                                                      onMultipleEntitiesDelete,
-                                                                      path
-                                                                  }: DeleteEntityDialogProps<M>) {
+    entityOrEntitiesToDelete,
+    collection,
+    onClose,
+    open,
+    callbacks,
+    onEntityDelete,
+    onMultipleEntitiesDelete,
+    path
+}: DeleteEntityDialogProps<M>) {
     const authController = useAuthController();
     const dataSource = useDataSource(collection);
     const customizationController = useCustomizationController();
@@ -66,23 +66,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         console.error(e);
     }, [collection.name]);
 
-    const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
-        snackbarController.open({
-            type: "error",
-            title: "Error before deleting",
-            message: e?.message
-        });
-        console.error(e);
-    }, [collection.name]);
 
-    const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
-        snackbarController.open({
-            type: "error",
-            title: "Error after deleting",
-            message: e?.message
-        });
-        console.error(e);
-    }, [collection.name]);
 
     const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
         deleteEntityWithCallbacks({
@@ -92,10 +76,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             callbacks,
             onDeleteSuccess,
             onDeleteFailure,
-            onPreDeleteHookError,
-            onDeleteSuccessHookError,
             context
-        }), [dataSource, collection, callbacks, onDeleteSuccess, onDeleteFailure, onPreDeleteHookError, onDeleteSuccessHookError, context]);
+        }), [dataSource, collection, callbacks, onDeleteSuccess, onDeleteFailure, context]);
 
     const handleOk = useCallback(async () => {
         if (entityOrEntities) {
@@ -155,7 +137,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             ? <EntityView
                 entity={entity}
                 collection={collection}
-                path={path}/>
+                path={path} />
             : <></>;
     }
 
@@ -178,11 +160,11 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             </DialogContent>
             <DialogActions>
 
-                {loading && <CircularProgress size={"smallest"}/>}
+                {loading && <CircularProgress size={"smallest"} />}
 
                 <Button onClick={handleCancel}
-                        disabled={loading}
-                        variant="text">
+                    disabled={loading}
+                    variant="text">
                     Cancel
                 </Button>
                 <Button

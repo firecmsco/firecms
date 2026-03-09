@@ -477,21 +477,16 @@ export const EntityCollectionView = React.memo(
                 collection,
                 dataSource,
                 context,
-                onSaveSuccess: () => {
+                afterSave: () => {
                     setError(undefined);
                     onValueUpdated();
                 },
-                onSaveFailure: (e: Error) => {
+                afterSaveError: (e: Error) => {
                     console.error("Save failure");
                     console.error(e);
                     setError(e);
-                },
-                onPreSaveHookError: (e: Error) => {
-                    console.error("Pre-save hook error");
-                    console.error(e);
-                    setError(e);
                 }
-            });
+            }).then();
 
         };
 

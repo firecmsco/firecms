@@ -109,7 +109,7 @@ type Product = {
 
 export const productSchema = buildSchema<Product>({
     name: "Product",
-    onPreSave: ({
+    beforeSave: ({
                     schema,
                     path,
                     id,
@@ -148,7 +148,7 @@ import { buildSchema, buildProperty } from "@camberi/firecms";
 
 export const productSchema = buildSchema({
     name: "Product",
-    onPreSave: ({
+    beforeSave: ({
                     schema,
                     path,
                     id,

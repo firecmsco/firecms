@@ -1,17 +1,17 @@
 ---
-slug: "docs/api/type-aliases/EntityOnPreSaveProps"
-title: "EntityOnPreSaveProps"
+slug: "docs/api/type-aliases/EntityBeforeSaveProps"
+title: "EntityBeforeSaveProps"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityOnPreSaveProps
+[@firecms/core](../README) / EntityBeforeSaveProps
 
-# Type Alias: EntityOnPreSaveProps\<M, USER\>
+# Type Alias: EntityBeforeSaveProps\<M, USER\>
 
-> **EntityOnPreSaveProps**\<`M`, `USER`\> = `Omit`\<[`EntityOnSaveProps`](../interfaces/EntityOnSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
+> **EntityBeforeSaveProps**\<`M`, `USER`\> = `Omit`\<[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
 
 Defined in: [types/entity\_callbacks.ts:104](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

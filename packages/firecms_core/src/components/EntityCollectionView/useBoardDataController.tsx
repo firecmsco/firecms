@@ -197,12 +197,12 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 ? entities.filter(e => e.values?.[currentColumnProperty] === column)
                 : entities;
 
-            // Apply onFetch callbacks if any
-            if (currentCollection.callbacks?.onFetch) {
+            // Apply afterRead callbacks if any
+            if (currentCollection.callbacks?.afterRead) {
                 try {
                     processed = await Promise.all(
                         processed.map(entity =>
-                            currentCollection.callbacks!.onFetch!({
+                            currentCollection.callbacks!.afterRead!({
                                 collection: currentCollection,
                                 path: currentResolvedPath,
                                 entity,
@@ -211,7 +211,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                         )
                     );
                 } catch (e) {
-                    console.error("Error in onFetch callback:", e);
+                    console.error("Error in afterRead callback:", e);
                 }
             }
 

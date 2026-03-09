@@ -20,8 +20,8 @@ It will run all the save callbacks specified in the collection.
 It is also possible to attach callbacks on save success or error, and callback
 errors.
 
-If you just want to save the data without running the `onSaveSuccess`,
-`onSaveFailure` and `onPreSave` callbacks, you can use the `saveEntity` method
+If you just want to save the data without running the `afterSave`,
+`afterSaveError` and `beforeSave` callbacks, you can use the `saveEntity` method
 in the datasource ([useDataSource](useDataSource)).
 
 ## Type Parameters

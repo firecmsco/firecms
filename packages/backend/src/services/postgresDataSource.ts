@@ -4,6 +4,7 @@ import { RealtimeService } from "./realtimeService";
 import { DrizzleClient } from "../db/interfaces";
 import { User } from "@firecms/types";
 import { sql } from "drizzle-orm";
+import { buildPropertyCallbacks, mergeDeep } from "@firecms/common";
 import { collectionRegistry } from "../collections/registry";
 import {
     DataSource,
@@ -57,6 +58,26 @@ export class PostgresDataSource implements DataSource {
         return date;
     }
 
+    private resolveCollectionCallbacks<M extends Record<string, any>>(collection: EntityCollection<M> | undefined, path: string) {
+        if (!collection && !path) return { collection: undefined, callbacks: undefined, propertyCallbacks: undefined };
+        const registryCollection = collectionRegistry.getCollectionByPath(path);
+        const resolvedCollection = registryCollection
+            ? { ...collection, ...registryCollection } as EntityCollection<M>
+            : collection as EntityCollection<M>;
+
+        const callbacks = resolvedCollection?.callbacks;
+        const properties = resolvedCollection?.properties;
+        let propertyCallbacks;
+        if (properties) {
+            propertyCallbacks = buildPropertyCallbacks(properties);
+        }
+        return {
+            collection: resolvedCollection,
+            callbacks,
+            propertyCallbacks
+        };
+    }
+
     async fetchCollection<M extends Record<string, any>>({
         path,
         collection,
@@ -78,17 +99,30 @@ export class PostgresDataSource implements DataSource {
             searchString
         });
 
-        if (collection?.callbacks?.onFetch) {
+        const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, path);
+
+        if (callbacks?.afterRead || propertyCallbacks?.afterRead) {
             const contextForCallback = {
                 user: this.user
             } as any; // Backend context
             return Promise.all(entities.map(async (entity) => {
-                const fetched = await collection.callbacks!.onFetch!({
-                    collection,
-                    path,
-                    entity,
-                    context: contextForCallback
-                });
+                let fetched = entity;
+                if (callbacks?.afterRead) {
+                    fetched = await callbacks.afterRead({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entity: fetched,
+                        context: contextForCallback
+                    }) ?? fetched;
+                }
+                if (propertyCallbacks?.afterRead) {
+                    fetched = await propertyCallbacks.afterRead({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entity: fetched,
+                        context: contextForCallback
+                    }) ?? fetched;
+                }
                 return fetched;
             }));
         }
@@ -187,16 +221,28 @@ export class PostgresDataSource implements DataSource {
             databaseId || collection?.databaseId
         );
 
-        if (entity && collection?.callbacks?.onFetch) {
+        const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, path);
+
+        if (entity && (callbacks?.afterRead || propertyCallbacks?.afterRead)) {
             const contextForCallback = {
                 user: this.user
             } as any; // Backend context
-            entity = await collection.callbacks.onFetch({
-                collection,
-                path,
-                entity,
-                context: contextForCallback
-            });
+            if (callbacks?.afterRead) {
+                entity = await callbacks.afterRead({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path,
+                    entity,
+                    context: contextForCallback
+                }) ?? entity;
+            }
+            if (propertyCallbacks?.afterRead) {
+                entity = await propertyCallbacks.afterRead({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path,
+                    entity,
+                    context: contextForCallback
+                }) ?? entity;
+            }
         }
 
         return entity;
@@ -260,56 +306,104 @@ export class PostgresDataSource implements DataSource {
         status
     }: SaveEntityProps<M>): Promise<Entity<M>> {
 
-        // Resolve the collection from the backend registry so callbacks (which are
-        // functions and can't survive JSON serialization over WebSocket) are available.
-        const registryCollection = collectionRegistry.getCollectionByPath(path);
-        const resolvedCollection = (registryCollection
-            ? { ...collection, ...registryCollection, callbacks: registryCollection.callbacks ?? collection?.callbacks }
-            : collection) as EntityCollection<M> | undefined;
+        const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, path);
 
         let updatedValues = values;
         const contextForCallback = {
             user: this.user
         } as any;
 
-        if (resolvedCollection?.callbacks?.onPreSave) {
+        if (callbacks?.beforeSave || propertyCallbacks?.beforeSave) {
             let previousValues: Partial<Entity<M>["values"]> | undefined;
             if (status === "existing" && entityId) {
-                const existing = await this.fetchEntity({ path, entityId, collection: resolvedCollection });
+                const existing = await this.entityService.fetchEntity<M>(path, entityId, resolvedCollection?.databaseId);
                 if (existing) {
                     previousValues = existing.values as Partial<Entity<M>["values"]>;
                 }
             }
-            updatedValues = await resolvedCollection.callbacks.onPreSave({
-                collection: resolvedCollection,
-                path,
-                entityId,
-                values,
-                previousValues,
-                status,
-                context: contextForCallback
-            });
+
+            if (callbacks?.beforeSave) {
+                const result = await callbacks.beforeSave({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path,
+                    entityId,
+                    values: updatedValues,
+                    previousValues,
+                    status,
+                    context: contextForCallback
+                });
+                if (result) updatedValues = mergeDeep(updatedValues, result);
+            }
+
+            if (propertyCallbacks?.beforeSave) {
+                const result = await propertyCallbacks.beforeSave({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path,
+                    entityId,
+                    values: updatedValues,
+                    previousValues,
+                    status,
+                    context: contextForCallback
+                });
+                if (result) updatedValues = mergeDeep(updatedValues, result);
+            }
+
+            console.log("💾 [DataSource] updatedValues after beforeSave callback:", updatedValues);
+        } else {
+            console.warn("⚠️ [DataSource] No beforeSave callback found for collection", path);
         }
 
         try {
-            const savedEntity = await this.entityService.saveEntity<M>(
+            let savedEntity = await this.entityService.saveEntity<M>(
                 path,
                 updatedValues,
                 entityId,
                 resolvedCollection?.databaseId
             );
 
-            if (resolvedCollection?.callbacks?.onSaveSuccess) {
+            if (savedEntity && (callbacks?.afterRead || propertyCallbacks?.afterRead)) {
+                if (callbacks?.afterRead) {
+                    savedEntity = await callbacks.afterRead({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entity: savedEntity,
+                        context: contextForCallback
+                    }) ?? savedEntity;
+                }
+                if (propertyCallbacks?.afterRead) {
+                    savedEntity = await propertyCallbacks.afterRead({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entity: savedEntity,
+                        context: contextForCallback
+                    }) ?? savedEntity;
+                }
+            }
+
+            if (callbacks?.afterSave || propertyCallbacks?.afterSave) {
                 let previousValues: Partial<Entity<M>["values"]> | undefined = undefined;
-                await resolvedCollection.callbacks.onSaveSuccess({
-                    collection: resolvedCollection as EntityCollection<M>,
-                    path,
-                    entityId: savedEntity.id,
-                    values: updatedValues,
-                    previousValues,
-                    status,
-                    context: contextForCallback
-                });
+                if (callbacks?.afterSave) {
+                    await callbacks.afterSave({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entityId: savedEntity.id,
+                        values: updatedValues,
+                        previousValues,
+                        status,
+                        context: contextForCallback
+                    });
+                }
+                if (propertyCallbacks?.afterSave) {
+                    await propertyCallbacks.afterSave({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entityId: savedEntity.id,
+                        values: updatedValues,
+                        previousValues,
+                        status,
+                        context: contextForCallback
+                    });
+                }
             }
 
             // Notify real-time subscribers (deferred if inside a transaction)
@@ -331,16 +425,29 @@ export class PostgresDataSource implements DataSource {
 
             return savedEntity;
         } catch (error) {
-            if (resolvedCollection?.callbacks?.onSaveFailure) {
-                await resolvedCollection.callbacks.onSaveFailure({
-                    collection: resolvedCollection as EntityCollection<M>,
-                    path,
-                    entityId: entityId || "unknown",
-                    values: updatedValues,
-                    previousValues: undefined,
-                    status,
-                    context: contextForCallback
-                });
+            if (callbacks?.afterSaveError || propertyCallbacks?.afterSaveError) {
+                if (callbacks?.afterSaveError) {
+                    await callbacks.afterSaveError({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entityId: entityId || "unknown",
+                        values: updatedValues,
+                        previousValues: undefined,
+                        status,
+                        context: contextForCallback
+                    });
+                }
+                if (propertyCallbacks?.afterSaveError) {
+                    await propertyCallbacks.afterSaveError({
+                        collection: resolvedCollection as EntityCollection<M>,
+                        path,
+                        entityId: entityId || "unknown",
+                        values: updatedValues,
+                        previousValues: undefined,
+                        status,
+                        context: contextForCallback
+                    });
+                }
             }
             throw error;
         }
@@ -354,23 +461,31 @@ export class PostgresDataSource implements DataSource {
         console.log("🗑️ [DataSource] Starting delete for entity:", entity.id, "in path:", entity.path);
 
         // Resolve from backend registry to restore callbacks lost during WebSocket serialization
-        const registryCollection = collectionRegistry.getCollectionByPath(entity.path);
-        const resolvedCollection = (registryCollection
-            ? { ...collection, ...registryCollection, callbacks: registryCollection.callbacks ?? collection?.callbacks }
-            : collection) as EntityCollection<M> | undefined;
+        const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, entity.path);
 
         const contextForCallback = {
             user: this.user
         } as any;
 
-        if (resolvedCollection?.callbacks?.onPreDelete) {
-            await resolvedCollection.callbacks.onPreDelete({
-                collection: resolvedCollection as EntityCollection<M>,
-                path: entity.path,
-                entityId: entity.id,
-                entity,
-                context: contextForCallback
-            });
+        if (callbacks?.beforeDelete || propertyCallbacks?.beforeDelete) {
+            if (callbacks?.beforeDelete) {
+                await callbacks.beforeDelete({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path: entity.path,
+                    entityId: entity.id,
+                    entity,
+                    context: contextForCallback
+                });
+            }
+            if (propertyCallbacks?.beforeDelete) {
+                await propertyCallbacks.beforeDelete({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path: entity.path,
+                    entityId: entity.id,
+                    entity,
+                    context: contextForCallback
+                });
+            }
         }
 
         await this.entityService.deleteEntity(
@@ -379,14 +494,25 @@ export class PostgresDataSource implements DataSource {
             entity.databaseId || resolvedCollection?.databaseId
         );
 
-        if (resolvedCollection?.callbacks?.onDelete) {
-            await resolvedCollection.callbacks.onDelete({
-                collection: resolvedCollection as EntityCollection<M>,
-                path: entity.path,
-                entityId: entity.id,
-                entity,
-                context: contextForCallback
-            });
+        if (callbacks?.afterDelete || propertyCallbacks?.afterDelete) {
+            if (callbacks?.afterDelete) {
+                await callbacks.afterDelete({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path: entity.path,
+                    entityId: entity.id,
+                    entity,
+                    context: contextForCallback
+                });
+            }
+            if (propertyCallbacks?.afterDelete) {
+                await propertyCallbacks.afterDelete({
+                    collection: resolvedCollection as EntityCollection<M>,
+                    path: entity.path,
+                    entityId: entity.id,
+                    entity,
+                    context: contextForCallback
+                });
+            }
         }
 
         console.log("🗑️ [DataSource] Entity deleted from database, now notifying real-time subscribers");

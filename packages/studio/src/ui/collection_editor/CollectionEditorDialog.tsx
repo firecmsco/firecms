@@ -653,12 +653,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             <>
                 {!isNewCollection && <div className={cls("px-4 py-2 w-full flex shrink-0 items-center justify-between gap-4 bg-white dark:bg-surface-950 border-b", defaultBorderMixin)}>
-                    <div className="flex items-center gap-4">
-                        {!fullScreen && <Typography variant="subtitle1" className="font-semibold px-2">
-                            {values.name || values.slug || "Collection"}
-                        </Typography>}
+                    <div className="flex flex-1 items-center justify-end gap-4 min-w-0">
                         <Tabs value={currentView}
-                            className="bg-transparent"
+                            className="bg-transparent !w-fit max-w-full"
                             onValueChange={(v) => setCurrentView(v as EditorView)}>
                             <Tab value={"general"}>
                                 General

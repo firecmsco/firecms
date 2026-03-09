@@ -141,6 +141,7 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
     const entityService = new EntityService(db);
     const realtimeService = new RealtimeService(db);
     const dataSource = new PostgresDataSource(db, realtimeService);
+    realtimeService.setDataSource(dataSource);
     const postgresConnection = new PostgresConnection(db);
 
     return {

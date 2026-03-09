@@ -31,9 +31,9 @@ Defined in: [hooks/data/save.ts:8](https://github.com/firecmsco/firecms/blob/mai
 
 `void`
 
-### onSaveFailure()?
+### afterSaveError()?
 
-> `optional` **onSaveFailure**: (`e`) => `void`
+> `optional` **afterSaveError**: (`e`) => `void`
 
 #### Parameters
 
@@ -45,9 +45,9 @@ Defined in: [hooks/data/save.ts:8](https://github.com/firecmsco/firecms/blob/mai
 
 `void`
 
-### onSaveSuccess()?
+### afterSave()?
 
-> `optional` **onSaveSuccess**: (`updatedEntity`) => `void`
+> `optional` **afterSave**: (`updatedEntity`) => `void`
 
 #### Parameters
 

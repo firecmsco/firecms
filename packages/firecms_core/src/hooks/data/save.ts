@@ -7,10 +7,8 @@ import { useDataSource } from "./useDataSource";
 export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
     SaveEntityProps<M> &
     {
-        onSaveSuccess?: (updatedEntity: Entity<M>) => void,
-        onSaveFailure?: (e: Error) => void,
-        onPreSaveHookError?: (e: Error) => void,
-        onSaveSuccessHookError?: (e: Error) => void
+        afterSave?: (updatedEntity: Entity<M>) => void,
+        afterSaveError?: (e: Error) => void
     }
 
 /**
@@ -19,8 +17,8 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
  *
- * If you just want to save the data without running the `onSaveSuccess`,
- * `onSaveFailure` and `onPreSave` callbacks, you can use the `saveEntity` method
+ * If you just want to save the data without running the `afterSave`,
+ * `afterSaveError` and `beforeSave` callbacks, you can use the `saveEntity` method
  * in the datasource ({@link useDataSource}).
  *
  * @param collection
@@ -32,10 +30,8 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @param status
  * @param dataSource
  * @param context
- * @param onSaveSuccess
- * @param onSaveFailure
- * @param onPreSaveHookError
- * @param onSaveSuccessHookError
+ * @param afterSave
+ * @param afterSaveError
  * @see useDataSource
  * @group Hooks and utilities
  */
@@ -48,16 +44,14 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
     status,
     dataSource,
     context,
-    onSaveSuccess,
-    onSaveFailure,
-    onPreSaveHookError,
-    onSaveSuccessHookError
+    afterSave,
+    afterSaveError
 }: SaveEntityWithCallbacksProps<M> & {
     collection: EntityCollection,
     dataSource: DataSource,
     context: FireCMSContext,
 }
-): Promise<void> {
+): Promise<Entity<M>> {
 
     if (status !== "new" && !entityId) {
         throw new Error("Entity id must be specified when updating an existing entity");
@@ -71,9 +65,11 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
         previousValues,
         status
     }).then((entity) => {
-        if (onSaveSuccess)
-            onSaveSuccess(entity);
+        if (afterSave)
+            afterSave(entity);
+        return entity as Entity<M>;
     }).catch((e) => {
-        if (onSaveFailure) onSaveFailure(e);
+        if (afterSaveError) afterSaveError(e);
+        throw e;
     });
 }

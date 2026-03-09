@@ -1,6 +1,7 @@
 import { Router, Response, NextFunction } from "express";
 import { DataSource, EntityCollection } from "@firecms/types";
 import { ApiResponse, QueryOptions, FireCMSRequest } from "../types";
+import { buildPropertyCallbacks } from "@firecms/common";
 
 /**
  * Lightweight REST API generator that leverages existing FireCMS DataSource
@@ -32,6 +33,9 @@ export class RestApiGenerator {
     private createCollectionRoutes(collection: EntityCollection): void {
         const basePath = `/${collection.slug}`;
 
+        // The DataSource handles callback execution (beforeSave, afterRead, etc) internally.
+        const resolvedCollection = collection;
+
         // GET /collection - List entities (fetch raw data without Entity wrapper)
         this.router.get(basePath, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
@@ -41,10 +45,10 @@ export class RestApiGenerator {
                 const dataSource = req.dataSource || this.dataSource;
 
                 // Fetch raw data directly from EntityService without Entity wrapper
-                const entities = await this.fetchRawCollection(dataSource, collection, queryOptions);
+                const entities = await this.fetchRawCollection(dataSource, resolvedCollection, queryOptions);
 
                 // Get count if needed
-                const total = await this.countRawEntities(dataSource, collection, queryOptions);
+                const total = await this.countRawEntities(dataSource, resolvedCollection, queryOptions);
 
                 res.json({
                     data: entities,
@@ -70,7 +74,7 @@ export class RestApiGenerator {
                 const dataSource = req.dataSource || this.dataSource;
 
                 // Fetch raw data directly from EntityService without Entity wrapper
-                const entity = await this.fetchRawEntity(dataSource, collection, String(id));
+                const entity = await this.fetchRawEntity(dataSource, resolvedCollection, String(id));
 
                 if (!entity) {
                     throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
@@ -94,7 +98,7 @@ export class RestApiGenerator {
                 const entity = await dataSource.saveEntity({
                     path,
                     values: req.body,
-                    collection,
+                    collection: resolvedCollection,
                     status: "new"
                 });
 
@@ -119,7 +123,7 @@ export class RestApiGenerator {
                 const existingEntity = await dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
-                    collection
+                    collection: resolvedCollection
                 });
 
                 if (!existingEntity) {
@@ -131,7 +135,7 @@ export class RestApiGenerator {
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     values: req.body,
-                    collection,
+                    collection: resolvedCollection,
                     status: "existing"
                 });
 
@@ -156,7 +160,7 @@ export class RestApiGenerator {
                 const existingEntity = await dataSource.fetchEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
-                    collection
+                    collection: resolvedCollection
                 });
 
                 if (!existingEntity) {
@@ -166,7 +170,7 @@ export class RestApiGenerator {
                 // Use existing deleteEntity from DataSource (expects the full entity)
                 await dataSource.deleteEntity({
                     entity: existingEntity,
-                    collection
+                    collection: resolvedCollection
                 });
 
                 res.status(204).send();
@@ -176,6 +180,8 @@ export class RestApiGenerator {
             }
         });
     }
+
+
 
     /**
      * Map PostgREST-style operators to FireCMS WhereFilterOp

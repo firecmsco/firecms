@@ -35,7 +35,7 @@ export function createHistoryEntry<T = any>({
 }
 
 export const entityHistoryCallbacks: EntityCallbacks = {
-    onSaveSuccess: async (props) => {
+    afterSave: async (props) => {
 
         const values = props.values;
         const previousValues = props.previousValues;

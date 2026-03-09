@@ -6,7 +6,7 @@ sidebar_label: Entity callbacks
 
 When working with an entity, you can attach different callbacks before and
 after it gets saved or fetched:
-`onFetch`, `onIdUpdate`, `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
+`afterRead`, `onIdUpdate`, `beforeSave`, `afterSave` and `afterSaveError`.
 
 These callbacks are defined at the collection level under the prop `callbacks`.
 
@@ -33,9 +33,9 @@ including the `authController`, `dataSource`, `storageSource`, `sideDialogsContr
 import {
     buildCollection,
     buildEntityCallbacks,
-    EntityOnDeleteProps,
-    EntityOnSaveProps,
-    EntityOnFetchProps,
+    EntityBeforeDeleteProps,
+    EntityAfterSaveProps,
+    EntityAfterReadProps,
     EntityIdUpdateProps,
     toSnakeCase
 } from "@firecms/core";
@@ -46,7 +46,7 @@ type Product = {
 }
 
 const productCallbacks = buildEntityCallbacks({
-    onPreSave: ({
+    beforeSave: ({
                     collection,
                     path,
                     entityId,
@@ -59,36 +59,36 @@ const productCallbacks = buildEntityCallbacks({
         return values;
     },
 
-    onSaveSuccess: (props: EntityOnSaveProps<Product>) => {
-        console.log("onSaveSuccess", props);
+    afterSave: (props: EntityAfterSaveProps<Product>) => {
+        console.log("afterSave", props);
     },
 
-    onSaveFailure: (props: EntityOnSaveProps<Product>) => {
-        console.log("onSaveFailure", props);
+    afterSaveError: (props: EntityAfterSaveProps<Product>) => {
+        console.log("afterSaveError", props);
     },
 
-    onPreDelete: ({
+    beforeDelete: ({
                       collection,
                       path,
                       entityId,
                       entity,
                       context
-                  }: EntityOnDeleteProps<Product>
+                  }: EntityBeforeDeleteProps<Product>
     ) => {
         if (!context.authController.user)
             throw Error("Not logged in users cannot delete products");
     },
 
-    onDelete: (props: EntityOnDeleteProps<Product>) => {
+    onDelete: (props: EntityBeforeDeleteProps<Product>) => {
         console.log("onDelete", props);
     },
 
-    onFetch({
+    afterRead({
                 collection,
                 context,
                 entity,
                 path,
-            }: EntityOnFetchProps) {
+            }: EntityAfterReadProps) {
         entity.values.name = "Forced name";
         return entity;
     },
@@ -125,7 +125,7 @@ const productCollection = buildCollection<Product>({
 });
 ```
 
-#### EntityOnSaveProps
+#### EntityAfterSaveProps
 
 * `collection`: Resolved collection of the entity
 
@@ -143,7 +143,7 @@ const productCollection = buildCollection<Product>({
 
 * `context`: FireCMSContext Context of the app status
 
-#### EntityOnDeleteProps
+#### EntityBeforeDeleteProps
 
 * `collection`:  Resolved collection of the entity
 

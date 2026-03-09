@@ -1,15 +1,15 @@
 ---
-slug: "docs/api/interfaces/EntityOnSaveProps"
-title: "EntityOnSaveProps"
+slug: "docs/api/interfaces/EntityAfterSaveProps"
+title: "EntityAfterSaveProps"
 ---
 
 [**@firecms/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityOnSaveProps
+[@firecms/core](../README) / EntityAfterSaveProps
 
-# Interface: EntityOnSaveProps\<M, USER\>
+# Interface: EntityAfterSaveProps\<M, USER\>
 
 Defined in: [types/entity\_callbacks.ts:123](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

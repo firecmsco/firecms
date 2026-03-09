@@ -449,42 +449,42 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 status
             })}
 
-            <div className={"grow"} />
-
             {pluginActionsTop}
 
             {globalLoading && <div className="self-center">
                 <CircularProgress size={"small"} />
             </div>}
 
-            {hasAdditionalViews && <Tabs
-                // className={"self-end"}
-                value={selectedTab}
-                onValueChange={(value) => {
-                    onSideTabClick(value);
-                }}>
+            {hasAdditionalViews && <div className={"flex-1 flex justify-end min-w-0"}>
+                <Tabs
+                    className={"!w-fit max-w-full"}
+                    value={selectedTab}
+                    onValueChange={(value) => {
+                        onSideTabClick(value);
+                    }}>
 
-                {includeJsonView && <Tab
-                    disabled={!hasAdditionalViews}
-                    value={JSON_TAB_VALUE}
-                    className={"text-sm"}>
-                    <CodeIcon size={"small"} />
-                </Tab>}
+                    {includeJsonView && <Tab
+                        disabled={!hasAdditionalViews}
+                        value={JSON_TAB_VALUE}
+                        className={"text-sm"}>
+                        <CodeIcon size={"small"} />
+                    </Tab>}
 
-                {customViewTabsStart}
+                    {customViewTabsStart}
 
-                <Tab
-                    disabled={!hasAdditionalViews}
-                    value={MAIN_TAB_VALUE}
-                    className={"text-sm min-w-[90px]"}>
-                    {collection.singularName ?? collection.name}
-                </Tab>
+                    <Tab
+                        disabled={!hasAdditionalViews}
+                        value={MAIN_TAB_VALUE}
+                        className={"text-sm min-w-[90px]"}>
+                        {collection.singularName ?? collection.name}
+                    </Tab>
 
 
-                {customViewTabsEnd}
+                    {customViewTabsEnd}
 
-                {subcollectionTabs}
-            </Tabs>}
+                    {subcollectionTabs}
+                </Tabs>
+            </div>}
         </div>}
 
         {globalLoading

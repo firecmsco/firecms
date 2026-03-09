@@ -28,10 +28,10 @@ const privateNotesCollection: EntityCollection = {
         }
     ],
     callbacks: {
-        onPreSave: ({ values, context, status }) => {
+        beforeSave: ({ values, context, status }) => {
             if (status === "new" && !values.user_id) {
                 // Ensure we handle both frontend (authController) and backend (user) context contexts.
-                values.user_id = context.user?.uid ?? context.authController?.user?.uid;
+                values.user_id = context.user?.uid ?? (context as any).authController?.user?.uid;
             }
             return values;
         }

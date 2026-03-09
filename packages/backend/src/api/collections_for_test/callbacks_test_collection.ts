@@ -25,33 +25,33 @@ export const callbacksTestCollection: EntityCollection<any> = {
         }
     },
     callbacks: {
-        onPreSave: (props: any) => {
-            console.log("🔥 [BACKEND_CALLBACK] onPreSave Triggered!", props);
+        beforeSave: (props: any) => {
+            console.log("🔥 [BACKEND_CALLBACK] beforeSave Triggered!", props);
             return {
                 ...props.values,
                 hasPreSaveTriggered: true,
                 name: props.values.name + " (PreSaved)" // Modifying value before save
             };
         },
-        onSaveSuccess: (props: any) => {
-            console.log("🔥 [BACKEND_CALLBACK] onSaveSuccess Triggered!", props);
+        afterSave: (props: any) => {
+            console.log("🔥 [BACKEND_CALLBACK] afterSave Triggered!", props);
             // This usually triggers other side effects (emails, notifications), log for now
         },
-        onSaveFailure: (props: any) => {
-            console.error("🔥 [BACKEND_CALLBACK] onSaveFailure Triggered!", props);
+        afterSaveError: (props: any) => {
+            console.error("🔥 [BACKEND_CALLBACK] afterSaveError Triggered!", props);
         },
-        onFetch: (props: any) => {
-            console.log("🔥 [BACKEND_CALLBACK] onFetch Triggered!", props);
+        afterRead: (props: any) => {
+            console.log("🔥 [BACKEND_CALLBACK] afterRead Triggered!", props);
             return {
                 ...props.entity.values,
                 hasFetchTriggered: true
             };
         },
-        onPreDelete: (props: any) => {
-            console.log("🔥 [BACKEND_CALLBACK] onPreDelete Triggered!", props);
+        beforeDelete: (props: any) => {
+            console.log("🔥 [BACKEND_CALLBACK] beforeDelete Triggered!", props);
         },
-        onDelete: (props: any) => {
-            console.log("🔥 [BACKEND_CALLBACK] onDelete Triggered!", props);
+        afterDelete: (props: any) => {
+            console.log("🔥 [BACKEND_CALLBACK] afterDelete Triggered!", props);
         }
     }
 };

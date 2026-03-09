@@ -1,7 +1,7 @@
 import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { User } from "../users";
-import { FireCMSContext } from "../firecms_context";
+import { FireCMSCallContext } from "../firecms_context";
 
 /**
  * This interface defines all the callbacks that can be used when an entity
@@ -13,49 +13,51 @@ export type EntityCallbacks<M extends Record<string, any> = any, USER extends Us
 
     /**
      * Callback used after fetching data
-     * @param entityFetchProps
+     * @param props
      */
-    onFetch?(entityFetchProps: EntityOnFetchProps<M, USER>)
+    afterRead?(props: EntityAfterReadProps<M, USER>)
         : Promise<Entity<M>> | Entity<M>;
 
-    /**
-     * Callback used when save is successful
-     * @param entitySaveProps
-     */
-    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M, USER>)
-        : Promise<void> | void;
-
-    /**
-     * Callback used when saving fails
-     * @param entitySaveProps
-     */
-    onSaveFailure?(entitySaveProps: EntityOnSaveFailureProps<M, USER>)
-        : Promise<void> | void;
 
     /**
      * Callback used before saving, you need to return the values that will get
      * saved. If you throw an error in this method the process stops, and an
      * error snackbar gets displayed.
-     * @param entitySaveProps
+     * This runs after schema validation.
+     * @param props
      */
-    onPreSave?(entitySaveProps: EntityOnPreSaveProps<M, USER>)
+    beforeSave?(props: EntityBeforeSaveProps<M, USER>)
         : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
 
     /**
-     * Callback used after the entity is deleted.
+     * Callback used when save is successful
+     * @param props
+     */
+    afterSave?(props: EntityAfterSaveProps<M, USER>)
+        : Promise<void> | void;
+
+    /**
+     * Callback used when saving fails
+     * @param props
+     */
+    afterSaveError?(props: EntityAfterSaveErrorProps<M, USER>)
+        : Promise<void> | void;
+
+    /**
+     * Callback used before the entity is deleted.
      * If you throw an error in this method the process stops, and an
      * error snackbar gets displayed.
      *
-     * @param entityDeleteProps
+     * @param props
      */
-    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M, USER>): void;
+    beforeDelete?(props: EntityBeforeDeleteProps<M, USER>): void;
 
     /**
      * Callback used after the entity is deleted.
      *
-     * @param entityDeleteProps
+     * @param props
      */
-    onDelete?(entityDeleteProps: EntityOnDeleteProps<M, USER>): void;
+    afterDelete?(props: EntityAfterDeleteProps<M, USER>): void;
 
 }
 
@@ -63,7 +65,7 @@ export type EntityCallbacks<M extends Record<string, any> = any, USER extends Us
  * Parameters passed to hooks when an entity is fetched
  * @group Models
  */
-export interface EntityOnFetchProps<M extends Record<string, any> = any, USER extends User = User> {
+export interface EntityAfterReadProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * Collection of the entity
@@ -84,15 +86,15 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, USER ex
     /**
      * Context of the app status
      */
-    context: FireCMSContext<USER>;
+    context: FireCMSCallContext<USER>;
 }
 
 /**
  * Parameters passed to hooks before an entity is saved
  * @group Models
  */
-export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER extends User = User> =
-    Omit<EntityOnSaveProps<M, USER>, "entityId">
+export type EntityBeforeSaveProps<M extends Record<string, any> = any, USER extends User = User> =
+    Omit<EntityAfterSaveProps<M, USER>, "entityId">
     & {
         entityId?: string | number;
     }
@@ -100,8 +102,8 @@ export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER exten
  * Parameters passed to hooks before an entity is saved
  * @group Models
  */
-export type EntityOnSaveFailureProps<M extends Record<string, any> = any, USER extends User = User> =
-    Omit<EntityOnSaveProps<M, USER>, "entityId">
+export type EntityAfterSaveErrorProps<M extends Record<string, any> = any, USER extends User = User> =
+    Omit<EntityAfterSaveProps<M, USER>, "entityId">
     & {
         entityId?: string | number;
     }
@@ -110,7 +112,7 @@ export type EntityOnSaveFailureProps<M extends Record<string, any> = any, USER e
  * Parameters passed to hooks when an entity is saved
  * @group Models
  */
-export interface EntityOnSaveProps<M extends Record<string, any> = any, USER extends User = User> {
+export interface EntityAfterSaveProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * Resolved collection of the entity
@@ -146,14 +148,14 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, USER ext
     /**
      * Context of the app status
      */
-    context: FireCMSContext<USER>;
+    context: FireCMSCallContext<USER>;
 }
 
 /**
  * Parameters passed to hooks when an entity is deleted
  * @group Models
  */
-export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER extends User = User> {
+export interface EntityBeforeDeleteProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * collection of the entity being deleted
@@ -178,7 +180,38 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER e
     /**
      * Context of the app status
      */
-    context: FireCMSContext<USER>;
+    context: FireCMSCallContext<USER>;
 }
 
+/**
+ * Parameters passed to hooks after an entity is deleted
+ * @group Models
+ */
+export interface EntityAfterDeleteProps<M extends Record<string, any> = any, USER extends User = User> {
+
+    /**
+     * collection of the entity being deleted
+     */
+    collection: EntityCollection<M>;
+
+    /**
+     * Path of the parent collection
+     */
+    path: string;
+
+    /**
+     * Deleted entity id
+     */
+    entityId: string | number;
+
+    /**
+     * Deleted entity
+     */
+    entity: Entity<M>;
+
+    /**
+     * Context of the app status
+     */
+    context: FireCMSCallContext<USER>;
+}
 

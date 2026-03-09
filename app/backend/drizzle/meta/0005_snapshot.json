@@ -1,0 +1,584 @@
+{
+  "id": "b96a4264-5715-4c87-89ec-fb81b7e97c9b",
+  "prevId": "c7265b49-50dd-49b2-844d-8c8e9a78d5fe",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.authors": {
+      "name": "authors",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "byDefault",
+            "name": "authors_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "picture": {
+          "name": "picture",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.posts": {
+      "name": "posts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "posts_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "posts_author_id_authors_id_fk": {
+          "name": "posts_author_id_authors_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "authors",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "Enable read access for all users": {
+          "name": "Enable read access for all users",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "(true) AND (auth.roles() ~ 'public')"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.posts_tags": {
+      "name": "posts_tags",
+      "schema": "",
+      "columns": {
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_id": {
+          "name": "tag_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "posts_tags_post_id_posts_id_fk": {
+          "name": "posts_tags_post_id_posts_id_fk",
+          "tableFrom": "posts_tags",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "posts_tags_tag_id_tags_id_fk": {
+          "name": "posts_tags_tag_id_tags_id_fk",
+          "tableFrom": "posts_tags",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tag_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "posts_tags_post_id_tag_id_pk": {
+          "name": "posts_tags_post_id_tag_id_pk",
+          "columns": [
+            "post_id",
+            "tag_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.private_notes": {
+      "name": "private_notes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_locked": {
+          "name": "is_locked",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "admin_bypass": {
+          "name": "admin_bypass",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "(true) AND (auth.roles() ~ 'admin')",
+          "withCheck": "(true) AND (auth.roles() ~ 'admin')"
+        },
+        "owner_access": {
+          "name": "owner_access",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "\"private_notes\".\"user_id\" = auth.uid()",
+          "withCheck": "\"private_notes\".\"user_id\" = auth.uid()"
+        },
+        "no_update_locked": {
+          "name": "no_update_locked",
+          "as": "RESTRICTIVE",
+          "for": "UPDATE",
+          "to": [
+            "public"
+          ],
+          "using": "\"private_notes\".\"is_locked\" = false",
+          "withCheck": "\"private_notes\".\"is_locked\" = false"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "bio": {
+          "name": "bio",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "website": {
+          "name": "website",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profiles_author_id_authors_id_fk": {
+          "name": "profiles_author_id_authors_id_fk",
+          "tableFrom": "profiles",
+          "tableTo": "authors",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.project_users": {
+      "name": "project_users",
+      "schema": "",
+      "columns": {
+        "project_id": {
+          "name": "project_id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "project_users_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tags": {
+      "name": "tags",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tags_test_entities": {
+      "name": "tags_test_entities",
+      "schema": "",
+      "columns": {
+        "test_entitie_id": {
+          "name": "test_entitie_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_entity_tag_id": {
+          "name": "test_entity_tag_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tags_test_entities_test_entitie_id_test_entities_id_fk": {
+          "name": "tags_test_entities_test_entitie_id_test_entities_id_fk",
+          "tableFrom": "tags_test_entities",
+          "tableTo": "test_entities",
+          "columnsFrom": [
+            "test_entitie_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "tags_test_entities_test_entity_tag_id_tags_id_fk": {
+          "name": "tags_test_entities_test_entity_tag_id_tags_id_fk",
+          "tableFrom": "tags_test_entities",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "test_entity_tag_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tags_test_entities_test_entitie_id_test_entity_tag_id_pk": {
+          "name": "tags_test_entities_test_entitie_id_test_entity_tag_id_pk",
+          "columns": [
+            "test_entitie_id",
+            "test_entity_tag_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.test_entities": {
+      "name": "test_entities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "string_plain": {
+          "name": "string_plain",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_multiline": {
+          "name": "string_multiline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_markdown": {
+          "name": "string_markdown",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_url": {
+          "name": "string_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_email": {
+          "name": "string_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_enum": {
+          "name": "string_enum",
+          "type": "test_entities_string_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "number_plain": {
+          "name": "number_plain",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_enum": {
+          "name": "number_enum",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boolean_plain": {
+          "name": "boolean_plain",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_plain": {
+          "name": "date_plain",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_time": {
+          "name": "date_time",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "map_plain": {
+          "name": "map_plain",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "array_string": {
+          "name": "array_string",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "array_enum": {
+          "name": "array_enum",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.posts_status": {
+      "name": "posts_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "review",
+        "published",
+        "archived"
+      ]
+    },
+    "public.project_users_role": {
+      "name": "project_users_role",
+      "schema": "public",
+      "values": [
+        "admin",
+        "editor",
+        "viewer"
+      ]
+    },
+    "public.test_entities_number_enum": {
+      "name": "test_entities_number_enum",
+      "schema": "public",
+      "values": [
+        "10",
+        "20"
+      ]
+    },
+    "public.test_entities_string_enum": {
+      "name": "test_entities_string_enum",
+      "schema": "public",
+      "values": [
+        "opt_a",
+        "opt_b"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

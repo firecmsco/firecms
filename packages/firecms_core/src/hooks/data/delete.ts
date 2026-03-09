@@ -4,7 +4,7 @@ import {
     Entity,
     EntityCallbacks,
     EntityCollection,
-    EntityOnDeleteProps,
+    EntityBeforeDeleteProps,
     FireCMSContext,
     User
 } from "@firecms/types";
@@ -18,8 +18,6 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
         callbacks?: EntityCallbacks<M, USER>;
         onDeleteSuccess?: (entity: Entity<M>) => void;
         onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
-        onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
-        onDeleteSuccessHookError?: (entity: Entity<M>, e: Error) => void;
     }
 
 /**
@@ -28,8 +26,8 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
  *
- * If you just want to delete any data without running the `onPreDelete`,
- * and `onDelete` callbacks, you can use the `deleteEntity` method
+ * If you just want to delete any data without running the `beforeDelete`,
+ * and `afterDelete` callbacks, you can use the `deleteEntity` method
  * in the datasource ({@link useDataSource}).
  *
  * @param dataSource
@@ -38,8 +36,6 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
  * @param callbacks
  * @param onDeleteSuccess
  * @param onDeleteFailure
- * @param onPreDeleteHookError
- * @param onDeleteSuccessHookError
  * @param context
  * @group Hooks and utilities
  */
@@ -50,8 +46,6 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
     callbacks,
     onDeleteSuccess,
     onDeleteFailure,
-    onPreDeleteHookError,
-    onDeleteSuccessHookError,
     context
 }: DeleteEntityWithCallbacksProps<M> & {
     collection: EntityCollection<M>,
@@ -62,7 +56,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
 
     console.debug("Deleting entity", entity.path, entity.id);
 
-    const entityDeleteProps: EntityOnDeleteProps<M, any> = {
+    const entityDeleteProps: EntityBeforeDeleteProps<M, any> = {
         entity,
         collection,
         entityId: entity.id,

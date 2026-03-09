@@ -23,21 +23,21 @@ interface SheetProps {
 }
 
 export const Sheet: React.FC<SheetProps> = ({
-                                                children,
-                                                side = "right",
-                                                title,
-                                                modal = true,
-                                                includeBackgroundOverlay = true,
-                                                open,
-                                                onOpenChange,
-                                                transparent,
-                                                className,
-                                                style,
-                                                overlayClassName,
-                                                overlayStyle,
-                                                portalContainer,
-                                                ...props
-                                            }) => {
+    children,
+    side = "right",
+    title,
+    modal = true,
+    includeBackgroundOverlay = true,
+    open,
+    onOpenChange,
+    transparent,
+    className,
+    style,
+    overlayClassName,
+    overlayStyle,
+    portalContainer,
+    ...props
+}) => {
     const [displayed, setDisplayed] = useState(false);
 
     // Get the portal container from context
@@ -69,8 +69,8 @@ export const Sheet: React.FC<SheetProps> = ({
 
     return (
         <DialogPrimitive.Root open={displayed || open}
-                              modal={modal}
-                              onOpenChange={onOpenChange}>
+            modal={modal}
+            onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal container={finalContainer}>
                 <DialogPrimitive.Title autoFocus tabIndex={0}>
                     {title ?? "Sheet"}
@@ -78,16 +78,11 @@ export const Sheet: React.FC<SheetProps> = ({
                 {includeBackgroundOverlay && <DialogPrimitive.Overlay
                     className={cls(
                         "outline-none",
-                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
-                        "bg-black bg-opacity-50 bg-black/50",
-                        "dark:bg-surface-900 dark:bg-opacity-60 dark:bg-surface-900/60",
-                        displayed && open ? "opacity-100" : "opacity-0",
+                        "fixed inset-0 z-20 bg-black/80 dark:bg-surface-900/80",
+                        "backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
                         overlayClassName
                     )}
-                    style={{
-                        pointerEvents: displayed ? "auto" : "none",
-                        ...overlayStyle
-                    }}
+                    style={overlayStyle}
                 />}
                 <DialogPrimitive.Content
                     {...props}

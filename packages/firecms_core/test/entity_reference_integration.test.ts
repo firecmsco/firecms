@@ -8,7 +8,7 @@ import { describe, expect, it } from "@jest/globals";
 import { EntityReference, GeoPoint } from "@firecms/types";
 import { mergeDeep } from "@firecms/common";
 import { updateDateAutoValues } from "@firecms/common";
-import { mergeCallbacks } from "@firecms/common";
+
 
 // Real EntityReference class for testing
 class TestEntityReference extends EntityReference {
@@ -200,56 +200,6 @@ describe("EntityReference Preservation - Integration Tests", () => {
         });
     });
 
-    describe("mergeCallbacks onPreSave with EntityReference", () => {
-
-        it("should preserve EntityReference through onPreSave callback chain", async () => {
-            // This simulates plugin callbacks modifying values with references
-
-            const baseCallbacks = {
-                onPreSave: async (props: any) => {
-                    // Base callback adds a reference
-                    return {
-                        ...props.values,
-                        createdBy: new TestEntityReference("system", "users"),
-                    };
-                },
-            };
-
-            const pluginCallbacks = {
-                onPreSave: async (props: any) => {
-                    // Plugin callback modifies another field but shouldn't break references
-                    return {
-                        processedAt: new Date(),
-                    };
-                },
-            };
-
-            const mergedCallbacks = mergeCallbacks(baseCallbacks, pluginCallbacks);
-
-            const inputValues = {
-                title: "Test",
-                author: new TestEntityReference("author1", "users"),
-            };
-
-            const result = await mergedCallbacks!.onPreSave!({
-                values: inputValues,
-                collection: {} as any,
-                path: "test",
-                entityId: "123",
-                status: "new",
-                context: {} as any,
-                resolvedPath: "test",
-            });
-
-            // Original reference should be preserved
-            expect(result.author.isEntityReference()).toBe(true);
-            expect(result.author.id).toBe("author1");
-
-            // Added reference should also be valid
-            expect(result.createdBy.isEntityReference()).toBe(true);
-            expect(result.createdBy.id).toBe("system");
-        });
-    });
 
     describe("Full Save Flow Simulation", () => {
 

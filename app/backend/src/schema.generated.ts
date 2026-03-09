@@ -9,7 +9,7 @@ export const testEntitiesString_enum = pgEnum("test_entities_string_enum", ['opt
 export const testEntitiesNumber_enum = pgEnum("test_entities_number_enum", ['10', '20']);
 
 export const authors = pgTable("authors", {
-    id: integer("id").primaryKey().notNull(),
+    id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
     name: varchar("name").notNull(),
     email: varchar("email").notNull(),
     picture: varchar("picture")
@@ -21,7 +21,9 @@ export const posts = pgTable("posts", {
     content: varchar("content"),
     status: postsStatus("status"),
     author_id: integer("author_id").references(() => authors.id, { onDelete: "set null" })
-});
+}, (table) => ([
+    pgPolicy("Enable read access for all users", { as: "permissive", for: "select", to: ["public"], using: sql`(true) AND (auth.roles() ~ 'public')` }),
+]));
 
 export const postsTags = pgTable("posts_tags", {
     post_id: integer("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
@@ -34,7 +36,7 @@ export const privateNotes = pgTable("private_notes", {
     id: uuid("id").primaryKey().defaultRandom(),
     title: varchar("title").notNull(),
     content: varchar("content"),
-    user_id: varchar("user_id").notNull(),
+    user_id: varchar("user_id"),
     is_locked: boolean("is_locked")
 }, (table) => ([
     pgPolicy("admin_bypass", { as: "permissive", for: "all", to: ["public"], using: sql`(true) AND (auth.roles() ~ 'admin')`, withCheck: sql`(true) AND (auth.roles() ~ 'admin')` }),
@@ -50,13 +52,11 @@ export const profiles = pgTable("profiles", {
 });
 
 export const projectUsers = pgTable("project_users", {
-    project_id: varchar("project_id").notNull(),
-    id: varchar("id").notNull(),
+    project_id: varchar("project_id").primaryKey().notNull(),
+    id: varchar("id").primaryKey().notNull(),
     email: varchar("email").notNull(),
     role: projectUsersRole("role")
-}, (table) => ({
-    pk: primaryKey({ columns: [table.project_id, table.id] })
-}));
+});
 
 export const tags = pgTable("tags", {
     id: integer("id").primaryKey().notNull(),
@@ -64,7 +64,7 @@ export const tags = pgTable("tags", {
 });
 
 export const testEntities = pgTable("test_entities", {
-    id: integer("id").primaryKey().notNull(),
+    id: integer("id").primaryKey(),
     string_plain: varchar("string_plain"),
     string_multiline: varchar("string_multiline"),
     string_markdown: varchar("string_markdown"),

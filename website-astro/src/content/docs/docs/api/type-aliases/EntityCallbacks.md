@@ -43,7 +43,7 @@ Callback used after the entity is deleted.
 
 ##### entityDeleteProps
 
-[`EntityOnDeleteProps`](../interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
+[`EntityBeforeDeleteProps`](../interfaces/EntityBeforeDeleteProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -51,9 +51,9 @@ Callback used after the entity is deleted.
 
 ***
 
-### onFetch()?
+### afterRead()?
 
-> `optional` **onFetch**(`entityFetchProps`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
+> `optional` **afterRead**(`entityFetchProps`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
 Defined in: [types/entity\_callbacks.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -63,7 +63,7 @@ Callback used after fetching data
 
 ##### entityFetchProps
 
-[`EntityOnFetchProps`](../interfaces/EntityOnFetchProps)\<`M`, `USER`\>
+[`EntityAfterReadProps`](../interfaces/EntityAfterReadProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -93,9 +93,9 @@ The returned string will be used as the ID of the entity.
 
 ***
 
-### onPreDelete()?
+### beforeDelete()?
 
-> `optional` **onPreDelete**(`entityDeleteProps`): `void`
+> `optional` **beforeDelete**(`entityDeleteProps`): `void`
 
 Defined in: [types/entity\_callbacks.ts:52](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -107,7 +107,7 @@ error snackbar gets displayed.
 
 ##### entityDeleteProps
 
-[`EntityOnDeleteProps`](../interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
+[`EntityBeforeDeleteProps`](../interfaces/EntityBeforeDeleteProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -115,9 +115,9 @@ error snackbar gets displayed.
 
 ***
 
-### onPreSave()?
+### beforeSave()?
 
-> `optional` **onPreSave**(`entitySaveProps`): `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
+> `optional` **beforeSave**(`entitySaveProps`): `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
 
 Defined in: [types/entity\_callbacks.ts:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -129,7 +129,7 @@ error snackbar gets displayed.
 
 ##### entitySaveProps
 
-[`EntityOnPreSaveProps`](EntityOnPreSaveProps)\<`M`, `USER`\>
+[`EntityBeforeSaveProps`](EntityBeforeSaveProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -137,9 +137,9 @@ error snackbar gets displayed.
 
 ***
 
-### onSaveFailure()?
+### afterSaveError()?
 
-> `optional` **onSaveFailure**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
+> `optional` **afterSaveError**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
 
 Defined in: [types/entity\_callbacks.ts:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -149,7 +149,7 @@ Callback used when saving fails
 
 ##### entitySaveProps
 
-[`EntityOnSaveFailureProps`](EntityOnSaveFailureProps)\<`M`, `USER`\>
+[`EntityAfterSaveErrorProps`](EntityAfterSaveErrorProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -157,9 +157,9 @@ Callback used when saving fails
 
 ***
 
-### onSaveSuccess()?
+### afterSave()?
 
-> `optional` **onSaveSuccess**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
+> `optional` **afterSave**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
 
 Defined in: [types/entity\_callbacks.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -169,7 +169,7 @@ Callback used when save is successful
 
 ##### entitySaveProps
 
-[`EntityOnSaveProps`](../interfaces/EntityOnSaveProps)\<`M`, `USER`\>
+[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>
 
 #### Returns
 

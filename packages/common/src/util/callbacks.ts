@@ -1,104 +1,114 @@
-import { EntityCallbacks } from "@firecms/types";
+import { EntityCallbacks, Properties } from "@firecms/types";
 import { mergeDeep } from "./objects";
 
-export const mergeCallbacks = (
-    baseCallbacks: EntityCallbacks = {},
-    pluginCallbacks: EntityCallbacks = {}
-): EntityCallbacks | undefined => {
-
-    if (!baseCallbacks && !pluginCallbacks) {
-        return undefined;
-    }
-
-    const mergedCallbacks: EntityCallbacks = {};
-
-    // Handle onFetch - returns Entity<M> or Promise<Entity<M>>
-    if (baseCallbacks.onFetch || pluginCallbacks.onFetch) {
-        mergedCallbacks.onFetch = async (props) => {
-            let entity = props.entity;
-            if (baseCallbacks.onFetch) {
-                entity = await Promise.resolve(baseCallbacks.onFetch(props));
+/**
+ * Helper function to recursively check if there are any callbacks in the properties.
+ */
+function hasPropertyCallbacks(properties: Properties, callbackName: "afterRead" | "beforeSave"): boolean {
+    if (!properties) return false;
+    for (const property of Object.values(properties)) {
+        if (property.callbacks?.[callbackName]) return true;
+        if (property.type === "map" && property.properties) {
+            if (hasPropertyCallbacks(property.properties, callbackName)) return true;
+        } else if (property.type === "array" && property.of) {
+            const ofs = Array.isArray(property.of) ? property.of : [property.of];
+            for (const of of ofs) {
+                if (of.callbacks?.[callbackName]) return true;
+                if (of.type === "map" && of.properties && hasPropertyCallbacks(of.properties, callbackName)) return true;
             }
-            if (pluginCallbacks.onFetch) {
-                entity = await Promise.resolve(pluginCallbacks.onFetch({
-                    ...props,
-                    entity
+        }
+    }
+    return false;
+}
+
+/**
+ * Recursively process properties to apply field-level hooks.
+ */
+async function processProperties(
+    properties: Properties,
+    values: any,
+    previousValues: any,
+    propsContext: any,
+    callbackName: "afterRead" | "beforeSave"
+): Promise<any> {
+    if (!values || typeof values !== "object") return values;
+
+    let result = { ...values };
+
+    for (const [key, property] of Object.entries(properties)) {
+        if (result[key] === undefined) continue;
+
+        let currentValue = result[key];
+        let previousValue = previousValues?.[key];
+
+        // 1. Array Property
+        if (property.type === "array" && Array.isArray(currentValue)) {
+            // We only support traversing single-type arrays for hooks currently to avoid complex union matching
+            if (property.of && !Array.isArray(property.of)) {
+                currentValue = await Promise.all(currentValue.map(async (item, index) => {
+                    const prevItem = Array.isArray(previousValue) ? previousValue[index] : undefined;
+                    // Mock a properties object to process a single item
+                    const singlePropData = { "_tmp": property.of } as Properties;
+                    const res = await processProperties(singlePropData, { "_tmp": item }, { "_tmp": prevItem }, propsContext, callbackName);
+                    return res["_tmp"];
                 }));
             }
-            return entity;
+        }
+        // 2. Map Property
+        else if (property.type === "map" && property.properties && typeof currentValue === "object") {
+            currentValue = await processProperties(property.properties, currentValue, previousValue, propsContext, callbackName);
+        }
+
+        // 3. Property's own callback
+        if (property.callbacks?.[callbackName]) {
+            const cbRes = await Promise.resolve(property.callbacks[callbackName]({
+                ...propsContext,
+                value: currentValue,
+                previousValue
+            }));
+            if (cbRes !== undefined) {
+                currentValue = cbRes;
+            }
+        }
+
+        result[key] = currentValue;
+    }
+    return result;
+}
+
+/**
+ * Helper function to extract field-level PropertyCallbacks from a properties schema
+ * and wrap them into an EntityCallbacks object recursively.
+ */
+export const buildPropertyCallbacks = (properties: Properties): EntityCallbacks | undefined => {
+    if (!properties) return undefined;
+
+    const propertyCallbacks: EntityCallbacks = {};
+
+    if (hasPropertyCallbacks(properties, "afterRead")) {
+        propertyCallbacks.afterRead = async (props) => {
+            const processedValues = await processProperties(
+                properties,
+                props.entity.values,
+                props.entity.values,
+                props,
+                "afterRead"
+            );
+            return { ...props.entity, values: processedValues };
         };
     }
 
-    // Handle onSaveSuccess - returns void or Promise<void>
-    if (baseCallbacks.onSaveSuccess || pluginCallbacks.onSaveSuccess) {
-        mergedCallbacks.onSaveSuccess = async (props) => {
-            if (baseCallbacks.onSaveSuccess) {
-                await Promise.resolve(baseCallbacks.onSaveSuccess(props));
-            }
-            if (pluginCallbacks.onSaveSuccess) {
-                await Promise.resolve(pluginCallbacks.onSaveSuccess(props));
-            }
+    if (hasPropertyCallbacks(properties, "beforeSave")) {
+        propertyCallbacks.beforeSave = async (props) => {
+            return await processProperties(
+                properties,
+                props.values,
+                props.previousValues,
+                props,
+                "beforeSave"
+            );
         };
     }
 
-    // Handle onSaveFailure - returns void or Promise<void>
-    if (baseCallbacks.onSaveFailure || pluginCallbacks.onSaveFailure) {
-        mergedCallbacks.onSaveFailure = async (props) => {
-            if (baseCallbacks.onSaveFailure) {
-                await Promise.resolve(baseCallbacks.onSaveFailure(props));
-            }
-            if (pluginCallbacks.onSaveFailure) {
-                await Promise.resolve(pluginCallbacks.onSaveFailure(props));
-            }
-        };
-    }
-
-    // Handle onPreSave - returns Partial<EntityValues<M>> or Promise<Partial<EntityValues<M>>>
-    if (baseCallbacks.onPreSave || pluginCallbacks.onPreSave) {
-        mergedCallbacks.onPreSave = async (props) => {
-            let values = props.values;
-            if (baseCallbacks.onPreSave) {
-                const baseValues = await Promise.resolve(baseCallbacks.onPreSave(props));
-                // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
-                values = mergeDeep(values, baseValues);
-            }
-            if (pluginCallbacks.onPreSave) {
-                const pluginValues = await Promise.resolve(pluginCallbacks.onPreSave({
-                    ...props,
-                    values
-                }));
-                // Use mergeDeep to preserve class instances like EntityReference, GeoPoint
-                values = mergeDeep(values, pluginValues);
-            }
-            return values;
-        };
-    }
-
-    // Handle onPreDelete - returns void
-    if (baseCallbacks.onPreDelete || pluginCallbacks.onPreDelete) {
-        mergedCallbacks.onPreDelete = (props) => {
-            if (baseCallbacks.onPreDelete) {
-                baseCallbacks.onPreDelete(props);
-            }
-            if (pluginCallbacks.onPreDelete) {
-                pluginCallbacks.onPreDelete(props);
-            }
-        };
-    }
-
-    // Handle onDelete - returns void
-    if (baseCallbacks.onDelete || pluginCallbacks.onDelete) {
-        mergedCallbacks.onDelete = (props) => {
-            if (baseCallbacks.onDelete) {
-                baseCallbacks.onDelete(props);
-            }
-            if (pluginCallbacks.onDelete) {
-                pluginCallbacks.onDelete(props);
-            }
-        };
-    }
-
-
-
-    return Object.keys(mergedCallbacks).length > 0 ? mergedCallbacks : undefined;
+    return Object.keys(propertyCallbacks).length > 0 ? propertyCallbacks : undefined;
 };

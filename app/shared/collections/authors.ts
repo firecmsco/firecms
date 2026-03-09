@@ -12,23 +12,41 @@ const authorsCollection: EntityCollection = {
         id: {
             name: "ID",
             type: "number",
-            validation: {
-                required: true
-            }
+            isId: "increment"
         },
         name: {
             name: "Name",
             type: "string",
             validation: {
                 required: true
+            },
+            callbacks: {
+                beforeSave: ({ value }) => {
+                    return value?.trim();
+                }
             }
         },
         email: {
-            name: "Email!",
+            name: "Email!!",
             type: "string",
-            email: true,
+            // email: true,
             validation: {
                 required: true
+            },
+            callbacks: {
+                beforeSave: ({ value }) => {
+                    return value?.trim();
+                },
+                afterRead: ({ value }) => {
+                    // Sample logic to obscure the email for testing
+                    if (value && typeof value === "string") {
+                        const parts = value.split("@");
+                        if (parts.length === 2) {
+                            return `${parts[0].slice(0, 2)}***@${parts[1]}`;
+                        }
+                    }
+                    return value;
+                }
             }
         },
         picture: {
@@ -70,7 +88,14 @@ const authorsCollection: EntityCollection = {
         "picture",
         "profile",
         "name"
-    ]
+    ],
+    callbacks: {
+        beforeSave: ({ values }) => {
+            return values;
+        },
+        afterSave: ({ values }) => {
+        }
+    }
 };
 
 export default authorsCollection;

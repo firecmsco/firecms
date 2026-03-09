@@ -198,11 +198,11 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         setDataLoading(true);
 
         const onEntitiesUpdate = async (entities: Entity<M>[]) => {
-            if (collection.callbacks?.onFetch) {
+            if (collection.callbacks?.afterRead) {
                 try {
                     entities = await Promise.all(
                         entities.map((entity) =>
-                            collection.callbacks!.onFetch!({
+                            collection.callbacks!.afterRead!({
                                 collection,
                                 path,
                                 entity,

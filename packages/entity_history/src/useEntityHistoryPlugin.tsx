@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { EntityCollection, FireCMSPlugin, mergeCallbacks, User } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, User } from "@firecms/core";
 import { EntityHistoryView } from "./components/EntityHistoryView";
 import { HistoryIcon } from "@firecms/ui";
 import { entityHistoryCallbacks } from "./entity_history_callbacks";
@@ -28,7 +28,61 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
                         position: "start"
                     }
                 ],
-                callbacks: mergeCallbacks(collection.callbacks, entityHistoryCallbacks)
+                callbacks: {
+                    ...collection.callbacks,
+                    beforeSave: async (props) => {
+                        let values = props.values;
+                        if (collection.callbacks?.beforeSave) {
+                            values = await Promise.resolve(collection.callbacks.beforeSave(props)) ?? values;
+                        }
+                        if (entityHistoryCallbacks.beforeSave) {
+                            values = await Promise.resolve(entityHistoryCallbacks.beforeSave({ ...props, values })) ?? values;
+                        }
+                        return values;
+                    },
+                    afterSave: async (props) => {
+                        if (collection.callbacks?.afterSave) {
+                            await Promise.resolve(collection.callbacks.afterSave(props));
+                        }
+                        if (entityHistoryCallbacks.afterSave) {
+                            await Promise.resolve(entityHistoryCallbacks.afterSave(props));
+                        }
+                    },
+                    afterRead: async (props) => {
+                        let entity = props.entity;
+                        if (collection.callbacks?.afterRead) {
+                            entity = await Promise.resolve(collection.callbacks.afterRead(props)) ?? entity;
+                        }
+                        if (entityHistoryCallbacks.afterRead) {
+                            entity = await Promise.resolve(entityHistoryCallbacks.afterRead({ ...props, entity })) ?? entity;
+                        }
+                        return entity;
+                    },
+                    afterSaveError: async (props) => {
+                        if (collection.callbacks?.afterSaveError) {
+                            await Promise.resolve(collection.callbacks.afterSaveError(props));
+                        }
+                        if (entityHistoryCallbacks.afterSaveError) {
+                            await Promise.resolve(entityHistoryCallbacks.afterSaveError(props));
+                        }
+                    },
+                    beforeDelete: (props) => {
+                        if (collection.callbacks?.beforeDelete) {
+                            collection.callbacks.beforeDelete(props);
+                        }
+                        if (entityHistoryCallbacks.beforeDelete) {
+                            entityHistoryCallbacks.beforeDelete(props);
+                        }
+                    },
+                    afterDelete: (props) => {
+                        if (collection.callbacks?.afterDelete) {
+                            collection.callbacks.afterDelete(props);
+                        }
+                        if (entityHistoryCallbacks.afterDelete) {
+                            entityHistoryCallbacks.afterDelete(props);
+                        }
+                    }
+                }
             } satisfies EntityCollection;
         }
         return collection;

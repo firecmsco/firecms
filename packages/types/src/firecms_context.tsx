@@ -15,13 +15,11 @@ import { User } from "./users";
 import { UserManagementDelegate, EffectiveRoleController } from "./types";
 
 /**
- * Context that includes the internal controllers and contexts used by the app.
- * Some controllers and context included in this context can be accessed
- * directly from their respective hooks.
+ * Context that is provided to entity callbacks (hooks).
+ * It contains only the dependencies that are available in both the frontend and the backend.
  * @group Hooks and utilities
- * @see useFireCMSContext
  */
-export type FireCMSContext<USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>> = {
+export type FireCMSCallContext<USER extends User = User> = {
 
     /**
      * Connector to your database, e.g. your Firestore database
@@ -32,6 +30,21 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * Used storage implementation
      */
     storageSource: StorageSource;
+
+    /**
+     * Set by the backend when callbacks are executed on the server.
+     */
+    user?: USER;
+}
+
+/**
+ * Context that includes the internal controllers and contexts used by the app.
+ * Some controllers and context included in this context can be accessed
+ * directly from their respective hooks.
+ * @group Hooks and utilities
+ * @see useFireCMSContext
+ */
+export type FireCMSContext<USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>> = FireCMSCallContext<USER> & {
 
     /**
      * Context that includes the resolved navigation and utility methods and
@@ -63,10 +76,7 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      */
     authController?: AuthControllerType;
 
-    /**
-     * Set by the backend when callbacks are executed on the server.
-     */
-    user?: USER;
+
 
     /**
      * This controller holds the customization options for the CMS.

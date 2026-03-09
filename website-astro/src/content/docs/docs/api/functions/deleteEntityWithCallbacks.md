@@ -20,7 +20,7 @@ It will run all the delete callbacks specified in the collection.
 It is also possible to attach callbacks on save success or error, and callback
 errors.
 
-If you just want to delete any data without running the `onPreDelete`,
+If you just want to delete any data without running the `beforeDelete`,
 and `onDelete` callbacks, you can use the `deleteEntity` method
 in the datasource ([useDataSource](useDataSource)).
 
