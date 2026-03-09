@@ -113,11 +113,14 @@ export const DefaultAppBar = function DefaultAppBar({
         avatarComponent = null;
     }
 
+    const isStudioDark = adminModeController.mode === "studio";
+
     return (
         <div
             style={style}
             className={cls("w-full h-16 transition-all ease-in duration-75 absolute top-0 max-w-full overflow-x-auto no-scrollbar",
                 "flex flex-row gap-2 px-4 items-center",
+                isStudioDark ? "dark:bg-black" : "",
                 {
                     "pl-[19rem]": drawerOpen && largeLayout,
                     "pl-24": hasDrawer && !(drawerOpen && largeLayout),
@@ -212,7 +215,7 @@ export const DefaultAppBar = function DefaultAppBar({
                     <button
                         onClick={() => {
                             adminModeController.setMode("studio");
-                            navigate(navigation?.basePath ?? "/");
+                            navigate(navigation?.basePath === "/" ? "/s" : `${navigation?.basePath ?? ""}/s`);
                         }}
                         className={cls("px-3 py-1 text-xs font-semibold rounded-md transition-all", adminModeController.mode === "studio" ? "bg-white dark:bg-surface-900 shadow-sm text-primary dark:text-primary-400" : "text-surface-500 hover:text-surface-900 dark:hover:text-white")}
                     >

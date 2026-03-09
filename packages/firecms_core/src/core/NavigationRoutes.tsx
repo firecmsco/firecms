@@ -15,10 +15,9 @@ export type NavigationRoutesProps = {
     /**
      * In case you need to override the home page
      */
-    homePage?: any;
+    homePage?: React.ReactNode;
 
-    children?: any | any[]
-
+    children?: React.ReactNode;
 };
 
 
@@ -82,11 +81,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                 } />
         );
 
-        const homeRoute = (
-            <Route path={"/"}
-                element={<HomePageRoute>{homePage}</HomePageRoute>} />
-        );
-
         const notFoundRoute = (
             <Route path={"*"}
                 element={
@@ -103,11 +97,13 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
                 <Route path={"/settings"} element={<UserSettingsView />} />
 
-                {homeRoute}
-
-                {notFoundRoute}
+                <Route path={"/"} element={<HomePageRoute>{homePage}</HomePageRoute>} />
+                <Route path={"/s"} element={<HomePageRoute>{homePage}</HomePageRoute>} />
+                <Route path={"/s/*"} element={<HomePageRoute>{homePage}</HomePageRoute>} />
 
                 {children}
+
+                {notFoundRoute}
 
             </Routes>
         );

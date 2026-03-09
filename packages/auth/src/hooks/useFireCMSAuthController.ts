@@ -112,7 +112,7 @@ export function useFireCMSAuthController(
     const tokensRef = useRef<AuthTokens | null>(null);
     const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     // Track if a refresh is currently in progress to avoid concurrent refreshes
-    const isRefreshingRef = useRef(false);
+    const refreshPromiseRef = useRef<Promise<AuthTokens | null> | null>(null);
     // Track if component is mounted
     const isMountedRef = useRef(true);
 
@@ -143,50 +143,65 @@ export function useFireCMSAuthController(
      */
     const refreshAccessToken = useCallback(async (): Promise<AuthTokens | null> => {
         // Prevent concurrent refreshes
-        if (isRefreshingRef.current) {
+        if (refreshPromiseRef.current) {
             console.log("[AUTH] Refresh already in progress, waiting...");
             // Wait for the current refresh to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-            return tokensRef.current;
+            return refreshPromiseRef.current;
         }
 
-        const currentTokens = tokensRef.current;
-        if (!currentTokens?.refreshToken) {
-            console.log("[AUTH] No refresh token available");
-            return null;
-        }
-
-        isRefreshingRef.current = true;
-        console.log("[AUTH] Refreshing access token...");
-
-        try {
-            const response = await authApi.refreshAccessToken(currentTokens.refreshToken);
-            const newTokens = response.tokens;
-
-            // Update tokens immediately
-            tokensRef.current = newTokens;
-
-            // Persist to storage
+        const executeRefresh = async (): Promise<AuthTokens | null> => {
+            // Check if another tab has already refreshed the token
             const storedData = loadAuthFromStorage();
-            if (storedData) {
-                saveAuthToStorage(newTokens, storedData.user);
+            if (storedData?.tokens?.accessTokenExpiresAt) {
+                const storedTokens = storedData.tokens;
+                // If stored token is newer and not expired
+                if (!isTokenExpiredOrNearExpiry(storedTokens.accessTokenExpiresAt) && storedTokens.accessToken !== tokensRef.current?.accessToken) {
+                    console.log("[AUTH] Found valid newer token in storage, skipping network refresh");
+                    tokensRef.current = storedTokens;
+                    return storedTokens;
+                }
             }
 
-            const newExpiryStr = Number.isFinite(newTokens.accessTokenExpiresAt) ? new Date(newTokens.accessTokenExpiresAt).toISOString() : "invalid";
-            console.log("[AUTH] Token refresh successful, new expiry:", newExpiryStr);
-            isRefreshingRef.current = false;
-            return newTokens;
-        } catch (error: any) {
-            console.error("[AUTH] Token refresh failed:", error?.message);
-            isRefreshingRef.current = false;
-
-            // If it's a network error (e.g., backend restarting), we throw so callers can retry
-            // instead of immediately assuming the refresh token is invalid and signing out.
-            if (error?.code === "NETWORK_ERROR") {
-                throw error;
+            const currentTokens = tokensRef.current;
+            if (!currentTokens?.refreshToken) {
+                console.log("[AUTH] No refresh token available");
+                return null;
             }
-            return null;
-        }
+
+            console.log("[AUTH] Refreshing access token...");
+
+            try {
+                const response = await authApi.refreshAccessToken(currentTokens.refreshToken);
+                const newTokens = response.tokens;
+
+                // Update tokens immediately
+                tokensRef.current = newTokens;
+
+                // Persist to storage
+                const latestStoredData = loadAuthFromStorage();
+                if (latestStoredData) {
+                    saveAuthToStorage(newTokens, latestStoredData.user);
+                }
+
+                const newExpiryStr = Number.isFinite(newTokens.accessTokenExpiresAt) ? new Date(newTokens.accessTokenExpiresAt).toISOString() : "invalid";
+                console.log("[AUTH] Token refresh successful, new expiry:", newExpiryStr);
+                return newTokens;
+            } catch (error: any) {
+                console.error("[AUTH] Token refresh failed:", error?.message);
+
+                // If it's a network error (e.g., backend restarting), we throw so callers can retry
+                // instead of immediately assuming the refresh token is invalid and signing out.
+                if (error?.code === "NETWORK_ERROR") {
+                    throw error;
+                }
+                return null;
+            } finally {
+                refreshPromiseRef.current = null;
+            }
+        };
+
+        refreshPromiseRef.current = executeRefresh();
+        return refreshPromiseRef.current;
     }, []);
 
     // Schedule token refresh before expiry

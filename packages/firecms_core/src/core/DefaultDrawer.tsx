@@ -69,9 +69,11 @@ export function DefaultDrawer({
             closeDrawer();
     };
 
+    const isStudioDark = adminModeController.mode === "studio";
+
     return (
         <>
-            <div className={cls("flex flex-col h-full relative grow w-full", className)} style={style}>
+            <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-black" : "", className)} style={style}>
 
                 <DrawerLogo logo={logo} />
 

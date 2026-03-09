@@ -26,8 +26,8 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
 
     useEffect(() => {
         const path = location.pathname;
-        const isContentRoute = path.startsWith(`${cmsUrlController.baseCollectionPath}/`) || path === cmsUrlController.baseCollectionPath;
-        const isStudioRoute = devViews?.some(view => {
+        const isContentRoute = cmsUrlController.isUrlCollectionPath(path) || path === cmsUrlController.basePath;
+        const isStudioRoute = path.startsWith("/s/") || path === "/s" || devViews?.some(view => {
             const viewPath = cmsUrlController.buildCMSUrlPath(view.slug);
             return path.startsWith(`${viewPath}/`) || path === viewPath;
         });
@@ -37,7 +37,7 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
         } else if (isContentRoute && adminModeController.mode !== "content") {
             adminModeController.setMode("content");
         }
-    }, [location.pathname, cmsUrlController, devViews, adminModeController]);
+    }, [location.pathname, cmsUrlController, devViews, adminModeController.mode, adminModeController.setMode]);
 
     return null;
 }

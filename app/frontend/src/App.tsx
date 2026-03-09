@@ -16,6 +16,7 @@ import {
     DefaultHomePage,
     Drawer,
     FireCMS,
+    HomePageRoute,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -34,6 +35,7 @@ import { usePostgresClientDataSource } from "@firecms/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@firecms/studio";
 import { CMSView } from "@firecms/types";
 import { collections } from "virtual:firecms-collections";
+import { Route } from "react-router-dom";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -126,7 +128,6 @@ export function App() {
 
     return (
         <SnackbarProvider>
-            <AdminModeSyncer devViews={devViews} />
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
                     <FireCMS
@@ -153,10 +154,9 @@ export function App() {
                                 );
                             }
 
-
-
                             return (
                                 <Scaffold autoOpenDrawer={false}>
+                                    <AdminModeSyncer devViews={devViews} />
                                     <AppBar title={"Rebase"} />
                                     <Drawer />
                                     <NavigationRoutes
