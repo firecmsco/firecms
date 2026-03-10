@@ -1,5 +1,5 @@
-export * from "./DefaultHomePage";
-export * from "./NavigationCardBinding";
+export * from "./ContentHomePage";
+export * from "./StudioHomePage";
 export * from "./NavigationGroup";
 export * from "./NavigationCard";
 export * from "./SmallNavigationCard";

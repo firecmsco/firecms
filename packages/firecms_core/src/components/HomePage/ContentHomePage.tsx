@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import {
-    useAdminModeController,
     useCollapsedGroups,
     useCustomizationController,
     useFireCMSContext,
     useNavigationStateController
 } from "../../hooks";
+import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import {
     CMSAnalyticsEvent,
     HomePageSection,
@@ -36,7 +36,7 @@ import { toArray } from "@firecms/common";
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";
 
-export function DefaultHomePage({
+export function ContentHomePage({
     additionalActions,
     additionalChildrenStart,
     additionalChildrenEnd,
@@ -53,8 +53,11 @@ export function DefaultHomePage({
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationStateController();
-    const adminModeController = useAdminModeController();
-    const adminMode = adminModeController.mode;
+    const breadcrumbs = useBreadcrumbsController();
+
+    useEffect(() => {
+        breadcrumbs.set({ breadcrumbs: [] });
+    }, [breadcrumbs]);
 
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");
@@ -130,28 +133,21 @@ export function DefaultHomePage({
                 ...new Set(src.map((e) => e.group ?? DEFAULT_GROUP_NAME))
             ];
             allProcessed = ordered
-                .filter(g =>
-                    (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
-                    (adminMode === "studio" && g !== DEFAULT_GROUP_NAME)
-                )
+                .filter(g => g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)
                 .map((name) => ({
                     name,
                     entries: entriesByGroup[name] || []
                 }))
                 .filter((g) => g.entries.length);
         } else {
-            const filteredGroupOrder = groupOrderFromNavController.filter(g =>
-                (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
-                (adminMode === "studio" && g !== DEFAULT_GROUP_NAME)
-            );
+            const filteredGroupOrder: string[] = groupOrderFromNavController.filter(g => g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME);
 
             allProcessed = filteredGroupOrder.map((g) => ({
                 name: g,
                 entries: entriesByGroup[g] || []
             }));
             Object.keys(entriesByGroup).forEach((g) => {
-                const shouldInclude = (adminMode === "content" && (g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME)) ||
-                    (adminMode === "studio" && g !== DEFAULT_GROUP_NAME);
+                const shouldInclude = g === DEFAULT_GROUP_NAME || g === ADMIN_GROUP_NAME;
                 if (!filteredGroupOrder.includes(g) && shouldInclude)
                     allProcessed.push({
                         name: g,
@@ -179,7 +175,7 @@ export function DefaultHomePage({
             adminGroupData: admin || null,
             items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME && !hiddenGroups?.includes(g.name))
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups, adminMode]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups]);
 
     // Update state only when processedGroups actually changes
     // Skip update if DnD just made a local change (dirty flag is set)
@@ -379,15 +375,13 @@ export function DefaultHomePage({
                     className="w-full sticky py-4 transition-all duration-400 ease-in-out top-0 z-10 flex flex-row gap-4"
                     style={{ top: direction === "down" ? -84 : 0 }}
                 >
-                    {adminMode !== "studio" && (
-                        <SearchBar
-                            onTextSearch={updateSearch}
-                            placeholder="Search collections"
-                            autoFocus
-                            innerClassName="w-full"
-                            className="w-full grow"
-                        />
-                    )}
+                    <SearchBar
+                        onTextSearch={updateSearch}
+                        placeholder="Search collections"
+                        autoFocus
+                        innerClassName="w-full"
+                        className="w-full grow"
+                    />
                     {additionalActions}
                     {additionalPluginActions}
                 </div>

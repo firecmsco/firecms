@@ -14,11 +14,11 @@ import {
     AppBar,
     CircularProgressCenter,
     CustomCMSRoute,
-    DefaultHomePage,
+    ContentHomePage,
+    StudioHomePage,
     Drawer,
     FireCMS,
     FireCMSRoute,
-    HomePageRoute,
     ModeControllerProvider,
     NotFoundPage,
     Scaffold,
@@ -168,9 +168,8 @@ export function App() {
                                             <SideDialogs />
                                         </Scaffold>
                                     }>
-                                        <Route path={"/"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
-                                        <Route path={"/s"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
-                                        <Route path={"/s/*"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
+                                        <Route path={"/"} element={<ContentHomePage />} />
+                                        <Route path={"/s"} element={<StudioHomePage />} />
 
                                         <Route path={"/c/*"} element={<FireCMSRoute />} />
                                         <Route path={"/settings"} element={<UserSettingsView />} />
