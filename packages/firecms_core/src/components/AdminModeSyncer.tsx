@@ -24,6 +24,10 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
     const cmsUrlController = useCMSUrlController();
     const adminModeController = useAdminModeController();
 
+    // Keep track of the current mode using a ref to avoid adding it to the dependency array
+    const currentModeRef = React.useRef(adminModeController.mode);
+    currentModeRef.current = adminModeController.mode;
+
     useEffect(() => {
         const path = location.pathname;
         const isContentRoute = cmsUrlController.isUrlCollectionPath(path) || path === cmsUrlController.basePath;
@@ -32,12 +36,12 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
             return path.startsWith(`${viewPath}/`) || path === viewPath;
         });
 
-        if (isStudioRoute && adminModeController.mode !== "studio") {
+        if (isStudioRoute && currentModeRef.current !== "studio") {
             adminModeController.setMode("studio");
-        } else if (isContentRoute && adminModeController.mode !== "content") {
+        } else if (isContentRoute && currentModeRef.current !== "content") {
             adminModeController.setMode("content");
         }
-    }, [location.pathname, cmsUrlController, devViews, adminModeController.mode, adminModeController.setMode]);
+    }, [location.pathname, cmsUrlController, devViews, adminModeController]);
 
     return null;
 }

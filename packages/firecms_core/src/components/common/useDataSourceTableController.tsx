@@ -136,17 +136,26 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? filterUrl : undefined) ?? filter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? sortUrl : undefined) ?? sortInternal);
 
+    // Sync filter/sort state from URL on browser navigation (back/forward).
+    // Skip initial mount since useState initializers already handle URL params + collection defaults.
+    const initialSearchRef = React.useRef<string | null>(location.search);
     useEffect(() => {
-        if (updateUrl) {
-            const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
-            if (!forceFilter) {
-                setFilterValues(urlFilterValues as any);
-            }
-            if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
-                console.warn("URL sort is not compatible with the force filter.");
-            } else {
-                setSortBy(urlSortBy as any);
-            }
+        if (!updateUrl) return;
+        // Skip the initial mount - useState already set the correct values
+        if (initialSearchRef.current !== null && initialSearchRef.current === location.search) {
+            initialSearchRef.current = null;
+            return;
+        }
+        initialSearchRef.current = null;
+
+        const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
+        if (!forceFilter) {
+            setFilterValues(urlFilterValues as any);
+        }
+        if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
+            console.warn("URL sort is not compatible with the force filter.");
+        } else {
+            setSortBy(urlSortBy as any);
         }
     }, [location.search, updateUrl, forceFilter, checkFilterCombination]);
 

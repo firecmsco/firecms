@@ -15,14 +15,29 @@ export function useBuildModeController(): ModeController {
         return mediaQueryList.matches;
     }, []);
 
-    const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
-    const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery();
-    const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
+    const [mode, setMode] = useState<"light" | "dark">(() => {
+        const prefersDarkModeStorage = typeof window !== "undefined" && localStorage.getItem("prefers-dark-mode") != null 
+            ? localStorage.getItem("prefers-dark-mode") === "true" 
+            : null;
+        const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery();
+        return prefersDarkMode ? "dark" : "light";
+    });
 
     useEffect(() => {
-        setMode(prefersDarkMode ? "dark" : "light");
-        setDocumentMode(prefersDarkMode ? "dark" : "light");
-    }, [prefersDarkMode]);
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const handleChange = (e: MediaQueryListEvent) => {
+            if (localStorage.getItem("prefers-dark-mode") == null) {
+                setMode(e.matches ? "dark" : "light");
+                setDocumentMode(e.matches ? "dark" : "light");
+            }
+        };
+        
+        // Initial setup
+        setDocumentMode(mode);
+
+        mediaQuery.addEventListener("change", handleChange);
+        return () => mediaQuery.removeEventListener("change", handleChange);
+    }, []);
 
     const setDocumentMode = (mode: "light" | "dark") => {
         if (mode === "dark") {

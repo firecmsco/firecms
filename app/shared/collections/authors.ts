@@ -29,7 +29,6 @@ const authorsCollection: EntityCollection = {
         email: {
             name: "Email!!",
             type: "string",
-            // email: true,
             validation: {
                 required: true
             },
@@ -63,7 +62,13 @@ const authorsCollection: EntityCollection = {
             name: "Profile",
             type: "relation",
             relationName: "profile",
-            description: " <a> </a>"
+            description: " <a> </a>",
+            relation: {
+                relationName: "profile",
+                cardinality: "one",
+                direction: "inverse",
+                inverseRelationName: "author"
+            }
         }
     },
     relations: [
@@ -95,7 +100,13 @@ const authorsCollection: EntityCollection = {
         },
         afterSave: ({ values }) => {
         }
-    }
+    },
+    Actions: [],
+    filter: undefined,
+    sort: [
+        "email",
+        "asc"
+    ]
 };
 
 export default authorsCollection;

@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 import { deepEqual as equal } from "fast-equals"
 
-import { useLargeLayout } from "../hooks";
+import { useLargeLayout, useAdminModeController } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { AppContext } from "./useApp";
 
@@ -86,6 +86,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
 
+        const adminModeController = useAdminModeController();
+        const isStudioDark = adminModeController.mode === "studio";
+
         const hasAppBar = Boolean(appBarChildren.length > 0);
         return (
             <AppContext.Provider value={{
@@ -98,7 +101,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 autoOpenDrawer
             }}>
                 <div
-                    className={cls("flex h-screen w-screen bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-white overflow-hidden", className)}
+                    className={cls("flex h-screen w-screen overflow-hidden",
+                        isStudioDark ? "bg-surface-50 dark:bg-black" : "bg-surface-50 dark:bg-surface-900",
+                        "text-surface-900 dark:text-white", className)}
                     style={{
                         paddingTop: "env(safe-area-inset-top)",
                         paddingLeft: "env(safe-area-inset-left)",

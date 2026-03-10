@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { removeInitialAndTrailingSlashes } from "@firecms/common";
 import { CMSUrlController, NavigateOptions, CollectionRegistryController } from "@firecms/types";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +54,7 @@ export function useBuildCMSUrlController(props: {
         navigate(to, options);
     }, [navigate]);
 
-    return {
+    return useMemo(() => ({
         basePath,
         baseCollectionPath,
         urlPathToDataPath,
@@ -64,5 +64,5 @@ export function useBuildCMSUrlController(props: {
         buildCMSUrlPath,
         resolveDatabasePathsFrom,
         navigate: navigateTo
-    };
+    }), [basePath, baseCollectionPath, urlPathToDataPath, homeUrl, isUrlCollectionPath, buildUrlCollectionPath, buildCMSUrlPath, resolveDatabasePathsFrom, navigateTo]);
 }

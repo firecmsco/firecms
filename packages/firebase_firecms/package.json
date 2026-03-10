@@ -11,18 +11,18 @@
     "source": "src/index.ts",
     "dependencies": {
         "@firebase/auth": "*",
-        "@firecms/studio": "4.0.0",
+        "@firecms/common": "4.0.0",
         "@firecms/core": "4.0.0",
-        "@firecms/types": "4.0.0",
         "@firecms/data_enhancement": "4.0.0",
         "@firecms/data_export": "4.0.0",
         "@firecms/data_import": "4.0.0",
         "@firecms/data_import_export": "4.0.0",
         "@firecms/schema_inference": "4.0.0",
-        "@firecms/common": "4.0.0",
+        "@firecms/studio": "4.0.0",
+        "@firecms/types": "4.0.0",
         "@firecms/ui": "4.0.0",
-        "react-router": "^6.30.2",
-        "react-router-dom": "^6.30.2"
+        "react-router": "^7.13.1",
+        "react-router-dom": "^7.13.1"
     },
     "peerDependencies": {
         "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

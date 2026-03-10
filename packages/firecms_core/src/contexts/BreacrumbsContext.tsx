@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { BreadcrumbEntry, BreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
 const DEFAULT_BREADCRUMBS_CONTROLLER: BreadcrumbsController = {
@@ -31,14 +31,14 @@ export const BreadcrumbsProvider: React.FC<BreadcrumbsProviderProps> = ({ childr
         ));
     }, []);
 
+    const value = useMemo(() => ({
+        breadcrumbs,
+        set,
+        updateCount
+    }), [breadcrumbs, set, updateCount]);
+
     return (
-        <BreadcrumbContext.Provider
-            value={{
-                breadcrumbs,
-                set,
-                updateCount
-            }}
-        >
+        <BreadcrumbContext.Provider value={value}>
             {children}
         </BreadcrumbContext.Provider>
     );

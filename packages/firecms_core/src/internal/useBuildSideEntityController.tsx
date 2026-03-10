@@ -102,6 +102,7 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);
+    const currentPanelKeysRef = useRef<string[]>([]);
     const customizationController = useCustomizationController();
 
     const smallLayout = !useLargeLayout();
@@ -128,26 +129,31 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
     }, [navigationStateController.loading]);
 
     // sync panels if URL changes with #side
-    const currentPanelKeys = sideDialogsController.sidePanels.map(p => p.key);
+    // Use a ref for currentPanelKeys so this effect only fires on URL changes,
+    // not on panel state changes. This prevents a race condition with React Router 7
+    // where close() clears panels before the URL updates, causing the effect to
+    // re-open the panel from the stale #side hash.
+    currentPanelKeysRef.current = sideDialogsController.sidePanels.map(p => p.key);
     useEffect(() => {
         if (initialised.current) {
             const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
             if (sideFlag) {
+                const currentKeys = currentPanelKeysRef.current;
                 const entityOrCollectionPath = cmsUrlController.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, collectionRegistryController.collections ?? [], false);
                 // if we have more panels than determined by the url, we ignore the url. We might have references open
-                if (panelsFromUrl.length <= currentPanelKeys.length) {
+                if (panelsFromUrl.length <= currentKeys.length) {
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
                 const panelProps = propsToSidePanel(lastPanel, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search);
-                const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
+                const lastCurrentPanel = currentKeys.length > 0 ? currentKeys[currentKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
                 }
             }
         }
-    }, [location.pathname, location.hash, currentPanelKeys]);
+    }, [location.pathname, location.hash]);
 
     // update side panels to match browser size
     useEffect(() => {

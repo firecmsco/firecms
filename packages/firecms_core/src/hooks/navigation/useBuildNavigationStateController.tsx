@@ -70,11 +70,17 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     const navigationEntriesOrderRef = useRef<string[] | undefined>(undefined);
 
     const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
+    const topLevelNavigationRef = useRef(topLevelNavigation);
+    topLevelNavigationRef.current = topLevelNavigation;
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
+    const navigationLoadingRef = useRef(navigationLoading);
+    navigationLoadingRef.current = navigationLoading;
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
-    const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
-    const pluginGroups = [...new Set(allPluginGroups)];
+    const pluginGroups = useMemo(() => {
+        const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
+        return [...new Set(allPluginGroups)];
+    }, [plugins]);
 
     const computeTopNavigation = useCallback((
         collections: EntityCollection[],
@@ -279,49 +285,76 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     }, [adminMode, effectiveRoleController?.effectiveRole, authController]);
 
     // Extract injectedAdminViews to a memoized hook before refreshNavigation
+    // Memoize JSX elements separately to ensure stable references for deep equality checks.
+    // React elements create new objects each time, which would cause adminViews comparison
+    // to always fail and trigger an infinite navigation refresh loop.
+    const usersViewElement = useMemo(() =>
+        userManagement ? <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} /> : null,
+        [userManagement]
+    );
+    const rolesViewElement = useMemo(() =>
+        userManagement?.roles ? <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} /> : null,
+        [userManagement]
+    );
+
     const injectedAdminViews: CMSView[] = useMemo(() => {
         const views: CMSView[] = [];
-        if (userManagement) {
+        if (userManagement && usersViewElement) {
             views.push({
                 slug: "users",
                 name: "Users",
                 group: NAVIGATION_ADMIN_GROUP_NAME,
                 icon: "support_agent",
-                view: <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+                view: usersViewElement
             });
-            if (userManagement.roles) {
+            if (userManagement.roles && rolesViewElement) {
                 views.push({
                     slug: "roles",
                     name: "Roles",
                     group: NAVIGATION_ADMIN_GROUP_NAME,
                     icon: "admin_panel_settings",
-                    view: <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} />
+                    view: rolesViewElement
                 });
             }
         }
         return views;
-    }, [userManagement]);
+    }, [userManagement, usersViewElement, rolesViewElement]);
+
+    // Use refs for values that refreshNavigation reads, so refreshNavigation
+    // identity stays stable and doesn't re-trigger the effect.
+    const resolvedAuthControllerRef = useRef(resolvedAuthController);
+    resolvedAuthControllerRef.current = resolvedAuthController;
+    const computeTopNavigationRef = useRef(computeTopNavigation);
+    computeTopNavigationRef.current = computeTopNavigation;
+    const onNavigationEntriesOrderUpdateRef = useRef(onNavigationEntriesOrderUpdate);
+    onNavigationEntriesOrderUpdateRef.current = onNavigationEntriesOrderUpdate;
+    const injectedAdminViewsRef = useRef(injectedAdminViews);
+    injectedAdminViewsRef.current = injectedAdminViews;
 
     const refreshNavigation = useCallback(async () => {
 
-        if (disabled || resolvedAuthController.initialLoading)
+        const currentAuthController = resolvedAuthControllerRef.current;
+        if (disabled || currentAuthController.initialLoading)
             return;
 
         console.debug("Refreshing navigation");
 
         try {
 
-            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, resolvedAuthController, dataSource);
-            const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViews];
+            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, currentAuthController, dataSource);
+            const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViewsRef.current];
 
             const [resolvedCollections = [], resolvedViews] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, resolvedAuthController, dataSource, plugins),
-                    resolveCMSViews(viewsProp, resolvedAuthController, dataSource, plugins)
+                    resolveCollections(collectionsProp, currentAuthController, dataSource, plugins),
+                    resolveCMSViews(viewsProp, currentAuthController, dataSource, plugins)
                 ]
             );
 
-            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
+            const currentComputeTopNavigation = computeTopNavigationRef.current;
+            const currentOnNavigationEntriesOrderUpdate = onNavigationEntriesOrderUpdateRef.current;
+
+            const computedTopLevelNav = currentComputeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, currentOnNavigationEntriesOrderUpdate);
 
             let shouldUpdateTopLevelNav = false;
             let collectionsChanged = collectionRegistryController.collectionRegistryRef.current.registerMultiple(resolvedCollections);
@@ -332,27 +365,26 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
             }
 
             if (!equal(viewsRef.current, resolvedViews)) {
-                console.log("views differ", viewsRef.current, resolvedViews);
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;
             }
             if (!equal(adminViewsRef.current, resolvedAdminViews)) {
-                console.log("adminViews differ", adminViewsRef.current, resolvedAdminViews);
                 adminViewsRef.current = resolvedAdminViews;
                 shouldUpdateTopLevelNav = true;
             }
 
             const navigationEntriesOrder = computedTopLevelNav.navigationEntries.map(e => e.id);
-            console.log("adminMode is", adminMode, "computed top level nav:", computedTopLevelNav.navigationEntries.length);
-            console.log("old order", navigationEntriesOrderRef.current, "new order", navigationEntriesOrder);
             if (!equal(navigationEntriesOrderRef.current, navigationEntriesOrder)) {
                 navigationEntriesOrderRef.current = navigationEntriesOrder;
                 shouldUpdateTopLevelNav = true;
             }
 
-            console.log("shouldUpdateTopLevelNav", shouldUpdateTopLevelNav, "equal", equal(topLevelNavigation, computedTopLevelNav));
-            if (shouldUpdateTopLevelNav && !equal(topLevelNavigation, computedTopLevelNav)) {
-                console.log("ACTUALLY SETTING top level navigation");
+            // Compare only data fields, not the callback function (which is always a new reference)
+            const isNavEqual = topLevelNavigationRef.current &&
+                equal(topLevelNavigationRef.current.navigationEntries, computedTopLevelNav.navigationEntries) &&
+                equal(topLevelNavigationRef.current.groups, computedTopLevelNav.groups) &&
+                topLevelNavigationRef.current.allowDragAndDrop === computedTopLevelNav.allowDragAndDrop;
+            if (shouldUpdateTopLevelNav && !isNavEqual) {
                 setTopLevelNavigation(computedTopLevelNav);
             }
         } catch (e) {
@@ -360,24 +392,18 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
             setNavigationLoadingError(e as any);
         }
 
-        if (navigationLoading)
+        if (navigationLoadingRef.current)
             setNavigationLoading(false);
 
     }, [
         collectionsProp,
-        resolvedAuthController,
         disabled,
         viewsProp,
         adminViewsProp,
-        computeTopNavigation,
         dataSource,
         plugins,
         viewsOrder,
-        navigationLoading,
-        topLevelNavigation,
-        onNavigationEntriesOrderUpdate,
         collectionRegistryController.collectionRegistryRef,
-        injectedAdminViews
     ]);
 
     useEffect(() => {

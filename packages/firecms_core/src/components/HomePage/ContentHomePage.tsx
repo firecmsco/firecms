@@ -57,7 +57,7 @@ export function ContentHomePage({
 
     useEffect(() => {
         breadcrumbs.set({ breadcrumbs: [] });
-    }, [breadcrumbs]);
+    }, [breadcrumbs.set]);
 
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");
