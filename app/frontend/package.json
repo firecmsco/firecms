@@ -30,8 +30,8 @@
         "firecms-app-shared": "workspace:*",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-router": "^6.30.0",
-        "react-router-dom": "^6.30.0",
+        "react-router": "^7.0.0",
+        "react-router-dom": "^7.0.0",
         "react18-json-view": "^0.2.9",
         "reconnecting-websocket": "^4.4.0",
         "typeface-rubik": "^1.1.13"

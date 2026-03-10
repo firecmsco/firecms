@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --watch ../shared --conditions development src/index.ts",
+    "dev": "tsx watch --watch=\"../shared/**/*\" --conditions development src/index.ts",
     "build": "tsc --noEmit",
     "start": "tsx src/index.ts",
     "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections --output=src/schema.generated.ts",

@@ -7,7 +7,6 @@ export * from "./DrawerNavigationGroup";
 export * from "./field_configs";
 
 export * from "./SideDialogs";
-export * from "./NavigationRoutes";
 
 export * from "./FireCMSRouter";
 

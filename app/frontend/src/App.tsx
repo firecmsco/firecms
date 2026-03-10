@@ -13,15 +13,18 @@ import {
     AdminModeSyncer,
     AppBar,
     CircularProgressCenter,
+    CustomCMSRoute,
     DefaultHomePage,
     Drawer,
     FireCMS,
+    FireCMSRoute,
     HomePageRoute,
     ModeControllerProvider,
-    NavigationRoutes,
+    NotFoundPage,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
+    UserSettingsView,
     useBackendStorageSource,
     useBuildAdminModeController,
     useBuildCMSUrlController,
@@ -35,7 +38,7 @@ import { usePostgresClientDataSource } from "@firecms/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@firecms/studio";
 import { CMSView } from "@firecms/types";
 import { collections } from "virtual:firecms-collections";
-import { Route } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -155,15 +158,32 @@ export function App() {
                             }
 
                             return (
-                                <Scaffold autoOpenDrawer={false}>
-                                    <AdminModeSyncer devViews={devViews} />
-                                    <AppBar title={"Rebase"} />
-                                    <Drawer />
-                                    <NavigationRoutes
-                                        homePage={<DefaultHomePage />}
-                                    />
-                                    <SideDialogs />
-                                </Scaffold>
+                                <Routes>
+                                    <Route element={
+                                        <Scaffold autoOpenDrawer={false}>
+                                            <AdminModeSyncer devViews={devViews} />
+                                            <AppBar title={"Rebase"} />
+                                            <Drawer />
+                                            <Outlet />
+                                            <SideDialogs />
+                                        </Scaffold>
+                                    }>
+                                        <Route path={"/"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
+                                        <Route path={"/s"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
+                                        <Route path={"/s/*"} element={<HomePageRoute><DefaultHomePage /></HomePageRoute>} />
+
+                                        <Route path={"/c/*"} element={<FireCMSRoute />} />
+                                        <Route path={"/settings"} element={<UserSettingsView />} />
+
+                                        {devViews.flatMap(view =>
+                                            (Array.isArray(view.slug) ? view.slug : [view.slug]).map(path => (
+                                                <Route key={path} path={path} element={<CustomCMSRoute cmsView={view} />} />
+                                            ))
+                                        )}
+
+                                        <Route path={"*"} element={<NotFoundPage />} />
+                                    </Route>
+                                </Routes>
                             );
                         }}
                     </FireCMS>
