@@ -183,11 +183,11 @@ const resolveRawSql = (expression: string): string => {
 
 /**
  * Wraps a SQL clause with a role check using AND.
- * Generates: `(<clause>) AND (auth.roles() ~ '<role1>|<role2>')`
+ * Generates: `(<clause>) AND (string_to_array(auth.roles(), ',') && ARRAY['<role1>','<role2>'])`
  */
 const wrapWithRoleCheck = (clause: string, roles: string[]): string => {
-    const rolesPattern = roles.join("|");
-    const roleCondition = `auth.roles() ~ '${rolesPattern}'`;
+    const rolesArrayString = `ARRAY[${roles.map(r => `'${r}'`).join(',')}]`;
+    const roleCondition = `string_to_array(auth.roles(), ',') && ${rolesArrayString}`;
     return `sql\`(${unwrapSql(clause)}) AND (${roleCondition})\``;
 };
 
@@ -277,14 +277,14 @@ const generateSinglePolicyCode = (tableName: string, rule: SecurityRule, operati
             usingClause = wrapWithRoleCheck(usingClause, roles);
         } else if (needsUsing) {
             // Roles-only rule (e.g. { operation: "select", roles: ["admin"] })
-            const rolesPattern = roles.join("|");
-            usingClause = `sql\`auth.roles() ~ '${rolesPattern}'\``;
+            const rolesArrayString = `ARRAY[${roles.map(r => `'${r}'`).join(',')}]`;
+            usingClause = `sql\`string_to_array(auth.roles(), ',') && ${rolesArrayString}\``;
         }
         if (withCheckClause) {
             withCheckClause = wrapWithRoleCheck(withCheckClause, roles);
         } else if (needsWithCheck) {
-            const rolesPattern = roles.join("|");
-            withCheckClause = `sql\`auth.roles() ~ '${rolesPattern}'\``;
+            const rolesArrayString = `ARRAY[${roles.map(r => `'${r}'`).join(',')}]`;
+            withCheckClause = `sql\`string_to_array(auth.roles(), ',') && ${rolesArrayString}\``;
         }
     }
 

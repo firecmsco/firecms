@@ -12,13 +12,23 @@ function evaluateAST(sqlString: string, auth: AuthController, entity: Entity<any
         return true;
     }
 
-    // Pattern 1: `field = current_setting('firecms.user_id')`
-    const userSettingMatch = sqlString.match(/([\w_]+)\s*=\s*current_setting\s*\(\s*'firecms\.user_id'\s*\)/i);
-    if (userSettingMatch && userSettingMatch[1]) {
-        return entity.values[userSettingMatch[1]] === auth.user?.uid;
+    // PostgreSQL session variables are set in the backend via set_config('app.user_id', ...)
+    // Pattern 1: `field = current_setting('app.user_id')`
+    const pattern1 = new RegExp(`^([a-zA-Z0-9_]+)\\s*=\\s*current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)$`);
+    // Pattern 2: `current_setting('app.user_id') = field`
+    const pattern2 = new RegExp(`^current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)\\s*=\\s*([a-zA-Z0-9_]+)$`);
+
+    const match1 = sqlString.match(pattern1);
+    if (match1 && match1[1]) {
+        return entity.values[match1[1]] === auth.user?.uid;
     }
 
-    // Pattern 2: `field = 'value'` or `field != 'value'`
+    const match2 = sqlString.match(pattern2);
+    if (match2 && match2[1]) {
+        return entity.values[match2[1]] === auth.user?.uid;
+    }
+
+    // Pattern 3: `field = 'value'` or `field != 'value'`
     const simpleEqualityMatch = sqlString.match(/([\w_]+)\s*(=|!=)\s*'([^']+)'/i);
     if (simpleEqualityMatch) {
         const field = simpleEqualityMatch[1];
@@ -36,14 +46,22 @@ function evaluateRule(rule: SecurityRule, auth: AuthController, entity: Entity<a
 
     if (rule.access === "public") return true;
 
-    if (rule.ownerField && entity) {
-        return entity.values[rule.ownerField] === auth.user?.uid;
+    if (rule.ownerField) {
+        if (!entity) {
+            // null entity: optimistic — we can't evaluate ownership without data
+            // Fall through to SQL checks below (if any). If none, will return true.
+        } else {
+            // Entity present: strictly check ownership. Fail immediately if mismatch.
+            if (entity.values[rule.ownerField] !== auth.user?.uid) return false;
+        }
     }
 
-    const sqlToEvaluate = rule.using || rule.withCheck;
-    if (sqlToEvaluate) {
-        return evaluateAST(sqlToEvaluate, auth, entity);
-    }
+    // In PostgreSQL RLS, USING and WITH CHECK have distinct semantics:
+    // USING applies to existing rows (SELECT/UPDATE/DELETE read phase)
+    // WITH CHECK applies to new/modified values (INSERT/UPDATE write phase)
+    // Both must pass. We evaluate both independently.
+    if (rule.using && !evaluateAST(rule.using, auth, entity)) return false;
+    if (rule.withCheck && !evaluateAST(rule.withCheck, auth, entity)) return false;
 
     return true;
 }

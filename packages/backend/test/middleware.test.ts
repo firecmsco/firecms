@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { requireAuth, optionalAuth, extractUserFromToken, AuthenticatedRequest } from "../src/auth/middleware";
+import { requireAuth, optionalAuth, extractUserFromToken, requireAdmin, AuthenticatedRequest } from "../src/auth/middleware";
 import { configureJwt, generateAccessToken } from "../src/auth/jwt";
 
 describe("Auth Middleware", () => {
@@ -159,6 +159,101 @@ describe("Auth Middleware", () => {
 
             expect(nextFn).toHaveBeenCalled();
             expect(mockReq.user).toBeUndefined();
+        });
+    });
+
+    describe("requireAdmin", () => {
+        it("should return 401 if user is not authenticated (missing requireAuth)", () => {
+            mockReq.user = undefined;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(401);
+            expect(jsonFn).toHaveBeenCalledWith({
+                error: {
+                    message: "User not authenticated. requireAuth middleware is missing?",
+                    code: "UNAUTHORIZED"
+                }
+            });
+            expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should return 403 if user has no roles array", () => {
+            mockReq.user = { userId: "user-123" } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(jsonFn).toHaveBeenCalledWith({
+                error: {
+                    message: "Admin privileges required for this operation",
+                    code: "FORBIDDEN"
+                }
+            });
+            expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should return 403 if user has empty roles array", () => {
+            mockReq.user = { userId: "user-123", roles: [] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should return 403 if user has standard roles (forbidden)", () => {
+            mockReq.user = { userId: "user-123", roles: ["editor", "viewer"] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should allow access if user has 'admin' string role", () => {
+            mockReq.user = { userId: "user-123", roles: ["editor", "admin"] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(nextFn).toHaveBeenCalled();
+            expect(statusFn).not.toHaveBeenCalled();
+        });
+
+        it("should allow access if user has 'schema-admin' string role", () => {
+            mockReq.user = { userId: "user-123", roles: ["schema-admin"] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(nextFn).toHaveBeenCalled();
+            expect(statusFn).not.toHaveBeenCalled();
+        });
+
+        it("should block access for malformed spoofed string roles", () => {
+            mockReq.user = { userId: "user-123", roles: ["schema-adminstration", "admins", "admin "] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should allow access if user has 'admin' object role", () => {
+            mockReq.user = { userId: "user-123", roles: [{ id: "editor" }, { id: "admin" }] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(nextFn).toHaveBeenCalled();
+            expect(statusFn).not.toHaveBeenCalled();
+        });
+
+        it("should block access if role object is missing ID but is an object", () => {
+            mockReq.user = { userId: "user-123", roles: [{ name: "admin" }, { role: "schema-admin" }] } as any;
+
+            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+
+            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(nextFn).not.toHaveBeenCalled();
         });
     });
 

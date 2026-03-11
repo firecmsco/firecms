@@ -4,7 +4,7 @@ import profilesCollection from "./profiles";
 import tagsCollection from "./tags";
 
 const postsCollection: EntityCollection = {
-    name: "Posts Modified 2",
+    name: "Posts",
     singularName: "Post",
     slug: "posts",
     dbPath: "posts",

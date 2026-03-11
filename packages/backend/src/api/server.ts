@@ -10,7 +10,7 @@ import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
 import { createCallbacksTestRouter } from "./test_callbacks_route";
 import { PostgresDataSource } from "../services/postgresDataSource";
-import { extractUserFromToken } from "../auth/middleware";
+import { extractUserFromToken, requireAuth, requireAdmin } from "../auth/middleware";
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
  * Can be used standalone or mounted on existing Express app
@@ -270,7 +270,7 @@ export class FireCMSApiServer {
         // Schema Editor (AST Generation) endpoints
         if (this.config.collectionsDir) {
             const schemaEditorRoutes = createSchemaEditorRoutes(this.config.collectionsDir);
-            this.router.use(`${basePath}/schema-editor`, schemaEditorRoutes);
+            this.router.use(`${basePath}/schema-editor`, requireAuth, requireAdmin, schemaEditorRoutes);
         }
 
         if (this.dataSource instanceof PostgresDataSource) {

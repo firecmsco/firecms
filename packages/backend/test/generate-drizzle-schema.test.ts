@@ -200,7 +200,37 @@ describe("generateDrizzleSchema", () => {
             }];
 
             const result = await generateSchema(collections);
-            expect(result).toContain("auth.roles() ~ 'admin'");
+            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin']");
+        });
+
+        it("should safely handle complex sub-string roles overlapping like 'view' and 'viewer'", async () => {
+            const collections: EntityCollection[] = [{
+                slug: "finance_data",
+                name: "Finance Data",
+                properties: { amount: { type: "number" } },
+                securityRules: [
+                    { operation: "select", roles: ["view"] } // Should not match 'viewer'
+                ]
+            }];
+
+            const result = await generateSchema(collections);
+            // Before array change: auth.roles() ~ 'view' would match 'viewer'
+            // Now: array intersection prevents this
+            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['view']");
+        });
+
+        it("should securely handle multiple allowed roles", async () => {
+            const collections: EntityCollection[] = [{
+                slug: "multi_role",
+                name: "Multi Role",
+                properties: { data: { type: "string" } },
+                securityRules: [
+                    { operation: "select", roles: ["admin", "editor", "super-admin"] }
+                ]
+            }];
+
+            const result = await generateSchema(collections);
+            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin','editor','super-admin']");
         });
 
         it("should combine roles with access: public", async () => {
@@ -215,7 +245,7 @@ describe("generateDrizzleSchema", () => {
 
             const result = await generateSchema(collections);
             // Should be (true) AND (role check)
-            expect(result).toContain("(true) AND (auth.roles() ~ 'admin|manager')");
+            expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') && ARRAY['admin','manager'])");
         });
 
         it("should combine roles with ownerField", async () => {
@@ -234,7 +264,7 @@ describe("generateDrizzleSchema", () => {
             const result = await generateSchema(collections);
             // Should combine owner check AND role check
             expect(result).toContain("auth.uid()");
-            expect(result).toContain("auth.roles() ~ 'editor'");
+            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['editor']");
             expect(result).toContain("AND");
         });
 
@@ -372,7 +402,7 @@ describe("generateDrizzleSchema V2 improvements", () => {
             ]
         }];
         const result = await generateSchema(collections);
-        expect(result).toContain("auth.roles() ~ 'admin'");
+        expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin']");
     });
     it("should generate multiple policies from operations array", async () => {
         const collections: EntityCollection[] = [{
@@ -468,7 +498,7 @@ describe("generateDrizzleSchema V2 improvements", () => {
         }];
         const result = await generateSchema(collections);
         // Should be (true) AND (role check) — same effect as access: "public" + roles
-        expect(result).toContain("(true) AND (auth.roles() ~ 'admin')");
+        expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') && ARRAY['admin'])");
     });
 });
 

@@ -47,6 +47,45 @@ export const requireAuth: RequestHandler = (
 };
 
 /**
+ * Express middleware that requires the user to have an admin or schema-admin role.
+ * Must be used AFTER requireAuth or on a route where req.user is guaranteed.
+ */
+export const requireAdmin: RequestHandler = (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): void => {
+    if (!req.user) {
+        res.status(401).json({
+            error: {
+                message: "User not authenticated. requireAuth middleware is missing?",
+                code: "UNAUTHORIZED"
+            }
+        });
+        return;
+    }
+
+    const roles = req.user.roles || [];
+    const isAdmin = roles.some(role => {
+        const roleId = typeof role === "string" ? role : (role as any).id;
+        return roleId === "admin" || roleId === "schema-admin";
+    });
+
+    if (!isAdmin) {
+        res.status(403).json({
+            error: {
+                message: "Admin privileges required for this operation",
+                code: "FORBIDDEN"
+            }
+        });
+        return;
+    }
+
+    next();
+};
+
+
+/**
  * Express middleware that optionally extracts user from JWT
  * Does not return 401 if token is missing - allows anonymous access
  */

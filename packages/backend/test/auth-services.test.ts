@@ -28,7 +28,10 @@ describe("Auth Services", () => {
     beforeEach(() => {
         // Create chainable mocks
         mockInsertReturning = jest.fn().mockResolvedValue([]);
-        mockInsertValues = jest.fn().mockReturnValue({ returning: mockInsertReturning });
+        mockInsertValues = jest.fn().mockReturnValue({ 
+            returning: mockInsertReturning,
+            onConflictDoUpdate: jest.fn().mockReturnValue({ returning: mockInsertReturning })
+        });
 
         mockSelectWhere = jest.fn().mockResolvedValue([]);
         mockSelectFrom = jest.fn().mockReturnValue({
@@ -443,7 +446,9 @@ describe("Auth Services", () => {
                 expect(mockInsertValues).toHaveBeenCalledWith({
                     userId: "user-123",
                     tokenHash: "token-hash",
-                    expiresAt
+                    expiresAt,
+                    ipAddress: "",
+                    userAgent: ""
                 });
             });
         });

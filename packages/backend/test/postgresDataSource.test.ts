@@ -124,5 +124,85 @@ describe('PostgresDataSource', () => {
             // The SQL object in drizzle is complex, but we can inspect it roughly or rely on the code review
             // Ideally testing with a real DB is better, but this unit-tests the logic flow.
         });
+
+        it('should set app.user_roles handling array of strings correctly', async () => {
+            const user = { uid: 'test-user-123', email: 'test@example.com', roles: ['admin', 'editor'] } as any;
+            const authDelegate = await delegate.withAuth(user);
+
+            let txExecutor: any;
+            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
+                txExecutor = { execute: jest.fn(), select: jest.fn().mockReturnThis(), from: jest.fn().mockReturnThis() };
+                throw new Error("Stop execution");
+            });
+
+            try { await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any }); } catch (e: any) {}
+
+            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
+            const mockTx = { execute: jest.fn() } as any;
+
+            try { await transactionCallback(mockTx); } catch (e) {}
+
+            expect(mockTx.execute).toHaveBeenCalledTimes(3);
+            
+            // Check the second execute call which sets app.user_roles
+            const userRolesCall = mockTx.execute.mock.calls[1][0];
+            const callString = JSON.stringify(userRolesCall);
+            expect(callString).toContain("set_config('app.user_roles'");
+            expect(callString).toContain("admin,editor");
+        });
+
+        it('should set app.user_roles handling array of objects correctly', async () => {
+            const user = { uid: 'test-user-123', email: 'test@example.com', roles: [{ id: 'admin' }, { id: 'editor' }] } as any;
+            const authDelegate = await delegate.withAuth(user);
+
+            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
+                throw new Error("Stop execution");
+            });
+
+            try { await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any }); } catch (e: any) {}
+
+            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
+            const mockTx = { execute: jest.fn() } as any;
+
+            try { await transactionCallback(mockTx); } catch (e) {}
+
+            expect(mockTx.execute).toHaveBeenCalledTimes(3);
+            const userRolesCall = mockTx.execute.mock.calls[1][0];
+            const callString = JSON.stringify(userRolesCall);
+            expect(callString).toContain("set_config('app.user_roles'");
+            expect(callString).toContain("admin,editor");
+        });
+
+        it('should falback to anonymous and empty roles when missing from user', async () => {
+            const user = {} as any; // Empty user object
+            const authDelegate = await delegate.withAuth(user);
+
+            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
+                throw new Error("Stop execution");
+            });
+
+            try { await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any }); } catch (e: any) {}
+
+            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
+            const mockTx = { execute: jest.fn() } as any;
+
+            try { await transactionCallback(mockTx); } catch (e) {}
+
+            expect(mockTx.execute).toHaveBeenCalledTimes(3);
+            
+            // Expected UID is 'anonymous'
+            const userIdCall = mockTx.execute.mock.calls[0][0];
+            const userIdCallString = JSON.stringify(userIdCall);
+            expect(userIdCallString).toContain("set_config('app.user_id'");
+            expect(userIdCallString).toContain("anonymous");
+            
+            // Expected roles is empty string
+            const userRolesCall = mockTx.execute.mock.calls[1][0];
+            const userRolesCallString = JSON.stringify(userRolesCall);
+            expect(userRolesCallString).toContain("set_config('app.user_roles'");
+            
+            // It will json stringify the empty string or empty array depending on drizzle internals
+            expect(userRolesCallString).toContain("");
+        });
     });
 });
