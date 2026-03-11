@@ -84,25 +84,27 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             setDrawerOpen(false);
         }, []);
 
-        const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
+        const computedDrawerOpen: boolean = drawerOpen;
+        const computedDrawerHovered: boolean = Boolean(largeLayout && onHover);
 
         const adminModeController = useAdminModeController();
         const isStudioDark = adminModeController.mode === "studio";
 
         const hasAppBar = Boolean(appBarChildren.length > 0);
         return (
-            <AppContext.Provider value={{
-                logo,
-                hasDrawer: includeDrawer,
-                drawerHovered: onHover,
-                drawerOpen: computedDrawerOpen,
-                closeDrawer: handleDrawerClose,
-                openDrawer: handleDrawerOpen,
-                autoOpenDrawer
-            }}>
+            <AppContext.Provider
+                    value={{
+                        hasDrawer: Boolean(includeDrawer),
+                        drawerOpen: computedDrawerOpen,
+                        drawerHovered: computedDrawerHovered,
+                        openDrawer: () => setDrawerOpen(true),
+                        closeDrawer: () => setDrawerOpen(false),
+                        closeHover: () => setOnHover(false),
+                        logo
+                    }}>
                 <div
                     className={cls("flex h-screen w-screen overflow-hidden",
-                        isStudioDark ? "bg-surface-50 dark:bg-black" : "bg-surface-50 dark:bg-surface-900",
+                        isStudioDark ? "bg-surface-50 dark:bg-surface-950" : "bg-surface-50 dark:bg-surface-900",
                         "text-surface-900 dark:text-white", className)}
                     style={{
                         paddingTop: "env(safe-area-inset-top)",
@@ -119,7 +121,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         onMouseEnter={setOnHoverTrue}
                         onMouseMove={setOnHoverTrue}
                         onMouseLeave={setOnHoverFalse}
-                        open={computedDrawerOpen}
+                        open={drawerOpen}
                         hovered={onHover}
                         setDrawerOpen={setDrawerOpen}>
                         {includeDrawer && drawerChildren}
@@ -131,7 +133,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         {hasAppBar && <DrawerHeader />}
 
                         <div
-                            className={cls(defaultBorderMixin, "grow overflow-auto m-0 ", {
+                            className={cls(defaultBorderMixin, "bg-surface-50 dark:bg-surface-900 grow overflow-auto m-0", {
                                 "lg:mt-4": !hasAppBar,
                                 "mt-1 lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid": padding,
                                 "border-t": hasAppBar && !padding,
@@ -168,26 +170,32 @@ function DrawerWrapper(props: {
     onMouseLeave: () => void
 }) {
 
-    const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
+    const layoutWidth = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
+    const visualWidth = !props.displayed ? 0 : ((props.open || props.hovered) ? DRAWER_WIDTH : 72);
+    
+    const isFloating = props.hovered && !props.open;
+
     const innerDrawer = <div
-        className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
+        className={cls("h-full no-scrollbar overflow-y-auto overflow-x-hidden", defaultBorderMixin,
+            isFloating ? "absolute top-0 left-0 bottom-0 z-50 bg-visual-background dark:bg-surface-950 shadow-2xl border-r" : "relative")}
         style={{
-            width,
-            transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+            width: visualWidth,
+            transition: "left 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
         }}
     >
 
-        {!props.open && props.displayed && (
-            <Tooltip title="Open menu"
+        {props.displayed && (
+            <Tooltip title={props.open ? "Close menu" : "Open menu"}
                 side="right"
                 sideOffset={12}
-                asChild={true}>
+                asChild={true}
+                open={isFloating ? false : undefined}>
                 <div
-                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 bg-surface-50! dark:bg-surface-900! rounded-full w-fit z-20">
+                    className="absolute top-[72px] left-0 w-[72px] flex justify-center bg-transparent z-20">
                     <IconButton
                         color="inherit"
-                        aria-label="Open menu"
-                        onClick={() => props.setDrawerOpen(true)}
+                        aria-label="Toggle menu"
+                        onClick={() => props.setDrawerOpen(!props.open)}
                         size="large"
                     >
                         <MenuIcon size="small" />
@@ -196,18 +204,7 @@ function DrawerWrapper(props: {
             </Tooltip>
         )}
 
-        <div
-            className={`z-20 absolute right-0 top-4 ${props.open ? "opacity-100" : "opacity-0 invisible"
-                } transition-opacity duration-200 ease-in-out`}>
-            <IconButton
-                aria-label="Close drawer"
-                onClick={() => props.setDrawerOpen(false)}
-            >
-                <ChevronLeftIcon />
-            </IconButton>
-        </div>
-
-        <div className={"flex flex-col h-full"}>
+        <div className={"flex flex-col h-full mt-4"}>
             {props.children}
         </div>
 
@@ -246,8 +243,8 @@ function DrawerWrapper(props: {
             onMouseMove={props.onMouseMove}
             onMouseLeave={props.onMouseLeave}
             style={{
-                width,
-                transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+                width: layoutWidth,
+                transition: "left 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
             }}>
 
             {innerDrawer}

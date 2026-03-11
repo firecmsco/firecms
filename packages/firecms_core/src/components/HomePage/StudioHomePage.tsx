@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { Container } from "@firecms/ui";
+import { Container, Typography } from "@firecms/ui";
 import {
     useCollapsedGroups,
     useCustomizationController,
@@ -13,7 +13,6 @@ import {
     NavigationEntry,
     PluginGenericProps
 } from "@firecms/types";
-import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 
 export function StudioHomePage({
@@ -50,7 +49,7 @@ export function StudioHomePage({
         const entriesByGroup: Record<string, NavigationEntry[]> = {};
 
         rawNavigationEntries.forEach((e) => {
-            if (e.group && e.group !== "Views" && e.group !== "Admin") {
+            if (e.group && e.group !== "Views" && e.group !== "Admin" && !hiddenGroups?.includes(e.group)) {
                 (entriesByGroup[e.group] ??= []).push(e);
             }
         });
@@ -59,12 +58,8 @@ export function StudioHomePage({
             .map(([name, entries]) => ({
                 name,
                 entries
-            }))
-            .filter(g => !hiddenGroups?.includes(g.name));
+            }));
     }, [rawNavigationEntries, hiddenGroups]);
-
-    const groupNames = useMemo(() => processedGroups.map(item => item.name), [processedGroups]);
-    const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames, "home");
 
     /* ───────────────────────────────────────────────────────────────
        Plugin extras
@@ -86,12 +81,16 @@ export function StudioHomePage({
                             sectionProps
                         );
                         return (
-                            <NavigationGroup
-                                group={section.title}
-                                key={`plugin_section_${plugin.key}`}
-                            >
+                            <div key={`plugin_section_${plugin.key}`} className="flex flex-col gap-4 mt-8">
+                                <Typography
+                                    variant="caption"
+                                    color="secondary"
+                                    className="px-4 py-2 font-medium uppercase text-sm text-surface-600 dark:text-surface-400"
+                                >
+                                    {section.title}
+                                </Typography>
                                 {section.children}
-                            </NavigationGroup>
+                            </div>
                         );
                     })}
             </>
@@ -150,14 +149,16 @@ export function StudioHomePage({
                 {additionalChildrenStart}
                 {additionalPluginChildrenStart}
 
-                <div className="flex flex-col gap-4">
-                    {processedGroups.map((groupData, groupIndex) => (
-                        <NavigationGroup
-                            key={`group-${groupIndex}`}
-                            group={groupData.name}
-                            collapsed={isGroupCollapsed(groupData.name)}
-                            onToggleCollapsed={() => toggleGroupCollapsed(groupData.name)}
-                        >
+                <div className="flex flex-col gap-10">
+                    {processedGroups.map((groupData) => (
+                        <div key={groupData.name} className="flex flex-col gap-4">
+                            <Typography
+                                variant="caption"
+                                color="secondary"
+                                className="px-4 py-2 font-medium uppercase text-sm text-surface-600 dark:text-surface-400"
+                            >
+                                {groupData.name}
+                            </Typography>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {groupData.entries.map((entry) => (
                                     <NavigationCardBinding
@@ -174,19 +175,52 @@ export function StudioHomePage({
                                     />
                                 ))}
                             </div>
-                        </NavigationGroup>
+                        </div>
                     ))}
+
+                    <div className="flex flex-col gap-4">
+                        <Typography
+                            variant="caption"
+                            color="secondary"
+                            className="px-4 py-2 font-medium uppercase text-sm text-surface-600 dark:text-surface-400"
+                        >
+                            Workspace Admin
+                        </Typography>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <NavigationCardBinding
+                                id="users"
+                                slug="users"
+                                group="Admin"
+                                url="/users"
+                                name="Users"
+                                description="Manage developers & roles in the workspace"
+                                view={{ icon: "group" } as unknown as any}
+                                type="admin"
+                            />
+
+                            <NavigationCardBinding
+                                id="roles"
+                                slug="roles"
+                                group="Admin"
+                                url="/roles"
+                                name="Roles"
+                                description="Manage fine-grained access configurations"
+                                view={{ icon: "admin_panel_settings" } as unknown as any}
+                                type="admin"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {additionalPluginSections}
 
                 {sections && sections.map((section) => (
-                    <NavigationGroup
-                        key={section.key}
-                        group={section.title}
-                    >
+                    <div key={section.key} className="flex flex-col gap-4 mt-8">
+                        <h3 className="text-xl font-medium tracking-tight border-b border-surface-200 dark:border-surface-700 pb-2">
+                            {section.title}
+                        </h3>
                         {section.children}
-                    </NavigationGroup>
+                    </div>
                 ))}
 
                 {additionalPluginChildrenEnd}

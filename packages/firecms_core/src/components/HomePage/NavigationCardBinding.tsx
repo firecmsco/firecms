@@ -92,12 +92,6 @@ export function NavigationCardBinding({
         {actionsArray}
     </>
 
-    if (type === "admin") {
-        return <SmallNavigationCard icon={collectionIcon}
-                                    name={name}
-                                    url={url}/>;
-    }
-
     return <NavigationCard
         icon={collectionIcon}
         name={name}

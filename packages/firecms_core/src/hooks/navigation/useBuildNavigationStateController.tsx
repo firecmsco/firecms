@@ -1,11 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { deepEqual as equal } from "fast-equals";
+import { useCallback } from "react";
 
 import {
     CMSView,
     EntityCollection,
-    NavigationEntry,
-    NavigationGroupMapping,
     NavigationResult,
     FireCMSPlugin,
     AuthController,
@@ -15,17 +12,16 @@ import {
     DataSource,
     CollectionRegistryController,
     CMSUrlController,
+    NavigationGroupMapping,
     User
 } from "@firecms/types";
-
-import { resolveCollections, resolveCMSViews } from "./useNavigationResolution";
-import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";
 import { CollectionRegistry } from "@firecms/common";
-import { useAdminModeController } from "../useAdminModeController";
+
 import { EffectiveRoleController, UserManagementDelegate } from "@firecms/types";
-import React, { useMemo } from "react";
-import { UsersView, RolesView } from "../../components/admin";
-import { AccountCircleIcon, SecurityIcon } from "@firecms/ui";
+
+import { useResolvedCollections } from "./useResolvedCollections";
+import { useResolvedViews } from "./useResolvedViews";
+import { useTopLevelNavigation } from "./useTopLevelNavigation";
 
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
@@ -44,6 +40,16 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     userManagement?: UserManagementDelegate<USER>;
 };
 
+/**
+ * Main hook that resolves collections, views, and admin views into a
+ * NavigationStateController. This is a thin composition of three focused hooks:
+ *
+ * - useResolvedCollections: resolves collection props and registers with CollectionRegistry
+ * - useResolvedViews: resolves view/admin view props and injects Users/Roles views
+ * - useTopLevelNavigation: computes the NavigationResult from resolved data
+ *
+ * The NavigationStateController type is preserved as a public API.
+ */
 export function useBuildNavigationStateController<EC extends EntityCollection, USER extends User>(
     props: BuildNavigationStateProps<EC, USER>
 ): NavigationStateController {
@@ -65,357 +71,64 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         userManagement
     } = props;
 
-    const viewsRef = useRef<CMSView[] | undefined>(undefined);
-    const adminViewsRef = useRef<CMSView[] | undefined>(undefined);
-    const navigationEntriesOrderRef = useRef<string[] | undefined>(undefined);
-
-    const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
-    const topLevelNavigationRef = useRef(topLevelNavigation);
-    topLevelNavigationRef.current = topLevelNavigation;
-    const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
-    const navigationLoadingRef = useRef(navigationLoading);
-    navigationLoadingRef.current = navigationLoading;
-    const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
-
-    const pluginGroups = useMemo(() => {
-        const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
-        return [...new Set(allPluginGroups)];
-    }, [plugins]);
-
-    const computeTopNavigation = useCallback((
-        collections: EntityCollection[],
-        views: CMSView[],
-        adminViews: CMSView[],
-        viewsOrder?: string[],
-        navigationGroupMappingsOverride?: NavigationGroupMapping[],
-        onNavigationEntriesUpdateCallback?: (entries: NavigationGroupMapping[]) => void
-    ): NavigationResult => {
-
-        const finalNavigationGroupMappings: NavigationGroupMapping[] = computeNavigationGroups({
-            navigationGroupMappings: navigationGroupMappingsOverride ?? navigationGroupMappings,
-            collections,
-            views,
-            plugins: plugins
-        });
-
-        const allPluginNavigationEntries = finalNavigationGroupMappings.map((g) => g.entries).flat() ?? [];
-        const navigationEntriesOrder = ([...new Set(allPluginNavigationEntries)]);
-
-        let navigationEntries: NavigationEntry[] = [
-            ...(collections ?? []).reduce((acc, collection) => {
-                if (collection.hideFromNavigation) return acc;
-
-                const pathKey = collection.slug;
-                let groupName = getGroup(collection);
-
-                if (finalNavigationGroupMappings) {
-                    for (const pluginGroupDef of finalNavigationGroupMappings) {
-                        if (pluginGroupDef.entries.includes(pathKey)) {
-                            groupName = pluginGroupDef.name;
-                            break;
-                        }
-                    }
-                }
-
-                acc.push({
-                    id: `collection:${pathKey}`,
-                    url: cmsUrlController.buildUrlCollectionPath(pathKey),
-                    type: "collection",
-                    name: collection.name.trim(),
-                    slug: pathKey,
-                    collection,
-                    description: collection.description?.trim(),
-                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
-                });
-                return acc;
-            }, [] as NavigationEntry[]),
-
-            ...(views ?? []).reduce((acc, view) => {
-                if (view.hideFromNavigation) return acc;
-
-                const pathKey = view.slug;
-                let groupName = getGroup(view);
-
-                if (finalNavigationGroupMappings) {
-                    for (const pluginGroupDef of finalNavigationGroupMappings) {
-                        if (pluginGroupDef.entries.includes(pathKey)) {
-                            groupName = pluginGroupDef.name;
-                            break;
-                        }
-                    }
-                }
-
-                const basePathKey = Array.isArray(pathKey) ? pathKey[0] : pathKey;
-                acc.push({
-                    id: `view:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(basePathKey),
-                    name: view.name.trim(),
-                    type: "view",
-                    slug: view.slug,
-                    view,
-                    description: view.description?.trim(),
-                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
-                });
-                return acc;
-            }, [] as NavigationEntry[]),
-
-            ...(adminViews ?? []).reduce((acc, adminView) => {
-                if (adminView.hideFromNavigation) return acc;
-
-                const pathKey = adminView.slug;
-                let groupName = getGroup(adminView);
-
-                if (finalNavigationGroupMappings) {
-                    for (const pluginGroupDef of finalNavigationGroupMappings) {
-                        if (pluginGroupDef.entries.includes(pathKey)) {
-                            groupName = pluginGroupDef.name;
-                            break;
-                        }
-                    }
-                }
-
-                acc.push({
-                    id: `admin:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(pathKey),
-                    name: adminView.name.trim(),
-                    type: "admin",
-                    slug: adminView.slug,
-                    view: adminView,
-                    description: adminView.description?.trim(),
-                    group: groupName ?? NAVIGATION_ADMIN_GROUP_NAME
-                });
-                return acc;
-            }, [] as NavigationEntry[])
-        ];
-
-        const groupOrderValue = (groupName?: string): number => {
-            if (groupName === NAVIGATION_ADMIN_GROUP_NAME) return 1;
-            return 0; // Other groups
-        };
-
-        navigationEntries = navigationEntries.sort((a, b) => {
-            return groupOrderValue(a.group) - groupOrderValue(b.group);
-        });
-
-        const usedViewsOrder = viewsOrder ?? navigationEntriesOrder;
-        if (usedViewsOrder) {
-            navigationEntries = navigationEntries.sort((a, b) => {
-                const getSortPath = (navEntry: NavigationEntry) => typeof navEntry.slug === "string" ? navEntry.slug : navEntry.slug[0];
-                const aIndex = usedViewsOrder.indexOf(getSortPath(a));
-                const bIndex = usedViewsOrder.indexOf(getSortPath(b));
-                if (aIndex === -1 && bIndex === -1) return 0;
-                if (aIndex === -1) return 1;
-                if (bIndex === -1) return -1;
-                return aIndex - bIndex;
-            });
-        }
-
-        const collectedGroupsFromEntries = navigationEntries
-            .map(e => e.group)
-            .filter(Boolean) as string[];
-
-        // Preserve order from finalNavigationGroupMappings (persisted order)
-        const groupsFromMappings = finalNavigationGroupMappings.map(g => g.name);
-
-        // Add any additional groups not in mappings
-        const additionalGroups = collectedGroupsFromEntries.filter(g => !groupsFromMappings.includes(g));
-
-        const allDefinedGroups = [
-            ...(pluginGroups ?? []),
-            ...groupsFromMappings,
-            ...additionalGroups
-        ];
-
-        // Remove duplicates while preserving order, then separate admin to the end
-        const uniqueGroupsArray = [...new Set(allDefinedGroups)];
-        const adminGroups = uniqueGroupsArray.filter(g => g === NAVIGATION_ADMIN_GROUP_NAME);
-        const nonAdminGroups = uniqueGroupsArray.filter(g => g !== NAVIGATION_ADMIN_GROUP_NAME);
-        const uniqueGroups = [...nonAdminGroups, ...adminGroups] as string[];
-
-        return {
-            allowDragAndDrop: plugins?.some((plugin: FireCMSPlugin) => plugin.homePage?.allowDragAndDrop) ?? false,
-            navigationEntries,
-            groups: uniqueGroups,
-            onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
-        };
-    }, [navigationGroupMappings, cmsUrlController.buildCMSUrlPath, cmsUrlController.buildUrlCollectionPath, pluginGroups, plugins, adminMode]);
-
-    const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
-        if (!plugins) {
-            return;
-        }
-        // remove all groups that have no entries
-        const filteredEntries = entries.filter(entry => entry.entries.length > 0);
-
-        // Immediately update the local topLevelNavigation with new mappings
-        if (collectionRegistryController.collectionRegistryRef.current && viewsRef.current) {
-            const updatedNav = computeTopNavigation(
-                collectionRegistryController.collectionRegistryRef.current.getCollections(),
-                viewsRef.current,
-                adminViewsRef.current ?? [],
-                viewsOrder,
-                filteredEntries,
-                onNavigationEntriesOrderUpdate
-            );
-            setTopLevelNavigation(updatedNav);
-        }
-
-        // Then persist to backend
-        if (plugins.some((plugin: FireCMSPlugin) => plugin.homePage?.onNavigationEntriesUpdate)) {
-            plugins.forEach((plugin: FireCMSPlugin) => {
-                if (plugin.homePage?.onNavigationEntriesUpdate) {
-                    plugin.homePage.onNavigationEntriesUpdate(filteredEntries);
-                }
-            });
-        }
-
-    }, [plugins, computeTopNavigation, viewsOrder, collectionRegistryController.collectionRegistryRef]);
-
-    const resolvedAuthController = useMemo(() => {
-        if (adminMode === "studio" && effectiveRoleController?.effectiveRole && authController.user) {
-            return {
-                ...authController,
-                user: {
-                    ...authController.user,
-                    roles: [effectiveRoleController.effectiveRole]
-                }
-            };
-        }
-        return authController;
-    }, [adminMode, effectiveRoleController?.effectiveRole, authController]);
-
-    // Extract injectedAdminViews to a memoized hook before refreshNavigation
-    // Memoize JSX elements separately to ensure stable references for deep equality checks.
-    // React elements create new objects each time, which would cause adminViews comparison
-    // to always fail and trigger an infinite navigation refresh loop.
-    const usersViewElement = useMemo(() =>
-        userManagement ? <UsersView userManagement={userManagement as unknown as UserManagementDelegate<User>} /> : null,
-        [userManagement]
-    );
-    const rolesViewElement = useMemo(() =>
-        userManagement?.roles ? <RolesView userManagement={userManagement as unknown as UserManagementDelegate<User>} /> : null,
-        [userManagement]
-    );
-
-    const injectedAdminViews: CMSView[] = useMemo(() => {
-        const views: CMSView[] = [];
-        if (userManagement && usersViewElement) {
-            views.push({
-                slug: "users",
-                name: "Users",
-                group: NAVIGATION_ADMIN_GROUP_NAME,
-                icon: "support_agent",
-                view: usersViewElement
-            });
-            if (userManagement.roles && rolesViewElement) {
-                views.push({
-                    slug: "roles",
-                    name: "Roles",
-                    group: NAVIGATION_ADMIN_GROUP_NAME,
-                    icon: "admin_panel_settings",
-                    view: rolesViewElement
-                });
-            }
-        }
-        return views;
-    }, [userManagement, usersViewElement, rolesViewElement]);
-
-    // Use refs for values that refreshNavigation reads, so refreshNavigation
-    // identity stays stable and doesn't re-trigger the effect.
-    const resolvedAuthControllerRef = useRef(resolvedAuthController);
-    resolvedAuthControllerRef.current = resolvedAuthController;
-    const computeTopNavigationRef = useRef(computeTopNavigation);
-    computeTopNavigationRef.current = computeTopNavigation;
-    const onNavigationEntriesOrderUpdateRef = useRef(onNavigationEntriesOrderUpdate);
-    onNavigationEntriesOrderUpdateRef.current = onNavigationEntriesOrderUpdate;
-    const injectedAdminViewsRef = useRef(injectedAdminViews);
-    injectedAdminViewsRef.current = injectedAdminViews;
-
-    const refreshNavigation = useCallback(async () => {
-
-        const currentAuthController = resolvedAuthControllerRef.current;
-        if (disabled || currentAuthController.initialLoading)
-            return;
-
-        console.debug("Refreshing navigation");
-
-        try {
-
-            const resolvedAdminViewsProp = await resolveCMSViews(adminViewsProp, currentAuthController, dataSource);
-            const resolvedAdminViews = [...resolvedAdminViewsProp, ...injectedAdminViewsRef.current];
-
-            const [resolvedCollections = [], resolvedViews] = await Promise.all(
-                [
-                    resolveCollections(collectionsProp, currentAuthController, dataSource, plugins),
-                    resolveCMSViews(viewsProp, currentAuthController, dataSource, plugins)
-                ]
-            );
-
-            const currentComputeTopNavigation = computeTopNavigationRef.current;
-            const currentOnNavigationEntriesOrderUpdate = onNavigationEntriesOrderUpdateRef.current;
-
-            const computedTopLevelNav = currentComputeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, currentOnNavigationEntriesOrderUpdate);
-
-            let shouldUpdateTopLevelNav = false;
-            let collectionsChanged = collectionRegistryController.collectionRegistryRef.current.registerMultiple(resolvedCollections);
-
-            if (collectionsChanged) {
-                console.debug("Collections have changed", resolvedCollections);
-                shouldUpdateTopLevelNav = true;
-            }
-
-            if (!equal(viewsRef.current, resolvedViews)) {
-                viewsRef.current = resolvedViews;
-                shouldUpdateTopLevelNav = true;
-            }
-            if (!equal(adminViewsRef.current, resolvedAdminViews)) {
-                adminViewsRef.current = resolvedAdminViews;
-                shouldUpdateTopLevelNav = true;
-            }
-
-            const navigationEntriesOrder = computedTopLevelNav.navigationEntries.map(e => e.id);
-            if (!equal(navigationEntriesOrderRef.current, navigationEntriesOrder)) {
-                navigationEntriesOrderRef.current = navigationEntriesOrder;
-                shouldUpdateTopLevelNav = true;
-            }
-
-            // Compare only data fields, not the callback function (which is always a new reference)
-            const isNavEqual = topLevelNavigationRef.current &&
-                equal(topLevelNavigationRef.current.navigationEntries, computedTopLevelNav.navigationEntries) &&
-                equal(topLevelNavigationRef.current.groups, computedTopLevelNav.groups) &&
-                topLevelNavigationRef.current.allowDragAndDrop === computedTopLevelNav.allowDragAndDrop;
-            if (shouldUpdateTopLevelNav && !isNavEqual) {
-                setTopLevelNavigation(computedTopLevelNav);
-            }
-        } catch (e) {
-            console.error(e);
-            setNavigationLoadingError(e as any);
-        }
-
-        if (navigationLoadingRef.current)
-            setNavigationLoading(false);
-
-    }, [
-        collectionsProp,
-        disabled,
-        viewsProp,
-        adminViewsProp,
+    // Step 1: Resolve collections
+    const {
+        collections,
+        loading: collectionsLoading,
+        error: collectionsError,
+        refresh: refreshCollections
+    } = useResolvedCollections({
+        authController,
+        collections: collectionsProp,
         dataSource,
         plugins,
-        viewsOrder,
-        collectionRegistryController.collectionRegistryRef,
-    ]);
+        disabled,
+        collectionRegistryController
+    });
 
-    useEffect(() => {
-        refreshNavigation();
-    }, [refreshNavigation, adminMode]);
+    // Step 2: Resolve views and admin views
+    const {
+        views,
+        adminViews,
+        loading: viewsLoading,
+        error: viewsError,
+        refresh: refreshViews
+    } = useResolvedViews({
+        authController,
+        views: viewsProp,
+        adminViews: adminViewsProp,
+        dataSource,
+        plugins,
+        adminMode,
+        effectiveRoleController,
+        userManagement
+    });
+
+    // Step 3: Compute top-level navigation (pure derived state)
+    const { topLevelNavigation } = useTopLevelNavigation({
+        collections,
+        views,
+        adminViews,
+        plugins,
+        navigationGroupMappings,
+        viewsOrder,
+        cmsUrlController,
+        adminMode,
+        collectionRegistryController
+    });
+
+    // Expose a combined refresh function
+    const refreshNavigation = useCallback(() => {
+        refreshCollections();
+        refreshViews();
+    }, [refreshCollections, refreshViews]);
 
     return {
-        views: viewsRef.current,
-        adminViews: adminViewsRef.current,
+        views,
+        adminViews,
         topLevelNavigation,
-        loading: navigationLoading,
-        navigationLoadingError,
+        loading: collectionsLoading || viewsLoading,
+        navigationLoadingError: collectionsError ?? viewsError,
         refreshNavigation,
         plugins
     };

@@ -120,7 +120,7 @@ export const DefaultAppBar = function DefaultAppBar({
             style={style}
             className={cls("w-full h-16 transition-all ease-in duration-75 absolute top-0 max-w-full overflow-x-auto no-scrollbar",
                 "flex flex-row gap-2 px-4 items-center",
-                isStudioDark ? "dark:bg-black" : "",
+                isStudioDark ? "dark:bg-surface-950" : "",
                 {
                     "pl-[19rem]": drawerOpen && largeLayout,
                     "pl-24": hasDrawer && !(drawerOpen && largeLayout),

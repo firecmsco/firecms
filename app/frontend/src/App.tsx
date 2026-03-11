@@ -21,10 +21,12 @@ import {
     FireCMSRoute,
     ModeControllerProvider,
     NotFoundPage,
+    RolesView,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
     UserSettingsView,
+    UsersView,
     useBackendStorageSource,
     useBuildAdminModeController,
     useBuildCMSUrlController,
@@ -173,6 +175,8 @@ export function App() {
 
                                         <Route path={"/c/*"} element={<FireCMSRoute />} />
                                         <Route path={"/settings"} element={<UserSettingsView />} />
+                                        <Route path={"/roles"} element={<RolesView userManagement={userManagement}/>} />
+                                        <Route path={"/users"} element={<UsersView userManagement={userManagement}/>} />
 
                                         {devViews.flatMap(view =>
                                             (Array.isArray(view.slug) ? view.slug : [view.slug]).map(path => (

@@ -10,6 +10,7 @@ export type AppState = {
     drawerOpen: boolean,
     openDrawer: () => void,
     closeDrawer: () => void,
+    closeHover: () => void,
     autoOpenDrawer?: boolean,
     logo?: string
 }
@@ -23,6 +24,9 @@ export const AppContext = React.createContext<AppState>({
     },
     closeDrawer: () => {
         throw new Error("closeDrawer not implemented");
+    },
+    closeHover: () => {
+        throw new Error("closeHover not implemented");
     },
     autoOpenDrawer: false
 });

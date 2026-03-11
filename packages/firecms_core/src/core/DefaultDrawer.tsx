@@ -26,10 +26,19 @@ export function DefaultDrawer({
         drawerHovered,
         drawerOpen,
         closeDrawer,
+        closeHover,
         logo
     } = useApp();
 
     const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
+    const scrollRef = React.useRef<HTMLDivElement>(null);
+    const [scrolled, setScrolled] = React.useState(false);
+
+    const handleScroll = () => {
+        if (scrollRef.current) {
+            setScrolled(scrollRef.current.scrollTop > 0);
+        }
+    };
 
     const analyticsController = useAnalyticsController();
     const navigationState = useNavigationStateController();
@@ -65,21 +74,30 @@ export function DefaultDrawer({
             ? "drawer_navigate_to_collection"
             : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
         analyticsController.onAnalyticsEvent?.(eventName, { url: view.url });
-        if (!largeLayout)
+        if (!largeLayout) {
             closeDrawer();
+        } else if (!drawerOpen) {
+            closeHover();
+        }
     };
 
     const isStudioDark = adminModeController.mode === "studio";
+    const drawerVisuallyOpen = drawerOpen || drawerHovered;
 
     return (
         <>
-            <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-black" : "", className)} style={style}>
+            <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-surface-950" : "", className)} style={style}>
 
                 <DrawerLogo logo={logo} />
 
-                <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+                <div 
+                    ref={scrollRef}
+                    onScroll={handleScroll}
+                    className={"mt-[72px] flex-grow overflow-scroll no-scrollbar"}
                     style={{
-                        maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                        maskImage: scrolled 
+                            ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
+                            : "linear-gradient(to bottom, black 0, black calc(100% - 20px), transparent 100%)",
                     }}>
 
                     {groupsToRender.map((group) => {
@@ -91,7 +109,7 @@ export function DefaultDrawer({
                                 entries={entriesInGroup}
                                 collapsed={isGroupCollapsed(group)}
                                 onToggleCollapsed={() => toggleGroupCollapsed(group)}
-                                drawerOpen={drawerOpen}
+                                drawerOpen={drawerVisuallyOpen}
                                 tooltipsOpen={tooltipsOpen}
                                 adminMenuOpen={adminMenuOpen}
                                 onItemClick={onItemClick}
@@ -118,25 +136,19 @@ export function DrawerLogo({ logo }: {
 }) {
 
     const urlController = useCMSUrlController();
-    const { drawerOpen } = useApp();
     return <div
-        style={{
-            transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-            padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
-        }}
-        className={cls("cursor-pointer rounded-xs ml-3 mr-1")}>
+        className={cls("cursor-pointer rounded-xs flex w-[72px] justify-center pt-5")}>
 
         <Tooltip title={"Home"}
             sideOffset={20}
             side="right">
             <Link
-                className={"block"}
+                className={cls("block transition-all w-[32px] h-[32px]")}
                 to={urlController.basePath}>
                 {logo
                     ? <img src={logo}
                         alt="Logo"
-                        className={cls("max-w-full max-h-full transition-all object-contain",
-                            drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")} />
+                        className={cls("w-full h-full object-contain")} />
                     : <FireCMSLogo />}
 
             </Link>

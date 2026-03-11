@@ -24,6 +24,10 @@ export class CollectionRegistry {
     private rawCollectionsBySlug = new Map<string, EntityCollection>();
     private rawRootCollections: EntityCollection[] = [];
 
+    // Snapshot of raw input for idempotency check — compared BEFORE normalization
+    // to avoid the issue where normalization creates new objects that always fail equality.
+    private lastRawInputSnapshot: ReturnType<typeof removeFunctions>[] | null = null;
+
     constructor(collections?: EntityCollection[]) {
         if (collections) {
             this.registerMultiple(collections);
@@ -43,27 +47,30 @@ export class CollectionRegistry {
     /**
      * Registers a collection and its subcollections recursively.
      * Returns true if the collections have changed, false otherwise.
+     *
+     * Idempotent: compares the raw input (before normalization) against a stored
+     * snapshot. Only re-normalizes and re-registers when the raw input actually changed.
      * @param collections
      */
     registerMultiple(collections: EntityCollection[]): boolean {
-        // Get current collections for comparison
-        const currentCollections = [...this.rootCollections];
-
-        // Normalize the new collections first
-        const normalizedCollections = collections.map(c => this.normalizeCollection({ ...c }));
-
-        // Check if collections have changed
-        const hasChanged = !areCollectionListsEqual(currentCollections, normalizedCollections);
-
-        if (hasChanged) {
-            // Clear existing collections
-            this.reset();
-
-            // Register the normalized collections
-            normalizedCollections.forEach((c, index) => this.register(c, collections[index]));
+        // Compare raw input BEFORE normalization to detect actual changes.
+        // This avoids the old issue where normalization creates new objects
+        // that always fail deep-equal even when the source data is identical.
+        const rawSnapshot = collections.map(c => removeFunctions(c));
+        if (this.lastRawInputSnapshot && deepEqual(this.lastRawInputSnapshot, rawSnapshot)) {
+            return false;
         }
 
-        return hasChanged;
+        // Raw input has changed — normalize and register
+        this.reset();
+
+        const normalizedCollections = collections.map(c => this.normalizeCollection({ ...c }));
+        normalizedCollections.forEach((c, index) => this.register(c, collections[index]));
+
+        // Store the snapshot for future comparisons
+        this.lastRawInputSnapshot = rawSnapshot;
+
+        return true;
     }
 
     register(collection: EntityCollection, rawCollection?: EntityCollection) {

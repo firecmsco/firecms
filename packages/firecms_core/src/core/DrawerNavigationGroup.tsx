@@ -60,43 +60,42 @@ export function DrawerNavigationGroup({
 }: DrawerNavigationGroupProps) {
     return (
         <div
-            className={"bg-surface-50 dark:bg-surface-800/30 my-4 rounded-lg ml-3 mr-1"}
+            className={"my-2 ml-3 mr-1 flex flex-col"}
             key={`drawer_group_${group}`}
         >
             {/* Group Header */}
-            {drawerOpen ? (
-                <div
-                    className="pl-4 pr-2 py-2 flex flex-row items-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg transition-colors"
-                    onClick={onToggleCollapsed}
-                >
-                    <ExpandMoreIcon
-                        size={"smallest"}
-                        className={cls(
-                            "text-surface-500 dark:text-surface-400 transition-transform duration-200 mr-1",
-                            collapsed ? "-rotate-90" : "rotate-0"
-                        )}
-                    />
-                    <Typography
-                        variant={"caption"}
-                        color={"secondary"}
-                        className="font-medium flex-grow line-clamp-1"
-                    >
-                        {(group || "Views").toUpperCase()}
-                    </Typography>
-                    {headerActions && (
-                        <div onClick={(e) => e.stopPropagation()}>
-                            {headerActions}
-                        </div>
+            <div
+                className={cls("pl-4 pr-2 py-1 flex flex-row items-center transition-colors",
+                        drawerOpen ? "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg bg-surface-50 dark:bg-surface-800/30" : "opacity-0 invisible pointer-events-none"
                     )}
-                </div>
-            ) : (
-                <div className="w-full" />
-            )}
+                onClick={drawerOpen ? onToggleCollapsed : undefined}
+            >
+                <ExpandMoreIcon
+                    size={"smallest"}
+                    className={cls(
+                        "text-surface-500 dark:text-surface-400 transition-transform duration-200 mr-1",
+                        collapsed ? "-rotate-90" : "rotate-0"
+                    )}
+                />
+                <Typography
+                    variant={"caption"}
+                    color={"secondary"}
+                    className="font-medium flex-grow line-clamp-1"
+                >
+                    {(group || "Views").toUpperCase()}
+                </Typography>
+                {headerActions && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                        {headerActions}
+                    </div>
+                )}
+            </div>
 
             {/* Collapsible Content */}
             <div
                 className={cls(
-                    "overflow-hidden transition-all duration-200 ease-in-out",
+                    "overflow-hidden transition-all duration-200 ease-in-out bg-surface-50 dark:bg-surface-800/30",
+                    drawerOpen ? "rounded-b-lg" : "rounded-lg",
                     collapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
                 )}
             >
