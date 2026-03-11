@@ -9,6 +9,11 @@ jest.mock("graphql-http/lib/use/express", () => ({
 
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
+import { extractUserFromToken } from "../src/auth/middleware";
+jest.mock("../src/auth/middleware", () => ({
+    extractUserFromToken: jest.fn()
+}));
+import request from "supertest";
 describe("FireCMSApiServer", () => {
     let mockDataSource: jest.Mocked<PostgresDataSource>;
     let mockCollections: any[];
@@ -259,6 +264,10 @@ describe("FireCMSApiServer", () => {
     });
 
     describe("Middleware", () => {
+        beforeEach(() => {
+            (extractUserFromToken as jest.Mock).mockReset();
+        });
+
         it("should apply CORS middleware when configured", async () => {
             const cors = require("cors");
 
@@ -279,6 +288,76 @@ describe("FireCMSApiServer", () => {
 
             // The app should be able to parse JSON
             expect(server.getApp()).toBeDefined();
+        });
+
+        it("should apply default authentication extraction when auth is enabled and no validator is present", async () => {
+            (extractUserFromToken as jest.Mock).mockReturnValue({
+                userId: "test-user-id",
+                roles: ["admin"]
+            });
+
+            const server = await FireCMSApiServer.create({
+                dataSource: mockDataSource,
+                collections: mockCollections,
+                auth: {
+                    enabled: true
+                }
+            });
+
+            const app = server.getApp();
+            
+            const response = await request(app)
+                .get("/api/products")
+                .set("Authorization", "Bearer mock-token");
+                
+            expect(response.status).not.toBe(401);
+            expect(extractUserFromToken).toHaveBeenCalledWith("mock-token");
+        });
+
+        it("should reject requests when requireAuth is true and token is invalid or missing", async () => {
+            (extractUserFromToken as jest.Mock).mockReturnValue(null); // Invalid token
+
+            const server = await FireCMSApiServer.create({
+                dataSource: mockDataSource,
+                collections: mockCollections,
+                auth: {
+                    enabled: true,
+                    requireAuth: true
+                }
+            });
+
+            const app = server.getApp();
+            
+            // Missing token
+            const response1 = await request(app).get("/api/products");
+            expect(response1.status).toBe(401);
+            
+            // Invalid token
+            const response2 = await request(app)
+                .get("/api/products")
+                .set("Authorization", "Bearer invalid-token");
+            expect(response2.status).toBe(401);
+            expect(extractUserFromToken).toHaveBeenCalledWith("invalid-token");
+        });
+
+        it("should use custom validator if provided instead of default extraction", async () => {
+            const customValidator = jest.fn().mockResolvedValue({ uid: "custom-user" });
+            
+            const server = await FireCMSApiServer.create({
+                dataSource: mockDataSource,
+                collections: mockCollections,
+                auth: {
+                    enabled: true,
+                    validator: customValidator
+                }
+            });
+
+            const app = server.getApp();
+            
+            await request(app).get("/api/products");
+            
+            expect(customValidator).toHaveBeenCalled();
+            expect(extractUserFromToken).not.toHaveBeenCalled();
         });
     });
 

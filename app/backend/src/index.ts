@@ -48,7 +48,8 @@ async function startServer() {
     const datasources: Record<string, any> = {
         "(default)": {
             connection: db,
-            schema: { tables, enums, relations }
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL
         }
     };
 

@@ -99,7 +99,7 @@ export class AstSchemaEditor {
                                     kind === SyntaxKind.CallExpression ||
                                     kind === SyntaxKind.JsxElement;
 
-                                if (isCode || name === "target" || name === "callbacks" || name === "permissions") {
+                                if (isCode || name === "target" || name === "callbacks" || name === "permissions" || name === "securityRules") {
                                     // Preserve this property exactly as it was
                                     const keyStr = /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(name) ? name : `"${name}"`;
                                     preservedProps.push(`${keyStr}: ${init.getText()}`);

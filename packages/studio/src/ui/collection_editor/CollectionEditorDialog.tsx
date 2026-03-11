@@ -690,6 +690,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     color="primary"
                                     type="submit"
                                     size="small"
+                                    onClick={() => formController.handleSubmit()}
                                     disabled={isSubmitting || configController?.readOnly}
                                     loading={isSubmitting}
                                 >

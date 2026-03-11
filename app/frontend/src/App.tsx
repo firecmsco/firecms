@@ -164,8 +164,11 @@ export function App() {
                                     <Route element={
                                         <Scaffold autoOpenDrawer={false}>
                                             <AdminModeSyncer devViews={devViews} />
-                                            <AppBar title={"Rebase"} />
-                                            <Drawer />
+                                            <AppBar />
+                                            <Drawer 
+                                                title={"Rebase"} 
+                                                logoDestination={adminModeController.mode === "studio" ? "/s" : "/"} 
+                                            />
                                             <Outlet />
                                             <SideDialogs />
                                         </Scaffold>

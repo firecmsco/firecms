@@ -4,7 +4,7 @@ import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCM
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { cls, Tooltip } from "@firecms/ui";
+import { cls, Tooltip, IconButton, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { FireCMSLogo } from "../components";
@@ -15,20 +15,29 @@ import { useApp } from "../app/useApp";
  * @group Core
  */
 export function DefaultDrawer({
+    title,
+    logo,
+    logoDestination,
     className,
     style,
 }: {
-    className?: string
-    style?: React.CSSProperties,
+    title?: React.ReactNode;
+    logo?: string;
+    logoDestination?: string;
+    className?: string;
+    style?: React.CSSProperties;
 }) {
 
     const {
         drawerHovered,
         drawerOpen,
+        openDrawer,
         closeDrawer,
         closeHover,
-        logo
+        logo: appLogo
     } = useApp();
+
+    const resolvedLogo = logo ?? appLogo;
 
     const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
     const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -88,12 +97,20 @@ export function DefaultDrawer({
         <>
             <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-surface-950" : "", className)} style={style}>
 
-                <DrawerLogo logo={logo} />
+                <DrawerHeader 
+                    logo={resolvedLogo} 
+                    title={title} 
+                    logoDestination={logoDestination}
+                    drawerOpen={drawerOpen} 
+                    drawerHovered={drawerHovered} 
+                    openDrawer={openDrawer} 
+                    closeDrawer={closeDrawer} 
+                />
 
                 <div 
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className={"mt-[72px] flex-grow overflow-scroll no-scrollbar"}
+                    className={"mt-3 flex-grow overflow-scroll no-scrollbar"}
                     style={{
                         maskImage: scrolled 
                             ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
@@ -125,33 +142,91 @@ export function DefaultDrawer({
 }
 
 /**
- * This is the logo displayed in the drawer
- * It expands when the drawer is open.
- *
- * @param logo
- 
+ * This is the header displayed in the drawer
+ * It mimics Google Cloud Sidebar behavior with the integrated hamburger toggle.
  */
-export function DrawerLogo({ logo }: {
+import { MenuIcon, MenuOpenIcon, CloseIcon } from "@firecms/ui";
+
+export function DrawerHeader({ 
+    logo, 
+    title,
+    logoDestination,
+    drawerOpen,
+    drawerHovered,
+    openDrawer,
+    closeDrawer 
+}: {
     logo?: string;
+    title?: React.ReactNode;
+    logoDestination?: string;
+    drawerOpen: boolean;
+    drawerHovered: boolean;
+    openDrawer: () => void;
+    closeDrawer: () => void;
 }) {
 
     const urlController = useCMSUrlController();
-    return <div
-        className={cls("cursor-pointer rounded-xs flex w-[72px] justify-center pt-5")}>
+    
+    // States:
+    // 1. Expanded (drawerOpen) -> Show MenuOpenIcon or CloseIcon, Show Logo, Show Title
+    // 2. Collapsed & Hovered (drawerHovered & !drawerOpen) -> Show MenuIcon, Show Logo, Show Title
+    // 3. Collapsed (!drawerHovered & !drawerOpen) -> Show MenuIcon, Hide Logo, Hide Title
+    
+    const isExpanded = drawerOpen;
+    const isHovered = drawerHovered && !drawerOpen;
+    const isFloating = isHovered;
+    const showFullContent = isExpanded || isHovered;
 
-        <Tooltip title={"Home"}
-            sideOffset={20}
-            side="right">
-            <Link
-                className={cls("block transition-all w-[32px] h-[32px]")}
-                to={urlController.basePath}>
-                {logo
-                    ? <img src={logo}
-                        alt="Logo"
-                        className={cls("w-full h-full object-contain")} />
-                    : <FireCMSLogo />}
+    return (
+        <div className="flex flex-row items-center shrink-0 pt-2 px-2 pb-0">
+            {/* Hamburger Toggle */}
+            <Tooltip 
+                title={isExpanded ? "Close menu" : "Open menu"}
+                side="right"
+                sideOffset={12}
+                asChild={true}
+                open={isFloating ? false : undefined}
+            >
+                <div className="shrink-0 flex items-center justify-center w-[56px] h-[48px]">
+                    <IconButton
+                        color="inherit"
+                        aria-label="Toggle menu"
+                        onClick={() => isExpanded ? closeDrawer() : openDrawer()}
+                    >
+                        {isExpanded ? <CloseIcon size="small" /> : <MenuIcon size="small" />}
+                    </IconButton>
+                </div>
+            </Tooltip>
 
-            </Link>
-        </Tooltip>
-    </div>;
+            {/* Logo and Title (Fades in when expanded or hovered) */}
+            <div 
+                className={cls(
+                    "flex flex-row items-center gap-3 ml-2 overflow-hidden transition-all duration-200 ease-in-out",
+                    showFullContent ? "opacity-100 w-full" : "opacity-0 w-0"
+                )}
+            >
+                <Link
+                    className="flex shrink-0 transition-all w-[32px] h-[32px]"
+                    to={logoDestination || urlController.basePath}
+                >
+                    {logo
+                        ? <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+                        : <FireCMSLogo width="32px" height="32px" />
+                    }
+                </Link>
+
+                {title && (
+                    <Link
+                        className="visited:text-inherit dark:visited:text-inherit block truncate"
+                        to={logoDestination || urlController.basePath}
+                    >
+                        {typeof title === "string" 
+                            ? <Typography variant="subtitle1" noWrap className="truncate">{title}</Typography>
+                            : title
+                        }
+                    </Link>
+                )}
+            </div>
+        </div>
+    );
 }

@@ -227,10 +227,10 @@ export function createPostgresWebSocket(
 
                     case "EXECUTE_SQL": {
                         console.debug("⚡ [WebSocket Server] Processing EXECUTE_SQL request");
-                        const { sql } = payload;
+                        const { sql, options } = payload;
                         const delegate = await getScopedDelegate();
                         // @ts-ignore
-                        const result = await delegate.executeSql(sql);
+                        const result = await delegate.executeSql(sql, options);
                         console.debug(`⚡ [WebSocket Server] SQL executed. Returned ${Array.isArray(result) ? result.length : 'non-array'} rows.`);
                         const response = {
                             type: "EXECUTE_SQL_SUCCESS",
@@ -238,6 +238,56 @@ export function createPostgresWebSocket(
                             requestId
                         };
                         console.debug("⚡ [WebSocket Server] Sending EXECUTE_SQL_SUCCESS response");
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
+                    case "FETCH_DATABASES": {
+                        console.debug("📚 [WebSocket Server] Processing FETCH_DATABASES request");
+                        const delegate = await getScopedDelegate();
+                        let databases: string[] = [];
+                        if (delegate.fetchAvailableDatabases) {
+                            databases = await delegate.fetchAvailableDatabases();
+                        }
+                        console.debug(`📚 [WebSocket Server] Fetched ${databases.length} databases.`);
+                        const response = {
+                            type: "FETCH_DATABASES_SUCCESS",
+                            payload: { databases },
+                            requestId
+                        };
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
+                    case "FETCH_ROLES": {
+                        console.debug("👤 [WebSocket Server] Processing FETCH_ROLES request");
+                        const delegate = await getScopedDelegate();
+                        let roles: string[] = [];
+                        if (delegate.fetchAvailableRoles) {
+                            roles = await delegate.fetchAvailableRoles();
+                        }
+                        console.debug(`👤 [WebSocket Server] Fetched ${roles.length} roles.`);
+                        const response = {
+                            type: "FETCH_ROLES_SUCCESS",
+                            payload: { roles },
+                            requestId
+                        };
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
+                    case "FETCH_CURRENT_DATABASE": {
+                        console.debug("📚 [WebSocket Server] Processing FETCH_CURRENT_DATABASE request");
+                        const delegate = await getScopedDelegate();
+                        let database: string | undefined = undefined;
+                        if (delegate.fetchCurrentDatabase) {
+                            database = await delegate.fetchCurrentDatabase();
+                        }
+                        const response = {
+                            type: "FETCH_CURRENT_DATABASE_SUCCESS",
+                            payload: { database },
+                            requestId
+                        };
                         ws.send(JSON.stringify(response));
                     }
                         break;

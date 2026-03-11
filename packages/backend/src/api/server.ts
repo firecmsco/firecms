@@ -10,7 +10,7 @@ import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
 import { createCallbacksTestRouter } from "./test_callbacks_route";
 import { PostgresDataSource } from "../services/postgresDataSource";
-
+import { extractUserFromToken } from "../auth/middleware";
 /**
  * Simplified API server that leverages existing FireCMS infrastructure
  * Can be used standalone or mounted on existing Express app
@@ -142,7 +142,40 @@ export class FireCMSApiServer {
                         res.status(401).json({ error: { message: "Unauthorized" } });
                         return; // ensure exit without calling next
                     }
+                } else {
+                    try {
+                        const authHeader = req.headers.authorization;
+                        if (authHeader && authHeader.startsWith("Bearer ")) {
+                            const token = authHeader.substring(7);
+                            const payload = extractUserFromToken(token);
+                            
+                            if (payload) {
+                                const user = { uid: payload.userId, roles: payload.roles } as unknown as User;
+                                req.user = user;
+
+                                // If the data source supports RLS/scoped auth, use it
+                                if ("withAuth" in this.dataSource && typeof (this.dataSource as { withAuth?: Function }).withAuth === "function") {
+                                    try {
+                                        req.dataSource = await (this.dataSource as { withAuth: Function }).withAuth(user);
+                                    } catch (e) {
+                                        console.error("Failed to initialize scoped data source", e);
+                                        req.dataSource = this.dataSource;
+                                    }
+                                } else {
+                                    req.dataSource = this.dataSource;
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Default auth validation error", error);
+                    }
                 }
+
+                if (this.config.auth?.requireAuth && !req.user) {
+                    res.status(401).json({ error: { message: "Unauthorized: Invalid or missing token" } });
+                    return;
+                }
+
                 next();
             });
         }

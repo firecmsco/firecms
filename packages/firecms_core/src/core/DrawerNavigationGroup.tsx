@@ -60,7 +60,7 @@ export function DrawerNavigationGroup({
 }: DrawerNavigationGroupProps) {
     return (
         <div
-            className={"my-2 ml-3 mr-1 flex flex-col"}
+            className={"my-2 mx-2 flex flex-col"}
             key={`drawer_group_${group}`}
         >
             {/* Group Header */}

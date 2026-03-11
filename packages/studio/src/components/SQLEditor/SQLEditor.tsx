@@ -80,8 +80,81 @@ export const SQLEditor = () => {
     const [schemaError, setSchemaError] = useState<string | null>(null);
 
     // Connection state
-    const [selectedRole, setSelectedRole] = useState("postgres");
-    const [selectedDatabase, setSelectedDatabase] = useState("default");
+    const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(() => {
+        return localStorage.getItem("firecms_sql_selected_db") || undefined;
+    });
+    const [selectedRole, setSelectedRole] = useState<string | undefined>(() => {
+        return localStorage.getItem("firecms_sql_selected_role") || undefined;
+    });
+
+    const [availableDatabases, setAvailableDatabases] = useState<string[]>([]);
+    const [availableRoles, setAvailableRoles] = useState<string[]>([]);
+    const [isLoadingConfig, setIsLoadingConfig] = useState(true);
+    const [connectionConfigError, setConnectionConfigError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let mounted = true;
+        const fetchConnectionConfig = async () => {
+            if (!dataSource.fetchAvailableDatabases || !dataSource.fetchAvailableRoles) {
+                setConnectionConfigError("Active data source does not support fetching specific databases or roles.");
+                setIsLoadingConfig(false);
+                return;
+            }
+
+            try {
+                const [dbs, roles, currentDbFromApi] = await Promise.all([
+                    dataSource.fetchAvailableDatabases(),
+                    dataSource.fetchAvailableRoles(),
+                    typeof dataSource.fetchCurrentDatabase === "function" ? dataSource.fetchCurrentDatabase() : Promise.resolve(undefined)
+                ]);
+
+                if (mounted) {
+                    setAvailableDatabases(dbs);
+                    setAvailableRoles(roles);
+
+                    // Set default database if not selected, preferring current DB -> postgres -> first available
+                    if (!localStorage.getItem("firecms_sql_selected_db") && dbs.length > 0) {
+                        let defaultDb = currentDbFromApi;
+                        if (!defaultDb || !dbs.includes(defaultDb)) {
+                            defaultDb = dbs.includes("postgres") ? "postgres" : dbs[0];
+                        }
+                        setSelectedDatabase(defaultDb);
+                        localStorage.setItem("firecms_sql_selected_db", defaultDb);
+                    }
+
+                    // Set default role if not selected, preferring 'postgres'
+                    if (!localStorage.getItem("firecms_sql_selected_role") && roles.length > 0) {
+                        const defaultRole = roles.includes("postgres") ? "postgres" : roles[0];
+                        setSelectedRole(defaultRole);
+                        localStorage.setItem("firecms_sql_selected_role", defaultRole);
+                    }
+                }
+            } catch (err: any) {
+                console.error("Failed to fetch databases or roles:", err);
+                if (mounted) {
+                    setConnectionConfigError("Failed to fetch connection options: " + (err.message || String(err)));
+                }
+            } finally {
+                if (mounted) {
+                    setIsLoadingConfig(false);
+                }
+            }
+        };
+
+        fetchConnectionConfig();
+
+        return () => { mounted = false; };
+    }, [dataSource]);
+
+    const handleDatabaseChange = (db: string) => {
+        setSelectedDatabase(db);
+        localStorage.setItem("firecms_sql_selected_db", db);
+    };
+
+    const handleRoleChange = (role: string) => {
+        setSelectedRole(role);
+        localStorage.setItem("firecms_sql_selected_role", role);
+    };
 
     const fetchSchema = useCallback(async () => {
         if (!dataSource.executeSql) {
@@ -107,7 +180,7 @@ export const SQLEditor = () => {
                 ORDER BY 
                     schema, "table", ordinal_position;
             `;
-            const result = await dataSource.executeSql(sql);
+            const result = await dataSource.executeSql(sql, { database: selectedDatabase, role: selectedRole });
 
             const processGrouped = (data: any[]) => {
                 const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: any) => {
@@ -133,9 +206,11 @@ export const SQLEditor = () => {
                     processGrouped((result as any).rows);
                 } else {
                     setSchemaError(`Unexpected data format: ${typeof result}`);
+                    setSchemas({});
                 }
             } else if (result.length === 0) {
-                setSchemaError("No tables found in the database.");
+                setSchemas({});
+                setSchemaError("No tables found in this database.");
             } else {
                 processGrouped(result);
             }
@@ -146,11 +221,15 @@ export const SQLEditor = () => {
         } finally {
             setIsSchemaLoading(false);
         }
-    }, [dataSource]);
+    }, [dataSource, selectedDatabase, selectedRole]);
 
     useEffect(() => {
-        fetchSchema();
-    }, [fetchSchema]);
+        // Wait till config is loaded (to have the correct selectedDatabase/Role chosen).
+        // It's possible we already run with `undefined`, then it defaults. 
+        if (!isLoadingConfig) {
+            fetchSchema();
+        }
+    }, [fetchSchema, isLoadingConfig, selectedDatabase, selectedRole]);
 
     // Tabbed interface state
     const [tabs, setTabs] = useState<Array<{
@@ -274,7 +353,7 @@ export const SQLEditor = () => {
 
         try {
             if (dataSource.executeSql) {
-                await dataSource.executeSql(updateSql);
+                await dataSource.executeSql(updateSql, { database: selectedDatabase, role: selectedRole });
 
                 const newResults = [...(activeTab.results || [])];
                 if (newResults[rowIndex]) {
@@ -293,7 +372,7 @@ export const SQLEditor = () => {
                 message: `Failed to update: ${e.message}`
             });
         }
-    }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController]);
+    }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
 
     const [columnWidths, setColumnWidths] = useState<Record<string, Record<string, number>>>(() => {
         const saved = localStorage.getItem("firecms_sql_column_widths");
@@ -414,7 +493,7 @@ export const SQLEditor = () => {
         const start = performance.now();
         try {
             if (dataSource.executeSql) {
-                const result = await dataSource.executeSql(explainSql);
+                const result = await dataSource.executeSql(explainSql, { database: selectedDatabase, role: selectedRole });
                 updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
             }
         } catch (e: any) {
@@ -435,7 +514,7 @@ export const SQLEditor = () => {
 
         try {
             if (dataSource.executeSql) {
-                const result = await dataSource.executeSql(sqlToRun);
+                const result = await dataSource.executeSql(sqlToRun, { database: selectedDatabase, role: selectedRole });
                 updateActiveTab({
                     results: result,
                     execTime: Math.round(performance.now() - start),
@@ -879,23 +958,41 @@ export const SQLEditor = () => {
                                     trigger={
                                         <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors bg-surface-100 hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 rounded border border-transparent mr-2">
                                             <svg className="w-3.5 h-3.5 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
-                                            <span className="max-w-[80px] truncate">{selectedRole}</span>
+                                            <span className="max-w-[80px] truncate">{isLoadingConfig ? "..." : (selectedDatabase || "Select DB")}</span>
                                         </button>
                                     }
                                 >
-                                    <div className="px-3 py-1.5 border-b border-surface-200 dark:border-surface-800 mb-1">
-                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Database</Typography>
-                                    </div>
-                                    <MenuItem dense onClick={() => setSelectedDatabase("default")} className={cls("text-xs", selectedDatabase === "default" && "text-primary dark:text-primary-dark")}>
-                                        default
-                                    </MenuItem>
+                                    <div className="max-h-64 overflow-y-auto">
+                                        <div className="px-3 py-1.5 border-b border-surface-200 dark:border-surface-800 mb-1">
+                                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Database</Typography>
+                                        </div>
+                                        {isLoadingConfig ? (
+                                            <div className="flex items-center justify-center p-4">
+                                                <CircularProgress size="small" />
+                                            </div>
+                                        ) : connectionConfigError ? (
+                                            <div className="px-3 py-2 text-xs text-red-500 dark:text-red-400 max-w-[200px] break-words">
+                                                {connectionConfigError}
+                                            </div>
+                                        ) : (
+                                            <>
+                                                {availableDatabases.map(db => (
+                                                    <MenuItem key={db} dense onClick={() => handleDatabaseChange(db)} className={cls("text-xs", selectedDatabase === db && "text-primary dark:text-primary-dark")}>
+                                                        {db}
+                                                    </MenuItem>
+                                                ))}
 
-                                    <div className="px-3 py-1.5 border-y border-surface-200 dark:border-surface-800 mb-1 mt-1">
-                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Role</Typography>
+                                                <div className="px-3 py-1.5 border-y border-surface-200 dark:border-surface-800 mb-1 mt-1">
+                                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Role</Typography>
+                                                </div>
+                                                {availableRoles.map(role => (
+                                                    <MenuItem key={role} dense onClick={() => handleRoleChange(role)} className={cls("text-xs", selectedRole === role && "text-primary dark:text-primary-dark")}>
+                                                        {role}{role === "postgres" ? " (Admin)" : ""}
+                                                    </MenuItem>
+                                                ))}
+                                            </>
+                                        )}
                                     </div>
-                                    <MenuItem dense onClick={() => setSelectedRole("postgres")} className={cls("text-xs", selectedRole === "postgres" && "text-primary dark:text-primary-dark")}>postgres (Admin)</MenuItem>
-                                    <MenuItem dense onClick={() => setSelectedRole("authenticated")} className={cls("text-xs", selectedRole === "authenticated" && "text-primary dark:text-primary-dark")}>authenticated</MenuItem>
-                                    <MenuItem dense onClick={() => setSelectedRole("anon")} className={cls("text-xs", selectedRole === "anon" && "text-primary dark:text-primary-dark")}>anon</MenuItem>
                                 </Menu>
 
                                 <Button

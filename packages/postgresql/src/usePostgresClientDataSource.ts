@@ -216,8 +216,20 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
             return true; // PostgreSQL supports complex filter combinations
         },
 
-        async executeSql(sql: string): Promise<any[]> {
-            return client.executeSql(sql);
+        async executeSql(sql: string, options?: { database?: string, role?: string }): Promise<any[]> {
+            return client.executeSql(sql, options);
+        },
+
+        async fetchAvailableDatabases(): Promise<string[]> {
+            return client.fetchAvailableDatabases();
+        },
+
+        async fetchAvailableRoles(): Promise<string[]> {
+            return client.fetchAvailableRoles();
+        },
+
+        async fetchCurrentDatabase(): Promise<string | undefined> {
+            return client.fetchCurrentDatabase();
         }
     }), [client]);
 

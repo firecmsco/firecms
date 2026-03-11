@@ -27,7 +27,7 @@ const authorsCollection: EntityCollection = {
             }
         },
         email: {
-            name: "Email!!",
+            name: "Email",
             type: "string",
             validation: {
                 required: true

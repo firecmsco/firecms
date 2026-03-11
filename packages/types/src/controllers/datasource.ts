@@ -185,7 +185,22 @@ export interface DataSource {
     /**
      * Execute raw SQL (if supported by the datasource)
      */
-    executeSql?(sql: string): Promise<any[]>;
+    executeSql?(sql: string, options?: { database?: string, role?: string }): Promise<any[]>;
+
+    /**
+     * Fetch the available databases (if supported by the datasource)
+     */
+    fetchAvailableDatabases?(): Promise<string[]>;
+
+    /**
+     * Fetch the available roles (if supported by the datasource)
+     */
+    fetchAvailableRoles?(): Promise<string[]>;
+
+    /**
+     * Fetch the current database name (if supported by the datasource)
+     */
+    fetchCurrentDatabase?(): Promise<string | undefined>;
 
     /**
      * Flag to indicate if the datasource delegate has requested the initialization of the text search index

@@ -23,6 +23,7 @@ export interface ApiConfig {
     };
     auth?: {
         enabled: boolean;
+        requireAuth?: boolean;
         validator?: (req: FireCMSRequest) => Promise<AuthResult>;
     };
     pagination?: {

@@ -136,7 +136,7 @@ export function computeNavigationGroups({
     return result;
 }
 
-export function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
+export function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[], visitedSlugs: string[] = []) {
     if (a.length !== b.length) {
         return false;
     }
@@ -144,10 +144,18 @@ export function areCollectionListsEqual(a: EntityCollection[], b: EntityCollecti
     const bCopy = [...b];
     const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
     const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
-    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
+    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index], visitedSlugs));
 }
 
-export function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
+export function areCollectionsEqual(a: EntityCollection, b: EntityCollection, visitedSlugs: string[] = []) {
+    if (a.slug !== b.slug) {
+        return false;
+    }
+    if (visitedSlugs.includes(a.slug)) {
+        return true;
+    }
+    const newVisited = [...visitedSlugs, a.slug];
+
     const {
         subcollections: subcollectionsA,
         ...restA
@@ -156,7 +164,7 @@ export function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
         subcollections: subcollectionsB,
         ...restB
     } = b;
-    if (!areCollectionListsEqual(getSubcollections(a), getSubcollections(b))) {
+    if (!areCollectionListsEqual(getSubcollections(a), getSubcollections(b), newVisited)) {
         return false;
     }
     const restAWithoutFunctions = Object.fromEntries(

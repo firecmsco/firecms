@@ -4,7 +4,7 @@ import profilesCollection from "./profiles";
 import tagsCollection from "./tags";
 
 const postsCollection: EntityCollection = {
-    name: "Posts",
+    name: "Posts Modified 2",
     singularName: "Post",
     slug: "posts",
     dbPath: "posts",
@@ -13,12 +13,16 @@ const postsCollection: EntityCollection = {
         id: {
             name: "ID",
             type: "number",
-            validation: { required: true }
+            validation: {
+                required: true
+            }
         },
         title: {
             name: "Title",
             type: "string",
-            validation: { required: true }
+            validation: {
+                required: true
+            }
         },
         content: {
             name: "Content",
@@ -66,7 +70,6 @@ const postsCollection: EntityCollection = {
             type: "relation",
             relationName: "tags"
         }
-
     },
     relations: [
         {

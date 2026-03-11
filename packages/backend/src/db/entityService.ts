@@ -164,12 +164,13 @@ export class EntityService implements EntityRepository {
     /**
      * Execute raw SQL
      */
-    async executeSql(sql: string): Promise<any[]> {
-        console.debug("Executing raw SQL:", sql);
-        const result: any = await this.db.execute(sql as any);
-        const rows = result.rows || result;
+    async executeSql(sqlText: string): Promise<Record<string, unknown>[]> {
+        console.debug("Executing raw SQL:", sqlText);
+        const { sql } = await import("drizzle-orm");
+        const result = await this.db.execute(sql.raw(sqlText));
+        const rows = result.rows;
         console.debug(`SQL executed successfully. Returned ${Array.isArray(rows) ? rows.length : 'non-array'} rows.`);
-        return rows;
+        return rows as Record<string, unknown>[];
     }
 
     // =============================================================

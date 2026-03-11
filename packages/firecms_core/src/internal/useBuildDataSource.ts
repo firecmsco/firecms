@@ -363,8 +363,16 @@ export function useBuildDataSource({
 
         needsInitTextSearch: Boolean(delegate.initTextSearch),
 
-        executeSql: delegate.executeSql ? (sql: string) => {
-            return delegate.executeSql!(sql);
+        executeSql: delegate.executeSql ? (sql: string, options?: any) => {
+            return delegate.executeSql!(sql, options);
+        } : undefined,
+
+        fetchAvailableDatabases: delegate.fetchAvailableDatabases ? () => {
+            return delegate.fetchAvailableDatabases!();
+        } : undefined,
+
+        fetchAvailableRoles: delegate.fetchAvailableRoles ? () => {
+            return delegate.fetchAvailableRoles!();
         } : undefined,
 
     };

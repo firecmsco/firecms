@@ -1,9 +1,10 @@
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
+import { DatabasePoolManager } from "./databasePoolManager";
 import { DrizzleClient } from "../db/interfaces";
 import { User } from "@firecms/types";
-import { sql } from "drizzle-orm";
+import { sql as drizzleSql } from "drizzle-orm";
 import { buildPropertyCallbacks, mergeDeep } from "@firecms/common";
 import { collectionRegistry } from "../collections/registry";
 import {
@@ -41,7 +42,8 @@ export class PostgresDataSource implements DataSource {
     constructor(
         private db: DrizzleClient,
         realtimeService: RealtimeService,
-        user?: User
+        user?: User,
+        private poolManager?: DatabasePoolManager
     ) {
         this.entityService = new EntityService(db);
         this.realtimeService = realtimeService;
@@ -565,8 +567,51 @@ export class PostgresDataSource implements DataSource {
         );
     }
 
-    async executeSql(sql: string): Promise<any[]> {
-        return this.entityService.executeSql(sql);
+    private getTargetDb(databaseName?: string): DrizzleClient {
+        if (!databaseName || databaseName === this.poolManager?.defaultDatabaseName) {
+            return this.db;
+        }
+        if (!this.poolManager) {
+            throw new Error(
+                "Cross-database execution requires adminConnectionString to be configured in the backend."
+            );
+        }
+        return this.poolManager.getDrizzle(databaseName);
+    }
+
+    async executeSql(sqlText: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]> {
+        console.log(`[DataSource] executeSql CALLED: options=`, options, `sql=`, sqlText.substring(0, 50));
+        if (!options?.database && !options?.role) {
+            return this.entityService.executeSql(sqlText);
+        }
+
+        const targetDb = this.getTargetDb(options?.database);
+
+        if (options?.role) {
+            const safeRole = options.role.replace(/"/g, '""');
+            return await targetDb.transaction(async (tx) => {
+                await tx.execute(drizzleSql.raw(`SET LOCAL ROLE "${safeRole}"`));
+                const result = await tx.execute(drizzleSql.raw(sqlText));
+                return result.rows as Record<string, unknown>[];
+            });
+        }
+
+        const result = await targetDb.execute(drizzleSql.raw(sqlText));
+        return result.rows as Record<string, unknown>[];
+    }
+
+    async fetchAvailableDatabases(): Promise<string[]> {
+        const result = await this.executeSql(`SELECT datname FROM pg_database WHERE datistemplate = false;`);
+        return result.map((r: any) => r.datname as string);
+    }
+
+    async fetchAvailableRoles(): Promise<string[]> {
+        const result = await this.executeSql(`SELECT rolname FROM pg_roles;`);
+        return result.map((r: any) => r.rolname as string);
+    }
+
+    async fetchCurrentDatabase(): Promise<string | undefined> {
+        return this.poolManager?.defaultDatabaseName;
     }
 
     private generateSubscriptionId(): string {
@@ -620,14 +665,14 @@ export class PostgresDataSource implements DataSource {
                     const rolesString = userRoles.map(r => r.id).join(",");
 
                     // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
-                    await tx.execute(sql`SELECT set_config('app.user_id', ${userId}, true)`);
-                    await tx.execute(sql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
-                    await tx.execute(sql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles.map(r => r.id) })}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.user_id', ${userId}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles.map(r => r.id) })}, true)`);
 
                     // Create a temporary delegate using the transaction client
                     const txEntityService = new EntityService(tx);
 
-                    const txDelegate = new PostgresDataSource(tx, this.realtimeService, user);
+                    const txDelegate = new PostgresDataSource(tx, this.realtimeService, user, this.poolManager);
                     // Force inject the transactional entity service
                     // @ts-ignore
                     txDelegate.entityService = txEntityService;
@@ -664,7 +709,13 @@ export class PostgresDataSource implements DataSource {
         authenticatedDelegate.deleteEntity = wrapMethod("deleteEntity");
         authenticatedDelegate.checkUniqueField = wrapMethod("checkUniqueField");
         authenticatedDelegate.countEntities = wrapMethod("countEntities");
-        authenticatedDelegate.executeSql = wrapMethod("executeSql");
+
+        // These bypass the RLS transaction — they use the pool manager directly
+        // or query cluster-wide catalogs where RLS doesn't apply.
+        authenticatedDelegate.executeSql = this.executeSql.bind(this);
+        authenticatedDelegate.fetchAvailableDatabases = this.fetchAvailableDatabases.bind(this);
+        authenticatedDelegate.fetchCurrentDatabase = this.fetchCurrentDatabase.bind(this);
+        authenticatedDelegate.fetchAvailableRoles = this.fetchAvailableRoles.bind(this);
 
         // Listen methods use websockets/realtime service which handles auth differently (via connection params usually),
         // OR we might need to think about how listen works with RLS.

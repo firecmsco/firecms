@@ -10,14 +10,20 @@ import { DefaultDrawer } from "../core";
  */
 export function Drawer({
                            children,
+                           title,
+                           logo,
+                           logoDestination,
                            className,
                            style
                        }: {
     children?: React.ReactNode,
+    title?: React.ReactNode,
+    logo?: string,
+    logoDestination?: string,
     className?: string,
     style?: React.CSSProperties
 }) {
-    const usedChildren = children ?? <DefaultDrawer className={className} style={style}/>;
+    const usedChildren = children ?? <DefaultDrawer title={title} logo={logo} logoDestination={logoDestination} className={className} style={style}/>;
     return <>{usedChildren}</>;
 }
 

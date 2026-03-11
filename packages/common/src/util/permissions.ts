@@ -71,7 +71,8 @@ function checkOperation(
     if (applicableRules.length === 0) return false;
 
     // In Postgres, policies ONLY apply if the user matching the targeted roles.
-    const userRoles = authController.user?.roles?.map((r: any) => typeof r === "string" ? r : r.id) || ["public"];
+    const userRoleIds = authController.user?.roles?.map((r: any) => typeof r === "string" ? r : r.id) || [];
+    const userRoles = [...userRoleIds, "public"];
     const roleApplicableRules = applicableRules.filter(rule => {
         if (!rule.roles || rule.roles.length === 0) return true; // APPLIES TO PUBLIC
         return rule.roles.some((r: string) => userRoles.includes(r));

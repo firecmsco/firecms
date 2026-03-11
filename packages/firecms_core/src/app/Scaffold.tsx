@@ -135,7 +135,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         <div
                             className={cls(defaultBorderMixin, "bg-surface-50 dark:bg-surface-900 grow overflow-auto m-0", {
                                 "lg:mt-4": !hasAppBar,
-                                "mt-1 lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid": padding,
+                                "mt-1 lg:m-0 lg:mx-2 lg:mb-2 lg:rounded-lg lg:border lg:border-solid": padding,
                                 "border-t": hasAppBar && !padding,
                             })}>
 
@@ -184,27 +184,9 @@ function DrawerWrapper(props: {
         }}
     >
 
-        {props.displayed && (
-            <Tooltip title={props.open ? "Close menu" : "Open menu"}
-                side="right"
-                sideOffset={12}
-                asChild={true}
-                open={isFloating ? false : undefined}>
-                <div
-                    className="absolute top-[72px] left-0 w-[72px] flex justify-center bg-transparent z-20">
-                    <IconButton
-                        color="inherit"
-                        aria-label="Toggle menu"
-                        onClick={() => props.setDrawerOpen(!props.open)}
-                        size="large"
-                    >
-                        <MenuIcon size="small" />
-                    </IconButton>
-                </div>
-            </Tooltip>
-        )}
 
-        <div className={"flex flex-col h-full mt-4"}>
+
+        <div className={"flex flex-col h-full"}>
             {props.children}
         </div>
 

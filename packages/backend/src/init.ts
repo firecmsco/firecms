@@ -6,6 +6,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PostgresDataSource } from "./services/postgresDataSource";
 import { RealtimeService } from "./services/realtimeService";
 import { DatasourceRegistry, DEFAULT_DATASOURCE_ID, DefaultDatasourceRegistry } from "./services/datasource-registry";
+import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, FireCMSApiServer } from "./api";
@@ -74,6 +75,9 @@ export interface PostgresDatasourceConfig {
         /** Database relations (optional) */
         relations?: Record<string, Relations>;
     };
+    /** Explicit cluster connection string to enable cross-database queries 
+        and administrative pool generation. */
+    adminConnectionString?: string; 
 }
 
 /**
@@ -271,7 +275,8 @@ async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<
         const {
             delegate,
             db,
-            schema
+            schema,
+            adminConnectionString
         } = resolveDatasourceConfig(dsConfig);
 
         if (delegate) {
@@ -302,7 +307,8 @@ async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<
 
             // Create realtime service and datasource delegate
             const realtimeService = new RealtimeService(db);
-            const dataSource = new PostgresDataSource(db, realtimeService);
+            const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
+            const dataSource = new PostgresDataSource(db, realtimeService, undefined, poolManager);
             realtimeService.setDataSource(dataSource);
 
             realtimeServices[datasourceId] = realtimeService;
@@ -512,6 +518,7 @@ function resolveDatasourceConfig(config: DatasourceConfig): {
     delegate?: DataSource;
     db?: NodePgDatabase;
     schema?: PostgresDatasourceConfig["schema"];
+    adminConnectionString?: string;
 } {
     // If it's a DataSource directly
     if (isDataSourceDelegate(config)) {
@@ -522,7 +529,8 @@ function resolveDatasourceConfig(config: DatasourceConfig): {
     if (isPostgresDatasourceConfig(config)) {
         return {
             db: config.connection,
-            schema: config.schema
+            schema: config.schema,
+            adminConnectionString: config.adminConnectionString
         };
     }
 

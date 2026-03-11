@@ -533,12 +533,34 @@ export class PostgresDataSourceClient {
         });
     }
 
-    async executeSql(sql: string): Promise<any[]> {
+    async executeSql(sql: string, options?: { database?: string, role?: string }): Promise<any[]> {
         const response = await this.sendMessage({
             type: "EXECUTE_SQL",
-            payload: { sql }
+            payload: { sql, options }
         });
         return response.result || [];
+    }
+
+    async fetchAvailableDatabases(): Promise<string[]> {
+        const response = await this.sendMessage({
+            type: "FETCH_DATABASES",
+            payload: {}
+        });
+        return response.databases || [];
+    }
+
+    async fetchAvailableRoles(): Promise<string[]> {
+        const response = await this.sendMessage({
+            type: "FETCH_ROLES"
+        });
+        return response.roles || [];
+    }
+
+    async fetchCurrentDatabase(): Promise<string | undefined> {
+        const response = await this.sendMessage({
+            type: "FETCH_CURRENT_DATABASE"
+        });
+        return response.database;
     }
 
     async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
