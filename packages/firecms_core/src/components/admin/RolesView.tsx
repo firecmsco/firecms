@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useSnackbarController } from "../../index";
-import { Role, UserManagementDelegate } from "@firecms/types";
+import { useSnackbarController, useCollectionRegistryController } from "../../index";
+import { Role, SecurityRule, UserManagementDelegate } from "@firecms/types";
 import {
     AddIcon,
     Button,
+    Chip,
     Container,
     DeleteIcon,
     Dialog,
@@ -23,7 +24,8 @@ import {
     CenteredView,
     Tooltip,
     Checkbox,
-    LoadingButton
+    LoadingButton,
+    defaultBorderMixin
 } from "@firecms/ui";
 import { RoleChip } from "./RoleChip";
 import { ConfirmationDialog } from "../ConfirmationDialog";
@@ -240,9 +242,9 @@ function RoleDetailsForm({
                     Role
                 </DialogTitle>
 
-                <DialogContent className="h-full grow">
+                <DialogContent className="h-full grow overflow-y-auto">
                     <div className="grid grid-cols-12 gap-4">
-                        <div className="col-span-12">
+                        <div className="col-span-12 sm:col-span-4">
                             <TextField
                                 name="id"
                                 required
@@ -257,7 +259,7 @@ function RoleDetailsForm({
                             )}
                         </div>
 
-                        <div className="col-span-12">
+                        <div className="col-span-12 sm:col-span-4">
                             <TextField
                                 name="name"
                                 required
@@ -271,17 +273,18 @@ function RoleDetailsForm({
                             )}
                         </div>
 
-                        <div className="col-span-12">
-                            <label className="flex items-center gap-2 cursor-pointer">
+                        <div className="col-span-12 sm:col-span-4 flex items-start pt-2">
+                            <label className="flex items-center gap-2 cursor-pointer mt-3">
                                 <Checkbox
                                     checked={isAdmin}
                                     onCheckedChange={(checked) => setIsAdmin(Boolean(checked))}
                                 />
                                 <span className="font-medium">Is Admin</span>
                             </label>
-                            <Typography variant="caption">
-                                Admins have full access to all collections
-                            </Typography>
+                        </div>
+
+                        <div className="col-span-12">
+                            <CollectionPermissionsMatrix roleId={roleId} isAdmin={isAdmin} />
                         </div>
                     </div>
                 </DialogContent>
@@ -303,3 +306,103 @@ function RoleDetailsForm({
         </Dialog>
     );
 }
+
+// ============================================
+// CollectionPermissionsMatrix
+// ============================================
+const CRUD_OPS = [
+    { op: "select" as const, label: "Read" },
+    { op: "insert" as const, label: "Create" },
+    { op: "update" as const, label: "Edit" },
+    { op: "delete" as const, label: "Delete" },
+];
+
+function hasRoleAccess(
+    rules: SecurityRule[] | undefined,
+    roleId: string,
+    op: "select" | "insert" | "update" | "delete"
+): boolean {
+    if (!rules || rules.length === 0) return true;
+    const applicable = rules.filter(r =>
+        r.operation === op || r.operation === "all" ||
+        r.operations?.includes(op) || r.operations?.includes("all")
+    );
+    if (applicable.length === 0) return false;
+    const forRole = applicable.filter(r =>
+        !r.roles || r.roles.length === 0 || r.roles.includes(roleId) || r.roles.includes("public")
+    );
+    if (forRole.length === 0) return false;
+    for (const r of forRole) {
+        if ((r.mode ?? "permissive") === "restrictive") return false;
+    }
+    return forRole.some(r => (r.mode ?? "permissive") === "permissive");
+}
+
+function PermCell({ granted }: { granted: boolean }) {
+    return (
+        <span className={granted
+            ? "text-green-500 dark:text-green-400 font-bold"
+            : "text-surface-300 dark:text-surface-600"}
+        >
+            {granted ? "✓" : "✗"}
+        </span>
+    );
+}
+
+function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAdmin: boolean }) {
+    const { collections } = useCollectionRegistryController();
+
+    if (!collections || collections.length === 0) {
+        return (
+            <div className="mt-4">
+                <Typography variant="label" className="text-surface-400">No collections configured</Typography>
+            </div>
+        );
+    }
+
+    const topLevel = collections.filter(c => !c.collectionGroup);
+
+    return (
+        <div className="mt-4">
+            <Typography variant="label" className="mb-2 block text-surface-500 dark:text-surface-400 uppercase tracking-wide text-xs">
+                Collection permissions
+            </Typography>
+            <div className={`rounded-lg overflow-hidden border w-full ${defaultBorderMixin}`}>
+                <Table className="w-full">
+                    <TableHeader>
+                        <TableCell header>Collection</TableCell>
+                        {CRUD_OPS.map(({ op, label }) => (
+                            <TableCell key={op} header align="center" className="w-20">{label}</TableCell>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {topLevel.map((collection) => {
+                            const noRules = !collection.securityRules || collection.securityRules.length === 0;
+                            return (
+                                <TableRow key={collection.slug}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="font-medium">{collection.name}</span>
+                                            {noRules && !isAdmin && (
+                                                <Tooltip title="No security rules defined — all operations unrestricted">
+                                                    <Chip size="smallest" colorScheme="grayLight">no rules</Chip>
+                                                </Tooltip>
+                                            )}
+                                        </div>
+                                        <span className="text-xs text-surface-400 font-mono">{collection.slug}</span>
+                                    </TableCell>
+                                    {CRUD_OPS.map(({ op }) => (
+                                        <TableCell key={op} align="center" className="w-20">
+                                            <PermCell granted={isAdmin || hasRoleAccess(collection.securityRules, roleId, op)} />
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
+    );
+}
+

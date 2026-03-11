@@ -108,10 +108,10 @@ export function createPostgresWebSocket(
                     const session = clientSessions.get(clientId);
                     if (session?.user && "withAuth" in dataSource && typeof (dataSource as any).withAuth === "function") {
                         try {
-                            // Map AccessTokenPayload back to User interface ( uid instead of userId, and roles as Role objects)
+                            // Map AccessTokenPayload back to User interface for withAuth (roles are already string IDs from JWT)
                             const userForAuth: any = {
                                 uid: session.user.userId,
-                                roles: (session.user.roles || []).map(r => ({ id: r, name: r }))
+                                roles: session.user.roles ?? []
                             };
                             return await (dataSource as any).withAuth(userForAuth);
                         } catch (e) {

@@ -1,4 +1,3 @@
-import { Role } from "./roles";
 
 /**
  * This interface represents a user.
@@ -37,9 +36,10 @@ export type User = {
     readonly isAnonymous: boolean;
 
     /**
-     * Custom roles assigned to the user.
+     * Role IDs assigned to this user (e.g. ["admin", "editor"]).
+     * These are plain string IDs — use the UserManagementDelegate to look up full Role objects.
      */
-    roles?: Role[];
+    roles?: string[];
 
     getIdToken?: (forceRefresh?: boolean) => Promise<string>;
 

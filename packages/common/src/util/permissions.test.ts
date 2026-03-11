@@ -12,7 +12,7 @@ describe("Permissions Evaluator", () => {
         providerId: "test",
         isAnonymous: false,
         photoURL: null,
-        roles: [{ id: "author", name: "Author" }, { id: "user", name: "User" }]
+        roles: ["author", "user"]
     };
 
     const adminUser: User = {
@@ -22,7 +22,7 @@ describe("Permissions Evaluator", () => {
         providerId: "test",
         isAnonymous: false,
         photoURL: null,
-        roles: [{ id: "admin", name: "Admin" }]
+        roles: ["admin"]
     };
 
     const mockAuthController: AuthController<any> = {
@@ -613,7 +613,7 @@ describe("Permissions Evaluator", () => {
             const editorUser: User = {
                 uid: "editor-1", email: "e@e.com", displayName: "Ed",
                 providerId: "test", isAnonymous: false, photoURL: null,
-                roles: [{ id: "editor", name: "Editor" }]
+                roles: ["editor"]
             };
             const editorAuth: AuthController<any> = { ...mockAuthController, user: editorUser };
 

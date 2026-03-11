@@ -47,7 +47,7 @@ export function UsersView({ userManagement }: {
     const [bootstrapping, setBootstrapping] = useState(false);
 
     // Check if any admin exists
-    const hasAdmin = users.some(u => u.roles?.some(r => r.id === "admin"));
+    const hasAdmin = users.some(u => u.roles?.includes("admin"));
 
     const handleBootstrap = async () => {
         if (!bootstrapAdmin) return;
@@ -157,9 +157,10 @@ export function UsersView({ userManagement }: {
                                 <TableCell className="font-medium">{user.displayName}</TableCell>
                                 <TableCell>
                                     <div className="flex flex-wrap gap-2">
-                                        {user.roles?.map((r: Role) => (
-                                            <RoleChip key={r.id} role={r} />
-                                        ))}
+                                        {user.roles?.map((roleId: string) => {
+                                            const role = roles?.find(r => r.id === roleId);
+                                            return role ? <RoleChip key={roleId} role={role} /> : <span key={roleId}>{roleId}</span>;
+                                        })}
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -227,7 +228,7 @@ function UserDetailsForm({
     const [displayName, setDisplayName] = useState(userProp?.displayName || "");
     const [email, setEmail] = useState(userProp?.email || "");
     const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>(
-        userProp?.roles?.map((r: Role) => r.id) || []
+        userProp?.roles || []
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState<{ displayName?: string; email?: string; roles?: string }>({});
@@ -250,7 +251,7 @@ function UserDetailsForm({
 
         setIsSubmitting(true);
         try {
-            const userRoles = roles ? selectedRoleIds.map(id => roles.find(r => r.id === id) as Role).filter(Boolean) : [];
+            const userRoles = selectedRoleIds;
             const userToSave: User = {
                 uid: userProp?.uid || crypto.randomUUID(),
                 email,
@@ -272,7 +273,7 @@ function UserDetailsForm({
     const dirty = isNewUser ||
         displayName !== (userProp?.displayName || "") ||
         email !== (userProp?.email || "") ||
-        JSON.stringify(selectedRoleIds.sort()) !== JSON.stringify((userProp?.roles?.map(r => r.id) || []).sort());
+        JSON.stringify(selectedRoleIds.sort()) !== JSON.stringify((userProp?.roles || []).sort());
 
     return (
         <Dialog open={open} onOpenChange={(open) => !open ? handleClose() : undefined} maxWidth="4xl">

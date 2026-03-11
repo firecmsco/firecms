@@ -24,7 +24,7 @@ function convertToUser(userInfo: UserInfo): User {
         photoURL: userInfo.photoURL || null,
         providerId: "custom",
         isAnonymous: false,
-        roles: userInfo.roles?.map((id: string) => ({ id, name: id })) || []
+        roles: userInfo.roles || []
     };
 }
 
@@ -300,7 +300,7 @@ export function useFireCMSAuthController(
         if (defineRolesFor) {
             const customRoles = await defineRolesFor(convertedUser);
             if (customRoles) {
-                convertedUser = { ...convertedUser, roles: customRoles };
+                convertedUser = { ...convertedUser, roles: customRoles.map(r => r.id) };
             }
         }
 
@@ -447,7 +447,7 @@ export function useFireCMSAuthController(
             if (defineRolesFor) {
                 const customRoles = await defineRolesFor(convertedUser);
                 if (customRoles) {
-                    convertedUser = { ...convertedUser, roles: customRoles };
+                    convertedUser = { ...convertedUser, roles: customRoles.map(r => r.id) };
                 }
             }
 
@@ -540,7 +540,7 @@ export function useFireCMSAuthController(
                 if (defineRolesFor) {
                     const customRoles = await defineRolesFor(userToSet);
                     if (customRoles) {
-                        userToSet = { ...userToSet, roles: customRoles };
+                        userToSet = { ...userToSet, roles: customRoles.map(r => r.id) };
                     }
                 }
 
@@ -587,7 +587,7 @@ export function useFireCMSAuthController(
                         const customRoles = await defineRolesFor(userToSet);
                         if (!isMountedRef.current) return;
                         if (customRoles) {
-                            userToSet = { ...userToSet, roles: customRoles };
+                            userToSet = { ...userToSet, roles: customRoles.map(r => r.id) };
                         }
                     }
                 } catch (meError: any) {

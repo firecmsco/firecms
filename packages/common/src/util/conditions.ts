@@ -5,8 +5,7 @@ import {
     EnumValueConfig,
     JsonLogicRule,
     PropertyConditions,
-    Property,
-    Role
+    Property
 } from "@firecms/types";
 
 /**
@@ -149,7 +148,7 @@ export function buildConditionContext(params: {
             email: user?.email ?? null,
             displayName: user?.displayName ?? null,
             photoURL: user?.photoURL ?? null,
-            roles: user?.roles?.map((r: Role) => r.id) ?? []
+            roles: user?.roles ?? []
         },
         now: Date.now()
     };

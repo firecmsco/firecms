@@ -662,12 +662,12 @@ export class PostgresDataSource implements DataSource {
                     if (!user.roles) {
                         console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
                     }
-                    const rolesString = userRoles.map((r: any) => typeof r === "string" ? r : r.id).join(",");
+                    const rolesString = userRoles.join(",");
 
                     // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
                     await tx.execute(drizzleSql`SELECT set_config('app.user_id', ${userId}, true)`);
                     await tx.execute(drizzleSql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
-                    await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles.map((r: any) => typeof r === "string" ? r : r.id) })}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)`);
 
                     // Create a temporary delegate using the transaction client
                     const txEntityService = new EntityService(tx);

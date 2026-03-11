@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
-import { CMSView, EntityCollection, FieldCaption, Role, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@firecms/core";
+import React, { useCallback, useMemo, useState } from "react";
+import { CMSView, EntityCollection, FieldCaption, Role, SecurityRule, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@firecms/core";
+
 import {
     AddIcon,
     Button,
@@ -101,7 +102,7 @@ export function UsersView({ userManagement, apiUrl, getAuthToken }: {
     const [bootstrapping, setBootstrapping] = useState(false);
 
     // Check if any admin exists
-    const hasAdmin = users.some(u => u.roles?.some(r => r.id === "admin"));
+    const hasAdmin = users.some(u => u.roles?.includes("admin"));
 
     const handleBootstrap = async () => {
         setBootstrapping(true);
@@ -219,9 +220,10 @@ export function UsersView({ userManagement, apiUrl, getAuthToken }: {
                                 <TableCell className="font-medium">{user.displayName}</TableCell>
                                 <TableCell>
                                     <div className="flex flex-wrap gap-2">
-                                        {user.roles?.map(r => (
-                                            <RoleChip key={r.id} role={r} />
-                                        ))}
+                                        {user.roles?.map((roleId: string) => {
+                                            const role = roles.find(r => r.id === roleId);
+                                            return role ? <RoleChip key={roleId} role={role} /> : <span key={roleId}>{roleId}</span>;
+                                        })}
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -287,7 +289,7 @@ function UserDetailsForm({
     const [displayName, setDisplayName] = useState(userProp?.displayName || "");
     const [email, setEmail] = useState(userProp?.email || "");
     const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>(
-        userProp?.roles?.map(r => r.id) || ["editor"]
+        userProp?.roles || ["editor"]
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState<{ displayName?: string; email?: string; roles?: string }>({});
@@ -318,7 +320,7 @@ function UserDetailsForm({
                 photoURL: userProp?.photoURL || null,
                 providerId: "custom",
                 isAnonymous: false,
-                roles: selectedRoleIds.map(id => roles.find(r => r.id === id) as Role)
+                roles: selectedRoleIds
             };
             await saveUser(userToSave);
             handleClose();
@@ -332,7 +334,7 @@ function UserDetailsForm({
     const dirty = isNewUser ||
         displayName !== (userProp?.displayName || "") ||
         email !== (userProp?.email || "") ||
-        JSON.stringify(selectedRoleIds.sort()) !== JSON.stringify((userProp?.roles?.map(r => r.id) || []).sort());
+        JSON.stringify(selectedRoleIds.sort()) !== JSON.stringify((userProp?.roles || []).sort());
 
     return (
         <Dialog open={open} onOpenChange={(open) => !open ? handleClose() : undefined} maxWidth="4xl">
@@ -609,7 +611,7 @@ function RoleDetailsForm({
     };
 
     return (
-        <Dialog open={open} onOpenChange={(open) => !open ? handleClose() : undefined} maxWidth="4xl">
+        <Dialog open={open} onOpenChange={(open) => !open ? handleClose() : undefined} maxWidth="6xl">
             <form onSubmit={handleSubmit} autoComplete="off" noValidate
                 style={{ display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
 
@@ -617,9 +619,9 @@ function RoleDetailsForm({
                     Role
                 </DialogTitle>
 
-                <DialogContent className="h-full grow">
+                <DialogContent className="h-full grow overflow-y-auto">
                     <div className="grid grid-cols-12 gap-4">
-                        <div className="col-span-12">
+                        <div className="col-span-12 sm:col-span-4">
                             <TextField
                                 name="id"
                                 required
@@ -634,7 +636,7 @@ function RoleDetailsForm({
                             </FieldCaption>
                         </div>
 
-                        <div className="col-span-12">
+                        <div className="col-span-12 sm:col-span-4">
                             <TextField
                                 name="name"
                                 required
@@ -648,17 +650,19 @@ function RoleDetailsForm({
                             </FieldCaption>
                         </div>
 
-                        <div className="col-span-12">
-                            <label className="flex items-center gap-2 cursor-pointer">
+                        <div className="col-span-12 sm:col-span-4 flex items-start pt-2">
+                            <label className="flex items-center gap-2 cursor-pointer mt-3">
                                 <Checkbox
                                     checked={isAdmin}
                                     onCheckedChange={(checked) => setIsAdmin(Boolean(checked))}
                                 />
                                 <span className="font-medium">Is Admin</span>
                             </label>
-                            <FieldCaption>
-                                Admins have full access to all collections
-                            </FieldCaption>
+                        </div>
+
+                        {/* Permissions matrix */}
+                        <div className="col-span-12">
+                            <CollectionPermissionsMatrix roleId={roleId} isAdmin={isAdmin} />
                         </div>
                     </div>
                 </DialogContent>
@@ -677,5 +681,113 @@ function RoleDetailsForm({
                 </DialogActions>
             </form>
         </Dialog>
+    );
+}
+
+// ============================================
+// CollectionPermissionsMatrix Component
+// ============================================
+const CRUD_OPS = [
+    { op: "select" as const, label: "Read" },
+    { op: "insert" as const, label: "Create" },
+    { op: "update" as const, label: "Edit" },
+    { op: "delete" as const, label: "Delete" },
+];
+
+/** Inline check: does roleId have access for this operation on these securityRules? */
+function hasRoleAccess(
+    rules: SecurityRule[] | undefined,
+    roleId: string,
+    op: "select" | "insert" | "update" | "delete"
+): boolean {
+    if (!rules || rules.length === 0) return true; // no rules = unrestricted
+    const applicable = rules.filter(r =>
+        r.operation === op || r.operation === "all" ||
+        r.operations?.includes(op) || r.operations?.includes("all")
+    );
+    if (applicable.length === 0) return false;
+    const forRole = applicable.filter(r =>
+        !r.roles || r.roles.length === 0 || r.roles.includes(roleId) || r.roles.includes("public")
+    );
+    if (forRole.length === 0) return false;
+    // Restrictive rules: any failing one denies immediately
+    for (const r of forRole) {
+        if ((r.mode ?? "permissive") === "restrictive") return false;
+    }
+    return forRole.some(r => (r.mode ?? "permissive") === "permissive");
+}
+
+function PermCell({ granted }: { granted: boolean }) {
+    return (
+        <span className={granted
+            ? "text-green-500 dark:text-green-400 text-base select-none"
+            : "text-surface-300 dark:text-surface-600 text-base select-none"}
+        >
+            {granted ? "✓" : "✗"}
+        </span>
+    );
+}
+
+function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAdmin: boolean }) {
+    const { collections } = useCollectionRegistryController();
+
+    if (!collections || collections.length === 0) {
+        return (
+            <div className="mt-4">
+                <Typography variant="label" className="text-surface-400">No collections configured</Typography>
+            </div>
+        );
+    }
+
+    const topLevel = collections.filter(c => !c.collectionGroup);
+
+    return (
+        <div className="mt-6">
+            <Typography variant="label" className="mb-2 block text-surface-600 dark:text-surface-400 uppercase tracking-wide text-xs">
+                Collection permissions
+            </Typography>
+            <div className="rounded-lg border border-surface-200 dark:border-surface-700 overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableCell header>Collection</TableCell>
+                            {CRUD_OPS.map(({ op, label }) => (
+                                <TableCell key={op} header className="text-center w-24">{label}</TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {topLevel.map((collection) => {
+                            const noRules = !collection.securityRules || collection.securityRules.length === 0;
+                            return (
+                                <TableRow key={collection.slug}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-medium">{collection.name}</span>
+                                            {noRules && !isAdmin && (
+                                                <Tooltip title="No security rules — unrestricted">
+                                                    <Chip className="text-xs" colorScheme="yellowLight">No rules</Chip>
+                                                </Tooltip>
+                                            )}
+                                        </div>
+                                        <span className="text-xs text-surface-400 font-mono">{collection.slug}</span>
+                                    </TableCell>
+                                    {CRUD_OPS.map(({ op }) => (
+                                        <TableCell key={op} className="text-center">
+                                            <PermCell granted={isAdmin || hasRoleAccess(collection.securityRules, roleId, op)} />
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </div>
+            {!roleId && (
+                <Typography variant="caption" className="mt-2 text-surface-400 italic">
+                    Enter a role ID above to preview permissions
+                </Typography>
+            )}
+        </div>
     );
 }

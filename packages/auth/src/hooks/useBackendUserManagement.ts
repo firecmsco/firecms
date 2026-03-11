@@ -66,7 +66,7 @@ interface ApiRole {
  * @param apiUser - The API user object
  * @param availableRoles - Optional array of available roles to look up names
  */
-function convertUser(apiUser: ApiUser, availableRoles?: Role[]): User {
+function convertUser(apiUser: ApiUser): User {
     return {
         uid: apiUser.uid,
         email: apiUser.email,
@@ -74,10 +74,7 @@ function convertUser(apiUser: ApiUser, availableRoles?: Role[]): User {
         photoURL: apiUser.photoURL || null,
         providerId: "custom",
         isAnonymous: false,
-        roles: apiUser.roles.map(id => {
-            const role = availableRoles?.find(r => r.id === id);
-            return { id, name: role?.name ?? id };
-        })
+        roles: apiUser.roles
     };
 }
 
@@ -170,10 +167,10 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
      * Load users from API
      * @param availableRoles - Optional roles array to resolve role names
      */
-    const loadUsers = useCallback(async (availableRoles?: Role[]) => {
+    const loadUsers = useCallback(async () => {
         try {
             const data = await apiRequest("/users");
-            setUsers(data.users.map((u: ApiUser) => convertUser(u, availableRoles)));
+            setUsers(data.users.map((u: ApiUser) => convertUser(u)));
             setUsersError(undefined);
         } catch (error) {
             console.error("Failed to load users:", error);
@@ -219,8 +216,8 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 console.error("Failed to load roles:", error);
                 setRolesError(error as Error);
             }
-            // Then load users with roles available for name resolution
-            await loadUsers(loadedRoles);
+            // Then load users
+            await loadUsers();
             setLoading(false);
         };
         load();
@@ -230,7 +227,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
      * Save user (create or update)
      */
     const saveUser = useCallback(async (user: User): Promise<User> => {
-        const roleIds = user.roles?.map(r => r.id) ?? [];
+        const roleIds = user.roles ?? [];
 
         // Check if user exists
         const existingUser = users.find(u => u.uid === user.uid);
@@ -242,7 +239,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 displayName: user.displayName,
                 roles: roleIds
             });
-            const updated = convertUser(data.user, roles);
+            const updated = convertUser(data.user);
             setUsers(prev => prev.map(u => u.uid === updated.uid ? updated : u));
             return updated;
         } else {
@@ -252,7 +249,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 displayName: user.displayName,
                 roles: roleIds
             });
-            const created = convertUser(data.user, roles);
+            const created = convertUser(data.user);
             setUsers(prev => [...prev, created]);
             return created;
         }
@@ -318,15 +315,15 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         const existingUser = users.find(u => u.uid === user.uid || u.email === user.email);
         if (!existingUser) return undefined;
 
-        // Return roles from our cached role data
-        const userRoleIds = existingUser.roles?.map(r => r.id) ?? [];
+        // Return roles from our cached role data (string IDs → full Role objects)
+        const userRoleIds = existingUser.roles ?? [];
         return roles.filter(r => userRoleIds.includes(r.id));
     }, [users, roles]);
 
     /**
      * Check if current user is admin
      */
-    const isAdmin = currentUser?.roles?.some(r => r.id === "admin") ?? false;
+    const isAdmin = currentUser?.roles?.includes("admin") ?? false;
 
 
 
@@ -340,7 +337,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             const data = await apiRequest("/roles");
             const loadedRoles = data.roles.map(convertRole);
             setRoles(loadedRoles);
-            await loadUsers(loadedRoles);
+            await loadUsers();
         } catch (error) {
             console.error("Failed to bootstrap admin:", error);
             throw error;

@@ -299,7 +299,7 @@ export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any
     const firebaseUserWrapper: FirebaseUserWrapper | null = loggedUser
         ? {
             ...loggedUser,
-            roles: userRoles,
+            roles: userRoles?.map(r => r.id),  // User.roles is string[], keep Role[] internally only
             firebaseUser: loggedUser
         }
         : null;
