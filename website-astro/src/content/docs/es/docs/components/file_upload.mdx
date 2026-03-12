@@ -1,0 +1,31 @@
+---
+slug: es/docs/components/file_upload
+title: Subida de archivos (File Upload)
+sidebar_label: Subida de archivos
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente File Upload (Subida de archivos) está diseñado para manejar fácilmente la acción de arrastrar y soltar archivos, así como la selección de archivos a través de la ventana de diálogo. Admite características como restricción de tipo de archivo, tamaño máximo de archivo, títulos personalizados y descripciones.
+
+## Uso
+
+Para usar `FileUpload`, impórtalo desde tus componentes y pasa las props necesarias, incluyendo `accept` (aceptar), `onFilesAdded` (al agregar archivos), y opcionalmente, `onFilesRejected` (al rechazar archivos), `maxSize` (tamaño máximo), `disabled` (deshabilitado), `maxFiles` (archivos máximos), `title` (título), `uploadDescription` (descripción de carga), `preventDropOnDocument` y `size` (tamaño).
+
+## Subida de archivos básica
+
+Un ejemplo sencillo de subida de archivos con una configuración mínima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_basic.tsx"/>
+
+## Subida de archivos con tipos y tamaños personalizados
+
+Demostración de la carga de archivos con restricciones de tipos de archivos y tamaños, y mensajes personalizados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_custom.tsx"/>
+
+## Subida de archivos deshabilitada
+
+Ilustrando cómo deshabilitar la funcionalidad de subida de archivos.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_disabled.tsx"/>

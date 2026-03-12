@@ -1,0 +1,319 @@
+---
+slug: pt/docs/self/migrating_from_v3_to_v3_1
+title: Migrando de v3.0 para v3.1
+sidebar_label: Migrando de v3.0 para v3.1
+---
+
+Este guia de migração se aplica às versões **self-hosted** do FireCMS, incluindo as edições **Community** e **PRO**.
+O FireCMS v3.1 introduz atualizações importantes que requerem mudanças de configuração e oferece novos e empolgantes recursos.
+
+## Antes de Começar
+
+- Certifique-se de estar atualmente no **FireCMS v3.0.x**
+- Faça backup do seu projeto ou commit o estado atual ao controle de versão
+- Certifique-se de estar usando **Node.js 18+**
+
+## Atualizar Pacotes FireCMS
+
+Atualize todos os pacotes `@firecms/*` para a versão **3.1**:
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Certifique-se de incluir **todos** os pacotes `@firecms/*` listados no seu `package.json`. Misturar pacotes v3.0 e v3.1 causará problemas.
+
+---
+
+## Migração para TailwindCSS v4
+
+A mudança mais significativa na v3.1 é a migração do **TailwindCSS v3 para v4**. Isso envolve atualizar sua
+configuração do TailwindCSS e garantir que seus estilos sejam compatíveis com a nova versão.
+
+:::caution
+Esta é uma **mudança incompatível**. Seu projeto não funcionará corretamente até que você complete todas as etapas desta seção.
+:::
+
+### Atualizar Dependências
+
+Instale o TailwindCSS v4 e o plugin Vite:
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+### Adicionar o Plugin Vite
+
+Atualize seu `vite.config.ts` para incluir o novo plugin TailwindCSS v4:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+### Mudanças nas Variáveis de Cor
+
+Os nomes das variáveis CSS foram atualizados para seguir o padrão do TailwindCSS v4.
+Atualize seu arquivo `index.css` para refletir essas mudanças:
+
+**Antes (v3.0):**
+```css
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+
+**Depois (v3.1):**
+```css
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::warning
+Se você pular esta etapa, suas cores de tema personalizadas **não serão aplicadas** e o FireCMS voltará à sua paleta padrão.
+As variáveis `--fcms-primary-dark` e `--fcms-primary-bg` não são mais necessárias — elas são calculadas automaticamente a partir de `--color-primary`.
+:::
+
+### Estrutura Atualizada do index.css
+
+Seu arquivo `index.css` deve ficar assim:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}
+```
+
+### Limpar Arquivos de Configuração Antigos
+
+Remova os seguintes arquivos do seu projeto, pois não são mais necessários:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+### Verificar Sua Migração
+
+Após completar todas as etapas, execute:
+
+```bash
+npm run build
+```
+
+O build deve ser concluído sem erros. Se você ver avisos relacionados a CSS, verifique se seu `index.css` corresponde à estrutura acima.
+
+---
+
+## Novos Modos de View de Coleção
+
+O FireCMS v3.1 introduz novas formas de visualizar os dados da coleção além da view de tabela tradicional.
+
+### View de Cards
+
+A **view de Cards** exibe suas entidades como cards visuais, facilitando a navegação em coleções com muito conteúdo
+como posts de blog, produtos ou bibliotecas de mídia. Cada card mostra uma prévia da entidade com seus campos principais.
+
+### View Kanban/Quadro
+
+A **view Kanban** (também chamada de view Quadro) permite organizar entidades em colunas baseadas em uma propriedade enum.
+É perfeita para:
+- Gerenciamento de fluxo de trabalho (ex.: Rascunho → Revisão → Publicado)
+- Rastreamento de tarefas (ex.: A Fazer → Em Progresso → Concluído)
+- Organização baseada em status
+
+Para usar a view Kanban, sua coleção precisa de uma **propriedade enum** que define as colunas. Você pode:
+- Arrastar e soltar entidades entre colunas para atualizar seu status
+- Reordenar colunas arrastando seus cabeçalhos
+- Configurar qual propriedade usar para agrupamento de colunas
+
+Ambas as views podem ser habilitadas na configuração da sua coleção ou alteradas em tempo de execução usando o toggle de view na barra de ferramentas da coleção.
+
+---
+
+## Correções de Bugs e Melhorias
+
+O FireCMS v3.1 inclui numerosas correções de bugs e melhorias:
+
+### Editor & UI
+- Comportamento aprimorado da tecla escape no comando slash do editor
+- Comportamento aprimorado do menu de sugestões
+- Pequenos ajustes de UI e atualização visual dos diálogos
+- Removido font-mono do preview de mapa
+- Migração para TipTap V3 para melhor desempenho do editor markdown
+
+### Editor de Coleção
+- Adicionado edição inline para edição de propriedades
+- Correções para salvar propriedades no editor de coleção
+- Comportamento consistente para props `editable` em coleções e propriedades
+
+### Tratamento de Formulários
+- Exibindo erros de pre-save na view de tabela
+- Foco de erro aprimorado ao salvar formulários com erros
+- Debouncing na mudança de valores no Formex
+- Mudança em como os valores sujos são persistidos no armazenamento local
+
+### Mudanças Locais
+- Adicionado `enableLocalChangesBackup` às coleções para controlar a cópia local de entidades não salvas
+- Mudanças locais agora podem ser aplicadas manualmente
+- Limpando indicador de mudanças não salvas quando o recurso não está habilitado
+
+:::note
+`enableLocalChangesBackup` tem padrão **true**, correspondendo ao comportamento anterior. Defina como `false` na configuração da sua coleção se quiser desabilitar o backup local de mudanças não salvas.
+:::
+
+### Armazenamento & Imagens
+- Novas capacidades de redimensionamento de imagem
+- Substituída biblioteca interna de compressão por compressor.js
+- Mensagem de erro melhorada quando o Firebase Storage não está habilitado
+
+### Dados & Desempenho
+- Datas não perdem foco durante a digitação
+- Corrigido glitch da UI de filtros de enum select
+- Corrigido views de entidade em tela cheia com caracteres codificados em seus IDs
+
+---
+
+## Recursos de IA para Self-Hosted (PRO)
+
+O FireCMS v3.1 traz recursos com IA para usuários PRO self-hosted que antes estavam disponíveis apenas no FireCMS Cloud.
+
+### Geração de Coleção por IA
+
+Agora você pode usar IA para gerar e modificar coleções diretamente no editor de coleção. A IA pode criar schemas de coleção a partir de descrições em linguagem natural, adicionar ou modificar propriedades e entender relacionamentos com suas coleções existentes.
+
+Habilite passando um callback `generateCollection` para o plugin de editor de coleção:
+
+```typescript
+import {
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
+} from "@firecms/collection_editor";
+import { useFirebaseAuthController } from "@firecms/firebase";
+
+const authController = useFirebaseAuthController({ firebaseApp });
+
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController,
+    collectionInference: buildCollectionInference(firebaseApp),
+    getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 200),
+    generateCollection: buildCollectionGenerationCallback({
+        getAuthToken: authController.getAuthToken
+    })
+});
+```
+
+O helper `buildCollectionGenerationCallback` usa o endpoint padrão da API FireCMS. Você pode opcionalmente fornecer um endpoint personalizado:
+
+```typescript
+generateCollection: buildCollectionGenerationCallback({
+    getAuthToken: authController.getAuthToken,
+    apiEndpoint: "https://your-custom-endpoint.com/collections/generate"
+})
+```
+
+### DataTalk AI Chat
+
+O DataTalk permite consultar e atualizar seus dados Firestore usando linguagem natural. Você pode fazer perguntas sobre seus dados, criar gráficos e visualizações, e até modificar entidades através de conversas.
+
+Habilite o DataTalk no seu app self-hosted:
+
+```typescript
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
+
+
+// Configure DataTalk - habilite apenas quando o usuário estiver logado
+const userEmail = authController.user?.email;
+const dataTalkConfig = useBuildDataTalkConfig({
+    enabled: Boolean(userEmail),
+    firebaseApp,
+    userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
+    getAuthToken: authController.getAuthToken,
+    loadSamplePrompts: true
+    // apiEndpoint tem padrão https://api.firecms.co
+});
+
+// Adicione DataTalk como uma view na sua navegação
+const navigationController = useBuildNavigationController({
+    collections,
+    views: [
+        ...yourViews,
+        {
+            path: "datatalk/*",
+            name: "DataTalk",
+            group: "AI",
+            view: <DataTalkRoutes
+                getAuthToken={authController.getAuthToken}
+            />
+        }
+    ],
+    // ... outra configuração
+});
+
+// Envolva seu app com o DataTalkProvider
+return (
+    <DataTalkProvider config={dataTalkConfig}>
+        <FireCMS navigationController={navigationController} /* ... */ >
+            {/* seu app */}
+        </FireCMS>
+    </DataTalkProvider>
+);
+```
+
+O DataTalk automaticamente lê o schema da sua coleção do navigation controller para entender a estrutura dos seus dados e fornecer respostas mais precisas.
+
+:::note
+Os recursos de IA requerem uma licença FireCMS PRO válida. Os endpoints da API autenticam usando seu token de autenticação Firebase.
+:::
+
+---
+
+## Solução de Problemas
+
+### `Cannot find namespace 'JSX'`
+Se você ver erros TypeScript como `error TS2503: Cannot find namespace 'JSX'`, atualize suas anotações de tipo de retorno de `JSX.Element` para `React.ReactElement` ou simplesmente remova o tipo de retorno explícito e deixe o TypeScript inferir.
+
+### Estilos não aplicados após migração
+- Verifique se seu `index.css` inclui as diretivas `@source` para seus arquivos de projeto e `node_modules/@firecms`
+- Certifique-se de ter removido o antigo `tailwind.config.js` e `postcss.config.js`
+- Limpe sua pasta `node_modules` e reinstale: `rm -rf node_modules && npm install`
+
+### Erros de build após atualizar pacotes
+Certifique-se de que **todos** os pacotes `@firecms/*` estão na mesma versão. Misturar pacotes v3.0 e v3.1 causará incompatibilidades de tipos e erros de runtime.

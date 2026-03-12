@@ -1,4 +1,4 @@
-import { useCustomizationController } from "@firecms/core";
+import { useCustomizationController, useTranslation } from "@firecms/core";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 import React from "react";
 
@@ -9,11 +9,12 @@ export function EntityActionsSelectDialog({
     const {
         entityActions
     } = useCustomizationController();
+    const { t } = useTranslation();
 
     return <Dialog
         maxWidth={"md"}
         open={open}>
-        <DialogTitle>Select custom action</DialogTitle>
+        <DialogTitle>{t("select_custom_action")}</DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
             {entityActions?.map((action) => {
                 return <Button
@@ -27,14 +28,12 @@ export function EntityActionsSelectDialog({
             })}
             {(entityActions ?? []).length === 0 &&
                 <Typography variant={"body2"}>
-                    No custom actions defined. Define your custom actions in the customization settings, before using
-                    this
-                    dialog.
+                    {t("no_custom_actions_defined")}
                 </Typography>
             }
         </DialogContent>
         <DialogActions>
-            <Button onClick={() => onClose()}>Cancel</Button>
+            <Button onClick={() => onClose()}>{t("cancel")}</Button>
         </DialogActions>
     </Dialog>
 }

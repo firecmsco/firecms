@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EntityCollection, useNavigationController, useSnackbarController, AIIcon } from "@firecms/core";
+import { EntityCollection, useNavigationController, useSnackbarController, AIIcon, useTranslation } from "@firecms/core";
 import {
     Button,
     CircularProgress,
@@ -69,6 +69,7 @@ export function AICollectionGeneratorPopover({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const { t } = useTranslation();
     const navigation = useNavigationController();
     const snackbarController = useSnackbarController();
 
@@ -155,13 +156,13 @@ export function AICollectionGeneratorPopover({
                 : <AIIcon size="small" />
             }
         >
-            AI Assist
+            {t("ai_assist")}
         </Button>
     ) : (
         <IconButton
             size={size}
             disabled={loading}
-            aria-label="AI Assist"
+            aria-label={t("ai_assist")}
         >
             {loading
                 ? <CircularProgress size="smallest" />
@@ -185,14 +186,14 @@ export function AICollectionGeneratorPopover({
                 <div className="flex items-center gap-2">
                     <AIIcon size="small" />
                     <Typography variant="subtitle2">
-                        {existingCollection ? "Modify Collection with AI" : "Generate Collection with AI"}
+                        {existingCollection ? t("modify_collection_with_ai") : t("generate_collection_with_ai")}
                     </Typography>
                 </div>
 
                 <Typography variant="caption" color="secondary">
                     {existingCollection
-                        ? "Describe the changes you want to make to this collection."
-                        : "Describe the collection you want to create."
+                        ? t("describe_changes_to_make")
+                        : t("describe_collection_to_create")
                     }
                 </Typography>
 
@@ -205,8 +206,8 @@ export function AICollectionGeneratorPopover({
                     onChange={(e) => setPrompt(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={existingCollection
-                        ? "e.g., Add a thumbnail image field with storage, make price required..."
-                        : "e.g., Create a products collection with name, price, description, and category..."
+                        ? t("ai_placeholder_modify")
+                        : t("ai_placeholder_create")
                     }
                     disabled={loading}
                 />
@@ -224,7 +225,7 @@ export function AICollectionGeneratorPopover({
                         onClick={() => setMenuOpen(false)}
                         disabled={loading}
                     >
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <Button
                         variant="filled"
@@ -233,7 +234,7 @@ export function AICollectionGeneratorPopover({
                         disabled={!prompt.trim() || loading}
                         startIcon={loading ? <CircularProgress size="smallest" /> : undefined}
                     >
-                        {loading ? "Generating..." : "Generate"}
+                        {loading ? t("generating") : t("generate_with_ai")}
                     </Button>
                 </div>
             </div>

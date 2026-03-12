@@ -1,0 +1,51 @@
+---
+slug: de/docs/components/text_field
+title: Textfeld (Text Field)
+sidebar_label: Text Field
+description: Erfahren Sie, wie Sie Textfeld-Komponenten verwenden, damit Benutzer Text in Ihrer Anwendung eingeben, bearbeiten und anzeigen können. Enthält Beispiele für einfache, mehrzeilige und verzierte Textfelder sowie verschiedene Größen.
+---
+
+# Text Field-Komponente
+
+Textfelder (Text Fields) sind vielseitige UI-Elemente, die es Benutzern ermöglichen, Text innerhalb einer Anwendung einzugeben, zu bearbeiten und anzuzeigen.
+Sie spielen eine entscheidende Rolle bei der Benutzerinteraktion und bieten Benutzern eine einfache Möglichkeit, Daten einzugeben,
+Feedback zu geben, Formulare auszufüllen und mit verschiedenen Schnittstellen zu interagieren, die Texteingaben erfordern. Textfelder können für kurze Eingaben wie Benutzernamen oder Passwörter verwendet werden,
+aber auch für längere Texteingaben wie Kommentare, Nachrichten oder detaillierte Beschreibungen.
+
+Im Kontext der FireCMS-Benutzeroberfläche basieren die Designprinzipien und Komponenten lose auf den Material Design-Richtlinien von Google. Das bedeutet, dass
+die Textfelder in FireCMS von einer konsistenten und benutzerfreundlichen Designsprache profitieren, die ein kohärentes
+Erscheinungsbild über verschiedene Webanwendungen hinweg gewährleistet. Durch die Nutzung dieser Komponenten können Entwickler schnell
+interaktive und optisch ansprechende Formulare und Eingabebereiche erstellen, die die Benutzererfahrung verbessern und die Designkonsistenz wahren.
+
+## Verwendung
+
+Um das `TextField` zu verwenden, importieren Sie es aus Ihrem Komponentenverzeichnis und übergeben Sie den `value`, `onChange` und andere erforderliche Props für Ihren Anwendungsfall.
+
+
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Einfaches Textfeld
+
+
+Ein einfaches Textfeld mit minimaler Konfiguration:
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_basic.tsx"/>
+
+## Mehrzeiliges Textfeld
+
+Sie können ein mehrzeiliges Textfeld erstellen, indem Sie die Eigenschaft `multiline` auf `true` setzen. Dies ist nützlich für längere Texteingaben wie Kommentare oder Beschreibungen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_multiline.tsx"/>
+
+## Größen
+
+Die `TextField`-Komponente ist in verschiedenen Größen erhältlich, um verschiedenen Layout-Anforderungen gerecht zu werden. Sie können die Größe mithilfe der Eigenschaft `size` anpassen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_sizes.tsx"/>
+
+## Verzierungen (Adornments)
+
+Sie können Verzierungen am Anfang oder Ende eines Textfelds hinzufügen, um zusätzlichen Kontext oder Funktionalität bereitzustellen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_adornment.tsx"/>

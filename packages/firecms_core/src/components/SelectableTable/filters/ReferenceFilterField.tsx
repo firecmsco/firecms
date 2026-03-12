@@ -3,7 +3,7 @@ import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "../../../types";
 import { ReferencePreview } from "../../../preview";
 import { getReferenceFrom } from "../../../util";
-import { useNavigationController, useReferenceDialog } from "../../../hooks";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
 
 interface ReferenceFilterFieldProps {
@@ -43,6 +43,8 @@ export function ReferenceFilterField({
     previewProperties,
     setHidden
 }: ReferenceFilterFieldProps) {
+
+    const { t } = useTranslation();
 
     const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
@@ -203,7 +205,7 @@ export function ReferenceFilterField({
                                 updateFilter(operation, null);
                             else updateFilter(operation, undefined);
                         }} />
-                    Filter for null values
+                    {t("filter_for_null_values")}
                 </Label>}
 
             </div>

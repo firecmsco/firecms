@@ -1,3 +1,7 @@
+// Note: entity action 'name' fields (Edit, Copy, Delete) are plain strings defined
+// at module level. They cannot use hooks. Consumers who need to translate these
+// should override the action name by creating their own EntityAction objects or
+// by using the entityActions prop with custom names for their locale.
 import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";

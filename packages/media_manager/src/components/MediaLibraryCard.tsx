@@ -6,6 +6,7 @@ import {
     cls,
     ImageIcon
 } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export interface MediaLibraryCardProps {
     group?: string;
@@ -16,6 +17,8 @@ export interface MediaLibraryCardProps {
  * Card component displayed on the home page that links to the Media Library.
  */
 export function MediaLibraryCard({ group }: MediaLibraryCardProps) {
+    const { t } = useTranslation();
+
     // Only render in the "Media" group
     if (group !== "Media") return null;
 
@@ -39,13 +42,13 @@ export function MediaLibraryCard({ group }: MediaLibraryCardProps) {
                     </div>
                     <div className="flex-1">
                         <Typography variant="subtitle2" className="font-medium">
-                            Media Library
+                            {t("media_library")}
                         </Typography>
                         <Typography
                             variant="caption"
                             className="text-surface-accent-600 dark:text-surface-accent-400"
                         >
-                            Manage images and files
+                            {t("media_library_description")}
                         </Typography>
                     </div>
                 </div>

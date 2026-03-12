@@ -1,0 +1,42 @@
+---
+slug: es/docs/components/dialog
+title: Diálogo (Dialog)
+sidebar_label: Diálogo
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Los componentes de Diálogo (Dialog) se utilizan para presentar contenido en una capa por encima del contenido principal de la aplicación y, a menudo, solicitan una respuesta del usuario. Son un componente crítico para los diálogos modales, las cajas de luz (lightboxes), las ventanas emergentes de notificaciones y las ventanas emergentes de contenido personalizado.
+
+## Uso
+
+Para usar el `Dialog`, impórtalo desde tus componentes y pasa las props necesarias, incluyendo `open` (abrir), `onOpenChange` (al cambiar apertura), y el contenido del diálogo como elementos secundarios (children). Opcionalmente, puedes personalizar su apariencia con las props `className`, `fullWidth` (ancho completo), `fullHeight` (alto completo), `fullScreen` (pantalla completa), `scrollable` (desplazable), `maxWidth` (ancho máximo), `modal` y `onOpenAutoFocus`.
+
+:::caution
+Debes proporcionar un `DialogTitle` (Título de diálogo) en tu componente `Dialog` para asegurar que el diálogo sea accesible.
+Verás una advertencia en la consola si olvidas proporcionar un `DialogTitle`.
+:::
+
+## Diálogo básico
+
+Un ejemplo básico del uso del componente de diálogo para mostrar una ventana emergente simple.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
+
+## Diálogo a pantalla completa
+
+Un ejemplo de un diálogo que cubre toda la pantalla.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
+
+## Diálogo desplazable
+
+Ilustra cómo hacer que el contenido de un diálogo sea desplazable.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
+
+## Diálogo con ancho personalizado
+
+Demuestra el uso de la prop `maxWidth` para personalizar el ancho del diálogo.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

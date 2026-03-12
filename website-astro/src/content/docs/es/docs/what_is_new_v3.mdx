@@ -1,0 +1,174 @@
+---
+slug: es/docs/what_is_new_v3
+title: Novedades en FireCMS 3.0
+sidebar_label: Novedades en FireCMS 3.0
+description: FireCMS 3.0 incluye funciones pioneras y mejoras para una experiencia de gestión de contenido dinámica y personalizable. Ahora integrado con un backend, amplía la flexibilidad de modificación del esquema de colección directamente desde la UI, agilizando el flujo de trabajo para los usuarios finales. Las innovaciones incluyen un editor de esquemas de UI intuitivo, inferencia de datos inteligente para una configuración rápida, y capacidades avanzadas de importación/exportación de datos. Notablemente, el cambio a Tailwind CSS marca un salto en el rendimiento, ofreciendo una interfaz de CMS rápida y más eficiente. FireCMS 3.0 transforma la gestión de contenido con su combinación de funciones fáciles de usar y optimizaciones de rendimiento, estableciendo un nuevo estándar en soluciones de CMS headless.
+---
+
+La nueva versión de FireCMS es una actualización importante que trae muchas características nuevas
+y mejoras. ¡Esta página te guiará a través de los cambios más importantes! 🔥
+
+FireCMS 3.0 viene en tres variantes: **FireCMS Cloud**, **FireCMS Community** y **FireCMS PRO**.
+
+## FireCMS Cloud
+
+FireCMS Cloud ahora hace uso de un **backend** para proporcionar una experiencia más flexible y
+personalizable. Este backend está alojado por nosotros, y no tienes que
+preocuparte por él. Todavía puedes usar FireCMS Cloud de forma gratuita, pero tendrás que
+pagar por algunas características.
+
+Hasta ahora, FireCMS era una biblioteca solo de frontend (frontend-only) que se conectaba directamente al
+SDK del lado del cliente de Firebase. Esto era genial para casos de uso simples, pero
+limitaba la flexibilidad de la biblioteca. Por ejemplo, no era posible
+personalizar colecciones desde la interfaz de usuario (UI), ya que estaban codificadas de forma rígida (hard coded) en el
+código del cliente.
+
+Tener un backend nos permite almacenar la configuración en Firestore, y hacer que sea fácil para los usuarios finales
+modificar los esquemas. Hemos hecho mucho trabajo para **evitar contaminar tu base de datos** con
+la configuración de FireCMS.
+
+Tener un backend también nos permite ofrecer una mejor experiencia al brindar funciones adicionales
+como el enriquecimiento de datos a través de OpenAI y los últimos modelos de Google.
+
+## FireCMS PRO
+
+FireCMS PRO es una versión de FireCMS que puedes alojar tú mismo. Esto significa que
+tienes control total sobre tus datos, y puedes personalizar el CMS según tus
+necesidades. Puedes probar FireCMS PRO de forma gratuita, pero necesitarás una licencia para usarlo.
+
+FireCMS PRO es genial para proyectos grandes, o cuando necesitas personalizar el CMS
+a tu medida. Puedes lograr el nivel más alto de personalización de todas las versiones anteriores de FireCMS.
+
+FireCMS PRO es perfecto para agencias que buscan proporcionar un CMS a sus clientes.
+Si eres una agencia, no dudes en [contactarnos](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true)
+para obtener una demostración de FireCMS PRO.
+
+
+## FireCMS Community
+
+FireCMS Community es una versión gratuita y de código abierto de FireCMS que puedes
+alojar tú mismo. Esto significa que tienes control total sobre tus datos, y puedes
+personalizar el CMS según tus necesidades.
+
+Con licencia MIT y completamente gratuita, FireCMS Community es una gran opción para
+proyectos pequeños que solo necesitan un CMS. No incluye todas las funciones adicionales (bells and whistles)
+de FireCMS Cloud o FireCMS PRO, pero sigue siendo una alternativa poderosa, debido a
+su personalización y flexibilidad.
+
+Esta versión tiene toda la funcionalidad de FireCMS 2.0 pero con muchas de las mejoras
+de la última versión, por lo que es genial si estás buscando actualizar y beneficiarte de las
+actualizaciones de la UI y las mejoras de rendimiento.
+
+
+## Nuevo editor de esquemas de colecciones en UI
+
+Hasta ahora, el esquema de la colección se definía en el código del lado del cliente. Esto era
+genial para casos de uso simples, pero limitaba la flexibilidad de la biblioteca. Por
+ejemplo, no era posible personalizar colecciones desde la UI, ya que
+estaban codificadas de forma rígida en el código de los clientes.
+
+En FireCMS Cloud, **el esquema de la colección se almacena en el backend de FireCMS**, pero también puedes definir
+tus colecciones en código para una mayor flexibilidad. Tus usuarios finales podrán modificar el
+esquema de la colección. Digamos que tienes una colección de `Posts` (Publicaciones) y quieres
+añadir un nuevo valor posible para el enum `status` (estado). Ahora puedes abrir el editor
+de la colección y añadir el nuevo valor. Aún mejor, ¡FireCMS puede encontrar nuevos valores y añadirlos
+a tu esquema con un solo clic!
+
+Todavía puedes limitar las propiedades que se pueden modificar desde la UI, y
+también puedes definir los valores predeterminados para documentos nuevos.
+
+### Nueva inferencia de datos
+
+¿Tienes algunas colecciones en tu proyecto y quieres empezar
+rápidamente? FireCMS ahora puede **inferir el esquema a partir de tus datos**. Esto significa que
+puedes empezar con FireCMS en unos pocos minutos, sin tener que escribir ni una
+sola línea de código.
+
+## Búsqueda local basada en texto
+
+En versiones anteriores de FireCMS, podías añadir tu solución de motor de búsqueda externa
+como Algolia o ElasticSearch. Esto sigue siendo posible, pero ahora también puedes
+**buscar tus datos localmente**. Esto significa que puedes buscar tus datos sin
+tener que pagar por un servicio externo. Esto es genial para proyectos pequeños, o
+cuando recién estás empezando.
+
+Esta característica está pensada para usarse con **conjuntos de datos pequeños** (small datasets). Si tienes un conjunto de
+datos grande, aún debes usar un motor de búsqueda externo.
+
+## Importación y exportación de datos
+
+### Exportación
+Ahora tienes un mejor control de cómo se **exportan** tus datos:
+- Definir el formato de tus fechas
+- Definir cómo las matrices (arrays) se serializan en archivos CSV (asignar una columna por elemento de la matriz, o
+serializar la matriz como un string/cadena de texto)
+- Exportar tus datos como JSON o CSV.
+
+### Importación
+Ahora puedes **importar datos** desde archivos CSV, JSON o Excel. Esto es genial para migrar datos
+desde otros sistemas. Incorporamos una interfaz de usuario moderna que permite definir cómo se importan los datos
+y cómo se mapean a tus colecciones.
+
+## Migración a Tailwind y mejoras de rendimiento
+
+Las versiones 1.0 y 2.0 de FireCMS se basaban en Material UI (mui). Esto fue genial
+para empezar rápidamente, pero tenía algunos inconvenientes. El principal era que
+**el rendimiento no era excelente**. La solución de estilos de MUI se basa en emotion,
+que resuelve los estilos en tiempo de ejecución (runtime). Esto significa que el navegador tiene que hacer mucho
+trabajo para resolver los estilos. Esto no es un problema para aplicaciones pequeñas, pero
+puede ser un problema para aplicaciones grandes.
+
+En FireCMS 3.0 hemos migrado a Tailwind CSS. Este es un marco CSS utility-first (primero utilidad)
+que nos permite generar un archivo CSS pequeño con todos los estilos
+resueltos en tiempo de compilación (build time). Esto significa que el navegador no tiene que hacer ningún
+trabajo para resolver los estilos, lo que resulta en una **experiencia mucho más rápida**. 🚀
+
+## Nuevo sistema de autenticación
+
+Ahora proporcionamos un nuevo sistema de autenticación que permite administrar usuarios del CMS
+y roles desde la interfaz de usuario.
+
+Si prefieres definir permisos para cada colección en el código, aún puedes hacerlo.
+
+
+## Nueva biblioteca de componentes e Íconos
+
+También hemos creado una nueva biblioteca de componentes que puedes usar para construir tus propios componentes
+(¡o usarla en cualquier proyecto que quieras realmente!). Puedes obtenerla en npm:
+
+```bash
+npm install @firecms/ui
+```
+
+o
+
+```bash
+yarn add @firecms/ui
+```
+
+(solo necesitas instalarla si quieres usarla en un proyecto diferente)
+
+Los componentes están completamente tipados y documentados. Puedes encontrar la documentación [aquí](/docs/components).
+Se basan en Tailwind CSS y Radix UI. Son fácilmente personalizables, y puedes
+usarlos para construir tus propios componentes. También son accesibles y responsivos.
+
+## Colección de íconos
+
+Puedes personalizar los íconos en diferentes partes del CMS, como al seleccionar uno para
+una colección. FireCMS UI ahora exporta todos los Íconos de Material (Material Icons), convenientemente exportados como componentes de React.
+
+También hemos añadido una [función de búsqueda de íconos](/docs/icons) en el sitio web para encontrar el ícono que necesitas.
+
+Hace que sea fácil encontrar la clave (key) del ícono correcto al definir la configuración de tus colecciones, o encontrar
+el componente de ícono correcto cuando quieres usarlo en tus propios componentes.
+
+## Nueva CLI
+
+Utiliza la CLI para desplegar tu código personalizado con un solo comando:
+
+```bash
+firecms deploy
+```
+```
+
+

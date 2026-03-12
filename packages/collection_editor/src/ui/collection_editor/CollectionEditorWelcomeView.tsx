@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AIIcon, EntityCollection, prettifyIdentifier, } from "@firecms/core";
+import { AIIcon, EntityCollection, prettifyIdentifier, useTranslation } from "@firecms/core";
 import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 
@@ -30,6 +30,7 @@ export function CollectionEditorWelcomeView({
 }) {
 
     const { pathSuggestions } = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const filteredSuggestions = (pathSuggestions ?? []).filter(s => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === s.trim().toLowerCase()));
 
@@ -49,13 +50,13 @@ export function CollectionEditorWelcomeView({
                 <div
                     className="flex flex-row py-2 pt-3 items-center">
                     <Typography variant={"h4"} className={"flex-grow"}>
-                        New collection
+                        {t("new_collection")}
                     </Typography>
                 </div>
 
                 {parentCollection && <Chip colorScheme={"tealDarker"}>
                     <Typography variant={"caption"}>
-                        This is a subcollection of <b>{parentCollection.name}</b>
+                        {t("this_is_subcollection_of")} <b>{parentCollection.name}</b>
                     </Typography>
                 </Chip>}
 
@@ -63,7 +64,7 @@ export function CollectionEditorWelcomeView({
 
                     <Typography variant={"caption"}
                         color={"secondary"}>
-                        ● Use one of the existing paths in your database:
+                        ● {t("use_existing_paths_database")}
                     </Typography>
                     <div className={"flex flex-wrap gap-x-2 gap-y-1 items-center my-2 min-h-7"}>
 
@@ -92,7 +93,7 @@ export function CollectionEditorWelcomeView({
                             <Typography variant={"caption"}
                                 color={"secondary"}
                                 className={"mb-2"}>
-                                ● Describe your collection to AI:
+                                ● {t("describe_collection_ai")}
                             </Typography>
 
                             <AICollectionGeneratorPopover
@@ -107,7 +108,7 @@ export function CollectionEditorWelcomeView({
                                         variant="outlined"
                                         startIcon={<AIIcon size="small" />}
                                     >
-                                        Generate with AI
+                                        {t("generate_with_ai")}
                                     </Button>
                                 }
                             />
@@ -118,7 +119,7 @@ export function CollectionEditorWelcomeView({
                         <Typography variant={"caption"}
                             color={"secondary"}
                             className={"mb-2"}>
-                            ● Create from JSON configuration:
+                            ● {t("create_from_json_config")}
                         </Typography>
 
                         <Button
@@ -126,7 +127,7 @@ export function CollectionEditorWelcomeView({
                             onClick={() => setJsonImportOpen(true)}
                             startIcon={<CodeIcon size="small" />}
                         >
-                            Paste JSON Configuration
+                            {t("paste_json_config")}
                         </Button>
 
                         <CollectionJsonImportDialog
@@ -149,7 +150,7 @@ export function CollectionEditorWelcomeView({
                     <Typography variant={"caption"}
                         color={"secondary"}
                         className={"mb-2"}>
-                        ● Create a collection from a file (csv, json, xls, xslx...)
+                        ● {t("create_collection_from_file_formats")}
                     </Typography>
 
                     <ImportFileUpload onDataAdded={(data, propertiesOrder) => onContinue(data, propertiesOrder)} />
@@ -159,34 +160,34 @@ export function CollectionEditorWelcomeView({
                 <div className={"my-2"}>
                     <Typography variant={"caption"}
                         color={"secondary"}>
-                        ● Select a template:
+                        ● {t("select_template")}
                     </Typography>
 
                     <div className={"flex gap-2"}>
-                        <TemplateButton title={"Products"}
-                            subtitle={"A collection of products with images, prices and stock"}
+                        <TemplateButton title={t("products")}
+                            subtitle={t("collection_products_subtitle")}
                             icon={<Icon size={"small"}
                                 iconKey={productsCollectionTemplate.icon! as string} />}
                             onClick={() => {
                                 setValues(productsCollectionTemplate);
                                 onContinue();
                             }} />
-                        <TemplateButton title={"Users"}
-                            subtitle={"A collection of users with emails, names and roles"}
+                        <TemplateButton title={t("users")}
+                            subtitle={t("collection_users_subtitle")}
                             icon={<Icon size={"small"} iconKey={usersCollectionTemplate.icon! as string} />}
                             onClick={() => {
                                 setValues(usersCollectionTemplate);
                                 onContinue();
                             }} />
-                        <TemplateButton title={"Blog posts"}
-                            subtitle={"A collection of blog posts with images, authors and complex content"}
+                        <TemplateButton title={t("blog_posts")}
+                            subtitle={t("collection_blog_posts_subtitle")}
                             icon={<Icon size={"small"} iconKey={blogCollectionTemplate.icon! as string} />}
                             onClick={() => {
                                 setValues(blogCollectionTemplate);
                                 onContinue();
                             }} />
-                        <TemplateButton title={"Pages"}
-                            subtitle={"A collection of pages with images, authors and complex content"}
+                        <TemplateButton title={t("pages")}
+                            subtitle={t("collection_pages_subtitle")}
                             icon={<Icon size={"small"} iconKey={pagesCollectionTemplate.icon! as string} />}
                             onClick={() => {
                                 setValues(pagesCollectionTemplate);

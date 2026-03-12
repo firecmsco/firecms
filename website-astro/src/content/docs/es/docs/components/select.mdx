@@ -1,0 +1,66 @@
+---
+slug: es/docs/components/select
+title: Selección (Select)
+sidebar_label: Selección
+---
+
+Selección (Select) es un componente de formulario que proporciona un menú desplegable para que los usuarios elijan entre varias opciones. Admite selecciones únicas y múltiples, estilos personalizables e integración con bibliotecas de formularios.
+
+## Uso
+
+Para usar el componente `Select` en tu aplicación web, comienza importándolo junto con `SelectItem` para las opciones
+individuales y `SelectGroup` si necesitas agrupar opciones relacionadas. El componente `Select` puede ser altamente
+personalizado para adaptarse a los requisitos específicos de tu interfaz de usuario. Esto te permite controlar su apariencia, como su
+tamaño, forma y color, para que coincida con el diseño general de tu aplicación. Además, puedes modificar su comportamiento,
+incluyendo cómo maneja las interacciones del usuario, si admite múltiples selecciones y cómo muestra los elementos seleccionados.
+Este nivel de personalización lo convierte en una herramienta versátil para crear menús desplegables intuitivos y receptivos
+que mejoran la experiencia del usuario.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Selección básica (Basic Select)
+
+Un uso básico del componente de selección con configuración mínima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_basic.tsx"/>
+
+## Selección personalizada (Customized Select)
+
+Un componente de selección con estilos y funcionalidades personalizados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_custom.tsx"/>
+
+## Selección con grupos (Select with Groups)
+
+Demuestra cómo agrupar opciones bajo etiquetas usando `SelectGroup`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_group.tsx"/>
+
+## Props del componente de selección
+
+El componente `Select` en FireCMS UI es altamente personalizable a través de varias props. A continuación, se muestra una lista exhaustiva de props que puedes usar para adaptar el componente `Select` a tus necesidades:
+
+- `open`: Controla si el menú desplegable de selección está abierto. Por defecto a `false`.
+- `name`: El atributo de nombre (name) para el elemento de entrada de selección.
+- `id`: El atributo id para el elemento de entrada de selección.
+- `onOpenChange`: Callback cuando cambia el estado de apertura.
+- `value`: El(Los) valor(es) actual(es) del componente de selección, que puede ser un `string` o un array de `strings` para selecciones múltiples.
+- `className`: Clases adicionales para aplicar al elemento raíz (root).
+- `inputClassName`: Clases adicionales para aplicar al elemento de entrada (input).
+- `onChange`: Función de controlador llamada cuando cambia el valor de selección.
+- `onValueChange`: Callback cuando cambia el valor.
+- `onMultiValueChange`: Callback cuando cambia el valor en una selección múltiple.
+- `placeholder`: El texto del marcador de posición (placeholder) que se muestra cuando no se selecciona ningún valor.
+- `renderValue`: Función de renderizado personalizado para el valor seleccionado.
+- `renderValues`: Función de renderizado personalizado para los valores seleccionados en selección múltiple.
+- `size`: El tamaño del componente de selección, puede ser `"small"` (pequeño) o `"medium"` (mediano). Por defecto a `"medium"`.
+- `label`: La etiqueta que se muestra arriba del campo de selección, puede ser un `ReactNode` o un `string`.
+- `disabled`: Deshabilita el componente de selección. Por defecto a `false`.
+- `error`: Establece el componente de selección en un estado de error. Por defecto a `false`.
+- `position`: Posición del menú desplegable con respecto al disparador, puede ser `"item-aligned"` o `"popper"`. Por defecto a `"item-aligned"`.
+- `endAdornment`: Elemento a colocar al final de la entrada de selección.
+- `multiple`: Habilita el modo de selección múltiple. Por defecto a `false`.
+- `inputRef`: Objeto de referencia (Ref) para el elemento de entrada de selección.
+- `padding`: Agrega relleno (padding) a la entrada de selección. Por defecto a `true`.
+- `invisible`: Oculta el componente de selección pero lo mantiene en el DOM.
+- `children`: Contenido que se renderizará como las opciones dentro del componente de selección.

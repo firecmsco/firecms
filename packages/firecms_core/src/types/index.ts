@@ -28,3 +28,4 @@ export * from "./export_import";
 export * from "./modify_collections";
 export * from "./analytics_controller";
 export * from "./customization_controller";
+export * from "./translations";

@@ -1,6 +1,7 @@
 import { useEditor } from "../components";
 import { useEffect, useRef, } from "react";
 import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
+import { useTranslation, FireCMSTranslations } from "@firecms/core";
 
 export function isValidUrl(url: string) {
     try {
@@ -35,6 +36,7 @@ export const LinkSelector = ({
                              }: LinkSelectorProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const { editor } = useEditor();
+    const { t } = useTranslation();
 
     // Autofocus on input by default
     useEffect(() => {
@@ -72,7 +74,7 @@ export const LinkSelector = ({
                      <p className={cls("underline decoration-stone-400 underline-offset-4", {
                          "text-blue-500": editor.isActive("link"),
                      })}>
-                         Link
+                         {t("editor_link" as keyof FireCMSTranslations)}
                      </p>
                  </Button>}>
             <form
@@ -82,7 +84,7 @@ export const LinkSelector = ({
                 <input
                     ref={inputRef}
                     autoFocus={open}
-                    placeholder="Paste a link"
+                    placeholder={t("editor_paste_or_type_link" as keyof FireCMSTranslations)}
                     defaultValue={editor.getAttributes("link").href || ""}
                     className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}/>
 

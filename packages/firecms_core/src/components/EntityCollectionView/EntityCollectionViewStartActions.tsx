@@ -12,6 +12,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
 import { FiltersDialog } from "./FiltersDialog";
 import { Badge, Button, cls, FilterListIcon, IconButton, Tooltip } from "@firecms/ui";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -42,6 +43,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins ?? [];
     const largeLayout = useLargeLayout();
+    const { t } = useTranslation();
 
     // Filters dialog state
     const [filtersDialogOpen, setFiltersDialogOpen] = useState(false);
@@ -66,7 +68,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && (
-        <Tooltip title="Filters"
+        <Tooltip title={t("filters")}
             key={"filters_tooltip"}>
             <Badge
                 color="primary"
@@ -80,7 +82,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         startIcon={<FilterListIcon size="small" />}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
-                        Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+                        {t("filters")}{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
                     </Button>
                 ) : (
                     <IconButton

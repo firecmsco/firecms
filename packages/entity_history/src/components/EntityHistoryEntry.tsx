@@ -25,7 +25,8 @@ import {
     useAuthController,
     useCustomizationController,
     useNavigationController,
-    useSideEntityController
+    useSideEntityController,
+    useTranslation
 } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 import { UserChip } from "./UserChip";
@@ -50,6 +51,7 @@ function PreviousValueView({
     childProperty: Property,
     propertyKey: string
 }) {
+    const { t } = useTranslation();
     if (typeof previousValueInPath === "string" || typeof previousValueInPath === "number") {
         return <Typography variant={"caption"} color={"secondary"} className="line-through">
             {previousValueInPath}
@@ -64,7 +66,7 @@ function PreviousValueView({
             side={"left"}
             title={<div className={"flex flex-col gap-2"}>
                 <Typography variant={"caption"} color={"secondary"}>
-                    Previous value
+                    {t("entity_history_previous_value")}
                 </Typography>
                 <PropertyPreview
                     propertyKey={propertyKey as string}
@@ -97,6 +99,7 @@ export function EntityHistoryEntry({
 
     const navigationController = useNavigationController();
     const sideEntityController = useSideEntityController();
+    const { t } = useTranslation();
 
     const collection = collectionProp ?? navigationController.getCollection(entity.path);
     const updatedOn = entity.values?.["__metadata"]?.["updated_on"];
@@ -139,7 +142,7 @@ export function EntityHistoryEntry({
             {actions}
 
             {entity &&
-                <Tooltip title={"See details for this revision"}
+                <Tooltip title={t("entity_history_see_details")}
                          className={"my-2 grow-0 shrink-0 self-start"}>
                     <IconButton
                         color={"inherit"}

@@ -1,0 +1,332 @@
+---
+// src/components/pages/SecurityContent.astro
+import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+
+const { lang, t } = Astro.props;
+---
+
+<main>
+    <!-- Hero Section -->
+    <section
+            class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+        <!-- Background accents and subtle grid -->
+        <div class="pointer-events-none absolute inset-0 -z-10">
+            <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+        </div>
+
+        <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+            <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+                {t('security.hero.title')}
+            </h1>
+            <p class="mb-4 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48" set:html={t('security.hero.subtitle')}></p>
+        </div>
+        <SectionBackgroundAccents bottomLine={true}/>
+    </section>
+
+    <!-- Core Pillars Section -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl text-center mb-16">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('security.pillars.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">
+                    {t('security.pillars.subtitle')}
+                </p>
+            </div>
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                <!-- Pillar 1 -->
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                                 alt="Data Ownership" class="h-6 w-6 filter invert"/>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-white mb-4">{t('security.pillars.p1.title')}</h3>
+                    <p class="text-surface-400">{t('security.pillars.p1.desc')}</p>
+                </div>
+                <!-- Pillar 2 -->
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg"
+                                 alt="Multi-Layered Security" class="h-6 w-6 filter invert"/>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-white mb-4">{t('security.pillars.p2.title')}</h3>
+                    <p class="text-surface-400">{t('security.pillars.p2.desc')}</p>
+                </div>
+                <!-- Pillar 3 -->
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/eye.svg"
+                                 alt="Transparency by Design" class="h-6 w-6 filter invert"/>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-white mb-4">{t('security.pillars.p3.title')}</h3>
+                    <p class="text-surface-400">{t('security.pillars.p3.desc')}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sovereignty Section -->
+    <section class="bg-surface-950 py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                             alt="Data Sovereignty" class="h-8 w-8 mr-3 filter invert"/>
+                        <h2 class="text-2xl font-medium text-white m-0">{t('security.sovereignty.title')}</h2>
+                    </div>
+                    <p class="text-lg text-surface-300 mb-8" set:html={t('security.sovereignty.subtitle')}></p>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                            <div>
+                                <h4 class="font-semibold text-white">{t('security.sovereignty.f1.title')}</h4>
+                                <p class="text-surface-400">{t('security.sovereignty.f1.desc')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                            <div>
+                                <h4 class="font-semibold text-white">{t('security.sovereignty.f2.title')}</h4>
+                                <p class="text-surface-400">{t('security.sovereignty.f2.desc')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-6 w-6 mt-1 flex-shrink-0 filter invert"/>
+                            <div>
+                                <h4 class="font-semibold text-white">{t('security.sovereignty.f3.title')}</h4>
+                                <p class="text-surface-400">{t('security.sovereignty.f3.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-xl border overflow-hidden border-surface-800">
+                    <img
+                            src="/img/demo-botanic-plant-firestore.png"
+                            alt="Diagram showing FireCMS connecting to customer's own Firebase/MongoDB project"
+                            class="h-full w-full object-cover"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture & Security -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('security.architecture.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('security.architecture.subtitle')}</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="rounded-xl overflow-hidden">
+                    <img
+                            src="/img/firecms-layers.png"
+                            alt="Security architecture diagram"
+                            class="h-full w-full object-cover"
+                    />
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-lg border border-surface-800 bg-surface-900/50">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
+                                 alt="Application Layer" class="h-6 w-6 mr-3 filter invert"/>
+                            <h3 class="text-lg font-semibold text-white m-0">{t('security.architecture.f1.title')}</h3>
+                        </div>
+                        <p class="text-surface-400">{t('security.architecture.f1.desc')}</p>
+                    </div>
+                    <div class="p-6 rounded-lg border border-surface-800 bg-surface-900/50">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-upload.svg"
+                                 alt="Infrastructure Layer" class="h-6 w-6 mr-3 filter invert"/>
+                            <h3 class="text-lg font-semibold text-white m-0">{t('security.architecture.f2.title')}</h3>
+                        </div>
+                        <p class="text-surface-400">{t('security.architecture.f2.desc')}</p>
+                    </div>
+                    <div class="p-6 rounded-lg border border-surface-800 bg-surface-900/50">
+                        <div class="flex items-center mb-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg"
+                                 alt="Database Security" class="h-6 w-6 mr-3 filter invert"/>
+                            <h3 class="text-lg font-semibold text-white m-0">{t('security.architecture.f3.title')}</h3>
+                        </div>
+                        <p class="text-surface-400">{t('security.architecture.f3.desc')}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment Models Section -->
+    <section class="bg-surface-950 py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('security.deployment.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('security.deployment.subtitle')}</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Self-Hosted -->
+                <div class="p-8 rounded-xl border bg-surface-900/50 border-surface-800">
+                    <div class="flex items-center mb-4">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/monitor.svg"
+                             alt="Self-Hosted" class="h-8 w-8 mr-3 filter invert"/>
+                        <h3 class="text-2xl font-bold m-0 text-white">{t('security.deployment.self.title')}</h3>
+                    </div>
+                    <p class="text-surface-400 mb-6">{t('security.deployment.self.desc')}</p>
+                    <ul class="space-y-3 text-surface-300">
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.self.f1')}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.self.f2')}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.self.f3')}</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- FireCMS Cloud -->
+                <div class="p-8 rounded-xl border bg-surface-900/50 border-surface-800">
+                    <div class="flex items-center mb-4">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-upload.svg"
+                             alt="FireCMS Cloud" class="h-8 w-8 mr-3 filter invert"/>
+                        <h3 class="text-2xl font-bold m-0 text-white">{t('security.deployment.cloud.title')}</h3>
+                    </div>
+                    <p class="text-surface-400 mb-6">{t('security.deployment.cloud.desc')}</p>
+                    <ul class="space-y-3 text-surface-300">
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.cloud.f1')}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.cloud.f2')}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                                 alt="Check" class="h-5 w-5 flex-shrink-0 mt-1 filter invert"/>
+                            <span>{t('security.deployment.cloud.f3')}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy & Compliance Section -->
+    <section class="bg-black py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="flex items-center mb-4 justify-center">
+                    <h2 class="text-3xl font-bold text-white m-0">{t('security.privacy.title')}</h2>
+                </div>
+                <p class="text-xl text-surface-300 mb-8" set:html={t('security.privacy.subtitle')}></p>
+            </div>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-lg border bg-surface-900/50 border-surface-800">
+                    <div class="flex items-center mb-3">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/user-check.svg"
+                             alt="Data Controller" class="h-6 w-6 mr-3 filter invert"/>
+                        <h5 class="font-semibold text-white m-0">{t('security.privacy.f1.title')}</h5>
+                    </div>
+                    <p class="text-surface-400 text-sm">{t('security.privacy.f1.desc')}</p>
+                </div>
+                <div class="p-6 rounded-lg border bg-surface-900/50 border-surface-800">
+                    <div class="flex items-center mb-3">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg"
+                             alt="Data Subject Requests" class="h-6 w-6 mr-3 filter invert"/>
+                        <h5 class="font-semibold text-white m-0">{t('security.privacy.f2.title')}</h5>
+                    </div>
+                    <p class="text-surface-400 text-sm">{t('security.privacy.f2.desc')}</p>
+                </div>
+                <div class="p-6 rounded-lg border bg-surface-900/50 border-surface-800">
+                    <div class="flex items-center mb-3">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                             alt="Data Residency" class="h-6 w-6 mr-3 filter invert"/>
+                        <h5 class="font-semibold text-white m-0">{t('security.privacy.f3.title')}</h5>
+                    </div>
+                    <p class="text-surface-400 text-sm">{t('security.privacy.f3.desc')}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators Section -->
+    <section class="bg-surface-950 py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('security.trust.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('security.trust.subtitle')}</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="p-6 rounded-xl border bg-surface-900/50 text-center border-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/users.svg"
+                         alt="Active Projects" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                    <h3 class="text-3xl font-bold text-white mb-2">{t('security.trust.s1.value')}</h3>
+                    <p class="text-surface-400">{t('security.trust.s1.label')}</p>
+                </div>
+                <div class="p-6 rounded-xl border bg-surface-900/50 text-center border-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg"
+                         alt="Data Sovereignty" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                    <h3 class="text-3xl font-bold text-white mb-2">{t('security.trust.s2.value')}</h3>
+                    <p class="text-surface-400">{t('security.trust.s2.label')}</p>
+                </div>
+                <div class="p-6 rounded-xl border bg-surface-900/50 text-center border-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/monitor.svg"
+                         alt="Infrastructure Uptime" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                    <h3 class="text-3xl font-bold text-white mb-2">{t('security.trust.s3.value')}</h3>
+                    <p class="text-surface-400">{t('security.trust.s3.label')}</p>
+                </div>
+                <div class="p-6 rounded-xl border bg-surface-900/50 text-center border-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/user-check.svg"
+                         alt="Security Monitoring" class="h-8 w-8 mx-auto mb-3 filter invert"/>
+                    <h3 class="text-3xl font-bold text-white mb-2">{t('security.trust.s4.value')}</h3>
+                    <p class="text-surface-400">{t('security.trust.s4.label')}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="bg-black py-16 sm:py-24">
+
+        <SectionBackgroundAccents topLine={true}/>
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">{t('security.cta.title')}</h2>
+            <p class="text-lg text-surface-300 mb-8 max-w-2xl mx-auto">
+                {t('security.cta.subtitle')}
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://demo.firecms.co"
+                   class="inline-flex items-center justify-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    {t('security.cta.demo')}
+                </a>
+                <a href="https://app.firecms.co"
+                   class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all btn-glow">
+                    {t('security.cta.register')}
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="Arrow"
+                         class="h-5 w-5 filter invert"/>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>

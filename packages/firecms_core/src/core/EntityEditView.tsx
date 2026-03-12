@@ -32,6 +32,7 @@ import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub } from "../util/createFormexStub";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -170,6 +171,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 }) {
 
     const context = useFireCMSContext();
+    const { t } = useTranslation();
 
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
 
@@ -342,8 +344,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             openEntityMode={layout} />
                         : <div className="flex items-center justify-center w-full h-full p-3">
                             <Typography variant={"label"}>
-                                You need to save your entity before
-                                adding additional collections
+                                {t("youd_need_to_save_before_additional_collections")}
                             </Typography>
                         </div>)
                 }

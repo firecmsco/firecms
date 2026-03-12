@@ -62,6 +62,7 @@
     "date-fns": "^3.6.0",
     "fuse.js": "^7.1.0",
     "history": "^5.3.0",
+    "i18next": "^23.16.4",
     "json-logic-js": "^2.0.5",
     "markdown-it": "^14.1.0",
     "notistack": "^3.0.2",
@@ -69,6 +70,7 @@
     "prism-react-renderer": "^2.4.1",
     "react-dropzone": "^14.3.8",
     "react-fast-compare": "^3.2.2",
+    "react-i18next": "^14.1.3",
     "react-transition-group": "^4.4.5",
     "react-use-measure": "^2.1.7",
     "react-window": "^1.8.11",
@@ -95,6 +97,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "cross-env": "^7.0.3",
+    "eslint-plugin-i18next": "^6.1.3",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.2.0",
@@ -118,8 +121,15 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "plugin:i18next/recommended"
+    ],
+    "plugins": [
+        "i18next"
+    ],
+    "rules": {
+        "i18next/no-literal-string": ["warn", { "markupOnly": true }]
+    }
   },
   "jest": {
     "transform": {

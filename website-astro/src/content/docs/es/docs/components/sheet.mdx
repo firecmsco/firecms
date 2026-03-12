@@ -1,0 +1,31 @@
+---
+slug: es/docs/components/sheet
+title: Hoja (Sheet)
+sidebar_label: Hoja
+---
+
+El componente `Sheet` (Hoja) se utiliza para mostrar paneles deslizantes desde los bordes de la pantalla. Puede abrirse desde arriba, abajo, izquierda o derecha, y puede ser opaco o transparente.
+
+## Uso
+
+Para usar `Sheet`, impórtalo desde tus componentes y pasa las props `open` (abierto), `side` (lado), `transparent` (transparente) y `onOpenChange` (al cambiar apertura).
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Hoja básica
+
+Una hoja simple que se desliza desde la derecha.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_basic.tsx"/>
+
+## Hoja desde la parte superior
+
+Este ejemplo demuestra una hoja que se desliza desde la parte superior (top).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_top.tsx"/>
+
+## Hoja transparente
+
+Esta hoja está configurada para ser transparente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_transparent.tsx"/>

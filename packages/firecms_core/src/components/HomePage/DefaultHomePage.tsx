@@ -30,6 +30,7 @@ import { NavigationCardBinding } from "./NavigationCardBinding";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { RenameGroupDialog } from "./RenameGroupDialog";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";
@@ -47,6 +48,7 @@ export function DefaultHomePage({
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationController();
+    const { t } = useTranslation();
 
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");
@@ -362,7 +364,7 @@ export function DefaultHomePage({
                 >
                     <SearchBar
                         onTextSearch={updateSearch}
-                        placeholder="Search collections"
+                        placeholder={t("search_collections")}
                         autoFocus
                         innerClassName="w-full"
                         className="w-full flex-grow"

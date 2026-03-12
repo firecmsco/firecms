@@ -1,0 +1,60 @@
+---
+slug: de/docs/self/migrating_from_v2_to_v3
+title: Migration von FireCMS 2.0 zu FireCMS 3.0
+sidebar_label: Migration von FireCMS 2.0 zu FireCMS 3.0
+description: Migration zu FireCMS 3.0 von FireCMS 2.0
+---
+
+FireCMS 3.0 ist ein Major-Release mit vielen Änderungen. Diese Seite
+beschreibt die wichtigsten Änderungen und wie man von FireCMS 2.0 migriert.
+
+## Migration zu FireCMS PRO
+
+Wir empfehlen, ein neues Projekt zu starten mit:
+
+```bash
+npx create-firecms-app --pro
+```
+
+oder
+
+```bash
+yarn create firecms-app --pro
+```
+
+## Imports aktualisieren
+
+Die Imports haben sich geändert. Sie müssen die Imports in Ihrem Projekt aktualisieren.
+Früher haben Sie alles aus `firecms` (oder `@camberi/firecms`) importiert. Jetzt müssen Sie aus
+verschiedenen Paketen importieren:
+- Alle UI-Komponenten sind jetzt in `@firecms/ui` (Buttons, Textfelder, Layouts, etc.)
+- Der Kern von FireCMS ist in `@firecms/core` (`FireCMSApp`, `FireCMSContext`, etc.)
+- Alle Firebase-Codes sind in `@firecms/firebase`
+
+## Kollektionskonfiguration
+
+Kollektionen haben minimale Änderungen erfahren.
+
+- Sie müssen eine `id` für jede Kollektion definieren, die typischerweise gleich dem `path` sein kann. Die `id` muss eindeutig sein.
+- Die Prop `views` wurde in `entityViews` umbenannt.
+  - In `entityViews` wurde die Prop `path` in `key` umbenannt.
+- Für `AdditionalFieldDelegate`:
+  - Die Prop `id` wurde in `key` umbenannt.
+  - Die Prop `builder` wurde in `Builder` umbenannt.
+
+## Authenticator
+
+Der Authenticator gibt jetzt einen `dataSourceDelegate` anstatt einer `dataSource` zurück.
+
+## Sonstiges
+
+- `useNavigationContext` wurde in `useNavigationController` umbenannt.
+- `FieldDescription` wurde in `FieldCaption` umbenannt.
+- `PropertyPreview` benötigt keine `entity`-Prop mehr.
+
+## Benutzerdefinierte Komponenten migrieren (MUI)
+
+FireCMS 3.0 basiert auf `tailwindcss` anstatt auf `mui`.
+
+Die neue Version von FireCMS verfügt über fast 50 neue Komponenten, die mit Tailwind CSS implementiert sind.
+Sie können versuchen, Imports von `@mui/material` auf `@firecms/ui` umzustellen.

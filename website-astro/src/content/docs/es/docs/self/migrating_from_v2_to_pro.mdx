@@ -1,0 +1,128 @@
+---
+slug: es/docs/self/migrating_from_v2_to_v3
+title: Migración de FireCMS 2.0 a FireCMS 3.0
+sidebar_label: Migración de FireCMS 2.0 a FireCMS 3.0
+description: Migra a FireCMS 3.0, desde FireCMS 2.0
+---
+
+FireCMS 3.0 es una versión principal que introduce muchos cambios. Esta página
+describe los cambios principales y cómo migrar desde FireCMS 2.0.
+
+FireCMS Community y PRO son las versiones autoalojadas de FireCMS. Te permiten alojar tu propio backend y usar FireCMS sin restricciones.
+Es la versión más similar a FireCMS 2.0, pero con muchas mejoras y nuevas funcionalidades.
+
+## Migrar a FireCMS PRO
+
+La mayoría de los conceptos son los mismos que en FireCMS 2.0, pero hay algunos cambios que debes conocer.
+Recomendamos empezar un nuevo proyecto con:
+
+```bash
+npx create-firecms-app --pro
+```
+
+o
+
+```bash
+yarn create firecms-app --pro
+```
+
+Esto creará un nuevo proyecto con la última versión de FireCMS PRO.
+
+## Actualizar las importaciones
+
+El cambio principal es que las importaciones han cambiado. Necesitas actualizar las importaciones en tu proyecto.
+Antes importabas todo desde `firecms` (o incluso `@camberi/firecms`). Ahora necesitas importar desde
+diferentes paquetes.
+- Todos los componentes de UI ahora están en `@firecms/ui`. Todo incluyendo botones, campos de texto, layouts, etc.
+- El núcleo de FireCMS está en `@firecms/core`. Esto incluye `FireCMSApp`, `FireCMSContext`, etc.
+- Todo el código relacionado con Firebase está en `@firecms/firebase`, incluyendo `useFirebaseAuthController`, etc.
+La mayoría de las importaciones se pueden encontrar en `@firecms/core`, así que recomendamos empezar por ahí.
+
+## Configuración de colecciones
+
+Las colecciones han sufrido cambios mínimos. Si no tienes ningún componente personalizado definido,
+debería ser fácil adaptar tus colecciones al nuevo formato.
+
+- Necesitas definir un `id` para cada colección, que normalmente puede ser el mismo que el `path`. Asegúrate de que
+el `id` sea único.
+
+- La prop `views` ha sido renombrada a `entityViews`, ya que se aplican a entidades.
+  - Dentro de `entityViews` la prop `path` ha sido renombrada a `key`.
+
+- Para `AdditionalFieldDelegate`:
+  - La prop `id` ha sido renombrada a `key`.
+  - La prop `builder` ha sido renombrada a `Builder`.
+
+## Autenticador
+
+- El autenticador ahora devuelve un `dataSourceDelegate` en lugar de un `dataSource`. La diferencia es que
+ya no pasas la prop `collection`.
+
+## Otros
+
+- `useNavigationContext` ha sido renombrado a `useNavigationController`.
+- `FieldDescription` ha sido renombrado a `FieldCaption`.
+- `PropertyPreview` ya no necesita una prop `entity`.
+
+
+## Migración de componentes personalizados (MUI)
+
+FireCMS 3.0 está basado en `tailwindcss` en lugar de `mui`.
+
+MUI fue genial para las versiones iniciales de FireCMS, pero se estaba convirtiendo en un gran cuello de botella de rendimiento
+y era difícil de personalizar.
+
+La nueva versión de FireCMS tiene casi 50 nuevos componentes implementados con tailwindcss, que
+imitan de buena manera los componentes de material-ui. Se recomienda migrar tus componentes personalizados
+al nuevo formato.
+
+Puedes intentar reemplazar las importaciones de `@mui/material` por `@firecms/ui` y verás que muchas cosas funcionan directamente.
+
+### Iconos
+
+Los iconos en FireCMS están basados en los iconos de Material. Puedes usar todos los iconos de Material importándolos igual que en MUI.
+
+```tsx
+import { AddIcon } from "@firecms/ui";
+```
+
+La prop `fontSize` se llama `size` en FireCMS (porque tiene más sentido, MUI).
+
+### Componentes sin equivalente:
+- `Box`: El componente Box es solo un wrapper usado por MUI para aplicar estilos. Puedes usar un `div` en su lugar, con algunas
+clases de tailwind.
+Consejo: ChatGPT es excelente para convertir componentes Box a div con clases tailwind.
+- `Link`: Usa `a` en su lugar.
+- `FormControl`
+
+### Componentes que cambian su comportamiento (de MUI a FireCMS UI)
+- `Menu` y `MenuItem`: Los elementos de menú ya no tienen un id. Puedes añadir una prop `onClick` por cada elemento de menú.
+- `Select` ya no usa `labelId`. Solo añade la etiqueta como componente en `label`.
+- `SelectChangeEvent` ahora es `ChangeEvent<HTMLSelectElement>`
+- `CircularProgress` el tamaño es una cadena en lugar de un número. Puedes usar `size="small"` o `size="large"`.
+
+### Seguir usando MUI
+
+Si deseas seguir usando MUI, puedes instalarlo manualmente:
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+o
+
+```bash
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+Si necesitas iconos de MUI:
+
+```bash
+npm install @mui/icons-material
+```
+
+o
+
+```bash
+yarn add @mui/icons-material
+```

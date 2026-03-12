@@ -2,6 +2,7 @@ import { useSnackbarController } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { ArrowBackIcon, Button, CircularProgress, IconButton, LoadingButton, TextField, Typography } from "@firecms/ui";
 import { FireCMSBackend } from "../../types";
+import { useTranslation } from "@firecms/core";
 
 type LoginFormMode = "login" | "signup";
 
@@ -14,6 +15,7 @@ export function CloudUserPasswordForm({
     fireCMSBackend: FireCMSBackend,
     onAnalyticsEvent?: (event: string, params?: Record<string, any>) => void;
 }) {
+    const { t } = useTranslation();
     const [mode, setMode] = useState<LoginFormMode>("login");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -39,7 +41,7 @@ export function CloudUserPasswordForm({
 
         if (!email.trim() || !password.trim()) {
             snackbarController.open({
-                message: "Please enter both email and password",
+                message: t("auth_invalid_email_password"),
                 type: "error"
             });
             return;
@@ -58,7 +60,7 @@ export function CloudUserPasswordForm({
         e.preventDefault();
         if (!email.trim()) {
             snackbarController.open({
-                message: "Please enter your email first",
+                message: t("auth_enter_email_first"),
                 type: "error"
             });
             return;
@@ -70,7 +72,7 @@ export function CloudUserPasswordForm({
             await fireCMSBackend.sendPasswordResetEmail(email);
             onAnalyticsEvent?.("password_reset_success");
             snackbarController.open({
-                message: "Password reset email sent",
+                message: t("auth_password_reset_sent"),
                 type: "success"
             });
         } catch (e: any) {
@@ -101,7 +103,7 @@ export function CloudUserPasswordForm({
                     </IconButton>
 
                     <Typography variant={"label"}>
-                        {mode === "login" ? "Sign in to your account" : "Create a new account"}
+                        {mode === "login" ? t("auth_sign_in_account") : t("auth_create_new_account")}
                     </Typography>
                 </div>
 
@@ -118,7 +120,7 @@ export function CloudUserPasswordForm({
 
                 <TextField
                     key={mode}
-                    placeholder="Password"
+                    placeholder={t("auth_password")}
                     value={password}
                     disabled={fireCMSBackend.loginLoading}
                     size={"small"}
@@ -135,7 +137,7 @@ export function CloudUserPasswordForm({
                                 variant="text"
                                 loading={resettingPassword}
                                 onClick={handlePasswordReset}>
-                                Reset password
+                                {t("auth_reset_password")}
                             </LoadingButton>
                         )}
                         {fireCMSBackend.loginLoading && (
@@ -154,13 +156,13 @@ export function CloudUserPasswordForm({
                                 }
                                 setMode(mode === "login" ? "signup" : "login");
                             }}>
-                            {mode === "login" ? "New user?" : "Have an account?"}
+                            {mode === "login" ? t("auth_new_user") : t("auth_have_account")}
                         </Button>
 
                         <Button
                             type="submit"
                             disabled={!isFormValid || fireCMSBackend.loginLoading}>
-                            {mode === "login" ? "Sign In" : "Sign Up"}
+                            {mode === "login" ? t("auth_sign_in") : t("auth_sign_up")}
                         </Button>
                     </div>
                 </div>

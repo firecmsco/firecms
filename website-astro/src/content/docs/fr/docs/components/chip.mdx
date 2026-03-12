@@ -1,0 +1,43 @@
+---
+slug: fr/docs/components/chip
+title: Chip
+sidebar_label: Chip
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Les Chips sont des éléments compacts qui représentent une entrée, un attribut ou une action. Ils permettent aux utilisateurs de saisir des informations, de faire des sélections, de filtrer du contenu ou de déclencher des actions.
+
+## Utilisation
+
+Pour utiliser le `Chip`, importez-le depuis vos composants et passez les props nécessaires comme `children`, `colorScheme`, `size`, `error`, `outlined`, `onClick` et `icon`.
+
+## Chip de base
+
+Un chip simple avec une configuration minimale. Il affiche un morceau de texte ou une etiquette.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_basic.tsx"/>
+
+## Tailles de Chip
+
+Illustration de l'utilisation de différentes tailles pour le composant chip. Vous pouvez choisir entre `tiny`, `small` et `medium`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_sizes.tsx"/>
+
+## Couleurs de Chip
+
+Démontre l'utilisation de la prop `colorScheme` pour personnaliser l'apparence du chip selon le thème de votre application.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_colors.tsx"/>
+
+## Chip avec icône
+
+Montre comment utiliser un chip avec une icône pour une meilleure interaction utilisateur ou pour fournir plus d'informations dans le chip.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_icon.tsx"/>
+
+## Chip cliquable
+
+Cet exemple démontre un chip cliquable qui déclenche une action au clic. Utile pour les tags interactifs ou les sélections.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/chip/chip_clickable.tsx"/>

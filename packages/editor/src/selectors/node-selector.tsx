@@ -1,5 +1,5 @@
-import React from "react";
 import { EditorBubbleItem, useEditor } from "../components";
+import { FireCMSTranslations, useTranslation } from "@firecms/core";
 
 import {
     Button,
@@ -19,6 +19,7 @@ import {
 
 export type SelectorItem = {
     name: string;
+    labelKey: keyof FireCMSTranslations;
     icon: React.ElementType;
     command: (editor: ReturnType<typeof useEditor>["editor"]) => void;
     isActive: (editor: ReturnType<typeof useEditor>["editor"]) => boolean;
@@ -27,6 +28,7 @@ export type SelectorItem = {
 const items: SelectorItem[] = [
     {
         name: "Text",
+        labelKey: "editor_text",
         icon: TextFieldsIcon,
         command: (editor) =>
             editor?.chain().focus().toggleNode("paragraph", "paragraph").run(),
@@ -38,6 +40,7 @@ const items: SelectorItem[] = [
     },
     {
         name: "Heading 1",
+        labelKey: "editor_heading_1",
         icon: LooksOneIcon,
         command: (editor) =>
             editor?.chain().focus().toggleHeading({ level: 1 }).run(),
@@ -45,6 +48,7 @@ const items: SelectorItem[] = [
     },
     {
         name: "Heading 2",
+        labelKey: "editor_heading_2",
         icon: LooksTwoIcon,
         command: (editor) =>
             editor?.chain().focus().toggleHeading({ level: 2 }).run(),
@@ -52,6 +56,7 @@ const items: SelectorItem[] = [
     },
     {
         name: "Heading 3",
+        labelKey: "editor_heading_3",
         icon: Looks3Icon,
         command: (editor) =>
             editor?.chain().focus().toggleHeading({ level: 3 }).run(),
@@ -59,24 +64,28 @@ const items: SelectorItem[] = [
     },
     {
         name: "To-do List",
+        labelKey: "editor_todo_list",
         icon: CheckBoxIcon,
         command: (editor) => editor?.chain().focus().toggleTaskList().run(),
         isActive: (editor) => editor?.isActive("taskItem") ?? false,
     },
     {
         name: "Bullet List",
+        labelKey: "editor_bullet_list",
         icon: FormatListBulletedIcon,
         command: (editor) => editor?.chain().focus().toggleBulletList().run(),
         isActive: (editor) => editor?.isActive("bulletList") ?? false,
     },
     {
         name: "Numbered List",
+        labelKey: "editor_numbered_list",
         icon: FormatListNumberedIcon,
         command: (editor) => editor?.chain().focus().toggleOrderedList().run(),
         isActive: (editor) => editor?.isActive("orderedList") ?? false,
     },
     {
         name: "Quote",
+        labelKey: "editor_quote",
         icon: FormatQuoteIcon,
         command: (editor) => editor?.chain()
             .focus()
@@ -87,6 +96,7 @@ const items: SelectorItem[] = [
     },
     {
         name: "Code",
+        labelKey: "editor_code",
         icon: CodeIcon,
         command: (editor) => editor?.chain().focus().toggleCodeBlock().run(),
         isActive: (editor) => editor?.isActive("codeBlock") ?? false,
@@ -105,9 +115,11 @@ export const NodeSelector = ({
                                  portalContainer
                              }: NodeSelectorProps) => {
     const { editor } = useEditor();
+    const { t } = useTranslation();
     if (!editor) return null;
     const activeItem = items.filter((item) => item.isActive(editor)).pop() ?? {
         name: "Multiple",
+        labelKey: "editor_multiple" as keyof FireCMSTranslations,
     };
 
     return (
@@ -120,7 +132,7 @@ export const NodeSelector = ({
             trigger={<Button variant="text"
                              className="gap-2 rounded-none"
                              color="text">
-                <span className="whitespace-nowrap text-sm">{activeItem.name}</span>
+                <span className="whitespace-nowrap text-sm">{t(activeItem.labelKey)}</span>
                 <KeyboardArrowDownIcon size={"small"}/>
             </Button>}
             modal={true}
@@ -137,7 +149,7 @@ export const NodeSelector = ({
                 >
                     <div className="flex items-center space-x-2">
                         <item.icon size="smallest"/>
-                        <span>{item.name}</span>
+                        <span>{t(item.labelKey)}</span>
                     </div>
                     {activeItem.name === item.name && <CheckIcon size="smallest"/>}
                 </EditorBubbleItem>

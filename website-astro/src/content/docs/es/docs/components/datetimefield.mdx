@@ -1,0 +1,31 @@
+---
+slug: es/docs/components/datetimefield
+title: Campo de fecha y hora (DateTimeField)
+sidebar_label: Campo de fecha y hora
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+DateTimeField (Campo de fecha y hora) es un componente versátil que permite a los usuarios seleccionar fácilmente fechas y horas. Puede configurarse para varios modos, como solo fecha o selección de fecha y hora, y admite la localización.
+
+## Uso
+
+El componente `DateTimeField` se puede usar para capturar valores de fecha o de fecha y hora de los usuarios. Admite personalización para deshabilitar el campo, borrar la selección, mostrar errores y más.
+
+## Uso básico
+
+Proporciona una funcionalidad básica de selector de fechas donde los usuarios pueden seleccionar una fecha.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/datetimefield/datetimefield_basic.tsx"/>
+
+## Selección de fecha y hora
+
+Permite la selección de fecha y hora, adecuado para escenarios donde la precisión de tiempo es crucial.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/datetimefield/datetimefield_datetime.tsx"/>
+
+## Localización
+
+Muestra cómo localizar el componente DateTimeField, ajustándolo para diferentes regiones/idiomas (locales).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/datetimefield/datetimefield_localization.tsx"/>

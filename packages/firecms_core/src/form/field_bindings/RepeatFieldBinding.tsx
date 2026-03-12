@@ -7,6 +7,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useAuthController } from "../../hooks";
+import { useTranslation } from "../../hooks/useTranslation";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -34,6 +35,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
     const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;
+    const { t } = useTranslation();
 
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
@@ -87,7 +89,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     const canAddElements = !property.disabled && !isSubmitting && !disabled && (property.canAddElements || property.canAddElements === undefined);
     const sortable = property.sortable === undefined ? true : property.sortable;
     const arrayContainer = <ArrayContainer droppableId={propertyKey}
-                                           addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                           addLabel={property.name ? t("add_to_field", { fieldName: property.name }) : t("add_entry")}
                                            value={value}
                                            buildEntry={buildEntry}
                                            onInternalIdAdded={setLastAddedId}

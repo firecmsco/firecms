@@ -1,0 +1,319 @@
+---
+slug: fr/docs/self/migrating_from_v3_to_v3_1
+title: Migration de v3.0 vers v3.1
+sidebar_label: Migration de v3.0 vers v3.1
+---
+
+Ce guide de migration s'applique aux **versions auto-hébergées** de FireCMS, y compris les éditions **Community** et **PRO**.
+FireCMS v3.1 introduit des mises à jour importantes qui nécessitent des changements de configuration et offre de nouvelles fonctionnalités passionnantes.
+
+## Avant de commencer
+
+- Assurez-vous d'être actuellement sur **FireCMS v3.0.x**
+- Sauvegardez votre projet ou committez votre état actuel dans le contrôle de version
+- Assurez-vous d'utiliser **Node.js 18+**
+
+## Mettre à jour les packages FireCMS
+
+Mettez à jour tous les packages `@firecms/*` vers la version **3.1** :
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Assurez-vous d'inclure **tous** les packages `@firecms/*` listés dans votre `package.json`. Mélanger les packages v3.0 et v3.1 causera des problèmes.
+
+---
+
+## Migration TailwindCSS v4
+
+Le changement le plus significatif dans v3.1 est la migration de **TailwindCSS v3 vers v4**. Cela implique de mettre à jour
+votre configuration TailwindCSS et de vous assurer que vos styles sont compatibles avec la nouvelle version.
+
+:::caution
+Il s'agit d'un **changement incompatible**. Votre projet ne fonctionnera pas correctement jusqu'à ce que vous ayez complété toutes les étapes de cette section.
+:::
+
+### Mettre à jour les dépendances
+
+Installez TailwindCSS v4 et le plugin Vite :
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+### Ajouter le plugin Vite
+
+Mettez à jour votre `vite.config.ts` pour inclure le nouveau plugin TailwindCSS v4 :
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+### Changements des variables de couleur
+
+Les noms de variables CSS ont été mis à jour pour suivre le standard TailwindCSS v4.
+Mettez à jour votre fichier `index.css` pour refléter ces changements :
+
+**Avant (v3.0) :**
+```css
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+
+**Après (v3.1) :**
+```css
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::warning
+Si vous sautez cette étape, vos couleurs de thème personnalisées **ne seront pas appliquées** et FireCMS reviendra à sa palette par défaut.
+Les variables `--fcms-primary-dark` et `--fcms-primary-bg` ne sont plus nécessaires — elles sont calculées automatiquement depuis `--color-primary`.
+:::
+
+### Structure index.css mise à jour
+
+Votre fichier `index.css` devrait maintenant ressembler à ceci :
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}
+```
+
+### Nettoyer les anciens fichiers de configuration
+
+Supprimez les fichiers suivants de votre projet car ils ne sont plus nécessaires :
+- `tailwind.config.js`
+- `postcss.config.js`
+
+### Vérifier votre migration
+
+Après avoir complété toutes les étapes, exécutez :
+
+```bash
+npm run build
+```
+
+La compilation devrait se terminer sans erreurs. Si vous voyez des avertissements liés au CSS, vérifiez que votre `index.css` correspond à la structure ci-dessus.
+
+---
+
+## Nouveaux modes d'affichage des collections
+
+FireCMS v3.1 introduit de nouvelles façons de visualiser vos données de collection au-delà de la vue tableau traditionnelle.
+
+### Vue Cartes
+
+La **vue Cartes** affiche vos entités sous forme de cartes visuelles, facilitant la navigation dans les collections riches en contenu
+comme des articles de blog, des produits ou des médiathèques. Chaque carte affiche un aperçu de l'entité avec ses champs clés.
+
+### Vue Kanban/Tableau
+
+La **vue Kanban** (également appelée vue Tableau) vous permet d'organiser les entités en colonnes basées sur une propriété enum.
+C'est parfait pour :
+- La gestion de workflow (ex. Brouillon → Révision → Publié)
+- Le suivi des tâches (ex. À faire → En cours → Terminé)
+- L'organisation basée sur le statut
+
+Pour utiliser la vue Kanban, votre collection a besoin d'une **propriété enum** qui définit les colonnes. Vous pouvez :
+- Glisser-déposer des entités entre les colonnes pour mettre à jour leur statut
+- Réorganiser les colonnes en faisant glisser leurs en-têtes
+- Configurer quelle propriété utiliser pour le regroupement des colonnes
+
+Les deux vues peuvent être activées dans la configuration de votre collection ou changées à l'exécution en utilisant le sélecteur de vue dans la barre d'outils de collection.
+
+---
+
+## Corrections de bugs et améliorations
+
+FireCMS v3.1 inclut de nombreuses corrections de bugs et améliorations :
+
+### Éditeur et interface
+- Amélioration du comportement de la touche Escape dans la commande slash de l'éditeur
+- Comportement amélioré du menu de suggestions
+- Petits ajustements UI et mise à jour visuelle des dialogues
+- Suppression de font-mono de l'aperçu map
+- Migration TipTap V3 pour de meilleures performances de l'éditeur markdown
+
+### Éditeur de collection
+- Ajout de l'édition en ligne pour les propriétés
+- Corrections pour la sauvegarde des propriétés de l'éditeur de collection
+- Comportement cohérent pour les props `editable` dans les collections et propriétés
+
+### Gestion des formulaires
+- Affichage des erreurs pré-sauvegarde dans la vue tableau
+- Amélioration du focus sur les erreurs lors de la sauvegarde de formulaires avec des erreurs
+- Debouncing sur les changements de valeurs dans Formex
+- Changement dans la façon dont les valeurs modifiées sont persistées dans le stockage local
+
+### Modifications locales
+- Ajout de `enableLocalChangesBackup` pour les collections afin de contrôler la copie locale des entités non sauvegardées
+- Les modifications locales peuvent maintenant être appliquées manuellement
+- Effacement de l'indicateur de changements non sauvegardés quand la fonctionnalité n'est pas activée
+
+:::note
+`enableLocalChangesBackup` est par défaut **true**, correspondant au comportement précédent. Définissez-le à `false` dans votre configuration de collection si vous voulez désactiver la sauvegarde locale des changements non sauvegardés.
+:::
+
+### Stockage et images
+- Nouvelles capacités de redimensionnement d'images
+- Remplacement de la bibliothèque de compression interne par compressor.js
+- Amélioration du message d'erreur quand Firebase Storage n'est pas activé
+
+### Données et performances
+- Correction des dates perdant le focus lors de la saisie
+- Correction du bug visuel des filtres enum de sélection
+- Correction des vues d'entités plein écran avec des caractères encodés dans leur ID
+
+---
+
+## Fonctionnalités IA pour auto-hébergé (PRO)
+
+FireCMS v3.1 apporte des fonctionnalités alimentées par l'IA aux utilisateurs PRO auto-hébergés qui étaient auparavant uniquement disponibles dans FireCMS Cloud.
+
+### Génération de collection par IA
+
+Vous pouvez maintenant utiliser l'IA pour générer et modifier des collections directement dans l'éditeur de collection. L'IA peut créer des schémas de collection à partir de descriptions en langage naturel, ajouter ou modifier des propriétés, et comprendre les relations avec vos collections existantes.
+
+Activez-le en passant un callback `generateCollection` au plugin de l'éditeur de collection :
+
+```typescript
+import {
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
+} from "@firecms/collection_editor";
+import { useFirebaseAuthController } from "@firecms/firebase";
+
+const authController = useFirebaseAuthController({ firebaseApp });
+
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController,
+    collectionInference: buildCollectionInference(firebaseApp),
+    getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 200),
+    generateCollection: buildCollectionGenerationCallback({
+        getAuthToken: authController.getAuthToken
+    })
+});
+```
+
+L'assistant `buildCollectionGenerationCallback` utilise le point de terminaison API FireCMS par défaut. Vous pouvez optionnellement fournir un point de terminaison personnalisé :
+
+```typescript
+generateCollection: buildCollectionGenerationCallback({
+    getAuthToken: authController.getAuthToken,
+    apiEndpoint: "https://your-custom-endpoint.com/collections/generate"
+})
+```
+
+### Chat IA DataTalk
+
+DataTalk vous permet d'interroger et de mettre à jour vos données Firestore en utilisant le langage naturel. Vous pouvez poser des questions sur vos données, créer des graphiques et des visualisations, et même modifier des entités par la conversation.
+
+Activez DataTalk dans votre application auto-hébergée :
+
+```typescript
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
+
+
+// Configurer DataTalk - activer uniquement quand l'utilisateur est connecté
+const userEmail = authController.user?.email;
+const dataTalkConfig = useBuildDataTalkConfig({
+    enabled: Boolean(userEmail),
+    firebaseApp,
+    userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
+    getAuthToken: authController.getAuthToken,
+    loadSamplePrompts: true
+    // apiEndpoint est par défaut https://api.firecms.co
+});
+
+// Ajouter DataTalk comme vue dans votre navigation
+const navigationController = useBuildNavigationController({
+    collections,
+    views: [
+        ...yourViews,
+        {
+            path: "datatalk/*",
+            name: "DataTalk",
+            group: "AI",
+            view: <DataTalkRoutes
+                getAuthToken={authController.getAuthToken}
+            />
+        }
+    ],
+    // ... autres configurations
+});
+
+// Enveloppez votre application avec le DataTalkProvider
+return (
+    <DataTalkProvider config={dataTalkConfig}>
+        <FireCMS navigationController={navigationController} /* ... */ >
+            {/* votre application */}
+        </FireCMS>
+    </DataTalkProvider>
+);
+```
+
+DataTalk lit automatiquement le schéma de votre collection depuis le contrôleur de navigation pour comprendre votre structure de données et fournir des réponses plus précises.
+
+:::note
+Les fonctionnalités IA nécessitent une licence FireCMS PRO valide. Les points de terminaison API s'authentifient en utilisant votre token d'authentification Firebase.
+:::
+
+---
+
+## Dépannage
+
+### `Cannot find namespace 'JSX'`
+Si vous voyez des erreurs TypeScript comme `error TS2503: Cannot find namespace 'JSX'`, mettez à jour vos annotations de type de retour de `JSX.Element` vers `React.ReactElement` ou supprimez simplement le type de retour explicite et laissez TypeScript l'inférer.
+
+### Styles non appliqués après migration
+- Vérifiez que votre `index.css` inclut les directives `@source` pour les fichiers de votre projet et `node_modules/@firecms`
+- Assurez-vous d'avoir supprimé les anciens `tailwind.config.js` et `postcss.config.js`
+- Nettoyez votre dossier `node_modules` et réinstallez : `rm -rf node_modules && npm install`
+
+### Erreurs de compilation après mise à jour des packages
+Assurez-vous que **tous** les packages `@firecms/*` sont sur la même version. Mélanger les packages v3.0 et v3.1 causera des erreurs de type et des erreurs d'exécution.

@@ -5,7 +5,8 @@ import {
     Properties,
     useAuthController,
     useNavigationController,
-    useSelectionController
+    useSelectionController,
+    useTranslation
 } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { Typography } from "@firecms/ui";
@@ -19,6 +20,8 @@ export function CollectionEditorImportDataPreview({
     properties: Properties,
     propertiesOrder: string[]
 }) {
+    const { t } = useTranslation();
+
 
     const authController = useAuthController();
     const navigation = useNavigationController();
@@ -46,8 +49,8 @@ export function CollectionEditorImportDataPreview({
 
     return <EntityCollectionTable
         title={<div>
-            <Typography variant={"subtitle2"}>Imported data preview</Typography>
-            <Typography variant={"caption"}>Entities with the same id will be overwritten</Typography>
+            <Typography variant={"subtitle2"}>{t("imported_data_preview")}</Typography>
+            <Typography variant={"caption"}>{t("entities_with_same_id_overwritten")}</Typography>
         </div>}
         tableController={{
             data: importConfig.entities,

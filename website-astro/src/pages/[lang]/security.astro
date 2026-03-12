@@ -1,0 +1,29 @@
+---
+// src/pages/[lang]/security.astro
+import Layout from "../../layouts/Layout.astro";
+import SecurityContent from "../../components/pages/SecurityContent.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+    const supportedLangs = Object.keys(languages).filter(l => l !== 'en');
+    return supportedLangs.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Security", url: "https://firecms.co/security" }
+];
+---
+
+<Layout
+        title={t('seo.security.title')}
+        description={t('seo.security.description')}
+        breadcrumbs={breadcrumbs}
+        lang={lang}
+>
+    <SecurityContent lang={lang} t={t} />
+</Layout>

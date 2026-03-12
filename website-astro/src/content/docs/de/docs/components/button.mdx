@@ -1,0 +1,71 @@
+---
+slug: de/docs/components/button
+title: Schaltfläche (Button)
+sidebar_label: Button
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Schaltflächen (Buttons) sind interaktive UI-Elemente, die es Benutzern ermöglichen, bestimmte Aktionen oder Ereignisse innerhalb einer Anwendung auszulösen.
+Sie spielen eine entscheidende Rolle in Benutzeroberflächen und bieten einen visuellen Hinweis für vom Benutzer initiierte Aktionen.
+Schaltflächen können in verschiedenen Kontexten verwendet werden, einschließlich Formularen zum Absenden, Dialogen zur Bestätigung
+und Symbolleisten für den schnellen Zugriff auf Funktionen. Durch Klicken auf eine Schaltfläche können Benutzer Daten übermitteln,
+neue Fenster öffnen, Befehle ausführen und vieles mehr. Das macht Schaltflächen zu einer wesentlichen Komponente für die Benutzerinteraktion.
+
+## Größe
+
+Die Eigenschaft `size` kann verwendet werden, um die Größe der Schaltfläche zu ändern.
+
+Schaltflächen sind in fünf Größen erhältlich: `small`, `medium`, `large`, `xl` und `2xl`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_size.tsx"/>
+
+## Variante
+
+Die Eigenschaft `variant` ändert den Stil der Schaltfläche. Mögliche Werte sind `filled`, `outlined` und `text`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/variant_button.tsx"/>
+
+## Farbe
+
+Die Eigenschaft `color` legt das Farbthema der Schaltfläche fest. Mögliche Werte sind `primary`, `secondary`, `text`, `error` und `neutral`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_color.tsx"/>
+
+## Deaktiviert
+
+Wenn `disabled` auf `true` gesetzt wird, wird die Schaltfläche deaktiviert und Interaktionen werden verhindert.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/disabled_button.tsx"/>
+
+## Start-Icon
+
+Mit der Eigenschaft `startIcon` können Sie ein Icon vor dem Inhalt der Schaltfläche einfügen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/start_icon_button.tsx"/>
+
+## Volle Breite
+
+Die Eigenschaft `fullWidth` bewirkt, dass die Schaltfläche über die gesamte Breite ihres Containers ausgedehnt wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/full_width_button.tsx"/>
+
+## Benutzerdefinierter Klassenname
+
+Die Eigenschaft `className` ermöglicht es Ihnen, benutzerdefinierte CSS-Klassen an die Schaltflächenkomponente zu übergeben.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/custom_class_name_button.tsx"/>
+
+## Button-Komponenten-Eigenschaften
+
+- `variant`: Definiert die Stilvariante der Schaltfläche. Optionen sind `"filled"`, `"outlined"` oder `"text"`. Standard ist `"filled"`.
+- `disabled`: Deaktiviert die Schaltfläche und verhindert Benutzerinteraktionen. Standard ist `false`.
+- `color`: Legt das Farbthema der Schaltfläche fest. Optionen sind `"primary"`, `"secondary"`, `"neutral"`, `"text"` oder `"error"`.
+- `size`: Gibt die Größe der Schaltfläche an. Optionen sind `"small"`, `"medium"`, `"large"`, `"xl"` oder `"2xl"`. Standard ist `"medium"`.
+- `startIcon`: Fügt ein Icon am Anfang des Schaltflächeninhalts hinzu.
+- `fullWidth`: Wenn `true`, dehnt sich die Schaltfläche aus, um die Breite des Containers auszufüllen. Standard ist `false`.
+- `className`: Zusätzliche Klassen, die auf das Schaltflächenelement angewendet werden sollen.
+- `onClick`: Handler-Funktion, die aufgerufen wird, wenn auf die Schaltfläche geklickt wird.
+- `children`: Definiert den Inhalt der Schaltfläche, typischerweise Text oder Elemente.
+- `component`: Benutzerdefinierte Komponente, die zum Rendern der Schaltfläche verwendet werden soll.
+- `type`: Das `type`-Attribut für die Schaltfläche, typischerweise `"button"`, `"submit"` oder `"reset"`. Standard ist `"button"`.

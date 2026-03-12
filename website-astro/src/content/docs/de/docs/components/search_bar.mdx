@@ -1,0 +1,37 @@
+---
+slug: de/docs/components/search_bar
+title: Suchleiste (SearchBar)
+sidebar_label: SearchBar
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die `SearchBar`-Komponente ist für die Implementierung von Suchfunktionen konzipiert. Sie unterstützt Funktionen wie Entprellen (Debouncing) der Sucheingabe, erweiterbare Eingabegrößen und die Anzeige des Ladezustands.
+
+## Verwendung
+
+Um die `SearchBar` zu verwenden, importieren Sie sie aus Ihren Komponenten und übergeben Sie die erforderlichen Props wie `onTextSearch`, `placeholder`, `expandable`, `large`, `autoFocus`, `disabled`, `loading` und `inputRef`.
+
+## Einfache Suchleiste
+
+Die grundlegende Verwendung der `SearchBar` mit minimaler Konfiguration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_basic.tsx"/>
+
+## Suchleiste mit Ladezustand
+
+Eine Darstellung der `SearchBar` mit Anzeige eines Ladeindikators.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_loading.tsx"/>
+
+## Erweiterbare Suchleiste
+
+Dieses Beispiel zeigt, wie man die `SearchBar` beim Fokussieren erweiterbar macht.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_expandable.tsx"/>
+
+## Große Suchleiste
+
+Zeigt eine größere Variante der `SearchBar`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_large.tsx"/>

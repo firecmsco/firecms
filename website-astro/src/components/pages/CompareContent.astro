@@ -1,0 +1,139 @@
+---
+// src/components/pages/CompareContent.astro
+import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+
+const { lang, t } = Astro.props;
+
+// Helper function or component for checkmark/dash (optional, but cleaner)
+// Or use inline SVGs directly as shown below
+const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-green-400 mx-auto"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"></path></svg>`;
+const dashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-surface-500 mx-auto"><path d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"></path></svg>`;
+
+const features = [
+    // Core & Deployment
+    { feature: t('compare.table.features.1'), community: checkIcon, pro: checkIcon, cloud: dashIcon },
+    { feature: t('compare.table.features.2'), community: dashIcon, pro: dashIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.3'), community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Pro builds on Community
+    { feature: t('compare.table.features.4'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.5'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+
+    // Core Features
+    { feature: t('compare.table.features.6'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.7'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.8'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.9'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.10'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.11'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.12'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.13'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.14'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.15'), community: checkIcon, pro: dashIcon, cloud: dashIcon }, // Assuming basic export is OSS
+
+    // PRO & Cloud Features
+    { feature: t('compare.table.features.16'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.17'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.18'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.19'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.20'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.21'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Marked as included in original Community list
+    { feature: t('compare.table.features.22'), community: t('compare.table.values.devManaged'), pro: t('compare.table.values.devManaged'), cloud: t('compare.table.values.devManaged') },
+    { feature: t('compare.table.features.23'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.24'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.25'), community: dashIcon, pro: checkIcon, cloud: checkIcon }, // Cloud includes PRO features equivalent
+    { feature: t('compare.table.features.26'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.27'), community: dashIcon, pro: dashIcon, cloud: checkIcon }, // Cloud only currently
+    { feature: t('compare.table.features.28'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+
+    // Customization & Extensibility
+    { feature: t('compare.table.features.29'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: t('compare.table.features.30'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: t('compare.table.features.31'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
+    { feature: t('compare.table.features.32'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.33'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.34'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.35'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.36'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Core components can be overridden
+    { feature: t('compare.table.features.37'), community: t('compare.table.values.devManaged'), pro: checkIcon, cloud: t('compare.table.values.enterpriseOnly') }, // UI/Config vs Code
+    { feature: t('compare.table.features.38'), community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Self-hosted advantage
+
+    // Security & Support
+    { feature: t('compare.table.features.39'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    { feature: t('compare.table.features.40'), community: dashIcon, pro: t('compare.table.values.enterpriseOnly'), cloud: t('compare.table.values.enterpriseOnly') },
+    { feature: t('compare.table.features.41'), community: t('compare.table.values.community'), pro: t('compare.table.values.priority'), cloud: t('compare.table.values.standardPriority') }, // Cloud Plus gets Standard
+    { feature: t('compare.table.features.42'), community: dashIcon, pro: checkIcon, cloud: t('compare.table.values.enterpriseOnly') },
+
+];
+---
+<main>
+    {/* Hero Section */}
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+        <!-- Background accents and subtle grid -->
+        <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+        <div class="pointer-events-none absolute inset-0 -z-10">
+            <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+        </div>
+
+        <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+            <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
+                <span class="text-sm font-medium">{t('compare.hero.badge')}</span>
+            </div>
+            <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+                {t('compare.hero.title')}
+            </h1>
+            <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+                {t('compare.hero.subtitle')}
+            </p>
+        </div>
+    </section>
+
+    {/* Comparison Table Section */}
+    <section class="relative isolate bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="relative rounded-xl ring-1 ring-inset ring-surface-800">
+                <table class="w-full table-auto divide-y divide-surface-800 border-collapse">
+                    <thead class="bg-surface-900/60 backdrop-blur supports-[backdrop-filter]:bg-surface-900/40 sticky top-20 sm:top-24 z-10">
+                    <tr>
+                        <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-white w-2/5 lg:w-1/3" set:html={t('compare.table.header.feature')}></th>
+                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6" set:html={t('compare.table.header.community')}></th>
+                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6" set:html={t('compare.table.header.pro')}></th>
+                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6" set:html={t('compare.table.header.cloud')}></th>
+                        {/* Optional: Add Enterprise Column if needed */}
+                        {/* <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-white w-1/5 lg:w-1/6">Enterprise <span class="block text-xs font-normal text-surface-400">(Cloud)</span></th> */}
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-surface-800 bg-surface-950/30">
+                    {features.map(item => (
+                            <tr class="hover:bg-surface-800/20 transition-colors">
+                                <td class="whitespace-normal py-4 pl-6 pr-3 text-sm font-medium text-white">{item.feature}</td>
+                                <td class="px-3 py-4 text-sm text-surface-400 text-center"><Fragment set:html={item.community} /></td>
+                                <td class="px-3 py-4 text-sm text-surface-400 text-center"><Fragment set:html={item.pro} /></td>
+                                <td class="px-3 py-4 text-sm text-surface-400 text-center"><Fragment set:html={item.cloud} /></td>
+                                {/* Optional: Add Enterprise Data Cell */}
+                                {/* <td class="px-3 py-4 text-sm text-surface-400 text-center">...</td> */}
+                            </tr>
+                    ))}
+                    </tbody>
+                    {/* Footer with CTAs */}
+                    <tfoot class="bg-surface-900/60 backdrop-blur supports-[backdrop-filter]:bg-surface-900/40 border-t border-surface-800">
+                    <tr>
+                        <th scope="row" class="py-7 pl-6 pr-3 text-left text-base font-semibold text-white">{t('compare.table.footer.getStarted')}</th>
+                        <td class="px-3 py-7 text-center">
+                            <a href="/developers" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.viewDocs')}</a>
+                        </td>
+                        <td class="px-3 py-7 text-center">
+                            <a href="/pricing" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.buyLicense')}</a>
+                        </td>
+                        <td class="px-3 py-7 text-center">
+                            <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark transition-colors">{t('compare.table.footer.startTrial')}</a>
+                        </td>
+                         {/* Optional: Add Enterprise CTA Cell */}
+                         {/* <td class="px-3 py-5 text-center">...</td> */}
+                     </tr>
+                     </tfoot>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>

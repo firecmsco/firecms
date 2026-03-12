@@ -1,4 +1,4 @@
-import { CollectionActionsProps, useAuthController, useNavigationController } from "@firecms/core";
+import { CollectionActionsProps, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -16,7 +16,7 @@ export function EditorCollectionAction({
     const collectionEditorController = useCollectionEditorController();
 
     const parentCollection = navigationController.getCollectionFromIds(parentCollectionIds);
-
+    const { t } = useTranslation();
     const canEditCollection = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
             user: authController.user,
@@ -26,7 +26,7 @@ export function EditorCollectionAction({
 
     const editorButton = <Tooltip
         asChild={true}
-        title={canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection"}>
+        title={canEditCollection ? t("edit_collection") : t("no_permissions_edit_collection")}>
         <IconButton
             size={"small"}
             color={"primary"}

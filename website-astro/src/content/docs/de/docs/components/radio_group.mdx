@@ -1,0 +1,32 @@
+---
+slug: de/docs/components/radio_group
+title: Optionsgruppe (Radio)
+sidebar_label: Radio Group
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die Optionsgruppe (Radio Group) ermöglicht es Benutzern, eine Option aus einem Set auszuwählen. Sie ist nützlich für Szenarien mit exklusiver Auswahl, bei denen nur eine Auswahl zulässig ist.
+Jedes Element der Optionsgruppe wird durch eine `RadioGroupItem`-Komponente repräsentiert und typischerweise von einer `Label`-Komponente umschlossen.
+
+## Verwendung
+
+Um `RadioGroup` und `RadioGroupItem` zu verwenden, importieren Sie sie aus Ihren Komponenten und strukturieren Sie Ihre Optionen mithilfe der `RadioGroup` als Container und `RadioGroupItem` für jede Option.
+
+## Einfache Optionsgruppe
+
+Ein grundlegendes Beispiel für eine Auswahlgruppe, das eine einfache Auswahl ermöglicht.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_basic.tsx"/>
+
+## Anpassen des Erscheinungsbilds von Optionsgruppenelementen
+
+Dieses Beispiel demonstriert, wie das Erscheinungsbild einzelner Optionsgruppenelemente (Radio Group Items) angepasst wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_custom.tsx"/>
+
+## Deaktivierte Optionsgruppe
+
+Zeigt, wie die gesamte Optionsgruppe oder einzelne Elemente darin deaktiviert werden.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_disabled.tsx"/>

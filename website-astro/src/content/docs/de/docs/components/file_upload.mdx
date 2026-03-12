@@ -1,0 +1,31 @@
+---
+slug: de/docs/components/file_upload
+title: Datei-Upload (FileUpload)
+sidebar_label: File Upload
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die File Upload-Komponente ist dafür konzipiert, das einfache Drag-and-Drop von Dateien sowie die Dateiauswahl über das Dialogfenster zu handhaben. Sie unterstützt Funktionen wie Einschränkung des Dateityps, maximale Dateigröße, benutzerdefinierte Titel und Beschreibungen.
+
+## Verwendung
+
+Um `FileUpload` zu verwenden, importieren Sie es aus Ihren Komponenten und übergeben Sie die erforderlichen Props einschließlich `accept`, `onFilesAdded` und optional `onFilesRejected`, `maxSize`, `disabled`, `maxFiles`, `title`, `uploadDescription`, `preventDropOnDocument` und `size`.
+
+## Einfacher Datei-Upload
+
+Ein einfaches Datei-Upload-Beispiel mit minimaler Konfiguration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_basic.tsx"/>
+
+## Datei-Upload mit benutzerdefinierten Typen und Größen
+
+Demonstriert den Datei-Upload mit Einschränkungen bei Dateitypen und -größen sowie benutzerdefinierten Nachrichten.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_custom.tsx"/>
+
+## Deaktivierter Datei-Upload
+
+Veranschaulicht, wie die Datei-Upload-Funktion deaktiviert wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/file_upload/file_upload_disabled.tsx"/>

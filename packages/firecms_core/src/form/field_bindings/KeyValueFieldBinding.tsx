@@ -22,6 +22,7 @@ import {
 import { getDefaultValueForDataType, getIconForProperty } from "../../util";
 import { useCustomizationController } from "../../hooks";
 import { getIn } from "@firecms/formex";
+import { useTranslation } from "../../hooks/useTranslation";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -54,6 +55,7 @@ export function KeyValueFieldBinding({
         throw Error(`Your property ${propertyKey} needs to have the 'keyValue' prop in order to use this field binding`);
     }
 
+    const { t } = useTranslation();
     const initialValues = getIn(context.formex.initialValues, propertyKey);
 
     const mapFormView = <MapEditView value={value}
@@ -103,6 +105,7 @@ function MapEditView<T extends Record<string, any>>({
                                                         fieldName,
                                                         disabled
                                                     }: MapEditViewParams<T>) {
+    const { t } = useTranslation();
     const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
         Object.keys(initialValue ?? {}).map((key) => [getRandomId(), {
             key,
@@ -230,7 +233,7 @@ function MapEditView<T extends Record<string, any>>({
                     }]]);
                 }
                 }>
-            {fieldName ? `Add to ${fieldName}` : "Add"}
+            {fieldName ? t("add_to_field", { fieldName }) : t("add_entry")}
         </Button>
 
     </div>;
@@ -261,12 +264,13 @@ function MapKeyValueRow<T extends Record<string, any>>({
 }) {
 
     const { locale } = useCustomizationController();
+    const { t } = useTranslation();
 
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
             return <TextField
                 key={dataType}
-                placeholder={"value"}
+                placeholder={t("value")}
                 value={entryValue}
                 type={dataType === "number" ? "number" : "text"}
                 size={"medium"}
@@ -325,7 +329,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <ArrayContainer value={entryValue}
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
-                                addLabel={fieldKey ? `Add to ${fieldKey}` : "Add"}
+                                addLabel={fieldKey ? t("add_to_field", { fieldName: fieldKey }) : t("add_entry")}
                                 size={"small"}
                                 disabled={disabled || !fieldKey}
                                 canAddElements={true}
@@ -370,7 +374,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         } else {
             return <Typography
                 variant={"caption"}>
-                {`Data type ${dataType} not supported yet`}
+                {t("data_type_not_supported", { dataType })}
             </Typography>;
         }
     }
@@ -386,7 +390,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <div className="w-[300px] max-w-[30%]">
                     <TextField
                         value={fieldKey}
-                        placeholder={"key"}
+                        placeholder={t("key")}
                         disabled={disabled || (entryValue !== undefined && entryValue !== null && entryValue !== "")}
                         size={"medium"}
                         onChange={(event) => {
@@ -404,17 +408,17 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         </IconButton>}
                     >
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                                  onClick={() => doUpdateDataType("string")}>{t("string")}</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                                  onClick={() => doUpdateDataType("number")}>{t("number")}</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                                  onClick={() => doUpdateDataType("boolean")}>{t("boolean")}</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                                  onClick={() => doUpdateDataType("date")}>{t("date")}</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                                  onClick={() => doUpdateDataType("map")}>{t("map")}</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("array")}>array</MenuItem>
+                                  onClick={() => doUpdateDataType("array")}>{t("array")}</MenuItem>
                     </Menu>
 
                     <IconButton aria-label="delete"
@@ -446,6 +450,7 @@ function ArrayKeyValueRow<T>({
 }) {
 
     const { locale } = useCustomizationController();
+    const { t } = useTranslation();
     const [selectedDataType, setSelectedDataType] = useState<DataType>(getDataType(value) ?? "string");
 
     function doUpdateDataType(dataType: DataType) {
@@ -487,7 +492,7 @@ function ArrayKeyValueRow<T>({
                                            }}/>;
         } else if (dataType === "array") {
             return <Typography variant={"caption"}>
-                Arrays of arrays are not supported.
+                {t("arrays_of_arrays_not_supported")}
             </Typography>;
         } else if (dataType === "map") {
             return <div className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
@@ -499,7 +504,7 @@ function ArrayKeyValueRow<T>({
         } else {
             return <Typography
                 variant={"caption"}>
-                {`Data type ${dataType} not supported yet`}
+                {t("data_type_not_supported", { dataType })}
             </Typography>;
         }
     }
@@ -519,15 +524,15 @@ function ArrayKeyValueRow<T>({
                         <ArrowDropDownIcon/>
                     </IconButton>}>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                              onClick={() => doUpdateDataType("string")}>{t("string")}</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                              onClick={() => doUpdateDataType("number")}>{t("number")}</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                              onClick={() => doUpdateDataType("boolean")}>{t("boolean")}</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                              onClick={() => doUpdateDataType("map")}>{t("map")}</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                              onClick={() => doUpdateDataType("date")}>{t("date")}</MenuItem>
                 </Menu>
 
             </Typography>

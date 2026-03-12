@@ -45,7 +45,8 @@ import {
     useFireCMSContext,
     useLargeLayout,
     useNavigationController,
-    useSideEntityController
+    useSideEntityController,
+    useTranslation
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -160,6 +161,7 @@ export const EntityCollectionView = React.memo(
     ) {
 
         const context = useFireCMSContext();
+        const { t } = useTranslation();
         const navigation = useNavigationController();
         const breadcrumbs = useBreadcrumbsController();
         const fullPath = fullPathProp ?? collectionProp.path;
@@ -696,11 +698,13 @@ export const EntityCollectionView = React.memo(
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
             const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPath, entity) : true;
-            const actions: EntityAction[] = [editEntityAction];
+            const actions: EntityAction[] = [
+                { ...editEntityAction, name: t("edit") }
+            ];
             if (createEnabled)
-                actions.push(copyEntityAction);
+                actions.push({ ...copyEntityAction, name: t("copy") });
             if (deleteEnabled)
-                actions.push(deleteEntityAction);
+                actions.push({ ...deleteEntityAction, name: t("delete") });
             if (customEntityActions)
                 return mergeEntityActions(actions, customEntityActions);
             return actions;
@@ -919,16 +923,16 @@ export const EntityCollectionView = React.memo(
                         deletedEntities={deletedEntities}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                     />
                 ) : viewMode === "cards" ? (
@@ -945,16 +949,16 @@ export const EntityCollectionView = React.memo(
                         size={cardSize}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                     />
                 ) : (
@@ -983,16 +987,16 @@ export const EntityCollectionView = React.memo(
                         textSearchEnabled={textSearchEnabled}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                         hoverRow={hoverRow}
                         inlineEditing={checkInlineEditing()}
@@ -1163,11 +1167,12 @@ function EntityIdHeaderWidget({
     const [searchString, setSearchString] = React.useState("");
     const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.id));
     const sideEntityController = useSideEntityController();
+    const { t } = useTranslation();
 
     const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;
 
     return (
-        <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>
+        <Tooltip title={!openPopup ? t("find_by_id") : undefined} asChild={false}>
             <Popover
                 open={openPopup}
                 onOpenChange={setOpenPopup}
@@ -1203,7 +1208,7 @@ function EntityIdHeaderWidget({
                         <div className="flex p-2 w-full gap-2">
                             <input
                                 autoFocus={openPopup}
-                                placeholder={"Find entity by ID"}
+                                placeholder={t("find_entity_by_id")}
                                 // size={"small"}
                                 onChange={(e) => {
                                     setSearchString(e.target.value);

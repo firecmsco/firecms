@@ -17,7 +17,7 @@ import {
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
-import { useAuthController, useCustomizationController } from "../hooks";
+import { useAuthController, useCustomizationController, useTranslation } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
@@ -213,6 +213,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
             formexFieldProps: FormexFieldProps<T, any>
         }) {
 
+    const { t } = useTranslation();
     const { plugins } = useCustomizationController();
 
     const customFieldProps: any = property.customProps;
@@ -291,7 +292,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <Typography variant={"caption"} className={"ml-3.5"}>
-                    This value has been updated elsewhere
+                    {t("value_updated_elsewhere")}
                 </Typography>}
 
         </ErrorBoundary>);

@@ -1,0 +1,180 @@
+---
+slug: it/docs/pro/user_management
+title: Gestione utenti
+description: Aggiungi il controllo accessi basato su ruoli al tuo pannello admin Firebase con il plugin User Management di FireCMS PRO.
+---
+
+![user_management.png](/img/user_management.png)
+
+Controlla chi può accedere al tuo **pannello admin Firebase** e cosa può fare. Il Plugin User Management fornisce un sistema completo di **controllo accessi basato su ruoli (RBAC)** per il tuo progetto FireCMS.
+
+:::tip[Perché usare il Plugin User Management?]
+Costruire autenticazione e permessi da zero richiede tempo ed è soggetto a errori. Questo plugin ti offre:
+- **CRUD utenti**: Crea, modifica ed elimina utenti CMS direttamente nell'UI
+- **Definizioni ruoli**: Definisci permessi granulari (Admin, Editor, Viewer, o personalizzati)
+- **Permessi per collezione**: Controlla chi può leggere, creare, modificare o eliminare in ogni collezione
+- **Integrazione Firestore**: Tutti i dati utenti/ruoli memorizzati in modo sicuro nel tuo database **Firestore**
+:::
+
+
+## Installazione
+
+Prima, assicurati di aver installato le dipendenze necessarie.
+
+```sh
+yarn add @firecms/user_management
+```
+
+
+## Configurazione
+
+Il plugin richiede diverse configurazioni, inclusi i percorsi per memorizzare dati utenti e ruoli.
+
+La configurazione predefinita del plugin verrà salvata nel tuo database sotto il percorso `__FIRECMS/config`, ma puoi personalizzare questo percorso.
+
+Se stai usando Firestore, assicurati di configurare le regole Firestore per consentire al plugin di leggere e scrivere nei percorsi specificati.
+
+```
+match /{document=**} {
+  allow read: if isFireCMSUser();
+  allow write: if isFireCMSUser();
+}
+
+function isFireCMSUser(){
+  return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+}
+```
+
+
+### Parametri User Management
+
+Di seguito sono riportati i parametri configurabili:
+
+- **firebaseApp**: L'app Firebase da usare per la gestione utenti.
+- **usersPath**: Percorso in Firestore dove vengono memorizzate le configurazioni utenti. Default `__FIRECMS/config/users`.
+- **rolesPath**: Percorso in Firestore dove vengono memorizzate le configurazioni ruoli. Default `__FIRECMS/config/roles`.
+- **allowDefaultRolesCreation**: Se non ci sono ruoli nel database, mostra un pulsante per creare ruoli predefiniti. Default `true`.
+
+### Uso dell'hook
+
+L'hook principale per inizializzare la funzionalità del plugin è `useBuildUserManagement`:
+
+```jsx
+
+import {useBuildUserManagement} from "@firecms/user_management";
+
+const userManagement = useBuildUserManagement({
+    dataSourceDelegate: firestoreDelegate,
+    usersPath: "__FIRECMS/config/users",
+    rolesPath: "__FIRECMS/config/roles",
+    allowDefaultRolesCreation: true,
+});
+```
+
+## Configurazione del Plugin
+
+Per integrare la gestione utenti in FireCMS, usa la funzione `useUserManagementPlugin` e passa il plugin risultante nella configurazione FireCMS:
+
+```jsx
+import {FireCMS} from "@firecms/core";
+
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
+
+function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        usersPath: "__FIRECMS/config/users",
+        rolesPath: "__FIRECMS/config/roles",
+        allowDefaultRolesCreation: true,
+        includeCollectionConfigPermissions: true,
+    });
+
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        disabled: userManagement.loading,
+        authController,
+        authenticator: userManagement.authenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+
+    const plugins = [userManagementPlugin];
+
+    const navigationController = useBuildNavigationController({
+        collections,
+        views,
+        adminViews: userManagementAdminViews,
+        collectionPermissions: userManagement.collectionPermissions,
+        authController,
+        dataSourceDelegate: firestoreDelegate,
+        plugins
+    });
+
+  return (
+      // ..componenti e provider
+    <FireCMS
+        // ...altre configurazioni
+        navigationController={navigationController}
+    />
+  );
+}
+
+export default App;
+```
+
+## Aggiungere le viste di User Management
+
+```jsx
+import {userManagementAdminViews} from "@firecms/user_management";
+
+const navigationController = useBuildNavigationController({
+    collections,
+    views,
+    adminViews: userManagementAdminViews,
+    collectionPermissions: userManagement.collectionPermissions,
+    authController,
+    dataSourceDelegate: firestoreDelegate
+});
+```
+
+## Autenticazione degli utenti
+
+Il plugin fornisce una funzione `authenticator` che puoi usare per autenticare gli utenti in base ai loro ruoli:
+
+```jsx
+const {
+    authLoading,
+    canAccessMainView,
+    notAllowedError
+} = useValidateAuthenticator({
+    disabled: userManagement.loading,
+    authController,
+    authenticator: userManagement.authenticator,
+    dataSourceDelegate: firestoreDelegate,
+    storageSource
+});
+```
+
+## Proprietà di `userManagement`
+
+L'oggetto `userManagement` include le seguenti proprietà:
+
+- **`loading`**: Indica se i dati vengono caricati.
+- **`users`**: Array di oggetti utente.
+- **`saveUser`**: Funzione per persistere un utente.
+- **`deleteUser`**: Funzione per eliminare un utente.
+- **`roles`**: Array di oggetti ruolo.
+- **`saveRole`**: Funzione per persistere un ruolo.
+- **`deleteRole`**: Funzione per eliminare un ruolo.
+- **`isAdmin`**: Opzionale. Booleano per verificare se l'utente connesso è un Admin.
+- **`collectionPermissions`**: Un builder di permessi che definisce quali operazioni può eseguire un utente in una collezione.
+- **`defineRolesFor`**: Funzione per definire i ruoli per un dato utente.
+- **`authenticator`**: Opzionale. Callback autenticatore costruita dalla configurazione corrente della gestione utenti.
+- **`rolesError`**: Opzionale. Contiene qualsiasi errore verificatosi durante il caricamento dei ruoli.
+- **`usersError`**: Opzionale. Contiene qualsiasi errore verificatosi durante il caricamento degli utenti.

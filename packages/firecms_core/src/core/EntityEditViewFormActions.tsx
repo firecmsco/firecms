@@ -28,7 +28,8 @@ import {
     useCustomizationController,
     useFireCMSContext,
     useSideEntityController,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "../hooks";
 import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
@@ -56,6 +57,7 @@ export function EntityEditViewFormActions({
     const sideEntityController = useSideEntityController();
     const sideDialogContext = useSideDialogContext();
     const customizationController = useCustomizationController();
+    const { t } = useTranslation();
 
     const entityActions = useMemo((): EntityAction[] => {
         const customEntityActions = (collection.entityActions ?? [])
@@ -90,7 +92,8 @@ export function EntityEditViewFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         })
         : buildSideActions({
             savingError,
@@ -106,7 +109,8 @@ export function EntityEditViewFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         });
 }
 
@@ -123,8 +127,9 @@ type ActionsViewProps<M extends object> = {
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
     navigateBack: () => void;
-    formContext: FormContext,
+    formContext: FormContext;
     formex: FormexController<any>;
+    t: any;
 };
 
 function buildBottomActions<M extends object>({
@@ -141,7 +146,8 @@ function buildBottomActions<M extends object>({
                                                   openEntityMode,
                                                   navigateBack,
                                                   formContext,
-                                                  formex
+                                                  formex,
+                                                  t
                                               }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -191,7 +197,7 @@ function buildBottomActions<M extends object>({
                 color="primary"
                 disabled={disabled || formex.isSubmitting}
                 type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
         <Button variant={canClose ? "text" : "filled"}
                 color="primary"
@@ -200,9 +206,9 @@ function buildBottomActions<M extends object>({
                 onClick={() => {
                     sideDialogContext.setPendingClose(false);
                 }}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </Button>
         {canClose && <LoadingButton variant="filled"
                                     color="primary"
@@ -212,9 +218,9 @@ function buildBottomActions<M extends object>({
                                     onClick={() => {
                                         sideDialogContext.setPendingClose?.(true);
                                     }}>
-            {status === "existing" && "Save and close"}
-            {status === "copy" && "Create copy and close"}
-            {status === "new" && "Create and close"}
+            {status === "existing" && t("save_and_close")}
+            {status === "copy" && t("create_copy_and_close")}
+            {status === "new" && t("create_and_close")}
         </LoadingButton>}
     </DialogActions>;
 }
@@ -233,7 +239,8 @@ function buildSideActions<M extends object>({
                                                 openEntityMode,
                                                 navigateBack,
                                                 formContext,
-                                                formex
+                                                formex,
+                                                t
                                             }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -249,13 +256,13 @@ function buildSideActions<M extends object>({
                        onClick={() => {
                            sideDialogContext.setPendingClose?.(false);
                        }}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </LoadingButton>
 
         <Button fullWidth={true} variant="text" disabled={disabled || formex.isSubmitting} type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
 
         {pluginActions}

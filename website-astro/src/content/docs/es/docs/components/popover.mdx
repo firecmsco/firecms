@@ -1,0 +1,37 @@
+---
+slug: es/docs/components/popover
+title: Popover (Aviso emergente)
+sidebar_label: Popover
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente Popover te permite hacer flotar un panel de contenido anclado a otro elemento, perfecto para menús contextuales, tarjetas al pasar el cursor (hover cards), información sobre herramientas (tooltips) y mucho más.
+
+## Uso
+
+Para usar `Popover`, impórtalo desde tus componentes y pasa las props requeridas `trigger` (disparador) y las opciones `open` (abierto), `onOpenChange` (al cambiar apertura), `side` (lado), `sideOffset` (desplazamiento lateral), `align` (alinear), `alignOffset` (desplazamiento de alineación), `arrowPadding` (relleno de flecha), `sticky` (pegajoso), `hideWhenDetached` (ocultar cuando se separa), `avoidCollisions` (evitar colisiones), `enabled` (habilitado) y `modal`.
+
+## Popover básico
+
+Un popover simple que se muestra al hacer clic en el elemento disparador.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_basic.tsx"/>
+
+## Popover con alineación
+
+Mostrando cómo alinear el contenido del popover en relación con el elemento disparador.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_align.tsx"/>
+
+## Popover controlado
+
+Demuestra el uso de las props `open` y `onOpenChange` para un comportamiento controlado.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_controlled.tsx"/>
+
+## Uso con estilo personalizado
+
+Ilustrando el estilo personalizado aplicado al contenido del popover.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_styled.tsx"/>

@@ -23,6 +23,7 @@ import {
     PropertyOrBuilder,
     stripCollectionPath,
     useLargeLayout,
+    useTranslation,
 } from "@firecms/core";
 import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
 import { SamplePrompt } from "../types/data_enhancement_controller";
@@ -43,6 +44,7 @@ export function FormEnhanceAction({
 
     const [loading, setLoading] = React.useState(false);
     const dataEnhancementController = useDataEnhancementController();
+    const { t } = useTranslation();
 
     const [samplePrompts, setSamplePrompts] = React.useState<SamplePrompt[] | undefined>(undefined);
     const [instructions, setInstructions] = React.useState<string>("");
@@ -58,7 +60,7 @@ export function FormEnhanceAction({
         loadingPrompts.current = true;
         const prompts = status === "new"
             ? (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts
-            : getPromptsForExistingEntities(collection.properties);
+            : getPromptsForExistingEntities(collection.properties, t);
 
         const recentPromptsFromStorage = getRecentPromptsFromStorage(storageKey);
         const recentPrompts = recentPromptsFromStorage.map(prompt => prompt.prompt);
@@ -127,7 +129,7 @@ export function FormEnhanceAction({
                 disabled={loading || disabled}>
                 {!loading && <AIIcon size={"small"} />}
                 {loading && <CircularProgress size={"small"} />}
-                Autofill
+                {t("autofill")}
             </Button>}>
 
             <MenuItem className={"py-4"}
@@ -135,7 +137,7 @@ export function FormEnhanceAction({
                     enhance();
                 }}>
                 <AIIcon size={"small"} />
-                Autofill based on the current content
+                {t("autofill_current_content")}
             </MenuItem>
 
             <Separator orientation={"horizontal"} className={"mt-2"} />
@@ -182,7 +184,7 @@ export function FormEnhanceAction({
                     onFocus={(event) => {
                         event.stopPropagation();
                     }}
-                    placeholder={noIdSet ? "Please set an ID first" : "...or provide instructions"}
+                    placeholder={noIdSet ? t("set_id_first") : t("provide_instructions")}
                     onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Enter" && !e.shiftKey) {
@@ -233,7 +235,7 @@ export interface EnhanceDialogProps {
     samplePrompts?: string[];
 }
 
-function getPromptsForExistingEntities(properties: PropertiesOrBuilders): SamplePrompt[] {
+function getPromptsForExistingEntities(properties: PropertiesOrBuilders, t: any): SamplePrompt[] {
 
     const multilineProperties = Object.values(properties).filter((p: PropertyOrBuilder) => {
         if (isPropertyBuilder(p)) {
@@ -247,11 +249,11 @@ function getPromptsForExistingEntities(properties: PropertiesOrBuilders): Sample
         : undefined;
 
     const prompts = [
-        "Fill the missing fields",
-        "Translate the missing content"
+        t("fill_missing_fields"),
+        t("translate_missing_content")
     ];
     if (multilinePrompt) {
-        prompts.push(`Add 2 paragraphs to '${multilinePrompt.name}'`);
+        prompts.push(t("add_2_paragraphs_to", { property: multilinePrompt.name }));
     }
     return prompts.map(p => ({
         prompt: p,

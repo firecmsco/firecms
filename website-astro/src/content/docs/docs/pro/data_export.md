@@ -8,7 +8,7 @@ description: Export your Firestore collections to JSON or CSV with the FireCMS D
 
 Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
 
-:::tip Common use cases
+:::tip[Common use cases]
 - **Backups**: Create regular snapshots of your data
 - **Migrations**: Move data between environments or databases
 - **Reporting**: Feed data into spreadsheets or BI tools

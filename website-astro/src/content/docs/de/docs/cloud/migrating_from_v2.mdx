@@ -1,0 +1,235 @@
+---
+slug: de/docs/cloud/migrating_from_v2
+title: Migration von FireCMS 2.0 zu FireCMS Cloud
+sidebar_label: Von FireCMS 2.0 zu FireCMS Cloud migrieren
+description: Upgraden Sie auf das moderne **React-basierte Firebase CMS**. Migrieren Sie Ihr Admin-Panel zu FireCMS Cloud für bessere Leistung und mehr Funktionen.
+---
+
+:::important
+Diese Migrationsanleitung gilt für die Migration von FireCMS 2.0 zu FireCMS Cloud
+:::
+
+FireCMS 3.0 ist ein Major-Release mit vielen Änderungen. Diese Seite
+beschreibt die wichtigsten Änderungen und wie Sie von FireCMS 2.0 migrieren.
+
+
+## Ein Projekt auf app.firecms.co erstellen
+
+FireCMS Cloud erfordert die Erstellung eines Projekts auf [app.firecms.co](https://app.firecms.co).
+
+Die neue Version basiert auf einem Backend, mit dem Sie Ihre
+Kollektionen und Schemas verwalten können. Die Endbenutzer können jetzt Kollektionen ändern,
+daher verwenden wir einen zentralisierten Service zum Speichern der Konfiguration.
+
+Dadurch müssen Sie **Ihre Firebase-Projektanmeldedaten nicht angeben**,
+da der Service direkt auf Ihr Projekt zugreifen kann. Sie müssen nur
+die **Projekt-ID** angeben.
+
+## Ein FireCMS Cloud-Projekt in einem neuen Ordner initialisieren
+
+Es empfiehlt sich, ein neues Projekt von Grund auf zu erstellen und dann Ihre Kollektionen und Ansichten in den
+neuen Ordner zu migrieren.
+
+Führen Sie dazu folgendes aus:
+```
+npx create-firecms-app
+```
+und erstellen Sie ein neues Projekt in einem neuen Ordner.
+
+Die CLI initialisiert ein leeres Projekt mit dem neuen Format und allen Konfigurationsdateien,
+sodass Sie sich keine Gedanken darüber machen müssen.
+
+
+## Kollektionen ins neue Format migrieren
+
+Trotz des neuen Formats zielt FireCMS darauf ab, Benutzern die Migration bestehender Apps mit minimalen
+Änderungen zu ermöglichen. Die Kollektionen können jetzt sowohl im FireCMS-Backend gespeichert als auch in
+Code definiert werden wie bisher.
+
+Außerdem können Sie Kollektionen an beiden Orten definieren und festlegen, ob die im Code definierten Kollektionen
+vom Benutzer geändert werden können oder nicht.
+
+Bitte beachten Sie, dass im Code definierte Eigenschaften nicht vom Benutzer bearbeitbar sind, es sei denn, Sie
+markieren sie explizit als `editable: true`.
+
+## package.json
+
+Als Referenz sieht die `package.json`-Datei eines neuen FireCMS Cloud-Projekts wie folgt aus:
+
+```json
+{
+  "name": "my-firecms-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5001",
+    "build": "vite build",
+    "serve": "vite preview --port 5001",
+    "deploy": "run-s build && firecms deploy --project=ihre-projekt-id"
+  },
+  "dependencies": {
+    "@firecms/cloud": "^3.0.0",
+    "firebase": "^12.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6"
+  }
+}
+```
+
+
+## Neues Format
+
+Da es jetzt möglich ist, FireCMS in unserem gehosteten Service zu deployen, muss die Ausgabe
+Ihres Projekts in einem bestimmten Format vorliegen.
+
+Die Datei `index.ts` sollte ein `FireCMSAppConfig`-Objekt exportieren, das wie folgt definiert ist:
+
+```typescript
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
+export type FireCMSAppConfig = {
+
+    /**
+     * Version des Anpassungsschemas.
+     */
+    version: "1";
+
+    /**
+     * Liste der im CMS zugeordneten Kollektionen.
+     * Jeder Eintrag bezieht sich auf eine Kollektion in der Root-Datenbank.
+     * Jeder der Navigationseinträge in diesem Feld
+     * generiert einen Eintrag im Hauptmenü.
+     */
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+
+    /**
+     * Benutzerdefinierte zusätzliche Ansichten, die vom Entwickler erstellt und der Haupt-
+     * navigation hinzugefügt wurden.
+     */
+    views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * Liste benutzerdefinierter Formularfelder für den CMS.
+     * Sie können den Schlüssel verwenden, um auf das benutzerdefinierte Feld in der
+     * `propertyConfig`-Eigenschaft einer Kollektion zu verweisen.
+     */
+    propertyConfigs?: PropertyConfig[];
+
+    /**
+     * Liste zusätzlicher benutzerdefinierter Ansichten für Entities.
+     * Sie können den Schlüssel verwenden, um auf die benutzerdefinierte Ansicht in der
+     * `entityViews`-Eigenschaft einer Kollektion zu verweisen.
+     *
+     * Sie können eine Entity-Ansicht auch über die UI definieren.
+     */
+    entityViews?: EntityCustomView[];
+
+}
+```
+
+Lassen Sie uns die verschiedenen Felder aufschlüsseln:
+
+## Kollektionskonfiguration
+
+Kollektionen haben minimale Änderungen erfahren. Wenn Sie keine benutzerdefinierten Komponenten definiert haben, sollte es
+einfach sein, Ihre Kollektionen an das neue Format anzupassen.
+
+- Sie müssen eine `id` für jede Kollektion definieren, die typischerweise dieselbe wie der `path` sein kann.
+
+- Die Eigenschaft `views` wurde in `entityViews` umbenannt, da sie auf Entities angewendet werden.
+
+- Bei `AdditionalFieldDelegate` wurde die Eigenschaft `id` in `key` umbenannt.
+
+Um Ihre Kollektionen zu migrieren, exportieren Sie sie einfach in Ihrer `index.ts`-Datei:
+
+```typescript
+import { FireCMSAppConfig } from "@firecms/cloud";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: async (props) => {
+        return ([
+            productsCollection
+        ]);
+    },
+    propertyConfigs: [
+        colorPropertyConfig
+    ],
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+```
+
+- Die `views`-Eigenschaft wurde in `entityViews` umbenannt, da sie auf Entities angewendet werden.
+- Die `path`-Eigenschaft von Ansichten wurde in `key` umbenannt, für Konsistenz mit dem Rest der Bibliothek.
+
+
+## Benutzerdefinierte Komponenten migrieren (MUI)
+
+FireCMS 3.0 basiert auf `tailwindcss` statt auf `mui`.
+
+MUI war großartig für die ersten Versionen von FireCMS, wurde aber zu einem großen Performance-Engpass
+und war schwer anzupassen.
+
+Die neue Version von FireCMS hat fast 50 neue Komponenten eingebaut, die mit TailwindCSS implementiert wurden und
+die Material-UI-Komponenten gut imitieren. Sie werden ermutigt, Ihre benutzerdefinierten Komponenten
+in das neue Format zu migrieren.
+
+Wenn Sie MUI jedoch weiterhin verwenden möchten: Sie können die alten Komponenten weiterhin verwenden, müssen aber
+das `mui`-Paket manuell installieren.
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+oder
+
+```bash
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+Wenn Sie MUI-Icons benötigen, führen Sie folgendes aus:
+
+```bash
+npm install @mui/icons-material
+```
+
+oder
+
+```bash
+yarn add @mui/icons-material
+```
+
+### Komponenten ohne Äquivalent:
+- `Box`: Die Box-Komponente ist nur ein von MUI verwendeter Wrapper zum Anwenden von Styles. Sie können stattdessen ein `div` verwenden.
+Tipp: ChatGPT ist gut darin, Box-Komponenten in divs mit Tailwind-Klassen zu konvertieren.
+- `Link`: Verwenden Sie stattdessen `a`.
+- `FormControl`
+
+### Komponenten mit geändertem Verhalten:
+- `Menu` und `MenuItem`: Menüelemente haben keine ID mehr. Sie können eine `onClick`-Eigenschaft pro Menüelement hinzufügen.
+- `Select` verwendet kein `labelId` mehr. Fügen Sie einfach das Label als Komponente in `label` ein.
+  - `SelectChangeEvent` ist jetzt `ChangeEvent<HTMLSelectElement>`
+- `CircularProgress` Größe ist ein String statt einer Zahl. Sie können `size="small"` oder `size="large"` verwenden.
+
+### Deployment
+
+FireCMS 3.0 wird jetzt in unserem eigenen Service deployed und ist über [app.firecms.co](https://app.firecms.co) erreichbar.
+
+Sie können es weiterhin in Ihrem eigenen Firebase-Projekt deployen. Derselbe Build, den Sie zum lokalen Ausführen des
+CMS generieren, kann auf Firebase Hosting oder einem anderen Hosting-Service deployed werden.

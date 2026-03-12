@@ -1,0 +1,24 @@
+---
+slug: de/docs/components/collapse
+title: Einklappen (Collapse)
+sidebar_label: Collapse
+---
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Collapse-Komponenten werden verwendet, um Inhalte ein- und auszublenden. Für den Übergang wird eine React-Animation verwendet. Verwenden Sie sie, um die Sichtbarkeit von Inhalten umzuschalten.
+
+## Verwendung
+
+Um `Collapse` zu verwenden, müssen Sie es importieren, untergeordnete Elemente (children) übergeben, die innerhalb der Collapse-Komponente angezeigt werden sollen, und den geöffneten Zustand (open state) steuern. Optional können Sie auch die Dauer der Animation anpassen.
+
+## Einfaches Einklappen
+
+Ein einfaches Beispiel für die Verwendung der Collapse-Komponente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/collapse/collapse_basic.tsx"/>
+
+## Einklappen mit benutzerdefinierter Dauer
+
+Veranschaulicht, wie eine benutzerdefinierte Dauer für die Einklapp-Animation verwendet wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/collapse/collapse_custom_duration.tsx"/>

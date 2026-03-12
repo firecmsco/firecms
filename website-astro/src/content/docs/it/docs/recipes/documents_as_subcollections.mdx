@@ -1,0 +1,55 @@
+---
+slug: it/docs/recipes/documents_as_subcollections
+title: Collezioni root dinamiche
+sidebar_label: Collezioni root dinamiche
+description: Impara come generare dinamicamente la navigazione e le collezioni dai documenti del database in FireCMS.
+---
+
+Costruiamo un esempio più complesso dove la navigazione principale viene **caricata dinamicamente** dal database. Useremo la collezione `units` come quella per generare il resto della navigazione.
+
+Per questo esempio avremo `Units` e `Lessons` come tipi di contenuto principali — immagina di modellare la struttura per un corso.
+
+Nella collezione units creeremo un documento per ogni unità:
+
+![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+
+E ciascuno di quei documenti genererà una nuova voce di navigazione:
+
+![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+
+
+### Dichiara la collezione principale
+
+Definiamo la collezione `units` come quella principale:
+
+:::note
+Implementeremo un paio di callback sul salvataggio e l'eliminazione delle entità per aggiornare la navigazione quando i dati cambiano. Questo evita all'utente di dover ricaricare l'app per vedere le modifiche.
+:::
+
+
+import { Code } from '@astrojs/starlight/components';
+import UnitCollection from '../../samples/samples_v3/recipes/document_as_subcollection/unit_collection?raw';
+import CollectionBuilder from '../../samples/samples_v3/recipes/document_as_subcollection/collection_builder?raw';
+import FullCode from '../../samples/samples_v3/recipes/document_as_subcollection/full?raw';
+
+<Code code={UnitCollection} lang="tsx" />
+
+
+### Builder di collezioni dinamico
+
+Tipicamente in FireCMS passi una lista statica di collezioni al componente CMS principale, ma in questo caso dobbiamo costruire le collezioni dinamicamente in base ai dati nel database.
+
+FireCMS ti permette di passare una funzione che restituisce una lista di collezioni alla prop `collections` del componente `FireCMSApp`.
+
+<Code code={CollectionBuilder} lang="tsx" />
+
+:::tip
+Le collezioni possono essere comodamente caricate in modo asincrono.
+:::
+
+Questo codice recupera i dati che vengono generati nella collezione `units` e crea una nuova collezione per ciascuno dei documenti.
+
+
+## Codice completo
+
+<Code code={FullCode} lang="tsx" />

@@ -1,4 +1,5 @@
 import { cls, SquareIcon, ToggleButtonGroup, Typography, VerticalSplitIcon } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function LayoutModeSwitch({
     value,
@@ -10,8 +11,10 @@ export function LayoutModeSwitch({
     className?: string;
 }) {
 
+    const { t } = useTranslation();
+
     return <div className={cls(className)}>
-        <Typography variant={"label"} color={"secondary"} className={"ml-3.5"}>Document view</Typography>
+        <Typography variant={"label"} color={"secondary"} className={"ml-3.5"}>{t("document_view")}</Typography>
         <div className={"my-2"}>
             <ToggleButtonGroup
                 value={value}
@@ -19,17 +22,17 @@ export function LayoutModeSwitch({
                 options={[
                     {
                         value: "side_panel",
-                        label: "Side panel",
+                        label: t("side_panel"),
                         icon: <VerticalSplitIcon />
                     },
                     {
                         value: "full_screen",
-                        label: "Full screen",
+                        label: t("full_screen"),
                         icon: <SquareIcon />
                     }
                 ]}
             />
         </div>
-        <Typography variant={"caption"} color={"secondary"} className={"ml-3.5"}>Should documents be opened full screen or in an inline side dialog</Typography>
+        <Typography variant={"caption"} color={"secondary"} className={"ml-3.5"}>{t("should_documents_opened_full_screen")}</Typography>
     </div>
 }

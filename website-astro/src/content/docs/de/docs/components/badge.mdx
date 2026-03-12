@@ -1,0 +1,27 @@
+---
+slug: de/docs/components/badge
+title: Abzeichen (Badge)
+sidebar_label: Badge
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Abzeichen (Badges) sind kleine Zähl- und Kennzeichnungskomponenten, die verwendet werden, um jedem Inhalt zusätzliche Informationen hinzuzufügen. Sie werden häufig verwendet, um Zähler für ungelesene Elemente anzuzeigen, als Statusindikatoren oder einfach als dekorative Elemente.
+
+## Einfaches Abzeichen
+
+Indem Sie die Eigenschaft `invisible` auf `true` setzen, können Sie das Abzeichen ausblenden, sodass es für Benutzer nicht sichtbar ist.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_invisible.tsx"/>
+
+## Farbvarianten
+
+Die Eigenschaft `color` bestimmt die Farbe des Abzeichens. Mögliche Werte sind `primary`, `secondary` und `error`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_color.tsx"/>
+
+## Verwendung mit Icons und Schaltflächen
+
+Abzeichen können um Icons oder Schaltflächen gelegt werden, um Statusindikatoren bereitzustellen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_icon.tsx"/>

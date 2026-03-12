@@ -1,7 +1,9 @@
 import { AddIcon, Button } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export function NewCollectionButton() {
+    const { t } = useTranslation();
     const collectionEditorController = useCollectionEditorController();
     return <div className={"bg-surface-50 dark:bg-surface-900 min-w-fit rounded"}>
         <Button className={"min-w-fit"}
@@ -12,7 +14,7 @@ export function NewCollectionButton() {
                     sourceClick: "new_collection_button"
                 })}>
             <AddIcon/>
-            New collection
+            {t("new_collection")}
         </Button>
     </div>
 }

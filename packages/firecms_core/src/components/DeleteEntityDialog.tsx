@@ -11,6 +11,7 @@ import {
 } from "../hooks";
 import { resolveCollection } from "../util";
 import { EntityView } from "./EntityView";
+import { useTranslation } from "../hooks/useTranslation";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -39,6 +40,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const dataSource = useDataSource(collection);
     const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
+
     const [loading, setLoading] = useState(false);
 
     const context = useFireCMSContext();
@@ -66,7 +69,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error deleting: " + e?.message
+            message: t("error_deleting", { message: e?.message })
         });
 
         console.error("Error deleting entity");
@@ -76,7 +79,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error before deleting: " + e?.message
+            message: t("error_before_delete", { message: e?.message })
         });
         console.error(e);
     }, [resolvedCollection.name]);
@@ -153,7 +156,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     let content: React.ReactNode;
     if (entityOrEntities && multipleEntities) {
-        content = <>Multiple entities</>;
+        content = <>{t("multiple_entities")}</>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
@@ -165,8 +168,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     }
 
     const dialogTitle = multipleEntities
-        ? <><b>{resolvedCollection.name}</b>: Confirm multiple delete?</>
-        : `Would you like to delete this ${resolvedCollection.singularName ?? resolvedCollection.name}?`;
+        ? <><b>{resolvedCollection.name}</b>: {t("confirm_multiple_delete")}</>
+        : t("delete_entity_confirm_title", { entityName: resolvedCollection.singularName ?? resolvedCollection.name });
 
     return (
         <Dialog
@@ -188,14 +191,14 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                 <Button onClick={handleCancel}
                         disabled={loading}
                         variant="text">
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button
                     autoFocus
                     disabled={loading}
                     onClick={handleOk}
                     variant="filled">
-                    Ok
+                    {t("ok")}
                 </Button>
             </DialogActions>
 

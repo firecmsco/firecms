@@ -1,0 +1,153 @@
+---
+slug: pt/docs/self/mongodb
+title: Integrazione di MongoDB Atlas con FireCMS
+sidebar_label: Integrazione MongoDB
+description: Guida completa all'uso di MongoDB Atlas come database e provider di autenticazione con FireCMS.
+---
+
+Questa guida fornisce i passaggi necessari per integrare MongoDB Atlas come sistema di autenticazione e database principale per la tua applicazione FireCMS. Mongo Atlas non supporta l'archiviazione di file, quindi puoi opzionalmente usare Firebase per questo scopo.
+
+## Configurazione del progetto
+
+Inizia generando un nuovo progetto usando il template starter FireCMS PRO:
+
+```bash
+npx create-firecms-app --pro
+```
+
+## Configurazione MongoDB Atlas
+
+```js
+const atlasConfig = {
+  appId: "your-app-id",
+  appUrl: "https://services.cloud.mongodb.com/groups/your-group-id/apps/your-app-id",
+  baseUrl: "https://services.cloud.mongodb.com",
+  clientApiBaseUrl: "https://your-region.gcp.services.cloud.mongodb.com",
+  dataApiBaseUrl: "https://your-region.gcp.data.mongodb-api.com",
+  dataExplorerLink: "https://cloud.mongodb.com/links/your-group-id/explorer/Cluster0/database/collection/find",
+  dataSourceName: "mongodb-atlas"
+};
+```
+
+## Configurazione Firebase (opzionale)
+
+Se vuoi usare Firebase per l'archiviazione di file:
+
+```js
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-auth-domain",
+  projectId: "your-project-id",
+  storageBucket: "your-storage-bucket",
+  appId: "your-app-id"
+};
+```
+
+## Implementare MongoDB in FireCMS
+
+### Inizializzazione
+
+```jsx
+import React from "react";
+import {
+  AppBar, CircularProgressCenter, FireCMS, ModeControllerProvider,
+  NavigationRoutes, Scaffold, SideDialogs, SnackbarProvider,
+  useBuildLocalConfigurationPersistence, useBuildModeController,
+  useBuildNavigationController, useValidateAuthenticator
+} from "@firecms/core";
+import { useFirebaseStorageSource, useInitialiseFirebase } from "@firecms/firebase";
+import { productsCollection } from "./collections/products_collection";
+import {
+  MongoAuthController, MongoLoginView, useInitRealmMongodb,
+  useMongoDBAuthController, useMongoDBDelegate
+} from "@firecms/mongodb";
+
+const MongoDBApp = () => {
+  const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
+  const { app } = useInitRealmMongodb(atlasConfig);
+  // ...
+};
+```
+
+### Controller e persistenza
+
+```jsx
+const modeController = useBuildModeController();
+const userConfigPersistence = useBuildLocalConfigurationPersistence();
+
+const authController: MongoAuthController = useMongoDBAuthController({ app });
+const mongoDataSourceDelegate = useMongoDBDelegate({
+  app,
+  cluster: "mongodb-atlas",
+  database: "todo"
+});
+```
+
+### Sorgente storage Firebase
+
+```jsx
+const storageSource = useFirebaseStorageSource({ firebaseApp });
+```
+
+### Validazione autenticazione
+
+```jsx
+const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
+  authController,
+  authenticator: () => true,
+  dataSourceDelegate: mongoDataSourceDelegate,
+  storageSource
+});
+```
+
+### Navigation Controller
+
+```jsx
+const navigationController = useBuildNavigationController({
+  collections: [productsCollection],
+  authController,
+  dataSourceDelegate: mongoDataSourceDelegate
+});
+```
+
+### Render dell'applicazione completa
+
+```jsx
+return (
+  <SnackbarProvider>
+    <ModeControllerProvider value={modeController}>
+      <FireCMS
+        navigationController={navigationController}
+        authController={authController}
+        userConfigPersistence={userConfigPersistence}
+        dataSourceDelegate={mongoDataSourceDelegate}
+        storageSource={storageSource}
+      >
+        {({ context, loading }) => {
+          if (loading || authLoading) {
+            return <CircularProgressCenter size="large" />;
+          }
+          if (!canAccessMainView) {
+            return (
+              <MongoLoginView
+                allowSkipLogin={false}
+                authController={authController}
+                registrationEnabled={true}
+                notAllowedError={notAllowedError}
+              />
+            );
+          }
+          return (
+            <Scaffold autoOpenDrawer={false}>
+              <AppBar title={name} />
+              <Drawer />
+              <NavigationRoutes />
+              <SideDialogs />
+            </Scaffold>
+          );
+        }}
+      </FireCMS>
+    </ModeControllerProvider>
+  </SnackbarProvider>
+);
+```

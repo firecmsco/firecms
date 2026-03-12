@@ -1,32 +1,33 @@
 import { Alert, Card, Typography } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 import { useDataTalk } from "../DataTalkProvider";
 
 export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestionClick: (prompt: string) => void }) {
 
+    const { t } = useTranslation();
     const dataTalk = useDataTalk();
 
     const promptSuggestions = (dataTalk.rootPromptsSuggestions ?? []).length > 0
         ? dataTalk.rootPromptsSuggestions
         : [
-            "What can you do?",
-            "What collections are available?",
-            "Show me all products under 50 euros",
-            "Create a new book with data for El Quijote.",
-            "Show me the 10 cars with the most horsepower."
+            t("datatalk_sample_1"),
+            t("datatalk_sample_2"),
+            t("datatalk_sample_3"),
+            t("datatalk_sample_4"),
+            t("datatalk_sample_5")
         ];
 
     return (
         <div className={"my-8"}>
             <Typography variant={"h3"} gutterBottom={true} className={"font-mono ml-4 my-2"}>
-                Welcome to DATATALK
+                {t("datatalk_welcome")}
             </Typography>
             <Typography paragraph={true} className={"ml-4 my-2"}>
-                DataTalk is a conversational interface to your data. You can ask questions, run commands and explore
-                your data in a natural way.
+                {t("datatalk_subtitle")}
             </Typography>
             {promptSuggestions && <>
                 <Typography paragraph={true} className={"ml-4 my-2 mb-6"}>
-                    Here are some examples of things you can ask:
+                    {t("datatalk_examples_title")}
                 </Typography>
                 <div className={"flex gap-1 sm:gap-2 md:gap-4 overflow-auto no-scrollbar"}>
                     {promptSuggestions.map((prompt, index) => (
@@ -36,10 +37,10 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
             </>}
 
             <Typography variant={"caption"} color={"secondary"} paragraph={true} className={"ml-4 my-2"}>
-                Note that these sample prompts are generic and may not work with your specific data.
+                {t("datatalk_note_generic")}
             </Typography>
             <Typography variant={"caption"} color={"secondary"} paragraph={true} className={"ml-4 my-2"}>
-                You can&apos;t add additional imports or dependencies to the code snippets.
+                {t("datatalk_note_dependencies")}
             </Typography>
         </div>
     );

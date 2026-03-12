@@ -14,6 +14,7 @@ import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
 import { EntityAction } from "./entity_actions";
 import { InternalUserManagement } from "./internal_user_management";
+import { DeepPartial, FireCMSTranslations } from "./translations";
 
 /**
  * Use this callback to build entity collections dynamically.
@@ -111,9 +112,27 @@ export type FireCMSProps<USER extends User> = {
     dateTimeFormat?: string;
 
     /**
-     * Locale of the CMS, currently only affecting dates
+     * Locale of the CMS.
+     * Affects date formatting and, when `translations` is provided for this
+     * locale, the UI language.
      */
     locale?: Locale;
+
+    /**
+     * Override any FireCMS UI string, or provide translations for additional
+     * locales. Keys must match {@link FireCMSTranslations}.
+     *
+     * English is always the built-in fallback — you only need to provide the
+     * keys you want to change.
+     *
+     * @example
+     * translations={{ en: { save: "Publish" } }}
+     * @example
+     * translations={{ es: { save: "Guardar", discard: "Descartar" } }}
+     */
+    translations?: {
+        [locale: string]: DeepPartial<FireCMSTranslations>;
+    };
 
     /**
      * Connector to your database

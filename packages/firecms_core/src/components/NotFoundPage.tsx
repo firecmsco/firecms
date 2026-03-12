@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Typography } from "@firecms/ui";
+import { useTranslation } from "../hooks/useTranslation";
 
 export function NotFoundPage() {
+    const { t } = useTranslation();
 
     return (
         <div className="flex w-full h-full">
@@ -10,15 +12,15 @@ export function NotFoundPage() {
             >
                 <Typography variant={"h4"} align={"center"}
                             gutterBottom={true}>
-                    Page not found
+                    {t("page_not_found")}
                 </Typography>
                 <Typography align={"center"} gutterBottom={true}>
-                    This page does not exist or you may not have access to it
+                    {t("page_not_found_body")}
                 </Typography>
                 <Button
                     variant={"text"}
                     component={Link}
-                    to={"/"}>Back to home</Button>
+                    to={"/"}>{t("back_to_home")}</Button>
             </div>
         </div>
     );

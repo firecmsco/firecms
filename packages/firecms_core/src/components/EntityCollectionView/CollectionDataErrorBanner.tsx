@@ -1,7 +1,9 @@
 import React from "react";
 import { Typography, IconButton, RefreshIcon, Button, Tooltip } from "@firecms/ui";
+import { useTranslation } from "../../hooks";
 
 export function CollectionDataErrorBanner({ error, onRetry }: { error?: Error, onRetry?: () => void }) {
+    const { t } = useTranslation();
     if (!error) return null;
 
     const errorMessage = error.message || "";
@@ -11,13 +13,13 @@ export function CollectionDataErrorBanner({ error, onRetry }: { error?: Error, o
     return (
         <div className="flex w-full items-center gap-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
             <Typography variant="body2" className="text-red-700 dark:text-red-300 flex-1 break-words">
-                <strong>Error:</strong>{" "}
+                <strong>{t("error")}:</strong>{" "}
                 {indexUrl
-                    ? "A Firestore index is required for this query."
+                    ? t("error_firestore_index")
                     : errorMessage}
             </Typography>
             {onRetry && (
-                <Tooltip title="Refresh data">
+                <Tooltip title={t("refresh_data")}>
                     <IconButton
                         size="small"
                         onClick={onRetry}
@@ -33,7 +35,7 @@ export function CollectionDataErrorBanner({ error, onRetry }: { error?: Error, o
                     color="error"
                     onClick={() => window.open(indexUrl, "_blank")}
                 >
-                    Create Index
+                    {t("create_index")}
                 </Button>
             )}
         </div>

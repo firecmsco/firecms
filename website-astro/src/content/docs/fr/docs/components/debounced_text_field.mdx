@@ -1,0 +1,19 @@
+---
+slug: fr/docs/components/debounced_text_field
+title: DebouncedTextField
+sidebar_label: DebouncedTextField
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+DebouncedTextField est un composant de champ de texte qui diffère les mises à jour de valeur pour réduire le nombre d'appels, idéal pour les scénarios avec des mises à jour fréquentes, comme pendant la frappe.
+
+## Utilisation
+
+Pour utiliser `DebouncedTextField`, importez-le depuis vos composants. Il supporte toutes les props `TextField` y compris `value`, `onChange` et autres.
+
+## DebouncedTextField de base
+
+Cet exemple montre une utilisation de base du `DebouncedTextField`, démontrant comment il peut être utilisé pour gérer les changements de valeur avec un mécanisme de différement pour réduire le nombre de mises à jour.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/debounced_text_field/debounced_text_field_basic.tsx"/>

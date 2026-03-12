@@ -1,0 +1,143 @@
+---
+slug: pt/docs/cloud/app_config
+title: App Config
+description: Um guia completo para configurar o FireCMS, um CMS personalizável. Fornece instruções detalhadas sobre como inicializar um novo projeto, personalizar o CMS com propriedades reutilizáveis, campos, coleções, views de entidade e views CMS.
+---
+
+O app config é o principal objeto de configuração do FireCMS Cloud. É definido
+pela interface `FireCMSAppConfig`. Para personalizar o CMS, você precisa
+criar um projeto em [app.firecms.co](https://app.firecms.co) e
+inicializar um novo projeto em código com `npx create-firecms-app` ou `yarn create firecms-app`.
+
+Após esses passos, você pode usar o export `FireCMSAppConfig` para adicionar
+suas próprias personalizações, como propriedades ou campos reutilizáveis personalizados, coleções,
+views de entidade, views CMS, etc.
+
+
+### Opções de personalização
+
+Veja todas as opções de personalização disponíveis:
+
+* `collections`: Lista das coleções mapeadas no CMS.
+    Cada entrada se relaciona a uma coleção no banco de dados raiz.
+    Cada uma das entradas de navegação neste campo
+    gera uma entrada no menu principal.
+    Veja [Coleções](../collections) para mais informações.
+
+* `modifyCollection`: Função para modificar uma coleção antes que ela seja adicionada ao CMS. Se você estiver definindo coleções
+    na UI, pode usar esta função para modificá-las. Este callback é chamado para cada coleção.
+
+* `views`: Views adicionais personalizadas criadas pelo desenvolvedor, adicionadas à navegação principal.
+    Veja [Views de nível superior personalizadas](../top_level_views) para mais informações.
+
+* `propertyConfigs`: Lista de configurações de propriedade personalizadas para usar no CMS.
+    Você pode usar a chave para referenciar o campo personalizado na prop `propertyConfig` de uma propriedade em uma coleção.
+    Veja [Configurações de propriedade](../properties/reusing_properties) para mais informações.
+
+* `entityViews`: Lista de views personalizadas adicionais para entidades.
+    Você pode usar a chave para referenciar a view personalizada na prop `entityViews` de uma coleção.
+    Você também pode definir uma view de entidade pela UI.
+    Veja [Views de entidade](../collections/entity_views) para mais informações.
+
+* `HomePage`: Use este componente para sobrescrever a página inicial.
+* `fireCMSAppBarComponentProps`: Props adicionais passadas para a AppBar personalizada.
+* `firestoreIndexesBuilder`: Use este builder para indicar quais índices estão disponíveis no seu banco de dados Firestore.
+    Isso é usado para permitir filtragem e ordenação por múltiplos campos no CMS.
+* `onFirebaseInit`: Callback opcional após o Firebase ter sido inicializado.
+    Útil para usar o emulador local ou recuperar a configuração usada.
+* `dateTimeFormat`: Formato das datas no CMS.
+    Padrão é 'MMMM dd, yyyy, HH:mm:ss'.
+* `locale`: Locale do CMS, atualmente afeta apenas datas.
+* `textSearchController`: Use este controller para retornar resultados de pesquisa de texto como IDs de documentos, que são então buscados do Firestore.
+* `autoOpenDrawer`: Funcionalidade experimental para abrir o drawer automaticamente ao passar o mouse.
+* `appCheck`: Configuração do Firebase App Check.
+    - `provider`: O provedor a usar para App Check.
+    - `isTokenAutoRefreshEnabled`: Se deve atualizar automaticamente o token.
+    - `debugToken`: Token de debug para usar com App Check.
+    - `forceRefresh`: Se deve forçar a atualização do token.
+
+### Exemplo
+
+Um app config é gerado automaticamente para você quando você inicializa um novo projeto, mas aqui está um
+exemplo de como você pode personalizá-lo:
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    // As coleções são as entradas de navegação principais no CMS
+    collections: async ({ authController, dataSource }) => {
+        // Exemplo de busca de dados do banco de dados para construir coleções dinâmicas
+        const firstProducts = await dataSource.fetchCollection({
+            path: "products",
+            limit: 5
+        });
+
+        return ([
+           // ...suas coleções
+        ]);
+    },
+
+    // Views de nível superior, não vinculadas a nenhuma coleção
+    views: [
+        {
+            path: "sales_report",
+            name: "Sales report",
+            icon: "extension",
+            view: <SalesReportView/>
+        },
+    ],
+
+    // Modify collection permite modificar coleções antes que sejam adicionadas ao CMS
+    modifyCollection: ({ collection }) => {
+        if (collection.id === "products") {
+            return {
+                ...collection,
+                name: "Products modified",
+                entityActions: [
+                    {
+                        name: "My custom action",
+                        onClick: ({ entity }) => {
+                            console.log("Entity", entity);
+                        }
+                    }
+                ]
+            }
+        }
+        return collection;
+    },
+
+    // Propriedades que podem ser reutilizadas em diferentes coleções
+    propertyConfigs: [
+        {
+            name: "Translated string",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "English"
+                    },
+                    es: {
+                        dataType: "string",
+                        name: "Español"
+                    },
+                },
+            },
+        }
+    ],
+
+    // Views que podem ser atribuídas a entidades
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+
+export default appConfig;
+```

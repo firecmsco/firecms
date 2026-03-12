@@ -6,7 +6,8 @@ import {
 } from "@firecms/data_import";
 import { getIn, useFormex } from "@firecms/formex";
 
-import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@firecms/core";
+import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge,     useTranslation
+} from "@firecms/core";
 import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@firecms/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
@@ -26,6 +27,8 @@ export function CollectionEditorImportMapping({
                                                       propertyConfigs: Record<string, PropertyConfig>,
                                                       collectionEditable: boolean
                                                   }) {
+    const { t } = useTranslation();
+
 
     // const {
     //     values,
@@ -142,7 +145,7 @@ export function CollectionEditorImportMapping({
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"6xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
 
-                <Typography variant="h6" className={"my-4 ml-3.5"}>Data property mapping</Typography>
+                <Typography variant="h6" className={"my-4 ml-3.5"}>{t("data_property_mapping")}</Typography>
 
                 <DataNewPropertiesMapping importConfig={importConfig}
                                           destinationProperties={values.properties as Properties}

@@ -1,67 +1,72 @@
 ---
 import NavigationDropdown from "./NavigationDropdown.astro";
+import LanguageSelect from "./LanguageSelect.astro";
+import { useTranslatedPath, useTranslations } from "../i18n/utils";
 
+const { lang = "en" } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const tp = useTranslatedPath(lang as any);
+const t = useTranslations(lang as any);
 
 const navLinks = [
     {
-        href: "/features",
-        label: "Features"
+        href: tp("/features"),
+        label: t("nav.features") || "Features"
     },
     {
-        href: "/why-firecms",
-        label: "Why FireCMS",
+        href: tp("/why-firecms"),
+        label: t("nav.why") || "Why FireCMS",
         dropdown: [
             [
                 {
-                    href: "/developers",
-                    label: "Developers",
-                    description: "Built for developers, by developers.",
+                    href: tp("/developers"),
+                    label: t("nav.developers") || "Developers",
+                    description: t("nav.developers.desc") || "Built for developers, by developers.",
                     icon: "code"
                 },
                 {
-                    href: "/startups",
-                    label: "Startups",
-                    description: "Launch your project faster than ever.",
+                    href: tp("/startups"),
+                    label: t("nav.startups") || "Startups",
+                    description: t("nav.startups.desc") || "Launch your project faster than ever.",
                     icon: "rocket"
                 },
                 {
-                    href: "/agencies",
-                    label: "Agencies",
-                    description: "Deliver amazing projects to your clients.",
+                    href: tp("/agencies"),
+                    label: t("nav.agencies") || "Agencies",
+                    description: t("nav.agencies.desc") || "Deliver amazing projects to your clients.",
                     icon: "briefcase"
                 }
             ],
             [
                 {
-                    href: "/security",
-                    label: "Security",
-                    description: "Keep your data safe and secure.",
+                    href: tp("/security"),
+                    label: t("nav.security") || "Security",
+                    description: t("nav.security.desc") || "Keep your data safe and secure.",
                     icon: "shield"
                 },
                 {
-                    href: "/ui",
-                    label: "UI",
-                    description: "A beautiful and intuitive user interface.",
+                    href: tp("/ui"),
+                    label: t("nav.ui") || "UI",
+                    description: t("nav.ui.desc") || "A beautiful and intuitive user interface.",
                     icon: "palette"
                 },
             ]
         ]
     },
     {
-        href: "/pricing",
-        label: "Pricing"
+        href: tp("/pricing"),
+        label: t("nav.pricing") || "Pricing"
     },
     {
-        href: "/docs",
-        label: "Docs"
+        href: tp("/docs"),
+        label: t("nav.docs") || "Docs"
     },
 ];
 ---
 <header class="bg-black/40 backdrop-blur sticky top-0 z-20">
     <nav class="mx-auto flex max-w-7xl items-center justify-between py-2 px-4 lg:px-8" aria-label="Global">
         <div class="flex items-center">
-            <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50 mr-6" transition:name="site-logo">
+            <a href={tp("/")} class="flex items-center -m-1.5 p-1.5 relative z-50 mr-6" transition:name="site-logo">
                 <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image"/>
                 <span class="self-center text-lg font-semibold whitespace-nowrap text-white"
                       transition:name="logo-text">FireCMS</span>
@@ -104,6 +109,9 @@ const navLinks = [
             </div>
         </div>
         <div class="flex flex-1 justify-end items-center gap-4">
+            <div class="hidden sm:block">
+                <LanguageSelect iconOnly={true} />
+            </div>
             <a
                     href="https://app.firecms.co"
                     target="_blank"
@@ -208,6 +216,10 @@ const navLinks = [
                             class="h-5 w-5 text-white filter invert"
                     />
                 </a>
+                
+                <div class="mt-8 pt-8 border-t border-surface-800 w-full flex justify-center">
+                    <LanguageSelect />
+                </div>
             </nav>
         </div>
     </div>

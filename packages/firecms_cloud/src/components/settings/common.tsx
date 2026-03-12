@@ -71,15 +71,15 @@ export function getLicenseStatus(subscriptions: Subscription[]) {
     return getSubscriptionStatusText(usedSubscription);
 }
 
-export function getSubscriptionPlanName(subscriptionPlan: ProjectSubscriptionPlan): string {
+export function getSubscriptionPlanName(subscriptionPlan: ProjectSubscriptionPlan, t?: any): string {
     switch (subscriptionPlan) {
         case "free":
-            return "Not subscribed";
+            return t ? t("plan_free") : "Not subscribed";
         case "cloud_plus":
-            return "Subscribed";
+            return t ? t("plan_cloud_plus") : "Subscribed";
         case "pro":
-            return "Pro";
+            return t ? t("plan_pro") : "Pro";
         default:
-            return "Unknown Plan";
+            return t ? t("plan_unknown") : "Unknown Plan";
     }
 }

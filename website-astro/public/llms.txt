@@ -2698,6 +2698,293 @@ Feel free to add any of this classes to your `index.css` file, to override the d
 If you need to customize any other aspect of FireCMS, please [let us know](https://discord.gg/fxy7xsQm3m).
 
 
+## Internationalisation (i18n)
+
+FireCMS ships with a built-in internationalisation system powered by
+[i18next](https://www.i18next.com/) and
+[react-i18next](https://react.i18next.com/).
+Out of the box the following languages are supported:
+
+| Code | Language |
+|------|----------|
+| `en` | English (default) |
+| `es` | Spanish |
+| `de` | German |
+| `fr` | French |
+| `it` | Italian |
+| `hi` | Hindi |
+
+All language switching, persistence between sessions, and string lookup are
+handled automatically by `FireCMSi18nProvider`, which you mount at the root of
+your FireCMS component tree.
+
+---
+
+### Basic setup
+
+Wrap your `FireCMS` tree with `FireCMSi18nProvider`. You can see a full wiring
+example in the [Sample PRO Project](https://firecms.co/docs/pro/sample_pro) page — the snippet
+below focuses only on the i18n part:
+
+```tsx
+
+export function MyCMSApp() {
+    // … set up controllers (auth, navigation, storage, etc.)
+
+    return (
+        <SnackbarProvider>
+            <FireCMSi18nProvider locale="es">
+                <ModeControllerProvider value={modeController}>
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                    >
+                        {({ context, loading }) => {
+                            if (loading) return <CircularProgressCenter size="large" />;
+                            return (
+                                <Scaffold>
+                                    <AppBar title="My CMS" />
+                                    <Drawer />
+                                    <NavigationRoutes />
+                                    <SideDialogs />
+                                </Scaffold>
+                            );
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </FireCMSi18nProvider>
+        </SnackbarProvider>
+    );
+}
+```
+
+The `locale` prop accepts any [BCP-47 language tag](https://www.ietf.org/rfc/bcp/bcp47.txt)
+(`"en"`, `"es"`, `"de"`, …).
+
+#### User preference is persisted
+
+When a user changes the language through the FireCMS UI, the choice is saved to
+`localStorage` under the key `firecms_locale`.
+On the next visit the stored preference takes priority over the `locale` prop —
+unless you clear it manually.
+
+---
+
+### Overriding built-in strings
+
+You can replace any FireCMS UI string without touching the library source code.
+Use the `translations` prop on `FireCMSi18nProvider`:
+
+```tsx
+
+// Only include the keys you want to change — everything else keeps its default.
+const myTranslations: { [locale: string]: Partial<FireCMSTranslations> } = {
+    en: {
+        save: "Publish",
+        discard: "Throw away",
+        delete: "Remove",
+    },
+    es: {
+        save: "Publicar",
+        discard: "Descartar",
+    },
+};
+
+// Inside your component tree:
+<FireCMSi18nProvider locale="en" translations={myTranslations}>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+Overrides are **deep-merged** on top of the built-in strings — keys you don't
+provide keep their default values. Overrides are re-applied whenever the
+`translations` prop reference changes.
+
+---
+
+### Adding a completely new locale
+
+If your target language is not listed above, create an object that satisfies
+`DeepPartial<FireCMSTranslations>` (you don't have to provide every key —
+missing keys fall back to English automatically) and pass it under a new locale
+code:
+
+```tsx
+
+const ptTranslations = {
+    save: "Guardar",
+    create: "Criar",
+    discard: "Descartar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    edit: "Editar",
+    copy: "Copiar",
+    search: "Pesquisar",
+    filter: "Filtro",
+    loading: "A carregar...",
+    // … add as many keys as you need; the rest default to English
+};
+
+<FireCMSi18nProvider
+    locale="pt"                              // activate the new locale
+    translations={{ pt: ptTranslations }}   // provide its strings
+>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+:::note
+When a key is missing in your custom locale, FireCMS automatically uses the
+English (`en`) value as a fallback.
+:::
+
+---
+
+### Props reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `locale` | `string` | `"en"` | BCP-47 language tag for the active language. |
+| `translations` | `Record<string, DeepPartial<FireCMSTranslations>>` | — | Per-locale string overrides / additions. |
+
+:::note
+`FireCMSi18nProvider` creates its own **isolated** i18next instance — it will
+not interfere with any other i18next configuration you may have in your app.
+:::
+
+---
+
+### Full list of translatable keys
+
+All translatable strings are defined in the `FireCMSTranslations` interface
+exported from `@firecms/core`.
+Below is a categorised summary of the most commonly customised keys:
+
+#### Form actions
+
+| Key | Default (en) |
+|-----|-------------|
+| `save` | Save |
+| `create` | Create |
+| `save_and_close` | Save and close |
+| `create_and_close` | Create and close |
+| `create_copy` | Create copy |
+| `discard` | Discard |
+| `clear` | Clear |
+| `cancel` | Cancel |
+
+#### Entity actions
+
+| Key | Default (en) |
+|-----|-------------|
+| `edit` | Edit |
+| `copy` | Copy |
+| `delete` | Delete |
+| `delete_selected` | Delete |
+
+#### Collection table
+
+| Key | Default (en) |
+|-----|-------------|
+| `search` | Search |
+| `filter` | Filter |
+| `no_items` | No items |
+| `no_entries_found` | No entries found |
+| `create_your_first_entry` | Create your first entry |
+| `add` | Add |
+| `remove` | Remove |
+
+#### Dialogs
+
+| Key | Default (en) |
+|-----|-------------|
+| `delete_confirmation_title` | Delete? |
+| `delete_confirmation_body` | This will delete the entity. Are you sure? |
+| `unsaved_changes_title` | Unsaved changes |
+| `unsaved_changes_body` | You have unsaved changes. Do you want to discard them? |
+| `discard_changes` | Discard changes |
+| `keep_editing` | Keep editing |
+
+#### Navigation & layout
+
+| Key | Default (en) |
+|-----|-------------|
+| `open_menu` | Open menu |
+| `close_drawer` | Close drawer |
+| `home` | Home |
+| `admin` | Admin |
+| `log_out` | Log out |
+
+#### Error states
+
+| Key | Default (en) |
+|-----|-------------|
+| `error` | Error |
+| `error_uploading_file` | Error uploading file |
+| `error_deleting` | Error deleting |
+| `internal_error` | Internal ERROR |
+| `page_not_found` | Page not found |
+| `back_to_home` | Back to home |
+
+#### Authentication
+
+| Key | Default (en) |
+|-----|-------------|
+| `auth_sign_in` | Sign In |
+| `auth_sign_up` | Sign Up |
+| `auth_password` | Password |
+| `auth_reset_password` | Reset password |
+| `auth_wrong_password` | Wrong password. Please try again. |
+| `auth_user_not_found` | User not found |
+
+#### Data import / export
+
+| Key | Default (en) |
+|-----|-------------|
+| `import` | Import |
+| `import_data` | Import data |
+| `export` | Export |
+| `export_data` | Export data |
+| `download` | Download |
+
+For the **complete** list of keys with their TypeScript definitions, see the
+[`FireCMSTranslations` source file](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/translations.ts)
+and the [English baseline locale](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts)
+on GitHub.
+
+---
+
+### Dynamically switching languages at runtime
+
+You can change the active language at runtime by updating the `locale` prop.
+FireCMS will switch automatically **unless** the user has already stored a
+personal preference in `localStorage`.
+
+To clear the stored preference and force a language change:
+
+```ts
+
+// Clear user preference, then set the new locale via the `locale` prop
+localStorage.removeItem(FIRECMS_LOCALE_STORAGE_KEY);
+```
+
+---
+
+### Contribute a new language
+
+If you add a full translation for a new language and would like to share it with
+the community, we welcome pull requests!
+
+1. Add a new file `packages/firecms_core/src/locales/<code>.ts` following the
+   structure of the existing [`en.ts`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts).
+2. Register it inside
+   [`FireCMSi18nProvider.tsx`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/i18n/FireCMSi18nProvider.tsx).
+3. Open a pull request — thank you! 🎉
+
+Have questions? Join the [Discord community](https://discord.gg/fxy7xsQm3m).
+
 ## Self-Hosted Deployment
 
 FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
@@ -2884,128 +3171,6 @@ const {
 #### Custom provider
 
 You can also create a custom provider by implementing the `AppCheckProvider` interface.
-
-## Firebase setup
-
-FireCMS connects directly to your **Firebase** project to provide a powerful **admin panel** for your **Firestore database**. Before you can use FireCMS as a **headless CMS** or **back-office** for your app, you need to configure your Firebase project.
-
-This guide covers the essential setup steps:
-1. **Firestore** - Your primary database
-2. **Authentication** - Control who can access the admin panel
-3. **Storage** - For file uploads and media management
-4. **Security Rules** - Protect your data
-
-#### Firestore
-
-You need to enable **Firestore** in it. You can initialise the security rules
-in test mode to allow reads and writes, but you are encouraged to write rules
-that are suited for your domain.
-
-Keep in mind that rules should be defined for each collection and should be
-defined in a way that is suited for your domain.
-
-Please check the [Firestore documentation](https://firebase.google.com/docs/firestore/security/get-started)
-for more information.
-
-:::important
-In a default Firestore project, it is likely that your Firestore rules
-will not allow you to read or write to the database. Continue reading to
-learn how to set up your rules.
-:::
-
-For example, a simple rule that allows any authenticated user to read and write
-to any collection would be:
-
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
-
-but ideally you will want to make it more restricitve. For the products demo to work, your rules should look like this:
-
-```
-rules_version = '2';
-service cloud.firestore {
-
-    // everything is private by default
-    match /{document=**} {
-      allow read: if false;
-      allow write: if false;
-    }
-    
-    // allow every read to products collection but write only to authenticated users
-    match /databases/{database}/documents {
-        match /products/{id=**} {
-          allow read: if true;
-          allow write: if request.auth != null;
-        }
-    }
-    
-    // allow users to modify only their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-}
-
-```
-
-#### Web app
-
-In the project settings, you need to create a **Web app** within your
-project, from which you can get your Firebase config as a Javascript object.
-That is the object that you need to pass to the CMS.
-
-![firebase_setup](/img/firebase_setup_app.png)
-
-:::tip[Firebase Hosting]
-Note that you can also link your new webapp to **Firebase Hosting** which will
-allow you to deploy it with very little effort. You can create the
-Firebase Hosting site at a later stage and link it to your webapp.
-:::
-
-#### Authentication
-
-You will most likely want to enable authentication in order to pass the login
-screen
-
-:::important
-Vite uses the default url `http://127.0.0.1:5173` for the development server.
-Firebase Auth will require to add this url to the authorized domains in the
-Firebase console.
-Alternatively, you can use the url `http://localhost:5173`.
-:::
-
-![firebase_setup](/img/firebase_setup_auth.png)
-
-#### Storage
-
-In case you want to use the different storage fields provided by the CMS, you
-need to enable **Firebase Storage**. The default bucket will be used to
-save your stored files.
-
-:::note
-If you are experiencing any CORS issues, you can enable CORS in your bucket
-settings as specified in: https://firebase.google.com/docs/storage/web/download-files#cors_configuration
-Create a file with the content:
-
-```
-[
-  {
-    "origin": ["*"],
-    "method": ["GET"],
-    "maxAgeSeconds": 3600
-  }
-]
-```
-
-and upload it with: `gsutil cors set cors.json gs://<your-cloud-storage-bucket>`.
-:::
 
 ## Integrating MongoDB Atlas with FireCMS
 

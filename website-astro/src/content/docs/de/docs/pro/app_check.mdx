@@ -1,0 +1,110 @@
+---
+slug: de/docs/pro/app_check
+title: App Check
+description: Integrieren Sie Firebase App Check mit FireCMS, um Ihr Backend vor Missbrauch zu schützen.
+---
+
+Sie können Firebase App Check in Ihre Anwendung integrieren, um Ihre Backend-Ressourcen vor Missbrauch zu schützen, z. B. vor Abrechnungsbetrug oder Phishing. Firebase App Check funktioniert zusammen mit anderen Firebase-Diensten, wie Firebase Authentication, um Ihre Backend-Ressourcen zu sichern.
+
+FireCMS bietet eine einfache Möglichkeit, Firebase App Check in Ihre Anwendung zu integrieren.
+
+:::important
+Denken Sie daran, die Domain, auf der Sie Ihre Anwendung deployen, zur Liste der erlaubten Domains in der AppCheck-Anbieter-Konfiguration hinzuzufügen.
+:::
+
+Für Self-Hosted-Versionen können Sie Firebase App Check in Ihrer Anwendung aktivieren, indem Sie die Eigenschaften `options`
+und `firebaseApp` im `useAppCheck`-Hook angeben.
+
+Der `useAppCheck`-Hook wird zur Initialisierung von Firebase App Check und zur Überwachung seines Status verwendet.
+Er verarbeitet den asynchronen Initialisierungsprozess, stellt den Ladezustand bereit und erfasst alle Fehler, die
+während der Initialisierung auftreten können.
+
+### Parameter
+
+- `firebaseApp` (optional): Eine Instanz von `FirebaseApp` zur Verwendung für die App Check-Initialisierung.
+- `options` (optional): Konfigurationsoptionen für App Check.
+    - `provider`: Der Anbieter, den Sie verwenden möchten.
+    - `isTokenAutoRefreshEnabled`: Ob das Token automatisch aktualisiert werden soll.
+    - `debugToken`: Ein Debug-Token zur Verwendung.
+    - `forceRefresh`: Ob eine Token-Aktualisierung erzwungen werden soll.
+
+### Rückgabewert
+
+Gibt ein Objekt zurück, das Folgendes enthält:
+- `loading`: Ein Boolean, der angibt, ob die Initialisierung noch läuft.
+- `appCheckVerified` (optional): Ein Boolean, der angibt, ob die Anwendung von App Check verifiziert wurde.
+- `error` (optional): Alle Fehler, die während des Initialisierungsprozesses aufgetreten sind.
+
+### Beispiel
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+
+## Anbieter
+
+Die Eigenschaft `provider` ist erforderlich und muss eine Instanz eines Firebase AppCheck-Anbieters sein.
+Sie können einen der folgenden Anbieter verwenden:
+
+### ReCaptchaEnterpriseProvider
+
+Um den ReCaptchaEnterpriseProvider einzurichten, müssen Sie einen neuen reCAPTCHA Enterprise-Site-Schlüssel erstellen.
+Folgen Sie den Anweisungen in der [Firebase-Dokumentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+:::important
+Stellen Sie sicher, dass Sie die Domain `app.firecms.co` zur Liste der erlaubten Domains in der reCAPTCHA Enterprise-Konsole hinzugefügt haben.
+:::
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaEnterpriseProvider("ihr-site-schlüssel"),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+### ReCaptchaV3Provider
+
+Um den ReCaptchaV3Provider einzurichten, müssen Sie einen neuen reCAPTCHA v3-Site-Schlüssel erstellen.
+Folgen Sie den Anweisungen in der [Firebase-Dokumentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaV3Provider("ihr-site-schlüssel"),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+### Benutzerdefinierter Anbieter
+
+Sie können auch einen benutzerdefinierten Anbieter erstellen, indem Sie die Schnittstelle `AppCheckProvider` implementieren.

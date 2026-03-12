@@ -13,7 +13,7 @@ If you're building a **headless CMS** or **back-office** for your **Firebase** p
 - **Who can do what** (create, read, update, delete permissions)
 - **Custom logic** (callbacks on save, computed fields, side effects)
 
-:::tip Why use FireCMS collections?
+:::tip[Why use FireCMS collections?]
 Unlike traditional CMSs that impose a rigid data model, FireCMS collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
 :::
 

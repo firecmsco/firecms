@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDataTalk } from "../DataTalkProvider";
 import { AddIcon, Button, cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Typography } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 import { Session } from "../types";
 
 interface DataTalkSessionsPanelProps {
@@ -18,6 +19,7 @@ export function DataTalkSessionsPanel({
     const { sessions, loading } = useDataTalk();
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
     const handleSessionClick = (session: Session) => {
         // Navigate to session, replacing current URL with new session ID
@@ -50,7 +52,7 @@ export function DataTalkSessionsPanel({
                         onClick={onNewChat}
                     >
                         <AddIcon size="small" />
-                        <span className="ml-2">New Chat</span>
+                        <span className="ml-2">{t("datatalk_new_chat")}</span>
                     </Button>
                 )}
                 <IconButton
@@ -79,18 +81,18 @@ export function DataTalkSessionsPanel({
                     <>
                         {loading ? (
                             <div className="p-4 text-center">
-                                <Typography variant="caption" color="secondary">Loading...</Typography>
+                                <Typography variant="caption" color="secondary">{t("loading")}</Typography>
                             </div>
                         ) : sessions.length === 0 ? (
                             <div className="p-4 text-center">
-                                <Typography variant="caption" color="secondary">No conversations yet</Typography>
+                                <Typography variant="caption" color="secondary">{t("datatalk_no_conversations_yet")}</Typography>
                             </div>
                         ) : (
                             <div className="py-2">
                                 {sessions.map((session) => {
                                     const isActive = session.id === currentSessionId;
                                     const firstMessage = session.messages[0];
-                                    const preview = firstMessage?.text.slice(0, 40) || "New conversation";
+                                    const preview = firstMessage?.text.slice(0, 40) || t("datatalk_new_conversation");
                                     const hasMore = (firstMessage?.text.length ?? 0) > 40;
 
                                     return (

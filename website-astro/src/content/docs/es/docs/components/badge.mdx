@@ -1,0 +1,27 @@
+---
+slug: es/docs/components/badge
+title: Insignia (Badge)
+sidebar_label: Insignia (Badge)
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Las insignias (badges) son componentes de recuento y etiquetado pequeños que se utilizan para agregar información adicional a cualquier contenido. Suelen usarse para mostrar conteos no leídos, indicadores de estado o simplemente como nodos decorativos.
+
+## Insignia básica
+
+Al establecer la prop `invisible` en `true`, puedes ocultar la insignia, haciéndola no visible para los usuarios.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_invisible.tsx"/>
+
+## Variantes de color
+
+La prop `color` determina el color de la insignia. Los valores posibles son `primary` (primario), `secondary` (secundario) y `error` (error).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_color.tsx"/>
+
+## Uso con iconos y botones
+
+Las insignias se pueden envolver alrededor de íconos o botones para proporcionar indicadores de estado.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_icon.tsx"/>

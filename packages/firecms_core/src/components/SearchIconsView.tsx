@@ -2,6 +2,7 @@ import React from "react";
 
 import { coolIconKeys, debounce, Icon, IconButton, iconKeys, SearchBar, Tooltip } from "@firecms/ui";
 import { iconSynonyms, iconsSearch } from "../util";
+import { useTranslation } from "../hooks/useTranslation";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -22,6 +23,7 @@ export function SearchIconsView({
                                 selectedIcon = "",
                                 onIconSelected
                             }: SearchIconsProps) {
+    const { t } = useTranslation();
     const [keys, setKeys] = React.useState<string[] | null>(null);
     const [query, setQuery] = React.useState<string>("");
 
@@ -53,7 +55,7 @@ export function SearchIconsView({
                 autoFocus={false}
                 innerClassName={"w-full sticky top-0 z-10"}
                 onTextSearch={(value?: string) => setQuery(value ?? "")}
-                placeholder="Search for more icons…"
+                placeholder={t("search_for_more_icons")}
             />
 
             <div className={"flex max-w-full flex-wrap mt-4"}>

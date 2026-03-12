@@ -16,7 +16,8 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    useValidateAuthenticator
+    useValidateAuthenticator,
+    FireCMSi18nProvider
 } from "@firecms/core";
 
 import { FireCMSFirebaseAppProps } from "./FireCMSFirebaseAppProps";
@@ -77,6 +78,7 @@ export function FireCMSFirebaseApp({
                                        firestoreIndexesBuilder,
                                        components,
                                        localTextSearchEnabled = false,
+                                       translations,
                                    }: FireCMSFirebaseAppProps) {
 
     /**
@@ -176,9 +178,10 @@ export function FireCMSFirebaseApp({
 
     return (
         <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+            <FireCMSi18nProvider translations={translations}>
+                <ModeControllerProvider value={modeController}>
 
-                <FireCMS
+                    <FireCMS
                     authController={authController}
                     navigationController={navigationController}
                     userConfigPersistence={userConfigPersistence}
@@ -230,6 +233,7 @@ export function FireCMSFirebaseApp({
                     }}
                 </FireCMS>
             </ModeControllerProvider>
+            </FireCMSi18nProvider>
         </SnackbarProvider>
     );
 }

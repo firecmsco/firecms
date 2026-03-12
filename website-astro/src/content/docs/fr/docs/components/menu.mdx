@@ -1,0 +1,31 @@
+---
+slug: fr/docs/components/menu
+title: Menu
+sidebar_label: Menu
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Le composant `Menu` fournit une fonctionnalité de menu déroulant flexible. Il exploite `@radix-ui/react-dropdown-menu` pour l'accessibilité et les fonctionnalités de personnalisation.
+
+## Utilisation
+
+Le composant `Menu` nécessite un élément `trigger` pour basculer la visibilité du menu et peut accepter tout ReactNode comme ses enfants, qui inclut typiquement des composants `MenuItem` pour les options du menu.
+
+## Menu de base
+
+Un exemple simple d'utilisation du composant `Menu` pour créer un menu déroulant.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_basic.tsx"/>
+
+## Menu contrôlé
+
+Vous pouvez contrôler la visibilité du composant `Menu` en passant les props `open` et `onOpenChange`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_controlled.tsx"/>
+
+## Éléments de menu denses
+
+Montrant comment rendre les composants `MenuItem` denses pour une apparence de menu plus compacte.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_dense_items.tsx"/>

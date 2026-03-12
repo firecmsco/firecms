@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { useApp, useNavigationController } from "@firecms/core";
+import { useApp, useNavigationController, useTranslation } from "@firecms/core";
 import { useDataTalk } from "../DataTalkProvider";
 import { cls, ManageSearchIcon, Typography } from "@firecms/ui";
 
@@ -15,6 +15,7 @@ export function DataTalkDrawer() {
     } = useApp();
 
     const navigation = useNavigationController();
+    const { t } = useTranslation();
 
     const { sessions } = useDataTalk();
     return (
@@ -27,7 +28,7 @@ export function DataTalkDrawer() {
                 {sessions?.map((session, index) => {
                     const firstMessage = session.messages[0];
                     const charsLimit = 30;
-                    const firstChars = firstMessage?.text.slice(0, charsLimit) ?? "DataTalk session started";
+                    const firstChars = firstMessage?.text.slice(0, charsLimit) ?? t("datatalk_session_started");
                     return (
                         <NavLink
                             key={index}

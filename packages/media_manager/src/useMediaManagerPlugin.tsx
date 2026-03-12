@@ -1,10 +1,16 @@
 import React, { useMemo, createContext, useContext, PropsWithChildren } from "react";
-import { FireCMSPlugin, CMSView } from "@firecms/core";
+import { FireCMSPlugin, CMSView, useTranslation } from "@firecms/core";
 import { MediaManagerConfig } from "./types";
 import { MediaManagerProvider } from "./MediaManagerProvider";
 import { useMediaManagerController } from "./useMediaManagerController";
 import { MediaLibraryCard } from "./components/MediaLibraryCard";
 import { MediaLibraryView } from "./components/MediaLibraryView";
+import { mediaManagerTranslationsEn } from "./locales/en";
+import { mediaManagerTranslationsEs } from "./locales/es";
+import { mediaManagerTranslationsDe } from "./locales/de";
+import { mediaManagerTranslationsFr } from "./locales/fr";
+import { mediaManagerTranslationsIt } from "./locales/it";
+import { mediaManagerTranslationsHi } from "./locales/hi";
 
 const DEFAULT_STORAGE_PATH = "media";
 const DEFAULT_COLLECTION_PATH = "media_assets";
@@ -54,15 +60,14 @@ function buildMediaView(): CMSView {
     return {
         path: "media",
         name: "Media Library",
-        description: "Manage your media files and assets",
+        description: "Manage your media files",
         group: "Media",
         icon: "perm_media",
         view: <MediaLibraryViewInternal />
     };
 }
 
-// Single static instance of the view
-const MEDIA_VIEW = buildMediaView();
+// Removed static MEDIA_VIEW because it depends on translation
 
 /**
  * Hook to create the Media Manager plugin for FireCMS.
@@ -83,15 +88,25 @@ const MEDIA_VIEW = buildMediaView();
  * ```
  */
 export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPlugin {
+    const mediaView = useMemo(() => buildMediaView(), []);
+
     return useMemo(() => ({
         key: "media_manager",
-        views: [MEDIA_VIEW],
+        views: [mediaView],
         provider: {
             Component: ({ children }: PropsWithChildren) => (
                 <MediaManagerConfigContext.Provider value={props}>
                     {children}
                 </MediaManagerConfigContext.Provider>
             )
+        },
+        i18n: {
+            en: mediaManagerTranslationsEn,
+            es: mediaManagerTranslationsEs,
+            de: mediaManagerTranslationsDe,
+            fr: mediaManagerTranslationsFr,
+            it: mediaManagerTranslationsIt,
+            hi: mediaManagerTranslationsHi
         }
     } satisfies FireCMSPlugin), []);
 }

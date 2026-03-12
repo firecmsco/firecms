@@ -1,0 +1,121 @@
+---
+slug: de/docs/top_level_views
+title: Top-Level-Ansichten
+description: Passen Sie Ihre FireCMS-Erfahrung an, indem Sie benutzerdefinierte Top-Level-Ansichten hinzufügen, die über traditionelle Firestore-Kollektionen hinausgehen. Lernen Sie, wie Sie React-Komponenten in FireCMS erstellen und integrieren.
+---
+
+Wenn Sie eine benutzerdefinierte Ansicht entwickeln müssen, die nicht direkt einer
+Datenquellen-Kollektion (Datasource) zugeordnet ist, können Sie sie als React-Komponente implementieren. Dies ist nützlich für
+die Implementierung benutzerdefinierter Dashboards, Datenvisualisierungen oder jede andere
+benutzerdefinierte Funktionalität, die Sie benötigen.
+
+Top-Level-Ansichten können basierend auf dem angemeldeten Benutzer angepasst werden, sodass Sie
+benutzerdefinierte Ansichten für verschiedene Benutzerrollen implementieren oder sie für
+nicht-authentifizierte Benutzer vollständig ausblenden können.
+
+Sie können alle von FireCMS bereitgestellten Komponenten und Hooks verwenden.
+Weitere Informationen finden Sie in der [Komponentengalerie](./components).
+
+Sie können auch alle Hooks verwenden, einschließlich Authentifizierung, Navigation, Datenquelle (Firestore),
+Speicher (Storage) usw.
+
+Sie können auch Kollektionsansichten in Ihre benutzerdefinierten Ansichten einbinden, den Seitenbereich
+für Entity-Details verwenden oder sie mit vollständig benutzerdefinierten Komponenten nutzen.
+
+Sie müssen den Namen, die Route und die Komponente definieren und sie zur Hauptnavigation hinzufügen,
+wie im folgenden Beispiel.
+
+Standardmäßig wird sie in der Hauptnavigationsansicht angezeigt.
+
+Für benutzerdefinierte Ansichten können Sie folgende Eigenschaften definieren:
+
+* `path`: string
+
+Die CMS-Route, über die Sie auf diese Ansicht zugreifen können.
+Wenn Sie mehrere Routen angeben, wird nur die erste in das
+Hauptmenü aufgenommen.
+
+* `name`: string
+
+Name dieser Ansicht.
+
+* `description`?: string
+
+Optionale Beschreibung dieser Ansicht. Sie können Markdown verwenden.
+
+* `hideFromNavigation`?: boolean
+
+Soll diese Ansicht aus dem Hauptnavigationsbereich ausgeblendet werden?
+Sie ist weiterhin zugänglich, wenn Sie die angegebene Route aufrufen.
+
+* `view`: React.ReactNode
+
+Zu rendernde Komponente. Es kann jede React-Komponente sein und kann beliebige
+der bereitgestellten Hooks verwenden.
+
+* `group`?: string
+
+Optionales Feld, das verwendet wird, um Top-Level-Navigationseinträge unter einer
+Navigationsansicht zu gruppieren.
+
+
+### Beispiel mit FireCMS Self-Hosted
+
+Für Self-Hosted FireCMS können Sie Ihre benutzerdefinierten Top-Level-Ansichten definieren, indem Sie sie zu Ihrem `useBuildNavigationController` hinzufügen.
+Sie können sie als Array von `CMSView`-Objekten oder als Callback-Funktion übergeben, die ein Array von `CMSView`-Objekten zurückgibt.
+Im Callback können Sie das `user`-Objekt verwenden, um Ansichten basierend auf der Benutzerrolle bedingt anzuzeigen oder auszublenden, sowie
+auf die Authentifizierungs- und Navigations-Hooks zuzugreifen.
+
+```tsx
+import {CMSView, useBuildNavigationController} from "@firecms/core";
+import {useMemo} from "react";
+
+// Rest Ihres Haupt-App-Codes
+
+    const customViews: CMSView[] = useMemo([{
+        path: "additional",
+        name: "Additional view",
+        description: "This is an example of an additional view that is defined by the user",
+        // Dies kann jede React-Komponente sein
+        view: <ExampleCMSView/>
+    }], []);
+
+    const navigationController = useBuildNavigationController({
+        views: ({ user }) =>{
+            if(!user) {
+                return [];
+            }
+            return customViews;
+        },
+        collections,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+```
+
+
+### Beispiel mit FireCMS Cloud
+
+In FireCMS Cloud können Sie Ihre benutzerdefinierten Top-Level-Ansichten definieren, indem Sie sie zu Ihrem `FireCMSAppConfig` hinzufügen. Sie können
+einen Callback verwenden oder sie direkt zur `views`-Eigenschaft hinzufügen. Der Callback enthält den angemeldeten `user`, sodass Sie ihn
+verwenden können, um Ansichten basierend auf der Benutzerrolle bedingt anzuzeigen oder auszublenden.
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import CustomViewSampleCloud from '../samples/samples_v3/custom_cms_view/CustomViewSampleCloud?raw';
+import ExampleCMSView from '../samples/samples_v3/custom_cms_view/ExampleCMSView?raw';
+
+<Code code={CustomViewSampleCloud} lang="tsx" />
+
+
+
+### Beispiel einer zusätzlichen Ansicht
+
+Ihre benutzerdefinierte Ansicht wird wie jede reguläre React-Komponente implementiert.
+Sie können alle bereitgestellten Hooks verwenden, einschließlich Authentifizierung, Navigation, Datenquelle (Datasource), Speicher (Storage), App-Status usw.
+
+
+
+
+<Code code={ExampleCMSView} lang="tsx" />

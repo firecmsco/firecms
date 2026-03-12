@@ -1,0 +1,35 @@
+---
+slug: it/docs/recipes/autoupdate_slug
+title: Aggiungere uno slug ai tuoi documenti
+sidebar_label: Aggiungere uno slug ai tuoi documenti
+description: Impara come generare automaticamente slug per i tuoi documenti in Firestore usando FireCMS.
+---
+
+Quando si costruisce un CMS, è comune voler generare slug per i propri documenti in base a un campo specifico, come il titolo. Questo è utile per creare URL SEO-friendly e migliorare la reperibilità dei contenuti.
+
+In questo tutorial, ti mostreremo come generare automaticamente slug per i tuoi documenti usando FireCMS. È molto semplice aggiungere un callback che verrà eseguito prima di salvare il documento, permettendoti di generare lo slug in base al campo titolo.
+
+### Dichiara la tua collezione
+
+Per scopi illustrativi, creiamo una semplice collezione `pages`, con solo un campo titolo, a cui aggiungeremo uno slug:
+
+
+import { Code } from '@astrojs/starlight/components';
+import AddSlugSource from '../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property?raw';
+import SlugCallbacksSource from '../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks?raw';
+import FullCode from '../../samples/samples_v3/recipes/autoupdate_slug/full?raw';
+
+<Code code={AddSlugSource} lang="tsx" />
+
+### Aggiungi il callback pre-salvataggio
+
+Per aggiungere uno slug ai tuoi documenti, puoi usare il callback `onPreSave` fornito da FireCMS. Questo callback verrà eseguito prima di salvare il documento, permettendoti di modificarlo prima che venga scritto nel database.
+
+<Code code={SlugCallbacksSource} lang="tsx" />
+
+
+### Codice completo
+
+Ecco il codice completo per questo esempio:
+
+<Code code={FullCode} lang="tsx" />

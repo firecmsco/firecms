@@ -1,10 +1,11 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorBoundary, FireCMSLogo } from "../components";
+import { ErrorBoundary, FireCMSLogo, LanguageToggle } from "../components";
 import {
     Avatar,
     BrightnessMediumIcon,
+    CheckIcon,
     cls,
     DarkModeIcon,
     IconButton,
@@ -15,7 +16,7 @@ import {
     Skeleton,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useNavigationController, useTranslation } from "../hooks";
 import { User } from "../types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
@@ -85,6 +86,8 @@ export const DefaultAppBar = function DefaultAppBar({
         mode,
         setMode
     } = useModeController();
+    
+    const { i18n, t } = useTranslation();
 
     const navigate = useNavigate();
 
@@ -192,17 +195,18 @@ export const DefaultAppBar = function DefaultAppBar({
                 <Menu
                     trigger={<IconButton
                         color="inherit"
-                        aria-label="Open drawer"
-                        size="large">
+                        aria-label="Open drawer">
                         {mode === "dark"
-                            ? <DarkModeIcon />
-                            : <LightModeIcon />}
+                            ? <DarkModeIcon size="small" />
+                            : <LightModeIcon size="small" />}
                     </IconButton>}>
-                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> Dark</MenuItem>
-                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> Light </MenuItem>
+                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
+                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
                     <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
-                        size={"smallest"} />System</MenuItem>
+                        size={"smallest"} />{t("system_mode")}</MenuItem>
                 </Menu>}
+
+            <LanguageToggle />
 
             <Menu trigger={avatarComponent}>
                 {user && <div className={"px-4 py-2 mb-2"}>
@@ -222,7 +226,7 @@ export const DefaultAppBar = function DefaultAppBar({
                     navigate("/");
                 }}>
                     <LogoutIcon />
-                    Log Out
+                    {t("log_out")}
                 </MenuItem>}
 
             </Menu>

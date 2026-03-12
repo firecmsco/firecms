@@ -17,7 +17,8 @@ import {
     useCustomizationController,
     useDataSource,
     useNavigationController,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 
 import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
@@ -72,6 +73,7 @@ export function DataEnhancementControllerProvider({
 
     const customizationController = useCustomizationController();
     const enhancingInProgress = useRef(false);
+    const { t } = useTranslation();
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
@@ -211,7 +213,7 @@ export function DataEnhancementControllerProvider({
     function displayNeededSubscriptionSnackbar(projectId: any) {
         snackbarController.open({
             type: "warning",
-            message: "A valid subscription is needed in order to use this function.",
+            message: t("subscription_needed"),
             autoHideDuration: 4000
         })
     }
@@ -223,7 +225,7 @@ export function DataEnhancementControllerProvider({
         if (!authController.user) {
             snackbarController.open({
                 type: "warning",
-                message: "You need to be logged in to enhance data"
+                message: t("login_to_enhance")
             });
             return Promise.reject(new Error("Not logged in"));
         }
@@ -289,7 +291,7 @@ export function DataEnhancementControllerProvider({
                             snackbarController.open({
                                 type: "info",
                                 autoHideDuration: 1800,
-                                message: "No fields were updated"
+                                message: t("no_fields_updated")
                             })
                         }
                         setLoadingSuggestions([]);

@@ -7,7 +7,8 @@ import {
     singular,
     toSnakeCase,
     useAuthController,
-    useCustomizationController
+    useCustomizationController,
+    useTranslation
 } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
@@ -55,6 +56,7 @@ export function GeneralSettingsForm({
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
+    const { t } = useTranslation();
 
     const updateDatabaseId = (databaseId: string) => {
         setFieldValue("databaseId", databaseId ?? undefined);
@@ -90,12 +92,12 @@ export function GeneralSettingsForm({
                 <div>
                     <div className="flex flex-row gap-2 py-2 pt-3 items-center">
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
-                            {isNewCollection ? "New collection" : `${values?.name} collection`}
+                            {isNewCollection ? t("new_collection") : t("collection_with_name", { name: values?.name })}
                         </Typography>
                         <DefaultDatabaseField databaseId={values.databaseId}
                             onDatabaseIdUpdate={updateDatabaseId} />
 
-                        <Tooltip title={"Change icon"}
+                        <Tooltip title={t("change_icon")}
                             asChild={true}>
                             <IconButton
                                 shape={"square"}
@@ -107,7 +109,7 @@ export function GeneralSettingsForm({
 
                     {parentCollection && <Chip colorScheme={"tealDarker"}>
                         <Typography variant={"caption"}>
-                            This is a subcollection of <b>{parentCollection.name}</b>
+                            {t("is_subcollection_of")} <b>{parentCollection.name}</b>
                         </Typography>
                     </Chip>}
 
@@ -120,12 +122,12 @@ export function GeneralSettingsForm({
                         <TextField
                             value={values.name ?? ""}
                             onChange={(e: any) => updateName(e.target.value)}
-                            label={"Name"}
+                            label={t("name")}
                             autoFocus={true}
                             required
                             error={showErrors && Boolean(errors.name)} />
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
-                            {touched.name && Boolean(errors.name) ? errors.name : "Name of this collection, usually a plural name (e.g. Products)"}
+                            {touched.name && Boolean(errors.name) ? errors.name : t("collection_name_description")}
                         </FieldCaption>
                     </div>
 
@@ -133,14 +135,14 @@ export function GeneralSettingsForm({
                     <div className={cls("col-span-12")}>
                         <Field name={"path"}
                             as={DebouncedTextField}
-                            label={"Path"}
+                            label={t("path")}
                             required
                             error={showErrors && Boolean(errors.path)} />
 
                         <FieldCaption error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
                                 ? errors.path
-                                : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
+                                : isSubcollection ? t("relative_path_to_parent") : t("path_in_database")}
                         </FieldCaption>
                     </div>
 
@@ -155,9 +157,9 @@ export function GeneralSettingsForm({
                                 return handleChange(e);
                             }}
                             value={values.singularName ?? ""}
-                            label={"Singular name"} />
+                            label={t("singular_name")} />
                         <FieldCaption error={showErrors && Boolean(errors.singularName)}>
-                            {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
+                            {showErrors && Boolean(errors.singularName) ? errors.singularName : t("singular_name_description")}
                         </FieldCaption>
                     </div>
 
@@ -171,10 +173,10 @@ export function GeneralSettingsForm({
                             multiline
                             minRows={2}
                             aria-describedby="description-helper-text"
-                            label="Description"
+                            label={t("description")}
                         />
                         <FieldCaption error={showErrors && Boolean(errors.description)}>
-                            {showErrors && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
+                            {showErrors && Boolean(errors.description) ? errors.description : t("description_of_collection")}
                         </FieldCaption>
                     </div>
 
@@ -183,10 +185,10 @@ export function GeneralSettingsForm({
                         <Field name={"id"}
                             as={DebouncedTextField}
                             disabled={!isNewCollection}
-                            label={"Collection ID"}
+                            label={t("collection_id")}
                             error={showErrors && Boolean(errors.id)} />
                         <FieldCaption error={touched.id && Boolean(errors.id)}>
-                            {touched.id && Boolean(errors.id) ? errors.id : "This ID identifies this collection. Typically the same as the path."}
+                            {touched.id && Boolean(errors.id) ? errors.id : t("collection_id_description")}
                         </FieldCaption>
                     </div>
 
@@ -195,13 +197,12 @@ export function GeneralSettingsForm({
                         <BooleanSwitchWithLabel
                             position={"start"}
                             size={"large"}
-                            label="Collection group"
+                            label={t("collection_group")}
                             onValueChange={(v) => setFieldValue("collectionGroup", v)}
                             value={values.collectionGroup ?? false}
                         />
                         <FieldCaption>
-                            A collection group consists of all collections with the same path. This allows
-                            you to query over multiple collections at once.
+                            {t("collection_group_description")}
                         </FieldCaption>
                     </div>
 
@@ -209,7 +210,7 @@ export function GeneralSettingsForm({
 
                 {/* Advanced Settings */}
                 <ExpandablePanel
-                    title={<Typography variant="subtitle2">Advanced settings</Typography>}
+                    title={<Typography variant="subtitle2">{t("advanced_settings")}</Typography>}
                     initiallyExpanded={false}
                     className="mt-4"
                     innerClassName="p-4 flex flex-col gap-4"
@@ -220,16 +221,14 @@ export function GeneralSettingsForm({
                             position={"start"}
                             size={"large"}
                             allowIndeterminate={true}
-                            label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
-                                values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
+                            label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? t("doc_history_global") : (
+                                values.history ? t("doc_history_enabled") : t("doc_history_not_enabled")
                             )}</span>}
                             onValueChange={(v) => setFieldValue("history", v)}
                             value={values.history === undefined ? null : values.history}
                         />
                         <FieldCaption>
-                            When enabled, each document in this collection will have a history of changes.
-                            This is useful for auditing purposes. The data is stored in a subcollection of the document
-                            in your database, called <b>__history</b>.
+                            {t("doc_history_description")}
                         </FieldCaption>
                     </div>
 
@@ -237,7 +236,7 @@ export function GeneralSettingsForm({
                     <div>
                         <Select
                             name="customId"
-                            label="Document IDs generation"
+                            label={t("document_id_generation")}
                             position={"item-aligned"}
                             size={"large"}
                             fullWidth={true}
@@ -256,27 +255,27 @@ export function GeneralSettingsForm({
                             }
                             renderValue={(value: any) => {
                                 if (value === "code_defined")
-                                    return "Code defined";
+                                    return t("code_defined");
                                 else if (value === "true")
-                                    return "Users must define an ID";
+                                    return t("users_must_define_id");
                                 else if (value === "optional")
-                                    return "Users can define an ID, but it is not required";
+                                    return t("users_can_define_id");
                                 else
-                                    return "Document ID is generated automatically";
+                                    return t("doc_id_auto_generated");
                             }}
                         >
                             <SelectItem value={"false"}>
-                                Document ID is generated automatically
+                                {t("doc_id_auto_generated")}
                             </SelectItem>
                             <SelectItem value={"true"}>
-                                Users must define an ID
+                                {t("users_must_define_id")}
                             </SelectItem>
                             <SelectItem value={"optional"}>
-                                Users can define an ID, but it is not required
+                                {t("users_can_define_id")}
                             </SelectItem>
                         </Select>
                         <FieldCaption>
-                            Configure how document IDs are generated when creating new entities.
+                            {t("config_doc_id_generation")}
                         </FieldCaption>
                     </div>
 
@@ -285,14 +284,12 @@ export function GeneralSettingsForm({
                         <BooleanSwitchWithLabel
                             position={"start"}
                             size={"large"}
-                            label={<span className="flex items-center gap-2"><SearchIcon size={"smallest"} />Enable text search for this collection</span>}
+                            label={<span className="flex items-center gap-2"><SearchIcon size={"smallest"} />{t("enable_text_search")}</span>}
                             onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
                             value={values.textSearchEnabled ?? false}
                         />
                         <FieldCaption>
-                            Allow text search for this collection. If you have not specified a text search
-                            delegate, this will use the built-in local text search. This is not recommended
-                            for large collections, as it may incur in performance and cost issues.
+                            {t("text_search_description")}
                         </FieldCaption>
                     </div>
                 </ExpandablePanel>
@@ -323,8 +320,9 @@ function DefaultDatabaseField({
     databaseId,
     onDatabaseIdUpdate
 }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
+    const { t } = useTranslation();
 
-    return <Tooltip title={"Database ID"}
+    return <Tooltip title={t("database_id")}
         side={"top"}
         align={"start"}>
         <TextField size={"small"}
@@ -332,6 +330,6 @@ function DefaultDatabaseField({
             inputClassName={"text-end"}
             value={databaseId ?? ""}
             onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
-            placeholder={"(default)"}></TextField>
+            placeholder={t("default_text")}></TextField>
     </Tooltip>
 }

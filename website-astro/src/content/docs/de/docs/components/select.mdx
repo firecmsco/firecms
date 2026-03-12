@@ -1,0 +1,67 @@
+---
+slug: de/docs/components/select
+title: Auswahl (Select)
+sidebar_label: Select
+---
+
+Select ist eine Formularkomponente, die ein Dropdown-Menü bereitstellt, aus dem Benutzer unter mehreren Optionen wählen können. Sie unterstützt Einzel- und Mehrfachauswahl, anpassbare Stile und die Integration mit Formularbibliotheken.
+
+## Verwendung
+
+Um die `Select`-Komponente in Ihrer Webanwendung zu verwenden, beginnen Sie damit, sie zusammen mit `SelectItem` für einzelne
+Optionen und `SelectGroup` (falls Sie verwandte Optionen gruppieren möchten) zu importieren. Die `Select`-Komponente kann stark
+an Ihre spezifischen Anforderungen an die Benutzeroberfläche angepasst werden. Sie können ihr Erscheinungsbild steuern, wie z. B. ihre
+Größe, Form und Farbe, um dem Gesamtdesign Ihrer Anwendung zu entsprechen. Außerdem können Sie ihr Verhalten anpassen,
+einschließlich der Handhabung von Benutzerinteraktionen, ob Mehrfachauswahl unterstützt wird und wie ausgewählte Elemente angezeigt werden.
+Dieses Maß an Anpassung macht sie zu einem vielseitigen Werkzeug für die Erstellung intuitiver und responsiver Dropdown-Menüs,
+die die Benutzererfahrung verbessern.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Einfaches Select
+
+Eine grundlegende Verwendung der Select-Komponente mit minimaler Konfiguration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_basic.tsx"/>
+
+## Angepasstes Select
+
+Eine Select-Komponente mit benutzerdefinierten Stilen und Funktionen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_custom.tsx"/>
+
+## Select mit Gruppen
+
+Demonstriert, wie Optionen mithilfe von `SelectGroup` unter Labels gruppiert werden.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_group.tsx"/>
+
+## Select-Komponenten-Props
+
+Die `Select`-Komponente in FireCMS UI ist über verschiedene Props stark anpassbar. Nachfolgend finden Sie eine umfassende Liste der Props, mit denen Sie die `Select`-Komponente an Ihre Anforderungen anpassen können:
+
+- `open`: Steuert, ob das Select-Dropdown geöffnet ist. Standard: `false`.
+- `name`: Das `name`-Attribut für das Select-Eingabeelement.
+- `id`: Das `id`-Attribut für das Select-Eingabeelement.
+- `onOpenChange`: Callback, wenn sich der Öffnungsstatus ändert.
+- `value`: Der aktuelle Wert (oder die Werte) der Select-Komponente, kann ein `string` oder ein Array von `strings` für Mehrfachauswahl sein.
+- `className`: Zusätzliche Klassen, die auf das Root-Element angewendet werden.
+- `inputClassName`: Zusätzliche Klassen, die auf das Eingabeelement angewendet werden.
+- `onChange`: Handler-Funktion, die aufgerufen wird, wenn sich der Select-Wert ändert.
+- `onValueChange`: Callback, wenn sich der Wert ändert.
+- `onMultiValueChange`: Callback, wenn sich der Wert in einem Mehrfach-Select ändert.
+- `placeholder`: Der Platzhaltertext, der angezeigt wird, wenn kein Wert ausgewählt ist.
+- `renderValue`: Benutzerdefinierte Render-Funktion für den ausgewählten Wert.
+- `renderValues`: Benutzerdefinierte Render-Funktion für die ausgewählten Werte in einem Mehrfach-Select.
+- `size`: Die Größe der Select-Komponente, kann `"small"` oder `"medium"` sein. Standard: `"medium"`.
+- `label`: Das Label, das über dem Select-Feld angezeigt wird, kann ein `ReactNode` oder ein `string` sein.
+- `disabled`: Deaktiviert die Select-Komponente. Standard: `false`.
+- `error`: Versetzt die Select-Komponente in einen Fehlerzustand. Standard: `false`.
+- `position`: Position des Dropdowns relativ zum Trigger, kann `"item-aligned"` oder `"popper"` sein. Standard: `"item-aligned"`.
+- `endAdornment`: Element, das am Ende der Select-Eingabe platziert wird.
+- `multiple`: Aktiviert den Mehrfachauswahl-Modus. Standard: `false`.
+- `inputRef`: Ref-Objekt für das Select-Eingabeelement.
+- `padding`: Fügt der Select-Eingabe einen Innenabstand hinzu. Standard: `true`.
+- `invisible`: Versteckt die Select-Komponente, behält sie aber im DOM.
+- `children`: Inhalt, der als Optionen innerhalb der Select-Komponente gerendert wird.
+

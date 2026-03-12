@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, } from "@firecms/core";
+import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, useTranslation } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     CircularProgress,
@@ -89,6 +89,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     editorAIController
 }: FieldInnerParams<T, M>) {
 
+    const { t } = useTranslation();
     const [dataLoading, setDataLoading] = useState(false);
 
     const [tooltipOpen, setTooltipOpen] = React.useState(false);
@@ -175,8 +176,8 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                 side={"left"}
                 asChild={false}
                 title={enoughData
-                    ? `Autofill ${property.name ?? "this field"}`
-                    : `You need to input some data in the form before enhancing ${property.name ?? "this field"}`}>
+                    ? t("autofill_property", { property: property.name ?? t("this_field") })
+                    : t("input_data_before_enhancing_property", { property: property.name ?? t("this_field") })}>
                 <Menu
                     open={menuOpen}
                     onOpenChange={setMenuOpen}
@@ -207,13 +208,13 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                         <AutoAwesomeIcon size="small" />
                         <div className={"flex flex-col"}>
                             <Typography
-                                variant={"body2"}> {`Autofill ${property.name ?? "this field"}`}</Typography>
-                            <Typography variant={"caption"}>based on the rest of the entity</Typography>
+                                variant={"body2"}> {t("autofill_property", { property: property.name ?? t("this_field") })}</Typography>
+                            <Typography variant={"caption"}>{t("based_on_rest_of_entity")}</Typography>
                         </div>
                     </MenuItem>
 
                     {allowInstructions && <div className={"p-4"}>
-                        <TextField label={"Ask AI to write"}
+                        <TextField label={t("ask_ai_to_write")}
                             size={"small"}
                             className={"w-[400px] max-w-full text-text-primary dark:text-text-primary-dark"}
                             value={propertyInstructions ?? ""}
@@ -222,7 +223,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                     enhanceData(propertyInstructions);
                                 }
                             }}
-                            placeholder={"Instructions"}
+                            placeholder={t("instructions")}
                             onChange={(e) => setPropertyInstructions(e.target.value)}
                             endAdornment={<IconButton
                                 size={"small"}

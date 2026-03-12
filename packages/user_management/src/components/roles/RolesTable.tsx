@@ -13,7 +13,8 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { ConfirmationDialog, Role } from "@firecms/core";
+import { ConfirmationDialog, Role, useTranslation
+} from "@firecms/core";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "./RoleChip";
 import { DEFAULT_ROLES } from "./default_roles";
@@ -26,6 +27,7 @@ export function RolesTable({
     editable: boolean;
 }) {
 
+    const { t } = useTranslation();
     const {
         roles,
         saveRole,
@@ -41,9 +43,9 @@ export function RolesTable({
         <Table className={"w-full"}>
             <TableHeader>
                 <TableCell header={true} className="w-16"></TableCell>
-                <TableCell header={true}>Role</TableCell>
-                <TableCell header={true} className={"items-center"}>Is Admin</TableCell>
-                <TableCell header={true}>Default permissions</TableCell>
+                <TableCell header={true}>{t("role")}</TableCell>
+                <TableCell header={true} className={"items-center"}>{t("is_admin")}</TableCell>
+                <TableCell header={true}>{t("default_permissions")}</TableCell>
             </TableHeader>
 
             <TableBody>
@@ -63,7 +65,7 @@ export function RolesTable({
                                 {!role.isAdmin &&
                                     <Tooltip
                                         asChild={true}
-                                        title={"Delete this role"}>
+                                        title={t("delete_this_role")}>
                                         <IconButton
                                             size={"small"}
                                             disabled={!editable}
@@ -83,10 +85,10 @@ export function RolesTable({
                             </TableCell>
                             <TableCell>
                                 <ul>
-                                    {canCreateAll && <li>Create</li>}
-                                    {canReadAll && <li>Read</li>}
-                                    {canUpdateAll && <li>Update</li>}
-                                    {canDeleteAll && <li>Delete</li>}
+                                    {canCreateAll && <li>{t("create")}</li>}
+                                    {canReadAll && <li>{t("read")}</li>}
+                                    {canUpdateAll && <li>{t("update")}</li>}
+                                    {canDeleteAll && <li>{t("delete")}</li>}
                                 </ul>
                             </TableCell>
                         </TableRow>
@@ -97,7 +99,7 @@ export function RolesTable({
                     <TableCell colspan={4}>
                         <CenteredView className={"flex flex-col gap-4 my-8 items-center"}>
                             <Typography variant={"label"}>
-                                You don&apos;t have any roles yet.
+                                {t("no_roles_yet")}
                             </Typography>
                             {allowDefaultRolesCreation && <Button
                                                                   onClick={() => {
@@ -105,7 +107,7 @@ export function RolesTable({
                                                                           saveRole(role);
                                                                       });
                                                                   }}>
-                                Create default roles
+                                {t("create_default_roles")}
                             </Button>}
                         </CenteredView>
                     </TableCell>
@@ -133,8 +135,8 @@ export function RolesTable({
             onCancel={() => {
                 setRoleToBeDeleted(undefined);
             }}
-            title={<>Delete?</>}
-            body={<>Are you sure you want to delete this role?</>}/>
+            title={<>{t("delete_confirmation_title")}</>}
+            body={<>{t("delete_role_confirmation")}</>}/>
 
     </div>;
 }

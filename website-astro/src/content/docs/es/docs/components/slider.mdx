@@ -1,0 +1,43 @@
+---
+slug: es/docs/components/slider
+title: Control deslizante (Slider)
+sidebar_label: Control deslizante
+---
+
+Los controles deslizantes (Sliders) permiten a los usuarios ingresar un valor deslizando un control a lo largo de una pista. Este componente es altamente personalizable con varias opciones de orientación, pasos, rangos y más.
+
+## Uso
+
+Para usar `Slider`, impórtalo de tu biblioteca de componentes y configúralo usando props como `min` (mínimo), `max` (máximo), `step` (paso), `value` (valor) y otras.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Control deslizante básico
+
+Un ejemplo básico del componente Slider con la configuración predeterminada.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_basic.tsx"/>
+
+## Control deslizante de rango
+
+Un ejemplo de un control deslizante de rango con dos tiradores que permiten a los usuarios seleccionar un rango de valores.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_range.tsx"/>
+
+## Control deslizante pequeño
+
+Una versión más pequeña del componente Slider con un tamaño reducido.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_small.tsx"/>
+
+## Control deslizante deshabilitado
+
+Ilustrando cómo utilizar la prop `disabled` para crear un Slider no interactivo.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_disabled.tsx"/>
+
+## Control deslizante invertido
+
+Un ejemplo de un control deslizante invertido donde el valor disminuye de izquierda a derecha.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_inverted.tsx"/>

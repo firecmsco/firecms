@@ -1,0 +1,37 @@
+---
+slug: es/docs/components/search_bar
+title: Barra de búsqueda (SearchBar)
+sidebar_label: Barra de búsqueda
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente `SearchBar` (Barra de búsqueda) está diseñado para implementar funcionalidades de búsqueda. Admite funciones como entrada de búsqueda con retraso (debouncing), tamaños de entrada expandibles y visualización del estado de carga.
+
+## Uso
+
+Para usar `SearchBar`, impórtalo desde tus componentes y pasa las props necesarias como `onTextSearch` (al buscar texto), `placeholder` (marcador de posición), `expandable` (expandible), `large` (grande), `autoFocus` (autofoco), `disabled` (deshabilitado), `loading` (cargando) e `inputRef` (referencia de entrada).
+
+## Barra de búsqueda básica
+
+El uso básico de `SearchBar` con una configuración mínima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_basic.tsx"/>
+
+## Barra de búsqueda con estado de carga
+
+Una demostración de `SearchBar` mostrando un indicador de carga.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_loading.tsx"/>
+
+## Barra de búsqueda expandible
+
+Este ejemplo muestra cómo hacer que `SearchBar` se expanda al enfocar (focus).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_expandable.tsx"/>
+
+## Barra de búsqueda grande
+
+Muestra un variante más grande del `SearchBar`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_large.tsx"/>

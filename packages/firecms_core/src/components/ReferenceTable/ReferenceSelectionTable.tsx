@@ -12,7 +12,8 @@ import {
     useDataSource,
     useLargeLayout,
     useNavigationController,
-    useSideEntityController
+    useSideEntityController,
+    useTranslation
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
@@ -101,6 +102,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         maxSelection,
     }: ReferenceSelectionInnerProps<M>) {
 
+    const { t } = useTranslation();
     const authController = useAuthController();
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
@@ -302,8 +304,8 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                                 collectionOrView={collection}
                                 className={"text-surface-300 dark:text-surface-600"}/>
                             {collection.singularName
-                                ? `Select ${collection.singularName}`
-                                : `Select from ${collection.name}`}
+                                ? t("select_specific", { name: collection.singularName })
+                                : t("select_from", { name: collection.name })}
                         </Typography>}
                         defaultSize={collection.defaultSize}
                         properties={resolvedCollection.properties}
@@ -327,7 +329,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                 <Button
                     onClick={onDone}
                     variant="filled">
-                    Done
+                    {t("done")}
                 </Button>
             </DialogActions>
         </div>
@@ -347,7 +349,7 @@ function ReferenceDialogActions({
     onClear: () => void,
     onNewClick: () => void
 }) {
-
+    const { t } = useTranslation();
     const authController = useAuthController();
 
     const largeLayout = useLargeLayout();
@@ -363,7 +365,7 @@ function ReferenceDialogActions({
             ? <Button
                 onClick={onClick}
                 startIcon={<AddIcon/>}>
-                Add {collection.singularName ?? collection.name}
+                {t("add_specific", { name: collection.singularName ?? collection.name })}
             </Button>
             : <Button
                 onClick={onClick}>
@@ -374,7 +376,7 @@ function ReferenceDialogActions({
         <>
             <Button onClick={onClear}
                     variant={"text"}>
-                Clear
+                {t("clear")}
             </Button>
             {addButton}
         </>

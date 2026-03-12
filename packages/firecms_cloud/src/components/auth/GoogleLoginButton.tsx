@@ -2,6 +2,7 @@ import { googleIcon } from "./social_icons";
 import React from "react"
 
 import { Button, cls } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function GoogleLoginButton({
                                       onClick,
@@ -10,6 +11,7 @@ export function GoogleLoginButton({
     onClick: () => void,
     disabled?: boolean
 }) {
+    const { t } = useTranslation();
     return (
         <Button
             className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
@@ -22,14 +24,14 @@ export function GoogleLoginButton({
             disabled={disabled}
             onClick={onClick}>
             <div
-                className={cls("flex items-center justify-items-center ")}>
-                <div className="flex flex-col items-center justify-center w-4.5 h-4.5">
-                    {googleIcon()}
-                </div>
+                className="p-1 flex h-8 items-center justify-items-center">
                 <div
-                    className={cls("flex-grow pl-6 text-left")}>
-                    {"Sign in with Google"}
+                    className="flex flex-col w-8 items-center justify-items-center mr-4">
+                    <div className="flex items-center justify-center w-[28px] h-[28px]">
+                        {googleIcon()}
+                    </div>
                 </div>
+                <div className="flex-grow pl-2 text-center">{t("sign_in_with_google")}</div>
             </div>
         </Button>
 

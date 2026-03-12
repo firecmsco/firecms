@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@firecms/ui";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface RenameGroupDialogProps {
     open: boolean;
@@ -18,7 +19,8 @@ export function RenameGroupDialog({
                                   }: RenameGroupDialogProps) {
     const [name, setName] = useState(initialName);
     const [error, setError] = useState<string | null>(null);
-    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null); // Create a ref for the input
+    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (open) {
@@ -38,9 +40,9 @@ export function RenameGroupDialog({
         const newName = event.target.value;
         setName(newName);
         if (!newName.trim()) {
-            setError("Group name cannot be empty.");
+            setError(t("group_name_empty_error"));
         } else if (existingGroupNames.includes(newName.trim())) {
-            setError("This group name already exists.");
+            setError(t("group_name_exists_error"));
         } else {
             setError(null);
         }
@@ -49,11 +51,11 @@ export function RenameGroupDialog({
     const handleSave = () => {
         const trimmedName = name.trim();
         if (!trimmedName) {
-            setError("Group name cannot be empty.");
+            setError(t("group_name_empty_error"));
             return;
         }
         if (existingGroupNames.includes(trimmedName)) {
-            setError("This group name already exists.");
+            setError(t("group_name_exists_error"));
             return;
         }
         if (!error) {
@@ -70,9 +72,9 @@ export function RenameGroupDialog({
             // because the error state might not have updated if the user types and immediately hits enter.
             let currentError = null;
             if (!trimmedName) {
-                currentError = "Group name cannot be empty.";
+                currentError = t("group_name_empty_error");
             } else if (existingGroupNames.includes(trimmedName)) {
-                currentError = "This group name already exists.";
+                currentError = t("group_name_exists_error");
             }
 
             if (!currentError && trimmedName) {
@@ -93,14 +95,14 @@ export function RenameGroupDialog({
 
     return (
         <Dialog open={open}>
-            <DialogTitle>Rename Group</DialogTitle>
+            <DialogTitle>{t("rename_group")}</DialogTitle>
             <DialogContent>
                 <TextField
-                    inputRef={inputRef} // Pass the ref to the TextField
-                    label="Group Name"
+                    inputRef={inputRef}
+                    label={t("group_name_label")}
                     value={name}
                     onChange={handleNameChange}
-                    onKeyDown={handleKeyDown} // Added onKeyDown handler
+                    onKeyDown={handleKeyDown}
                     error={!!error}
                     aria-describedby={error ? "group-name-error" : undefined}
                 />
@@ -109,11 +111,11 @@ export function RenameGroupDialog({
             <DialogActions>
                 <Button onClick={onClose}
                         variant="text">
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button onClick={handleSave}
                         disabled={!!error || !name.trim()}>
-                    Save
+                    {t("save")}
                 </Button>
             </DialogActions>
         </Dialog>

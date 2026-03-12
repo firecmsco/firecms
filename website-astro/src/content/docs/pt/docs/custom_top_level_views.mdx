@@ -1,0 +1,119 @@
+---
+slug: pt/docs/top_level_views
+title: Views de Nível Superior
+description: Personalize sua experiência com o FireCMS adicionando views de nível superior personalizadas que transcendem as coleções tradicionais do Firestore. Aprenda como criar e integrar componentes React sob medida dentro do FireCMS.
+---
+
+Se você precisar desenvolver uma view personalizada que não mapeie diretamente para uma coleção de datasource,
+você pode implementá-la como um componente React. Isso é útil para
+implementar dashboards personalizados, visualizações de dados, ou qualquer outra
+funcionalidade personalizada que você precisar.
+
+As views de nível superior podem ser personalizadas com base no usuário logado, então você pode
+implementar views personalizadas para diferentes papéis de usuário, ou mesmo ocultá-las completamente
+para usuários não autenticados.
+
+Você pode usar todos os componentes e hooks fornecidos pelo FireCMS.
+Veja a [galeria de componentes](./components) para mais informações.
+
+Você também pode usar todos os hooks, incluindo autenticação, navegação, datasource (Firestore),
+armazenamento, etc.
+
+Você também pode incluir views de coleção dentro das suas views personalizadas, ou usar o painel lateral
+para ver detalhes de entidades, ou usar com componentes completamente personalizados.
+
+Você precisa definir o nome, rota e o componente, e adicioná-lo à navegação principal,
+como no exemplo abaixo.
+
+Por padrão, aparecerá na view de navegação principal.
+
+Para views personalizadas você pode definir as seguintes props:
+
+* `path` string
+
+Caminho CMS pelo qual você pode alcançar esta view.
+Se você incluir múltiplos caminhos, apenas o primeiro será incluído no
+menu principal
+
+* `name`: string
+
+Nome desta view
+
+* `description`?: string
+
+Descrição opcional desta view. Você pode usar Markdown
+
+* `hideFromNavigation`?: boolean
+
+Esta view deve ser ocultada do painel de navegação principal.
+Ainda será acessível se você alcançar o caminho especificado
+
+* `view`: React.ReactNode
+
+Componente a ser renderizado. Pode ser qualquer componente React e pode usar qualquer
+um dos hooks fornecidos
+
+* `group`?: string
+
+Campo opcional usado para agrupar entradas de navegação de nível superior em uma
+view de navegação.
+
+
+### Exemplo FireCMS self-hosted
+
+Para o FireCMS self-hosted, você pode definir suas views de nível superior personalizadas adicionando-as no seu componente `useBuildNavigationController`.
+Você pode passá-las como um array de objetos `CMSView` ou uma função callback que retorna um array de objetos `CMSView`.
+No callback, você pode usar o objeto `user` para mostrar ou ocultar condicionalmente views com base no papel do usuário.
+
+```tsx
+import {CMSView, useBuildNavigationController} from "@firecms/core";
+import {useMemo} from "react";
+
+// restante do código do seu app principal
+
+    const customViews: CMSView[] = useMemo([{
+        path: "additional",
+        name: "Additional view",
+        description: "This is an example of an additional view that is defined by the user",
+        // Pode ser qualquer componente React
+        view: <ExampleCMSView/>
+    }], []);
+
+    const navigationController = useBuildNavigationController({
+        views: ({ user }) =>{
+            if(!user) {
+                return [];
+            }
+            return customViews;
+        },
+        collections,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+```
+
+
+### Exemplo FireCMS Cloud
+
+No FireCMS Cloud, você pode definir suas views de nível superior personalizadas adicionando-as ao seu `FireCMSAppConfig`. Você pode
+usar um callback ou adicioná-las diretamente à propriedade `views`. O callback inclui o `user` logado, então você pode
+usá-lo para mostrar ou ocultar condicionalmente views com base no papel do usuário.
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import CustomViewSampleCloud from '../samples/samples_v3/custom_cms_view/CustomViewSampleCloud?raw';
+import ExampleCMSView from '../samples/samples_v3/custom_cms_view/ExampleCMSView?raw';
+
+<Code code={CustomViewSampleCloud} lang="tsx" />
+
+
+
+### Exemplo de view adicional
+
+Sua view personalizada é implementada como qualquer componente React regular.
+Você pode usar qualquer um dos hooks fornecidos, incluindo autenticação, navegação, datasource, armazenamento, etc.
+
+
+
+<Code code={ExampleCMSView} lang="tsx" />

@@ -1,0 +1,133 @@
+---
+slug: de/docs/cloud/app_check
+title: "App Check: Ihr Admin-Panel absichern"
+description: "Sichern Sie Ihr Firebase Admin-Panel und Ihre internen Tools mit Firebase App Check. Schützen Sie Ihr CMS vor Missbrauch und unbefugtem Zugriff."
+---
+
+Sie können Firebase App Check in Ihre Anwendung integrieren, um Ihre Backend-Ressourcen vor Missbrauch zu schützen, z. B. vor Abrechnungsbetrug oder Phishing. Firebase App Check funktioniert zusammen mit anderen Firebase-Diensten wie Firebase Authentication, um Ihre Backend-Ressourcen zu sichern.
+
+FireCMS bietet eine einfache Möglichkeit, Firebase App Check in Ihre Anwendung zu integrieren.
+
+:::important
+Denken Sie daran, die Domain `app.firecms.co` zur Liste der erlaubten Domains in der AppCheck-Anbieter-Konfiguration hinzuzufügen.
+:::
+
+Sie können Firebase App Check in Ihrer Anwendung direkt in den **Projekteinstellungen** in der FireCMS Cloud-Konsole aktivieren oder die Eigenschaft `appCheck` in der App-Konfiguration bereitstellen.
+
+Bei der Implementierung im Code haben Sie mehr Kontrolle über die Konfiguration und den Anbieter, den Sie verwenden möchten, einschließlich benutzerdefinierter Anbieter.
+
+Sie können einige Optionen definieren:
+- `provider`: Der Anbieter, den Sie verwenden möchten.
+- `isTokenAutoRefreshEnabled`: Ob das Token automatisch aktualisiert werden soll.
+- `debugToken`: Ein Debug-Token zur Verwendung.
+- `forceRefresh`: Ob das Token erzwungen aktualisiert werden soll.
+
+
+## Anbieter
+
+Die Eigenschaft `provider` ist erforderlich und muss eine Instanz eines Firebase AppCheck-Anbieters sein.
+Sie können einen der folgenden Anbieter verwenden:
+
+### ReCaptchaEnterpriseProvider
+
+Um den ReCaptchaEnterpriseProvider zu konfigurieren, müssen Sie einen neuen reCAPTCHA Enterprise-Site-Schlüssel erstellen.
+Folgen Sie den Anweisungen in der [Firebase-Dokumentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+:::important
+Stellen Sie sicher, dass Sie die Domain `app.firecms.co` zur Liste der erlaubten Domains in der reCAPTCHA Enterprise-Konsole hinzugefügt haben.
+:::
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaEnterpriseProvider("Ihr-Site-Schlüssel")
+    },
+}
+
+export default appConfig;
+```
+
+### ReCaptchaV3Provider
+
+Um den ReCaptchaV3Provider zu konfigurieren, müssen Sie einen neuen reCAPTCHA v3-Site-Schlüssel erstellen.
+Folgen Sie den Anweisungen in der [Firebase-Dokumentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaV3Provider("Ihr-Site-Schlüssel")
+    },
+}
+
+export default appConfig;
+```
+
+### Benutzerdefinierter Anbieter
+
+Sie können auch einen benutzerdefinierten Anbieter erstellen, indem Sie die Schnittstelle `AppCheckProvider` implementieren.
+
+
+## Ihrer Konfiguration überprüfen
+
+FireCMS Cloud kann Abhängigkeiten mit Ihrer hochgeladenen Anwendung teilen. Es ist wichtig, dass Ihre Anwendung und FireCMS Cloud dieselbe Version von Firebase App Check verwenden.
+Stellen Sie dazu sicher, dass Sie in Ihrer `vite.config.ts` die gemeinsam genutzte Abhängigkeit von FireCMS verwenden.
+Sie müssen die Abhängigkeit `@firebase/app-check` in Ihrer `vite.config.ts` im `shared`-Konfigurationsbereich des Federation-Plugins haben.
+
+Hier ist eine Beispielkonfiguration:
+
+```tsx
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import federation from "@originjs/vite-plugin-federation"
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    plugins: [
+        react(),
+        federation({
+            name: "remote_app",
+            filename: "remoteEntry.js",
+            exposes: {
+                "./config": "./src/index"
+            },
+            shared: [
+                "react",
+                "react-dom",
+                "@firecms/cloud",
+                "@firecms/core",
+                "@firecms/firebase",
+                "@firecms/ui",
+                "@firebase/firestore",
+                "@firebase/app",
+                "@firebase/functions",
+                "@firebase/auth",
+                "@firebase/storage",
+                "@firebase/analytics",
+                "@firebase/remote-config",
+                "@firebase/app-check" // Diese Zeile hinzufügen
+            ]
+        })
+    ],
+    build: {
+        modulePreload: false,
+        minify: false,
+        target: "ESNEXT",
+        cssCodeSplit: false,
+    }
+});
+```

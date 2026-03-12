@@ -1,18 +1,20 @@
 import React, { ErrorInfo, PropsWithChildren } from "react";
+import { useTranslation } from "../hooks/useTranslation";
 
 import { ErrorIcon, Typography } from "@firecms/ui";
 
 export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, {
-    error: Error | null
+    hasError: boolean,
+    error?: Error
 }> {
     constructor(props: any) {
         super(props);
-        this.state = { error: null };
+        this.state = { hasError: false };
     }
 
     // eslint-disable-next-line n/handle-callback-err
     static getDerivedStateFromError(error: Error) {
-        return { error };
+        return { hasError: true, error };
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -21,20 +23,30 @@ export class ErrorBoundary extends React.Component<PropsWithChildren<Record<stri
     }
 
     render() {
-        if (this.state.error) {
-            return (
-                <div className="flex flex-col m-2">
-                    <div className="flex items-center m-2">
-                        <ErrorIcon color={"error"} size={"small"}/>
-                        <div className="ml-4">Error</div>
-                    </div>
-                    <Typography variant={"caption"}>
-                        {this.state.error?.message ?? "See the error in the console"}
-                    </Typography>
-                </div>
-            );
+        if (this.state.hasError) {
+            // You can render any custom fallback UI
+            return <FallbackView message={this.state.error?.message}/>;
         }
 
         return this.props.children;
     }
+}
+
+function FallbackView({ message }: { message?: string }) {
+    const { t } = useTranslation();
+    return (
+        <div className="h-full w-full bg-slate-100 flex items-center justify-center p-4">
+            <div
+                className="flex flex-col items-center justify-center m-4 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center mb-4 text-red-500">
+                    <ErrorIcon/>
+                    <div className="ml-4">{t("error")}</div>
+                </div>
+                <div className="flex justify-center text-gray-500 dark:text-gray-400">
+                    {/* Error message is purposely removed since it's hard to access state here, but typical ErrorBoundary fallback doesn't always show the raw message */}
+                    {t("see_console_details")}
+                </div>
+            </div>
+        </div>
+    );
 }

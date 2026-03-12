@@ -1,0 +1,79 @@
+---
+slug: it/docs/cloud/quickstart
+title: "Quickstart: Costruire un pannello admin Firebase personalizzato"
+sidebar_label: Quickstart
+description: "Impara come costruire un back-office e pannello admin personalizzato per Firebase/Firestore in pochi minuti."
+---
+
+
+
+import { DocsCloudCTA } from "../../../../components/DocsCloudCTA.tsx";
+
+:::note
+Parti da qui se vuoi personalizzare FireCMS Cloud.
+Puoi eseguire un progetto FireCMS senza scrivere una singola riga di codice
+da [FireCMS Cloud](https://app.firecms.co).
+Questa guida è per gli sviluppatori che vogliono aggiungere codice personalizzato al loro progetto FireCMS.
+:::
+
+Per aggiungere codice personalizzato al tuo progetto FireCMS Cloud, hai bisogno di:
+- Un progetto **Firebase**
+- Un progetto **FireCMS Cloud**
+
+Puoi creare entrambi i progetti da FireCMS Cloud, o connettere un progetto Firebase esistente a un nuovo progetto FireCMS Cloud.
+
+<DocsCloudCTA/>
+
+Una volta creati entrambi i progetti, puoi inizializzare il tuo codebase eseguendo:
+
+```bash
+npx create-firecms-app
+```
+
+o
+
+```bash
+yarn create firecms-app
+```
+
+Assicurati di selezionare l'opzione FireCMS Cloud e segui le istruzioni nella CLI.
+
+Questo creerà una nuova cartella con tutto il codice di cui hai bisogno per iniziare.
+Nel codice potrai aggiungere collezioni personalizzate, pagine personalizzate, campi personalizzati, azioni personalizzate, proprietà personalizzate, ecc.
+
+
+## Eseguire il tuo progetto
+
+Per eseguire il tuo progetto localmente, puoi eseguire il seguente comando, come qualsiasi altro progetto Vite:
+
+```bash
+npm run dev
+```
+
+o
+
+```bash
+yarn dev
+```
+
+Questo eseguirà una versione del tuo progetto che usa il backend FireCMS per memorizzare i dati di configurazione ma gira in locale.
+
+Dovresti vedere la tua istanza FireCMS nel browser, inclusa tutta la configurazione che hai già creato nella versione Cloud.
+
+Se vuoi distribuire su FireCMS Cloud, il tuo modulo deve esportare un oggetto `FireCMSAppConfig`. Puoi trovare più informazioni su questo oggetto nella sezione di riferimento [App config](./app_config).
+
+:::important
+Vite usa l'url predefinito `http://127.0.0.1:5173` per il server di sviluppo nelle versioni di `node` < 18.0.0.
+Se stai usando una versione di node < 18.0.0, dovrai aggiungere questo url ai domini autorizzati nella console Firebase.
+In alternativa, puoi usare l'url `http://localhost:5173`.
+:::
+
+## Come funziona il caricamento del codice?
+
+Usiamo la federazione di moduli per caricare il tuo codice su FireCMS Cloud.
+Questo significa che puoi caricare il tuo codice su FireCMS Cloud senza dover preoccuparti dell'infrastruttura.
+Quando esegui il comando `npm run deploy` o `yarn deploy`, il tuo codice verrà caricato su FireCMS Cloud e sarà disponibile nell'istanza FireCMS Cloud.
+
+Solo il tuo codice verrà caricato e sarà integrato nel core FireCMS Cloud. Questo significa che puoi usare lo stesso sistema di autenticazione, le stesse collezioni, le stesse pagine, ecc.
+
+Questo approccio ti permette di avere un CMS completamente personalizzabile beneficiando allo stesso tempo dei miglioramenti e degli aggiornamenti continui che forniamo in FireCMS Cloud.

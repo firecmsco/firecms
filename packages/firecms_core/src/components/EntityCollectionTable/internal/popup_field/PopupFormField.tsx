@@ -20,7 +20,7 @@ import { useWindowSize } from "./useWindowSize";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
-import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
+import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useTranslation } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
@@ -108,6 +108,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const fireCMSContext = useFireCMSContext();
     const authController = useAuthController();
     const customizationController = useCustomizationController();
+    const { t } = useTranslation();
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{
@@ -345,7 +346,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         type="submit"
                         disabled={disabled}
                     >
-                        Save
+                        {t("save")}
                     </Button>
                 </DialogActions>
 

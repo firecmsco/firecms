@@ -1,0 +1,20 @@
+export const entityHistoryTranslationsDe = {
+    history: "Verlauf",
+    entity_history_only_existing: "Verlauf ist nur für vorhandene Entitäten verfügbar",
+    entity_history_reverted: "Wiederhergestellte Version",
+    entity_history_error_reverting: "Fehler beim Wiederherstellen der Entität",
+    entity_history_no_history: "Kein Verlauf verfügbar",
+    entity_history_when_save: "Wenn Sie eine Entität speichern, wird eine neue Version erstellt und im Verlauf gespeichert.",
+    entity_history_revert_tooltip: "Zu dieser Version zurückkehren",
+    entity_history_please_save: "Bitte speichern oder verwerfen Sie Ihre Änderungen vor der Wiederherstellung",
+    loading_more: "Mehr laden...",
+    entity_history_no_more: "Kein weiterer Verlauf verfügbar",
+    entity_history_revert_dialog_title: "Daten auf diese Version zurücksetzen?",
+    entity_history_previous_value: "Vorheriger Wert",
+    entity_history_see_details: "Details zu dieser Überarbeitung anzeigen",
+    entity_history_just_now: "gerade eben",
+    entity_history_minutes_ago: "vor {{minutes}}m",
+    entity_history_hours_ago: "vor {{hours}}h",
+    entity_history_days_ago: "vor {{days}}d",
+    user_picture: "Benutzerbild"
+};

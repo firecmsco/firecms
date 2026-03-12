@@ -21,7 +21,8 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    User
+    User,
+    FireCMSi18nProvider
 } from "@firecms/core";
 import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import {
@@ -71,7 +72,7 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
-import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
+import { DataTalkRoutes, useDataTalkPlugin } from "@firecms/datatalk";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
 
@@ -150,7 +151,9 @@ export function FireCMSCloudApp({
     }
 
     return <BrowserRouter basename={basePath}>
-        {component}
+        <FireCMSi18nProvider translations={appConfig?.translations}>
+            {component}
+        </FireCMSi18nProvider>
     </BrowserRouter>;
 
 }
@@ -618,7 +621,7 @@ function FireCMSAppAuthenticated({
         firebaseApp
     });
 
-    const dataTalkConfig = useBuildDataTalkConfig({
+    const datatalkPlugin = useDataTalkPlugin({
         enabled: includeDataTalk,
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
@@ -646,7 +649,6 @@ function FireCMSAppAuthenticated({
         fireCMSBackend,
         userManagement,
         onAnalyticsEvent,
-        dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
         historyDefaultEnabled,
         rootPathSuggestions
@@ -674,7 +676,8 @@ function FireCMSAppAuthenticated({
         importPlugin,
         collectionEditorPlugin,
         dataEnhancementPlugin,
-        historyPlugin
+        historyPlugin,
+        datatalkPlugin
     ];
 
     const navigationController = useBuildNavigationController({
@@ -698,7 +701,7 @@ function FireCMSAppAuthenticated({
                             dateTimeFormat={appConfig?.dateTimeFormat}
                             entityViews={appConfig?.entityViews}
                             entityActions={appConfig?.entityActions}
-                            locale={appConfig?.locale}
+                            locale={(projectConfig.defaultLocale as any) ?? appConfig?.locale}
                             propertyConfigs={propertyConfigsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
@@ -752,14 +755,6 @@ function FireCMSAppAuthenticated({
                                             <SideDialogs />
                                         </Scaffold>
                                     );
-                                }
-
-                                if (includeDataTalk) {
-                                    component = <DataTalkProvider
-                                        key={"datatalk_provider_" + projectConfig.projectId}
-                                        config={dataTalkConfig}>
-                                        {component}
-                                    </DataTalkProvider>
                                 }
 
                                 return component;

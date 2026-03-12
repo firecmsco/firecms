@@ -1,4 +1,4 @@
-import { FireCMSPlugin, useAuthController, User, useSnackbarController } from "@firecms/core";
+import { FireCMSPlugin, useAuthController, User, useSnackbarController, useTranslation } from "@firecms/core";
 import { UserManagementProvider } from "./UserManagementProvider";
 import { UserManagement } from "./types";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
@@ -46,19 +46,20 @@ export function IntroWidget({
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
 
     const buttonLabel = noUsers && noRoles
-        ? "Create default roles and add current user as admin"
+        ? t("create_default_roles_and_add_admin")
         : noUsers
-            ? "Add current user as admin"
-            : noRoles ? "Create default roles" : undefined;
+            ? t("add_current_user_as_admin")
+            : noRoles ? t("create_default_roles") : undefined;
 
     return (
         <Paper
             className={"my-4 flex flex-col px-4 py-6 bg-white dark:bg-surface-accent-800 gap-2"}>
-            <Typography variant={"subtitle2"} className={"uppercase"}>Create your users and roles</Typography>
+            <Typography variant={"subtitle2"} className={"uppercase"}>{t("create_your_users_and_roles")}</Typography>
             <Typography>
-                You have no users or roles defined. You can create default roles and add the current user as admin.
+                {t("no_users_or_roles_defined")}
             </Typography>
             <Button
 

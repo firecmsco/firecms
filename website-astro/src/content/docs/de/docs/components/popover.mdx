@@ -1,0 +1,37 @@
+---
+slug: de/docs/components/popover
+title: Popover
+sidebar_label: Popover
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die Popover-Komponente ermöglicht es Ihnen, ein Content-Panel schwebend an einem anderen Element zu verankern, ideal für Kontextmenüs, Hover-Karten, Tooltips und vieles mehr.
+
+## Verwendung
+
+Um `Popover` zu verwenden, importieren Sie es aus Ihren Komponenten und übergeben Sie den erforderlichen `trigger` und die optionalen Props `open`, `onOpenChange`, `side`, `sideOffset`, `align`, `alignOffset`, `arrowPadding`, `sticky`, `hideWhenDetached`, `avoidCollisions`, `enabled` und `modal`.
+
+## Einfaches Popover
+
+Ein einfaches Popover, das beim Klicken auf das Trigger-Element angezeigt wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_basic.tsx"/>
+
+## Popover mit Ausrichtung
+
+Zeigt, wie der Popover-Inhalt relativ zum Trigger-Element ausgerichtet wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_align.tsx"/>
+
+## Gesteuertes Popover
+
+Demonstriert die Verwendung der Eigenschaften `open` und `onOpenChange` für gesteuertes Verhalten.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_controlled.tsx"/>
+
+## Verwendung mit benutzerdefiniertem Styling
+
+Veranschaulicht benutzerdefiniertes Styling, das auf den Popover-Inhalt angewendet wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_styled.tsx"/>

@@ -1,0 +1,25 @@
+---
+slug: es/docs/components/info_label
+title: Etiqueta de información (InfoLabel)
+sidebar_label: Etiqueta de información
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+InfoLabel (Etiqueta de información) es un componente versátil que se utiliza para mostrar información o mensajes de advertencia en diferentes contextos. Aprovecha la flexibilidad de TailwindCSS para el estilo, ofreciendo modos de color predefinidos para una personalización rápida.
+
+## Uso
+
+Para usar `InfoLabel`, impórtalo en tu componente y especifica los elementos secundarios (`children`) que se mostrarán dentro de él. Opcionalmente, también puedes establecer la prop `mode` (modo) para cambiar la apariencia según el contexto (`info` o `warn`).
+
+## Etiqueta de información básica
+
+Un ejemplo básico que muestra cómo usar el componente InfoLabel para mostrar un mensaje informativo.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/info_label/info_label_basic.tsx"/>
+
+## Etiqueta de advertencia
+
+Ilustrando cómo utilizar el componente InfoLabel para mostrar un mensaje de advertencia estableciendo el modo en `warn` (advertencia).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/info_label/info_label_warn.tsx"/>

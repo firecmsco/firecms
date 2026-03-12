@@ -1,0 +1,39 @@
+---
+slug: fr/docs/components/dialog
+title: Dialog
+sidebar_label: Dialog
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Les composants Dialog sont utilisés pour présenter du contenu dans une couche au-dessus du contenu principal de l'application, et ils demandent souvent une réponse de l'utilisateur. Ils sont un composant critique pour les dialogues modaux, les lightboxes, les pop-ups de notification et les pop-ups de contenu personnalisé.
+
+## Utilisation
+
+Pour utiliser le `Dialog`, importez-le depuis vos composants et passez les props nécessaires incluant `open`, `onOpenChange` et le contenu du dialogue comme enfants.
+
+:::caution
+Vous devez fournir un `DialogTitle` dans votre composant `Dialog` pour vous assurer que le dialogue est accessible. Vous verrez un avertissement dans la console si vous oubliez de fournir un `DialogTitle`.
+:::
+
+## Dialog de base
+
+Un exemple basique d'utilisation du composant dialog pour afficher un pop-up simple.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
+
+## Dialog plein écran
+
+Un exemple de dialog qui couvre l'intégralité de l'écran.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
+
+## Dialog avec défilement
+
+Illustre comment rendre le contenu d'un dialogue défilable.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
+
+## Dialog avec largeur personnalisée
+
+Démontre l'utilisation de la prop `maxWidth` pour personnaliser la largeur du dialogue.

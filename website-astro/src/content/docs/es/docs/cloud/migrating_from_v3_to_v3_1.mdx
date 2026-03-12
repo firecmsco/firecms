@@ -1,0 +1,162 @@
+---
+slug: es/docs/cloud/migrating_from_v3_to_v3_1
+title: Migrando de v3.0 a v3.1 (Cloud)
+sidebar_label: Migrar de v3.0 a v3.1
+description: Actualiza el código personalizado de tu FireCMS Cloud a v3.1 — Tailwind CSS v4, React 19 y nuevas vistas de colección.
+---
+
+Esta guía de migración se aplica a los proyectos de **FireCMS Cloud** que despliegan código personalizado usando la CLI
+(`firecms deploy`).
+
+## ¿Necesito hacer algo?
+
+**Todos los usuarios de FireCMS Cloud obtienen cada nueva función automáticamente** — El tablero Kanban, la vista de Tarjetas (Cards),
+la generación de colecciones con IA, y más, ya están en vivo en tu proyecto. No se necesita actualización.
+
+Si despliegas **código personalizado** a través de la CLI (`firecms deploy`), tu compilación existente continuará trabajando
+exactamente como antes. Sin embargo, te recomendamos encarecidamente que actualices tus dependencias locales a
+Tailwind CSS v4 y React 19. React 18 todavía es compatible hoy en día, pero **será obsoleto en una
+versión futura**, por lo que actualizar ahora te ahorrará esfuerzo más adelante.
+
+---
+
+## Actualizaciones recomendadas
+
+### Actualizar paquetes de FireCMS
+
+Actualiza todos los paquetes `@firecms/*` en tu `package.json` a la versión **3.1**:
+
+```bash
+npm i @firecms/cloud@3.1.0
+```
+
+---
+
+### Migrar a Tailwind CSS v4
+
+FireCMS 3.1 viene con soporte para **Tailwind CSS v4**. Aunque tu configuración existente de Tailwind v3 continuará
+funcionando, recomendamos actualizar para compilaciones más rápidas y una configuración más simple.
+
+#### 1. Instalar Tailwind CSS v4 y el plugin de Vite
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+#### 2. Actualiza tu `vite.config.ts`
+
+Añade el nuevo plugin de Vite para Tailwind CSS:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+#### 3. Actualiza tu `index.css`
+
+Reemplaza tu CSS existente con el nuevo formato v4:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::note
+Los antiguos nombres de variables CSS (`--fcms-primary`, `--fcms-primary-dark`, `--fcms-primary-bg`) han sido
+reemplazados. Usa `--color-primary` y `--color-secondary` en su lugar — las variantes oscuras y de fondo son
+ahora calculadas automáticamente.
+:::
+
+#### 4. Limpia los archivos de configuración antiguos
+
+Elimina estos archivos de tu proyecto — ya no son necesarios:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+### Actualizar a React 19
+
+FireCMS 3.1 soporta **React 19** mientras mantiene la compatibilidad con versiones anteriores de React 18.3.
+Recomendamos actualizar ahora — **el soporte para React 18 será eliminado en una versión futura**.
+
+```bash
+npm i react@19 react-dom@19
+npm i -D @types/react@19 @types/react-dom@19
+```
+
+:::tip
+Si ves errores de TypeScript como `Cannot find namespace 'JSX'` después de actualizar, reemplaza los
+tipos de retorno explícitos `JSX.Element` con `React.ReactElement` o elimina completamente la anotación de tipo de retorno.
+:::
+
+---
+
+## Novedades en v3.1
+
+Estas características ya están disponibles en tu proyecto FireCMS Cloud — no se requiere actualización:
+
+- **Vista de Tablero Kanban** — arrastra y suelta (drag-and-drop) entidades agrupadas por propiedades de tipo enum
+- **Vista de Tarjetas (Cards)** — diseño de tarjetas visuales para colecciones con mucho contenido
+- **Generación de colecciones con IA** — genera esquemas a partir del lenguaje natural
+- **Reordenamiento de columnas Drag-and-drop** — reorganiza las columnas de la tabla arrastrándolas, el orden se guarda automáticamente
+- **Duplicar colecciones** — clona una colección existente para crear una nueva con el mismo esquema
+- **Mejoras en el Historial de Entidades** — valores anteriores, indicador de "última vez editado por", interruptores por colección
+- **Nueva UI de filtros** — vista de filtros rediseñada para una experiencia más limpia
+- **Soporte de zona horaria para fechas** — manejo correcto de la zona horaria, no más autoconversiones de medianoche
+- **Condiciones en Enum** — filtra dinámicamente los valores del enum basados en otras propiedades
+- **Grupos colapsables en el panel lateral (drawer)** — navegación en la barra lateral más limpia
+- **TipTap V3** — editor de texto enriquecido (rich-text) mejorado
+- **Redimensionamiento de imágenes** — redimensionamiento de imagen incorporado al momento de la subida (upload)
+
+Para proyectos de código personalizado, la actualización también desbloquea:
+
+- **Tailwind CSS v4** — compilaciones más rápidas, configuración más simple
+- **React 19** — las últimas características y rendimiento de React
+
+Consulta el [registro de cambios (changelog)](/docs/changelog) para ver la lista completa de cambios.
+
+---
+
+## Solución de problemas (Troubleshooting)
+
+### Errores de compilación después de actualizar paquetes
+Asegúrate de que **todos** los paquetes `@firecms/*` estén en la misma versión. Mezclar paquetes v3.0 y v3.1 causará
+incompatibilidades de tipo y errores de ejecución (runtime errors).
+
+### Los estilos no se aplican después de la migración a Tailwind v4
+- Verifica que tu `index.css` incluya las directivas `@source` para los archivos de tu proyecto y `node_modules/@firecms`
+- Asegúrate de haber eliminado los antiguos `tailwind.config.js` y `postcss.config.js`
+- Borra tu carpeta `node_modules` y vuelve a instalar: `rm -rf node_modules && npm install`
+
+### `Cannot find namespace 'JSX'`
+Actualiza las anotaciones de tipo de retorno de `JSX.Element` a `React.ReactElement` o elimina el
+tipo de retorno explícito y deja que TypeScript lo infiera.

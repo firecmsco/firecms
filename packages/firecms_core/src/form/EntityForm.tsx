@@ -40,7 +40,10 @@ import {
     useSnackbarController
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
-import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
+import { Formex, FormexController, getIn, setIn, useCreateFormex,
+    useFormex
+} from "@firecms/formex";
+import { useTranslation } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
@@ -212,6 +215,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
+    const { t } = useTranslation();
 
     const navigateBack = useCallback(() => {
         if (openEntityMode === "side_panel") {
@@ -767,7 +771,7 @@ export function EntityForm<M extends Record<string, any>>({
 
                 {!entity?.values && initialStatus === "existing" &&
                     <Alert color={"warning"} size={"small"} outerClassName={"w-full mb-4 text-xs"}>
-                        This entity does not exist in the database
+                        {t("this_entity_not_exist")}
                     </Alert>}
 
                 {showEntityPath && <Alert color={"base"} outerClassName={"w-full"} size={"small"}>
@@ -781,7 +785,7 @@ export function EntityForm<M extends Record<string, any>>({
             {children}
 
             {initialEntityId && !entity && initialStatus !== "new" && <Alert color={"info"} size={"small"}>
-                This entity does not exist in the database
+                {t("this_entity_not_exist")}
             </Alert>}
 
             {!Builder && !collection.hideIdFromForm &&

@@ -10,6 +10,8 @@ import {
     FileUpload,
     OnFileUploadRejected,
     Paper,
+    Select,
+    SelectItem,
     TextField,
     Typography,
 } from "@firecms/ui";
@@ -42,6 +44,21 @@ export function ProjectSettings() {
                 <Typography variant={"h4"} className="mt-4 mb-2">Settings</Typography>
 
                 <ProjectNameTextField />
+
+                <div className={"col-span-12"}>
+                     <Select
+                         label={"Default language"}
+                         value={projectConfig.defaultLocale ?? "en"}
+                         onValueChange={async (value) => {
+                             await projectConfig.updateDefaultLocale(value as string);
+                         }}>
+                         <SelectItem value="en">English (Default)</SelectItem>
+                         <SelectItem value="es">Español</SelectItem>
+                     </Select>
+                     <FieldCaption>
+                         Select the base language for this project. Users can override this preference in their personal settings.
+                     </FieldCaption>
+                 </div>
 
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel

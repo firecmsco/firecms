@@ -1,0 +1,349 @@
+---
+slug: de/docs/recipes/building_a_blog
+title: Einen Blog in FireCMS Cloud erstellen
+sidebar_label: Einen Blog erstellen
+description: Erstellen Sie einen Headless-Blog mit FireCMS und Firebase. Lernen Sie, dynamische Inhaltsblöcke, Bildergalerien und Live-Vorschauen mit React und Firestore zu erstellen.
+image: /img/blog_example.webp
+---
+
+![blog_example](/img/blog_example.webp)
+
+:::note
+In diesem Tutorial gehen wir davon aus, dass Sie ein Firebase-Projekt und eine FireCMS-Instanz mit benutzerdefiniertem Code eingerichtet haben.
+Falls nicht, überprüfen Sie den Abschnitt [Quickstart](../cloud/quickstart).
+:::
+
+Wir müssen die Vorteile der Verwendung eines Headless-CMS gegenüber einem
+traditionellen Blogging-Ansatz wie WordPress nicht erklären, aber hier sind einige:
+- Es ist einfacher und schneller zu entwickeln, da es keine Kopplung zwischen
+Frontend und Backend gibt.
+- Da Ihr Frontend unabhängig ist, ist es frei, es in jeder gewünschten Weise zu ändern.
+Das gilt genauso für das Backend.
+- Es eignet sich für Omnichannel-Anwendungen, Sie können das gleiche Backend und
+CMS mit mehreren Apps und Websites verwenden
+- Kleinere, spezialisierte Teams
+- Skalierbarkeit
+- Geringere Kosten
+- Flexibilität und Einfachheit
+
+:::tip[Frontend]
+Wenn Sie die Schritte in diesem Tutorial abgeschlossen haben, möchten Sie vielleicht prüfen,
+wie Sie eine einfache **next.js**-Frontend-App (oder ein anderes Frontend-Framework) erstellen.
+Wir empfehlen next.js, da es React verwendet und die Dinge einfacher macht.
+Wir stellen bereits viele React-Komponenten bereit, die Sie in
+Ihrer Frontend-App benötigen könnten, damit Sie sich auf die Geschäftslogik konzentrieren können.
+:::
+
+## Lassen Sie uns einen Blog mit FireCMS erstellen
+
+Wir werden eine Kollektion erstellen, die Blog-Beiträge enthält. Jeder der Blog-
+Beiträge enthält ein **dynamisches Array von Elementen**.
+
+FireCMS hat eine eingebaute Funktion, die es Ihnen ermöglicht, dynamische Arrays zu erstellen. Die
+Array-Eigenschaft kann mit der Eigenschaft `oneOf` konfiguriert werden, um Objekte
+zu enthalten, die einen bestimmten Werttyp halten. Das ist perfekt für den Aufbau unserer Blog-Eintrag-
+Datenstruktur!
+
+Dies sind die Typen, die wir verwenden werden:
+- Wir definieren den Typ der Blog-Kollektion:
+```tsx
+type BlogEntry = {
+    name: string,
+    header_image: string,
+    created_on: Date,
+    status: string,
+    content: (BlogEntryImages | BlogEntryText | BlogEntryProducts)[];
+}
+```
+
+- Und jeden der Typen des `content`-Arrays:
+
+```tsx
+type BlogEntryImages = {
+    type: "images";
+    value: string[];
+}
+
+type BlogEntryText = {
+    type: "text";
+    value: string;
+}
+
+type BlogEntryProducts = {
+    type: "products";
+    value: object[]; // Wir verwenden hier ein generisches Objekt, aber definieren Sie gerne einen Typ für Ihre Produkte
+}
+```
+
+### Die Kollektion erstellen
+
+:::tip
+Sie können diese gleiche Kollektion mit einer Vorlage im FireCMS-Dashboard erstellen.
+
+:::
+
+Beginnen wir mit der Initialisierung unserer Kollektion, ohne Eigenschaften:
+
+```tsx
+export const blogCollection = buildCollection<BlogEntry>({
+    name: "Blog entry",
+    path: "blog",
+    properties: {}
+});
+````
+
+### Grundlegende Eigenschaften
+
+Dann fügen wir einige einfache Eigenschaften für unsere Einträge hinzu.
+
+- Wir möchten einen Titel haben, der immer gesetzt sein muss, also setzen wir die required-
+Eigenschaft in der Validierung auf true:
+
+```tsx
+buildProperty({
+    name: "Title",
+    validation: { required: true },
+    dataType: "string"
+})
+```
+
+- Ein Bild, das oben im Blog-Beitrag erscheint:
+
+```tsx
+buildProperty({
+    name: "Header image",
+    dataType: "string",
+    storage: {
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+            cacheControl: "max-age=1000000"
+        }
+    }
+})
+```
+
+- Und ein "created on"-Datum, das **automatisch generiert** wird, wenn das Dokument
+erstellt wird.
+
+```tsx
+buildProperty( {
+    name: "Created on",
+    dataType: "date",
+    autoValue: "on_create"
+})
+```
+
+:::note
+Sie können auch ein Datumsfeld hinzufügen, das jedes Mal aktualisiert wird, wenn ein Dokument gespeichert wird,
+mit dieser Konfiguration:
+```tsx
+buildProperty( {
+    name: "Updated on",
+    dataType: "date",
+    autoValue: "on_update"
+})
+```
+:::
+
+### Bedingtes Status-Feld
+
+Jetzt möchten wir eine `status`-String-Eigenschaft hinzufügen, die zwei mögliche Werte hat:
+`published` und `draft`. Wir möchten den `published`-Zustand nur erlauben, wenn die restlichen Felder korrekt sind.
+
+In diesem Fall halten wir es einfach und prüfen nur, ob das Header-Bild
+gesetzt ist:
+
+```tsx
+buildProperty(({ values }) => ({
+    name: "Status",
+    validation: { required: true },
+    dataType: "string",
+    columnWidth: 140,
+    enumValues: {
+        published: {
+            id: "published",
+            label: "Published",
+            disabled: !values.header_image,
+        },
+        draft: "Draft"
+    }
+}))
+```
+
+### Inhalt des Blog-Beitrags
+
+Der Inhalt unserer Blog-Einträge muss **dynamisch** sein, damit Content-
+Manager in der Lage sind, komplexe Einträge mit verschiedenen Komponenten zu erstellen.
+
+Der Inhalt wird ein Array von Objekten sein, die ein `type`-Attribut haben (das
+als Diskriminator dient) und ein `value`-Attribut.
+
+Wir werden 3 Typen definieren:
+- `images`: ein Array von Bildern
+- `text`: ein Markdown-Textfeld
+- `products`: ein Array von Referenzen zu einer anderen Kollektion, in diesem Fall `products`.
+
+Wir verwenden die `oneOf`-Eigenschaft in Array-Eigenschaften, die genau für diesen
+Anwendungsfall entwickelt wurde. Sie müssen nur definieren
+
+```tsx
+buildProperty({
+    name: "Content",
+    description: "Beispiel eines komplexen Arrays mit mehreren Eigenschaften als Kinder",
+    validation: { required: true },
+    dataType: "array",
+    columnWidth: 400,
+    oneOf: {
+        typeField: "type", // Sie können diese `typeField` und `valueField`-Props weglassen, um die Standardwerte zu verwenden
+        valueField: "value",
+        properties: {
+            images: buildProperty({
+                name: "Images",
+                dataType: "array",
+                of: buildProperty({
+                    dataType: "string",
+                    storage: {
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }),
+                description: "Dieses Feld ermöglicht das gleichzeitige Hochladen mehrerer Bilder und das Neuanordnen"
+            }),
+            text: buildProperty({
+                dataType: "string",
+                name: "Text",
+                markdown: true
+            }),
+            products: buildProperty({
+                name: "Products",
+                dataType: "array",
+                of: {
+                    dataType: "reference",
+                    path: "products" // Sie müssen eine gültige Kollektion in diesem Pfad definieren
+                }
+            })
+        }
+    }
+})
+```
+
+Diese Array-Konfiguration erstellt Objekte in der Datenquelle mit dem Format:
+```json5
+{
+  // ...
+  content: [
+    {
+      "type": "text",
+      "value": "Sonnenbrille oder Sonnenbrillen (umgangssprachlich auch Shades oder Sunnies genannt) sind eine Form von Schutzbrilllen, die hauptsächlich dazu dient, das Auge vor hellem Sonnenlicht und hochenergetischem sichtbaren Licht zu schützen. ..."
+    },
+    {
+      "type": "images",
+      "value": [
+        "images/photo-1511499767150-a48a237f0083.jpeg",
+        "images/photo-1577803645773-f96470509666.jpeg"
+      ]
+    },
+    {
+      "type": "text",
+      "value": "Sonnenbrillen werden seit langem mit Prominenten und Filmschauspielern assoziiert, hauptsächlich aus dem Wunsch heraus, ihre Identität zu verbergen. Seit den 1940er Jahren sind Sonnenbrillen als Modeaccessoire beliebt, besonders am Strand."
+    },
+    {
+      "type": "products",
+      "value": [
+        {
+          "id": "B001UQ71F0",
+          "path": "products",
+        },
+        {
+          "id": "B001UQ71F0",
+          "path": "products",
+        }
+      ]
+    }
+  ],
+  // ...
+}
+```
+
+### Eine Vorschauansicht erstellen
+
+Lassen Sie uns eine weitere Funktion von FireCMS nutzen: **Benutzerdefinierte Ansichten für Entities**!
+
+FireCMS ermöglicht es Ihnen, Ihrer Entity-Ansicht zusätzliche Ansichten hinzuzufügen, die als
+React-Komponenten definiert sind. Die Props, die Sie für den Aufbau dieser
+Komponente erhalten, sind die Entity-Kollektion, die originale Entity und die modifizierten Werte.
+
+In diesem Fall erstellen wir einige React-Komponenten, um unseren Blog-Eintrag
+so darzustellen, wie es die Frontend-App tun würde. Dies ist derselbe Code, den Sie
+in jedem SSR-Framework mit React, wie `next.js`, verwenden könnten.
+
+Sie könnten auch ein komplexeres Setup haben, das Ihre Daten über eine API an Ihre SSR-App
+sendet und das Ergebnis rendert.
+
+Den Code für `BlogEntryPreview` finden Sie in
+[BlogEntryPreview](https://github.com/firecmsco/firecms/blob/main/website/samples/samples_v3/recipes/blog/BlogEntryPreview.tsx).
+
+Wenn Sie Ihre Komponente erstellt haben, gibt es 2 Möglichkeiten, sie zu Ihrer Komponente hinzuzufügen:
+
+#### Im CMS registrieren
+
+Der bevorzugte Weg ist, sie im CMS zu registrieren, damit sie im Ansichtsauswahl der
+Kollektion verfügbar ist.
+
+Um dies zu tun, müssen Sie sie zur `entityViews`-Eigenschaft des FireCMS-Haupt-App-Konfigurations-Exports hinzufügen:
+
+```tsx
+import { FireCMSAppConfig } from "@firecms/cloud";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: [],
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+}
+```
+
+
+#### In der Kollektion registrieren
+
+Wenn Sie Ihre Kollektion im Code definieren, können Sie sie auch
+in der Kollektion selbst registrieren:
+
+
+```tsx
+import {buildCollection} from "@firecms/core";
+export const blogCollection = buildCollection<BlogEntry>({
+    name: "Blog entry",
+    path: "blog",
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+    properties: {
+        // ...
+    }
+});
+```
+
+## Vollständiger Code:
+
+Wenn wir alle in diesem Tutorial erstellten Teile zusammenfügen,
+erhalten wir den folgenden Code für die Blog-Kollektion:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../../samples/samples_v3/recipes/blog/blog_collection?raw';
+
+<Code code={MyComponentSource} lang="tsx" />

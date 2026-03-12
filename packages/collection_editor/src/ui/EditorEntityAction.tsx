@@ -1,4 +1,4 @@
-import { PluginFormActionProps, useAuthController, useNavigationController } from "@firecms/core";
+import { PluginFormActionProps, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -14,6 +14,7 @@ export function EditorEntityAction({
     const authController = useAuthController();
     const navigationController = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const parentCollection = navigationController.getCollectionFromIds(parentCollectionIds);
 
@@ -28,7 +29,7 @@ export function EditorEntityAction({
 
     const editorButton = <Tooltip
         asChild={true}
-        title={canEditCollection ? (isDirty ? "You need to save the document before changing the schema" : "Edit schema for this form") : "You don't have permissions to edit this collection"}>
+        title={canEditCollection ? (isDirty ? t("save_before_changing_schema") : t("edit_schema_for_this_form")) : t("no_permissions_to_edit_collection")}>
         <IconButton
             color={"primary"}
             disabled={!canEditCollection || isDirty}

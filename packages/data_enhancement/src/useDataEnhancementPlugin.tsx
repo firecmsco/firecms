@@ -5,6 +5,12 @@ import { DataEnhancementControllerProvider } from "./components/DataEnhancementC
 import { fieldBuilder } from "./components/field_builder";
 import { FormEnhanceAction } from "./components/FormEnhanceAction";
 import { SubscriptionMessageProps } from "./types/subscriptions_message_props";
+import { dataEnhancementTranslationsEn } from "./locales/en";
+import { dataEnhancementTranslationsEs } from "./locales/es";
+import { dataEnhancementTranslationsDe } from "./locales/de";
+import { dataEnhancementTranslationsFr } from "./locales/fr";
+import { dataEnhancementTranslationsIt } from "./locales/it";
+import { dataEnhancementTranslationsHi } from "./locales/hi";
 
 const DEFAULT_API_KEY = "fcms-U9jdDii0xXWSDC34asfrf54lbkFJBfKfRWcEDEwdc4V5wDWEDF";
 
@@ -75,6 +81,14 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
             extraProps: {
                 getConfigForPath
             }
+        },
+        i18n: {
+            en: dataEnhancementTranslationsEn,
+            es: dataEnhancementTranslationsEs,
+            de: dataEnhancementTranslationsDe,
+            fr: dataEnhancementTranslationsFr,
+            it: dataEnhancementTranslationsIt,
+            hi: dataEnhancementTranslationsHi
         }
         // loading: configController.loading,
     };

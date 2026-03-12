@@ -4,9 +4,12 @@ import { UsersTable } from "./UsersTable";
 import { UserDetailsForm } from "./UserDetailsForm";
 import React, { useCallback, useState } from "react";
 import { useUserManagement } from "../../hooks/useUserManagement";
-import { User } from "@firecms/core";
+import { User, useTranslation
+} from "@firecms/core";
 
 export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
+    const { t } = useTranslation();
+
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | undefined>();
@@ -39,15 +42,11 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
                 className="flex items-center mt-12">
                 <Typography gutterBottom variant="h4"
                             className="flex-grow"
-                            component="h4">
-                    Users
-                </Typography>
+                            component="h4">{t("users")}</Typography>
                 <Button
                     size={"large"}
                     startIcon={<AddIcon/>}
-                    onClick={handleAddUser}>
-                    Add user
-                </Button>
+                    onClick={handleAddUser}>{t("add_user")}</Button>
             </div>
 
             <UsersTable onUserClicked={onUserClicked}/>

@@ -1,0 +1,20 @@
+export const entityHistoryTranslationsHi = {
+    history: "इतिहास",
+    entity_history_only_existing: "इतिहास केवल मौजूद संस्थाओं के लिए उपलब्ध है",
+    entity_history_reverted: "परिवर्तित संस्करण",
+    entity_history_error_reverting: "संस्था को वापस लाने में त्रुटि",
+    entity_history_no_history: "कोई इतिहास उपलब्ध नहीं",
+    entity_history_when_save: "जब आप किसी संस्था को सहेजते हैं, तो एक नया संस्करण बनाया जाता है और इतिहास में संग्रहीत किया जाता है।",
+    entity_history_revert_tooltip: "इस संस्करण पर वापस जाएं",
+    entity_history_please_save: "कृपया वापस जाने से पहले अपने परिवर्तनों को सहेजें या हटा दें",
+    loading_more: "और लोड हो रहा है...",
+    entity_history_no_more: "कोई और इतिहास उपलब्ध नहीं",
+    entity_history_revert_dialog_title: "डेटा को इस संस्करण में वापस लाएँ?",
+    entity_history_previous_value: "पिछला मान",
+    entity_history_see_details: "इस संशोधन के लिए विवरण यहाँ देखें",
+    entity_history_just_now: "अभी-अभी",
+    entity_history_minutes_ago: "{{minutes}}m पहले",
+    entity_history_hours_ago: "{{hours}}h पहले",
+    entity_history_days_ago: "{{days}}d पहले",
+    user_picture: "उपयोगकर्ता चित्र"
+};

@@ -1,0 +1,240 @@
+---
+slug: fr/docs/self/custom_storage
+title: Définir un stockage personnalisé dans FireCMS
+sidebar_label: Solutions de stockage personnalisées
+description: Implémentez des solutions de stockage personnalisées comme Amazon S3 dans FireCMS avec ce guide étape par étape.
+---
+
+FireCMS offre une flexibilité lors de l'intégration de solutions de stockage personnalisées.
+Bien qu'il soit livré avec un support intégré pour Firebase Storage, vous pourriez vouloir définir vos
+propres solutions de stockage pour gérer les téléchargements, téléversements et la gestion des métadonnées de fichiers.
+Ce guide vous aidera à mettre en place une solution de stockage personnalisée.
+
+## Créer une source de stockage personnalisée
+
+Une source de stockage personnalisée dans FireCMS est définie en implémentant l'interface `StorageSource`.
+Voici un modèle pour créer une source de stockage personnalisée.
+
+Attention : Ceci est un exemple de la façon dont vous pouvez implémenter et utiliser S3, directement depuis une source de stockage personnalisée.
+Ce n'est pas la méthode préférée d'utilisation de S3 car il est déconseillé de le consommer directement depuis le frontend.
+Comme vous devrez insérer la clé API et le secret dans le frontend, ce qui n'est pas sécurisé.
+À la place, vous pourriez utiliser [Amplify/Storage](https://docs.amplify.aws/react/build-a-backend/storage/) ou une auth IAM personnalisée.
+
+
+Voici un modèle pour créer une source de stockage personnalisée :
+
+```tsx
+import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
+import {S3Client, PutObjectCommand, GetObjectCommand} from "@aws-sdk/client-s3";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
+
+export interface S3StorageSourceProps {
+  apiKey: string;
+  apiSecret: string;
+  region: string;
+  defaultBucket?: string;
+}
+
+function initializeCustomClient({apiKey, apiSecret, region, defaultBucket}: S3StorageSourceProps) {
+  const s3Client = new S3Client({region, credentials: {accessKeyId: apiKey, secretAccessKey: apiSecret}});
+
+  return {
+    uploadFile: async (destinationPath: string, file: File, bucket?: string, metadata?: any) => {
+      await s3Client.send(new PutObjectCommand({
+        Bucket: bucket || defaultBucket,
+        Key: destinationPath,
+        Body: file,
+        ContentType: metadata?.contentType,
+        Metadata: metadata
+      }));
+      return {
+        path: destinationPath,
+        bucket: bucket || defaultBucket || ""
+      }
+    },
+    getFile: async (path: string, bucket?: string) => {
+      return await s3Client.send(new GetObjectCommand({
+        Bucket: bucket || defaultBucket || "",
+        Key: path
+      }));
+    },
+    getDownloadURL: async (path: string, bucket?: string) => {
+      const command = new GetObjectCommand({Bucket: bucket || defaultBucket, Key: path});
+      return await getSignedUrl(s3Client, command, {expiresIn: 3600});
+    },
+    getMetadata: async (path: string, bucket?: string) => {
+      const s3Object = await s3Client.send(new GetObjectCommand({
+        Bucket: bucket || defaultBucket,
+        Key: path
+      }));
+      return {
+        bucket: (bucket || defaultBucket) ?? "",
+        fullPath: path,
+        name: path,
+        size: s3Object.ContentLength || 0,
+        contentType: s3Object.ContentType || "",
+        customMetadata: s3Object.Metadata || {}
+      }
+    }
+  };
+}
+
+export function useCustomStorageSource(props: S3StorageSourceProps): StorageSource {
+  // Initialiser votre client de stockage en fonction des props fournies
+  // Par exemple, il pourrait s'agir d'un client pour Amazon S3, Google Cloud Storage, etc.
+  const customClient = initializeCustomClient(props);
+
+  return {
+    async uploadFile({file, fileName, path, metadata, bucket}: UploadFileProps): Promise<UploadFileResult> {
+      const usedFilename = fileName ?? file.name;
+      const destinationPath = `${path}/${usedFilename}`;
+      // Logique pour téléverser un fichier avec votre client de stockage
+      return await customClient.uploadFile(destinationPath, file, bucket, metadata);
+    },
+
+    async getFile(path: string, bucket?: string): Promise<File | null> {
+      const targetBucket = bucket ?? props.defaultBucket;
+      try {
+        // Logique pour récupérer le fichier avec votre client de stockage
+        const fileData = await customClient.getFile(path, targetBucket);
+        if (fileData && fileData.Body) {
+          const byteArray = await fileData.Body.transformToByteArray();
+          const blob = new Blob([byteArray], {type: fileData.ContentType});
+          return new File([blob], path);
+        } else {
+          return null;
+        }
+      } catch (e) {
+        return null; // Fichier non trouvé
+      }
+    },
+
+    async getDownloadURL(path: string, bucket?: string): Promise<DownloadConfig> {
+      const targetBucket = bucket || props.defaultBucket;
+      try {
+        // Logique pour obtenir l'URL de téléchargement avec votre client de stockage
+        const url = await customClient.getDownloadURL(path, targetBucket);
+        const metadata = await customClient.getMetadata(path, targetBucket);
+        return {url, metadata};
+      } catch (e) {
+        return {url: null, fileNotFound: true};
+      }
+    }
+  };
+}
+```
+
+## Utiliser la source de stockage personnalisée
+
+Après avoir créé la source de stockage personnalisée, vous pouvez l'utiliser dans votre application FireCMS en l'initialisant dans votre composant et en la passant au composant `FireCMS`.
+
+### Exemple d'utilisation
+
+Voici un exemple de la façon d'utiliser la source de stockage personnalisée dans votre application FireCMS
+
+```tsx
+import React from "react";
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  FireCMS,
+  ModeControllerProvider,
+  Scaffold,
+  AppBar,
+  Drawer,
+  NavigationRoutes,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator,
+  CenteredView,
+  CircularProgressCenter
+} from "@firecms/core";
+import { productsCollection } from "./collections/products_collection";
+import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
+
+const customStorageConfig: CustomStorageSourceProps = {
+  apiKey: "your-api-key",
+  apiSecret: "your-api-secret",
+  region: "your-region",
+  defaultBucket: "your-bucket-name"
+  // ... autres propriétés nécessaires
+};
+
+const CustomStorageApp: React.FC = () => {
+  const name = "My Custom Storage FireCMS App";
+
+  const modeController = useBuildModeController();
+  const userConfigPersistence = useBuildLocalConfigurationPersistence();
+  const storageSource = useCustomStorageSource(customStorageConfig);
+
+  const navigationController = useBuildNavigationController({
+    collections: [productsCollection],
+  });
+
+  return (
+    <SnackbarProvider>
+      <ModeControllerProvider value={modeController}>
+        <FireCMS
+          navigationController={navigationController}
+          userConfigPersistence={userConfigPersistence}
+          storageSource={storageSource}
+        >
+          {({ context, loading }) => {
+            if (loading || authLoading) {
+              return <CircularProgressCenter size="large" />;
+            }
+
+            if (!canAccessMainView) {
+              return <CenteredView>{notAllowedError}</CenteredView>;
+            }
+
+            return (
+              <Scaffold>
+                <AppBar title={"My app"} />
+                <Drawer />
+                <NavigationRoutes />
+                <SideDialogs />
+              </Scaffold>
+            );
+          }}
+        </FireCMS>
+      </ModeControllerProvider>
+    </SnackbarProvider>
+  );
+};
+
+export default CustomStorageApp;
+```
+
+Comme cet exemple utilise AWS S3, vous devrez également activer CORS dans le bucket,
+comme décrit dans la [documentation AWS - Configuration du partage de ressources cross-origin (CORS)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html?icmpid=docs_amazons3_console).
+
+```json
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "PUT",
+            "POST",
+            "DELETE"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [
+            "x-amz-server-side-encryption",
+            "x-amz-request-id",
+            "x-amz-id-2"
+        ],
+        "MaxAgeSeconds": 3000
+    }
+]
+```
+
+Cette documentation fournit un guide clair pour définir des solutions de stockage personnalisées dans FireCMS. Suivez le modèle pour intégrer d'autres services de stockage selon vos besoins.

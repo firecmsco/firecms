@@ -1,6 +1,11 @@
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationController } from "../hooks";
+import {
+    useCollapsedGroups,
+    useLargeLayout,
+    useNavigationController,
+    useTranslation
+} from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types";
@@ -34,6 +39,7 @@ export function DefaultDrawer({
 
     const analyticsController = useAnalyticsController();
     const navigation = useNavigationController();
+    const { t } = useTranslation();
 
     const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
     const largeLayout = useLargeLayout();
@@ -122,7 +128,7 @@ export function DefaultDrawer({
                             }}
                             key={entry.id}>
                             {<IconForView collectionOrView={entry.view} />}
-                            {entry.name}
+                            {t(entry.name as any)}
                         </MenuItem>)}
 
                 </Menu>}

@@ -1,0 +1,133 @@
+---
+slug: it/docs/cloud/app_check
+title: "App Check: Proteggere il tuo pannello admin"
+description: "Proteggi il tuo pannello admin Firebase e gli strumenti interni usando Firebase App Check. Proteggi il tuo CMS dagli abusi e dagli accessi non autorizzati."
+---
+
+Puoi integrare Firebase App Check nella tua app per proteggere le risorse del tuo backend dagli abusi, come frodi di fatturazione o phishing. Firebase App Check funziona insieme ad altri servizi Firebase, come Firebase Authentication, per aiutare a proteggere le risorse backend.
+
+FireCMS fornisce un modo semplice per integrare Firebase App Check nella tua app.
+
+:::important
+Ricorda di aggiungere il dominio `app.firecms.co` all'elenco dei domini consentiti nella configurazione del provider AppCheck.
+:::
+
+Puoi abilitare Firebase App Check nella tua app direttamente nelle **impostazioni del progetto** nella console FireCMS Cloud, o fornendo la prop `appCheck` nella configurazione della tua app.
+
+Implementandolo nel codice, hai più controllo sulla configurazione e sul provider che vuoi usare, inclusi i provider personalizzati.
+
+Puoi definire alcune opzioni:
+- `provider`: Il provider che vuoi usare.
+- `isTokenAutoRefreshEnabled`: Se aggiornare automaticamente il token.
+- `debugToken`: Un token di debug da usare.
+- `forceRefresh`: Se forzare un aggiornamento del token.
+
+
+## Provider
+
+La proprietà `provider` è richiesta e deve essere un'istanza di un provider Firebase AppCheck.
+Puoi usare uno dei seguenti provider:
+
+### ReCaptchaEnterpriseProvider
+
+Per configurare il ReCaptchaEnterpriseProvider, devi creare una nuova chiave del sito reCAPTCHA Enterprise.
+Segui le istruzioni nella [documentazione Firebase](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+:::important
+Assicurati di aver aggiunto il dominio `app.firecms.co` all'elenco dei domini consentiti nella console reCAPTCHA Enterprise.
+:::
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaEnterpriseProvider("your-site-key")
+    },
+}
+
+export default appConfig;
+```
+
+### ReCaptchaV3Provider
+
+Per configurare il ReCaptchaV3Provider, devi creare una nuova chiave del sito reCAPTCHA v3.
+Segui le istruzioni nella [documentazione Firebase](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaV3Provider("your-site-key")
+    },
+}
+
+export default appConfig;
+```
+
+### Provider personalizzato
+
+Puoi anche creare un provider personalizzato implementando l'interfaccia `AppCheckProvider`.
+
+
+## Verifica la tua configurazione
+
+FireCMS Cloud può condividere dipendenze con la tua app caricata. È importante che la tua app e FireCMS Cloud usino la stessa versione di Firebase App Check.
+Per farlo, assicurati, nel tuo `vite.config.ts`, di usare la dipendenza condivisa fornita da FireCMS.
+Devi avere la dipendenza `@firebase/app-check` nella configurazione `shared` del plugin Federation in `vite.config.ts`.
+
+Questa è una configurazione di esempio:
+
+```tsx
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import federation from "@originjs/vite-plugin-federation"
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    plugins: [
+        react(),
+        federation({
+            name: "remote_app",
+            filename: "remoteEntry.js",
+            exposes: {
+                "./config": "./src/index"
+            },
+            shared: [
+                "react",
+                "react-dom",
+                "@firecms/cloud",
+                "@firecms/core",
+                "@firecms/firebase",
+                "@firecms/ui",
+                "@firebase/firestore",
+                "@firebase/app",
+                "@firebase/functions",
+                "@firebase/auth",
+                "@firebase/storage",
+                "@firebase/analytics",
+                "@firebase/remote-config",
+                "@firebase/app-check" // Aggiungi questa riga
+            ]
+        })
+    ],
+    build: {
+        modulePreload: false,
+        minify: false,
+        target: "ESNEXT",
+        cssCodeSplit: false,
+    }
+});
+```

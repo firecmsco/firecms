@@ -1,0 +1,31 @@
+---
+slug: es/docs/components/multi_select
+title: Selección múltiple (MultiSelect)
+sidebar_label: Selección múltiple
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+MultiSelect (Selección múltiple) permite a los usuarios seleccionar múltiples opciones de una lista desplegable. Admite estados de apertura y cierre, renderizado de valores personalizados y navegación por teclado, entre otras características.
+
+## Uso
+
+Para usar `MultiSelect`, impórtalo junto con su componente de elemento (`MultiSelectItem`). Puedes pasar props como `value` (valor), `onMultiValueChange` (al cambiar valor múltiple), `size` (tamaño), `label` (etiqueta), `disabled` (deshabilitado) y muchas más para personalizar su comportamiento y apariencia.
+
+## Selección múltiple básica
+
+Un ejemplo sencillo que demuestra el uso básico del componente `MultiSelect`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_basic.tsx"/>
+
+## Renderizado de valor personalizado
+
+Este ejemplo muestra cómo personalizar el renderizado de los valores seleccionados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_custom_render.tsx"/>
+
+## Manejo del estado deshabilitado
+
+Un ejemplo para demostrar un componente `MultiSelect` en estado deshabilitado.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_disabled.tsx"/>

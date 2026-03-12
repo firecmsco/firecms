@@ -1,0 +1,21 @@
+export const dataEnhancementTranslationsPt = {
+    autofill: "Preenchimento automático",
+    autofill_current_content: "Preencher automaticamente com base no conteúdo atual",
+    set_id_first: "Deve definir primeiro um ID",
+    provide_instructions: "Forneça instruções ao Data Enhancement",
+    fill_missing_fields: "Preencher campos em falta",
+    translate_missing_content: "Traduzir conteúdo em falta",
+    add_2_paragraphs_to: "Adicionar 2 parágrafos ao conteúdo",
+    use_openai_generate_content: "Use o Google Vertex AI ou OpenAI para gerar conteúdo automaticamente.",
+    autofill_this_field: "Preencher automaticamente este campo",
+    autofill_property: "Preencher propriedade automaticamente",
+    input_data_before_enhancing: "Introduza alguns dados antes de melhorar",
+    input_data_before_enhancing_property: "Precisa de introduzir alguns dados noutras propriedades antes de melhorar esta.",
+    based_on_rest_of_entity: "Com base no resto da entidade",
+    this_field: "este campo",
+    subscription_needed: "É necessária uma subscrição válida para usar esta função.",
+    login_to_enhance: "Precisa de iniciar sessão para melhorar os dados",
+    no_fields_updated: "Nenhum campo foi atualizado",
+    ask_ai_to_write: "Pedir à IA para escrever",
+    instructions: "Instruções"
+};

@@ -2,10 +2,12 @@
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
+import { AuthController } from "../types";
 import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
-import { AuthControllerContext } from "../contexts";
+import { AuthControllerContext, ModeControllerProvider } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useCustomizationController, useFireCMSContext } from "../hooks";
+import { useCustomizationController, useFireCMSContext, useTranslation, ModeController } from "../hooks";
+import { useBuildModeController } from "../hooks/useBuildModeController";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -21,6 +23,7 @@ import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
+import { FireCMSi18nProvider } from "../i18n/FireCMSi18nProvider";
 
 /**
  * If you are using independent components of the CMS
@@ -41,6 +44,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         userConfigPersistence,
         dateTimeFormat,
         locale,
+        translations,
         authController,
         storageSource,
         dataSourceDelegate,
@@ -58,6 +62,10 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     if (_pluginsProp) {
         console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
     }
+
+    const { t } = useTranslation();
+
+    const modeController = useBuildModeController();
 
     const plugins = navigationController.plugins ?? _pluginsProp;
     const userManagement = plugins?.find(p => p.userManagement)?.userManagement
@@ -77,6 +85,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const customizationController: CustomizationController = {
         dateTimeFormat,
         locale,
+        translations,
         entityLinkBuilder,
         plugins,
         entityViews: entityViews ?? [],
@@ -133,12 +142,15 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     if (accessResponse?.blocked) {
         return (
             <CenteredView maxWidth={"md"} fullScreen={true} className={"flex flex-col gap-2"}>
+                {/* eslint-disable-next-line i18next/no-literal-string */}
                 <Typography variant={"h4"} gutterBottom>
-                    License needed
+                    {t("license_needed")}
                 </Typography>
                 <Typography>
-                    You need a valid license to use FireCMS PRO. Please reach out at <a
-                    href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
+                    {(() => {
+                        const parts = t("license_description", { email: "%%EMAIL%%" }).split("%%EMAIL%%");
+                        return <>{parts[0]}<a href={"mailto:hello@firecms.co"}>hello@firecms.co</a>{parts[1]}</>;
+                    })()}
                 </Typography>
                 {accessResponse?.message &&
                     <Typography>{accessResponse?.message}</Typography>}
@@ -146,42 +158,56 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         );
     }
 
+    const mergedTranslations = useMemo(() => {
+        const res: Record<string, any> = { ...translations };
+        plugins?.forEach(plugin => {
+            if (plugin.i18n) {
+                Object.keys(plugin.i18n).forEach(locale => {
+                    res[locale] = { ...res[locale], ...plugin.i18n![locale] };
+                });
+            }
+        });
+        return res;
+    }, [translations, plugins]);
+
     return (
-        <AnalyticsContext.Provider value={analyticsController}>
-            <CustomizationControllerContext.Provider value={customizationController}>
-                <UserConfigurationPersistenceContext.Provider
-                    value={userConfigPersistence}>
-                    <StorageSourceContext.Provider
-                        value={storageSource}>
-                        <DataSourceContext.Provider
-                            value={dataSource}>
-                            <AuthControllerContext.Provider
-                                value={authController}>
-                                <SideDialogsControllerContext.Provider
-                                    value={sideDialogsController}>
-                                    <SideEntityControllerContext.Provider
-                                        value={sideEntityController}>
-                                        <NavigationContext.Provider
-                                            value={navigationController}>
-                                            <InternalUserManagementContext.Provider value={userManagement}>
-                                                <DialogsProvider>
-                                                    <BreadcrumbsProvider>
-                                                        <FireCMSInternal
-                                                            loading={loading}>
-                                                            {children}
-                                                        </FireCMSInternal>
-                                                    </BreadcrumbsProvider>
-                                                </DialogsProvider>
-                                            </InternalUserManagementContext.Provider>
-                                        </NavigationContext.Provider>
-                                    </SideEntityControllerContext.Provider>
-                                </SideDialogsControllerContext.Provider>
-                            </AuthControllerContext.Provider>
-                        </DataSourceContext.Provider>
-                    </StorageSourceContext.Provider>
-                </UserConfigurationPersistenceContext.Provider>
-            </CustomizationControllerContext.Provider>
-        </AnalyticsContext.Provider>
+        <FireCMSi18nProvider locale={locale} translations={mergedTranslations}>
+            <AnalyticsContext.Provider value={analyticsController}>
+                <CustomizationControllerContext.Provider value={customizationController}>
+                    <UserConfigurationPersistenceContext.Provider
+                        value={userConfigPersistence}>
+                        <StorageSourceContext.Provider
+                            value={storageSource}>
+                            <DataSourceContext.Provider
+                                value={dataSource}>
+                                <AuthControllerContext.Provider
+                                    value={authController}>
+                                    <SideDialogsControllerContext.Provider
+                                        value={sideDialogsController}>
+                                        <SideEntityControllerContext.Provider
+                                            value={sideEntityController}>
+                                            <NavigationContext.Provider
+                                                value={navigationController}>
+                                                <InternalUserManagementContext.Provider value={userManagement}>
+                                                    <DialogsProvider>
+                                                        <BreadcrumbsProvider>
+                                                            <FireCMSInternal
+                                                                loading={loading}>
+                                                                {children}
+                                                            </FireCMSInternal>
+                                                        </BreadcrumbsProvider>
+                                                    </DialogsProvider>
+                                                </InternalUserManagementContext.Provider>
+                                            </NavigationContext.Provider>
+                                        </SideEntityControllerContext.Provider>
+                                    </SideDialogsControllerContext.Provider>
+                                </AuthControllerContext.Provider>
+                            </DataSourceContext.Provider>
+                        </StorageSourceContext.Provider>
+                    </UserConfigurationPersistenceContext.Provider>
+                </CustomizationControllerContext.Provider>
+            </AnalyticsContext.Provider>
+        </FireCMSi18nProvider>
     );
 
 }

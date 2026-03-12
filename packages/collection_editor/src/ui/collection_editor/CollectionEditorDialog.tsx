@@ -22,7 +22,8 @@ import {
     useCustomizationController,
     useNavigationController,
     User,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 import {
     ArrowBackIcon,
@@ -113,6 +114,8 @@ export interface CollectionEditorDialogProps {
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
+    const { t } = useTranslation();
+
 
     const open = props.open;
 
@@ -143,7 +146,7 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
             maxWidth={"7xl"}
             onOpenChange={(open) => !open ? handleCancel() : undefined}
         >
-            <DialogTitle hidden>Collection editor</DialogTitle>
+            <DialogTitle hidden>{t("collection_editor")}</DialogTitle>
             <AIModifiedPathsProvider>
                 {open && <CollectionEditor {...props}
                     handleCancel={handleCancel}
@@ -310,6 +313,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 }
 ) {
 
+    const { t } = useTranslation();
     const importConfig = useImportConfig();
     const navigation = useNavigationController();
     const snackbarController = useSnackbarController();
@@ -763,7 +767,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     importConfig.setInUse(false);
                                     return setCurrentView("welcome");
                                 }}>
-                                Back
+                                {t("back")}
                             </Button>}
 
                         {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
@@ -772,14 +776,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 onClick={() => {
                                     setCurrentView("import_data_mapping");
                                 }}>
-                                Back
+                                {t("back")}
                             </Button>}
 
                         {isNewCollection && includeTemplates && currentView === "general" &&
                             <Button variant={"text"}
                                 type="button"
                                 onClick={() => setCurrentView("welcome")}>
-                                Back
+                                {t("back")}
                             </Button>}
 
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
@@ -787,7 +791,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             color={"neutral"}
                             onClick={() => setCurrentView("general")}>
                             <ArrowBackIcon />
-                            Back
+                            {t("back")}
                         </Button>}
 
                         <Button variant={"text"}
@@ -795,12 +799,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             onClick={() => {
                                 handleCancel();
                             }}>
-                            Cancel
+                            {t("cancel")}
                         </Button>
 
                         {currentView === "welcome" &&
                             <Button variant={"text"} onClick={() => onWelcomeScreenContinue()}>
-                                Continue from scratch
+                                {t("continue_from_scratch")}
                             </Button>}
 
                         {isNewCollection && currentView === "import_data_mapping" &&
@@ -809,7 +813,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 color="primary"
                                 onClick={onImportMappingComplete}
                             >
-                                Next
+                                {t("next")}
                             </Button>}
 
                         {isNewCollection && currentView === "import_data_preview" &&
@@ -820,7 +824,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     setNextMode();
                                 }}
                             >
-                                Next
+                                {t("next")}
                             </Button>}
 
                         {isNewCollection && (currentView === "general" || currentView === "properties") &&
@@ -834,8 +838,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     ? <CheckIcon />
                                     : undefined}
                             >
-                                {currentView === "general" && "Next"}
-                                {currentView === "properties" && "Create collection"}
+                                {currentView === "general" && t("next")}
+                                {currentView === "properties" && t("create_collection")}
                             </LoadingButton>}
 
                         {!isNewCollection && <LoadingButton
@@ -844,7 +848,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             type="submit"
                             loading={isSubmitting}
                         >
-                            Update collection
+                            {t("update_collection")}
                         </LoadingButton>}
 
                     </DialogActions>

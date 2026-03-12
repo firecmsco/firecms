@@ -16,7 +16,8 @@ import {
     useNavigationController,
     User,
     useSelectionController,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 import {
     Button,
@@ -60,6 +61,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
     const [step, setStep] = React.useState<ImportState>("initial");
 
     const importConfig = useImportConfig();
+    const { t } = useTranslation();
 
     const handleClickOpen = useCallback(() => {
         setOpen(true);
@@ -119,7 +121,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
 
     return <>
 
-        <Tooltip title={"Import"}
+        <Tooltip title={t("import")}
                  asChild={true}>
             <IconButton
                 size={"small"}
@@ -133,13 +135,14 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                 fullHeight={step !== "initial"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}>
 
-            <DialogTitle variant={"h6"} hidden={step === "preview"}>Import data</DialogTitle>
+            <DialogTitle variant={"h6"} hidden={step === "preview"}>{t("import_data")}</DialogTitle>
 
             <DialogContent className={"h-full flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
 
                 {step === "initial" && <>
-                    <Typography variant={"body2"}>Upload a CSV, Excel or JSON file and map it to your existing
-                        schema</Typography>
+                    <Typography variant={"body2"}>
+                        {t("upload_file_description")}
+                    </Typography>
                     <ImportFileUpload onDataAdded={onDataAdded}/>
                 </>}
 
@@ -197,7 +200,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                                               handleClose();
                                               snackbarController.open({
                                                   type: "info",
-                                                  message: "Data imported successfully"
+                                                  message: t("data_imported_successfully")
                                               });
                                           }}
                     />}
@@ -208,30 +211,30 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                 {step === "mapping" && <Button
                     onClick={() => setStep("initial")}
                     variant={"text"}>
-                    Back
+                    {t("back")}
                 </Button>}
 
                 {step === "preview" && <Button
                     onClick={() => setStep("mapping")}
                     variant={"text"}>
-                    Back
+                    {t("back")}
                 </Button>}
 
                 <Button onClick={handleClose}
                         variant={"text"}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 {step === "mapping" && <Button variant="filled"
                                                color={"primary"}
                                                onClick={onMappingComplete}>
-                    Next
+                    {t("next")}
                 </Button>}
 
                 {step === "preview" && <Button variant="filled"
                                                color={"primary"}
                                                onClick={onPreviewComplete}>
-                    Save data
+                    {t("save_data")}
                 </Button>}
 
             </DialogActions>
@@ -257,18 +260,19 @@ function PropertyTreeSelect({
     propertiesAndLevel: PropertyAndLevel[];
     isIdColumn?: boolean;
 }) {
-
+    const { t } = useTranslation();
     const selectedProperty = selectedPropertyKey ? getPropertyInPath(properties, selectedPropertyKey) : null;
 
     const renderValue = useCallback((selectedPropertyKey: string) => {
 
         if (selectedPropertyKey === internalIDValue) {
-            return <Typography variant={"body2"} className={"p-4"}>Use this column as ID</Typography>;
+            return <Typography variant={"body2"} className={"p-4"}>{t("use_column_as_id")}</Typography>;
         }
 
         if (!selectedPropertyKey || !selectedProperty) {
-            return <Typography variant={"body2"} color="disabled" className={"p-4"}>Do not import this
-                property</Typography>;
+            return <Typography variant={"body2"} color="disabled" className={"p-4"}>
+                {t("do_not_import_property")}
+            </Typography>;
         }
 
         return <PropertySelectEntry propertyKey={selectedPropertyKey}
@@ -293,11 +297,11 @@ function PropertyTreeSelect({
                    renderValue={renderValue}>
 
         <SelectItem value={"__do_not_import"}>
-            <Typography variant={"body2"} color={"disabled"} className={"p-4"}>Do not import this property</Typography>
+            <Typography variant={"body2"} color={"disabled"} className={"p-4"}>{t("do_not_import_property")}</Typography>
         </SelectItem>
 
         <SelectItem value={internalIDValue}>
-            <Typography variant={"body2"} className={"p-4"}>Use this column as ID</Typography>
+            <Typography variant={"body2"} className={"p-4"}>{t("use_column_as_id")}</Typography>
         </SelectItem>
 
         {propertiesAndLevel.map(({
@@ -394,6 +398,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
     properties: ResolvedProperties<M>,
     propertiesOrder: Extract<keyof M, string>[],
 }) {
+    const { t } = useTranslation();
     const authController = useAuthController();
     const navigation = useNavigationController();
     useEffect(() => {
@@ -414,8 +419,8 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
     return <EntityCollectionTable
         title={<div>
-            <Typography variant={"subtitle2"}>Imported data preview</Typography>
-            <Typography variant={"caption"}>Entities with the same id will be overwritten</Typography>
+            <Typography variant={"subtitle2"}>{t("imported_data_preview")}</Typography>
+            <Typography variant={"caption"}>{t("entities_will_be_overwritten")}</Typography>
         </div>}
         tableController={{
             data: importConfig.entities,

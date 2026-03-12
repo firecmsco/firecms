@@ -1,0 +1,42 @@
+---
+slug: de/docs/components/dialog
+title: Dialog
+sidebar_label: Dialog
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Dialogkomponenten werden verwendet, um Inhalte in einer Ebene über dem Hauptinhalt der App darzustellen, und sie erfordern häufig eine Benutzerreaktion. Sie sind eine entscheidende Komponente für modale Dialoge, Lightboxes, Benachrichtigungs-Popups und benutzerdefinierte Inhalts-Popups.
+
+## Verwendung
+
+Um den `Dialog` zu verwenden, importieren Sie ihn aus Ihren Komponenten und übergeben Sie die erforderlichen Props einschließlich `open`, `onOpenChange` und den Inhalt des Dialogs als untergeordnete Elemente (children). Optional können Sie das Erscheinungsbild mit den Props `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal` und `onOpenAutoFocus` anpassen.
+
+:::caution
+Sie müssen einen `DialogTitle` in Ihrer `Dialog`-Komponente bereitstellen, um sicherzustellen, dass der Dialog barrierefrei ist.
+Sie sehen eine Warnung in der Konsole, wenn Sie vergessen, einen `DialogTitle` anzugeben.
+:::
+
+## Einfacher Dialog
+
+Ein einfaches Beispiel für die Verwendung der Dialogkomponente, um ein einfaches Popup anzuzeigen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
+
+## Vollbild-Dialog
+
+Ein Beispiel für einen Dialog, der den gesamten Bildschirm abdeckt.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
+
+## Scrollbarer Dialog
+
+Veranschaulicht, wie der Inhalt eines Dialogs scrollbar gemacht wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
+
+## Dialog mit benutzerdefinierter Breite
+
+Demonstriert die Verwendung der Eigenschaft `maxWidth` zur Anpassung der Breite des Dialogs.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

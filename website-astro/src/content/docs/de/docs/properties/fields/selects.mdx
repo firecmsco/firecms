@@ -1,0 +1,95 @@
+---
+slug: de/docs/properties/fields/selects
+title: Auswahlfelder
+---
+
+### Einfaches Auswahlfeld
+
+![Field](/img/fields/Select.png)
+
+Verwenden Sie ein einfaches Auswahlfeld, wenn Sie die Auswahl eines einzelnen Werts aus einer begrenzten Menge von Optionen ermöglichen möchten.
+
+Setzen Sie die `enumValues`-Prop auf eine gültige Konfiguration in einer String-Eigenschaft:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Category",
+    enumValues: {
+        art_design_books: "Art and design books",
+        backpacks: "Backpacks and bags",
+        bath: "Bath",
+        bicycle: "Bicycle",
+        books: "Books"
+    }
+});
+```
+
+oder:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Currency",
+    enumValues: [
+        { id: "EUR", label: "Euros", color: "blueDark" },
+        { id: "DOL", label: "Dollars", color: "greenLight" }
+    ]
+});
+```
+
+### Mehrfaches Auswahlfeld
+
+![Field](/img/fields/Multi_select.png)
+
+Verwenden Sie ein Mehrfachauswahlfeld, wenn Sie die Auswahl von null oder mehr Werten aus einer begrenzten Menge von Optionen ermöglichen möchten.
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    name: "Available locales",
+    dataType: "array",
+    of: {
+        dataType: "string",
+        enumValues: {
+            "es": "Spanish",
+            "en": "English",
+            "fr": {
+                id: "fr",
+                label: "French",
+                disabled: true
+            }
+        }
+    },
+    defaultValue: ["es"]
+});
+```
+
+### Farben anpassen
+
+Sie können auch benutzerdefinierte Farben mit der HTML-Syntax `#AAAAAA` definieren:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Currency",
+    enumValues: [
+        { id: "EUR", label: "Euros", color: "blueDark" },
+        {
+            id: "DOL",
+            label: "Dollars",
+            color: {
+                color: "#FFFFFF",
+                text: "#333333",
+            }
+        }
+    ]
+});
+```

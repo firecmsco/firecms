@@ -1,0 +1,43 @@
+---
+slug: de/docs/components/slider
+title: Schieberegler (Slider)
+sidebar_label: Slider
+---
+
+Schieberegler (Sliders) ermöglichen es Benutzern, einen Wert einzugeben, indem sie einen Griff entlang einer Spur verschieben. Diese Komponente ist hochgradig anpassbar mit verschiedenen Optionen für Ausrichtung, Schrittweite, Bereich und mehr.
+
+## Verwendung
+
+Um den `Slider` zu verwenden, importieren Sie ihn aus Ihrer Komponentenbibliothek und konfigurieren Sie ihn mit Eigenschaften wie `min`, `max`, `step`, `value` und anderen.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Einfacher Schieberegler
+
+Ein einfaches Beispiel der Slider-Komponente mit Standardeinstellungen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_basic.tsx"/>
+
+## Bereichs-Schieberegler
+
+Ein Beispiel für einen Bereichsschieberegler (Range Slider) mit zwei Griffen, mit denen Benutzer einen Wertebereich auswählen können.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_range.tsx"/>
+
+## Kleiner Schieberegler
+
+Eine kleinere Version der Slider-Komponente mit reduzierter Größe.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_small.tsx"/>
+
+## Deaktivierter Schieberegler
+
+Veranschaulicht, wie die Eigenschaft `disabled` verwendet wird, um einen nicht interaktiven Slider zu erstellen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_disabled.tsx"/>
+
+## Invertierter Schieberegler
+
+Ein Beispiel für einen invertierten Schieberegler, bei dem der Wert von links nach rechts abnimmt.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_inverted.tsx"/>

@@ -1,0 +1,31 @@
+---
+slug: de/docs/components/skeleton
+title: Skeleton
+sidebar_label: Skeleton
+---
+
+Die `Skeleton`-Komponente wird als Platzhalter verwendet, während Inhalte geladen werden. Sie bietet eine einfache visuelle Darstellung der zu ladenden Komponente, typischerweise als grauer oder hell gefärbter Block.
+
+## Verwendung
+
+Um `Skeleton` zu verwenden, importieren Sie es aus Ihren Komponenten und übergeben Sie die Props `width`, `height` und `className`, um das Erscheinungsbild anzupassen.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Einfaches Skeleton
+
+Ein einfaches Skeleton mit Standardbreite und -höhe.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_basic.tsx"/>
+
+## Skeleton mit benutzerdefinierter Größe
+
+Eine Skeleton-Komponente, die eine benutzerdefinierte Breite und Höhe zeigt.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_size.tsx"/>
+
+## Skeleton mit benutzerdefinierten Klassen
+
+Demonstriert die Verwendung der Eigenschaft `className`, um benutzerdefinierte Stile anzuwenden.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_class.tsx"/>

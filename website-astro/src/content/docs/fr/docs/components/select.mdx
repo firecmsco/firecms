@@ -1,0 +1,31 @@
+---
+slug: fr/docs/components/select
+title: Select
+sidebar_label: Select
+---
+
+import CodeSampleWithSource from "../../../../components/CodeSampleWithSource.astro";
+
+Select est un composant de liste déroulante qui permet aux utilisateurs de choisir une option parmi une liste. Il est basé sur Radix UI pour l'accessibilité et la personnalisation.
+
+## Utilisation
+
+Importez `Select` et `SelectItem` depuis `@firecms/ui` et passez les props `value` et `onValueChange`.
+
+## Select de base
+
+Un exemple simple du composant Select.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_basic.tsx"/>
+
+## Select avec rendu personnalisé
+
+Cet exemple montre comment personnaliser le rendu de l'élément sélectionné.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_custom_render.tsx"/>
+
+## Select désactivé
+
+Un exemple du composant Select dans un état désactivé.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_disabled.tsx"/>

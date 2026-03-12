@@ -36,6 +36,7 @@ import { SaveEntityProps } from "../../types/datasource";
 import { setIn } from "@firecms/formex";
 import { useBoardDataController } from "./useBoardDataController";
 import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;
@@ -75,6 +76,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const sideEntityController = useSideEntityController();
     const analyticsController = useAnalyticsController();
     const plugins = customizationController.plugins ?? [];
+    const { t } = useTranslation();
 
     // State for backfill dialog
     const [showBackfillDialog, setShowBackfillDialog] = useState(false);
@@ -583,11 +585,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return (
             <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
                 <Typography variant="h6">
-                    Kanban view is not available
+                    {t("kanban_view_not_available")}
                 </Typography>
                 <Typography variant="body2" color="secondary" className="text-center max-w-md">
-                    Kanban view requires a string property with enum values to group entities into columns.
-                    Please add an enum property to your collection schema to use this view.
+                    {t("kanban_view_requires_enum")}
                 </Typography>
                 {KanbanSetupComponent && (
                     <KanbanSetupComponent
@@ -608,7 +609,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         return (
             <div className="flex-1 flex items-center justify-center p-8">
                 <Typography variant="label" color="secondary">
-                    No enum values configured for property "{columnProperty}"
+                    {t("no_enum_values_configured", { property: columnProperty })}
                 </Typography>
             </div>
         );
@@ -629,14 +630,14 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 <div
                     className="flex items-center justify-between gap-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800">
                     <Typography variant="body2" color="secondary">
-                        Some items don't have order values. Initialize to enable drag-and-drop reordering.
+                        {t("items_need_backfill")}
                     </Typography>
                     <Button
                         size="small"
                         variant="text"
                         onClick={() => setShowBackfillDialog(true)}
                     >
-                        Initialize Order
+                        {t("initialize")}
                     </Button>
                 </div>
             )}
@@ -686,18 +687,17 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             {/* Backfill dialog */}
             <Dialog open={showBackfillDialog} onOpenChange={setShowBackfillDialog}>
                 <DialogContent>
-                    <Typography variant="h6" className="mb-4">Initialize Kanban Order</Typography>
+                    <Typography variant="h6" className="mb-4">{t("initialize_kanban_order")}</Typography>
                     <Typography variant="body2">
-                        This will assign sequential order values to all items that don't have one.
-                        Items will maintain their current order within each column.
+                        {t("initialize_kanban_order_desc")}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="text" onClick={() => setShowBackfillDialog(false)} disabled={backfillLoading}>
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <Button onClick={handleBackfill} disabled={backfillLoading}>
-                        {backfillLoading ? <CircularProgress size="smallest" /> : "Initialize"}
+                        {backfillLoading ? <CircularProgress size="smallest" /> : t("initialize")}
                     </Button>
                 </DialogActions>
             </Dialog>

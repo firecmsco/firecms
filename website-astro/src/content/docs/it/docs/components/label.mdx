@@ -1,0 +1,27 @@
+---
+slug: it/docs/components/label
+title: Label
+sidebar_label: Label
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Il componente `Label` è un componente semplice e versatile usato per visualizzare contenuto testuale con uno stile di etichetta.
+Di solito lo si usa per visualizzare un'etichetta per un campo di input, come una casella di controllo o un pulsante radio.
+
+## Utilizzo
+
+Per usare il componente `Label`, importalo dai tuoi componenti. Puoi passare una prop `border` per aggiungere un bordo attorno all'etichetta.
+Puoi anche passare qualsiasi prop HTML `label`, come `htmlFor`, `className` e `style`.
+
+## Label con una casella di controllo
+
+Semplice esempio di utilizzo del componente `Label` per creare una superficie di base per il contenuto.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_checkbox.tsx"/>
+
+## Label con un pulsante radio
+
+Questo è un esempio di utilizzo del componente `Label` con un pulsante radio.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_radio_group.tsx"/>

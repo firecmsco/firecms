@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, resolveCollection, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
+import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, resolveCollection, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController, useTranslation } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -60,6 +60,8 @@ export function CollectionDetailsForm({
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [orderPropertyDialogOpen, setOrderPropertyDialogOpen] = useState(false);
+
+    const { t } = useTranslation();
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -137,12 +139,12 @@ export function CollectionDetailsForm({
                     <div
                         className="flex flex-row gap-2 py-2 pt-3 items-center">
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
-                            {isNewCollection ? "New collection" : `${values?.name} collection`}
+                            {isNewCollection ? t("new_collection") : t("collection_with_name", { name: values?.name || "" })}
                         </Typography>
                         <DefaultDatabaseField databaseId={values.databaseId}
                             onDatabaseIdUpdate={updateDatabaseId} />
 
-                        <Tooltip title={"Change icon"}
+                        <Tooltip title={t("change_icon")}
                             asChild={true}>
                             <IconButton
                                 shape={"square"}
@@ -154,7 +156,7 @@ export function CollectionDetailsForm({
 
                     {parentCollection && <Chip colorScheme={"tealDarker"}>
                         <Typography variant={"caption"}>
-                            This is a subcollection of <b>{parentCollection.name}</b>
+                            {t("is_subcollection_of")} <b>{parentCollection.name}</b>
                         </Typography>
                     </Chip>}
 
@@ -165,26 +167,26 @@ export function CollectionDetailsForm({
                         <TextField
                             value={values.name ?? ""}
                             onChange={(e: any) => updateName(e.target.value)}
-                            label={"Name"}
+                            label={t("name")}
                             autoFocus={true}
                             required
                             error={showErrors && Boolean(errors.name)} />
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
-                            {touched.name && Boolean(errors.name) ? errors.name : "Name of this collection, usually a plural name (e.g. Products)"}
+                            {touched.name && Boolean(errors.name) ? errors.name : t("collection_name_description")}
                         </FieldCaption>
                     </div>
 
                     <div className={cls("col-span-12 ")}>
                         <Field name={"path"}
                             as={DebouncedTextField}
-                            label={"Path"}
+                            label={t("path")}
                             required
                             error={showErrors && Boolean(errors.path)} />
 
                         <FieldCaption error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
                                 ? errors.path
-                                : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
+                                : isSubcollection ? t("relative_path_to_parent") : t("path_in_database")}
                         </FieldCaption>
 
                     </div>
@@ -376,16 +378,14 @@ export function CollectionDetailsForm({
                             position={"start"}
                             size={"large"}
                             allowIndeterminate={true}
-                            label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
-                                values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
+                            label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? t("doc_history_global") : (
+                                values.history ? t("doc_history_enabled") : t("doc_history_not_enabled")
                             )}</span>}
                             onValueChange={(v) => setFieldValue("history", v)}
                             value={values.history === undefined ? null : values.history}
                         />
                         <FieldCaption>
-                            When enabled, each document in this collection will have a history of changes.
-                            This is useful for auditing purposes. The data is stored in a subcollection of the document
-                            in your database, called <b>__history</b>.
+                            {t("doc_history_description")}
                         </FieldCaption>
                     </div>
 
@@ -424,7 +424,9 @@ function DefaultDatabaseField({
     onDatabaseIdUpdate
 }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
 
-    return <Tooltip title={"Database ID"}
+    const { t } = useTranslation();
+
+    return <Tooltip title={t("database_id")}
         side={"top"}
         align={"start"}>
         <TextField size={"small"}
@@ -432,6 +434,6 @@ function DefaultDatabaseField({
             inputClassName={"text-end"}
             value={databaseId ?? ""}
             onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
-            placeholder={"(default)"}></TextField>
+            placeholder={t("default_text")}></TextField>
     </Tooltip>
 }

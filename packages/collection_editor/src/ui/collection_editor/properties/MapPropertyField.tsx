@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@firecms/core";
+import { FieldCaption, MapProperty, Property, PropertyConfig,     useTranslation
+} from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getIn, useFormex } from "@firecms/formex";
@@ -13,6 +14,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
     propertyConfigs: Record<string, PropertyConfig>,
     collectionEditable: boolean;
 }) {
+    const { t } = useTranslation();
 
     const {
         values,
@@ -73,7 +75,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
         <>
             <div className={"col-span-12"}>
                 <div className="flex justify-between items-end my-4">
-                    <Typography variant={"subtitle2"}>Properties in this group</Typography>
+                    <Typography variant={"subtitle2"}>{t("properties_in_this_group")}</Typography>
                     <Button
                         onClick={() => setPropertyDialogOpen(true)}
                         startIcon={<AddIcon/>}

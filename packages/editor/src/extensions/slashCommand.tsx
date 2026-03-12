@@ -23,6 +23,7 @@ import {
 } from "@firecms/ui"
 import { onFileRead, UploadFn } from "./Image";
 import { EditorAIController } from "../types";
+import { FireCMSTranslations, useTranslation } from "@firecms/core";
 
 // See `addAttributes` below
 export interface CommandNodeAttrs {
@@ -295,8 +296,8 @@ export const SlashCommand = Node.create<CommandOptions>({
 });
 
 export interface SuggestionItem {
-    title: string;
-    description: string;
+    titleKey: keyof FireCMSTranslations;
+    descriptionKey: keyof FireCMSTranslations;
     icon: ReactNode;
     searchTerms?: string[];
     command?: (props: { editor: Editor; range: Range, upload: UploadFn, aiController?: EditorAIController }) => void;
@@ -304,10 +305,12 @@ export interface SuggestionItem {
 
 export const suggestion = (ref: React.MutableRefObject<any>, {
     upload,
-    aiController
+    aiController,
+    t
 }: {
     upload: UploadFn,
-    aiController?: EditorAIController
+    aiController?: EditorAIController,
+    t: (key: keyof FireCMSTranslations) => string
 }): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
 ({
     items: ({ query }) => {
@@ -318,7 +321,7 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
 
         return availableSuggestionItems
             .filter(item => {
-                const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
+                const inTitle = t(item.titleKey as any).toLowerCase().startsWith(query.toLowerCase());
                 if (inTitle) return inTitle;
                 return item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
             })
@@ -464,6 +467,7 @@ const CommandList = forwardRef((props: {
     aiController: EditorAIController;
     onClose: () => void;
 }, ref) => {
+    const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const { editor } = useCurrentEditor();
@@ -528,7 +532,7 @@ const CommandList = forwardRef((props: {
             {props.items.length ? (
                 props.items.map((item, index) => (
                     <button
-                        value={item.title}
+                        value={t(item.titleKey as any)}
                         ref={el => {
                             if (!el) return;
                             itemRefs.current[index] = el;
@@ -539,16 +543,16 @@ const CommandList = forwardRef((props: {
                         aria-selected={index === selectedIndex}
                         className={cls("flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-surface-700 aria-selected:bg-blue-50 aria-selected:dark:bg-surface-700",
                             index === selectedIndex ? "bg-blue-100 dark:bg-surface-accent-950" : "")}
-                        key={item.title}
+                        key={item.titleKey}
                     >
                         <div
                             className={cls("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-surface-900", defaultBorderMixin)}>
                             {item.icon}
                         </div>
                         <div>
-                            <p className="font-medium">{item.title}</p>
+                            <p className="font-medium">{t(item.titleKey as any)}</p>
                             <p className="text-xs text-surface-700 dark:text-surface-accent-300">
-                                {item.description}
+                                {t(item.descriptionKey as any)}
                             </p>
                         </div>
                     </button>
@@ -562,8 +566,8 @@ const CommandList = forwardRef((props: {
 CommandList.displayName = "CommandList";
 
 const autocompleteSuggestionItem: SuggestionItem = {
-    title: "Autocomplete",
-    description: "Add text based on the context.",
+    titleKey: "editor_autocomplete",
+    descriptionKey: "editor_autocomplete_description",
     searchTerms: ["ai"],
     icon: <AutoFixHighIcon size={18} />,
     command: async ({
@@ -614,8 +618,8 @@ const autocompleteSuggestionItem: SuggestionItem = {
 };
 const suggestionItems: SuggestionItem[] = [
     {
-        title: "Text",
-        description: "Just start typing with plain text.",
+        titleKey: "editor_text",
+        descriptionKey: "editor_text_description",
         searchTerms: ["p", "paragraph"],
         icon: <TextFieldsIcon size={18} />,
         command: ({
@@ -631,8 +635,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "To-do List",
-        description: "Track tasks with a to-do list.",
+        titleKey: "editor_todo_list",
+        descriptionKey: "editor_todo_list_description",
         searchTerms: ["todo", "task", "list", "check", "checkbox"],
         icon: <CheckBoxIcon size={18} />,
         command: ({
@@ -643,8 +647,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Heading 1",
-        description: "Big section heading.",
+        titleKey: "editor_heading_1",
+        descriptionKey: "editor_heading_1_description",
         searchTerms: ["title", "big", "large"],
         icon: <LooksOneIcon size={18} />,
         command: ({
@@ -660,8 +664,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Heading 2",
-        description: "Medium section heading.",
+        titleKey: "editor_heading_2",
+        descriptionKey: "editor_heading_2_description",
         searchTerms: ["subtitle", "medium"],
         icon: <LooksTwoIcon size={18} />,
         command: ({
@@ -677,8 +681,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Heading 3",
-        description: "Small section heading.",
+        titleKey: "editor_heading_3",
+        descriptionKey: "editor_heading_3_description",
         searchTerms: ["subtitle", "small"],
         icon: <Looks3Icon size={18} />,
         command: ({
@@ -694,8 +698,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Bullet List",
-        description: "Create a simple bullet list.",
+        titleKey: "editor_bullet_list",
+        descriptionKey: "editor_bullet_list_description",
         searchTerms: ["unordered", "point"],
         icon: <FormatListBulletedIcon size={18} />,
         command: ({
@@ -706,8 +710,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Numbered List",
-        description: "Create a list with numbering.",
+        titleKey: "editor_numbered_list",
+        descriptionKey: "editor_numbered_list_description",
         searchTerms: ["ordered"],
         icon: <FormatListNumberedIcon size={18} />,
         command: ({
@@ -718,8 +722,8 @@ const suggestionItems: SuggestionItem[] = [
         }
     },
     {
-        title: "Quote",
-        description: "Capture a quote.",
+        titleKey: "editor_quote",
+        descriptionKey: "editor_quote_description",
         searchTerms: ["blockquote"],
         icon: <FormatQuoteIcon size={18} />,
         command: ({
@@ -735,8 +739,8 @@ const suggestionItems: SuggestionItem[] = [
                 .run()
     },
     {
-        title: "Code",
-        description: "Capture a code snippet.",
+        titleKey: "editor_code",
+        descriptionKey: "editor_code_description",
         searchTerms: ["codeblock"],
         icon: <CodeIcon size={18} />,
         command: ({
@@ -746,8 +750,8 @@ const suggestionItems: SuggestionItem[] = [
             editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
     {
-        title: "Image",
-        description: "Upload an image from your computer.",
+        titleKey: "editor_image",
+        descriptionKey: "editor_image_description",
         searchTerms: ["photo", "picture", "media", "upload", "file"],
         icon: <ImageIcon size={18} />,
         command: ({

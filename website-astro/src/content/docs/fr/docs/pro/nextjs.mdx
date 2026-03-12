@@ -1,0 +1,183 @@
+---
+slug: fr/docs/pro/nextjs
+title: Démarrage rapide + frontend Next.JS
+description: Utilisez notre template de démarrage Next.js pour obtenir un CMS complet avec un template e-commerce/blog prêt à être adapté à votre logique.
+---
+
+:::tip
+Obtenez un CMS complet avec un template e-commerce/blog prêt à être adapté à votre logique
+:::
+
+![next_js_frontend.png](/img/next_js_frontend.png)
+
+Vous pouvez consulter une **démo** de ce template :
+- [**Panneau d'administration**](https://next.firecms.co/cms)
+- [**Frontend**](https://next.firecms.co/products)
+
+Vous pouvez modifier les données dans la démo et voir les mises à jour, mais elles sont réinitialisées toutes les **heures**.
+
+Obtenez un **template frontend** avec des **vues CRUD** d'exemple qui incluent :
+- Intégration avec **Firebase** et **FireCMS**. Réutilisez les composants à la fois dans le frontend et le panneau d'administration.
+- **Aperçu en direct** : voyez comment les modifications dans le CMS seront reflétées sur le site web, en utilisant exactement le même code.
+- Interface implémentée avec **tailwindcss** et **composants Radix UI**.
+- **Options de filtrage** avancées
+- Récupération de données au **défilement**.
+- Stockage de l'état des filtres dans l'**URL**.
+
+Ce template est extrêmement facile à **personnaliser** selon vos besoins.
+
+## Utilisation du **template de démarrage FireCMS PRO**
+
+La façon la plus simple d'utiliser FireCMS avec Next.js est d'utiliser le **template de démarrage FireCMS PRO**. Ce template inclut un projet Next.js avec FireCMS déjà configuré.
+
+Vous pouvez créer un nouveau projet en utilisant le **template FireCMS PRO** en exécutant :
+
+```bash
+npx create-firecms-app
+```
+ou
+
+```bash
+yarn create firecms-app
+```
+
+et sélectionnez le template **`FireCMS PRO with Next.js frontend`**.
+
+Ensuite, suivez les instructions à l'écran pour créer votre projet.
+
+### Ce que vous obtenez
+
+Le code qui sera généré pour vous est un projet Next.JS divisé en **3 parties** :
+- Une **instance FireCMS** pour gérer vos données.
+- Une **application frontend** qui implémente les fonctionnalités CRUD pour une collection de produits, ainsi qu'une vue de blog.
+- Un **dossier commun** avec des composants partagés.
+
+## Configuration **manuelle de FireCMS** avec **Next.js**
+
+Vous pouvez utiliser FireCMS avec Next.js. FireCMS est une **bibliothèque React**, donc vous pouvez l'utiliser avec n'importe quel framework React.
+
+Dans le cas de Next.js, vous êtes contraint d'exécuter FireCMS côté **client**, car Next.js ne prend pas en charge le rendu côté serveur de certains composants React utilisés par FireCMS.
+
+Construisons une application en utilisant FireCMS et Next.js, avec le routeur d'application configuré pour déléguer toutes les routes commençant par `/cms` à **FireCMS**.
+
+### Créer un **projet Next.js**
+
+Commencez par créer votre projet Next.js :
+
+```bash
+npx create-next-app@latest
+```
+
+Sélectionnez :
+- **TypeScript** comme langage
+- **ESLint** comme linter
+- **Tailwind CSS** comme framework CSS
+- **src** comme répertoire racine
+- Oui à la question du **routeur d'application**
+- Oui pour personnaliser **l'alias d'import par défaut** (optionnel)
+
+### Installer **FireCMS**
+
+Ensuite, nous allons installer **FireCMS PRO**. Notez que nous n'allons pas ajouter tous les plugins comme l'éditeur de collection ou l'amélioration des données, mais vous pouvez les ajouter selon vos besoins.
+
+Installez ensuite FireCMS et ses dépendances :
+
+```bash
+yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta @firecms/editor@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
+```
+
+Maintenant, importons la configuration tailwind de FireCMS. Ajoutez le **preset FireCMS** dans `tailwind.config.js`, ainsi que les chemins de contenu vers le code source FireCMS, afin que les bonnes classes tailwind soient sélectionnées.
+
+```js
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  presets: [fireCMSConfig],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/cms/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+  ]
+};
+export default config;
+```
+
+### Désactiver **yarn pnp** (optionnel)
+
+Nous préférons désactiver yarn pnp pour ce projet. Vous pouvez le faire en créant le fichier `.yarnrc` à la racine de votre projet avec le contenu suivant :
+
+```bash
+nodeLinker: node-modules
+```
+
+### Configurer le **routeur d'application**
+
+Next.js utilise un routeur basé sur les fichiers. Dans ce guide, nous allons créer l'application FireCMS sur la route `/cms`, mais vous pouvez personnaliser cela selon vos besoins.
+
+FireCMS utilise **react-router**, donc nous devons configurer Next.js pour déléguer toutes les routes commençant par `/cms` à **FireCMS**.
+
+Dans notre dossier `app`, nous créons un dossier appelé `cms` et à l'intérieur un autre appelé `[[...path]]`. Cela correspondra à toute route commençant par `/cms`.
+
+Ensuite, créez le fichier `cms/[[...path]]/page.tsx` avec le contenu suivant :
+
+:::important
+Si vous n'exécutez pas FireCMS dans le chemin racine de votre application, vous devez définir la prop `basePath` sur le chemin où vous l'exécutez. Dans ce cas, nous l'exécutons dans `/cms`.
+:::
+
+```tsx
+"use client";
+import { FireCMSApp } from "@/cms/FireCMSApp";
+import { FireCMSRouter } from "@firecms/core";
+
+export default function CMS() {
+    return <FireCMSRouter basePath={"/cms"}>
+        <FireCMSApp/>
+    </FireCMSRouter>;
+}
+```
+
+### Créer le **CMS**
+
+Maintenant, créons les composants FireCMS. Créez le fichier `./src/cms/FireCMSApp.tsx` avec le contenu approprié. N'oubliez pas de remplacer les `firebaseConfig` par votre propre configuration Firebase.
+
+### Importer les **styles FireCMS** par défaut
+
+Créez un fichier appelé `index.css` dans le dossier `./src/cms` avec le contenu suivant :
+
+```css
+@import "@firecms/ui/index.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+a {
+    @apply text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 hover:text-blue-800
+}
+```
+
+### Exécuter
+
+Ensuite, exécutez simplement :
+
+```
+yarn dev
+```
+et naviguez vers `http://localhost:3000/cms` pour voir votre application **FireCMS** en cours d'exécution.
+
+### Quelques considérations
+
+- Les images sont chargées différemment dans **Next.js**. Vous obtenez un `StaticImageData` au lieu de l'URL de l'image (comme dans **vite**). Vous pouvez l'utiliser dans les composants FireCMS qui attendent une URL comme, en utilisant la propriété `src` :
+```tsx
+import logo from "./logo.png";
+
+<FirebaseLoginView
+    logo={logo.src}/>
+```

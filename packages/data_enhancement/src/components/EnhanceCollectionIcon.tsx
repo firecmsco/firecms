@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EntityCollection, PluginHomePageActionsProps } from "@firecms/core";
+import { EntityCollection, PluginHomePageActionsProps, useTranslation } from "@firecms/core";
 import { AutoFixHighIcon, Tooltip } from "@firecms/ui";
 
 export function EnhanceCollectionIcon({
@@ -10,6 +10,7 @@ export function EnhanceCollectionIcon({
                                       }: PluginHomePageActionsProps<{
     getConfigForPath?: (props: { path: string, collection: EntityCollection }) => boolean;
 }>) {
+    const { t } = useTranslation();
     const [showIcon, setShowIcon] = React.useState(false);
     React.useEffect(() => {
         if (!extraProps?.getConfigForPath) {
@@ -27,7 +28,7 @@ export function EnhanceCollectionIcon({
 
     if (showIcon)
         return <Tooltip
-            title={"Use OpenAI to generate content for this collection ❤️"}>
+            title={t("use_openai_generate_content")}>
             <AutoFixHighIcon/>
         </Tooltip>;
     return null;

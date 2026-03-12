@@ -1,0 +1,31 @@
+---
+slug: de/docs/components/expandable_panel
+title: Ausklappbares Panel (ExpandablePanel)
+sidebar_label: ExpandablePanel
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+`ExpandablePanel` ist eine vielseitige Komponente, die es ermöglicht, Inhalte einklappbar zu machen. Dadurch wird die Organisation der Benutzeroberfläche verbessert, indem Inhalte ausgeblendet werden, die für den Benutzer nicht unmittelbar relevant sind. Diese Komponente kann im gesteuerten (controlled) oder ungesteuerten (uncontrolled) Modus arbeiten, mit zusätzlichen Funktionen wie einem unsichtbaren Modus für eine subtilere UI und einem optionalen Feldmodus (`asField`), um sich an das Styling von Formularfeldern anzupassen.
+
+## Verwendung
+
+Um das `ExpandablePanel` zu verwenden, importieren Sie es aus Ihren Komponenten und übergeben Sie die erforderlichen Props einschließlich `title`, `children` sowie Steuerungs-Props wie `expanded` und `onExpandedChange` und Styling-Props wie `titleClassName`, `className`.
+
+## Einfaches ausklappbares Panel
+
+Ein Beispiel, das die grundlegende Verwendung der Komponente `ExpandablePanel` zeigt.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_basic.tsx"/>
+
+## Ausklappbares Panel als Feld
+
+Diese Variante zeigt das `ExpandablePanel`, das als Feld in einem Formular verwendet wird, und demonstriert die Kombination aus der Eigenschaft `asField`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_field.tsx"/>
+
+## Unsichtbares ausklappbares Panel
+
+Ein `ExpandablePanel`-Beispiel, bei dem die Panelränder unsichtbar gemacht werden, um eine nahtlosere Integration in die umgebende UI zu erreichen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_invisible.tsx"/>

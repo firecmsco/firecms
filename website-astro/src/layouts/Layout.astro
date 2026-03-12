@@ -8,6 +8,7 @@ export interface Props {
     title?: string;
     description?: string;
     breadcrumbs?: BreadcrumbItem[];
+    lang?: string;
 }
 
 import { ViewTransitions } from "astro:transitions";
@@ -19,7 +20,8 @@ import CookieBanner from "../components/CookieBanner.astro";
 const {
     title = "FireCMS - The Headless CMS for Firebase and MongoDB",
     description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
-    breadcrumbs
+    breadcrumbs,
+    lang = "en"
 } = Astro.props;
 
 const canonicalBase = "https://firecms.co";
@@ -40,7 +42,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang={lang ?? "en"} data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <title>{title}</title>
@@ -197,9 +199,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 </head>
 
 <body class="font-sans bg-black text-surface-300 antialiased" style="color-scheme: dark;">
-<Header/>
+<Header lang={lang}/>
 <slot/>
-<Footer/>
+<Footer lang={lang}/>
 <CookieBanner/>
 <script src="../scripts/tracking-params.js"/>
 <script src="../scripts/enhance-app-links.js"/>

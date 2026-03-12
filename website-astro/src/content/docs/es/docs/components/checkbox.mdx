@@ -1,0 +1,37 @@
+---
+slug: es/docs/components/checkbox
+title: Casilla de verificación (Checkbox)
+sidebar_label: Casilla de verificación
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Las casillas de verificación (Checkboxes) se utilizan para la selección entre múltiples opciones. Se pueden alternar entre marcado (checked), desmarcado (unchecked) y un estado intermedio.
+
+## Uso
+
+Para usar `Checkbox`, impórtalo desde tus componentes y pasa la prop `checked` (marcado), la prop `onCheckedChange` (al cambiar el estado de marcado) y opcionalmente, las props `disabled` (deshabilitado), `size` (tamaño) y `color`.
+
+## Casilla de verificación básica
+
+Una casilla de verificación simple con configuración mínima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_basic.tsx"/>
+
+## Casilla de verificación con estado indeterminado
+
+Una casilla de verificación que muestra el estado intermedio (indeterminado), que normalmente se usa en escenarios de "seleccionar todo" en los que no se han realizado todas las subselecciones.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_indeterminate.tsx"/>
+
+## Tamaños de casilla de verificación
+
+Ilustrando cómo utilizar diferentes tamaños para el componente de casilla de verificación.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_sizes.tsx"/>
+
+## Colores de casilla de verificación
+
+Demuestra el uso de la prop `color` para personalizar la apariencia de la casilla de verificación.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_colors.tsx"/>

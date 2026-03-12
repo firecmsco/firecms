@@ -1,5 +1,6 @@
 import React from "react";
 import { AutoAwesomeIcon } from "@firecms/ui";
+import { useTranslation } from "../hooks";
 
 export interface AIIconProps {
     size?: "smallest" | "small" | "medium" | "large";
@@ -30,10 +31,11 @@ export function AIIcon({ size = "small", className }: AIIconProps) {
  * Shows a pulsing gradient dot.
  */
 export function AIModifiedIndicator({ className }: { className?: string }) {
+    const { t } = useTranslation();
     return (
         <div
             className={`w-2 h-2 rounded-full bg-gradient-to-r from-primary to-secondary animate-pulse ${className ?? ""}`}
-            title="AI modified"
+            title={t("ai_modified")}
         />
     );
 }

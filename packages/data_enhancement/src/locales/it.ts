@@ -1,0 +1,21 @@
+export const dataEnhancementTranslationsIt = {
+    autofill: "Compilazione automatica",
+    autofill_current_content: "Compilazione automatica basata sul contenuto attuale",
+    set_id_first: "È necessario impostare prima un ID",
+    provide_instructions: "Fornisci istruzioni per il miglioramento dei dati",
+    fill_missing_fields: "Compila i campi mancanti",
+    translate_missing_content: "Traduci il contenuto mancante",
+    add_2_paragraphs_to: "Aggiungi 2 paragrafi al contenuto",
+    use_openai_generate_content: "Usa Google Vertex AI o OpenAI per generare contenuti automaticamente.",
+    autofill_this_field: "Compila automaticamente questo campo",
+    autofill_property: "Proprietà di compilazione automatica",
+    input_data_before_enhancing: "Inserisci alcuni dati prima di migliorare",
+    input_data_before_enhancing_property: "Devi inserire dati in altre proprietà prima di migliorare questa.",
+    based_on_rest_of_entity: "Basato sul resto dell'entità",
+    this_field: "questo campo",
+    subscription_needed: "È necessario un abbonamento valido per utilizzare questa funzione.",
+    login_to_enhance: "Devi essere connesso per migliorare i dati",
+    no_fields_updated: "Nessun campo è stato aggiornato",
+    ask_ai_to_write: "Chiedi all'IA di scrivere",
+    instructions: "Istruzioni"
+};

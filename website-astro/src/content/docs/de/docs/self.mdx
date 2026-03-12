@@ -1,0 +1,90 @@
+---
+slug: de/docs/self
+title: Schnellstart
+sidebar_label: Schnellstart
+description: Beginnen Sie in Minuten mit dem Self-Hosted FireCMS. Erstellen Sie ein neues Projekt mit der CLI und führen Sie es lokal aus.
+---
+
+Erstellen Sie Ihr eigenes **Firebase Admin-Panel** und **Headless CMS** mit voller Kontrolle über Ihre Infrastruktur. Die Self-Hosted-Versionen von FireCMS ermöglichen es Ihnen, ein leistungsstarkes **React-basiertes Back-Office** auf Ihren eigenen Servern zu betreiben, mit vollständiger Dateneigentümerschaft.
+
+:::tip[Wann Self-Hosted wählen?]
+- **Datensouveränität**: Ihre Daten verlassen Ihre Infrastruktur nie
+- **Benutzerdefinierte Backends**: Verwenden Sie **MongoDB**, benutzerdefinierte APIs oder eine beliebige Datenbank
+- **Tiefe Anpassung**: Vollständiger Zugriff auf die Erweiterung jedes Teils des CMS
+- **On-Premise-Anforderungen**: Hinter Firewalls oder in privaten Clouds deployen
+:::
+
+### Community vs PRO
+
+| Funktion | Community (Kostenlos) | PRO |
+|---------|-----------------|-----|
+| Vollständige CRUD-UI | ✅ | ✅ |
+| Benutzerdefinierte React-Felder | ✅ | ✅ |
+| TypeScript-Unterstützung | ✅ | ✅ |
+| Kollektions-Editor-UI | ❌ | ✅ |
+| Datenimport/-export | ❌ | ✅ |
+| LLM-Autovervollständigung | ❌ | ✅ |
+| Benutzer- & Rollenverwaltung | ❌ | ✅ |
+
+Beide Versionen basieren auf **React**, verbinden sich mit **Firebase/Firestore** (oder MongoDB) und bieten Ihnen in Minuten ein produktionsbereites **Admin-Panel**.
+
+
+### Neues Projekt mit der CLI erstellen
+
+Um ein neues Projekt mit der CLI zu erstellen, können Sie folgenden Befehl ausführen:
+```bash
+npx create-firecms-app
+```
+oder:
+
+```bash
+yarn create firecms-app
+```
+
+
+Dadurch wird ein neues FireCMS-Projekt (Community oder PRO) im ausgewählten Ordner erstellt.
+Ein FireCMS-Projekt ist eine React-Anwendung, die Sie an Ihre Bedürfnisse anpassen können.
+Das initiale Projekt hat eine grundlegende Struktur mit einigen Kollektionen und ein paar benutzerdefinierten Ansichten.
+
+### Das Projekt ausführen
+
+Um das Projekt auszuführen, führen Sie folgende Befehle aus:
+
+```bash
+cd my-cms
+yarn
+yarn dev
+```
+
+oder
+
+```bash
+cd my-cms
+npm install
+npm run dev
+```
+
+Dadurch werden die Abhängigkeiten installiert und der Entwicklungsserver gestartet.
+
+### Die Basis-URL von FireCMS ändern
+
+FireCMS verwendet React Router für das Routing der Anwendung.
+Sie können die Basis-URL von FireCMS ändern, indem Sie die `basename`-Eigenschaft der `BrowserRouter`-Komponente in der Datei `src/main.tsx` ändern.
+Wenn Sie beispielsweise die Basis-URL auf `/admin` ändern möchten, können Sie dies wie folgt tun:
+
+```tsx
+import React from "react"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+import "./index.css"
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <BrowserRouter basename={"/admin"}>
+            <App/>
+        </BrowserRouter>
+    </React.StrictMode>
+)
+```

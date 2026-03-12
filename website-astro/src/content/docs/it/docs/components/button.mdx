@@ -1,0 +1,72 @@
+---
+slug: it/docs/components/button
+title: Button
+sidebar_label: Button
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+I pulsanti sono elementi UI interattivi che consentono agli utenti di attivare azioni o eventi specifici all'interno di un'applicazione.
+Svolgono un ruolo cruciale nelle interfacce utente, fornendo un segnale visivo per le azioni avviate dall'utente.
+I pulsanti possono essere utilizzati in vari contesti, inclusi moduli per l'invio, dialog per la conferma
+e barre degli strumenti per accedere rapidamente a funzioni e funzionalità. Cliccando un pulsante, gli utenti possono inviare dati,
+aprire nuove finestre, eseguire comandi e molto altro, rendendo i pulsanti un componente essenziale per guidare l'interazione
+e il coinvolgimento dell'utente.
+
+## Dimensione
+
+La prop `size` può essere usata per cambiare la dimensione del pulsante.
+
+I pulsanti sono disponibili in tre dimensioni: `small`, `medium`, `large`, `xl` e `2xl`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_size.tsx"/>
+
+## Variante
+
+La prop `variant` cambia lo stile del pulsante. I valori possibili sono `filled`, `outlined` e `text`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/variant_button.tsx"/>
+
+## Colore
+
+La prop `color` imposta il tema colore del pulsante. I valori possibili sono `primary`, `secondary`, `text`, `error` e `neutral`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_color.tsx"/>
+
+## Disabilitato
+
+Impostando `disabled` su `true` si disabilita il pulsante, impedendo le interazioni.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/disabled_button.tsx"/>
+
+## Icona iniziale
+
+La prop `startIcon` consente di includere un'icona prima del contenuto del pulsante.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/start_icon_button.tsx"/>
+
+## Larghezza piena
+
+La prop `fullWidth` fa espandere il pulsante per occupare tutta la larghezza del suo contenitore.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/full_width_button.tsx"/>
+
+## Nome classe personalizzato
+
+La prop `className` consente di passare classi CSS personalizzate al componente pulsante.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/custom_class_name_button.tsx"/>
+
+## Props del componente Button
+
+- `variant`: Definisce la variante di stile del pulsante. Le opzioni sono `"filled"`, `"outlined"` o `"text"`. Default `"filled"`.
+- `disabled`: Disabilita il pulsante, impedendo l'interazione dell'utente. Default `false`.
+- `color`: Imposta il tema colore del pulsante. Le opzioni sono `"primary"`, `"secondary"`, `"neutral"`, `"text"` o `"error"`.
+- `size`: Specifica la dimensione del pulsante. Le opzioni sono `"small"`, `"medium"`, `"large"`, `"xl"` o `"2xl"`. Default `"medium"`.
+- `startIcon`: Aggiunge un'icona all'inizio del contenuto del pulsante.
+- `fullWidth`: Quando `true`, il pulsante si espande per riempire la larghezza del contenitore. Default `false`.
+- `className`: Classi aggiuntive da applicare all'elemento pulsante.
+- `onClick`: Funzione handler chiamata quando si clicca il pulsante.
+- `children`: Definisce il contenuto del pulsante, tipicamente testo o elementi.
+- `component`: Componente personalizzato da usare per il rendering del pulsante.
+- `type`: L'attributo type per il pulsante, tipicamente `"button"`, `"submit"` o `"reset"`. Default `"button"`.

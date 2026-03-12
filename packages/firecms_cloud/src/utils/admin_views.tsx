@@ -1,19 +1,19 @@
 export const ADMIN_VIEWS_CONFIG = [
         {
             path: "users",
-            name: "CMS Users",
+            name: "cms_users",
             group: "Admin",
             icon: "face"
         },
         {
             path: "roles",
-            name: "Roles",
+            name: "roles_menu",
             group: "Admin",
             icon: "gpp_good"
         },
         {
             path: "settings",
-            name: "Project settings",
+            name: "project_settings",
             group: "Admin",
             icon: "settings"
         }

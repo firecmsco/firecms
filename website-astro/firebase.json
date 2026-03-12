@@ -2,6 +2,9 @@
   "hosting": {
     "public": "dist",
     "site": "firecms-landing-2",
+    "i18n": {
+      "root": "/"
+    },
     "ignore": [
       "firebase.json",
       "**/.*",

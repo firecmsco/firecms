@@ -1,0 +1,31 @@
+---
+slug: fr/docs/components
+title: FireCMS UI
+sidebar_label: Introduction
+description: Une bibliothèque de composants UI React de haute qualité construite avec Tailwind CSS et Radix UI. À utiliser dans FireCMS ou dans tout projet React.
+---
+
+:::tip
+Tous les composants sont exportés depuis le package `@firecms/ui`. Ce sont les mêmes composants utilisés en interne dans **FireCMS**.
+:::
+
+**FireCMS UI** est un ensemble de composants de haute qualité que vous pouvez utiliser pour construire vos propres vues personnalisées. Vous pouvez utiliser ces composants pour construire vos propres vues FireCMS, ou dans n'importe quelle autre application React. Vous avez juste besoin d'installer `tailwindcss` et le package `@firecms/ui`.
+
+:::note[Pourquoi construire ce kit UI ?]
+FireCMS utilisait MUI jusqu'à la version 3.0. MUI fournit des composants prêts à l'emploi avec des APIs intuitives, mais il vient aussi avec beaucoup de complexité et de surcharge. Nous voulions construire un kit UI plus simple et plus flexible qui pouvait être utilisé dans n'importe quel projet React, pas seulement dans FireCMS. Nous voulions aussi faciliter la transition de MUI vers notre nouveau kit UI, donc nous avons gardé l'API aussi similaire que possible. Le résultat est un ensemble de composants faciles à utiliser, faciles à personnaliser, **beaucoup plus performants** et avec une taille de bundle plus petite.
+:::
+
+Les composants sont principalement construits en utilisant les primitives **Radix UI** et **tailwindcss**. Cela signifie que vous pouvez facilement les personnaliser en utilisant des classes tailwindcss ou en remplaçant les styles avec du CSS.
+
+:::note
+Si vous avez des questions, n'hésitez pas à nous rejoindre sur notre [canal Discord](https://discord.gg/fxy7xsQm3m).
+:::
+
+La liste des composants inclut :
+
+import ClientUIComponentsShowcase from "../../../../components/ClientUIComponentsShowcase.tsx";
+
+<ClientUIComponentsShowcase client:only="react" docsUrl="https://firecms.co" linksInNewTab={true} />
+
+
+et plus encore (consultez la barre latérale pour la liste complète).

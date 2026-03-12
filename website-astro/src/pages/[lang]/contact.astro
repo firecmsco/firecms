@@ -1,0 +1,29 @@
+---
+// src/pages/[lang]/contact.astro
+import Layout from "../../layouts/Layout.astro";
+import ContactContent from "../../components/pages/ContactContent.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+    const supportedLangs = Object.keys(languages).filter(l => l !== 'en');
+    return supportedLangs.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Contact", url: "https://firecms.co/contact" }
+];
+---
+
+<Layout
+        title={t('seo.contact.title')}
+        description={t('seo.contact.description')}
+        breadcrumbs={breadcrumbs}
+        lang={lang}
+>
+    <ContactContent lang={lang} t={t} />
+</Layout>
